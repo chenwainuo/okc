@@ -3,7 +3,7 @@
   "updated": "2026-10-24",
   "source_base": "a55ab7d5ae1bba59ac351e55026fe7f7644ecc5f",
   "objective": "Optimize official serving throughput/interactivity curve without correctness or TTFT regressions.",
-  "status": "selected_patch_pending_integrated_gpu_validation",
+  "status": "single_gpu_validated_pending_full_serving",
   "topology": {
     "target": "8xH200 TP8/EP8",
     "available_test": "1xH200",
@@ -92,7 +92,7 @@
       "C02",
       "C04"
     ],
-    "integration_state": "not yet measured as combined actual serving method"
+    "integration_state": "passed actual stock-vs-selected GPU correctness and clean timing with seed 7777"
   },
   "candidates": [
     {
@@ -126,7 +126,7 @@
     {
       "id": "C04",
       "name": "bounded Marlin tile policy",
-      "state": "integrated_pending_gpu_validation",
+      "state": "single_gpu_validated_pending_full_serving",
       "evidence": "reports/2026-10-24-tiles.json",
       "findings": [
         "block16: ~1.39x at M128, ~1.33x at M256",
@@ -134,7 +134,7 @@
         "block16 regresses at M753 and M3012",
         "block32 regresses at M3012"
       ],
-      "next": "validate actual stock-vs-selected method including boundary cases and prefill"
+      "next": "full-node validation; any further tile experiments must include prefill and boundary cases"
     },
     {
       "id": "C05",
@@ -209,7 +209,8 @@
     "reports/2026-10-24-smoke.json",
     "reports/2026-10-24-profiled.json",
     "reports/2026-10-24-ablation.json",
-    "reports/2026-10-24-tiles.json"
+    "reports/2026-10-24-tiles.json",
+    "reports/2026-10-24-selected-validation.json"
   ],
   "diagnostic_rules": [
     "profiling separate from clean timing",
@@ -227,16 +228,39 @@
     "cpu_tests": "python3 -m unittest discover -s benchmarks -p 'test_*.py' -v"
   },
   "next_actions": [
-    "GPU actual stock-vs-selected comparison",
-    "boundary and prefill validation of selected policy",
-    "independent-seed rerun",
-    "profile next dominant stage",
-    "8xH200 serving correctness and score validation"
+    "Use selected graph traces to rank remaining expert costs",
+    "If pursuing further local gains, add one isolated hypothesis with correctness and prefill gates",
+    "Acquire 8xH200 access or wait for official serving checks",
+    "Validate full model output agreement, TTFT, and serving curve at all loads"
   ],
   "not_proven": [
     "full serving speedup",
     "full model output agreement",
     "TTFT gate on hidden workload",
     "multi-GPU communication behavior"
-  ]
+  ],
+  "selected_validation": {
+    "artifact": "reports/2026-10-24-selected-validation.json",
+    "seed": 7777,
+    "pairs_per_batch": 20,
+    "batches": [
+      1,
+      8,
+      16,
+      32,
+      64,
+      128,
+      256,
+      257,
+      384,
+      512,
+      513,
+      753,
+      3012,
+      16384
+    ],
+    "no_local_routes": "passed eager and graph replay",
+    "prefill_result": "near parity at 753, 3012, 16384",
+    "serving_score": null
+  }
 }
