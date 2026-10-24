@@ -6,6 +6,7 @@ The patch stack is experimental: benchmark results determine which changes survi
 
 See the [architecture review and optimization candidates](docs/architecture-review.md)
 for the serving path, bottleneck hypotheses, experiments and validation gates.
+The [structured review](docs/architecture-review.json) is the current agent handoff record.
 
 ## Setup
 
@@ -57,9 +58,11 @@ Baseline → profile → explicit bottleneck hypothesis → isolated implementat
 correctness → paired measurements → retain/revert → re-profile the stack →
 full serving validation. Do not infer a speedup from fewer operations alone.
 
-The ordered changes in `serving/patches/` reduce local routing buckets, opt into
-small-batch fused finalization, and omit nonlocal route blocks only when the
-finalizer masks those slots. The combined artifact is `serving/patch.diff`.
+The active changes in `serving/patches/` enable small-batch fused finalization and
+cap Hopper EP8 expert tiles at 16 through 256 tokens and 32 through 512 tokens.
+Larger prefills retain stock tile selection. The combined artifact is `serving/patch.diff`.
+Earlier routing candidates are parked in `serving/experiments/initial-stack/`;
+their standalone measurements did not establish a useful gain.
 
 ## Serving requirements
 

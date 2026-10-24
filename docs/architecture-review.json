@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-24",
+  "source_base": "a55ab7d5ae1bba59ac351e55026fe7f7644ecc5f",
+  "objective": "Optimize official serving throughput/interactivity curve without correctness or TTFT regressions.",
+  "status": "selected_patch_pending_integrated_gpu_validation",
+  "topology": {
+    "target": "8xH200 TP8/EP8",
+    "available_test": "1xH200",
+    "expert_count": 256,
+    "local_experts": 32,
+    "top_k": 8,
+    "expert_hidden": 4096,
+    "expert_intermediate": 4096,
+    "draft_tokens": 8,
+    "concurrency": [
+      1,
+      4,
+      16,
+      32
+    ]
+  },
+  "pipeline": [
+    "scheduler/cache",
+    "target_prefill+draft_context",
+    "draft_forward+head",
+    "target_verify",
+    "acceptance",
+    "commit/KV_update",
+    "stream_response"
+  ],
+  "expert_pipeline": [
+    "router+pooler_overlap",
+    "global_to_local_ids",
+    "alignment",
+    "NVFP4_gate_up_GEMM",
+    "BF16_SwiGLU",
+    "NVFP4_down_GEMM",
+    "per_expert_norm",
+    "weighted_sum",
+    "all_reduce",
+    "unpool",
+    "residual_norm_boundary"
+  ],
+  "invariants": [
+    "NVFP4 weights unchanged/losslessly repacked only",
+    "BF16 activation boundaries preserved",
+    "FP8 KV cache preserved",
+    "eight routed experts per token",
+    "norm before expert summation",
+    "all required attention keys retained",
+    "released DFlash weights and prediction semantics preserved",
+    "no host input-value synchronization in captured kernels"
+  ],
+  "gates": {
+    "local_reference_relative_l2": 0.015,
+    "local_row_factor": 5,
+    "no_local_output": "exact zero; test eager and captured replay after valid inputs",
+    "measurement": "20+ alternating-order pairs; independent session rerun; nearby shapes; prefill regression",
+    "serving": [
+      "stock-vs-stock agreement calibration",
+      "stock-vs-patch agreement",
+      "exactly 220 output tokens/request",
+      "TTFT <=2x stock per load to improve score",
+      "throughput evaluated at stock interactivity across all loads"
+    ]
+  },
+  "active_patch": {
+    "combined": "serving/patch.diff",
+    "ordered": [
+      "serving/patches/01-small-batch-finalize.diff",
+      "serving/patches/02-hopper-expert-tiles.diff"
+    ],
+    "tile_guard": {
+      "device_capability": [
+        9,
+        0
+      ],
+      "expert_map": "present",
+      "global_experts": 256,
+      "local_experts": 32,
+      "top_k": 8,
+      "K": 4096,
+      "I": 4096
+    },
+    "tile_policy": [
+      "M<=256: min(stock_tile,16)",
+      "256<M<=512: min(stock_tile,32)",
+      "otherwise: stock_tile"
+    ],
+    "retained": [
+      "C02",
+      "C04"
+    ],
+    "integration_state": "not yet measured as combined actual serving method"
+  },
+  "candidates": [
+    {
+      "id": "C01",
+      "name": "local alignment buckets",
+      "state": "parked",
+      "evidence": "reports/2026-10-24-ablation.json",
+      "reason": "no isolated gain; estimates 0.982-0.999x",
+      "historical_patch": "serving/experiments/initial-stack/01-local-expert-buckets.diff"
+    },
+    {
+      "id": "C02",
+      "name": "fused small-batch finalize",
+      "state": "retained_pending_serving_validation",
+      "evidence": "reports/2026-10-24-ablation.json",
+      "speedup_by_M": {
+        "1": 1.462,
+        "8": 1.288,
+        "16": 1.227
+      },
+      "risk": "low-CTA occupancy, reduction-order rounding"
+    },
+    {
+      "id": "C03",
+      "name": "omit nonlocal route blocks",
+      "state": "parked",
+      "evidence": "reports/2026-10-24-ablation.json",
+      "reason": "isolated gains inconclusive under screening margin",
+      "risk": "unwritten slots require masked consumers"
+    },
+    {
+      "id": "C04",
+      "name": "bounded Marlin tile policy",
+      "state": "integrated_pending_gpu_validation",
+      "evidence": "reports/2026-10-24-tiles.json",
+      "findings": [
+        "block16: ~1.39x at M128, ~1.33x at M256",
+        "block32: ~1.21x at M384, ~1.15x at M512",
+        "block16 regresses at M753 and M3012",
+        "block32 regresses at M3012"
+      ],
+      "next": "validate actual stock-vs-selected method including boundary cases and prefill"
+    },
+    {
+      "id": "C05",
+      "name": "workspace/scratch reuse",
+      "state": "defer_until_profile_supports",
+      "risk": "graph lifetimes, locks, overlapping streams",
+      "signals": [
+        "workspace launch time",
+        "allocation/zeroing time",
+        "peak scratch bytes"
+      ]
+    },
+    {
+      "id": "C06",
+      "name": "attention metadata/split-KV policy",
+      "state": "unmeasured",
+      "signals": [
+        "full vs sliding context",
+        "KV bandwidth",
+        "metadata cost",
+        "graph bucket coverage"
+      ],
+      "risk": "stale page metadata, attention completeness"
+    },
+    {
+      "id": "C07",
+      "name": "router/pooler overlap",
+      "state": "unmeasured",
+      "signals": [
+        "side-stream critical path",
+        "pre-norm placement",
+        "router precision path"
+      ],
+      "risk": "stream joins and lifetime correctness"
+    },
+    {
+      "id": "C08",
+      "name": "collective/unpool fusion",
+      "state": "requires_8gpu",
+      "signals": [
+        "rank skew",
+        "all-reduce/gather timeline"
+      ],
+      "risk": "nonlinear ordering, rank-consistent dispatch, deadlocks"
+    },
+    {
+      "id": "C09",
+      "name": "DFlash graph coverage/head",
+      "state": "unmeasured",
+      "signals": [
+        "graph hit rate",
+        "draft head time",
+        "acceptance histogram",
+        "tokens committed per iteration"
+      ],
+      "note": "greedy acceptance already fused; avoid duplicate implementation"
+    },
+    {
+      "id": "C10",
+      "name": "scheduler/hierarchical cache",
+      "state": "requires_full_serving",
+      "signals": [
+        "prefix hit/miss",
+        "queue delay",
+        "prefill/decode interference",
+        "TTFT/ITL curves"
+      ],
+      "risk": "throughput/interactivity tradeoff"
+    }
+  ],
+  "measurement_artifacts": [
+    "reports/2026-10-24-smoke.json",
+    "reports/2026-10-24-profiled.json",
+    "reports/2026-10-24-ablation.json",
+    "reports/2026-10-24-tiles.json"
+  ],
+  "diagnostic_rules": [
+    "profiling separate from clean timing",
+    "do not sum inclusive spans with child kernels",
+    "device_type/is_user_annotation distinguish profiler rows",
+    "local geometric mean is not serving score",
+    "two-pair run is a smoke test only",
+    "within-run bootstrap does not capture thermal/session variation"
+  ],
+  "commands": {
+    "bootstrap": "python3 bootstrap.py",
+    "profile": "bash benchmarks/run_h200.sh --profile",
+    "ablation": "bash benchmarks/run_h200.sh --matrix",
+    "tile_sweep": "bash benchmarks/run_h200.sh --tiles",
+    "cpu_tests": "python3 -m unittest discover -s benchmarks -p 'test_*.py' -v"
+  },
+  "next_actions": [
+    "GPU actual stock-vs-selected comparison",
+    "boundary and prefill validation of selected policy",
+    "independent-seed rerun",
+    "profile next dominant stage",
+    "8xH200 serving correctness and score validation"
+  ],
+  "not_proven": [
+    "full serving speedup",
+    "full model output agreement",
+    "TTFT gate on hidden workload",
+    "multi-GPU communication behavior"
+  ]
+}

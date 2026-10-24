@@ -1,0 +1,26 @@
+--- a/python/sglang/srt/layers/muse_spark_fp4_moe.py
++++ b/python/sglang/srt/layers/muse_spark_fp4_moe.py
+@@ -478,6 +478,23 @@
+             if num_tokens * topk / self.num_local_experts / block_size_m < 0.9:
+                 break
+ 
++        # Hopper EP8: measured small-batch tiles avoid overpadding sparse local
++        # routes. Preserve stock tiles for larger prefills and other layouts.
++        if (
++            expert_map is not None
++            and num_tokens <= 512
++            and topk == 8
++            and self.num_local_experts == 32
++            and self.global_num_experts == 256
++            and size_k == 4096
++            and size_n == 4096
++            and torch.cuda.get_device_capability(hidden_states.device) == (9, 0)
++        ):
++            if num_tokens <= 256:
++                block_size_m = min(block_size_m, 16)
++            elif num_tokens <= 512:
++                block_size_m = min(block_size_m, 32)
++
+         if num_tokens == 1 and topk <= 32 and expert_map is None:
+             from sglang.kernels.ops.moe.moe_align_single_token import (
+                 moe_align_single_token,

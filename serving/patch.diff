@@ -19,63 +19,37 @@ index b2092f6..052776b 100644
          if slot_expert_ids is not None:
              y = torch.where(
 diff --git a/python/sglang/srt/layers/muse_spark_fp4_moe.py b/python/sglang/srt/layers/muse_spark_fp4_moe.py
-index 97b1474..7d167f8 100644
+index 97b1474..5045ca6 100644
 --- a/python/sglang/srt/layers/muse_spark_fp4_moe.py
 +++ b/python/sglang/srt/layers/muse_spark_fp4_moe.py
-@@ -453,6 +453,8 @@ class MuseSpark1xFp4Experts(nn.Module):
-         hidden_states: torch.Tensor,
-         topk_scores: torch.Tensor,
-         topk_ids: torch.Tensor,
-+        *,
-+        skip_nonlocal: bool = False,
-     ) -> torch.Tensor:
-         from sgl_kernel.scalar_type import scalar_types
+@@ -478,6 +478,23 @@ class MuseSpark1xFp4Experts(nn.Module):
+             if num_tokens * topk / self.num_local_experts / block_size_m < 0.9:
+                 break
  
-@@ -487,13 +489,14 @@ class MuseSpark1xFp4Experts(nn.Module):
-                 moe_align_single_token(local_topk_ids, block_size_m)
-             )
-         else:
--            align_num_experts = (
--                self.global_num_experts
--                if expert_map is not None
--                else self.num_local_experts
--            )
-+            # IDs have already been mapped to [-1, num_local_experts).
-+            # The align helper reserves its own extra bucket for -1.
-+            align_num_experts = self.num_local_experts
-             sorted_token_ids, expert_ids, num_tokens_post_padded = moe_align_block_size(
--                local_topk_ids, block_size_m, align_num_experts
-+                local_topk_ids,
-+                block_size_m,
-+                align_num_experts,
-+                ignore_invalid_expert=expert_map is not None and skip_nonlocal,
-             )
- 
-         workspace = marlin_make_workspace(hidden_states.device, max_blocks_per_sm=4)
-@@ -594,11 +597,15 @@ class MuseSpark1xFp4Experts(nn.Module):
-             )
-         if pre_expert_norm is not None:
-             hidden_states = pre_expert_norm(hidden_states)
--        expert_outputs, local_topk_ids = self._marlin_expert_outputs(
--            hidden_states, topk_scores, topk_ids
--        )
-         if self._post_expert_norm is not post_expert_norm:
-             self.set_post_expert_norm(post_expert_norm)
-+        expert_outputs, local_topk_ids = self._marlin_expert_outputs(
-+            hidden_states,
-+            topk_scores,
-+            topk_ids,
-+            # Only the masked fused finalizer can consume unwritten nonlocal slots.
-+            skip_nonlocal=self._post_expert_norm_weight is not None,
-+        )
-         if self._post_expert_norm_weight is not None:
-             return fused_post_expert_norm_weighted_sum(
-                 expert_outputs,
-@@ -607,6 +614,8 @@ class MuseSpark1xFp4Experts(nn.Module):
++        # Hopper EP8: measured small-batch tiles avoid overpadding sparse local
++        # routes. Preserve stock tiles for larger prefills and other layouts.
++        if (
++            expert_map is not None
++            and num_tokens <= 512
++            and topk == 8
++            and self.num_local_experts == 32
++            and self.global_num_experts == 256
++            and size_k == 4096
++            and size_n == 4096
++            and torch.cuda.get_device_capability(hidden_states.device) == (9, 0)
++        ):
++            if num_tokens <= 256:
++                block_size_m = min(block_size_m, 16)
++            elif num_tokens <= 512:
++                block_size_m = min(block_size_m, 32)
++
+         if num_tokens == 1 and topk <= 32 and expert_map is None:
+             from sglang.kernels.ops.moe.moe_align_single_token import (
+                 moe_align_single_token,
+@@ -607,6 +624,7 @@ class MuseSpark1xFp4Experts(nn.Module):
                  eps=self._post_expert_norm_eps,
                  weight_first=self._post_expert_norm_weight_first,
                  slot_expert_ids=local_topk_ids,
-+                # Avoid the multi-launch PyTorch finalize for small Marlin batches.
 +                fuse_small_tokens=True,
              )
          return finalize_identity_with_post_expert_norm(

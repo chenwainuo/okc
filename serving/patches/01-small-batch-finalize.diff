@@ -1,0 +1,28 @@
+--- a/python/sglang/srt/layers/muse_spark_fp4_moe.py
++++ b/python/sglang/srt/layers/muse_spark_fp4_moe.py
+@@ -607,6 +607,7 @@
+                 eps=self._post_expert_norm_eps,
+                 weight_first=self._post_expert_norm_weight_first,
+                 slot_expert_ids=local_topk_ids,
++                fuse_small_tokens=True,
+             )
+         return finalize_identity_with_post_expert_norm(
+             expert_outputs=expert_outputs,
+--- a/python/sglang/kernels/ops/muse_spark_v12/fused_post_expert_norm_weighted_sum_triton.py
++++ b/python/sglang/kernels/ops/muse_spark_v12/fused_post_expert_norm_weighted_sum_triton.py
+@@ -68,13 +68,14 @@
+     weight_first: bool = True,
+     apply_norm: bool = True,
+     slot_expert_ids: Optional[torch.Tensor] = None,
++    fuse_small_tokens: bool = False,
+ ) -> torch.Tensor:
+     x = expert_output.contiguous()
+     tokens, topk, hidden = x.shape
+     out = torch.empty((tokens, hidden), dtype=x.dtype, device=x.device)
+     if tokens == 0:
+         return out
+-    if tokens < _MIN_TOKENS_FOR_FUSED:
++    if tokens < _MIN_TOKENS_FOR_FUSED and not fuse_small_tokens:
+         y = x
+         if slot_expert_ids is not None:
+             y = torch.where(

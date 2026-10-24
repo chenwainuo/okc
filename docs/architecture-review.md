@@ -1,5 +1,9 @@
 # Serving architecture review and optimization candidates
 
+Current machine-readable decisions: [architecture-review.json](architecture-review.json).
+The source walk-through below describes the initial investigation; the JSON record
+tracks the active patch, measured/parked candidates, invariants and next actions.
+
 Reviewed 2026-10-24 against SGLang commit
 `a55ab7d5ae1bba59ac351e55026fe7f7644ecc5f` and our three-patch experiment stack.
 

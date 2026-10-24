@@ -50,7 +50,7 @@ class MarlinForwardDispatchTest(unittest.TestCase):
             layer._post_expert_norm = value
             layer._post_expert_norm_weight = effective_weight
 
-        def experts(hidden, scores, ids, *, skip_nonlocal):
+        def experts(hidden, scores, ids, *, skip_nonlocal=False):
             events.append(("experts", skip_nonlocal, hidden))
             return "expert-outputs", "local-ids"
 
@@ -60,28 +60,28 @@ class MarlinForwardDispatchTest(unittest.TestCase):
         result = forward_function(events)(layer, hidden, "scores", "ids", norm, pre_norm)
         return events, result
 
-    def test_binds_masked_norm_before_skipping_nonlocal(self):
+    def test_original_expert_path_uses_fused_finalize(self):
         events, result = self.run_case("weight")
-        self.assertEqual([e[0] for e in events], ["bind", "experts", "fused"])
-        self.assertTrue(events[1][1])
+        self.assertEqual([e[0] for e in events], ["experts", "bind", "fused"])
+        self.assertFalse(events[0][1])
         self.assertEqual(events[2][2]["slot_expert_ids"], "local-ids")
         self.assertTrue(events[2][2]["fuse_small_tokens"])
         self.assertEqual(result, "fused-output")
 
     def test_unmasked_fallback_keeps_nonlocal_blocks(self):
         events, result = self.run_case(None)
-        self.assertFalse(events[1][1])
+        self.assertFalse(events[0][1])
         self.assertEqual(result, "fallback-output")
 
     def test_changed_norm_does_not_use_stale_skip_decision(self):
         events, result = self.run_case(None, stale_weight="old-weight")
-        self.assertFalse(events[1][1])
+        self.assertFalse(events[0][1])
         self.assertEqual(result, "fallback-output")
 
     def test_pre_norm_result_reaches_experts(self):
         transformed = SimpleNamespace(dtype="bf16")
         events, _ = self.run_case("weight", pre_norm=lambda x: transformed)
-        self.assertIs(events[1][2], transformed)
+        self.assertIs(events[0][2], transformed)
 
     def test_missing_post_norm_is_rejected(self):
         with self.assertRaises(ValueError):

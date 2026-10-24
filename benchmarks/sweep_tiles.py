@@ -21,6 +21,7 @@ def main():
                         choices=["global-density", "8", "16", "32", "48", "64"])
     parser.add_argument("--batches", type=int, nargs="+", default=[32, 128, 256])
     parser.add_argument("--pairs", type=int, default=20)
+    parser.add_argument("--tag", default="", help="Suffix for a separate experiment's results")
     args = parser.parse_args()
     source = (ROOT / "muse_moe_w4a16/baseline.py").read_text()
     expected = json.loads((ROOT / "fixture-hashes.json").read_text())["baseline.py"]
@@ -43,7 +44,7 @@ def main():
         subprocess.run([
             sys.executable, str(ROOT / "benchmarks/moe_local.py"),
             "--candidate", str(candidate), "--pairs", str(args.pairs),
-            "--output", str(ROOT / "results" / f"tiles-{policy}.json"),
+            "--output", str(ROOT / "results" / f"tiles-{policy}{('-' + args.tag) if args.tag else ''}.json"),
             "--batches", *map(str, args.batches),
         ], check=True, cwd=ROOT)
 
