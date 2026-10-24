@@ -8,6 +8,9 @@ runner=benchmarks/moe_local.py
 if [[ ${1:-} == --matrix ]]; then
     runner=benchmarks/run_matrix.py
     shift
+elif [[ ${1:-} == --tiles ]]; then
+    runner=benchmarks/sweep_tiles.py
+    shift
 else
     set -- --baseline benchmarks/serving_stock_moe.py --candidate benchmarks/serving_moe.py --output results/serving-stack.json "$@"
 fi

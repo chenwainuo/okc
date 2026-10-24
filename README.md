@@ -38,6 +38,9 @@ bash benchmarks/run_h200.sh --matrix --profile
 
 # Representative prefill regression diagnostics; increase pairs for conclusions.
 bash benchmarks/run_h200.sh --matrix --prefill --pairs 20
+
+# Tile/padding candidates, with independent code artifacts and source hashes.
+bash benchmarks/run_h200.sh --tiles
 ```
 
 Results and profiles go into `results/`. Diagnostics include named eager stage ranges
