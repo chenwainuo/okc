@@ -108,6 +108,24 @@ Relevant source anchors:
 
 ## Candidates, in investigation order
 
+### First ablation outcome
+
+The [independent-change matrix](../reports/2026-10-24-ablation.json) is complete.
+Small-batch fusion alone produced paired estimates of 1.462x, 1.288x and 1.227x at
+1, 8 and 16 tokens against the standalone baseline. This supports fusion as the
+main low-token improvement. Local bucket reduction alone was slightly slower
+(0.982x–0.999x), with no demonstrated gain. Omitting nonlocal blocks was inconclusive
+under the 2% screening margin. Neither should be promoted merely because it does
+less work. A second actual stock-vs-stack run reproduced the low-token improvement.
+
+Routing diagnostics also exposed a concrete tile-policy mismatch: the 128/256-token
+test batches averaged about 18.3% local routes, or 5.9/11.7 routes per local expert.
+The stock heuristic sizes blocks from **all** eight routes per token divided by
+the 32 local experts, selecting 48/64 rather than accounting for the global expert
+population. The next experiment sweeps supported fixed tiles and a global-density
+heuristic. It preserves routing and precision and uses only static shape/config
+information. A smaller tile is a hypothesis, not yet a proven optimum.
+
 | Candidate | Source evidence / hypothesis | Experiment and signals | Risk and validation |
 |---|---|---|---|
 | **1. Local expert bucket count** — implemented candidate | IDs are mapped to `[-1, 32)` but stock aligns with 256 expert buckets. Local counts reduce scratch and can select a different alignment dispatch. | Isolate patch 01; alignment kernel count/time, padding length, full expert latency across decode and prefill. | Changing dispatch can reorder equal-expert slots. Check all outputs, sentinel padding, irregular shapes and all-invalid batches. |
