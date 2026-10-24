@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "objective": "Iteratively improve serving through independently validated component changes",
+  "cycle": [
+    "profile incumbent",
+    "rank bottleneck",
+    "record falsifiable hypothesis",
+    "implement isolated candidate",
+    "correctness",
+    "paired incumbent screening on independent seeds",
+    "stock and incumbent holdout validation including prefill",
+    "review source and retain or reject",
+    "reprofile retained stack",
+    "enqueue next hypothesis"
+  ],
+  "runner": "bash benchmarks/run_h200.sh --loop --minutes 45",
+  "state": "results/optimization-loop/state.json",
+  "stop": "touch results/optimization-loop/STOP; checked before next measurement; remove to resume",
+  "resume": "rerun same command; completed measurements reused; changed incumbent requires new --directory",
+  "automation_boundary": "Runner executes finite hypothesis queue. Agent generates new hypotheses and reviews validated candidates before modifying active patch. Queue exhaustion stops GPU work; no unattended code generation.",
+  "budget": {
+    "session_minutes": 45,
+    "gpu_hourly_usd_assumption": 5,
+    "session_compute_usd_max_approx": 3.75,
+    "excludes": "preflight, setup, idle node billing; node is not automatically destroyed"
+  },
+  "gates": {
+    "pairs": 20,
+    "screen_seeds": [
+      8801,
+      9901
+    ],
+    "holdout_seeds": [
+      11003,
+      12007
+    ],
+    "noninferiority": "Every measured shape lower bootstrap bound >=1/1.02",
+    "gain": "At least one targeted shape lower bootstrap bound >1.02 in each incumbent comparison",
+    "failure": "fail closed, preserve active source",
+    "profiling": "separate from clean timing",
+    "scope": "single-GPU component validation; not official serving score"
+  },
+  "first_queue": [
+    {
+      "cutoff": 320,
+      "hypothesis": "Reduced padding may outweigh tile inefficiency just beyond M256"
+    },
+    {
+      "cutoff": 384,
+      "hypothesis": "Locate the upper useful boundary of tile16; evidence may reject it"
+    }
+  ],
+  "promotion_requirements": [
+    "review candidate diff and gates",
+    "regenerate ordered and combined submission patches",
+    "validate patch application and constraints",
+    "update architecture record and curated report",
+    "commit and push",
+    "full 8-H200 correctness, TTFT and load curve remain required"
+  ],
+  "next_after_queue": [
+    "inspect rejection evidence or validated candidates",
+    "use graph traces to choose a different bottleneck if both fail",
+    "avoid repeated unchanged trials or tuning on holdout seeds"
+  ]
+}

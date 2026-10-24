@@ -54,6 +54,12 @@ before retaining a change. Local kernel speedups are **not** serving scores.
 
 ## Optimization loop
 
+Run the resumable experiment queue with `bash benchmarks/run_h200.sh --loop --minutes 45`.
+State, candidate sources, logs, and measurements persist under `results/optimization-loop/`.
+See [the agent loop protocol](docs/optimization-loop.json) for gates, stop/resume,
+budget boundaries, and promotion requirements. The finite queue stops when exhausted;
+new hypotheses and active-patch promotion require agent review.
+
 Baseline → profile → explicit bottleneck hypothesis → isolated implementation →
 correctness → paired measurements → retain/revert → re-profile the stack →
 full serving validation. Do not infer a speedup from fewer operations alone.

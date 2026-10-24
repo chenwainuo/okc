@@ -8,6 +8,9 @@ runner=benchmarks/moe_local.py
 if [[ ${1:-} == --matrix ]]; then
     runner=benchmarks/run_matrix.py
     shift
+elif [[ ${1:-} == --loop ]]; then
+    runner=benchmarks/optimize_loop.py
+    shift
 elif [[ ${1:-} == --tiles ]]; then
     runner=benchmarks/sweep_tiles.py
     shift
