@@ -20,6 +20,7 @@ from pathlib import Path
 import statistics
 import subprocess
 import sys
+import time
 
 from measurement import summarize
 from diagnostics import gpu_snapshot, routing_summary, save_profile, stage_ranges
@@ -64,12 +65,42 @@ def main():
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.set_grad_enabled(False)
 
+    checkout = ROOT / "serving/sglang"
+    source_diff = subprocess.check_output(["git", "-C", str(checkout), "diff", "HEAD"])
+    version = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"],
+                             capture_output=True, text=True)
+    report = dict(status="initializing", experiment_commit=version.stdout.strip() or None,
+                  gpu=torch.cuda.get_device_name(), torch=torch.__version__,
+                  cuda=torch.version.cuda, seed=args.seed, pairs=args.pairs,
+                  candidate=str(args.candidate), baseline=str(args.baseline),
+                  candidate_sha256=hashlib.sha256(args.candidate.read_bytes()).hexdigest(),
+                  baseline_sha256=hashlib.sha256(args.baseline.read_bytes()).hexdigest(),
+                  serving_diff_sha256=hashlib.sha256(source_diff).hexdigest(),
+                  serving_diff=source_diff.decode(),
+                  measurement="raw CUDA graph replay, cold L2, synthetic inputs; not official score",
+                  results=[])
+
+    def checkpoint(status):
+        report["status"] = status
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        temp = args.output.with_suffix(".tmp")
+        temp.write_text(json.dumps(report, indent=2) + "\n")
+        temp.replace(args.output)
+
+    checkpoint("generating_weights")
+
     print("Generating synthetic NVFP4 weights", flush=True)
     weights = reference.generate_weights(args.seed)
     # Isolate preparation from the reference and from the other implementation.
-    states = [module.prepare({k: v.clone() for k, v in weights.items()})
-              for module in (baseline, candidate)]
     modules = (baseline, candidate)
+    states = []
+    for module in modules:
+        checkpoint("preparing_" + module.__name__)
+        print(f"Preparing {module.__name__}", flush=True)
+        started = time.perf_counter()
+        states.append(module.prepare({k: v.clone() for k, v in weights.items()}))
+        torch.cuda.synchronize()
+        print(f"Prepared {module.__name__} in {time.perf_counter() - started:.1f}s", flush=True)
 
     def check(data, output):
         ok, detail = reference.check_implementation(data, output, weights)
@@ -82,6 +113,8 @@ def main():
     no_local = reference.generate_input(4, "ep8", args.seed + 99)
     no_local["topk_ids"][:] = torch.arange(32, 40, device="cuda", dtype=torch.int32)
     for module, state in zip(modules, states):
+        checkpoint("checking_no_local_" + module.__name__)
+        print(f"Checking no-local routes: {module.__name__} (first call may compile)", flush=True)
         out = module.kernel_fn(no_local, state)
         torch.testing.assert_close(out, torch.zeros_like(no_local["hidden_states"]),
                                    rtol=0, atol=0)
@@ -91,13 +124,15 @@ def main():
                                     (128, "skewed"), (1, "normal"))):
         data = reference.generate_input(bs, "ep8", args.seed + 100 + i, dist=dist)
         for module, state in zip(modules, states):
+            checkpoint(f"checking_{module.__name__}_bs{bs}")
             print(f"correctness {module.__name__} bs={bs}: "
                   f"{check(data, module.kernel_fn(data, state))}", flush=True)
 
     # Larger than H200 L2 (50 MiB); evict before, not within, each timed replay.
     flush = torch.empty(128 * 1024 * 1024, dtype=torch.uint8, device="cuda")
-    results = []
+    results = report["results"]
     for bs in args.batches:
+        checkpoint(f"measuring_bs{bs}")
         data = reference.generate_input(bs, "ep8", args.seed + 1000 + bs)
         graphs, outputs = [], []
         stream = torch.cuda.Stream()
@@ -161,10 +196,12 @@ def main():
         row["routing_samples"] = routing_samples
         row["gpu_memory"] = gpu_snapshot()
         results.append(row)
+        checkpoint(f"measured_bs{bs}")
         print(f"bs={bs}: {row['paired_speedup']:.3f}x "
               f"({row['baseline_us']:.2f} -> {row['candidate_us']:.2f} us); "
               f"{row['assessment']}, exploratory CI={row['bootstrap_95']}", flush=True)
         if args.profile:
+            checkpoint(f"profiling_bs{bs}")
             profile_dir = args.output.parent / (args.output.stem + "-profiles")
             profile_dir.mkdir(parents=True, exist_ok=True)
             for index, (label, graph) in enumerate(zip(("baseline", "candidate"), graphs)):
@@ -192,21 +229,9 @@ def main():
             row["profile_directory"] = str(profile_dir)
         del graphs, outputs, graph, out, original_ids
 
-    checkout = ROOT / "serving/sglang"
-    source_diff = subprocess.check_output(["git", "-C", str(checkout), "diff", "HEAD"])
-    report = dict(gpu=torch.cuda.get_device_name(), torch=torch.__version__,
-                  cuda=torch.version.cuda, seed=args.seed, pairs=args.pairs,
-                  candidate=str(args.candidate),
-                  candidate_sha256=hashlib.sha256(args.candidate.read_bytes()).hexdigest(),
-                  baseline=str(args.baseline),
-                  baseline_sha256=hashlib.sha256(args.baseline.read_bytes()).hexdigest(),
-                  serving_diff_sha256=hashlib.sha256(source_diff).hexdigest(),
-                  serving_diff=source_diff.decode(),
-                  measurement="raw CUDA graph replay, cold L2, synthetic inputs; not official score",
-                  geometric_mean_speedup=math.exp(statistics.mean(
-                      math.log(row["paired_speedup"]) for row in results)), results=results)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(report, indent=2) + "\n")
+    report["geometric_mean_speedup"] = math.exp(statistics.mean(
+        math.log(row["paired_speedup"]) for row in results))
+    checkpoint("complete")
     print(f"Saved {args.output}")
 
 
