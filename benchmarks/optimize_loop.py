@@ -41,6 +41,38 @@ def adapter(path, source):
                     '    return prepare_layer(weights, module.MuseSpark1xFp4Experts)\n')
 
 
+def build_candidate(source, item):
+    if item['executor'] == 'tile_cutoff':
+        cutoff = item['cutoff']
+        if cutoff not in (320, 384):
+            raise ValueError('New cutoff needs reviewed boundary coverage')
+        old = 'if num_tokens <= 256:'
+        if source.count(old) != 1:
+            raise ValueError('Expected unique tile policy anchor')
+        return source.replace(old, f'if num_tokens <= {cutoff}:'), [m for m in (257, 288, 320, 384) if m <= cutoff]
+    up, down = item['up_tile'], item['down_tile']
+    if up not in (8, 16, 32, 48, 64) or down not in (8, 16, 32, 48, 64):
+        raise ValueError('Unsupported tile')
+    anchor = '        if num_tokens == 1 and topk <= 32 and expert_map is None:'
+    if source.count(anchor) != 1:
+        raise ValueError('Expected alignment anchor')
+    guard = ('expert_map is not None and 64 <= num_tokens <= 512 and topk == 8 '
+             'and self.num_local_experts == 32 and self.global_num_experts == 256 '
+             'and size_k == 4096 and size_n == 4096 '
+             'and torch.cuda.get_device_capability(hidden_states.device) == (9, 0)')
+    source = source.replace(anchor, f'        split_tile = {guard}\n'
+                            f'        if split_tile:\n            block_size_m = {up}\n\n' + anchor)
+    anchor = '        return moe_wna16_marlin_gemm('
+    if source.count(anchor) != 1:
+        raise ValueError('Expected down GEMM anchor')
+    source = source.replace(anchor, f'        if split_tile and block_size_m != {down}:\n'
+                            f'            block_size_m = {down}\n'
+                            '            sorted_token_ids, expert_ids, num_tokens_post_padded = moe_align_block_size(\n'
+                            '                local_topk_ids, block_size_m, self.global_num_experts\n'
+                            '            )\n' + anchor)
+    return source, [128, 256, 384, 512]
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--minutes', type=float, default=45)
@@ -93,27 +125,21 @@ def main():
     queue = json.loads(args.queue.read_text())
     atomic(directory / 'queue-snapshot.json', queue)
     executable = sorted((item for item in queue['items']
-                         if item.get('executor') == 'tile_cutoff'
+                         if item.get('executor') in ('tile_cutoff', 'split_tiles')
                          and item['status'] in ('queued', 'running')), key=lambda item: item['rank'])
     try:
         for item in executable:
-            cutoff = item['cutoff']
-            if cutoff not in (320, 384):
-                raise ValueError('New cutoff needs reviewed boundary coverage')
             name = item['run_id']
             if state['iterations'].get(name, {}).get('status') in ('rejected', 'validated_candidate'):
                 continue
             folder = directory / name
             folder.mkdir(exist_ok=True)
-            old = 'if num_tokens <= 256:'
-            if source.count(old) != 1:
-                raise ValueError('Expected unique tile policy anchor')
-            changed = source.replace(old, f'if num_tokens <= {cutoff}:')
+            changed, targets = build_candidate(source, item)
             candidate = folder / 'candidate.py'
             adapter(candidate, changed)
             (folder / 'candidate-source.py').write_text(changed)
-            targets = [m for m in (257, 288, 320, 384) if m <= cutoff]
-            row = {'queue_id': item['id'], 'rank_at_start': item['rank'], 'status': 'screening', 'hypothesis': 'Tile16 reduces padding near the current 256-token boundary',
+            batches = item.get('screen_batches', [256, 257, 288, 320, 384, 512, 753])
+            row = {'queue_id': item['id'], 'rank_at_start': item['rank'], 'status': 'screening', 'hypothesis': item['title'],
                    'target_batches': targets, 'candidate_source_sha256': hashlib.sha256(changed.encode()).hexdigest(),
                    'evidence': []}
             state['iterations'][name] = row
@@ -121,9 +147,9 @@ def main():
             passed = True
             for seed in (8801, 9901):
                 tag = f'screen-{seed}'
-                report = measure(folder, tag, candidate, incumbent, [256, 257, 288, 320, 384, 512, 753], seed)
+                report = measure(folder, tag, candidate, incumbent, batches, seed)
                 row['evidence'].append(tag)
-                if not gate(report, [256, 257, 288, 320, 384, 512, 753], targets):
+                if not gate(report, batches, targets):
                     passed = False
                     break
             if passed:

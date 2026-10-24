@@ -280,6 +280,138 @@
       "executor": "tile_cutoff",
       "cutoff": 384,
       "run_id": "extend-tile16-to-384"
+    },
+    {
+      "id": "Q03.1",
+      "rank": 1.0,
+      "title": "Independent GEMM tiles up=16, down=8",
+      "stage": "hypothesis",
+      "status": "queued",
+      "executor": "split_tiles",
+      "up_tile": 16,
+      "down_tile": 8,
+      "run_id": "split-up16-down8",
+      "screen_batches": [
+        8,
+        32,
+        64,
+        128,
+        256,
+        384,
+        512,
+        753
+      ],
+      "roi_estimate": {
+        "potential_component_gain": "unknown",
+        "confidence": "medium",
+        "effort": "low",
+        "basis": "Marlin dominates selected profile; dimensions differ. Extra alignment overhead included."
+      },
+      "validation": [
+        "reference correctness",
+        "paired incumbent screen",
+        "independent seeds",
+        "prefill and boundary validation"
+      ]
+    },
+    {
+      "id": "Q03.2",
+      "rank": 1.1,
+      "title": "Independent GEMM tiles up=8, down=16",
+      "stage": "hypothesis",
+      "status": "queued",
+      "executor": "split_tiles",
+      "up_tile": 8,
+      "down_tile": 16,
+      "run_id": "split-up8-down16",
+      "screen_batches": [
+        8,
+        32,
+        64,
+        128,
+        256,
+        384,
+        512,
+        753
+      ],
+      "roi_estimate": {
+        "potential_component_gain": "unknown",
+        "confidence": "medium",
+        "effort": "low",
+        "basis": "Marlin dominates selected profile; dimensions differ. Extra alignment overhead included."
+      },
+      "validation": [
+        "reference correctness",
+        "paired incumbent screen",
+        "independent seeds",
+        "prefill and boundary validation"
+      ]
+    },
+    {
+      "id": "Q03.3",
+      "rank": 1.2,
+      "title": "Independent GEMM tiles up=16, down=32",
+      "stage": "hypothesis",
+      "status": "queued",
+      "executor": "split_tiles",
+      "up_tile": 16,
+      "down_tile": 32,
+      "run_id": "split-up16-down32",
+      "screen_batches": [
+        8,
+        32,
+        64,
+        128,
+        256,
+        384,
+        512,
+        753
+      ],
+      "roi_estimate": {
+        "potential_component_gain": "unknown",
+        "confidence": "medium",
+        "effort": "low",
+        "basis": "Marlin dominates selected profile; dimensions differ. Extra alignment overhead included."
+      },
+      "validation": [
+        "reference correctness",
+        "paired incumbent screen",
+        "independent seeds",
+        "prefill and boundary validation"
+      ]
+    },
+    {
+      "id": "Q03.4",
+      "rank": 1.3,
+      "title": "Independent GEMM tiles up=32, down=16",
+      "stage": "hypothesis",
+      "status": "queued",
+      "executor": "split_tiles",
+      "up_tile": 32,
+      "down_tile": 16,
+      "run_id": "split-up32-down16",
+      "screen_batches": [
+        8,
+        32,
+        64,
+        128,
+        256,
+        384,
+        512,
+        753
+      ],
+      "roi_estimate": {
+        "potential_component_gain": "unknown",
+        "confidence": "medium",
+        "effort": "low",
+        "basis": "Marlin dominates selected profile; dimensions differ. Extra alignment overhead included."
+      },
+      "validation": [
+        "reference correctness",
+        "paired incumbent screen",
+        "independent seeds",
+        "prefill and boundary validation"
+      ]
     }
   ],
   "latest_result": "Both expanded tile16 cutoffs rejected; incumbent unchanged. Next: independently tune gate/up versus down GEMM with consistent alignment metadata."

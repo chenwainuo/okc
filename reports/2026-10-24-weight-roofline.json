@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "source_report": "results/selected-validation.json",
+  "hardware_source": "https://www.nvidia.com/en-au/data-center/h200/",
+  "peak_hbm_bytes_per_second": 4800000000000.0,
+  "assumptions": [
+    "Each active dense expert reads its packed weights once from HBM per invocation",
+    "Cold-cache benchmark; estimate ignores residual cached weight bytes",
+    "Assume peak HBM bandwidth; ignore scales, activation traffic, compute, synchronization and communication",
+    "This is a model of component headroom, not measured traffic or a proof about full serving"
+  ],
+  "packed_bytes_per_expert": 25165824,
+  "results": [
+    {
+      "bs": 1,
+      "median_active_experts": 3.0,
+      "incumbent_us": 59.248000383377075,
+      "ideal_weight_streaming_us": 15.72864,
+      "optimistic_speedup_ceiling_under_assumptions": 3.7668864176036245
+    },
+    {
+      "bs": 8,
+      "median_active_experts": 8.5,
+      "incumbent_us": 137.2000053524971,
+      "ideal_weight_streaming_us": 44.56448,
+      "optimistic_speedup_ceiling_under_assumptions": 3.0786852074229767
+    },
+    {
+      "bs": 16,
+      "median_active_experts": 12.5,
+      "incumbent_us": 178.6240041255951,
+      "ideal_weight_streaming_us": 65.536,
+      "optimistic_speedup_ceiling_under_assumptions": 2.7255860004515853
+    },
+    {
+      "bs": 32,
+      "median_active_experts": 16.0,
+      "incumbent_us": 231.6800057888031,
+      "ideal_weight_streaming_us": 83.88607999999999,
+      "optimistic_speedup_ceiling_under_assumptions": 2.761840889320411
+    },
+    {
+      "bs": 64,
+      "median_active_experts": 20.5,
+      "incumbent_us": 286.44800186157227,
+      "ideal_weight_streaming_us": 107.47904,
+      "optimistic_speedup_ceiling_under_assumptions": 2.665152218158743
+    },
+    {
+      "bs": 128,
+      "median_active_experts": 23.5,
+      "incumbent_us": 350.76799988746643,
+      "ideal_weight_streaming_us": 123.20768000000001,
+      "optimistic_speedup_ceiling_under_assumptions": 2.846965383062699
+    },
+    {
+      "bs": 256,
+      "median_active_experts": 25.0,
+      "incumbent_us": 477.1679937839508,
+      "ideal_weight_streaming_us": 131.072,
+      "optimistic_speedup_ceiling_under_assumptions": 3.6405028822628083
+    },
+    {
+      "bs": 257,
+      "median_active_experts": 25.0,
+      "incumbent_us": 473.64799678325653,
+      "ideal_weight_streaming_us": 131.072,
+      "optimistic_speedup_ceiling_under_assumptions": 3.613647436395695
+    },
+    {
+      "bs": 384,
+      "median_active_experts": 24.5,
+      "incumbent_us": 564.1120076179504,
+      "ideal_weight_streaming_us": 128.45056,
+      "optimistic_speedup_ceiling_under_assumptions": 4.391666393809031
+    },
+    {
+      "bs": 512,
+      "median_active_experts": 25.5,
+      "incumbent_us": 638.8639807701111,
+      "ideal_weight_streaming_us": 133.69344,
+      "optimistic_speedup_ceiling_under_assumptions": 4.778573883431461
+    },
+    {
+      "bs": 513,
+      "median_active_experts": 26.0,
+      "incumbent_us": 740.4319941997528,
+      "ideal_weight_streaming_us": 136.31488,
+      "optimistic_speedup_ceiling_under_assumptions": 5.431776737798199
+    },
+    {
+      "bs": 753,
+      "median_active_experts": 26.5,
+      "incumbent_us": 847.4879860877991,
+      "ideal_weight_streaming_us": 138.93632,
+      "optimistic_speedup_ceiling_under_assumptions": 6.099830383356916
+    },
+    {
+      "bs": 3012,
+      "median_active_experts": 29.0,
+      "incumbent_us": 2072.208046913147,
+      "ideal_weight_streaming_us": 152.04352,
+      "optimistic_speedup_ceiling_under_assumptions": 13.629045466147765
+    },
+    {
+      "bs": 16384,
+      "median_active_experts": 29.0,
+      "incumbent_us": 9334.864139556885,
+      "ideal_weight_streaming_us": 152.04352,
+      "optimistic_speedup_ceiling_under_assumptions": 61.39600122094572
+    }
+  ],
+  "implication": "If large-shape weight streaming is dominant, 3x overall will require serving-level reuse, overlap, or fewer equivalent iterations as well as kernel work; preserve exact model and draft semantics."
+}

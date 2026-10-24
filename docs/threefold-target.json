@@ -1,0 +1,44 @@
+{
+  "objective": "3x the current benchmark",
+  "anchor_commit": "861333f",
+  "anchor_source_sha256": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5",
+  "anchor_report": "reports/2026-10-24-selected-validation.json",
+  "target_speedup": 3,
+  "verification": "paired comparison against frozen incumbent on original suite and independent holdouts; full serving score remains separately unproven",
+  "local_primary_batches": [
+    8,
+    32,
+    128,
+    256
+  ],
+  "regression_batches": [
+    1,
+    16,
+    64,
+    257,
+    384,
+    512,
+    513,
+    753,
+    3012,
+    16384
+  ],
+  "aggregation": "report every shape and geometric mean; never select winning subset",
+  "scope_caveat": "Local proxy is not the official serving benchmark. Full serving gain requires eight H200s and model validation.",
+  "baseline_medians": {
+    "1": 59.248000383377075,
+    "8": 137.2000053524971,
+    "16": 178.6240041255951,
+    "32": 231.6800057888031,
+    "64": 286.44800186157227,
+    "128": 350.76799988746643,
+    "256": 477.1679937839508,
+    "257": 473.64799678325653,
+    "384": 564.1120076179504,
+    "512": 638.8639807701111,
+    "513": 740.4319941997528,
+    "753": 847.4879860877991,
+    "3012": 2072.208046913147,
+    "16384": 9334.864139556885
+  }
+}
