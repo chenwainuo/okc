@@ -1,0 +1,42 @@
+--- a/python/sglang/srt/layers/muse_spark_fp4_moe.py
++++ b/python/sglang/srt/layers/muse_spark_fp4_moe.py
+@@ -453,6 +453,8 @@
+         hidden_states: torch.Tensor,
+         topk_scores: torch.Tensor,
+         topk_ids: torch.Tensor,
++        *,
++        skip_nonlocal: bool = False,
+     ) -> torch.Tensor:
+         from sgl_kernel.scalar_type import scalar_types
+ 
+@@ -491,7 +493,10 @@
+             # The align helper reserves its own extra bucket for -1.
+             align_num_experts = self.num_local_experts
+             sorted_token_ids, expert_ids, num_tokens_post_padded = moe_align_block_size(
+-                local_topk_ids, block_size_m, align_num_experts
++                local_topk_ids,
++                block_size_m,
++                align_num_experts,
++                ignore_invalid_expert=expert_map is not None and skip_nonlocal,
+             )
+ 
+         workspace = marlin_make_workspace(hidden_states.device, max_blocks_per_sm=4)
+@@ -592,11 +597,15 @@
+             )
+         if pre_expert_norm is not None:
+             hidden_states = pre_expert_norm(hidden_states)
+-        expert_outputs, local_topk_ids = self._marlin_expert_outputs(
+-            hidden_states, topk_scores, topk_ids
+-        )
+         if self._post_expert_norm is not post_expert_norm:
+             self.set_post_expert_norm(post_expert_norm)
++        expert_outputs, local_topk_ids = self._marlin_expert_outputs(
++            hidden_states,
++            topk_scores,
++            topk_ids,
++            # Only the masked fused finalizer can consume unwritten nonlocal slots.
++            skip_nonlocal=self._post_expert_norm_weight is not None,
++        )
+         if self._post_expert_norm_weight is not None:
+             return fused_post_expert_norm_weighted_sum(
+                 expert_outputs,
