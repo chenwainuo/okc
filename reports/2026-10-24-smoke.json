@@ -1,0 +1,51 @@
+{
+  "gpu": "NVIDIA H200",
+  "torch": "2.14.1+cu130",
+  "cuda": "13.0",
+  "seed": 5252,
+  "pairs": 2,
+  "candidate_sha256": "13285ce5b3409d6080f46bbd9ba452b63711f906c12640246552b3145b32744a",
+  "baseline_sha256": "7f06941671fc5b05c4e8cb3c383bb930df78fa2eea94c83c4faacb1a04382567",
+  "serving_diff_sha256": "05c13d3f16d080f3411b115ba2ab404ea8819cc56418afe08f32ee79c57843a6",
+  "measurement": "raw CUDA graph replay, cold L2, synthetic inputs; not official score",
+  "results": [
+    {
+      "bs": 8,
+      "baseline_us": 169.8720008134842,
+      "candidate_us": 130.96000254154205,
+      "paired_speedup": 1.3004949162833586,
+      "baseline_samples_us": [
+        170.1440066099167,
+        169.5999950170517
+      ],
+      "candidate_samples_us": [
+        137.7280056476593,
+        124.1919994354248
+      ],
+      "balanced_speedup": 1.2988628831511229,
+      "order_balanced_blocks": 1,
+      "bootstrap_95": null,
+      "assessment": "insufficient_samples"
+    },
+    {
+      "bs": 32,
+      "baseline_us": 202.4639993906021,
+      "candidate_us": 200.8640021085739,
+      "paired_speedup": 1.0082811591902532,
+      "baseline_samples_us": [
+        224.44799542427063,
+        180.4800033569336
+      ],
+      "candidate_samples_us": [
+        223.23200106620789,
+        178.49600315093994
+      ],
+      "balanced_speedup": 1.0082771765642355,
+      "order_balanced_blocks": 1,
+      "bootstrap_95": null,
+      "assessment": "insufficient_samples"
+    }
+  ],
+  "interpretation": "Functional smoke test only: two pairs cannot establish a speedup or predict the serving score.",
+  "comparison": "Actual pinned stock serving method vs three-change stack, synthetic single-GPU expert inputs; excludes all-reduce and the rest of serving."
+}

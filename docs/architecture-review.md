@@ -13,8 +13,12 @@ but reducing their operation count does not establish a serving improvement.
 - The remote H200 is running the pinned challenge container with PyTorch
   `2.14.1+cu130`, CUDA runtime 13.0 and host driver 595.99.02.
 - 280 GPU alignment contract checks and 256 GPU finalizer checks have passed.
-- At this review's initial publication, the full expert smoke test is still in its
-  first Marlin compilation. There are no validated latency or serving-score gains.
+- The full expert smoke test passed all five reference cases for stock and patch,
+  with relative L2 errors approximately 0.54–0.56%, below the fixture's 1.5% bound.
+  No-local routes also passed. Two-pair exploratory timings were 169.87 → 130.96 µs
+  at 8 tokens and 202.46 → 200.86 µs at 32 tokens. These samples are insufficient
+  for a performance conclusion; the repeated/profiled comparison is in progress.
+  No full serving-score gain has been established.
 - CPU tests cover control-flow safety, routing diagnostics, and measurement summaries.
   They do not establish GPU numerical correctness.
 - The local harness uses synthetic official kernel inputs and excludes inter-GPU
