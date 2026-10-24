@@ -44,6 +44,7 @@ def adapter(path, source):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--minutes', type=float, default=45)
+    p.add_argument('--queue', type=Path, default=ROOT / 'docs/optimization-queue.json')
     p.add_argument('--directory', type=Path, default=ROOT / 'results/optimization-loop')
     args = p.parse_args()
     if args.minutes <= 0:
@@ -89,9 +90,17 @@ def main():
                            timeout=remaining, check=True)
         return json.loads(output.read_text())
 
+    queue = json.loads(args.queue.read_text())
+    atomic(directory / 'queue-snapshot.json', queue)
+    executable = sorted((item for item in queue['items']
+                         if item.get('executor') == 'tile_cutoff'
+                         and item['status'] in ('queued', 'running')), key=lambda item: item['rank'])
     try:
-        for cutoff in (320, 384):
-            name = f'extend-tile16-to-{cutoff}'
+        for item in executable:
+            cutoff = item['cutoff']
+            if cutoff not in (320, 384):
+                raise ValueError('New cutoff needs reviewed boundary coverage')
+            name = item['run_id']
             if state['iterations'].get(name, {}).get('status') in ('rejected', 'validated_candidate'):
                 continue
             folder = directory / name
@@ -104,7 +113,7 @@ def main():
             adapter(candidate, changed)
             (folder / 'candidate-source.py').write_text(changed)
             targets = [m for m in (257, 288, 320, 384) if m <= cutoff]
-            row = {'status': 'screening', 'hypothesis': 'Tile16 reduces padding near the current 256-token boundary',
+            row = {'queue_id': item['id'], 'rank_at_start': item['rank'], 'status': 'screening', 'hypothesis': 'Tile16 reduces padding near the current 256-token boundary',
                    'target_batches': targets, 'candidate_source_sha256': hashlib.sha256(changed.encode()).hexdigest(),
                    'evidence': []}
             state['iterations'][name] = row

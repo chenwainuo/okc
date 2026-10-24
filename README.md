@@ -56,6 +56,9 @@ before retaining a change. Local kernel speedups are **not** serving scores.
 
 Run the resumable experiment queue with `bash benchmarks/run_h200.sh --loop --minutes 45`.
 State, candidate sources, logs, and measurements persist under `results/optimization-loop/`.
+The [ranked experiment queue](docs/optimization-queue.json) tracks potential ROI,
+evidence, stage, and next action. Executable queued items run in rank order;
+profiling and implementation tasks remain agent work.
 See [the agent loop protocol](docs/optimization-loop.json) for gates, stop/resume,
 budget boundaries, and promotion requirements. The finite queue stops when exhausted;
 new hypotheses and active-patch promotion require agent review.

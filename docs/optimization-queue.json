@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "ranking_policy": "Expected information/improvement per engineering and GPU cost; evidence-weighted ordinal estimates, not measured ROI. Feasible work first; nonpreemptive active measurement. Re-rank after each result.",
+  "runtime_state": "results/optimization-loop/state.json overrides snapshot status for executed items",
+  "lifecycle": [
+    "profile",
+    "measure baseline",
+    "hypothesis",
+    "optimize/reimplement",
+    "test",
+    "validate",
+    "retain/reject",
+    "reprofile and rerank"
+  ],
+  "items": [
+    {
+      "id": "Q03",
+      "rank": 1,
+      "title": "Tune gate/up and down GEMM independently",
+      "stage": "hypothesis",
+      "status": "ready_for_implementation",
+      "roi_estimate": {
+        "potential_component_gain": "high",
+        "confidence": "medium",
+        "effort": "medium",
+        "basis": "Both GEMMs dominate component time but differ in dimensions and padding cost; one common tile may be suboptimal.",
+        "serving_gain": "unknown"
+      },
+      "measurement": "Use Q01 attribution; implement separate tile choices with independently matched alignment metadata.",
+      "evidence": [
+        "reports/2026-10-24-profiled.json",
+        "reports/2026-10-24-loop-001.json"
+      ],
+      "validation": [
+        "official numerical reference",
+        "empty-local eager and graph replay",
+        "independent seeds",
+        "boundary and prefill noninferiority",
+        "full serving gate before claiming serving gain"
+      ],
+      "next_action": "Use Q01 attribution; implement separate tile choices with independently matched alignment metadata.",
+      "executor": "agent"
+    },
+    {
+      "id": "Q05",
+      "rank": 2,
+      "title": "Reduce small-batch finalizer launch/occupancy cost",
+      "stage": "hypothesis",
+      "status": "needs_profile",
+      "roi_estimate": {
+        "potential_component_gain": "medium",
+        "confidence": "medium",
+        "effort": "medium",
+        "basis": "Fusion already helps M1/8/16; remaining finalizer share must justify more work.",
+        "serving_gain": "unknown"
+      },
+      "measurement": "Profile selected finalizer, then isolate launch geometry or fusion changes with norm-order oracle.",
+      "evidence": [
+        "reports/2026-10-24-ablation.json"
+      ],
+      "validation": [
+        "official numerical reference",
+        "empty-local eager and graph replay",
+        "independent seeds",
+        "boundary and prefill noninferiority",
+        "full serving gate before claiming serving gain"
+      ],
+      "next_action": "Profile selected finalizer, then isolate launch geometry or fusion changes with norm-order oracle.",
+      "executor": "agent"
+    },
+    {
+      "id": "Q06",
+      "rank": 3,
+      "title": "Reuse expert workspace and reduce zeroing",
+      "stage": "hypothesis",
+      "status": "needs_profile",
+      "roi_estimate": {
+        "potential_component_gain": "low",
+        "confidence": "low",
+        "effort": "medium",
+        "basis": "Allocation may be outside captured timing; gains cannot be inferred from allocation count.",
+        "serving_gain": "unknown"
+      },
+      "measurement": "Measure captured device zeroing and end-to-end launch overhead; inspect scratch lifetimes.",
+      "evidence": [],
+      "validation": [
+        "official numerical reference",
+        "empty-local eager and graph replay",
+        "independent seeds",
+        "boundary and prefill noninferiority",
+        "full serving gate before claiming serving gain"
+      ],
+      "next_action": "Measure captured device zeroing and end-to-end launch overhead; inspect scratch lifetimes.",
+      "executor": "agent"
+    },
+    {
+      "id": "Q07",
+      "rank": 4,
+      "title": "Attention metadata and split-KV policy",
+      "stage": "profile",
+      "status": "needs_harness",
+      "roi_estimate": {
+        "potential_component_gain": "unknown",
+        "confidence": "low",
+        "effort": "high",
+        "basis": "Potential serving impact, but current expert-only harness supplies no supporting measurement.",
+        "serving_gain": "unknown"
+      },
+      "measurement": "Build representative isolated attention inputs with exact FP8 KV and full/sliding context semantics.",
+      "evidence": [],
+      "validation": [
+        "official numerical reference",
+        "empty-local eager and graph replay",
+        "independent seeds",
+        "boundary and prefill noninferiority",
+        "full serving gate before claiming serving gain"
+      ],
+      "next_action": "Build representative isolated attention inputs with exact FP8 KV and full/sliding context semantics.",
+      "executor": "agent"
+    },
+    {
+      "id": "Q08",
+      "rank": 5,
+      "title": "DFlash graph coverage and head",
+      "stage": "profile",
+      "status": "needs_harness",
+      "roi_estimate": {
+        "potential_component_gain": "unknown",
+        "confidence": "low",
+        "effort": "high",
+        "basis": "Could affect each serving iteration; acceptance and graph-miss distribution currently unmeasured.",
+        "serving_gain": "unknown"
+      },
+      "measurement": "Measure draft head, graph coverage and accepted tokens; preserve released draft semantics.",
+      "evidence": [],
+      "validation": [
+        "official numerical reference",
+        "empty-local eager and graph replay",
+        "independent seeds",
+        "boundary and prefill noninferiority",
+        "full serving gate before claiming serving gain"
+      ],
+      "next_action": "Measure draft head, graph coverage and accepted tokens; preserve released draft semantics.",
+      "executor": "agent"
+    },
+    {
+      "id": "Q09",
+      "rank": 6,
+      "title": "Communication/unpool overlap",
+      "stage": "profile",
+      "status": "blocked_hardware",
+      "roi_estimate": {
+        "potential_component_gain": "unknown",
+        "confidence": "low",
+        "effort": "high",
+        "basis": "Cannot measure rank skew or collectives faithfully on one H200.",
+        "serving_gain": "unknown"
+      },
+      "measurement": "Collect 8-rank trace before proposing overlap/fusion.",
+      "evidence": [],
+      "validation": [
+        "official numerical reference",
+        "empty-local eager and graph replay",
+        "independent seeds",
+        "boundary and prefill noninferiority",
+        "full serving gate before claiming serving gain"
+      ],
+      "next_action": "Collect 8-rank trace before proposing overlap/fusion.",
+      "executor": "agent"
+    },
+    {
+      "id": "Q10",
+      "rank": 7,
+      "title": "Scheduler/cache and full serving curve",
+      "stage": "validate",
+      "status": "blocked_full_serving",
+      "roi_estimate": {
+        "potential_component_gain": "unknown",
+        "confidence": "low",
+        "effort": "high",
+        "basis": "Required final gate; expert gains are not serving gains.",
+        "serving_gain": "unknown"
+      },
+      "measurement": "Measure stock-vs-stock and patched agreement, TTFT, throughput/interactivity at all four loads.",
+      "evidence": [],
+      "validation": [
+        "official numerical reference",
+        "empty-local eager and graph replay",
+        "independent seeds",
+        "boundary and prefill noninferiority",
+        "full serving gate before claiming serving gain"
+      ],
+      "next_action": "Measure stock-vs-stock and patched agreement, TTFT, throughput/interactivity at all four loads.",
+      "executor": "agent"
+    },
+    {
+      "id": "Q01",
+      "rank": 8,
+      "title": "Inspect incumbent graph traces and quantify GEMM padding",
+      "stage": "profile",
+      "status": "measured",
+      "roi_estimate": {
+        "potential_component_gain": "high",
+        "confidence": "high",
+        "effort": "low",
+        "basis": "Largest measured component: Marlin GEMMs ~95% of graph time at M128 before selected tile policy; remeasure attribution after selection.",
+        "serving_gain": "unknown"
+      },
+      "measurement": "Rank gate/up vs down GEMM, padding, occupancy and memory traffic at M128/256/384/512.",
+      "evidence": [
+        "selected-validation-profiles",
+        "reports/2026-10-24-loop-001.json"
+      ],
+      "validation": [
+        "official numerical reference",
+        "empty-local eager and graph replay",
+        "independent seeds",
+        "boundary and prefill noninferiority",
+        "full serving gate before claiming serving gain"
+      ],
+      "next_action": "Use selected-stack GEMM attribution to prioritize Q03; hardware occupancy counters still unmeasured.",
+      "executor": "agent"
+    },
+    {
+      "id": "Q02",
+      "rank": 9,
+      "title": "Extend tile16 cutoff to 320",
+      "stage": "validate",
+      "status": "rejected",
+      "roi_estimate": {
+        "potential_component_gain": "medium",
+        "confidence": "medium",
+        "effort": "low",
+        "basis": "Prior M257 isolated tile16 result suggests a small advantage over tile32; integrated benefit remains unknown.",
+        "serving_gain": "unknown"
+      },
+      "measurement": "Compare real serving candidate against incumbent on boundary shapes and independent seeds.",
+      "evidence": [
+        "reports/2026-10-24-tiles.json",
+        "reports/2026-10-24-loop-001.json"
+      ],
+      "validation": [
+        "official numerical reference",
+        "empty-local eager and graph replay",
+        "independent seeds",
+        "boundary and prefill noninferiority",
+        "full serving gate before claiming serving gain"
+      ],
+      "next_action": "Retain incumbent. Do not repeat without new evidence: screening found regressions beyond M256.",
+      "executor": "tile_cutoff",
+      "cutoff": 320,
+      "run_id": "extend-tile16-to-320"
+    },
+    {
+      "id": "Q04",
+      "rank": 10,
+      "title": "Extend tile16 cutoff to 384",
+      "stage": "validate",
+      "status": "rejected",
+      "roi_estimate": {
+        "potential_component_gain": "low",
+        "confidence": "low",
+        "effort": "low",
+        "basis": "Existing M384 results favor tile32; test only to locate boundary/generalization, not because a gain is established.",
+        "serving_gain": "unknown"
+      },
+      "measurement": "Reject early on regression; require consistent target-shape gain against incumbent.",
+      "evidence": [
+        "reports/2026-10-24-tiles.json",
+        "reports/2026-10-24-loop-001.json"
+      ],
+      "validation": [
+        "official numerical reference",
+        "empty-local eager and graph replay",
+        "independent seeds",
+        "boundary and prefill noninferiority",
+        "full serving gate before claiming serving gain"
+      ],
+      "next_action": "Retain incumbent. Do not repeat without new evidence: screening found regressions beyond M256.",
+      "executor": "tile_cutoff",
+      "cutoff": 384,
+      "run_id": "extend-tile16-to-384"
+    }
+  ],
+  "latest_result": "Both expanded tile16 cutoffs rejected; incumbent unchanged. Next: independently tune gate/up versus down GEMM with consistent alignment metadata."
+}
