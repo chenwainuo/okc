@@ -4,6 +4,9 @@ Optimize SGLang serving for Muse Spark Open. Develop and profile individual expe
 components on one H200, then validate the complete serving patch on eight H200s.
 The patch stack is experimental: benchmark results determine which changes survive.
 
+See the [architecture review and optimization candidates](docs/architecture-review.md)
+for the serving path, bottleneck hypotheses, experiments and validation gates.
+
 ## Setup
 
 Use a Linux GPU host with Docker, NVIDIA drivers, and NVIDIA Container Toolkit.
