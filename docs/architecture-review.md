@@ -19,6 +19,16 @@ but reducing their operation count does not establish a serving improvement.
   at 8 tokens and 202.46 → 200.86 µs at 32 tokens. These samples are insufficient
   for a performance conclusion; the repeated/profiled comparison is in progress.
   No full serving-score gain has been established.
+- A subsequent 20-pair stock-vs-stack run passed correctness and found local,
+  order-balanced speedups of 1.381x / 1.288x / 1.249x for 1 / 8 / 16 tokens.
+  The respective exploratory 95% intervals were [1.359, 1.387], [1.240, 1.320],
+  and [1.230, 1.271]. At 32 / 128 / 256 tokens the estimates were approximately
+  1.008x / 1.006x / 1.006x, all inconclusive under the 2% screening margin.
+  Independent-change measurements and reruns are still needed.
+- The patched 128-token graph trace attributes about 452 µs per replay to the
+  two Marlin GEMMs out of roughly 476 µs in the annotated replay span. This is
+  diagnostic evidence that GEMMs dominate that case, not a clean timing result.
+  It makes tile/padding policy a higher priority than another small finalizer edit.
 - CPU tests cover control-flow safety, routing diagnostics, and measurement summaries.
   They do not establish GPU numerical correctness.
 - The local harness uses synthetic official kernel inputs and excludes inter-GPU

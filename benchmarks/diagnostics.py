@@ -77,7 +77,10 @@ def save_profile(prof, prefix):
     Path(str(prefix) + ".txt").write_text(averages.table(
         sort_by="self_device_time_total", row_limit=80) + "\n")
     rows = [{"name": row.key, "count": row.count,
+             "device_type": str(row.device_type),
+             "is_user_annotation": row.is_user_annotation,
              "self_cpu_us": row.self_cpu_time_total,
+             "cpu_total_us": row.cpu_time_total,
              "device_total_us": row.device_time_total,
              "self_device_us": row.self_device_time_total} for row in averages]
     Path(str(prefix) + ".events.json").write_text(json.dumps(rows, indent=2) + "\n")
