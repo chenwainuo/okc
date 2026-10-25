@@ -1,0 +1,85 @@
+{
+  "status": "development_measurement_complete_all_sentinels_regress",
+  "reviewer": "measurement_audit",
+  "promotion_eligible": false,
+  "scope": "One development seed960043;20 paired AB/BA graph samples per mixed sentinel[8,128,3012,16384]",
+  "rows": [
+    {
+      "bs": 8,
+      "baseline_median_us": 123.64800274372101,
+      "candidate_median_us": 232.2240024805069,
+      "balanced_speedup": 0.5262166936694865,
+      "order_balanced_blocks": 10,
+      "bootstrap_95": [
+        0.47211303936961585,
+        0.5577832789880104
+      ],
+      "assessment": "regression"
+    },
+    {
+      "bs": 128,
+      "baseline_median_us": 345.08800506591797,
+      "candidate_median_us": 595.4720079898834,
+      "balanced_speedup": 0.5708929298988773,
+      "order_balanced_blocks": 10,
+      "bootstrap_95": [
+        0.5592588688629417,
+        0.5778223076228829
+      ],
+      "assessment": "regression"
+    },
+    {
+      "bs": 3012,
+      "baseline_median_us": 1967.6960110664368,
+      "candidate_median_us": 4711.856126785278,
+      "balanced_speedup": 0.41462739585990055,
+      "order_balanced_blocks": 10,
+      "bootstrap_95": [
+        0.412335056156427,
+        0.41604431667443553
+      ],
+      "assessment": "regression"
+    },
+    {
+      "bs": 16384,
+      "baseline_median_us": 9199.631690979004,
+      "candidate_median_us": 22761.823654174805,
+      "balanced_speedup": 0.4040971868496369,
+      "order_balanced_blocks": 10,
+      "bootstrap_95": [
+        0.403495015557469,
+        0.40551570342399096
+      ],
+      "assessment": "regression"
+    }
+  ],
+  "mixed_sentinel_geomean_balanced_speedup": 0.47365898151907726,
+  "aggregate_scope_warning": "This is neither original four-primary geomean nor original14shape/full-goal statistic.",
+  "ratio_definition": "baseline/candidate; below1 means candidate slower",
+  "decision": "Park this WGMMA rewrite family. No automatic T32/allpadding/variant profiling, no holdout spending or promotion. Retain negative evidence and prioritize other whole-goal bottlenecks. A new proposal requires new rationale and review.",
+  "audit": {
+    "raw_summarization": "All80pairs/4summaries recomputed exactly with frozen measurement.py; finite positive samples and alternating orders",
+    "correctness": "178 official reference cases;196 input immutability checks;84 matched-input fingerprints; eager/graph empty pass",
+    "provenance": "All reviewed artifacts and dependencies match current bytes; bundle/module hashes match manifests; SGLang imports isolated; same weight fingerprints; JIT paths/dependency hashes logged under distinct role/archive caches",
+    "ownership_samples": 72,
+    "foreign_or_unresolved_samples": 0,
+    "ownership_limit": "1s sampled ownership plus cooperative lock; not continuous exclusion proof",
+    "terminal": "Both workers clean exit0, groups terminated; root proves container/launcher/observer absent,GPUempty,lease released",
+    "elapsed_seconds": 129.07638573646545,
+    "accounted_usd": 0.17927275796731312
+  },
+  "limits": [
+    "Partial development suite, one seed; no holdouts, serving throughput or promotion evidence.",
+    "Different seeds/shape suites across revisions prevent causal v4-v5 token-reuse claims.",
+    "Bootstrap intervals reflect within-run sampling only; no calibrated cross-session significance.",
+    "No GPU/SSH calls by reviewer; root-produced terminal evidence audited locally."
+  ],
+  "evidence_sha256": {
+    "results/rsi/wgmma-token16-dev-v5/development-960043.json": "c27968d9e79b48177046415936c78ceb1aad0f472a9fcf43a43c09bbba80b026",
+    "results/rsi/wgmma-token16-dev-v5/development-960043.correctness.json": "9f01975f5bcf4855f76d09516f5def9fdbab4871317bb489407a67c9627a121e",
+    "results/rsi/wgmma-token16-dev-v5/development-960043.process.json": "b46fc82e4e0e9befafb10e73a19ad5b35b2f75228f7a43bab6e4fa9672dac4f6",
+    "results/rsi/wgmma-token16-dev-v5/ownership-observations.json": "79636aeadd3e21595f38a3557993c076da668baf1caf51c6272f27883abe6781",
+    "results/rsi/wgmma-token16-dev-v5/lease-record.json": "3eca273398874a0297634d5d4b813b9e7e9fd84e7440be9063a86611a5367757",
+    "results/rsi/wgmma-token16-dev-v5/review.json": "2fc2672bdd6f8b96204f04eabf03e466f40e36644a0c96341a9893b95012b9ed"
+  }
+}

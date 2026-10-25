@@ -1,0 +1,69 @@
+{
+  "reviewer": "measurement_audit",
+  "decision": "PASS_BOUNDED_DEVELOPMENT_CORRECTNESS_PROBE",
+  "scope": "T16 v5 developmental correctness; no GPU run or timing admission by reviewer",
+  "source_sha256": "c440200f02b153a00fe5c421207abc65dfb6a93249a7750c2328b96bfb7a0261",
+  "files_sha256": {
+    "routed_down.cuh": "c440200f02b153a00fe5c421207abc65dfb6a93249a7750c2328b96bfb7a0261",
+    "routed_adapter.py": "5c5673a212512d78a2401b0b1ba6b3c64f0f264035f2941c5ec86facce14ba04",
+    "serving_wgmma_down.py": "0b5df011b4c51f9d4872ef9d73a33f0900e53be027227f340c325ce44ffe5811",
+    "check_routed.py": "e97606427885a5a98c4fcd65fb2423847d53607987af7513d4efefb6d2894ea5",
+    "check_full_expert.py": "6dddff95f11d6d023e9333c5972de037b21d558d19f0308d766cc4a66a4fbe38",
+    "routed_down.sass": "b4d72e657b9b38165fe1d96756c6b604b607ab6d52ff4eacaf0508e937388bd5",
+    "status.json": "7032a04b6e203efa16a9a74668319c66178f3420c57e5c597a30719b22bbb56f"
+  },
+  "checks": {
+    "all_status_hashes": "match",
+    "T8_body": "independently extracted byte-identical to reviewed v4",
+    "adapter": "Only JIT namespace changes; packing/scales/zeroing same",
+    "map_contract": "Pinned CUTLASS T16 AMap equals T8; CMap1024 outputs unique in bounds, BMap256 elements unique in bounds; compile assertions passed in recorded build",
+    "activation_fill": "Independently enumerated128threads*2 halves, all256(token,k) coordinates exactly once",
+    "ownership_model_cases": 160,
+    "dispatch": "block divisible16 usesT16; otherwise validated multiple8 usesT8. Verified blocks8,16,24,32,40,48,56,64; tiles never cross expert-block boundary.48 valid,24 fallback.",
+    "slot_bounds": "Grid floor(S/tile) guarantees each launched tile fits sorted capacity; valid generated post is aligned and<=S, so all meaningful slots covered. Guards reject nonlocal experts/routes; output indices int64. Assumes valid upstream metadata and unique output slots, not arbitrary hostile metadata.",
+    "async_lifetime": "Four512B shared slices aligned128; producer synchronization+proxy fence; four ascendingK16 ops with eight C operands in one fenced commit/wait0 asm; CTA sync before reuse. Pinned T16 SASS cR24..31, A fragmentsR32..47, no pending operand writes before DEPBAR.",
+    "numerics": "Same FP4/scale arithmetic and BF16 epilogue; instruction N changes8->16, so source inspection does not establish bitwise numerical equivalence.",
+    "resources": "Recorded T16 compile55registers/2048shared/zero spills, T8 unchanged46/1024."
+  },
+  "pending": [
+    "Actual58-case GPU correctness and terminal independent review before timing"
+  ],
+  "budget_guidance": {
+    "future_timing": "[8,128,3012,16384],20pairs,600s proposed hard one-attempt cap; not yet reviewed",
+    "evidence": "Prior four-small-shape v4 run63.773s includes process/JIT/reference overhead; cannot extrapolate largest-shape oracle cost or candidate latency.",
+    "recommendation": "Keep fixed cap; timeout yields incomplete evidence and no retry under same plan. Any larger budget needs measured stage walltime and separately reviewed plan, not guessed kernel throughput."
+  },
+  "limits": [
+    "No GPU execution by reviewer.",
+    "Source pass does not approve unfinished wrapper or timing.",
+    "Original14shape/holdout/serving goals unchanged."
+  ],
+  "wrapper_review": {
+    "plan_sha256": "162e11bc33112e35892ee8e09500a3bf8f748337872470c28aaa950335daa772",
+    "artifact_sha256": {
+      "summarize.py": "d604b87990bab73f2e13f4e8b4b65234313e849976bb2b97a1f461deadf543b1",
+      "check_prefill.py": "9298ea1196bf4985c1f7a5ccd183de7a5b8693003576cc2acf670a2ee8bbfcca",
+      "preseed.py": "7a524b41861c9792e3472d3fdedbef874090bea0c3b969c139afbdf271d59cb6",
+      "verify_inputs.py": "10758c68009fc357c722e6482fb22bd186757ab02086b83d650bf3a1080263f3",
+      "teardown.py": "b7de95d8301dd9d6b768de855bb81dfdeafde4ab598424e4355168aca0facc14",
+      "check_routed_extended.py": "4c10e05535a7745c1372ec24bf2ca2ea5d6411539d45d6ba6c67af979a928e21",
+      "root-command.sh": "f3e3dfa0d4ea162046f5d6751f7c0a9a1b203aad384e422d659994a9fcc603e0",
+      "inside-command.sh": "21e0b274497a6a064c1eb20e0101777f0651e509f27353ccf958a18467086765",
+      "source-pins.json": "2a9505b0ab1144487e1949ceaa286fa8e63123e940481b5f9552bd566e1d630b"
+    },
+    "checks": [
+      "Six source and runner pins match exact reviewed bytes; immutable baseline verified externally before GPU.",
+      "42 extended routed checks: six blocks8/16/24/32/48/64 times seven modes including allpad, partial, skew, empty and graph valid-empty-restored. Independent CPU rawdecode dyadic oracle; input/metadata fingerprints checked before comparison.",
+      "Original five routed and nine full checks retained. Prefill3012/16384 separate eager official-reference checks, input fingerprints before oracle, fixed development seeds.",
+      "58 total cases required by summary with exact named coverage; any missing/failed case rejects.",
+      "Same reviewed read-only mount/private cache/network-none/host-flock and failclosed GPUidle wrapper; no automatic retry/overwrite.",
+      "Canonical matching600s lease checked after input-tree verification with>=585s remaining.540+15kill+25cleanup=580s."
+    ],
+    "conditions": [
+      "Root verifies remote wrapper and source hashes before execution; optional baseline-only preseed requires root provenance verification.",
+      "Root closes lease only after client0, complete58case summary, container/launcher absent and GPUempty; unknown retains lease.",
+      "No timing approval until independent result audit; final worker bundle must independently pass reference/graph gates."
+    ],
+    "reviewer_GPU_calls": false
+  }
+}

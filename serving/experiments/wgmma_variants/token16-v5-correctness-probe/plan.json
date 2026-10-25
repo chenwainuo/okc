@@ -1,0 +1,94 @@
+{
+  "status": "prepared_not_executed",
+  "scope": "decisive development correctness with prefill sentinels; no performance or promotion claim",
+  "source_directory": "results/rsi/candidates/wgmma-token16-v5",
+  "source_mutated": false,
+  "header_sha256": "c440200f02b153a00fe5c421207abc65dfb6a93249a7750c2328b96bfb7a0261",
+  "root_lease_seconds": 600,
+  "docker_timeout_seconds": 540,
+  "forced_kill_grace_seconds": 15,
+  "cleanup_bounds_seconds": {
+    "docker_rm": 15,
+    "docker_inspect": 10
+  },
+  "lease_admission_min_remaining_seconds": 585,
+  "cost_ceiling_usd_at_5_per_hour": 0.8333333333333334,
+  "tests": {
+    "existing_routed": 5,
+    "extended_routed": 42,
+    "extended_blocks": [
+      8,
+      16,
+      24,
+      32,
+      48,
+      64
+    ],
+    "T16_blocks": [
+      16,
+      32,
+      48,
+      64
+    ],
+    "T8_fallback_blocks": [
+      8,
+      24
+    ],
+    "per_block": [
+      "partial17plus9local",
+      "skew63local",
+      "nonlocalempty",
+      "validexpert allpadding nonzeropost",
+      "graphvalid",
+      "graphemptyaftervalid",
+      "graphvalidrestored"
+    ],
+    "original_full_expert": 9,
+    "prefill_full_expert": 2,
+    "prefill_batches": [
+      3012,
+      16384
+    ],
+    "full_expert_total": 11,
+    "routed_total": 47,
+    "prefill_scope": "eager officialreference overwholeoutput; no graphperformance claim"
+  },
+  "development_seeds": {
+    "original_routed": 761,
+    "extended_routed": 963017,
+    "original_full_expert": 910231,
+    "prefill_weights": 963019,
+    "prefill_inputs": [
+      963119,
+      963120
+    ]
+  },
+  "execution": [
+    "Optional compatiblebaselineSGLang preseed before rootlease; preserveexisting standalonecoalesced sourcecache",
+    "Matchingcanonical600slease,sharedGPUflock,verifiedidleGPU;585sremainingminimumadmission",
+    "Verify fullbaselineimmutabletree +source/runner/manifesthashes; read-only /baseline,/runner,/probe,/control",
+    "Run originalrouted5 thenextended42 thenunchangedfull9 thenprefill3012/16384",
+    "Allvalidation errors stop immediately; timeout/partialprefill nevercountascomplete",
+    "Required postchecks summarize exactcasecounts, reporthashes, unchangedsourcepins",
+    "Boundedcleanup proof; unknowntermination retainslease andexit42"
+  ],
+  "commands": {
+    "optional_preseed_before_lease": "python3 results/rsi/candidates/wgmma-token16-v5-probe/preseed.py",
+    "root_gpu": "bash results/rsi/candidates/wgmma-token16-v5-probe/root-command.sh WGMMA-TOKEN16-v5-CORRECTNESS"
+  },
+  "output": "results/rsi/wgmma-token16-v5-correctness",
+  "report_acceptance": "correctness-summary complete AND host-terminal terminal/container_absent; prefill-progress incomplete is neveracceptance",
+  "important_correction": "Existing frozencheck_routed.py already passesblock16; newprobe adds explicitblock8/24 fallback and16/32/48/64 coverage. No claimoriginaltestwasT8-only.",
+  "validation": "Local Pythoncompile andbashsyntax passed; noGPUorremotejobs; runtimecorrectness pendingroot",
+  "artifact_sha256": {
+    "summarize.py": "d604b87990bab73f2e13f4e8b4b65234313e849976bb2b97a1f461deadf543b1",
+    "check_prefill.py": "9298ea1196bf4985c1f7a5ccd183de7a5b8693003576cc2acf670a2ee8bbfcca",
+    "preseed.py": "7a524b41861c9792e3472d3fdedbef874090bea0c3b969c139afbdf271d59cb6",
+    "verify_inputs.py": "10758c68009fc357c722e6482fb22bd186757ab02086b83d650bf3a1080263f3",
+    "teardown.py": "b7de95d8301dd9d6b768de855bb81dfdeafde4ab598424e4355168aca0facc14",
+    "check_routed_extended.py": "4c10e05535a7745c1372ec24bf2ca2ea5d6411539d45d6ba6c67af979a928e21",
+    "root-command.sh": "f3e3dfa0d4ea162046f5d6751f7c0a9a1b203aad384e422d659994a9fcc603e0",
+    "inside-command.sh": "21e0b274497a6a064c1eb20e0101777f0651e509f27353ccf958a18467086765",
+    "source-pins.json": "2a9505b0ab1144487e1949ceaa286fa8e63123e940481b5f9552bd566e1d630b"
+  }
+}

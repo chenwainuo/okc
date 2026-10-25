@@ -1,0 +1,100 @@
+{
+  "reviewer": "measurement_audit",
+  "decision": "PASS_DEVELOPMENT_CORRECTNESS",
+  "kernel_sha256": "c440200f02b153a00fe5c421207abc65dfb6a93249a7750c2328b96bfb7a0261",
+  "cases": {
+    "routed_original": 5,
+    "routed_extended": 42,
+    "full_original": 9,
+    "full_prefill": 2,
+    "total": 58
+  },
+  "coverage": "T8 fallback8/24; T16 blocks16/32/48/64; partial/skew/empty/allpadding and graph valid-empty-restored; full official reference and M3012/M16384 eager prefills",
+  "prefill_results": [
+    {
+      "batch": 3012,
+      "input_seed": 963119,
+      "input_sha256": "680eb19bafd5aa87c24d1446f8cce432a5e28f22676934216c7a7ff4d974c7f3",
+      "official_reference_pass": true,
+      "detail": "relative L2 error 5.552e-03 (worst row 6.338e-03)"
+    },
+    {
+      "batch": 16384,
+      "input_seed": 963120,
+      "input_sha256": "624d6dd32e218fb811c491aec3af86cca3359ad7a271350fb54c81eecee83615",
+      "official_reference_pass": true,
+      "detail": "relative L2 error 5.551e-03 (worst row 6.283e-03)"
+    }
+  ],
+  "provenance": {
+    "all_summary_hashes_recomputed": true,
+    "source_and_reference_pins_match": true,
+    "baseline_imports_checked": 609,
+    "routed_loaded_jit": {
+      "/cache/sglang/sm90a/sgl_kernel_jit_rsi_wgmma_token16_down_c440200f02b153a0/build-543ac358db267346/deps-b6ed085ce6dcfb89/sgl_kernel_jit_rsi_wgmma_token16_down_c440200f02b153a0.so": "7907468ca5ff450ebcf329e05fb035d61d58058966bb42115605afb6348134a1"
+    },
+    "input_immutability": "Expanded/full/prefill reviewed harness assertions passed before oracle comparisons",
+    "runtime": {
+      "torch": "2.14.1+cu130",
+      "cuda": "13.0",
+      "gpu": "NVIDIA H200"
+    }
+  },
+  "termination": {
+    "experiment": "WGMMA-TOKEN16-v5-CORRECTNESS",
+    "executor": "root",
+    "started_at": 1792895818.0504742,
+    "deadline_unix": 1792896418.0504742,
+    "reserved_usd": 0.8333333333333334,
+    "purpose": "reviewed58case correctness includingprefill no timing",
+    "status": "complete",
+    "elapsed_seconds": 85.00096321105957,
+    "terminal_proof": {
+      "status": "terminal",
+      "container": "okc-wgmma-token16-v5-eb9b18433f14",
+      "container_absent": true,
+      "client_exit_code": 0,
+      "observations": [
+        {
+          "argv": [
+            "docker",
+            "rm",
+            "-f",
+            "okc-wgmma-token16-v5-eb9b18433f14"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "Error response from daemon: No such container: okc-wgmma-token16-v5-eb9b18433f14\n"
+        },
+        {
+          "argv": [
+            "docker",
+            "inspect",
+            "okc-wgmma-token16-v5-eb9b18433f14"
+          ],
+          "returncode": 1,
+          "stdout": "[]\n",
+          "stderr": "error: no such object: okc-wgmma-token16-v5-eb9b18433f14\n"
+        }
+      ],
+      "root_instruction": "Close lease only if terminal proof passes; termination_unknown leaves canonical lease active and blocks further GPU work pending root reconciliation.",
+      "launcher_absent": true,
+      "gpu_compute_pids": []
+    },
+    "accounted_usd": 0.11805689334869385
+  },
+  "limits": [
+    "Development fixtures only; no serving/fullsuite/holdout evidence or promotion.",
+    "Routed process enumerates loaded JIT; other processes use same readonly sources/private cache but do not enumerate libraries independently.",
+    "Root-produced remote terminal observations audited locally; no reviewer GPU or SSH calls."
+  ],
+  "next_gate": "One separately leased seed960043,20-pair mixed sentinel[8,128,3012,16384] developmental timing attempt with600s cap; final-bundle worker checks mandatory. No crossseed v4 causal claim.",
+  "evidence_sha256": {
+    "results/rsi/wgmma-token16-v5-correctness/correctness-summary.json": "8a2ba5b4651117f768d7322df3fa97fced251dfd84a7b18d05b2c23424711ad8",
+    "results/rsi/wgmma-token16-v5-correctness/routed.log": "c331f8215df377dc2e2bf551bda7fca9c935f163eaf342b1b0e27b7ecc350863",
+    "results/rsi/wgmma-token16-v5-correctness/routed-extended.json": "65bfff87b1c3039c1cdf9c4c954ffe2ec53b515ab86c751e53c4dba1c7592eb7",
+    "results/rsi/wgmma-token16-v5-correctness/full-correctness.json": "69370ca78ea08a7344bdbb7f0becf51d31df51a41b555fd55f75aded4821b3b7",
+    "results/rsi/wgmma-token16-v5-correctness/prefill-correctness.json": "78aff4c6785d3a8fd23060f52fea824b35c96b3b59d3664d1019f080a90dab72",
+    "results/rsi/probes/token16-v5-correctness-lease.json": "c136e924a7575a046b88d473311ec4b1c33117f510e9d25f2afac93378152825"
+  }
+}
