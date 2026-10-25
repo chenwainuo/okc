@@ -64,10 +64,10 @@ def main() -> None:
         print(run(args.candidate, "scored" if args.scored else "check", args.experiment, args.reserve, args.against))
     elif args.command == "wait":
         from .runner import archive, record, report, wait
-        job = wait(args.job)
         cand = Path(args.candidate) if args.candidate else None
         if cand is not None and not cand.is_absolute():
             cand = ROOT / cand
+        job = wait(args.job, candidate=cand)
         archive(job, cand)
         record(job, args.experiment, args.kind)
         log_text = ""

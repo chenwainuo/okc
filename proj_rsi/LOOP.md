@@ -52,3 +52,33 @@ Delivered: `candidates/pw1/` — 13 instantiations behind 22 paths, 0 spills (nv
 applied its fix (launch error in kernel_fn now falls back instead of raising) and moved the prepare budget guard
 after serves() so a timeout cannot flood the log. Spent check #1 (5 left today before the 00:00 UTC reset).
 
+### Result — check `c14d12e8d3f847a9`: 9/9, 4731.7 µs (1.021×). Correct everywhere, fast nowhere.
+
+Prepare: compiled in 33 s, done in 53 s. Every one of the 120 pw builds passed the one-hot and random validation on the
+judge (0 INVALID, 0 ERROR) — codec, fragment order, escapes, split-K reduction and the self-cleaning epilogue are all
+right on the first run. Bake-off (in-prepare µs, which run ≈ 3–4 µs above judge "yours"; torch column is cuBLAS):
+
+| shape | torch | best pw | r6 "yours" | note |
+|---|---:|---:|---:|---|
+| pooler m=1 | 24.8 | 22.3 (bulk BN64) | 13.95 | stream ≈ 2.7 TB/s; ring variants 27–29 |
+| qkv m=1 | 17.9 | 16.5 (bulk) | 9.97 | |
+| unpooler m=1 (n=1024) | 11.1 | 11.2 | 4.88 | 6 MB read costs 7 µs: fixed overhead dominates |
+| pooler m=16 | 25.2 | 24.2 | 14.30 | |
+| pooler m=32 | 25.6 | 33.6 | 16.94 | 2× slower than m=1: per-stage cost scales with m |
+| pooler m=128 | 30.5 | 158.9 (BN128) | 20.32 | 128 bulk copies of 128 B per stage |
+| qkv m=128 | 21.3 | 99.7 | 15.43 | |
+
+Judge picked pw only on qkv/pooler at m ∈ {1, 8, 16} and unpooler m=8, each still slower than r6; score fell to 4731.7.
+
+Diagnosis: x is staged through the shared-memory ring with one `cp.async.bulk` per token row per 64-k stage, and
+every stage needs a producer→consumer→producer mbarrier round trip. Cost scales with m (128 TMA issues per stage at
+m=128) and even at m=1 the handshake bubbles cap the W stream below r6's register ring. The ring variants inherited the
+same x handshake, so they were no better. Nothing here is a verdict on the packed tensor-core idea; it is a verdict
+on the data flow.
+
+Decision: refine → pw2, "x-stationary CTAs": each CTA loads its x K-slice into shared memory once (one bulk copy per
+row, total ≤ 128 KB), then streams W for several n-blocks with no further x traffic or per-chunk handshakes; W through
+either a deep register ring (ld.global.nc, no barriers) or a bulk ring whose only barriers are W's own. Plus a pure
+streaming PROBE in prepare that reports achieved TB/s per engine/config, so the next check calibrates the engine even
+if the GEMM paths lose again.
+

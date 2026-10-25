@@ -75,8 +75,24 @@ def submit(candidate: str | Path, kind: str = "check", experiment: str | None = 
     return job_id
 
 
-def wait(job_id: str, timeout: int = 1200) -> dict:
-    return okc("status", job_id, "--wait", timeout=timeout)
+def wait(job_id: str, timeout: int = 1200, candidate: Path | None = None) -> dict:
+    """Follow the job; return the normalized job JSON (benchmarks/profiles/summary).
+
+    `okc status --json` is a wrapper (result/output/profile); okc also saves the normalized form beside the
+    submitted file as profiles/submission.<job>.json, which is what the parser reads. Prefer that file."""
+    status = okc("status", job_id, "--wait", timeout=timeout)
+    if candidate is not None:
+        saved = candidate.parent / "profiles" / f"submission.{job_id}.json"
+        if saved.exists():
+            return json.loads(saved.read_text())
+    profile = status.get("profile") or {}
+    if isinstance(profile.get("json"), dict) and "benchmarks" in profile["json"]:
+        return profile["json"]
+    result = status.get("result") or {}
+    return {"job_id": job_id, "problem": status.get("board"), "benchmarks": [], "profiles": [],
+            "summary": {"status": status.get("status"), "passed": result.get("passed"), "error": result.get("error"),
+                        "score_us": result.get("score_us"), "speedup": None, "speedup_ci": None,
+                        "tests": None, "tests_passed": None}}
 
 
 def archive(job: dict, candidate: Path | None = None) -> Path:
@@ -122,7 +138,7 @@ def run(candidate: str | Path, kind: str, experiment: str | None, reserve: int, 
     path = candidate_file(candidate)
     job_id = submit(path, kind, experiment, reserve)
     print(f"submitted {kind} {job_id} for {path.relative_to(ROOT)}", flush=True)
-    job = wait(job_id)
+    job = wait(job_id, candidate=path)
     archive(job, path)
     record(job, experiment, kind)
     log_path = path.parent / "profiles" / f"submission.{job_id}.log"
