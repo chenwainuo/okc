@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "experiment": "FULLK10-v1",
+  "reviewer": "measurement_audit",
+  "decision": "reviewed_for_control_first",
+  "plan_sha256": "1832fce3f6042d661c39f518e602302bceab23a66fffe04a27915004aad1afcb",
+  "artifacts": [
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/fullk10-v1.tar.gz",
+      "sha256": "3801e5c8034cc6bdc675c28bb6c6eae66a33bd2cd9e8b138bd11710c9950c84b"
+    },
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+      "sha256": "a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab"
+    },
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+      "sha256": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5"
+    },
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+      "sha256": "a6405ec90466bbc5c13458382e6c5c6480dadecbbaf10feacd46b2101146f6a9"
+    },
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/fullk10-v1.tar.gz.manifest.json",
+      "sha256": "616f2e4387e25693ff2444f842705b5a1ca95679d0e322280375681bb7004926"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/measurement.py",
+      "sha256": "2306238af49c263d6f2b3bf4313d8e8b712cbe8f36f789e32df29c0ec620b3ab"
+    },
+    {
+      "path": "/home/ubuntu/okc/serving/benchmark-contract.json",
+      "sha256": "ce8ce13b67f2335ff7a764f4b03ed590691f15eb1a909d5253ff560c82954efd"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+      "sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+      "sha256": "713d5d43e4e14162f3133f77f668fd8c6d27fbfcca4d6bd341c276faf3348449"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+      "sha256": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/run_rsi_h200.py",
+      "sha256": "9ef6201a52af8811d75eae0e084863d370b2d5d00f0472c7177dbab373ad06d4"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/check_rsi_control.py",
+      "sha256": "e9a467ff4a5ec6440ddb0a6629c4f2994094b34fc678260d1cf12f60a94d1628"
+    }
+  ],
+  "delta_members": [
+    "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h"
+  ],
+  "archive_members_verified_per_archive": 5562,
+  "cpu_partition_checks": 5145,
+  "changed_schedule_cases": 510,
+  "static_reasoning": [
+    "Single added branch adjusts iters before all CTA slice/index/barrier arithmetic. All CTAs derive same deterministic rounded stripe.",
+    "K64-tile aligned stripe starts and lengths partition contiguous output tiles once; tail blocks become inactive through existing slice bounds; complete slices have slice_count1, bypassing cross-CTA reduction.",
+    "Original arithmetic retained outside EP/BF16/NVFP4/scale/group/thread/N/K/SM90 and M-range guards; atomic/weighted output modes excluded.",
+    "Only round upward when complete output count>=2grid and longest stripe increase<=10%; schedule coverage retained. Bound is not a latency guarantee.",
+    "No modifications to precision, MMA, quantization scales, output stores or stage depth. Existing integer products remain safe for bounded tested dimensions; overflow proof not generalized beyond scoped workload."
+  ],
+  "runtime_requirements": [
+    "Candidate has not compiled or executed; GPU full-suite oracle and empty-local handling remain mandatory.",
+    "Confirm runtime dispatch reaches eligible configuration before attributing mechanism or speedup.",
+    "Fresh screen36007, holdouts37003/38011,120-pair unchanged-control equivalence with no retries; original candidate min60pairs and fixed suite.",
+    "All candidate results remain local component only."
+  ],
+  "gpu_jobs_by_reviewer": false
+}

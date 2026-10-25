@@ -1,0 +1,69 @@
+{
+  "kind": "kernel",
+  "hypothesis": "For scoped M128..256 NVFP4 BF16 EP tiles, rounding CTA stripes to complete K only when maximum stripe work grows <=10% and output tiles >=2*grid eliminates cross-CTA reduction overhead. Reject on any correctness failure, primary aggregate failure or suite regression.",
+  "suite": [
+    1,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    257,
+    384,
+    512,
+    513,
+    753,
+    3012,
+    16384
+  ],
+  "screen_seeds": [
+    36007
+  ],
+  "holdout_seeds": [
+    37003,
+    38011
+  ],
+  "min_pairs": 60,
+  "max_gpu_minutes": 30,
+  "roi_prior": {
+    "basis": "engineering_prior",
+    "speedup_range": [
+      1.0,
+      1.1
+    ],
+    "confidence": "low",
+    "component": "expert path; full serving unknown"
+  },
+  "baseline_isolation": "immutable_tree",
+  "baseline_anchor_source": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+  "candidate": "/home/ubuntu/okc/results/rsi/bundles/fullk10-v1.tar.gz",
+  "baseline": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+  "dependencies": [
+    "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+    "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+    "/home/ubuntu/okc/results/rsi/bundles/fullk10-v1.tar.gz.manifest.json",
+    "/home/ubuntu/okc/benchmarks/measurement.py",
+    "/home/ubuntu/okc/serving/benchmark-contract.json",
+    "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+    "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+    "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+    "/home/ubuntu/okc/benchmarks/run_rsi_h200.py",
+    "/home/ubuntu/okc/benchmarks/check_rsi_control.py"
+  ],
+  "execution_note": "Read-only isolated persistent workers with private caches, matched input bytes and immutable inputs. Unchanged-control pilot on screening seed before candidate measurements; all subprocesses/container must be terminal before lease release.",
+  "supersedes": "New independent bounded scheduling candidate against fixed incumbent; not combined with pipeline3. Prior v5 pipeline candidate failed compilation before timing.",
+  "control_policy": {
+    "pairs": 120,
+    "seed": 36007,
+    "primary_batches": [
+      8,
+      32,
+      128,
+      256
+    ],
+    "gate": "Every marginal bootstrap CI wholly inside[1/1.02,1.02]; primary geometric-mean POINT estimate inside same band. No aggregate or simultaneous confidence claim.",
+    "retry": "none in this revision; one prespecified120-pair control; on failure stop and audit",
+    "failure": "no candidate sweep until new reviewed plan"
+  }
+}

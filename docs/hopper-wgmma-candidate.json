@@ -166,5 +166,15 @@
     "source": "serving/experiments/wgmma_rs/rs_tile_compile.cu",
     "compile_command": "serving/experiments/wgmma_rs/compile.sh",
     "status": "compile-only, no runnable MoE kernel"
+  },
+  "bf16_layout_oracle": {
+    "status": "GPU correctness passed",
+    "report": "reports/2026-10-25-wgmma-rs-oracle.json",
+    "source": "serving/experiments/wgmma_rs/rs_bf16_oracle.cu",
+    "compile": "serving/experiments/wgmma_rs/compile_oracle.sh",
+    "cases": 3,
+    "outputs_checked": 1536,
+    "max_abs_error": 0,
+    "limits": "single CTA BF16 K16; no FP4 integration/fullK or performance claim"
   }
 }

@@ -1,0 +1,196 @@
+{
+  "status": "cpu_arithmetic_model_pass",
+  "partition_cases_checked": 5145,
+  "cases_with_bounded_schedule_change": 510,
+  "source_report": "results/selected-validation.json",
+  "assumptions": [
+    "N tile128,K tile64; grid396 CTAs from incumbent Nsight M8/M128; confirm runtime grid before extrapolating.",
+    "Histograms reconstruct alignment padding; invalid bucket is ordered first by the +1 bucket convention.",
+    "Source-level CTA loop and scratch upper-bound counts, not executed instructions, DRAM traffic, or measured time.",
+    "FP32 scratch upper bound ignores partial-row masks; real traffic may be smaller."
+  ],
+  "shapes": [
+    {
+      "M": 1,
+      "M_tile": 8,
+      "samples": 20,
+      "median_valid_blocks": 3.0,
+      "median_invalid_prefix_blocks": 1.0,
+      "median_count_scan_CTA_iterations_per_GEMM": 1584.0,
+      "stages": {
+        "up": {
+          "median_output_tiles": 192.0,
+          "median_split_output_tile_fraction": 1.0,
+          "median_cross_CTA_K_boundaries": 192.0,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 1572864.0,
+          "median_unconditional_rounding_max_stripe_ratio": 2.0,
+          "fraction_samples_changed_by_candidate": 0.0
+        },
+        "down": {
+          "median_output_tiles": 96.0,
+          "median_split_output_tile_fraction": 1.0,
+          "median_cross_CTA_K_boundaries": 288.0,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 2359296.0,
+          "median_unconditional_rounding_max_stripe_ratio": 4.0,
+          "fraction_samples_changed_by_candidate": 0.0
+        }
+      }
+    },
+    {
+      "M": 8,
+      "M_tile": 8,
+      "samples": 20,
+      "median_valid_blocks": 8.5,
+      "median_invalid_prefix_blocks": 7.0,
+      "median_count_scan_CTA_iterations_per_GEMM": 5940.0,
+      "stages": {
+        "up": {
+          "median_output_tiles": 544.0,
+          "median_split_output_tile_fraction": 0.7087673611111112,
+          "median_cross_CTA_K_boundaries": 382.0,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 3129344.0,
+          "median_unconditional_rounding_max_stripe_ratio": 1.3617021276595744,
+          "fraction_samples_changed_by_candidate": 0.0
+        },
+        "down": {
+          "median_output_tiles": 272.0,
+          "median_split_output_tile_fraction": 1.0,
+          "median_cross_CTA_K_boundaries": 378.0,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 3096576.0,
+          "median_unconditional_rounding_max_stripe_ratio": 1.5238095238095237,
+          "fraction_samples_changed_by_candidate": 0.0
+        }
+      }
+    },
+    {
+      "M": 16,
+      "M_tile": 8,
+      "samples": 20,
+      "median_valid_blocks": 13.0,
+      "median_invalid_prefix_blocks": 13.0,
+      "median_count_scan_CTA_iterations_per_GEMM": 10098.0,
+      "stages": {
+        "up": {
+          "median_output_tiles": 832.0,
+          "median_split_output_tile_fraction": 0.46634615384615385,
+          "median_cross_CTA_K_boundaries": 384.5,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 3149824.0,
+          "median_unconditional_rounding_max_stripe_ratio": 1.2307692307692308,
+          "fraction_samples_changed_by_candidate": 0.0
+        },
+        "down": {
+          "median_output_tiles": 416.0,
+          "median_split_output_tile_fraction": 0.8822115384615384,
+          "median_cross_CTA_K_boundaries": 382.5,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 3133440.0,
+          "median_unconditional_rounding_max_stripe_ratio": 1.5915971578622181,
+          "fraction_samples_changed_by_candidate": 0.0
+        }
+      }
+    },
+    {
+      "M": 32,
+      "M_tile": 16,
+      "samples": 20,
+      "median_valid_blocks": 16.5,
+      "median_invalid_prefix_blocks": 13.0,
+      "median_count_scan_CTA_iterations_per_GEMM": 11880.0,
+      "stages": {
+        "up": {
+          "median_output_tiles": 1056.0,
+          "median_split_output_tile_fraction": 0.3549262152777778,
+          "median_cross_CTA_K_boundaries": 385.0,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 6307840.0,
+          "median_unconditional_rounding_max_stripe_ratio": 1.1936978683966637,
+          "fraction_samples_changed_by_candidate": 0.0
+        },
+        "down": {
+          "median_output_tiles": 528.0,
+          "median_split_output_tile_fraction": 0.7087673611111112,
+          "median_cross_CTA_K_boundaries": 380.0,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 6225920.0,
+          "median_unconditional_rounding_max_stripe_ratio": 1.498357064622125,
+          "fraction_samples_changed_by_candidate": 0.0
+        }
+      }
+    },
+    {
+      "M": 64,
+      "M_tile": 16,
+      "samples": 20,
+      "median_valid_blocks": 21.5,
+      "median_invalid_prefix_blocks": 27.0,
+      "median_count_scan_CTA_iterations_per_GEMM": 19008.0,
+      "stages": {
+        "up": {
+          "median_output_tiles": 1376.0,
+          "median_split_output_tile_fraction": 0.2738602543290043,
+          "median_cross_CTA_K_boundaries": 388.0,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 6356992.0,
+          "median_unconditional_rounding_max_stripe_ratio": 1.1743119266055047,
+          "fraction_samples_changed_by_candidate": 0.0
+        },
+        "down": {
+          "median_output_tiles": 688.0,
+          "median_split_output_tile_fraction": 0.5440340909090909,
+          "median_cross_CTA_K_boundaries": 387.0,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 6340608.0,
+          "median_unconditional_rounding_max_stripe_ratio": 1.1743119266055047,
+          "fraction_samples_changed_by_candidate": 0.0
+        }
+      }
+    },
+    {
+      "M": 128,
+      "M_tile": 16,
+      "samples": 20,
+      "median_valid_blocks": 27.0,
+      "median_invalid_prefix_blocks": 52.5,
+      "median_count_scan_CTA_iterations_per_GEMM": 31680.0,
+      "stages": {
+        "up": {
+          "median_output_tiles": 1728.0,
+          "median_split_output_tile_fraction": 0.20260416666666667,
+          "median_cross_CTA_K_boundaries": 389.0,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 6373376.0,
+          "median_unconditional_rounding_max_stripe_ratio": 1.1428571428571428,
+          "fraction_samples_changed_by_candidate": 0.4
+        },
+        "down": {
+          "median_output_tiles": 864.0,
+          "median_split_output_tile_fraction": 0.42824074074074076,
+          "median_cross_CTA_K_boundaries": 381.0,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 6242304.0,
+          "median_unconditional_rounding_max_stripe_ratio": 1.3257142857142856,
+          "fraction_samples_changed_by_candidate": 0.0
+        }
+      }
+    },
+    {
+      "M": 256,
+      "M_tile": 16,
+      "samples": 20,
+      "median_valid_blocks": 37.5,
+      "median_invalid_prefix_blocks": 105.0,
+      "median_count_scan_CTA_iterations_per_GEMM": 56628.0,
+      "stages": {
+        "up": {
+          "median_output_tiles": 2400.0,
+          "median_split_output_tile_fraction": 0.15748355263157895,
+          "median_cross_CTA_K_boundaries": 388.0,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 6356992.0,
+          "median_unconditional_rounding_max_stripe_ratio": 1.0667407458851308,
+          "fraction_samples_changed_by_candidate": 0.7
+        },
+        "down": {
+          "median_output_tiles": 1200.0,
+          "median_split_output_tile_fraction": 0.29573170731707316,
+          "median_cross_CTA_K_boundaries": 381.5,
+          "median_fp32_scratch_read_plus_write_upper_bytes": 6250496.0,
+          "median_unconditional_rounding_max_stripe_ratio": 1.0909090909090908,
+          "fraction_samples_changed_by_candidate": 0.3
+        }
+      }
+    }
+  ]
+}
