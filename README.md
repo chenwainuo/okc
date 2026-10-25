@@ -96,6 +96,10 @@ review gate local promotion. Ledger promotion neither applies a patch nor proves
 full serving speedup. Legacy reports are observational only. The local ledger
 coordinates trusted agents; actor labels are not authentication and deadline
 records do not themselves stop a process. Root must enforce execution deadlines.
+The isolated execution path is `benchmarks/run_rsi_h200.py`; it requires a
+reviewed frozen plan and supervisor-issued live lease, mounts verified source
+trees read-only, and starts serialized persistent workers. See
+[the runner review](docs/rsi-runner-review.json).
 Optimizer-method promotion requires the separate frozen portfolio evaluator
 specified in the protocol; that evaluator is not implemented yet.
 

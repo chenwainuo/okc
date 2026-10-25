@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "experiment_id": "Q14-pipeline3-v4",
+  "reviewer": "measurement_audit",
+  "decision": "reviewed_for_unchanged_control_pilot_first",
+  "ledger_state": "reviewed",
+  "plan_sha256": "551fc721af2968aef5c4ada08ca475ffa52f133a13492531cc349f60d0dd4e68",
+  "checklist": {
+    "baseline_bundle_complete": true,
+    "candidate_bundle_complete": true,
+    "baseline_isolated": true,
+    "hypothesis_falsifiable": true,
+    "suite_and_holdouts_frozen": true,
+    "precision_preserved": true,
+    "review_scope": "Static source/artifact preflight permits unchanged-control pilot first; runtime correctness/performance/goal completion remain unproven.",
+    "candidate_phase_condition": "Root must verify exact plan/baseline/dependency hashes, import and JIT identities, input immutability, terminal state and preregistered control equivalence before any candidate phase.",
+    "control_seed": 30011,
+    "control_pairs": 120,
+    "control_retries": 0,
+    "reviewed_plan_sha256": "551fc721af2968aef5c4ada08ca475ffa52f133a13492531cc349f60d0dd4e68",
+    "reviewer": "measurement_audit"
+  },
+  "reviewed_artifacts": [
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/pipeline3-moe-v2.tar.gz",
+      "sha256": "06fc83ce7f653a586d8005d6b70a230f64c35aaa383e1de96869616a427b5a9b"
+    },
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+      "sha256": "a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab"
+    },
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+      "sha256": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5"
+    },
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+      "sha256": "a6405ec90466bbc5c13458382e6c5c6480dadecbbaf10feacd46b2101146f6a9"
+    },
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/pipeline3-moe-v2.tar.gz.manifest.json",
+      "sha256": "2295a86be1a28e1d7212dc2ff9ddd076b5b051fd3e9a7c89d51286053aed2d0b"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/measurement.py",
+      "sha256": "2306238af49c263d6f2b3bf4313d8e8b712cbe8f36f789e32df29c0ec620b3ab"
+    },
+    {
+      "path": "/home/ubuntu/okc/serving/benchmark-contract.json",
+      "sha256": "ce8ce13b67f2335ff7a764f4b03ed590691f15eb1a909d5253ff560c82954efd"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+      "sha256": "b6b0d0feb10d0155f12b2200088dc8311834ef7a5c55691e5d6e548974fca73f"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+      "sha256": "713d5d43e4e14162f3133f77f668fd8c6d27fbfcca4d6bd341c276faf3348449"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+      "sha256": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/run_rsi_h200.py",
+      "sha256": "7dec4c616a49a6890cd8614c09be6cd9581030e19df1d2f2a0bdde14411d204e"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/check_rsi_control.py",
+      "sha256": "e9a467ff4a5ec6440ddb0a6629c4f2994094b34fc678260d1cf12f60a94d1628"
+    }
+  ],
+  "evidence": [
+    "Baseline/candidate archives and exact member/fixture hashes independently verified.",
+    "Only changed source is marlin_moe/moe_wna16_marlin.cuh: private stage3 constant and matching shared-memory/template references; dense Marlin header unchanged.",
+    "Isolated worker/pair/extraction/host launcher statically reviewed;8 pair and3 bundle CPU tests previously independently passed.",
+    "Updated wrapper screen-only controls, network-none and frozen control pair count inspected.",
+    "Control helper CPU fixtures:1.0,0.995,1.005 equivalent;0.97,1.03 rejected; duplicate shapes,NaN,wrong pairs,holdout seed rejected."
+  ],
+  "control_gate": {
+    "pairs": 120,
+    "seed": 30011,
+    "retries": 0,
+    "per_shape": "Every marginal bootstrap CI wholly inside[1/1.02,1.02]",
+    "aggregate": "Primary geometric-mean point estimate in same band; no aggregate/simultaneous CI claim"
+  },
+  "runtime_unverified": [
+    "Actual GPU import/JIT dependency identities",
+    "GPU numerical correctness and input immutability",
+    "Unchanged-control equivalence across all14 shapes",
+    "Bounded live process/container teardown",
+    "Candidate performance and held-out validation",
+    "Full-serving correctness/TTFT/throughput and3x goal"
+  ],
+  "helper_boundary": "check_rsi_control.py is statistical validation only. Root must also inspect plan/baseline/dependency hashes, input_immutable_pass and actual worker/JIT/terminal evidence emitted by the frozen wrapper; same bundle hash equality alone does not establish full provenance.",
+  "holdouts_unconsumed_at_review": [
+    31013,
+    32003
+  ],
+  "gpu_jobs_started_by_reviewer": false
+}
