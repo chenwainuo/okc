@@ -219,3 +219,32 @@ decode — not hideable under a 13 µs stream. pw9 therefore uses wgmma m64nNk16
 (x tile, 2D TMA, 128B swizzle) via smem descriptor; BN=128, KS from {2,4,7,8}, cluster-DSMEM split-K as pw7.
 Implementer: build on pw8 (m≤32 + router unchanged). Critic: independent PTX-ISA layout/descriptor study
 (audits/wgmma-layout.md) to cross-check fragment order before a check is spent.
+
+## Step-back: where 3000 can come from (computed 23:40 UTC on the r6 table)
+
+Ceiling model per shape: packed 12-bit W bytes / 3.8 TB/s + 1.0 µs (6 MB shapes floor 3.4), or the wgmma compute
+floor 2mNK / 790 TFLOP/s + 1 when larger (binds only at m=256). Judge-`yours` µs:
+
+| load | r6 sum | all-at-ceiling | ln available |
+|---|---:|---:|---:|
+| decode 1 | 38.2 | 34.4 | 0.105 |
+| decode 16 | 51.2 | 44.7 | 0.137 |
+| decode 32 | 60.4 | 44.7 | 0.302 |
+| verify 1 | 38.9 | 34.4 | 0.123 |
+| verify 16 | 72.6 | 44.7 | 0.486 |
+| verify 32 | 86.8 | 68.6 | 0.236 |
+
+Score if everything hit ceiling: **2720 µs**. Need 0.800 ln of the 1.389 available (58%).
+- m≤32 + router only (pw7+pw8 perfect): **3067** — cannot reach 3000 on its own. The m=128 kernel (pw9) is required.
+- m≤128 at ceiling: 2829. So the plan is pw7 (decode16/32, verify1) + pw8 (router, all loads) + pw9 (verify16, with
+  verify32 as a bonus; m=256 is near its compute floor already so its gain is ~0.1 at best).
+- Realistic (each branch captures ~70% of its pool): 0.45 + 0.22 + 0.30 ≈ 0.97 > 0.80. Feasible, but all three must land.
+
+The one lever that moves the floor itself: bits per weight. 11-bit lossless would cut every big shape 8% (~0.1 ln
+across the board). pw9's prepare prints STATS (exponent window coverage, mantissa low-bit zeros, entropies) so check #9
+answers whether a 3-bit-exponent-with-escapes or trailing-zero-mantissa codec is viable at decode cost ≈ 12-bit's.
+
+Dead ends, not to be revisited: register-ring W loads (≤3.3 TB/s); red.global split-K partials at m≥32; overlapped
+finalize epilogue; x-stationary smem at m=128; mma.sync at m≥128 (issue-bound); full entropy coding (decode rate).
+Kill criteria: pw7 — decode32 sum not below 52 ⇒ the skeleton design is wrong, go register-direct (gv lineage);
+pw9 — pooler m=128 not below 17 ⇒ wgmma pipeline not overlapping, read ptxas serialization and stage release.
