@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "reviewer": "measurement_audit",
+  "review_date": "2026-10-25",
+  "decision": "code_review_pass_for_unchanged_control_pilot_only",
+  "not_granted": [
+    "No kernel candidate validation or promotion",
+    "No serving speedup claim",
+    "No runtime import/JIT/GPU correctness proof before a real pilot",
+    "No automatic approval of old proposals missing new runner hashes"
+  ],
+  "reviewed_source_sha256": {
+    "benchmarks/rsi_worker.py": "b6b0d0feb10d0155f12b2200088dc8311834ef7a5c55691e5d6e548974fca73f",
+    "benchmarks/rsi_pair.py": "713d5d43e4e14162f3133f77f668fd8c6d27fbfcca4d6bd341c276faf3348449",
+    "benchmarks/rsi_bundle.py": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25",
+    "benchmarks/run_rsi_h200.py": "7dec4c616a49a6890cd8614c09be6cd9581030e19df1d2f2a0bdde14411d204e",
+    "benchmarks/measurement.py": "2306238af49c263d6f2b3bf4313d8e8b712cbe8f36f789e32df29c0ec620b3ab",
+    "benchmarks/test_rsi_pair.py": "128189647a724f2e6d1d41fa1a0e7fdbba08cc959fbcfba837df13415f755be9",
+    "benchmarks/test_rsi_bundle.py": "daf3970a33871b32baa9fe9504de2e84e937acf2b4f50a72da42c8f32f048de2"
+  },
+  "review_scope": "Read-only source inspection and CPU-only subprocess tests. Reviewer did not edit runner files, run GPU jobs or modify ledger.",
+  "checks": [
+    {
+      "id": "I01",
+      "area": "Import isolation",
+      "result": "pass_static",
+      "evidence": [
+        "rsi_worker.setup_paths removes ambient/current script roots and prepends only the selected bundle paths.",
+        "rsi_worker.identities rejects project modules outside the bundle and compares critical module hashes with extracted manifest.",
+        "rsi_pair creates distinct persistent processes and validates their reported root/archive/fixture/runtime identities.",
+        "Host wrapper mounts baseline and candidate trees read-only."
+      ]
+    },
+    {
+      "id": "I02",
+      "area": "JIT isolation",
+      "result": "pass_static_pending_runtime_manifest_inspection",
+      "evidence": [
+        "Each role/archive gets separate SGLang, Triton and Torch extension cache roots.",
+        "Worker records actual loaded sgl_kernel_jit shared-object hashes and neighboring transitive dependency-manifest hashes from /proc/self/maps.",
+        "Pinned SGLang JIT cache additionally content-addresses direct source and transitive dependencies; per-process memoized digests are safe only because source trees stay immutable."
+      ],
+      "required_pilot_check": "Actual MoE object/dependency identity must correspond to that worker bundle; inspect the concrete records rather than only path labels."
+    },
+    {
+      "id": "I03",
+      "area": "GPU serialization",
+      "result": "pass_static",
+      "evidence": [
+        "Second worker initialization waits for first successful init RPC.",
+        "Every successful init/configure/measure/close reply follows torch.cuda.synchronize.",
+        "Coordinator issues only one RPC at a time, including preparation, graph warmup and correctness work.",
+        "AB/BA order alternates across matched pairs; baseline and candidate remain resident but do not intentionally execute concurrently."
+      ]
+    },
+    {
+      "id": "I04",
+      "area": "Matched freshness and immutability",
+      "result": "pass_static",
+      "evidence": [
+        "Both workers generate each pair from the same seed and pinned fixture/runtime.",
+        "Actual captured input bytes, dtypes, shapes and configuration are SHA256-fingerprinted after copying new data.",
+        "Coordinator requires matching actual input fingerprints for graph setup and every pair.",
+        "Worker checks captured/eager inputs remain unchanged after execution before running the reference oracle."
+      ],
+      "limit": "Full weight tensors are not hashed. Equality is inferred from the same pinned deterministic generator/runtime/seed with cloned preparation and reference checks; report explicitly states this."
+    },
+    {
+      "id": "I05",
+      "area": "CUDA timing placement",
+      "result": "pass_static",
+      "evidence": [
+        "Events are initialized before measurement.",
+        "128MiB cache eviction occurs before event start on the same stream.",
+        "Events bracket graph replay only.",
+        "End event is synchronized before reading duration; durations must be finite positive.",
+        "Fingerprint transfers, reference checks and final synchronization remain outside measured event interval."
+      ],
+      "limit": "Per-process context switching and input/reference work may affect operational conditions between trials. Unchanged-control parity is required to validate the proxy."
+    },
+    {
+      "id": "I06",
+      "area": "Correctness accounting",
+      "result": "pass_static",
+      "evidence": [
+        "Each worker checks five eager reference cases, eager no-local zero output, captured valid output and no-local replay after valid state.",
+        "Every timed output is compared with the official reference.",
+        "Exact terminal eager/captured/timed/empty-route counts and input immutability claims are required.",
+        "Failure in worker RPC, input identity, duration or terminal accounting fails the run."
+      ],
+      "limit": "Source review and fake workers do not establish GPU numerical correctness; runtime pilot must exercise the real worker."
+    },
+    {
+      "id": "I07",
+      "area": "Bundle and source provenance",
+      "result": "pass_static",
+      "evidence": [
+        "Archive hashes and exact member/fixture hashes verified before extraction.",
+        "Unsafe paths, unsupported tar types and invalid symlinks rejected.",
+        "Marker metadata is checked against manifest; file sets/hashes checked again after execution.",
+        "Host launcher requires runner/evaluator/benchmark-contract dependencies in reviewed proposal and rechecks all reviewed artifact hashes after execution.",
+        "Read-only bind mounts prevent container-side source edits."
+      ],
+      "limit": "Host filesystem ownership and reviewer identities remain procedural trust boundaries, not cryptographic isolation from a malicious root actor."
+    },
+    {
+      "id": "I08",
+      "area": "Process-tree termination",
+      "result": "pass_static_and_cpu_tests",
+      "evidence": [
+        "Workers run in separate process groups; coordinator acts as child subreaper.",
+        "Deadline and SIGTERM failure paths signal whole groups, escalate, reap adopted compiler descendants and reject surviving groups.",
+        "Repeated TERM/INT ignored during bounded cleanup.",
+        "Host wrapper explicitly removes named Docker container and reaps Docker client.",
+        "Nonzero docker inspect is insufficient by itself; only explicit absence messages are accepted as terminal. Unknown daemon/permission state retains supervisor lease."
+      ],
+      "limit": "Container teardown remains the outer boundary for descendants intentionally escaping process groups. SIGKILL/host failure require supervisor recovery and authoritative container inspection."
+    },
+    {
+      "id": "I09",
+      "area": "GPU ownership and budget",
+      "result": "pass_for_controlled_single_host_workflow",
+      "evidence": [
+        "Host launcher requires a live matching supervisor-issued lease and nonblocking host device lock.",
+        "Pre-run GPU process check rejects an already busy GPU.",
+        "Effective timeout is bounded by remaining lease duration."
+      ],
+      "limit": "Uncooperative non-RSI processes are not prevented by advisory locking. All agents must use supervisor ownership; do not describe exclusive_gpu as a hardware-enforced security property."
+    },
+    {
+      "id": "I10",
+      "area": "Control seed and execution network policy",
+      "result": "pass_static",
+      "evidence": [
+        "Host launcher now restricts controls to preregistered screen seeds.",
+        "Container runs with network=none; numerical run cannot fetch mutable code or data."
+      ]
+    }
+  ],
+  "defects_found_and_resolved_during_review": [
+    {
+      "issue": "Coordinator SIGTERM bypassed cleanup",
+      "resolution": "Controlled cancellation and CPU test with stubborn compiler descendant added."
+    },
+    {
+      "issue": "Oracle could see candidate-mutated inputs",
+      "resolution": "Post-execution input hash checks added to eager, capture and timed paths; explicit immutability evidence required."
+    },
+    {
+      "issue": "Worker identities were initially stored without archive/root/runtime consistency checks",
+      "resolution": "Coordinator verifies root/archive, weight seed, fixture hashes and Torch/CUDA equality."
+    },
+    {
+      "issue": "Actual loaded JIT provenance absent",
+      "resolution": "Loaded .so and dependency-manifest fingerprints now recorded."
+    },
+    {
+      "issue": "Host wrapper treated any failed Docker inspect as terminal",
+      "resolution": "Explicit absence required; other failures remain termination_unknown."
+    },
+    {
+      "issue": "Extracted marker metadata was skipped in verification",
+      "resolution": "Marker contents now compared exactly with verified manifest."
+    },
+    {
+      "issue": "Host edits to bind-mounted driver might escape post-run tree checks",
+      "resolution": "All reviewed artifacts, including driver/evaluator, rehashed after execution."
+    }
+  ],
+  "independently_executed_cpu_validation": [
+    {
+      "command": "python3 -m unittest discover -s benchmarks -p 'test_rsi_pair.py' -v",
+      "result": "8 passed",
+      "coverage": [
+        "serial AB/BA order",
+        "fresh input equality",
+        "matched raw timing",
+        "duplicate shape rejection",
+        "NaN/zero/negative duration rejection",
+        "input mutation claim rejection",
+        "incomplete terminal correctness rejection",
+        "partial-line timeout",
+        "SIGTERM cleanup including stubborn descendant"
+      ]
+    },
+    {
+      "command": "python3 -m unittest discover -s benchmarks -p 'test_rsi_bundle.py' -v",
+      "result": "3 passed",
+      "coverage": [
+        "archive tamper rejection",
+        "path traversal rejection",
+        "verified tree reuse and changed-file rejection"
+      ]
+    }
+  ],
+  "required_next_actions": [
+    "Freeze these exact runner/evaluator hashes into a new immutable proposal revision; changed driver invalidates this review until inspected.",
+    "Use baseline-vs-identical-baseline control first, on a screen seed only; do not expose planned holdouts during runner development.",
+    "Acquire one live supervisor lease and verify named process/container handles before and after the pilot.",
+    "Inspect runtime imports, JIT object/dependency records, exact fingerprints, correctness counts, process teardown and unchanged-control noninferiority.",
+    "Only after the control passes may the reviewed candidate run; candidate still needs full suite, independent held-out seeds and review before local promotion.",
+    "Full-serving validation and 3x goal completion remain separate unresolved gates."
+  ],
+  "remaining_policy_recommendations": [
+    "Use a frozen bounded control retry policy. Preserve failures and do not rerun until a favorable result appears.",
+    "Add host-wrapper mocked Docker failure/timeout tests when modifying that cleanup code; current independent executed tests cover coordinator process groups and bundle verification."
+  ],
+  "control_design_review": {
+    "experiment_id": "Q14-pipeline3-v3",
+    "action": "independently_rejected_in_ledger_before_GPU_execution",
+    "reason": "CI contains1 is an exact-equality condition, not practical equivalence. A precisely estimated small difference can be acceptable while excluding1.",
+    "requested_v4_gate": "Each shape CI must lie wholly within[1/1.02,1.02]; primary geometric-mean point estimate must lie in the same band. Retain correctness and a preregistered at-most-one uncertainty-only escalation.",
+    "scope": "No candidate performance or correctness rejection; this rejects experimental design only."
+  }
+}

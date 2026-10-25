@@ -1,0 +1,63 @@
+{
+  "kind": "kernel",
+  "hypothesis": "MoE-scoped pipeline depth3 reduces shared-memory pressure while preserving the dense Marlin pipeline. At M8 this may admit4 CTAs if registers remain<=128; at M128 register pressure may still cap3. Reject on spills, primary aggregate failure, any suite regression beyond tolerance, or reference failure.",
+  "suite": [
+    1,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    257,
+    384,
+    512,
+    513,
+    753,
+    3012,
+    16384
+  ],
+  "screen_seeds": [
+    27011,
+    27013
+  ],
+  "holdout_seeds": [
+    28001,
+    29009
+  ],
+  "min_pairs": 60,
+  "max_gpu_minutes": 45,
+  "roi_prior": {
+    "basis": "engineering_prior",
+    "speedup_range": [
+      1.0,
+      1.15
+    ],
+    "confidence": "low",
+    "component": "expert path; full serving unknown"
+  },
+  "baseline_isolation": "immutable_tree",
+  "baseline_anchor_source": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+  "candidate": "/home/ubuntu/okc/results/rsi/bundles/pipeline3-moe-v2.tar.gz",
+  "baseline": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+  "dependencies": [
+    "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+    "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+    "/home/ubuntu/okc/results/rsi/bundles/pipeline3-moe-v2.tar.gz.manifest.json",
+    "/home/ubuntu/okc/benchmarks/measurement.py",
+    "/home/ubuntu/okc/serving/benchmark-contract.json",
+    "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+    "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+    "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+    "/home/ubuntu/okc/benchmarks/run_rsi_h200.py"
+  ],
+  "execution_note": "Read-only isolated persistent workers with private caches, matched input bytes and immutable inputs. Unchanged-control pilot on screening seed before candidate measurements; all subprocesses/container must be terminal before lease release.",
+  "supersedes": "Q14-pipeline3-v2: frozen execution runner added; no prior GPU run or holdout consumption.",
+  "control_policy": {
+    "initial_pairs": 60,
+    "seed": 27011,
+    "retry": "at most once with120pairs and seed27013 if interval uncertainty only; requires preregistered launcher support, otherwise stop",
+    "gate": "Each shape interval must contain1 and establish >=1/1.02 noninferiority; no more than2% primary geomean deviation",
+    "failure": "stop candidate sweep and audit runner"
+  }
+}
