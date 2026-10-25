@@ -1,0 +1,11 @@
+{
+  "id": "r5-fast",
+  "parent": "r4-fast",
+  "claim": "Router only. FP32 split-K keeps eight accumulators so m=32 can launch 32 columns. Fused wgmma m64n64k16 hi+lo split-K (256/512/1024) is baked off cold for m=16/32/128/256. Projections stay on cuBLAS.",
+  "roi": {"speedup_range": [1.08, 1.25], "kernel_geomean_us_target": 2800},
+  "reject_if": [
+    "official or graph correctness fails",
+    "kernel-scale geomean does not beat r4's 2992 us on a same-run comparison",
+    "any scored router shape is slower than 0.97x the r4 candidate"
+  ]
+}

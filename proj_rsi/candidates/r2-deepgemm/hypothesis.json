@@ -1,0 +1,17 @@
+{
+  "id": "r2-deepgemm",
+  "hypothesis": "On H200 the cuBLAS path leaves the router and some small-M projections well above the bandwidth floor. DeepGEMM BF16 NT, cuBLASLt, or a split-K streaming kernel is faster on those shapes. prepare() keeps a backend only when it beats torch on this GPU and stays inside tolerance, so a scored shape cannot regress.",
+  "roi_prior": {
+    "basis": "engineering_prior",
+    "speedup_range": [1.05, 1.25],
+    "confidence": "low",
+    "component": "router and M<=32 projections; large-M stays on whichever backend wins the local timing"
+  },
+  "fast_path": "per scored (layer, m), the fastest of deep_gemm.bf16_gemm_nt, cublaslt_gemm_nt, and split-K",
+  "fallback": "F.linear for BF16; FP32 matmul for router M<=8; BF16 hi+lo torch.mm above that",
+  "reject_if": [
+    "geomean load time stays above 3200 us",
+    "any official correctness case fails",
+    "a custom backend is selected and then loses to torch under CUDA-graph replay"
+  ]
+}

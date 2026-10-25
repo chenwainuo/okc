@@ -1,0 +1,11 @@
+{
+  "id": "r6-c12",
+  "parent": "r5-fast",
+  "claim": "Projections, not just the router. Lossless 12-bit BF16 weights (sign+mantissa plus a 3-bit exponent delta) cut the HBM traffic that already sits on the 4.8 TB/s floor, and a prepare-time cuBLASLt search covers m=128/256. The router above 32 tokens is one GEMM on the concatenated hi+lo matrix. This is the public Apache-2.0 v20 design that scored 1.4155x on okc check (board about 3410 us). Measure it here, then attack whatever is still short of 1.51x.",
+  "roi": {"speedup_range": [1.30, 1.50], "board_us_target": 3200},
+  "reject_if": [
+    "official or graph correctness fails",
+    "ci_high < 1.20 against the same-run SGLang baseline",
+    "prepare exceeds 300s"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "r4-fast",
+  "parent": "r3-fast",
+  "claim": "Cold-L2 router bake-off: one-warp-per-column FP32 split-K for m<=32, pipelined fused BF16 tensor-core split-K for m=128/256. Projections stay on cuBLAS.",
+  "roi": {"speedup_range": [1.10, 1.25], "kernel_geomean_us_target": 3200},
+  "reject_if": [
+    "official or graph correctness fails",
+    "kernel-scale geomean stays above 3200 us",
+    "any router shape regresses more than 5% versus the r3 torch/cuBLAS time"
+  ]
+}

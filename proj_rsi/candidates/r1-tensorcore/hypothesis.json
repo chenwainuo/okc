@@ -1,0 +1,15 @@
+{
+  "id": "r1-tensorcore",
+  "hypothesis": "Scored m<=32 is HBM-bound on H200, so a CUDA-core split-K (N-tile 64, enough K splits for about two waves on 132 SMs, streaming 16-byte weight loads, fp32 partials) should beat F.linear there. m=128 and m=256 are a large share of the geomean and need tensor cores; a real mma.sync m16n8k16 64x64 kernel with a 2-stage cp.async pipeline is there so those verify loads do not fall back to a CUDA-core GEMM. Router fast paths use a prepare-time BF16 hi+lo split with fp32 accumulation.",
+  "roi_prior": {
+    "basis": "engineering_prior",
+    "expected_effect": "Split-K is the bandwidth win on decode and verify-1. The MMA path is required so verify-16/32 do not regress versus cuBLAS. Net geomean versus SGLang is uncertain: the 64x64 tile's arithmetic intensity is only 32 FLOP/byte, below the H200 ridge, and the kernel was not executed on a GPU.",
+    "biggest_win_shapes": ["m=1,8,16,32 all five layers"],
+    "likely_flat_or_loss_shapes": ["m=128 and m=256 versus a tuned cuBLAS kernel", "router, already near the floor"]
+  },
+  "speedup_range": [0.85, 1.35],
+  "confidence": "low",
+  "fast_path": "Real MMA, not omitted. (1) m<=32 and n,k multiples of 64: split-K CUDA-core, CTA = N-tile 64 by one K-split, __ldcs uint4 weight loads via smem, fp32 partials, second kernel reduces to bf16 (fp32 for the router). Splits target 256 CTAs. Odd m in that range is predicated (template M=0). (2) m>=64, m%64==0, n%64==0, k%32==0: mma.sync.aligned.m16n8k16.row.col.f32.bf16.bf16.f32, BM=BN=64, BK=32, 128-thread CTA, each warp owns 16x64 as eight 16x8 accumulators, cp.async 2-stage smem, fp32 acc, store bf16. Router on both paths is BF16 hi+lo, fp32 acc, built in prepare. k%32 (not only k%16) because BK=32; every scored K is a multiple of 64.",
+  "fallback": "CPU, and any GPU shape that misses both predicates (m=33, 130, 1000, and any k not divisible by 32 on the MMA path): starter math, bf16 x @ W[:n].T, router x.float() @ W[:n].T. Original BF16 weights are not stored at another precision.",
+  "reject_if": "Official relative L2 fails (1e-2 BF16, 1e-4 router) or a probe row exceeds 1e-3. Most likely GPU failures: MMA fragment register map or the 2-stage cp.async wait counts are wrong, which corrupts every m>=64 result (m=128, 256, 512) rather than missing by an ulp; split-K partial indexing or the odd-m predicate is wrong on m=5, 7, 9. Also reject if a scored verify load is slower than cuBLAS by enough to pull the geomean under 1."
+}

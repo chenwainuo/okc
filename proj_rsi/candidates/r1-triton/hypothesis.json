@@ -1,0 +1,13 @@
+{
+  "id": "r1-triton",
+  "hypothesis": "SGLang's H200 projections are cuBLAS F.linear. At m<=32 the output grid under-fills 132 SMs unless K is split; a fixed Triton tl.dot split-K (fp32 accumulate, bf16 store) should move decode toward the HBM floor. At m>=128 split-K is off and tiles stay on tensor cores so verify loads do not regress. Router is the SGLang bf16 hi+lo pair with fp32 accumulation, built in prepare. No measurement on this host, so the geomean prior is wide and includes a possible loss to cuBLAS.",
+  "confidence": "low",
+  "roi_prior": {
+    "basis": "engineering_prior",
+    "speedup_range": [0.85, 1.35],
+    "confidence": "low"
+  },
+  "fast_path": "Lazy Triton import in prepare only if CUDA is available. Hardcoded tiles by m-bucket (m<=32, m<=64, else) and K>=4096. All use BLOCK_M=64. m<=32: SPLIT_K 8 and 64x64x64 when K>=4096, else SPLIT_K 4 and 64x128x64. m<=64: SPLIT_K 4 (64x64x64) or 2 (64x128x64). else: SPLIT_K 1, same blocks. Split-K writes an fp32 workspace allocated in prepare and reduces in a second kernel. Weights are transposed to contiguous [K, N] in prepare. Router dots bf16 hi and lo into one fp32 accumulator. Warmup launches every scored shape and the official odd-m cases before return.",
+  "fallback": "If CUDA/Triton is missing, import or compile fails, m>4096, N is not a multiple of BLOCK_N, K does not divide evenly across SPLIT_K*BLOCK_K, or the partial workspace would be exceeded: bf16 x @ W[:n].T, and for the router x.float() @ W.T. Same math as the starter.",
+  "reject_if": "Any official case fails relative L2 (1e-2 projections, 1e-4 router) or a probe row exceeds 1e-3; a scored load is slower than the torch/cuBLAS path by more than the judge CI; CUDA graph replay hits a compile, host sync, or value-dependent alloc; or m>=128 projections regress enough that the six-load geomean does not beat SGLang."
+}

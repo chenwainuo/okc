@@ -1,0 +1,66 @@
+{
+  "schema_version": 2,
+  "problem": "muse_bf16_proj",
+  "purpose": "Head-driven RSI loop that rewrites the muse_bf16_proj kernel for this model's exact shapes. Every claim about speed comes from an okc job id; nothing else counts.",
+  "goal": {
+    "board_us_target": 3000.0,
+    "speedup_required": 1.6103,
+    "published_sglang_us": 4830.8,
+    "incumbent_board": {"job": "23cecdef1bb54c9e", "candidate": "proj_rsi/candidates/r6-c12/submission.py", "score_us": 3428.0, "speedup": 1.4092},
+    "floor_us": 2384.0,
+    "log_gain_needed": 0.80,
+    "note": "Speedup is the geomean over six loads of SGLang load time over ours; a load is the sum of five layer times. Working in ln(ratio): r6 sums to 2.058 over six loads, 3000 us needs 2.859, the floor allows 4.236."
+  },
+  "roles": {
+    "head": {"model": "claude-fable-5-1", "effort": "high", "duties": ["reads every result", "does the board arithmetic", "chooses the next experiment", "writes the implementer brief", "decides promote/reject/refine", "spends the check budget", "keeps LOOP.md current"]},
+    "implementer": {"model": "claude-opus-5-5", "effort": "medium", "duties": ["writes exactly one candidate directory from the brief", "never edits the incumbent, the ledger, or another candidate", "runs python3 -m proj_rsi lint on the file before returning"]},
+    "critic": {"model": "claude-opus-5-5", "effort": "medium", "duties": ["different agent from the implementer", "reads the candidate for rule violations, graph safety, missing fallbacks, and wasted prepare time", "may not promote"]},
+    "executor": {"who": "head, via python3 -m proj_rsi check", "duties": ["quota guard", "okc check --no-wait", "wait, archive JSON/profile/log, record in the ledger"]}
+  },
+  "loop": [
+    "1. head: read ledger + LOOP.md; recompute board projection (python3 -m proj_rsi board)",
+    "2. head: choose one experiment with an explicit ln-gain target and a kill bar per shape; write the brief into the candidate's hypothesis.json",
+    "3. implementer (opus, medium): write candidates/<id>/submission.py from the template; lint must pass",
+    "4. critic (opus, medium): review; head reads both; fix or reject before spending a check",
+    "5. head: python3 -m proj_rsi check candidates/<id>  (quota-aware; blocks until the job finishes)",
+    "6. head: python3 -m proj_rsi result <job>  -> per-shape table vs incumbent, bake-off log, board projection",
+    "7. head: record decision in LOOP.md; promote if the gate passes; stitch best-per-shape plan if useful",
+    "8. head: schedule the next iteration (quota reset at 00:00 UTC) and go to 1"
+  ],
+  "candidate_contract": {
+    "first_line": "# okc: problem=muse_bf16_proj",
+    "self_validation": "Every fast path proves itself in prepare() on the probe shapes (one-hot columns exact, random rows within tolerance) before it is enabled; a failing path is disabled, not shipped.",
+    "bake_off": "prepare() times each candidate path against the fallback under CUDA-graph replay with a cold L2 (read-only flush > 60 MB) and keeps the faster one with a 1% margin. The table is printed as 'BAKE <layer> m=<m> <path> <us>' lines so the log tail carries every variant's time, not just the winner.",
+    "fallback": "cuBLAS/torch for BF16; FP32 matmul at m<=8 and the BF16 hi+lo pair above for the router. Odd m (5, 7, 9, 33, 130, 512, 1000) must go to a path that is correct; usually the fallback.",
+    "prepare_budget_s": 240,
+    "log_budget_chars": 14000,
+    "no_regression": "A path is only selected for a scored shape when it beats the fallback on that shape in the bake-off."
+  },
+  "gates": {
+    "lint": "python3 -m proj_rsi lint <file> has no errors",
+    "check": "okc check passes 9/9 and the 30 timed shapes",
+    "promote_to_scored": "score_us from the check is below incumbent_board.score_us by more than the half-width of the 95% interval; then okc submit the identical file",
+    "per_shape_win": "yours_us below the incumbent's yours_us on that shape; losses on any scored shape are reported and the path reverts to the incumbent's choice in the next stitch"
+  },
+  "budget": {
+    "checks_per_day": 20,
+    "scored_per_day": 10,
+    "reset": "00:00 UTC",
+    "rule": "Never spend a check on a file that fails lint or whose fast paths are not guarded by the bake-off. Prefer one check carrying many variants over many checks carrying one."
+  },
+  "rules": [
+    "kernel_fn is CUDA-graph replayed: no host sync, no value-dependent allocation or branch, no printing tensors. Branching on m, n, k, layer is fine. Allocating the output is fine. Zeroing a prepare-time workspace is fine.",
+    "prepare() runs once, untimed, up to 300 s including nvcc. Compile and pack there.",
+    "BF16 weights stay BF16 or a lossless compression of it. The router's FP32 weights may be a BF16 hi+lo pair with FP32 accumulation. Dequantize in-kernel.",
+    "Nothing derived from data is cached. No reference import, no subprocess, no network, no harness introspection.",
+    "Correctness: relative L2 <= 1e-2 (router 1e-4), any row <= 5x that, probe rows (one-hot inputs) <= 1e-3, no NaN/Inf.",
+    "No okc login, no rules acceptance, no edits to rsi/, serving/, muse_moe_w4a16/."
+  ],
+  "shape_model": {
+    "layers": {"qkv_gate": [2304, 8192], "o": [8192, 1024], "pooler": [4096, 8192], "unpooler": [8192, 4096], "router": [256, 8192]},
+    "unpooler_slice": "n=1024 when m<=8",
+    "loads": {"decode 1": 1, "decode 16": 16, "decode 32": 32, "verify 1": 8, "verify 16": 128, "verify 32": 256},
+    "weight": 62,
+    "judge_overhead": "yours_us is roughly kernel GPU time + 1.0-1.5 us after the judge subtracts about 4 us of replay cost; the practical floor for a tiny shape is about 2.5 us yours."
+  }
+}

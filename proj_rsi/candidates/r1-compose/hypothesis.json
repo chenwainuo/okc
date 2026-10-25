@@ -1,0 +1,12 @@
+{
+  "id": "r1-compose",
+  "hypothesis": "On H200, M=1 BF16 projections are bandwidth-bound. sglang hopper_bf16_gemv is documented at 5-15% above cuBLAS for these mid-size weights, and every BF16 layer at m=1 passes use_hopper_bf16_gemv: qkv_gate (2304, 8192), o (8192, 1024), pooler (4096, 8192), sliced unpooler (1024, 4096). For m>1, tiny_gemm_bf16's N variant (block threads = K/16) covers qkv_gate and pooler while K>N, up to max_m=512, and the sliced unpooler (1024, 4096) for m<=8. The K variant does not cover o (8192, 1024) or the full unpooler (8192, 4096), because warp lanes do not divide K/8. The router stays the FP32 matmul at m<=8 and the baseline BF16 hi+lo pair with FP32 accumulation above that; tiny_gemm is bf16-out and is not used. The geomean can move only a little: decode-1 is one of six loads, and o plus every m>8 unpooler stay on cuBLAS.",
+  "roi_prior": {
+    "basis": "engineering_prior",
+    "speedup_range": [1.0, 1.08]
+  },
+  "confidence": "low",
+  "fast_path": "m==1 and use_hopper_bf16_gemv: hopper_bf16_gemv on qkv_gate, o, pooler, and sliced unpooler. Else if can_use_tiny_gemm(n, k, max_m=max(m, 16)) and m<=max_m: tiny_gemm_bf16 on qkv_gate, pooler, and sliced unpooler. Router m>8 on CUDA: torch.mm of the transposed BF16 hi and lo weights with out_dtype=float32.",
+  "fallback": "Disabled import, a false predicate, or a runtime error from either sglang kernel uses F.linear for BF16. The router uses x.float() @ W[:n].T at m<=8, on CPU at any m (no aten::mm.dtype), and if the hi+lo GEMM throws.",
+  "reject_if": "Any official case fails; a scored load regresses versus SGLang; ci_low <= 1; tiny_gemm loses to cuBLAS on verify m=128 or m=256 by more than noise; hopper_bf16_gemv is missing or slower than cuBLAS on decode m=1."
+}

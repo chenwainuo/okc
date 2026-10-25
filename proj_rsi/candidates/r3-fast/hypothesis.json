@@ -1,0 +1,11 @@
+{
+  "id": "r3-fast",
+  "problem": "muse_bf16_proj",
+  "claim": "Keep cuBLAS on projections unless a split-K kernel wins a CUDA-graph replay. Replace the router with a single-pass FP32 split-K for m<=32 and a fused BF16 tensor-core split-K for m=128 and m=256. prepare() drops any custom path that misses the reference tolerance or is not at least 3% faster than torch under graph replay.",
+  "roi_prior": {"speedup_range": [1.15, 1.40], "confidence": "medium"},
+  "reject_if": [
+    "official correctness fails",
+    "kernel-scale candidate geomean stays above 3200 us",
+    "a custom backend is slower than torch under CUDA-graph replay"
+  ]
+}
