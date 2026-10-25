@@ -147,7 +147,7 @@ def parse_bake(log_text: str) -> list[dict]:
     return rows
 
 
-PROBE_LINE = re.compile(r"^PROBE\s+(\S+)\s+(\S+)\s+([0-9.]+)(?:\s+([0-9.]+))?")
+PROBE_LINE = re.compile(r"^PROBE\s+(\S+)\s+(.*?)\s+([0-9.]+)(?:\s+([0-9.]+))?\s*$")
 
 
 def parse_probe(log_text: str) -> list[dict]:
