@@ -1,0 +1,219 @@
+{
+  "status": "CPU_only_feasibility_research_no_implementation_no_GPU",
+  "decision": "Conditionally feasible as a prefill-only measurement hypothesis using an existing grouped BF16 kernel. Not a credible universal decode replacement; full32expert conversion likely unattractive atM3012 and3x atM16384 requires very optimistic realized bandwidth/compute. Do not force implementation if precision/backend/capture/memory gates fail.",
+  "parked_family": "Existing hand-written WGMMA v1-v5 family remains parked; noT32/allpadding/newvariant work authorized here.",
+  "preferred_existing_backend": {
+    "name": "DeepGEMM BF16 contiguous grouped GEMM",
+    "entrypoint": "serving/sglang/python/sglang/srt/layers/deep_gemm_wrapper/entrypoint.py:162 grouped_gemm_nt_bf16_contig(a,b,d,m_indices)",
+    "callee": "deep_gemm.m_grouped_bf16_gemm_nt_contiguous(a,b,d,m_indices)",
+    "layout": {
+      "a": "BF16 contiguous[R,K], grouped rows gathered onGPU",
+      "b": "BF16 contiguous[E,N,K], K contiguous, NT multiplication",
+      "d": "BF16[R,N]",
+      "m_indices": "int32[R] GPU expert index, with-1 for padding; perexpert rows aligned to backend current get_contiguous_layout_alignment result"
+    },
+    "source_examples": [
+      "serving/sglang/python/sglang/srt/layers/moe/moe_runner/deep_gemm.py:640 _run_bf16_contiguous_gemm",
+      "serving/sglang/python/sglang/srt/layers/moe/moe_runner/deep_gemm.py:985 pre_permute_standard_to_deep_gemm",
+      "serving/sglang/python/sglang/kernels/ops/moe/ep_moe_kernels.py:1020 _fwd_kernel_ep_scatter_1",
+      "serving/sglang/python/sglang/kernels/ops/moe/ep_moe_kernels.py:1145 ep_scatter"
+    ],
+    "optimization_evidence": "Existing locally inspected DeepGEMM sm90_bf16_gemm.cuh uses TMA staging and warp-specialized WGMMA, unlike serialized prototype. This is implementation provenance, not measured throughput for target shapes.",
+    "runtime_blocker": "Pinned SGLang wrapper/source proves API integration exists; current pinnedimage BF16 export availability/JIT configuration/actualcapture compatibility not runtime-verified in this CPU-only task. ENABLE_JIT_DEEPGEMM gates import. No assumption that every public upstream DeepGEMM build supports these exports.",
+    "warmup": "compile_utils.py:436 execution_hook may compile/warmup shapes. Warm kernels/configuration before capture; never hide weightconversion in warmup. Every graph replay must regenerate BF16 scratch from packedweights.",
+    "SM90_support_gate": "UNVERIFIED for the exact callable pinned BF16 grouped entrypoint. A local sm90_bf16_gemm implementation exists, but Python symbol/source presence does not prove binding dispatch selects it; BF16 grouped exports may be restricted to SM100 in some builds. Inspect exact installed binding/JIT architecture guards before any GPU prototype. If SM90 unsupported, stop DeepGEMM path; existing Triton BF16 grouped path is a separately justified fallback with unknown speed."
+  },
+  "alternatives": [
+    {
+      "name": "DeepGEMM BF16 masked grouped",
+      "entrypoint": "entrypoint.py:109 grouped_gemm_nt_bf16_masked(a,b,d,masked_m,expected_m)",
+      "layout": "a[E,capacity,K],b[E,N,K],d[E,capacity,N], GPU masked_m[E]; expected_m is host shape-based tuninghint, not devicecount.item()",
+      "problem": "Safe worstcase perexpert capacity can blow up activation/output memory; contiguous layout is preferred. No CPU sync to obtain actual perexpert counts."
+    },
+    {
+      "name": "Existing Triton grouped BF16 kernel",
+      "entrypoint": "serving/sglang/python/sglang/kernels/ops/moe/inkling_moe.py:943 grouped_gemm_triton",
+      "metadata": "compute_grouped_gemm_metadata atline695, GPU offsets/counts/blockschedule; requires sortedexpertrows andcontiguousa/b",
+      "role": "Fallback if pinnedDeepGEMM BF16 export/capture unsupported; performance unknown, do not assume meets3x."
+    },
+    {
+      "name": "FlashInfer SM90 gather+grouped GEMM+SiLU fusion",
+      "entrypoint": "flashinfer/fused_moe/cute_dsl/sm90_contiguous_gather_grouped_gemm_act_fusion.py:142 in existing localresearchcopy",
+      "problem": "Interleaved up/gate weightlayout and fusedSiLU afteraccumulation do not expose required perexpertglobal-scale andBF16intermediate boundary. Not a drop-in without semantic changes. Fusedfinalize weightedreduce also risks movingnorm; therefore not preferred."
+    }
+  ],
+  "proposed_invocation_not_implementation": [
+    "Retain onlyallowed canonical FP4/group16scale/global inputs andcurrentfallback asneeded; allocate reusable scratch addresses butnotcached expanded values.",
+    "GPU count/align/gather localroutes using existingdispatch/scatter primitives. Capacity derived frompublicshape bound; livecounts remainGPU. Produce expertindex/m_indices and inverse slotmap.",
+    "Inside captured graph: dequant currentlocalw13 to BF16 scratch[E,8192,4096], matching incumbent internalfragment values exactly; optionally device-skip experts withcount0 onlyif groupedkernel guarantees no stale reads.",
+    "Existing BF16 grouped GEMM produces BF16 gate/up rows. Apply perexpert processedglobal scale atincumbent boundary, then existing unfusedSwiGLU withsamegate/up halforder androunding.",
+    "Inside same invocation: dequant currentlocalw2 to BF16 scratch[E,4096,4096]; run groupedBF16down; apply correspondingprocessedglobal scale afterBF16GEMMoutput.",
+    "GPU scatter eachlocalexpert output back to expanded[M*8,4096] slots, exactzero elsewhere; preserve original perexpert RMSNorm thenrouterweighted sum. Do not use generic ep_gather weightedreduction beforeRMSNorm.",
+    "Allconversion,scale application,gather/scatter,zeroing anddevice metadata work included in capturedreplay timing. Persistent memoryallocation reuse allowed; persistent expandedweight reuse forbidden."
+  ],
+  "precision_contract": {
+    "primary": "Match Marlin BF16 weightfragment dequant+scale multiplication, FP32accumulator andBF16cast-before-processedglobal-scale ordering. Inspect existing dequant primitives rather than substituting generic rawweights*rawglobal expansion.",
+    "global_scale_evidence": "marlin_utils_fp4.py:29 processes group scales by FP16/bit transform; line47 processedglobal rescales BF16 by2^119. Movingglobal insideweights orbeforeBF16GEMMoutput changes rounding/range.",
+    "reference_warning": "muse_moe_w4a16/nvfp4.py:90 dequantize returnsFP32 includingglobal; simply .bfloat16() onthis fullreferenceweight is NOT proof of incumbent rounding equivalence.",
+    "danger": "Internal Marlin-scaled BF16 operands can be tiny; optimizedBF16 backend may handle underflow/subnormals/accumulation differently. Must test exactfragmentbits andoutputoracle, includingextreme scales, before timing. RawBF16representation withpower-of-two rescaling requires separate proof; not silentlyallowed.",
+    "SwiGLU": "w13 rows[:4096]gate,[4096:]up; materialize andscaleBF16gate/up beforeoriginalsilu_and_mul. Generic fusedactivation backend mayuseFP32intermediate or differenthalfordering."
+  },
+  "graph_capture_and_metadata": {
+    "counts": "Existing ep_scatter produces deviceexpertstart/m_indices/src2dst; perexpert paddedcounts useGPU kernels. NoTensor.item(),CPUtolist(),device-dependent Pythonloops orhostallocationbyactualcounts.",
+    "capacity": "_get_compact_all_tokens atdeep_gemm.py:252 gives128*(min(assignments,E)+(assignments-min(assignments,E))//128) foralignment128; queryactualbackendalignment fromshapeoutsidecapture. This isworstcase capacity, not expectedlocalrows.",
+    "M16384_example": {
+      "slots": 131072,
+      "compact_capacity_alignment128": 135040,
+      "packed_input_bytes": 1106247680,
+      "gate_up_output_bytes": 2212495360,
+      "down_input_or_output_bytes_each": 1106247680
+    },
+    "empty": "Graph valid\u2192empty mustzeroexpandedoutput; skippedgroups mayleavescratchgarbage butnever read/reduce it. Tests needed forpadding andchangingexpertcounts withoutrecapture.",
+    "runner_warning": "Reuse lowlevel groupedGEMM/preprocessing only. StandardMoE runner postpermute mayrouterweightreduce beforeMuseSparkperexpert norm; cannotinvoke unchanged asdrop-in."
+  },
+  "memory": {
+    "local_experts": 32,
+    "dimensions": {
+      "hidden": 4096,
+      "intermediate": 4096
+    },
+    "FP4_payload_bytes": 805306368,
+    "group16_scale_bytes": 100663296,
+    "transient_BF16_up_bytes": 2147483648,
+    "transient_BF16_down_bytes": 1073741824,
+    "both_BF16_banks_bytes": 3221225472,
+    "both_BF16_banks_GiB": 3.0,
+    "sequential_bank_reuse": "Canreuse2GiBcapacity aftergate/upGEMM andactivation beforedown conversion; requires verifiedgraphlifetime andstreamordering. This reducesbankpeak from3GiB to2GiB, notconversiontraffic.",
+    "not_total_scratch": "AtM16384 worstcase compactactivation/gateup/down buffers addmultipleGiB, plus expandedslots, originalpackedbanks, fallbackbanks, graphpool, allocatorreserve andKVcache. 3GiB alone isnot peakservingmemory.",
+    "model_bound": "Assuming816Bparameters andidealeightway partition, fullBF16model=1.632TBdecimal or204GB/rank, alreadygreaterthan141GB beforeKV/activations. ThereforefullpersistentBF16cache infeasible; no suchproposal.",
+    "serving_blocker": "Must prove one-layer scratch pool can be reused acrossmodel layers andcapturedgraphs. Perlayer/pergraph persistent3GiB allocations coulddestroy servingmemoryheadroom. OneH200syntheticfit doesnot establish8rank fullmodel fit."
+  },
+  "roofline": {
+    "model": "Forall32experts active, dequanttime >=(FP4read+scaleread+BF16write)/B. SubsequentGEMMtime >=max(BF16weightread/B,FLOPs/C). Sumthese sequentialstage floors; conversioncompute,activationtraffic,metadata,globalscaling,finalizer,launches,cache misses/overlap complexities omitted. B/C areassumptions, not measureddevicecapabilities.",
+    "conversion_min_bytes": 4127195136,
+    "subsequent_BF16_weightread_min_bytes": 3221225472,
+    "total_weightrelated_bytes": 7348420608,
+    "routing_assumption": "UniformEP8expected localvalidassignments\u2248M because8routes/token and32/256localexperts. Actualskew/routecount changesFLOPs; all32weights conversion assumed. Coulddevice-skipinactiveexperts butprefill typicallyactivatesmost, andmusttimecount/checkwork.",
+    "scenarios": [
+      {
+        "M": 3012,
+        "bandwidth_TB_s_assumption": 1,
+        "effective_grouped_BF16_TFLOP_s_assumption": 200,
+        "dequant_bandwidth_floor_us": 4127.195135999999,
+        "GEMM_roofline_floor_us": 3221.225472,
+        "sum_sequential_stage_floors_us": 7348.420607999999,
+        "anchor_us": 2072.208046913147,
+        "optimistic_speedup_ceiling_ignoring_other_work": 0.28199366332640213
+      },
+      {
+        "M": 3012,
+        "bandwidth_TB_s_assumption": 2,
+        "effective_grouped_BF16_TFLOP_s_assumption": 500,
+        "dequant_bandwidth_floor_us": 2063.5975679999997,
+        "GEMM_roofline_floor_us": 1610.612736,
+        "sum_sequential_stage_floors_us": 3674.2103039999997,
+        "anchor_us": 2072.208046913147,
+        "optimistic_speedup_ceiling_ignoring_other_work": 0.5639873266528043
+      },
+      {
+        "M": 3012,
+        "bandwidth_TB_s_assumption": 4,
+        "effective_grouped_BF16_TFLOP_s_assumption": 1000,
+        "dequant_bandwidth_floor_us": 1031.7987839999998,
+        "GEMM_roofline_floor_us": 805.306368,
+        "sum_sequential_stage_floors_us": 1837.1051519999999,
+        "anchor_us": 2072.208046913147,
+        "optimistic_speedup_ceiling_ignoring_other_work": 1.1279746533056085
+      },
+      {
+        "M": 16384,
+        "bandwidth_TB_s_assumption": 1,
+        "effective_grouped_BF16_TFLOP_s_assumption": 200,
+        "dequant_bandwidth_floor_us": 4127.195135999999,
+        "GEMM_roofline_floor_us": 8246.33720832,
+        "sum_sequential_stage_floors_us": 12373.53234432,
+        "anchor_us": 9334.864139556885,
+        "optimistic_speedup_ceiling_ignoring_other_work": 0.7544219289847334
+      },
+      {
+        "M": 16384,
+        "bandwidth_TB_s_assumption": 2,
+        "effective_grouped_BF16_TFLOP_s_assumption": 500,
+        "dequant_bandwidth_floor_us": 2063.5975679999997,
+        "GEMM_roofline_floor_us": 3298.534883328,
+        "sum_sequential_stage_floors_us": 5362.132451328,
+        "anchor_us": 9334.864139556885,
+        "optimistic_speedup_ceiling_ignoring_other_work": 1.7408865268229226
+      },
+      {
+        "M": 16384,
+        "bandwidth_TB_s_assumption": 4,
+        "effective_grouped_BF16_TFLOP_s_assumption": 1000,
+        "dequant_bandwidth_floor_us": 1031.7987839999998,
+        "GEMM_roofline_floor_us": 1649.267441664,
+        "sum_sequential_stage_floors_us": 2681.066225664,
+        "anchor_us": 9334.864139556885,
+        "optimistic_speedup_ceiling_ignoring_other_work": 3.481773053645845
+      }
+    ],
+    "interpretation": "M3012 wholeexpert3x budget\u2248691us isbeloweven optimistic4TB/s allweighttrafficfloor~1837us, sofullbank approach cannot plausiblydeliver3x there. M16384 optimistic4TB/s+1000TFLOP/s stagefloor~2681us leaveslittlemargin vs3x budget~3112us; moderate2TB/s+500TFLOP/s floor~5362us beforeotherwork makes3x implausible. Theseareconditionalbounds, notperformanceforecasts.",
+    "additional_assumption": "Largeexpandedbanks streamedfromHBM betweenphases; smalllast-level-cache overlap ignored. Treatnumericfloors asconditional model, not universal hardware lowerbounds or measuredrates."
+  },
+  "bounded_next_decision": {
+    "no_implementation_now": true,
+    "first_checks": [
+      "Inspectpinnedbackendexports/configuration andCPUcompileinterface underseparateauthorization ifneeded",
+      "Independentdequant-bit/global-boundary review; reject ifprecisionshift required",
+      "Estimate actualservingpeakmemory andscratchgraphpool ownership; reject ifnoheadroom",
+      "Onlythen root-reviewedGPUcorrectness+graphreplay probe forsingleexistingBF16grouped op withconversioninsidegraph; no newwarpgroupkernel"
+    ],
+    "eventual_screen": "NEWsentinelplan[M8,M128,M3012,M16384] withMarlinfallback fordecodes, conversionincluded. Measuredequant,scatter,GEMMs,scale andfinalizer costs plusendtoend; reportall. Full14shape independentholdout gates remain.",
+    "kill_conditions": [
+      "Backend unavailableorcapture unsafe",
+      "Precision/global-scale boundary cannotmatch",
+      "Scratchpool cannotfit fullservingorretains perlayerexpandedweights",
+      "Measured conversionfloor exceedspossiblebenefit atguardedshapes",
+      "Nooverallgain afterincludingallconversion/metadatawork"
+    ],
+    "honest_conclusion": "Existing optimized BF16backend reuse istechnically plausible butmemorytraffic makes3x broadgoal unlikely forfull-bank expansion. Investigate onlyasboundedprefill fallback, not nextunconditional rewrite; do notclaimfeasiblegain beforebackend/precision/memory tests."
+  },
+  "smallest_falsifiable_M16384_test": {
+    "decision": "CONDITIONAL GO for one bounded single-shape feasibility prototype, not for3x claim. NOT admitted now: backend/precision/memory prerequisites remain unverified. M3012 full-bank conversion is NO-GO as3x route under stated optimistic bandwidthmodel.",
+    "why_one_large_shape_is_justified": "M16384 stage-aware optimistic floor leaves somepossibleheadroom, whereas moderateeffective throughput predicts<2x. One measuredconversion+existinggroupedGEMM trial can falsify the remainingprefill opportunity; sourceanalysis cannotcalibrate sustainedbackendrate.",
+    "preconditions": [
+      "Exact pinned BF16 grouped entrypoint positively confirmed tosupportSM90/H200 (not onlySM100); otherwise no DeepGEMM launch",
+      "Independent review of transientdequant matchingMarlinBF16 fragmentbits andpostGEMMglobal placement",
+      "Worstcaseactivation+bank scratch accounted; sufficientactualfreeheadroom withoutperlayerexpandedweightretention",
+      "GPUcapture-safe metadata andbackendwarmup verified; allBF16expansion executesinsideeveryreplay"
+    ],
+    "candidate_scope": "M16384 only: both w13/w2 transientdequant +GPUscatter/countmetadata +existingBF16groupedGEMMs +separateglobal-scale andSwiGLU +expandedslotrestore +unchangedMuseSparkfinalizer. No persistentexpandedweights; no newWGMMAkernel; no fusion/repacking exclusions fromtimedwork. Decode remainscurrentMarlin.",
+    "controls": "Frozen incumbent onidenticalM16384actualinputbytes; same packedweights; no startupBF16cache. Independentlyreviewed freshdevelopmentseed; eagerandcapturedreference/emptychecks; everytimedoutput validated.",
+    "observations": [
+      "20balancedpaired completeexpertreplays ifcorrectness passes",
+      "Separate observationalstage attribution ofconversion/gather/GEMM/scales/finalizer; neveraddprofilerdurationto cleanpairedstatistics",
+      "Peakallocated/reservedmemory andunderlyingbankstorage; realcapturedscratchlifetimes",
+      "Verify graphreplay reexecutesconversion rather thanservingstaleBF16scratch"
+    ],
+    "bound": "Oneattempt, proposed\u2264600sGPUdeadline/\u2264$0.8334 at$5/hour; rootmustfreezeactualbudget/seed/review/lease before execution. Noautomaticretry orscope expansion.",
+    "go_after_test": "Onlyif completecandidate clearlybeatspairedincumbent afterallcosts andmemory/precision/capturechecks pass shouldrootconsider a newguardedprefill/full14suite plan. EvenaM16384win isnot original3xgoal.",
+    "no_go_after_test": "Reject ifunsupportedSM90, oraclefailure, insufficientmemory, captureunsafety, persistentBF16cache dependence, orcompletecandidatefails tobeatincumbent. IfonlyGEMMlooksfast butconversion/gathererasegain, parkthisapproach ratherthanexcludingconversion."
+  },
+  "root_pinned_image_source_inspection": {
+    "scope": "CPU-only pinnedimage file inspection; no imports orGPU execution; C++bindingdispatch/runtime correctness unproven",
+    "files": [
+      {
+        "path": "/opt/sglang/lib/python3.12/site-packages/deep_gemm/__init__.py",
+        "sha256": "16ceded415051d5a5adfb3cce00eacc455d04a729b80a76428b96b3f9968018e"
+      },
+      {
+        "path": "/opt/sglang/lib/python3.12/site-packages/deep_gemm/include/deep_gemm/impls/sm90_bf16_gemm.cuh",
+        "sha256": "3f12ad05796d7b8451604ff12e0a45ad1d9725a313919557bcdd9aa11c50e285"
+      }
+    ],
+    "python_grouped_bf16_symbol_defined": true,
+    "sm90_bf16_implementation_present": true,
+    "sm90_source_guard": true,
+    "grouped_layout_argument": true,
+    "interpretation": "Pinned image contains a Hopper BF16 implementation and Python grouped API; this narrows the backend uncertainty, but actual C++ binding dispatch on H200 and numerical behavior still require a bounded runtime smoke test."
+  }
+}
