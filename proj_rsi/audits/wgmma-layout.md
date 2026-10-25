@@ -36,7 +36,9 @@ The mma.sync formula is from §9.7.16.5.8, Figure 82:
 - `row = groupID` for a_i with i ∈ {0, 1, 4, 5}, otherwise `groupID + 8`.
 - `col = 2·threadID_in_group + (i & 1)`, plus 8 for i ≥ 4.
 
-There is no permutation. The packer's register order {row g k-lo, row g+8 k-lo, row g k-hi, row g+8 k-hi} is the judge-proven pw_dec output `A[4q..4q+3]` for k16 step q. It feeds wgmma unchanged:
+**Correction (found by the implementer, verified in the pw9 review):** the register slot order matches, but the r6/pw `_pack` assigns permuted k to those slots. Lane t at step q holds k = 16t + 4q + 0..3 of the 64-chunk. That was valid for mma.sync only because x was loaded into B registers with the same permutation. wgmma reads x from smem in natural k order, so the wgmma paths need `_pack_nat`. In it, slot (q, lane g·4+t, v = (kh, half, e)) holds W[16T + 8·half + g][64c + 16q + 8·kh + 2t + e], which gives exactly the table above per k16 step q. The +32 B descriptor step q walks the same natural k = 16q..16q+15.
+
+There is no register permutation. The packer's register order {row g k-lo, row g+8 k-lo, row g k-hi, row g+8 k-hi} is the judge-proven pw_dec output `A[4q..4q+3]` for k16 step q. It feeds wgmma unchanged:
 - The 4 registers of step q are the `{a0..a3}` operand of the q-th k16 wgmma in a 64-wide chunk.
 - Warp w of the warpgroup must decode W row tile `16w..16w+15` of the warpgroup's 64-row block.
 
