@@ -1,0 +1,125 @@
+{
+  "schema_version": 2,
+  "purpose": "Agent-directed recursive improvement of kernels and experiment selection toward the immutable 3x goal",
+  "authority": {
+    "objective": "docs/threefold-target.json; hash plus embedded snapshot frozen at init",
+    "ledger": "results/rsi/ledger.json",
+    "gpu_coordinator": "results/rsi/gpu-lease.json; shared across all ledgers on this physical GPU",
+    "role_identity": "CLI actor strings are coordination records, not authenticated identities. Root must invoke genuinely separate agents for independent review.",
+    "filesystem_trust": "Local files and executors are trusted to attest truthfully; hashes detect later changes, not fabricated evidence or omitted dependencies.",
+    "runtime_contract": "serving/benchmark-contract.json hash frozen at ledger initialization; expected image digest extracted once and checked against frozen contract"
+  },
+  "roles": {
+    "supervisor": [
+      "holds immutable goal and budget",
+      "spawns authorized subagents",
+      "owns execution scheduling",
+      "audits evidence and actual process handles"
+    ],
+    "planner": [
+      "reads profiles and failed experiments",
+      "proposes falsifiable hypothesis and ROI prior",
+      "freezes candidate, dependency bundle, suite and holdouts"
+    ],
+    "implementer": [
+      "implements candidate in isolated artifact/tree",
+      "does not modify incumbent or gates"
+    ],
+    "critic": [
+      "independently reviews baseline isolation, dependency completeness, precision and experiment design"
+    ],
+    "executor": [
+      "holds GPU lease",
+      "runs pinned harness with runtime deadline",
+      "records raw samples, structured correctness and environment",
+      "verifies actual process termination before releasing lease"
+    ],
+    "validator": [
+      "different identity from author and executor",
+      "recomputes raw sample statistics",
+      "verifies source and full-suite holdout evidence",
+      "approves only local incremental promotion"
+    ],
+    "method_reviewer": [
+      "reviews changes to planner/ranking/measurement separately from kernel changes",
+      "cannot weaken immutable goal or promotion gates"
+    ]
+  },
+  "lifecycle": [
+    "hypothesis",
+    "reviewed",
+    "running",
+    "measured",
+    "validated or rejected",
+    "promoted"
+  ],
+  "revision_policy": "Plans are immutable. Changed source invalidates review and evidence. Record rejection and create a new experiment ID with fresh holdouts; never overwrite prior outcomes.",
+  "local_gate": {
+    "pairs_minimum": 20,
+    "shape_coverage": "exact frozen primary+regression suite, no duplicates",
+    "seeds": "all preregistered holdout seeds, minimum two, distinct from screening and previous ledger runs",
+    "statistics": "recomputed from finite positive equal-length even raw pairs using hashed benchmarks/measurement.py; reported CIs ignored",
+    "noninferiority": "every shape lower bootstrap bound >=1/1.02 in every holdout",
+    "gain": "at least one frozen primary shape lower bootstrap bound >1.02 in every holdout",
+    "correctness": "report-hash-bound reference, eager empty-local, captured empty-local, precision assertions and positive case count",
+    "provenance": "candidate/baseline adapter hashes, complete transitive bundle snapshot, baseline source must match immutable anchor, plan hash, environment fingerprint, unique independent session IDs",
+    "profiling": "false; exclusive GPU required",
+    "primary_aggregate": "each holdout primary geometric-mean point speedup >1.02 AND geometric mean of marginal lower bounds >1.0; latter is a conservative screening statistic, not a joint 95% confidence interval",
+    "environment": "Exact frozen container sha256 digest; GPU UUID, driver, Torch and CUDA must be identical across all holdout sessions. Session IDs must remain distinct."
+  },
+  "goal_gate": {
+    "local_promotion": "updates ledger incumbent only; no source patch application and no full-goal completion",
+    "threefold": "fixed baseline comparison over original benchmark, no subset cherry-picking",
+    "serving": "full 8-H200 output agreement, TTFT and throughput/interactivity curve still required; not currently automated or available on one H200"
+  },
+  "budget_and_lease": {
+    "admission": "reserve max_run_minutes*hourly_rate before starting; deny insufficient remaining budget",
+    "accounting": "elapsed lease walltime, not provider billing; idle node costs excluded",
+    "enforcement": "ledger admission and exclusive ownership only. Executor must enforce process-group/container deadline externally. Ledger does not execute or kill commands.",
+    "expiry": "deadline never auto-releases GPU; inspect actual live handle, finish with terminal proof",
+    "crash": "Do not infer termination from stale files or deadline expiry. After verifying actual process termination, executor may abort with owned token, terminal handle proof and reason; abort rejects and releases/account resources even if artifacts changed. Lost token/coordinator corruption requires supervisor reconciliation under locks.",
+    "scope": "all executors must use the same canonical GPU coordinator; bypassing ledger is outside enforcement"
+  },
+  "rsi_loops": {
+    "kernel": "profile -> hypothesis -> isolated implementation -> independent review -> measure -> validate -> local promotion/rejection -> rerank",
+    "optimizer_method": "observe experiment outcomes -> propose ranking/search/harness change -> independent review -> frozen portfolio A/B -> validation; promotion intentionally unavailable until evaluator implemented"
+  },
+  "method_trial_contract": {
+    "status": "specified_not_implemented; optimizer_method validate/promote deliberately fails closed",
+    "frozen_before_exposure": [
+      "representative task/shape portfolio",
+      "disjoint development and holdout tasks/seeds",
+      "equal GPU-time and agent-token budgets for control and treatment",
+      "unchanged kernel correctness/performance gates",
+      "maximum trials and stopping rule"
+    ],
+    "metric": "validated log-speedup delivered per GPU-dollar and per agent-token, including failed candidates, compile costs and zero-gain trials",
+    "controls": [
+      "paired independent sessions/order balancing",
+      "multiple independent search seeds",
+      "full attempt ledger, no omitted failures",
+      "baseline method snapshot plus proposed method snapshot",
+      "holdout kernel wins independently revalidated"
+    ],
+    "decision": "independent reviewer requires portfolio-level improvement and no weakened gates; one faster kernel does not prove a better optimizer"
+  },
+  "ranking": {
+    "priors": "ROI ranges are labeled engineering_prior, never reported as measured speedups",
+    "update": "retain negative outcomes; rerank after each completed experiment using gain, uncertainty, cost and measured bottleneck share",
+    "selection": "prioritize information gathering when hardware bottleneck unknown; avoid repeated unchanged sweeps",
+    "serving_translation": "unknown until component share measured; use Amdahl rather than multiplying independent estimates"
+  },
+  "legacy": "observe imports existing artifact hashes as observational only. Legacy results cannot transition through review, validation, or promotion.",
+  "automation_boundary": [
+    "No implicit LLM spawning",
+    "No arbitrary shell execution",
+    "No patch application",
+    "No git commit/push",
+    "No cloud node creation/destruction",
+    "No full-goal completion claim"
+  ],
+  "versioning": {
+    "new_ledgers": "schema v2",
+    "v1": "Existing v1 remains readable and observational. Execution/validation/promotion cannot acquire image provenance retroactively; initialize a distinct v2 ledger, register proposals and obtain fresh review before running. Do not overwrite or silently migrate v1 history."
+  }
+}

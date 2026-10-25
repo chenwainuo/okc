@@ -76,6 +76,29 @@ Larger prefills retain stock tile selection. The combined artifact is `serving/p
 Earlier routing candidates are parked in `serving/experiments/initial-stack/`;
 their standalone measurements did not establish a useful gain.
 
+## Agent-driven RSI
+
+The [RSI protocol](rsi/protocol.json) assigns planner, implementer, critic, executor,
+and validator roles. The [kernel rewrite plan](docs/kernel-rewrite-plan.json) ranks
+counter-backed opportunities and labels speedup ranges as engineering priors.
+The [independent audit](docs/rsi-measurement-audit.json) records measurement gaps.
+
+```bash
+# Read the current ledger; all GPU work remains supervisor-controlled.
+python3 -m rsi status
+# First-time initialization only, with an explicit run-accounting budget:
+python3 -m rsi init --budget-usd 5
+```
+
+See [CLI usage](rsi/usage.json) and proposal/review schemas under `rsi/`.
+Source bundles, exact shape coverage, fresh holdouts, raw samples and independent
+review gate local promotion. Ledger promotion neither applies a patch nor proves
+full serving speedup. Legacy reports are observational only. The local ledger
+coordinates trusted agents; actor labels are not authentication and deadline
+records do not themselves stop a process. Root must enforce execution deadlines.
+Optimizer-method promotion requires the separate frozen portfolio evaluator
+specified in the protocol; that evaluator is not implemented yet.
+
 ## Serving requirements
 
 The [official rules](https://openkernelchallenge.dev/rules) and

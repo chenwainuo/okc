@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RSI proposal; ledger also enforces anchor-specific semantic checks",
+  "type": "object",
+  "required": [
+    "kind",
+    "hypothesis",
+    "suite",
+    "screen_seeds",
+    "holdout_seeds",
+    "min_pairs",
+    "max_gpu_minutes",
+    "roi_prior",
+    "baseline_isolation",
+    "candidate",
+    "baseline",
+    "baseline_anchor_source",
+    "dependencies"
+  ],
+  "properties": {
+    "kind": {
+      "enum": [
+        "kernel",
+        "optimizer_method"
+      ]
+    },
+    "hypothesis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "suite": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "screen_seeds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "integer"
+      }
+    },
+    "holdout_seeds": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "integer"
+      }
+    },
+    "min_pairs": {
+      "type": "integer",
+      "minimum": 20,
+      "multipleOf": 2
+    },
+    "max_gpu_minutes": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "roi_prior": {
+      "type": "object",
+      "required": [
+        "basis",
+        "speedup_range"
+      ],
+      "properties": {
+        "basis": {
+          "const": "engineering_prior"
+        },
+        "speedup_range": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        }
+      }
+    },
+    "baseline_isolation": {
+      "enum": [
+        "immutable_tree",
+        "isolated_process"
+      ]
+    },
+    "candidate": {
+      "type": "string"
+    },
+    "baseline": {
+      "type": "string"
+    },
+    "baseline_anchor_source": {
+      "type": "string"
+    },
+    "dependencies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

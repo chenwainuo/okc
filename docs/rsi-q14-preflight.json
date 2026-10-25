@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "experiment_id": "Q14-pipeline3",
+  "revision": 1,
+  "author": "root",
+  "reviewer": "measurement_audit",
+  "decision": "pending_not_approved",
+  "ledger_transition": "none; remains hypothesis",
+  "scientific_candidate_outcome": "unmeasured; not rejected for performance or correctness",
+  "scope": "CPU-only artifact and source preflight; no GPU jobs or runtime isolation claims",
+  "reviewed_plan_sha256": "73d925f895524bdedb09e92b8a335b0cce51d1574fef6a740c2ca97893ac60f4",
+  "reviewed_plan_file_sha256": "b02706bb381b3a858dad90785640d5b2a0f9a6d7b8992634ab9446013f9581cf",
+  "reviewed_artifacts": [
+    {
+      "archive": "results/rsi/bundles/baseline.tar.gz",
+      "archive_sha256": "4de5c64bda19542da0136825dbef21fd6b042a5ce7f31d2e70a98a422aebd411",
+      "manifest_sha256": "3914fac5d0d6e35c6cdf8994bd0e67d46aeadf560af7fe6528f1bcf38c57cca4",
+      "archive_hash_matches": true,
+      "member_hashes_exact": true,
+      "member_count": 5562,
+      "fixtures_match": true,
+      "pipeline_stages": 4
+    },
+    {
+      "archive": "results/rsi/bundles/pipeline3.tar.gz",
+      "archive_sha256": "609659091051b08352d9de220dedf657303fc8dad0f09082d38146ea820cfda0",
+      "manifest_sha256": "2fd31014964f4e6b9c181a00bd0a3ed3f38133cf47c42f58234e3737491b7d15",
+      "archive_hash_matches": true,
+      "member_hashes_exact": true,
+      "member_count": 5562,
+      "fixtures_match": true,
+      "pipeline_stages": 3
+    }
+  ],
+  "observed_checks": [
+    {
+      "check": "all ledger artifact hashes still match",
+      "result": "pass"
+    },
+    {
+      "check": "baseline and candidate archive hashes match manifests",
+      "result": "pass"
+    },
+    {
+      "check": "all archive member identities and hashes exactly match manifests including symlink encoding",
+      "result": "pass",
+      "count_each": 5562
+    },
+    {
+      "check": "official baseline/reference/checks/NVFP4 fixture hashes match frozen manifest",
+      "result": "pass"
+    },
+    {
+      "check": "candidate versus baseline archive file set",
+      "result": "pass",
+      "added_files": 0,
+      "removed_files": 0
+    },
+    {
+      "check": "candidate versus baseline bytes",
+      "result": "pass",
+      "changed_file": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin/marlin.cuh",
+      "change": "static constexpr int pipe_stages = 4 -> 3; existing four-stage comment remains stale"
+    },
+    {
+      "check": "baseline expert source equals original 3x-goal anchor hash",
+      "result": "pass",
+      "sha256": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5"
+    },
+    {
+      "check": "current serving source diff agrees with selected-validation anchor report",
+      "result": "pass",
+      "sha256": "c03e986317bc7019c1d39a90f40956a310aa92a6339e19936d473fe8230b133f"
+    },
+    {
+      "check": "full original primary+regression expert suite declared",
+      "result": "pass",
+      "shapes": [
+        1,
+        8,
+        16,
+        32,
+        64,
+        128,
+        256,
+        257,
+        384,
+        512,
+        513,
+        753,
+        3012,
+        16384
+      ]
+    },
+    {
+      "check": "independent seeds and samples preregistered",
+      "result": "pass",
+      "screen_seeds": [
+        20011
+      ],
+      "holdout_seeds": [
+        21013,
+        22003
+      ],
+      "min_pairs": 60
+    },
+    {
+      "check": "resource budget declared",
+      "result": "pass",
+      "max_gpu_minutes": 45,
+      "ledger_budget_usd": 5.0,
+      "hourly_assumption_usd": 5
+    },
+    {
+      "check": "source change preserves declared BF16/FP32/FP4 formats and all experts",
+      "result": "pass_at_source_only",
+      "runtime_numerical_correctness": "not yet tested"
+    },
+    {
+      "check": "baseline/candidate isolated persistent processes implemented and demonstrated",
+      "result": "fail_missing_implementation"
+    },
+    {
+      "check": "immutable extracted trees and import/JIT provenance verified",
+      "result": "pending_runtime_runner"
+    },
+    {
+      "check": "structured correctness/raw timing/session evidence emitter exists for isolated execution",
+      "result": "pending_runtime_runner"
+    },
+    {
+      "check": "suite covers every consumer changed by global header edit",
+      "result": "fail_for_promotion_scope",
+      "consumers": [
+        "MoE Marlin",
+        "dense GPTQ/FP4 Marlin code including gptq_marlin.cuh"
+      ]
+    }
+  ],
+  "rsi_preflight_boolean_checklist": {
+    "baseline_bundle_complete": true,
+    "candidate_bundle_complete": true,
+    "baseline_isolated": false,
+    "hypothesis_falsifiable": true,
+    "suite_and_holdouts_frozen": true,
+    "precision_preserved": true
+  },
+  "checklist_interpretation": "Bundle completeness here attests frozen repository/fixture/harness archive coverage plus pinned container contract, not successful deployment or execution. Precision attests source formats only; numerical gates remain mandatory. baseline_isolated=False must prevent review/start.",
+  "blocking_implementation": [
+    {
+      "priority": 1,
+      "item": "Isolated persistent worker runner",
+      "requirements": [
+        "Extract each archive into its own read-only tree after safe path/symlink validation.",
+        "Verify exact extracted members and hashes before and after execution.",
+        "Start distinct worker processes whose imports resolve only their own SGLang source tree; prohibit shared sys.modules and current-worktree imports.",
+        "Record actual imported module paths/hashes, CUDA header dependencies, compiler/container identity and JIT build identity; content-address or separate caches so changed header cannot reuse an incompatible binary.",
+        "Keep workers persistent and alternate serialized A/B graph replays with identical inputs; record exact plan seed/suite, raw finite paired samples, structured correctness and environment/session identity.",
+        "Use frozen manifest identities instead of legacy git-diff reporting: archives intentionally omit .git and legacy moe_local.py expects a git checkout.",
+        "Acquire one verified GPU lease; record process/container handles and verify terminal state before release.",
+        "Run a frozen unchanged-control bundle comparison through the exact isolated runner before candidate data are trusted."
+      ]
+    },
+    {
+      "priority": 2,
+      "item": "Resolve global modification scope",
+      "requirements": [
+        "Prefer a new candidate revision that specializes pipeline depth only in the intended NVFP4 MoE path, retaining global/dense defaults.",
+        "Alternatively freeze an expanded affected-consumer validation plan covering dense Marlin and any other included kernel families before promotion.",
+        "Do not interpret success on the current expert-only suite as validation of all shared-header consumers or full serving."
+      ]
+    }
+  ],
+  "nonblocking_observations": [
+    "The candidate still has a comment saying four stages after changing the value to three; fix in a new reviewed revision.",
+    "Resource/precision assertions in a plan are not measured outcomes.",
+    "A shared filesystem means immutable-tree and reviewer-label controls are procedural until enforced by runner mounts/process ownership."
+  ],
+  "next_transition": "After isolated runner and scope handling are implemented, freeze revised runner/evaluator/bundle dependencies and obtain a fresh independent preflight. Do not set baseline_isolated=True merely because archives exist.",
+  "reason_for_no_reject_command": "The proposal is a legitimate untested hypothesis awaiting required infrastructure. Rejection would falsely suggest negative candidate evidence; no run/start approval is granted."
+}

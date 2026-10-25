@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "objective": "3x the current benchmark",
+  "implementation": "agent-directed control layer; GPU execution remains supervisor-controlled",
+  "roles_used": {
+    "supervisor": "root",
+    "kernel_planner": "kernel_audit",
+    "framework_implementer": "rsi_framework",
+    "independent_critic": "measurement_audit"
+  },
+  "artifacts": {
+    "protocol": "rsi/protocol.json",
+    "ledger": "results/rsi/ledger.json",
+    "rewrite_plan": "docs/kernel-rewrite-plan.json",
+    "measurement_audit": "docs/rsi-measurement-audit.json",
+    "actual_preflight": "docs/rsi-q14-preflight.json"
+  },
+  "exercised": [
+    "initialize with $5 run-accounting budget at authorized $5/hour",
+    "import legacy evidence as non-promotable observations",
+    "freeze baseline and candidate source+fixture bundles",
+    "verify single-file candidate diff",
+    "register fixed-suite/fresh-holdout proposal",
+    "independent critic withheld approval on isolation and shared-header scope",
+    "create MoE-scoped V2 candidate without modifying incumbent"
+  ],
+  "pending": [
+    "isolated paired persistent-worker runner with bounded process-tree lifetime",
+    "independent preflight for runner and scoped V2",
+    "optimizer-method frozen portfolio evaluator; method promotion remains disabled",
+    "full serving validation and 3x goal proof"
+  ],
+  "performance_state": "No new speedup promoted; current selected patch remains incumbent",
+  "gpu_state": "idle after completed narrow sweep and Nsight captures",
+  "framework_schema_version": 2,
+  "test_count": 35,
+  "explicit_v1_archive": "results/rsi/ledger-v1-archived.json",
+  "container_pin": "serving/benchmark-contract.json; exact digest and holdout device/runtime consistency enforced"
+}

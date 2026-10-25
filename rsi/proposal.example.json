@@ -1,0 +1,47 @@
+{
+  "kind": "kernel",
+  "hypothesis": "Specific bottleneck, transformation, target shapes, predicted counter change, rejection condition",
+  "suite": [
+    1,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    257,
+    384,
+    512,
+    513,
+    753,
+    3012,
+    16384
+  ],
+  "screen_seeds": [
+    17001
+  ],
+  "holdout_seeds": [
+    18013,
+    19001
+  ],
+  "min_pairs": 60,
+  "max_gpu_minutes": 45,
+  "roi_prior": {
+    "basis": "engineering_prior",
+    "speedup_range": [
+      1.0,
+      1.2
+    ],
+    "confidence": "low",
+    "component": "expert path; serving effect unknown"
+  },
+  "baseline_isolation": "immutable_tree",
+  "baseline_anchor_source": "/absolute/frozen/tree/python/sglang/srt/layers/muse_spark_fp4_moe.py",
+  "candidate": "/absolute/experiment/candidate_adapter.py",
+  "baseline": "/absolute/frozen/baseline_adapter.py",
+  "dependencies": [
+    "/absolute/frozen/tree/python/sglang/srt/layers/muse_spark_fp4_moe.py",
+    "/absolute/frozen/transitive-source-and-fixtures.bundle",
+    "/absolute/candidate/transitive-source-and-harness.bundle"
+  ]
+}

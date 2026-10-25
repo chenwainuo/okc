@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RSI report extension; raw samples and anchor-specific checks enforced by ledger",
+  "type": "object",
+  "required": [
+    "status",
+    "candidate_sha256",
+    "baseline_sha256",
+    "rsi_plan_sha256",
+    "dependency_hashes",
+    "seed",
+    "session_id",
+    "profiling",
+    "environment",
+    "results"
+  ],
+  "properties": {
+    "status": {
+      "const": "complete"
+    },
+    "profiling": {
+      "const": false
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dependency_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "environment": {
+      "type": "object",
+      "required": [
+        "gpu_uuid",
+        "driver",
+        "torch",
+        "cuda",
+        "container_digest",
+        "exclusive_gpu"
+      ],
+      "properties": {
+        "exclusive_gpu": {
+          "const": true
+        },
+        "gpu_uuid": {
+          "type": "string",
+          "minLength": 1
+        },
+        "driver": {
+          "type": "string",
+          "minLength": 1
+        },
+        "torch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cuda": {
+          "type": "string",
+          "minLength": 1
+        },
+        "container_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "bs",
+          "baseline_samples_us",
+          "candidate_samples_us"
+        ],
+        "properties": {
+          "bs": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "baseline_samples_us": {
+            "type": "array",
+            "minItems": 20,
+            "items": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "candidate_samples_us": {
+            "type": "array",
+            "minItems": 20,
+            "items": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,813 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-25",
+  "source_base": "a55ab7d5ae1bba59ac351e55026fe7f7644ecc5f",
+  "anchor": "docs/threefold-target.json",
+  "scope": "Actual H200 Muse NVFP4 expert path; expert all-reduce, scheduler, attention, draft model excluded from local measurements",
+  "assessment": {
+    "finding": "Generic, tightly optimized legacy tensor-core machinery with plausible specialization opportunities; code size alone is not proof of runtime waste.",
+    "not_runtime_waste_by_itself": [
+      "Zero-point, activation-order, bias and scale-format branches use compile-time conditions/specializations; deleting their source need not change generated instructions.",
+      "torch.empty allocations before graph capture do not imply repeated device allocation during graph replay.",
+      "Virtual scratch capacity does not equal bytes touched; nonlocal slots are masked and may remain unwritten."
+    ],
+    "real_measured_bottleneck": "Both Marlin GEMMs contribute 92.3-95.1% of profiled expert replay at M128/256/384/512.",
+    "evidence": "reports/2026-10-24-loop-001.json"
+  },
+  "sources": {
+    "serving": "serving/sglang/python/sglang/srt/layers/muse_spark_fp4_moe.py",
+    "dispatch": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/moe_wna16_marlin.cuh",
+    "kernel": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h",
+    "primitives": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin/marlin.cuh",
+    "wrapper": "serving/sglang/python/sglang/kernels/ops/moe/moe_wna16_marlin.py",
+    "finalizer": "serving/sglang/python/sglang/kernels/ops/muse_spark_v12/fused_post_expert_norm_weighted_sum_triton.py",
+    "prepare": "serving/sglang/python/sglang/srt/layers/quantization/marlin_utils_fp4.py"
+  },
+  "implementation": [
+    {
+      "stage": "prepare",
+      "mechanism": "NVFP4 weights are repacked for Marlin; E4M3 scales are permuted; expert global scales are converted to activation dtype. This is outside timed replay.",
+      "source_refs": [
+        {
+          "source": "prepare",
+          "line": 468
+        }
+      ]
+    },
+    {
+      "stage": "routing/alignment",
+      "mechanism": "Map global expert IDs to local IDs, using -1 for nonlocal slots. Sort/pad slots by expert to an M tile. Selected guarded policy caps M tiles at16 through M256,32 through M512.",
+      "source_refs": [
+        {
+          "source": "serving",
+          "line": 470
+        },
+        {
+          "source": "serving",
+          "line": 477
+        },
+        {
+          "source": "serving",
+          "line": 512
+        }
+      ]
+    },
+    {
+      "stage": "scratch",
+      "mechanism": "cache1 stores gate/up output at [M*8,8192]; cache2 stores activated [M*8,4096]; cache3 aliases cache1 storage for down output. FP32 cross-CTA scratch and lock workspace are separate.",
+      "capacity": "cache13 + cache2 = 196608*M bytes at the fixed model dimensions; 48 MiB at M256, excluding FP32 scratch. This is capacity, not measured traffic.",
+      "source_refs": [
+        {
+          "source": "serving",
+          "line": 516
+        },
+        {
+          "source": "wrapper",
+          "line": 118
+        }
+      ]
+    },
+    {
+      "stage": "gate_up_GEMM",
+      "mechanism": "Sparse expert routing gathers BF16 input rows while reading repacked FP4 expert weights. Output width8192 combines gate and up.",
+      "source_refs": [
+        {
+          "source": "serving",
+          "line": 530
+        }
+      ]
+    },
+    {
+      "stage": "GEMM_dispatch",
+      "mechanism": "Two candidate thread configurations for M<=16 and two for larger M. Select the valid configuration with greatest estimated resident block count; this heuristic does not directly optimize measured latency.",
+      "small_M_configs_K_N_threads": [
+        [
+          128,
+          128,
+          256
+        ],
+        [
+          64,
+          128,
+          128
+        ]
+      ],
+      "large_M_configs_K_N_threads": [
+        [
+          64,
+          256,
+          256
+        ],
+        [
+          64,
+          128,
+          128
+        ]
+      ],
+      "source_refs": [
+        {
+          "source": "dispatch",
+          "line": 140
+        },
+        {
+          "source": "dispatch",
+          "line": 480
+        },
+        {
+          "source": "dispatch",
+          "line": 569
+        }
+      ]
+    },
+    {
+      "stage": "persistent_work_partition",
+      "mechanism": "Fixed SM-count-scaled grid traverses roughly equal stripes over (expert-M-block,N-tile,K-tile). Stripes can split an output tile along K. Each CTA counts valid EP blocks, then locates blocks and reloads route metadata.",
+      "source_refs": [
+        {
+          "source": "kernel",
+          "line": 332
+        },
+        {
+          "source": "kernel",
+          "line": 384
+        },
+        {
+          "source": "kernel",
+          "line": 452
+        },
+        {
+          "source": "kernel",
+          "line": 517
+        }
+      ]
+    },
+    {
+      "stage": "load_decode_compute",
+      "mechanism": "Four-stage cp.async pipeline moves gathered activations, packed weights and scale metadata through shared memory. FP4 E2M1 and FP8 E4M3 scales are decoded to BF16 fragments, multiplied, then fed to warp-level mma.sync m16n8k16 with FP32 accumulators. This path does not use Hopper WGMMA.",
+      "source_refs": [
+        {
+          "source": "primitives",
+          "line": 17
+        },
+        {
+          "source": "primitives",
+          "line": 49
+        },
+        {
+          "source": "kernel",
+          "line": 891
+        },
+        {
+          "source": "kernel",
+          "line": 1215
+        },
+        {
+          "source": "kernel",
+          "line": 1250
+        },
+        {
+          "source": "kernel",
+          "line": 108
+        }
+      ]
+    },
+    {
+      "stage": "reduce/store",
+      "mechanism": "Only split slices need cross-CTA reduction. The selected path keeps FP32 partials in scratch and serializes ordered reduction through locks. Final output converts to BF16, then applies BF16 expert global scale.",
+      "source_refs": [
+        {
+          "source": "kernel",
+          "line": 1456
+        },
+        {
+          "source": "kernel",
+          "line": 1536
+        },
+        {
+          "source": "kernel",
+          "line": 1547
+        },
+        {
+          "source": "kernel",
+          "line": 1822
+        }
+      ]
+    },
+    {
+      "stage": "activation/down",
+      "mechanism": "Separate masked SwiGLU writes cache2; second Marlin call computes width4096 using the same aligned expert slots, with top_k=1 over expanded rows.",
+      "source_refs": [
+        {
+          "source": "serving",
+          "line": 559
+        },
+        {
+          "source": "serving",
+          "line": 565
+        }
+      ]
+    },
+    {
+      "stage": "finalize",
+      "mechanism": "One Triton program per token loops over its eight slots, skips nonlocal slots, applies the effective norm weight before per-expert RMSNorm, accumulates routing-weighted outputs in FP32, and stores BF16.",
+      "source_refs": [
+        {
+          "source": "finalizer",
+          "line": 26
+        },
+        {
+          "source": "finalizer",
+          "line": 35
+        },
+        {
+          "source": "finalizer",
+          "line": 43
+        },
+        {
+          "source": "finalizer",
+          "line": 57
+        }
+      ]
+    }
+  ],
+  "hotspots_and_constraints": [
+    {
+      "id": "H01",
+      "issue": "Repeated valid-expert scan and route metadata barriers in every CTA and both GEMMs",
+      "classification": "real source work, materiality unmeasured",
+      "source_refs": [
+        {
+          "source": "kernel",
+          "line": 384
+        },
+        {
+          "source": "kernel",
+          "line": 452
+        },
+        {
+          "source": "kernel",
+          "line": 517
+        }
+      ],
+      "counter_or_probe": "Source instruction/stall attribution plus isolated compact metadata variant; earlier alignment/skip ablations were not useful, so do not assume a large gain."
+    },
+    {
+      "id": "H02",
+      "issue": "Padding and gathered activation accesses reduce useful tensor-core work",
+      "classification": "measured M-tile sensitivity; remaining inefficiency unquantified",
+      "source_refs": [
+        {
+          "source": "serving",
+          "line": 477
+        },
+        {
+          "source": "kernel",
+          "line": 891
+        }
+      ],
+      "counter_or_probe": "Compare valid rows to padded rows, DRAM/L2 bytes, tensor pipe activity across routing skew and M; preserve same input distribution."
+    },
+    {
+      "id": "H03",
+      "issue": "FP4/scale decode instructions compete with math and loading",
+      "classification": "plausible bottleneck, hardware evidence pending",
+      "source_refs": [
+        {
+          "source": "kernel",
+          "line": 1215
+        },
+        {
+          "source": "kernel",
+          "line": 1250
+        }
+      ],
+      "counter_or_probe": "Instruction mix, issue utilization, dependency stalls, tensor throughput. Compare SASS before/after; retain weight scaling/rounding behavior."
+    },
+    {
+      "id": "H04",
+      "issue": "Stripe split-K partial traffic and lock dependency chains",
+      "classification": "conditional work only when slice_count>1; not every output uses global reduction",
+      "source_refs": [
+        {
+          "source": "kernel",
+          "line": 1456
+        },
+        {
+          "source": "kernel",
+          "line": 1822
+        }
+      ],
+      "counter_or_probe": "Quantify split-slice fraction and scratch bytes before replacing schedule. A complete-K CTA can remove locks but may underfill the GPU on small workloads."
+    },
+    {
+      "id": "H05",
+      "issue": "Fixed four-stage pipeline and occupancy-driven dispatch",
+      "classification": "hardware profiles support coupled register/shared-memory constraint; causal speedup remains unproven",
+      "source_refs": [
+        {
+          "source": "primitives",
+          "line": 17
+        },
+        {
+          "source": "dispatch",
+          "line": 569
+        }
+      ],
+      "counter_or_probe": "M8 shared-memory limit3 vs register limit4; M128 both limits3. Evaluate stage/lifetime coupling, not a stage-count-only occupancy assumption."
+    },
+    {
+      "id": "H06",
+      "issue": "Intermediate materialization and finalizer occupancy",
+      "classification": "remaining fraction small at larger decode shapes",
+      "source_refs": [
+        {
+          "source": "serving",
+          "line": 517
+        },
+        {
+          "source": "finalizer",
+          "line": 26
+        }
+      ],
+      "counter_or_probe": "Measure actual intermediate traffic and finalizer kernel time. Dense allocation capacity is not an 8x optimization opportunity."
+    }
+  ],
+  "estimation_contract": {
+    "type": "engineering_priors_not_measurements_or_confidence_intervals",
+    "reference": "Current selected expert method, not original stock and not full serving",
+    "range_semantics": "Conditional successful-candidate envelope; every unmeasured change can yield zero gain, regress, or fail correctness. These are prioritization guesses, not expected values.",
+    "confidence_semantics": "Qualitative confidence that an experiment can find useful expert-path improvement; not calibrated probability.",
+    "cost_semantics": "Rough focused engineering hours plus H200 experiment hours; excludes billed idle time. Agent throughput may differ.",
+    "composition": "Do not add or multiply estimated gains blindly; candidates overlap and may remove the same cost.",
+    "serving_conversion": "S_serving = 1/((1-f_expert)+f_expert/S_expert); f_expert is currently unknown. No numeric serving-speedup estimate is defensible yet."
+  },
+  "roi_queue": [
+    {
+      "rank": 1,
+      "id": "R01",
+      "name": "Nsight counter baseline + generated-code audit",
+      "kind": "measurement",
+      "status": "baseline M8/M128 captured; extend only to resolve specific uncertainty",
+      "estimated_expert_speedup_if_success": [
+        1.0,
+        1.0
+      ],
+      "confidence": "high information value",
+      "engineering_hours": [
+        0.5,
+        1.5
+      ],
+      "gpu_hours": [
+        0.05,
+        0.25
+      ],
+      "why": "Avoid further blind tile enumeration. Determine whether memory, decode/issue, synchronization, or tensor compute dominates at M8 and128; add M256/large prefill if the regime differs.",
+      "deliverable": "Captured counter JSON available; next diagnosis should inspect dependency/issue/SASS evidence and rerun affected shape after a candidate."
+    },
+    {
+      "rank": 2,
+      "id": "R02",
+      "name": "Coupled NVFP4 pipeline-depth and register-lifetime specialization",
+      "kind": "tune",
+      "status": "ready for isolated design using counters",
+      "estimated_expert_speedup_if_success": [
+        1.05,
+        1.2
+      ],
+      "confidence": "medium bottleneck hypothesis; low-medium gain prior",
+      "engineering_hours": [
+        2,
+        6
+      ],
+      "gpu_hours": [
+        0.25,
+        1.0
+      ],
+      "why": "M128 uses155 registers/thread and77.482KB shared/block; both resources limit residency to3 CTAs/SM. M8 uses128 registers/thread, register limit4 but shared limit3. Sweep stage count only with consistent SMEM accounting and register lifetime changes; verify latency hiding is not lost. Dequantization/dependency scheduling may matter more than residency alone.",
+      "kill_condition": "No reduction in attributable instruction/stall cost or no holdout gain; deleting already-compiled-away generic code does not qualify.",
+      "counter_gates": [
+        "Measure registers, shared memory, spills, eligible warps, tensor activity and clean paired time.",
+        "At M128, reducing stages alone may leave the register limit at3 CTAs; no claim of higher residency without measured launch attributes.",
+        "Do not trade FP32 accumulator/reduction precision for register reduction."
+      ]
+    },
+    {
+      "rank": 3,
+      "id": "R03",
+      "name": "Complete-K grouped work queue with compact expert metadata",
+      "kind": "partial_rewrite",
+      "status": "requires R01 split-reduction evidence",
+      "estimated_expert_speedup_if_success": [
+        1.05,
+        1.25
+      ],
+      "confidence": "low",
+      "engineering_hours": [
+        4,
+        12
+      ],
+      "gpu_hours": [
+        0.5,
+        2.0
+      ],
+      "why": "Compute work descriptors once, dispatch valid expert output tiles directly, and avoid inter-CTA reductions when output-tile parallelism suffices. Keep a split-K fallback for genuinely small workloads.",
+      "risks": [
+        "Long-tail experts/load imbalance",
+        "Too little parallelism at low M",
+        "Graph-safe dynamic work count",
+        "Stale or uninitialized nonlocal outputs"
+      ],
+      "kill_condition": "Too few split slices or metadata cycles to justify queue construction; earlier skip-nonlocal ablation alone did not establish a gain."
+    },
+    {
+      "rank": 4,
+      "id": "R04",
+      "name": "Hopper-specific grouped WGMMA pipeline",
+      "kind": "substantial_rewrite",
+      "status": "requires R01 tensor/issue evidence and bounded prototype",
+      "estimated_expert_speedup_if_success": [
+        1.1,
+        1.6
+      ],
+      "prefill_only_optimistic_envelope": [
+        1.2,
+        2.0
+      ],
+      "confidence": "low",
+      "engineering_hours": [
+        8,
+        24
+      ],
+      "gpu_hours": [
+        1.0,
+        4.0
+      ],
+      "why": "Separate producer/dequantization and tensor-core consumers; stage dequantized BF16 weights in shared memory and use warp-group MMA for sufficiently large expert groups. Prefer a bounded prefill/large-M prototype before replacing sparse decode.",
+      "risks": [
+        "Additional shared-memory traffic can erase gain",
+        "Small expert groups underfill warp-group tiles",
+        "FP32 reduction/global-scale BF16 rounding must remain equivalent enough to pass the unchanged oracle",
+        "Higher shared-memory occupancy cost",
+        "No assumption of native Hopper NVFP4 tensor math"
+      ],
+      "kill_condition": "Prototype cannot outperform current grouped path after conversion, scheduling, and scratch overhead are included."
+    },
+    {
+      "rank": 5,
+      "id": "R05",
+      "name": "Gate/up epilogue plus SwiGLU fusion",
+      "kind": "fusion",
+      "status": "requires measured intermediate traffic and R03 scheduling feasibility",
+      "estimated_expert_speedup_if_success": [
+        1.01,
+        1.06
+      ],
+      "small_M_optimistic_envelope": [
+        1.02,
+        1.1
+      ],
+      "confidence": "low-medium",
+      "engineering_hours": [
+        3,
+        8
+      ],
+      "gpu_hours": [
+        0.25,
+        1.0
+      ],
+      "why": "Can remove a launch and intermediate read/write if gate/up output halves are co-owned and fully reduced. Existing N tiles usually own only one slice, so this is not a trivial epilogue toggle.",
+      "risks": [
+        "Gate and up are separate output halves",
+        "Cross-CTA K partials must finish before nonlinear activation",
+        "Preserve BF16 intermediate rounding and global-scale order"
+      ],
+      "kill_condition": "Pairing outputs increases registers/SMEM or duplicates work more than saved materialization."
+    },
+    {
+      "rank": 6,
+      "id": "R06",
+      "name": "Finalizer launch geometry / cooperative norm reduction",
+      "kind": "tune",
+      "status": "defer large-M; consider low-M if measured share warrants",
+      "estimated_expert_speedup_if_success": [
+        1.0,
+        1.04
+      ],
+      "small_M_optimistic_envelope": [
+        1.01,
+        1.1
+      ],
+      "confidence": "low-medium",
+      "engineering_hours": [
+        1,
+        3
+      ],
+      "gpu_hours": [
+        0.1,
+        0.5
+      ],
+      "why": "Current one-program-per-token scheme may underfill at M1/8, but fusion already captured the obvious launch win. Full hidden-width RMSNorm blocks direct fusion into independent down-GEMM output tiles.",
+      "kill_condition": "No stable total-expert improvement; finalizer-only gains are not enough."
+    },
+    {
+      "rank": 7,
+      "id": "R07",
+      "name": "Workspace reuse / graph bucket memory reduction",
+      "kind": "allocation",
+      "status": "defer until allocation/zeroing appears in measured critical path",
+      "estimated_expert_speedup_if_success": [
+        1.0,
+        1.02
+      ],
+      "confidence": "low",
+      "engineering_hours": [
+        1,
+        3
+      ],
+      "gpu_hours": [
+        0.1,
+        0.5
+      ],
+      "why": "May help memory footprint or uncaptured execution, but graph replay avoids Python allocator work. Do not prioritize on allocation count alone.",
+      "risks": [
+        "Concurrent graph/stream lifetime corruption",
+        "Scratch lock reset behavior"
+      ]
+    },
+    {
+      "rank": 8,
+      "id": "R08",
+      "name": "Full serving trace and cross-component optimization",
+      "kind": "required_system_gate",
+      "status": "requires 8 H200s/full model",
+      "estimated_expert_speedup_if_success": null,
+      "estimated_serving_speedup": null,
+      "confidence": "unknown until measured",
+      "engineering_hours": null,
+      "gpu_hours": null,
+      "why": "Measure expert critical-path fraction, collectives/rank skew, attention context regimes, DFlash acceptance and graph coverage, and scheduler/prefix-cache effects. A 3x overall target cannot be established from expert proxies."
+    }
+  ],
+  "parked_evidence": [
+    {
+      "idea": "extend M16 boundary beyond256",
+      "decision": "rejected",
+      "report": "reports/2026-10-24-loop-001.json",
+      "reason": "Regressions near M288/320."
+    },
+    {
+      "idea": "independent gate/up and down M tiles",
+      "decision": "rejected",
+      "report": "reports/2026-10-25-split-tiles.json",
+      "reason": "Four tested pairs all regressed meaningful decode shapes."
+    },
+    {
+      "idea": "force existing wider N/K configs or lower persistent block count globally",
+      "decision": "rejected globally",
+      "report": "reports/2026-10-25-execution-sweep.json",
+      "reason": "~4% at M512 accompanied by regressions at primary M8/32/128/256; guarded M512 tweak is low priority for the 3x objective."
+    },
+    {
+      "idea": "N64/K128 NVFP4 specialization",
+      "decision": "rejected for tested policies",
+      "report": "reports/2026-10-25-narrow-sweep.json",
+      "reason": "No decode gain; meaningful regressions M32/128/256. Do not enumerate nearby tiles without new counter evidence."
+    }
+  ],
+  "rewrite_stages": [
+    {
+      "stage": "A",
+      "output": "Counter attribution, SASS/register/SMEM inventory, active/padded route distribution",
+      "gate": "Repeatable incumbent control; no speedup claims from profiler timings."
+    },
+    {
+      "stage": "B",
+      "output": "One bottleneck-specific isolated patch or standalone faithful prototype",
+      "gate": "Same prepared model weights/layout or explicitly accounted lossless repack; no omitted routing/norm/precision work."
+    },
+    {
+      "stage": "C",
+      "output": "Screen by every primary shape plus boundaries and representative prefill",
+      "gate": "Fixed incumbent, paired alternating runs, enough samples to establish noninferiority; profile separately."
+    },
+    {
+      "stage": "D",
+      "output": "Frozen candidate + independent seeds/sessions + adverse routing",
+      "gate": "Numerical oracle, no-local eager and captured replay, stale-buffer tests, all-shape regression policy; retain failed attempts."
+    },
+    {
+      "stage": "E",
+      "output": "Integrated serving patch with reproducible source and build hashes",
+      "gate": "Patch restrictions and independent review; full model agreement, TTFT and official interactivity/throughput curve remain mandatory."
+    }
+  ],
+  "precision_and_fusion_invariants": [
+    "Retain BF16 activation boundaries and FP32 MMA/reduction behavior; replacing reduction scratch with BF16 atomics is not an accepted shortcut.",
+    "Preserve E2M1/E4M3 scaling semantics, expert global-scale representation and final-output conversion order. Reassociation may change rounding; test against the same reference and model-output gate.",
+    "Apply each expert norm before routing-weighted summation. Norm(weighted_sum(expert_outputs)) is not equivalent.",
+    "Do not apply routing weights twice or before a nonlinear stage without proof.",
+    "Nonlocal/unwritten expert slots must remain masked; fully nonlocal rows must return exact zeros even after valid captured replays.",
+    "The model-specific Marlin fallback relies on post-expert normalization and scale preparation; preserve that contract, including epsilon behavior.",
+    "No host input-value synchronization in captured execution. Device-side routing/work queues must remain graph safe.",
+    "A rewrite must include its gather, layout conversion, scratch initialization and epilogue costs in timed execution unless identical work is legitimately moved to model preparation."
+  ],
+  "threefold_feasibility": {
+    "measured_expert_gemm_fraction_M128_to512": [
+      0.9234478025391867,
+      0.9514279274625996
+    ],
+    "delete_all_non_gemm_work_speedup_bound": [
+      1.0510517624460942,
+      1.0828982398900286
+    ],
+    "gemm_speedup_required_for_3x_expert_when_other_cost_fixed": [
+      3.3411424180496825,
+      3.596244714010596
+    ],
+    "interpretation": "Requires roughly 3.34-3.60x faster GEMMs at these measured profiles if other work stays fixed; incremental metadata/finalizer cleanup cannot establish 3x expert speedup.",
+    "full_serving": "Unknown expert fraction and overlapping work. Preserve the 3x target but do not claim it is feasible or achieved from these priors."
+  },
+  "rsi_handoff": {
+    "planner": "Choose the next candidate from attributable cost and expected information/engineering cost; report which prior changed after each measurement.",
+    "implementer": "One isolated bottleneck hypothesis, owned code paths, frozen baseline and explicit cost accounting.",
+    "measurement_owner": "Exclusive GPU execution; immutable evidence bundle; profiles separated from clean timing.",
+    "critic": "Reject invalid model/precision changes, omitted costs, narrowed success criteria, and reused tuning seeds as holdout.",
+    "promotion_owner": "Independent source review and all predeclared gates; do not modify protected goals/oracle/holdout suite to make a candidate pass."
+  },
+  "hardware_evidence": {
+    "reports": [
+      "reports/2026-10-25-hardware-bs128.json",
+      "reports/2026-10-25-hardware-bs8.json"
+    ],
+    "scope": "Nsight hardware-counter captures, cold kernel replay; profiler durations not clean timing. Single routing sample/seed per batch.",
+    "batches": [
+      {
+        "M": 8,
+        "kernels": [
+          {
+            "stage": "gate_up",
+            "dram_pct": {
+              "value": 52.452977,
+              "unit": "%"
+            },
+            "dram_bytes_per_sec": {
+              "value": 2.522894,
+              "unit": "Tbyte/s"
+            },
+            "tensor_active_pct": {
+              "value": 10.659822,
+              "unit": "%"
+            },
+            "achieved_occupancy_pct": {
+              "value": 16.553961,
+              "unit": "%"
+            },
+            "registers_per_thread": {
+              "value": 128.0,
+              "unit": "register/thread"
+            },
+            "shared_mem_per_block": {
+              "value": 77.482,
+              "unit": "Kbyte/block"
+            },
+            "register_block_limit": {
+              "value": 4.0,
+              "unit": "block"
+            },
+            "shared_mem_block_limit": {
+              "value": 3.0,
+              "unit": "block"
+            },
+            "grid_ctas": {
+              "value": 396.0,
+              "unit": ""
+            }
+          },
+          {
+            "stage": "down",
+            "dram_pct": {
+              "value": 45.916054,
+              "unit": "%"
+            },
+            "dram_bytes_per_sec": {
+              "value": 2.208597,
+              "unit": "Tbyte/s"
+            },
+            "tensor_active_pct": {
+              "value": 9.234283,
+              "unit": "%"
+            },
+            "achieved_occupancy_pct": {
+              "value": 16.216824,
+              "unit": "%"
+            },
+            "registers_per_thread": {
+              "value": 128.0,
+              "unit": "register/thread"
+            },
+            "shared_mem_per_block": {
+              "value": 77.482,
+              "unit": "Kbyte/block"
+            },
+            "register_block_limit": {
+              "value": 4.0,
+              "unit": "block"
+            },
+            "shared_mem_block_limit": {
+              "value": 3.0,
+              "unit": "block"
+            },
+            "grid_ctas": {
+              "value": 396.0,
+              "unit": ""
+            }
+          }
+        ]
+      },
+      {
+        "M": 128,
+        "kernels": [
+          {
+            "stage": "gate_up",
+            "dram_pct": {
+              "value": 51.415659,
+              "unit": "%"
+            },
+            "dram_bytes_per_sec": {
+              "value": 2.47349,
+              "unit": "Tbyte/s"
+            },
+            "tensor_active_pct": {
+              "value": 21.983545,
+              "unit": "%"
+            },
+            "achieved_occupancy_pct": {
+              "value": 16.872388,
+              "unit": "%"
+            },
+            "registers_per_thread": {
+              "value": 155.0,
+              "unit": "register/thread"
+            },
+            "shared_mem_per_block": {
+              "value": 77.482,
+              "unit": "Kbyte/block"
+            },
+            "register_block_limit": {
+              "value": 3.0,
+              "unit": "block"
+            },
+            "shared_mem_block_limit": {
+              "value": 3.0,
+              "unit": "block"
+            },
+            "grid_ctas": {
+              "value": 396.0,
+              "unit": ""
+            }
+          },
+          {
+            "stage": "down",
+            "dram_pct": {
+              "value": 45.841719,
+              "unit": "%"
+            },
+            "dram_bytes_per_sec": {
+              "value": 2.205418,
+              "unit": "Tbyte/s"
+            },
+            "tensor_active_pct": {
+              "value": 20.295458,
+              "unit": "%"
+            },
+            "achieved_occupancy_pct": {
+              "value": 17.027283,
+              "unit": "%"
+            },
+            "registers_per_thread": {
+              "value": 155.0,
+              "unit": "register/thread"
+            },
+            "shared_mem_per_block": {
+              "value": 77.482,
+              "unit": "Kbyte/block"
+            },
+            "register_block_limit": {
+              "value": 3.0,
+              "unit": "block"
+            },
+            "shared_mem_block_limit": {
+              "value": 3.0,
+              "unit": "block"
+            },
+            "grid_ctas": {
+              "value": 396.0,
+              "unit": ""
+            }
+          }
+        ]
+      }
+    ],
+    "inference": "Neither captured case simply saturates DRAM or tensor compute. Resource/dependency scheduling is a plausible target, not proven causal attribution. Low occupancy alone does not prove an optimization; compare unchanged control, counters and clean time."
+  }
+}

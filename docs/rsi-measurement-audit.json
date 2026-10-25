@@ -1,0 +1,325 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-10-25",
+  "author_role": "independent measurement auditor",
+  "scope": "Read-only audit of existing benchmark/loop code and curated reports; CPU-only gate reproductions; no GPU jobs, source changes or performance claims.",
+  "current_evidence_assessment": {
+    "existing_gpu_results": "Useful exploratory component evidence with meaningful correctness checks; no finding here establishes fabricated results.",
+    "legacy_auto_promotion": "Not sufficient for an adversarial or recursively self-modifying optimizer.",
+    "serving_3x": "Not established; full-serving gate remains separate and unresolved."
+  },
+  "strengths": [
+    "Pinned SGLang commit and container digest.",
+    "Actual expert-method adapter instead of operation-count proxy.",
+    "Cloned preparation inputs and per-output reference checks.",
+    "AB/BA order balancing with raw samples.",
+    "Empty-local eager and replay-after-valid checks.",
+    "Profiler separated from clean timing.",
+    "Rejected candidates retained; initial failed control retained; no serving gain claimed from local score."
+  ],
+  "findings": [
+    {
+      "id": "V01",
+      "severity": "promotion_blocker",
+      "title": "Legacy summary gate is not an evidence validator",
+      "source_refs": [
+        "benchmarks/optimize_loop.py:17",
+        "benchmarks/optimize_loop.py:19",
+        "benchmarks/optimize_loop.py:24"
+      ],
+      "observation": "gate() trusts status, pairs and supplied confidence endpoints. Shape coverage uses set equality; duplicate rows are accepted. It does not check finite values, raw samples, candidate identity, correctness, or suite plan.",
+      "consequence": "A malformed, stale or optimizer-edited report can satisfy the apparent promotion gate without a measured improvement.",
+      "required_control": [
+        "Require exactly one row per preregistered shape and exact suite coverage.",
+        "Require finite positive raw timings, even equal counts equal to declared pairs, finite ordered confidence endpoints.",
+        "Recompute summaries using an immutable evaluator and verify report/artifact identities.",
+        "Require structured, independently reviewed numerical and graph-lifetime correctness evidence bound to the same candidate and report."
+      ],
+      "local_cpu_reproduction": {
+        "command": "python3 importing benchmarks/optimize_loop.py gate; CPU only; no files modified",
+        "observed": {
+          "nan_lower_bound_on_one_shape_plus_other_shape_gain": "True",
+          "duplicate_shape_rows": "True",
+          "report_with_no_raw_samples_or_correctness_records": "True"
+        },
+        "interpretation": "Gate bypass proof; not evidence that historical GPU reports were fabricated."
+      }
+    },
+    {
+      "id": "V02",
+      "severity": "promotion_blocker",
+      "title": "Baseline source snapshot is not transitively frozen",
+      "source_refs": [
+        "benchmarks/optimize_loop.py:35",
+        "benchmarks/optimize_loop.py:98",
+        "benchmarks/serving_stock_moe.py:19",
+        "benchmarks/serving_moe.py:21",
+        "benchmarks/run_h200.sh:27",
+        "docs/threefold-target.json"
+      ],
+      "observation": "Adapters freeze or retrieve the expert class source, but imports resolve through the current patched source tree and shared prepare helpers. The target anchor contains a class hash and commit, not a verified complete baseline dependency bundle.",
+      "consequence": "Future common-kernel or helper modifications can change both baseline and candidate, invalidating comparison against the original target even when the class hash stays fixed.",
+      "required_control": [
+        "Freeze base commit + full patch + imported Python/CUDA headers + fixture/reference/harness/container/compiler identity.",
+        "Load baseline from an isolated immutable import tree/process or otherwise demonstrate module separation.",
+        "Treat baseline-current and baseline-goal as separate IDs; always retain a comparison against the original goal anchor.",
+        "Independent reviewer checks bundle completeness; a list of supplied hashes alone cannot prove that omitted dependencies were unchanged."
+      ]
+    },
+    {
+      "id": "V03",
+      "severity": "promotion_blocker",
+      "title": "Resume can reuse stale complete measurements",
+      "source_refs": [
+        "benchmarks/optimize_loop.py:101",
+        "benchmarks/optimize_loop.py:125",
+        "benchmarks/optimize_loop.py:137"
+      ],
+      "observation": "measure() returns an existing complete JSON without verifying candidate/source hash, seed, suite, pair count, harness version, or baseline identity. Queue snapshots can be overwritten while completed iterations are skipped by run_id.",
+      "consequence": "Changing a candidate or queue under the same run_id can attach old evidence to a new implementation.",
+      "required_control": [
+        "Derive run identity from immutable proposal revision, candidate bundle, baseline bundle, plan, evaluator and seed.",
+        "Check evidence hashes on every transition and resume.",
+        "A candidate revision invalidates old review, measurement, validation and promotion decisions.",
+        "Append attempts instead of overwriting reports."
+      ]
+    },
+    {
+      "id": "V04",
+      "severity": "promotion_blocker_for_serving_claims",
+      "title": "Single-expert proxy cannot prove the serving objective",
+      "source_refs": [
+        "benchmarks/serving_moe.py:1",
+        "benchmarks/serving_moe.py:24",
+        "benchmarks/moe_local.py:146",
+        "docs/threefold-target.json",
+        "serving/benchmark-contract.json"
+      ],
+      "observation": "Measured scope is a synthetic single-rank expert method under CUDA graph replay. It excludes full model loading, pre-expert norm, collectives, scheduler, attention, draft acceptance, cache effects and response streaming.",
+      "consequence": "Neither local geometric mean nor one fast shape establishes 3x official serving throughput at stock interactivity or TTFT/output-agreement gates.",
+      "required_control": [
+        "Keep local_validated/local_promoted distinct from serving_validated/goal_achieved.",
+        "Do not let RSI change the objective, denominator, workload, required loads, precision or output-agreement gates.",
+        "Require full-serving evidence on the prescribed topology before claiming serving speedup."
+      ]
+    },
+    {
+      "id": "V05",
+      "severity": "promotion_blocker_for_new_winners",
+      "title": "Fixed visible seeds and adaptive selection are not durable holdouts",
+      "source_refs": [
+        "benchmarks/optimize_loop.py:148",
+        "benchmarks/optimize_loop.py:157",
+        "benchmarks/sweep_execution.py:91",
+        "benchmarks/sweep_execution.py:111",
+        "benchmarks/measurement.py:24"
+      ],
+      "observation": "Screen and validation seeds are literal reusable values. Execution sweeps screen multiple policies on one seed. A candidate may win because any one target shape has a lower bound above 1.02; unadjusted intervals are exploratory.",
+      "consequence": "Repeated adaptive tuning can overfit shape/seed noise; multiple comparisons and repeated peeking increase false discoveries.",
+      "required_control": [
+        "Preregister candidate family, target shapes, thresholds, sample sizes, stopping/retry rules and maximum trial count.",
+        "Freeze candidate before an independent validation seed/session allocation; consume validation data once and record it as exposed.",
+        "Run untouched acceptance seeds and representative distributions after screening; do not claim nominal familywise 95% confidence from per-shape CIs.",
+        "If formal simultaneous claims are needed, preregister a simultaneous bootstrap or multiplicity procedure instead of retroactively choosing a favorable test."
+      ]
+    },
+    {
+      "id": "V06",
+      "severity": "measurement_improvement",
+      "title": "Control retry was transparent but needs a general rule",
+      "source_refs": [
+        "reports/2026-10-25-execution-sweep.json",
+        "benchmarks/sweep_execution.py:105",
+        "benchmarks/sweep_execution.py:144"
+      ],
+      "observation": "Initial unchanged control at seed13001/pairs20 failed noninferiority because batch8 lower interval was 0.9703. A later seed14009/pairs60 control passed; original control is retained. This is consistent with an uncertainty-driven retry, not a demonstrated regression.",
+      "consequence": "Without a fixed escalation rule, future optimizer retries can become stop-when-significant selection.",
+      "required_control": [
+        "Classify uncertain control separately from candidate regression.",
+        "Predeclare bounded sample escalation, e.g. 20 to 60 pairs once, before new candidate results are used.",
+        "Retain all attempts and choose whether escalation accumulates same-stream data or restarts independent sessions before observing results.",
+        "After a second failed control, investigate environment rather than changing thresholds or seeds repeatedly."
+      ]
+    },
+    {
+      "id": "V07",
+      "severity": "promotion_blocker",
+      "title": "Correctness is asserted but not structured into evidence",
+      "source_refs": [
+        "benchmarks/moe_local.py:105",
+        "benchmarks/moe_local.py:113",
+        "benchmarks/moe_local.py:123",
+        "benchmarks/moe_local.py:153",
+        "benchmarks/check_finalize.py:32",
+        "benchmarks/check_local_alignment.py:36"
+      ],
+      "observation": "The GPU harness does meaningful reference checks including every timed output, skewed inputs, empty-local eager and captured replay. Results are mostly implicit in successful completion and stdout; report JSON lacks case-level outcomes and max errors.",
+      "consequence": "A future validator cannot independently establish which contracts were checked for a candidate solely from a summary report.",
+      "required_control": [
+        "Record named case IDs, input/seed identities, dtype/shape, tolerances, max error and pass/fail.",
+        "Bind correctness to candidate dependency bundle and exact run/report hash.",
+        "Preserve NaN-in-ignored-slot, no-local-after-valid-replay, routing boundary, norm-order and lifetime tests.",
+        "Do not allow optimizer changes to weaken oracle, tolerance, precision, number of experts or model semantics."
+      ]
+    },
+    {
+      "id": "V08",
+      "severity": "measurement_improvement",
+      "title": "Timing protocol is useful but operational environment is incompletely recorded",
+      "source_refs": [
+        "benchmarks/moe_local.py:72",
+        "benchmarks/moe_local.py:131",
+        "benchmarks/moe_local.py:167",
+        "benchmarks/moe_local.py:174",
+        "benchmarks/measurement.py:1"
+      ],
+      "observation": "Alternating AB/BA, fresh routing, cold-L2 eviction, preinitialized CUDA events, raw samples and separate profiling are sound local controls. Metadata omits UUID, driver, temperature/clocks/power, GPU owner, physical session ID and evaluator source hash.",
+      "consequence": "Within-run bootstrap cannot detect all session drift, contention or differences between local cold-cache conditions and serving behavior.",
+      "required_control": [
+        "Record start/end host time, monotonic duration, GPU UUID and driver, container digest, clock/power/temperature telemetry, concurrent process snapshot and source bundle IDs.",
+        "Keep profiler traces outside clean timing; use separate physical/session repetitions for retained gains.",
+        "Treat cold-cache graph timing as a defined proxy; test realistic cache/shape sequences before serving claims.",
+        "Do not freeze clocks merely to improve a score; choose and disclose a reproducible clock policy."
+      ]
+    },
+    {
+      "id": "V09",
+      "severity": "resource_safety_blocker_for_parallel_agents",
+      "title": "Locks are per-directory, not per physical GPU",
+      "source_refs": [
+        "benchmarks/optimize_loop.py:84",
+        "benchmarks/sweep_execution.py:96",
+        "benchmarks/run_h200.sh:24",
+        "benchmarks/run_ncu_h200.sh:7"
+      ],
+      "observation": "Each runner locks its own result directory; different directories and direct benchmark commands can overlap. The profiler process check is a non-atomic check-then-start.",
+      "consequence": "Parallel agents can contaminate timing and exceed intended spend even when each local lock succeeds.",
+      "required_control": [
+        "Use one host-level GPU UUID lease shared by benchmarks, profiler and all agents.",
+        "Lease acquisition must be atomic and include owner, run ID, PID/container identity and generation nonce.",
+        "Do not expire/reclaim a lease from elapsed time alone; verify actual process/container termination.",
+        "Keep source editing/review parallel; serialize all GPU measurement/profile jobs."
+      ]
+    },
+    {
+      "id": "V10",
+      "severity": "resource_safety_improvement",
+      "title": "Timeout is not complete process or billing containment",
+      "source_refs": [
+        "benchmarks/optimize_loop.py:97",
+        "benchmarks/optimize_loop.py:121",
+        "benchmarks/sweep_execution.py:110",
+        "benchmarks/sweep_execution.py:129",
+        "benchmarks/run_h200.sh:30"
+      ],
+      "observation": "Deadlines cover a runner subprocess; preflight occurs before the timer. Timeout kills the direct child but does not establish that compiler descendants or the Docker container are gone. Idle rented-node time remains billed.",
+      "consequence": "A session-minute label is not a hard node-spend cap and terminal ledger state may outlive active descendants.",
+      "required_control": [
+        "Track actual container/process-group handles and verify exit before releasing GPU ownership.",
+        "Bound compile, preflight, correctness, measurement, profile and validation phases; include them in cost accounting.",
+        "Record actual elapsed node time and explicit rate assumption; distinguish estimated compute cost from provider invoice.",
+        "Never automatically destroy the node unless user authorization covers that operation."
+      ]
+    },
+    {
+      "id": "V11",
+      "severity": "optimizer_method_validation_blocker",
+      "title": "Ledger labels are process controls, not authentication",
+      "source_refs": [
+        "benchmarks/optimize_loop.py:94",
+        "docs/optimization-loop.json"
+      ],
+      "observation": "All agents share a writable workspace. A reviewer string, evidence manifest or file hash is not by itself proof of independent authorship or protection against evaluator edits.",
+      "consequence": "An unconstrained self-improver could write both proposal and approval or replace the evaluator and rehash it.",
+      "required_control": [
+        "Root orchestrator records actual author/reviewer agent IDs and message/artifact hashes; reject self-review.",
+        "Pin evaluator/goal policy outside the optimizer-owned change set and require independent approval for evaluator changes.",
+        "Document shared-filesystem trust assumptions; do not claim a security boundary the implementation does not enforce.",
+        "Treat any optimizer-method change as a separate experiment with its own held-out evaluation."
+      ]
+    }
+  ],
+  "required_promotion_contract": {
+    "proposal": [
+      "Immutable objective and original baseline ID",
+      "Candidate source/dependency bundle hash",
+      "Hypothesis with falsifiable mechanism",
+      "Exact primary/regression suite and allowed shape guards",
+      "Frozen evaluation/retry plan and budgets",
+      "Expected gain and uncertainty labeled as prior"
+    ],
+    "before_run": [
+      "Independent reviewer acknowledges proposal/bundle/evaluator",
+      "Atomic GPU UUID lease acquired",
+      "Candidate and baseline imports demonstrably isolated",
+      "Control test passes preregistered equivalence/noninferiority gate"
+    ],
+    "measurement": [
+      "Exact unique suite coverage",
+      "Finite positive paired raw samples with even counts",
+      "Structured correctness evidence for same candidate",
+      "Recomputed statistics from immutable evaluator",
+      "No active profiling/concurrent GPU job",
+      "Preserved attempts and provenance"
+    ],
+    "validation": [
+      "Candidate frozen before new seed/session allocation",
+      "At least two independent validation allocations; seeds distinct from selection data",
+      "Full primary+regression suite, precision contracts, realistic boundary/distribution tests",
+      "No output/tolerance/denominator changes",
+      "Independent reviewer inspects artifacts and source"
+    ],
+    "local_promotion": [
+      "All local gates passed",
+      "Patch constraints/application verified",
+      "Prior incumbent preserved for rollback",
+      "Goal anchor remains unchanged",
+      "Only status local_promoted"
+    ],
+    "goal_completion": [
+      "Exact official serving scope and topology",
+      "Stock-vs-stock calibration and candidate agreement",
+      "TTFT and stock-interactivity throughput at every required load",
+      "Predeclared aggregate target >=3x current goal anchor with adequate repeated evidence",
+      "Independent completion audit; local speedup cannot substitute"
+    ]
+  },
+  "optimizer_self_improvement_protocol": {
+    "separation": "Kernel candidates change implementation; optimizer candidates change ranking, hypothesis generation, experiment design or orchestration. Neither changes acceptance policy or target.",
+    "offline_screen": [
+      "Version an immutable historical task corpus. Split by optimization family, not individual timing rows, to avoid near-duplicate leakage.",
+      "Use only training families to tune ranking/calibration. Freeze the optimizer policy before exposing evaluation-family outcomes.",
+      "Replay fixed per-task engineering/GPU costs and outcomes to compare selection order under equal budgets; label this historical replay, not new kernel improvement.",
+      "Track exposed task/seed/family IDs; replace evaluation sets once they become development data."
+    ],
+    "online_validation": [
+      "Preregister baseline optimizer and challenger, equal resource budgets, fixed evaluator and candidate acceptance rules.",
+      "Use independent future task families and seeds; interleave serial GPU sessions to reduce environment/time confounding.",
+      "All challenger-produced code still passes the same kernel correctness/holdout/serving gates.",
+      "Retain all failures, compilation costs, rejected candidates, control retries and idle/setup costs.",
+      "No promotion based on number of trials, attractive proposals, shorter tests or relaxed checks."
+    ],
+    "metrics": {
+      "primary": "Validated improvement against frozen goal anchor per total authorized resource cost, with all-shape regressions constrained.",
+      "secondary": [
+        "Time to first independently validated gain",
+        "Fraction of predicted wins that validate",
+        "Calibration of pre-experiment speedup ranges",
+        "Wasted GPU time on invalid or duplicate experiments",
+        "Reproducibility across sessions",
+        "Serving integration success once measurable"
+      ],
+      "accounting": "Report engineering/agent time, GPU-active/compile time and node elapsed dollars separately; any combined scalar weighting must be fixed before comparison."
+    },
+    "independence_limit": "Shared-agent filesystem and role separation are procedural. Strong hidden evaluation requires external access control or an evaluator service not editable/readable by the optimizer.",
+    "promotion_rule": "Independent reviewer accepts an optimizer revision only if it improves held-out optimization outcomes at equal budgets without weakening kernel/serving gates."
+  },
+  "immediate_actions_ranked": [
+    "Make new RSI evidence ingestion fail closed on raw-sample/schema/provenance gaps; legacy reports remain research evidence.",
+    "Freeze full baseline/evaluator bundles and exact experiment plans; invalidate evidence on any revision.",
+    "Install one GPU lease across all agents and runners with verified process termination.",
+    "Add structured correctness and environment/session metadata to new benchmark reports.",
+    "Predeclare control sample escalation and new holdout allocations before future tuning.",
+    "Evaluate optimizer changes on held-out task families with fixed cost/acceptance policy."
+  ]
+}

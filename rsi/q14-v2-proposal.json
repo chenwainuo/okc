@@ -1,0 +1,51 @@
+{
+  "kind": "kernel",
+  "hypothesis": "MoE-scoped pipeline depth3 reduces shared-memory pressure while preserving the dense Marlin pipeline. At M8 this may admit4 CTAs if registers remain<=128; at M128 register pressure may still cap3. Reject on spills, primary aggregate failure, any suite regression beyond tolerance, or reference failure.",
+  "suite": [
+    1,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    257,
+    384,
+    512,
+    513,
+    753,
+    3012,
+    16384
+  ],
+  "screen_seeds": [
+    23003
+  ],
+  "holdout_seeds": [
+    24001,
+    25013
+  ],
+  "min_pairs": 60,
+  "max_gpu_minutes": 45,
+  "roi_prior": {
+    "basis": "engineering_prior",
+    "speedup_range": [
+      1.0,
+      1.15
+    ],
+    "confidence": "low",
+    "component": "expert path; full serving unknown"
+  },
+  "baseline_isolation": "immutable_tree",
+  "baseline_anchor_source": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+  "candidate": "/home/ubuntu/okc/results/rsi/bundles/pipeline3-moe-v2.tar.gz",
+  "baseline": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+  "dependencies": [
+    "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+    "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+    "/home/ubuntu/okc/results/rsi/bundles/pipeline3-moe-v2.tar.gz.manifest.json",
+    "/home/ubuntu/okc/benchmarks/measurement.py",
+    "/home/ubuntu/okc/serving/benchmark-contract.json"
+  ],
+  "execution_note": "Requires isolated persistent worker processes importing each read-only bundle. Current legacy same-process harness is not approved for this global header modification.",
+  "supersedes": "Q14-pipeline3: scope defect found by independent reviewer; original remains observationally unmeasured."
+}

@@ -14,11 +14,30 @@
   ],
   "items": [
     {
+      "id": "Q13",
+      "rank": -2,
+      "title": "Nsight counter attribution of incumbent GEMMs",
+      "stage": "profile",
+      "status": "measured",
+      "executor": "hardware_profile",
+      "command": "bash benchmarks/run_ncu_h200.sh 128; bash benchmarks/run_ncu_h200.sh 8",
+      "roi_estimate": {
+        "potential_component_gain": "0x direct; information acquisition",
+        "confidence": "high that counters improve diagnosis",
+        "effort": "low"
+      },
+      "next_action": "Prioritize coupled register lifetime/pipeline work and investigate dependency stalls; avoid occupancy-only claims.",
+      "evidence": [
+        "reports/2026-10-25-hardware-bs128.json",
+        "reports/2026-10-25-hardware-bs8.json"
+      ]
+    },
+    {
       "id": "Q12",
       "rank": -1,
       "title": "Add N64/K128 NVFP4 Marlin specialization",
       "stage": "implement/test",
-      "status": "running",
+      "status": "rejected",
       "executor": "execution_sweep",
       "runtime_state": "results/execution-narrow/state.json",
       "roi_estimate": {
@@ -33,7 +52,11 @@
         "empty-local eager and graph",
         "all primary shapes",
         "holdout seeds and prefill before promotion"
-      ]
+      ],
+      "evidence": [
+        "reports/2026-10-25-narrow-sweep.json"
+      ],
+      "next_action": "Do not repeat tile tweaks without counter evidence; profile incumbent and consider scheduler/dequant redesign."
     },
     {
       "id": "Q11",
@@ -476,5 +499,61 @@
       ]
     }
   ],
-  "latest_result": "Four independent M tile combinations rejected; incumbent unchanged. Next: N/K thread tiles and occupancy, then serving-level opportunities for the full 3x target."
+  "latest_result": "Three independent agents established RSI protocol, strict ledger, and source/measurement audit. Review caught global-header scope leak; scoped V2 proposal created. Isolated paired-worker runner is the next mandatory task. GPU idle.",
+  "rsi_protocol": "rsi/protocol.json",
+  "kernel_roi_details": "docs/kernel-rewrite-plan.json",
+  "active_priority": [
+    {
+      "rank": 0,
+      "id": "RSI01",
+      "task": "Implement and independently review isolated paired worker runner",
+      "expected_speedup": "none directly; prerequisite for trustworthy global-kernel experiments",
+      "status": "ready_for_implementation"
+    },
+    {
+      "rank": 1,
+      "id": "Q14-pipeline3-v2",
+      "task": "MoE-specific pipeline/register specialization",
+      "conditional_expert_speedup_prior": [
+        1.05,
+        1.2
+      ],
+      "confidence": "low-medium",
+      "status": "hypothesis; requires RSI01"
+    },
+    {
+      "rank": 2,
+      "id": "R03",
+      "task": "Complete-K scheduling plus compact metadata",
+      "conditional_expert_speedup_prior": [
+        1.05,
+        1.25
+      ],
+      "confidence": "low",
+      "status": "requires reduction/stall evidence"
+    },
+    {
+      "rank": 3,
+      "id": "R04",
+      "task": "Bounded Hopper WGMMA rewrite",
+      "conditional_expert_speedup_prior": [
+        1.1,
+        1.6
+      ],
+      "confidence": "low",
+      "status": "prototype after counter-guided design"
+    },
+    {
+      "rank": 4,
+      "id": "R05",
+      "task": "Gate/up epilogue plus SwiGLU fusion",
+      "conditional_expert_speedup_prior": [
+        1.01,
+        1.06
+      ],
+      "confidence": "low-medium",
+      "status": "deferred until co-owned output tiles feasible"
+    }
+  ],
+  "estimate_contract": "Conditional engineering priors for whole expert component vs current selected incumbent; not measured, not additive, regressions possible; full serving estimates unavailable."
 }

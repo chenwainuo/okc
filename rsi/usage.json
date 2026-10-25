@@ -1,0 +1,50 @@
+{
+  "commands": [
+    "python3 -m rsi init --budget-usd 25",
+    "python3 -m rsi propose Q14 --actor implementer --plan /absolute/proposal.json",
+    "python3 -m rsi review Q14 --actor independent_critic --checklist /absolute/review.json",
+    "python3 -m rsi start Q14 --actor executor",
+    "Executor runs the reviewed experiment externally with the returned lease token and deadline; no CLI execution occurs.",
+    "python3 -m rsi finish Q14 --actor executor --token TOKEN --manifest /absolute/finish.json",
+    "python3 -m rsi validate Q14 --actor independent_validator",
+    "python3 -m rsi promote Q14 --actor independent_validator",
+    "python3 -m rsi reject Q14 --actor independent_validator --reason \"Observed regression\"",
+    "python3 -m rsi observe legacy-001 --actor supervisor --note \"Research evidence only; legacy non-preregistered run\" reports/2026-10-25-execution-sweep.json",
+    "python3 -m rsi abort Q14 --actor executor --token TOKEN --terminal-proof /absolute/terminal.json --reason \"Verified process failure or changed artifact\"",
+    "python3 -m rsi status"
+  ],
+  "budget_note": "25 USD is an example admission budget, not extra spending authorization. Supervisor chooses within user-authorized scope.",
+  "finish_manifest": {
+    "process_terminal": true,
+    "process_handle": "actual docker/session handle plus terminal result",
+    "runs": [
+      {
+        "report": "/absolute/holdout-18013.json",
+        "correctness": "/absolute/correctness-18013.json"
+      },
+      {
+        "report": "/absolute/holdout-19001.json",
+        "correctness": "/absolute/correctness-19001.json"
+      }
+    ]
+  },
+  "integration_required": [
+    "Current moe_local.py legacy reports lack new strict provenance and structured correctness fields. Extend harness or reviewed executor adapter before promotion; never fabricate assertions after the fact.",
+    "Freeze isolated baseline transitive imports and fixtures; a class source string alone is insufficient.",
+    "Use canonical GPU coordinator for every executor; existing direct run_h200.sh does not acquire RSI lease automatically.",
+    "A measured failure can be recorded and rejected; validation errors do not silently alter experiment state."
+  ],
+  "terminal_proof": {
+    "process_terminal": true,
+    "process_handle": "actual process/container identity and authoritative exit result"
+  },
+  "v1_to_v2": "python3 -m rsi --ledger results/rsi/ledger-v2.json init --budget-usd 25; then re-propose/re-review with canonical shared GPU coordinator. Existing v1 stays untouched.",
+  "report_environment_example": {
+    "gpu_uuid": "actual GPU UUID",
+    "driver": "actual driver version",
+    "torch": "actual torch version",
+    "cuda": "actual CUDA runtime version",
+    "container_digest": "sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
+    "exclusive_gpu": true
+  }
+}
