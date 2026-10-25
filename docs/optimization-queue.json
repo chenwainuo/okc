@@ -14,11 +14,33 @@
   ],
   "items": [
     {
+      "id": "Q12",
+      "rank": -1,
+      "title": "Add N64/K128 NVFP4 Marlin specialization",
+      "stage": "implement/test",
+      "status": "running",
+      "executor": "execution_sweep",
+      "runtime_state": "results/execution-narrow/state.json",
+      "roi_estimate": {
+        "potential_component_gain": "unknown",
+        "confidence": "low",
+        "effort": "medium",
+        "basis": "N64/K128 exists for MXFP4 but NVFP4 dispatcher excludes it; finer output tiling may improve sparse-route utilization."
+      },
+      "validation": [
+        "unchanged JIT control",
+        "reference correctness before timing",
+        "empty-local eager and graph",
+        "all primary shapes",
+        "holdout seeds and prefill before promotion"
+      ]
+    },
+    {
       "id": "Q11",
       "rank": 0,
       "title": "Tune Marlin N/K thread tiles and persistent block occupancy",
       "stage": "hypothesis",
-      "status": "running",
+      "status": "screen_complete_no_global_winner",
       "executor": "execution_sweep",
       "roi_estimate": {
         "potential_component_gain": "unknown",
@@ -26,7 +48,7 @@
         "effort": "medium",
         "basis": "Selected GEMMs dominate; current selector maximizes occupancy, which need not minimize latency. Independent M tile sweep failed."
       },
-      "next_action": "Build isolated JIT experiment exposing configuration index; compare each valid config against frozen incumbent; retain FP32 reductions and BF16 boundaries.",
+      "next_action": "Guarded batch512 tuning parked (~4% component gain); prioritize new narrow NVFP4 specialization on primary decode shapes.",
       "validation": [
         "unchanged JIT control must match incumbent before alternative configs",
         "same source baseline and isolated candidate",
@@ -36,7 +58,10 @@
         "independent holdouts"
       ],
       "command": "bash benchmarks/run_h200.sh --execution --minutes 45",
-      "runtime_state": "results/execution-sweep/state.json"
+      "runtime_state": "results/execution-sweep/state.json",
+      "evidence": [
+        "reports/2026-10-25-execution-sweep.json"
+      ]
     },
     {
       "id": "Q03",

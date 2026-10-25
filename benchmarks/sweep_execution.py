@@ -20,8 +20,22 @@ def replace_once(source, old, new):
     return source.replace(old, new)
 
 
-def generate(directory):
+def generate(directory, narrow=False):
     source = (CSRC / 'moe_wna16_marlin.cuh').read_text()
+    if narrow:
+        old = """thread_config_t small_batch_thread_configs[] = {
+    // Ordered by priority
+
+    // thread_k, thread_n, num_threads
+    {128, 128, 256},
+    {64, 128, 128}};"""
+        source = replace_once(source, old, old.replace('{64, 128, 128}};', '{64, 128, 128}, {128, 64, 128}};'))
+        lines = source.splitlines()
+        index = next(i for i,line in enumerate(lines) if line.strip().startswith('NVFP4_GET_IF_M1(W_TYPE, 8, 4, 128)'))
+        lines.insert(index+1, '  NVFP4_GET_IF_M1(W_TYPE, 4, 8, 128)    ' + chr(92))
+        source = '\n'.join(lines) + '\n'
+        # Preserve the automatic control: it still searches only original entries.
+        source = replace_once(source, 'i < thread_configs_size;', 'i < (config_index < 0 ? min(thread_configs_size, 2) : thread_configs_size);')
     for header in ('kernel.h', 'marlin_template.h'):
         source = replace_once(source, f'#include "{header}"', f'#include "{CSRC / header}"')
     source = replace_once(source, '    int sms) {',
@@ -55,7 +69,7 @@ def generate(directory):
             'ops_sha256': hashlib.sha256(ops.encode()).hexdigest()}
 
 
-def candidate_source(source, directory, up, down, blocks):
+def candidate_source(source, directory, up, down, blocks, max_tokens=512):
     source = replace_once(source,
         'from sglang.kernels.ops.moe.moe_wna16_marlin import moe_wna16_marlin_gemm',
         'from execution_variant import moe_wna16_marlin_gemm')
@@ -65,7 +79,7 @@ def candidate_source(source, directory, up, down, blocks):
     # Leave prefill and all precision flags unchanged. Runtime args permit one JIT
     # compilation for all policies, while baseline still loads the original JIT.
     parts = source.split(anchor)
-    source = parts[0] + anchor + f'            config_index={up} if num_tokens <= 512 else -1,\n            block_limit={blocks} if num_tokens <= 512 else -1,\n' + parts[1] + anchor + f'            config_index={down} if num_tokens <= 512 else -1,\n            block_limit={blocks} if num_tokens <= 512 else -1,\n' + parts[2]
+    source = parts[0] + anchor + f'            config_index={up} if num_tokens <= {max_tokens} else -1,\n            block_limit={blocks} if num_tokens <= {max_tokens} else -1,\n' + parts[1] + anchor + f'            config_index={down} if num_tokens <= {max_tokens} else -1,\n            block_limit={blocks} if num_tokens <= {max_tokens} else -1,\n' + parts[2]
     return source
 
 
@@ -73,6 +87,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--minutes', type=float, default=45)
     p.add_argument('--pairs', type=int, default=40)
+    p.add_argument('--narrow', action='store_true', help='Compile new N64 NVFP4 specialization; apply only through M256')
     p.add_argument('--seed', type=int, default=14009)
     p.add_argument('--directory', type=Path, default=ROOT / 'results/execution-sweep')
     args = p.parse_args()
@@ -83,7 +98,7 @@ def main():
     import fcntl
     lock = (directory / 'lock').open('w')
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    metadata = generate(directory)
+    metadata = generate(directory, args.narrow)
     source = SOURCE.read_text()
     adapter(directory / 'incumbent.py', source)
     state = dict(status='running',jit=metadata,source_sha256=hashlib.sha256(source.encode()).hexdigest(),results=[])
@@ -93,11 +108,14 @@ def main():
         atomic(directory / f'previous-state-{time.time_ns()}.json', previous)
     state.update(seed=args.seed,pairs=args.pairs)
     deadline = time.monotonic() + args.minutes * 60
+    policies = ([(-1,-1,-1),(2,2,-1),(2,2,1),(2,2,2),(2,1,-1),(1,2,-1)] if args.narrow else
+                [(-1,-1,-1),(0,0,-1),(0,1,-1),(1,0,-1),(1,1,-1),(-1,-1,1),(-1,-1,2)])
+    state['narrow'] = args.narrow
     try:
-        for up, down, blocks in [(-1,-1,-1),(0,0,-1),(0,1,-1),(1,0,-1),(1,1,-1),(-1,-1,1),(-1,-1,2)]:
+        for up, down, blocks in policies:
             name = f'up{up}-down{down}-blocks{blocks}'
             candidate = directory / f'{name}.py'
-            changed = candidate_source(source, directory, up, down, blocks)
+            changed = candidate_source(source, directory, up, down, blocks, max_tokens=256 if args.narrow else 512)
             adapter(candidate, changed)
             candidate.write_text(f'import sys\nsys.path.insert(0, {str(directory)!r})\n' + candidate.read_text())
             output = directory / f'{name}-seed{args.seed}-pairs{args.pairs}.json'
