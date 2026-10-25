@@ -1,0 +1,64 @@
+{
+  "id": "pw2",
+  "parent": "pw1",
+  "claim": "pw1 was correct on all 120 builds but slow. Its x went through the shared-memory ring as one bulk copy per token row per 64-k stage, with a producer/consumer mbarrier round trip each stage, so the cost scaled with m and even m=1 streamed W at only about 2.7 TB/s. pw2 keeps the codec, fragment maps and self-cleaning epilogue and changes only the data flow. Each CTA owns a K-slice and a range of n-blocks. It copies x[:, K-slice] into shared memory once (cp.async, overlapped with the first W loads), then streams a long range of W (100-400 KB per CTA) through an engine that knows nothing about x: a barrier-free per-warp register ring (D=4 or 8), or a W-only bulk ring of 12-24 KB stages. Finished n-blocks reduce with red.global.add.v4.f32 and arrival counting happens once at the end. Small m should then stream at the engine's own rate (the PROBE lines measure it: target >= 4 TB/s on packed bytes, which puts pooler m=1 near 12.5 us + ~4 us graph cost in prepare terms). m=16/32 should no longer be 2x slower than m=1. m=128 loses the 128-copies-per-stage handshake, which was the main cost (pw1 159 us vs 30 us torch in prepare).",
+  "target_shapes": [
+    "pooler m=1 <= 13.5 yours (r6 13.95)", "qkv_gate m=1 <= 8.5 (r6 9.97)", "unpooler m=1 <= 3.5 (r6 4.88)",
+    "pooler m=16 <= 14.0 (r6 14.30)", "pooler m=32 <= 15 (r6 16.94)", "qkv_gate m=32 <= 10 (r6 14.21)",
+    "pooler m=128 <= 17 (r6 20.32)", "unpooler m=128 <= 17 (r6 19.32)", "qkv_gate m=128 <= 11 (r6 15.43)", "o m=128 <= 5.5 (r6 7.23)"
+  ],
+  "kill_if": "Kill the stream engine itself if the PROBE lines show neither ring nor bulk above 3.5 TB/s on the 50 MB pooler pack at any config: then no packed-weight kernel can reach r6, and pw should stop. If the PROBE engines reach >= 4 TB/s but the pw GEMM paths stay > 1.3x the probe time at m <= 8, the decode/mma/epilogue is the bottleneck: refine that, don't kill. Kill m=128 for the pw family if bm12/bm24/rm all stay above 2x torch (prepare us) after this change, or if PROBE red shows the 16 MB reduction costing more than 6 us (then the 32 MB of m=128 split-K reductions alone exceed the bar).",
+  "design": {
+    "grid": "Grid (NG, KS). CTA (ng, ks) owns n-blocks [ng*NB/NG, (ng+1)*NB/NG) and K stages [ks*NST/KS, (ks+1)*NST/KS); both splits may be uneven. _pw_grid fits the x slice (TOK x (KCSmax*128+16) B) plus the W ring into 220 KB / CTAs-per-SM. It targets one wave (132 x CTAs/SM), or two waves for m <= 8 jobs under 16 MB of packed W. Among grids filling >= 85% of the target it minimizes x re-read NG*m*K*2 + 2*KS*m*N*4 (reductions weighted 2x; none when KS == 1).",
+    "x_stationary": "At kernel start every thread issues cp.async 16 B copies of x[:, K-slice] into the padded smem slice (row stride KCSmax*128+16, conflict-free B-fragment loads). Rows >= m are zero-filled through the cp.async src-size. The column of W chunk c is (c*64) % K, which is the K-wrap hook for the router. Then one wait_all + __syncthreads, and x is never touched again. The ring prologue loads (and the bulk producer's first ST stages) are issued before the x copy, so they overlap it.",
+    "engines": "MODE 0 ring: each consumer warp keeps D (4 or 8) chunks x RT tiles x 3 x 16 B in flight with ld.global.nc.L1::no_allocate.v4 (L1-allocating ld.global.nc when WTOK = 2 warps share a unit). There is no producer warp and no barrier in the main loop, and the cursor walks (n-block, chunk) across n-block boundaries without draining. MODE 1 bulk: the producer warp streams W only, CPS*BN rows per stage (12 KB at CPS=1, 24 KB at CPS=2), ST deep; full/empty mbarriers guard W only.",
+    "m128_layout": "bm12 / bm24: BN=128 (8 row tiles per chunk), 8 consumer warps = 4 (2 row tiles each) x 2 (64 tokens each). Accumulators 2 x 8 x 4 = 64 regs. Each A fragment is reused across 8 token tiles and each B fragment across 2 row tiles. W lives in the smem ring (12 KB x 6 or 24 KB x 3 stages) next to an x slice of at most about 146 KB; 1 CTA/SM. rm: register ring at m=128, BN=64, 8 warps = 4 x (1 row tile) x 2 (64 tokens), acc 32, D=4. The 2-row-tile ring version needed 255 regs and spilled, and so did a 16-warp version capped at 128.",
+    "epilogue": "As in pw1. After each n-block, KS == 1 stores bf16 straight from registers; otherwise red.global.add.v4.f32 per fragment (only lanes holding a valid token) into the fragment-ordered fp32 workspace, and acc is zeroed. After the whole stream: __threadfence, one atomicAdd per owned n-block, and the CTA collects the n-blocks it finished last (static list of <= 256). It then __threadfence's, converts with __ldcg, stores bf16, re-zeroes with __stcg, and resets the counter. There is no sync inside the stream.",
+    "escapes": "As in pw1 (the r6 codec's escape list), but the entry is now seq<<17 | lane<<12 | reg<<8 | half<<7 | xor7. seq = (warp step i = (nb - nb0)*KCS + u) * RT + j, which runs across the CTA's whole n-range. The 15-bit field is checked < 32000 on the host and in the launcher.",
+    "register_budget_ptxas": "nvcc 12.8 sm_90a -O3, every kernel 0 bytes stack and 0 spill. GEMM: r8t1d4 114, r8t1d8 159, b8t1 60, r8t2d4 118, r8t2d8 167, b8t2 66, r8t4d4 128, r8t4d8 200, b8t4 92, bm12 148, bm24 156, rm 206. Probes: ring D4 32, D8 48, D16 94, bulk 22, red 16, empty 10.",
+    "grid_table": {
+      "r8t1d4 (m 1,8; 8 warps, 2/SM)": "qkv 18x13=234 | o 64x8=512 | pooler 26x10=260 | unpooler(n=1024) 8x57=456. W/CTA 13-190 KB, x re-read <= 3.4 MB (m=8), reductions <= 2.1 MB",
+      "r8t1d8 / b8t1 (m 1,8; 1/SM)": "qkv 14x9=126 | o 64x4=256 | pooler 18x7=126 | unpooler 8x29=232. W/CTA 26-400 KB, x <= 2.4 MB, red <= 1 MB",
+      "r8t2d4 (m 16; 2/SM)": "qkv 18x13 | o 64x4 | pooler 26x10 | unpooler 52x5. x <= 6.8 MB, red <= 2.6 MB",
+      "r8t2d8 / b8t2 (m 16; 1/SM)": "qkv 14x9 | o 64x2 | pooler 18x7 | unpooler 33x4. x <= 4.7 MB, red <= 2.1 MB",
+      "r8t4d4 (m 32; 2/SM)": "qkv 18x13 | o 64x4 | pooler 26x10 | unpooler 52x5. x <= 13.6 MB, red <= 5.2 MB (W 28-50 MB)",
+      "r8t4d8 / b8t4 (m 32; 1/SM)": "qkv 14x9 | o 64x2 | pooler 18x7 | unpooler 33x4. x <= 9.4 MB, red <= 4.2 MB",
+      "bm12 (m 128)": "qkv 8x15=120 | o 64x2=128 | pooler 8x15=120 | unpooler 16x8=128. x re-read 16.8 MB each; reductions qkv 17.7, o 8.4, pooler 31.5, unpooler 33.6 MB; smem 202-218 KB",
+      "bm24 (m 128)": "qkv 8x16 | o 64x2 | pooler 8x16 | unpooler 16x8. Same traffic as bm12 (pooler red 33.6 MB)",
+      "rm (m 128)": "qkv 13x10 | o 66x2 | pooler 13x10 | unpooler 26x5. x 17-27 MB, red 8-21 MB (no W ring, so a larger x slice)",
+      "note": "At m=128 the 220 KB smem cap limits the x slice to about 8 chunks (512 k), which forces KS >= 15 on pooler. Reductions (m*N*KS*4 B) are then 31-34 MB against 50 MB of packed W: the main m=128 risk. PROBE red measures what 16 MB of red.v4 costs."
+    }
+  },
+  "paths": {
+    "pw-r8t1d4, pw-r8t1d8, pw-b8t1": "m in {1, 8}, four BF16 layers (unpooler n=1024 slice)",
+    "pw-r8t2d4, pw-r8t2d8, pw-b8t2": "m = 16",
+    "pw-r8t4d4, pw-r8t4d8, pw-b8t4": "m = 32",
+    "pw-bm12, pw-bm24, pw-rm": "m = 128",
+    "not_served": "router, m=256 and odd m -> torch fallback (unchanged)."
+  },
+  "probe": {
+    "where": "prepare(), after the compile and before the bake-off, <= 10 s, wrapped in try/except, selects nothing. Timed with the harness's own _time_us (graph replay, cold L2); TB/s = bytes / (us - 4) / 1e6.",
+    "buffer": "The pooler pack in the BN=128 layout (50.3 MB). Each CTA reads one contiguous range; one word per CTA is written to a sink.",
+    "lines": "PROBE empty grid=132 (fixed-cost floor). PROBE ring D={4,8,16} warps={4,8} ctas/sm={1,2,4}: 18 lines, grid = 132*ctas/sm. PROBE bulk stage={16K,32K} ST={2,4,6} ctas/sm={1,2}: 12 lines, 2 of them skip-smem (32K x 6 x 2 > 220 KB). PROBE 6mb ring D=8 warps=8 grid=264 (tiny-job floor). PROBE red 16MB v4 grid=264: 8 passes of red.global.add.v4.f32 over a 2 MB (128 x 4096 fp32) region, the size of m=128 split-K traffic. 34 lines in all, plus PROBE done.",
+    "use": "Calibrates the engines independently of decode/mma: if the GEMM paths lose again, these say whether the stream or the compute side is short, and which (D, warps, CTAs/SM) or (stage, ST) the next kernel should use."
+  },
+  "changes_from_pw1": [
+    "Grid is now (NG n-groups, KS K-slices) and each CTA walks a range of n-blocks; pw1 was (NB, KS) with one n-block per CTA.",
+    "x is copied into smem once per CTA with cp.async (rows >= m zero-filled), no longer as one bulk copy per row per stage through the mbarrier ring.",
+    "The ring engine has no producer warp and no barrier at all; its cursor crosses n-block boundaries without draining. The bulk engine's producer streams W only, in 12-24 KB stages.",
+    "Partial reductions are issued per finished n-block inside the stream. Arrival counting and last-arriver finalization run once at the end over the CTA's n-blocks (a CTA may finalize several).",
+    "Escape entry format widened to a 15-bit step field (seq<<17) over the whole n-range walk.",
+    "Instance set: 8-warp CTAs everywhere (BN=128 except rm BN=64), ring D=4 and D=8 at every small m, m=128 BN=128 bulk with 12 KB and 24 KB stages, and an m=128 ring. 12 GEMM instantiations plus 6 small probe kernels, one PATHS entry each (12 paths, down from 22).",
+    "Grid chooser: smem-feasible (x slice + W ring), one wave (two for small m <= 8 jobs), minimizing x re-read + 2x reductions.",
+    "New PROBE section in prepare() and a pw_probe glue entry point. A PW build line per path and shape logs NG/KS/grid/x-slice KB."
+  ],
+  "compile_check": "nvcc 12.8 -arch=sm_90a -cubin -O3 -Xptxas -v on KERNELS_SRC: about 5 s, 18/18 kernels (12 GEMM + 6 probe) with 0 bytes stack and 0 spill; registers in design.register_budget_ptxas. The full CUDA_SRC compiles with -std=c++20 against a minimal torch mock; the local torch wheel lacks the CUDA c10 headers, so the real glue was compiled only on the judge for pw1.",
+  "verification_done_offline": "CPU emulator emu_pw2.py (scratchpad) mirrors the kernel: the per-CTA smem x-slice copy (cp.async address math; it asserts no unwritten smem byte is read), the n-range walk, the ring load cursor and the bulk stage addressing, byte decode, the escape walk with the new step index, PTX m16n8k16 fragments, per-n-block flush, arrival counting and last-arriver finalize. It also asserts workspace and counters return to zero. 9 geometries pass bit-exact on one-hot rows and fp64-exact on random rows, covering both engines, BN 64/128, m 1/5/8/16/27/32/120/128, uneven NG and KS splits, KS=1, CPS 1/2, and injected zeros, tiny and huge weights. Mutating the escape step index (dropping the n-block offset) is caught.",
+  "risks": [
+    "A hang or fault still cannot be caught by the bake-off. The new mbarrier logic is W-only and follows pw1's pipeline, which ran on the judge (init + prologue by the producer before __syncthreads; parity waits unchanged). The launcher range-checks NG, KS, the x row stride, the smem size, the escape-step bound and the workspace/counter/offset sizes, and falls back on any error.",
+    "m=128: the x-slice smem cap forces KS >= 15 on pooler, so the fp32 reductions are about 32 MB. If L2 reductions run at only ~3-5 TB/s that alone is 6-10 us; PROBE red reports it.",
+    "Small m with 1 CTA/SM (D=8 and bulk) gives 8 warps/SM. If latency hiding needs more warps, the D=4 2-CTA/SM ring variants and the PROBE table show it.",
+    "Uneven K splits mean some CTAs stream 1 chunk more than others (up to 1/KCS imbalance).",
+    "Log size: about 60 PW build lines + about 150 BAKE/PICK + 35 PROBE lines, estimated at 11 KB, under the 14 KB budget."
+  ]
+}
