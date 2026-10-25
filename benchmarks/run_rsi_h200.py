@@ -21,6 +21,13 @@ def save(path,value):
     tmp=path.with_suffix('.tmp');tmp.write_text(json.dumps(value,indent=2,allow_nan=False)+'\n');tmp.replace(path)
 
 
+def container_absence_confirmed(result):
+    """A daemon failure is not evidence that a container is absent."""
+    error = result.stderr.casefold()
+    return result.returncode != 0 and any(
+        marker in error for marker in ("no such object:", "no such container:"))
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--plan',type=Path,required=True);p.add_argument('--review',type=Path,required=True)
@@ -108,7 +115,7 @@ def main():
             if remaining.returncode==0:
                 save(process_file,{'container':name,'status':'termination_unknown','reason':'container still exists'})
                 raise RuntimeError('Container still exists; keep supervisor lease held')
-            if 'No such object:' not in remaining.stderr and 'No such container:' not in remaining.stderr:
+            if not container_absence_confirmed(remaining):
                 save(process_file,{'container':name,'status':'termination_unknown','reason':remaining.stderr})
                 raise RuntimeError('Docker absence unverified; keep supervisor lease held')
             if proc is not None and proc.poll() is None:

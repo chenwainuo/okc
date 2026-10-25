@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "reviewer": "measurement_audit",
+  "scope": "Independent framework adequacy; no GPU execution or production ledger changes",
+  "verdict": {
+    "kernel_loop": "Substantial reproducible experiment framework; GPU pilot and first promotion still unproven. Remaining promotion gaps below.",
+    "optimizer_self_improvement": "Specified but not implemented or validated; optimizer_method promotion correctly fails closed. Kernel tuning alone is not evidence of improved optimizer.",
+    "proj_rsi": "Separate BF16 projection research scaffold; not equivalent to strict MoE ledger and not an optimizer-method evaluator."
+  },
+  "source_snapshots": [
+    {
+      "path": "rsi/protocol.json",
+      "sha256": "4db686abc0c2d6501b7a135eda4aaeba7eeb9da887e1560dfa6342eff7ad3ef8"
+    },
+    {
+      "path": "rsi/ledger.py",
+      "sha256": "2f57a7b0c9fa3e5693f732164b9b42daf867ca050b0f216533ba02d49861cf6c"
+    },
+    {
+      "path": "benchmarks/measurement.py",
+      "sha256": "2306238af49c263d6f2b3bf4313d8e8b712cbe8f36f789e32df29c0ec620b3ab"
+    },
+    {
+      "path": "proj_rsi/protocol.json",
+      "sha256": "7736e1ff89f493826379e869002f0838da4d0cb7654b5b81caa6bd51d0cd7530"
+    },
+    {
+      "path": "proj_rsi/ledger.py",
+      "sha256": "f633bbfcf50a59d512fcdac5fa4f9cac3c074c99fe8b1171836104b03efe635d"
+    },
+    {
+      "path": "proj_rsi/correctness.py",
+      "sha256": "ed401d163bfd99d6b420dc540599f1c24f7c356ccc5359bfdd506126ae15ac2e"
+    },
+    {
+      "path": "proj_rsi/static_check.py",
+      "sha256": "5039acf1d599f24b45b6602d593f18f4bb7c274de0de578fd9e58e68828ce52e"
+    },
+    {
+      "path": "benchmarks/test_proj_rsi.py",
+      "sha256": "92629798b5fb0b824c99d8e98a418db70b03af0e2319a2613b89aa374b647f1e"
+    }
+  ],
+  "strengths": [
+    "Frozen objective, runtime image and measurement policy; immutable proposal/artifact hashes.",
+    "Independent critic/validator roles; actor labels explicitly not authentication.",
+    "Exact suite, finite raw samples, independent sessions and two fresh holdouts; correctness/report binding.",
+    "Shared cooperative GPU lease, admission budget, terminal proof required; local and serving claims separated.",
+    "Method promotion fails closed instead of interpreting one faster kernel as better search."
+  ],
+  "material_gaps": [
+    {
+      "id": "incumbent-monotonicity",
+      "priority": "before_second_local_promotion",
+      "evidence": "rsi/ledger.py:propose validates fixed anchor; validate_evidence compares supplied anchor samples; promote unconditionally replaces local_incumbent.",
+      "risk": "A candidate better than original anchor but worse than current incumbent can replace incumbent.",
+      "required": "Keep fixed-anchor progress measurement; separately require paired candidate-versus-current-incumbent comparison before replacement. Archive alternatives without replacement."
+    },
+    {
+      "id": "method-evaluator",
+      "priority": "optimizer_promotion_blocker",
+      "evidence": "rsi/protocol.json:method_trial_contract status specified_not_implemented; rsi/ledger.py:validate_evidence rejects optimizer_method.",
+      "required": "Implement frozen portfolio evaluator with disjoint task families, multiple independent search seeds, equal GPU/token budgets, fixed stopping, complete attempts including failures/compile time, independent portfolio-level decision. Do not enable method promotion on kernel-only evidence."
+    },
+    {
+      "id": "operational-runtime-proof",
+      "priority": "before_candidate_measurement",
+      "evidence": "Q14-v4 pilot has no accepted complete control in reviewed ledger snapshot; state running with lease; root recovering failed lease.",
+      "required": "Authoritative process/container termination then accounted recovery; fresh reviewed revision if runtime dependencies change; successful prespecified unchanged control before candidate. Never release from timeout alone."
+    },
+    {
+      "id": "selection-and-uncertainty",
+      "priority": "before_strong_statistical_claims",
+      "evidence": "measurement.py resamples adjacent AB/BA blocks; rsi ledger uses marginal per-shape bootstrap bounds over adaptive experiment sequence.",
+      "risk": "Within-run bootstrap does not capture sustained thermal drift, across-day variation, or search-wide false discoveries. Two sessions improve replication but do not establish global95% confidence.",
+      "required": "Predetermine maximum candidate confirmations and stopping/alpha policy or retain exploratory labels; add independent final replication across sessions. Avoid calling geomean of marginal bounds joint CI."
+    },
+    {
+      "id": "promotion-evidence-depth",
+      "priority": "before_unattended_promotion",
+      "evidence": "rsi/ledger.py:validate_evidence validates reference/empty-local/precision and provenance fields but does not itself enforce input_immutable_pass, actual imported/JIT identity or control report pass. Frozen executor and reviewer currently enforce these.",
+      "required": "Bind successful control artifact and worker input/import/JIT/terminal evidence in validator schema; fail closed when absent. Human/agent attestation remains explicit until implemented."
+    },
+    {
+      "id": "ranking-feedback",
+      "priority": "framework_improvement",
+      "evidence": "rsi/protocol.json:ranking describes reranking and priors; ledger stores ROI prior but has no calibrated automatic policy evaluator.",
+      "required": "Record predicted gain/cost, measured bottleneck share, realized gain/cost, failure categories and posterior uncertainty; use these for transparent reranking. This is engineering policy, not validated RSI until portfolio trial passes."
+    },
+    {
+      "id": "holdout-consumption",
+      "priority": "operational_note",
+      "evidence": "rsi/ledger.py:start consumes all proposal holdouts immediately. Reviewed ledger has31013/32003 consumed despite control-stage failure.",
+      "required": "Use fresh seeds on next revision under current policy; never silently erase consumption. Any revised reservation/exposure semantics require explicit policy review and history preservation."
+    },
+    {
+      "id": "cooperative-trust",
+      "priority": "documented_limit",
+      "evidence": "Protocol trusts local files/executors and common coordinator; shared filesystem agents can inspect holdouts and change evaluator.",
+      "required": "Independent actual reviewer, full dependency completeness audit, external evaluator/access separation for stronger adversarial assurance; include node idle billing and agent costs when making efficiency claims."
+    }
+  ],
+  "proj_rsi_findings": {
+    "relation": "Dense projection challenge-specific score/protocol/ledger, separate results/proj-rsi; does not share strict rsi state machine or canonical GPU lease.",
+    "reproduced_cpu_temporary_fixture": {
+      "candidate_changed_after_review_still_promotes": true,
+      "infinite_speedup_and_CI_accepted": true,
+      "no_raw_report_or_nine_case_correctness_artifact_required": true,
+      "actual_recorder_can_promote_by_using_different_measurement_actor_label": true
+    },
+    "evidence": [
+      "propose stores candidate path without digest; no unchanged check in promote.",
+      "_check_measurement positivity test admits infinity; no math.isfinite.",
+      "record checks function actor but stores unbound measurement.actor; promote compares supplied measurement.actor.",
+      "correct=True suffices for local_h200; no report path/hash, actual device identity, case coverage or score recomputation.",
+      "_save replaces file atomically but has no transaction lock; concurrent read/modify/write can lose updates.",
+      "Protocol says no scored-load regression; promotion only checks aggregate supplied CI.",
+      "Static AST checks do not follow helper calls/aliases; CPU oracle receives same inputs/weights candidate can mutate."
+    ],
+    "recommendation": "Keep all proj_rsi results observational until strict provenance/raw measurement/finite checks/actor binding/locking/coordinator/correctness and loadwise gates are implemented. Reuse shared infrastructure with problem-specific score contract instead of treating weaker promotion as equivalent."
+  },
+  "promotion_rules": {
+    "kernel": "Reviewed immutable implementation; clean successful control; exact suite correctness and inputs unchanged; fresh independently validated raw holdouts and source/runtime evidence; fixed-anchor gain AND current-incumbent replacement gate; only local component promotion.",
+    "optimizer": "Frozen control/challenger method snapshots; held-out task-family portfolio at matched total resources; all candidate attempts counted; all produced kernels independently satisfy unchanged gates; preregistered portfolio improvement decision by independent reviewer; no evaluator/objective weakening.",
+    "goal": "Separate fixed original-suite3x comparison; official serving agreement and latency/throughput curve remain independently required. No inference from projection/MoE microbenchmarks alone."
+  },
+  "runtime_status_snapshot": {
+    "Q14_pipeline3_v4": "running during review; root owns recovery",
+    "local_incumbent": null,
+    "holdouts_consumed": [
+      31013,
+      32003
+    ]
+  },
+  "changes_by_reviewer": "Review document plus rsi/ledger.py fail-closed incumbent guard and benchmarks/test_rsi_framework.py regression test. Temporary CPU fixtures only; no GPU, production ledger mutation, commit or push.",
+  "remediations": [
+    {
+      "id": "incumbent-monotonicity",
+      "status": "fail_closed_guard_implemented",
+      "detail": "promote refuses replacing an existing different experiment until paired current-incumbent comparison implemented. Initial promotion unchanged; repeated promotion remains rejected by existing lifecycle semantics. No comparison schema added.",
+      "validation": "All22 test_rsi_framework tests pass, including genuine second candidate that clears fixed anchor but underperforms incumbent; blocked promotion leaves ledger bytes unchanged."
+    },
+    {
+      "id": "operational-runtime-proof",
+      "status": "root_recovered_after_initial_review_snapshot",
+      "detail": "Root reports owned-token abort after authoritative SSH checks: no matching Docker container, process45337 absent, no NVIDIA compute process. Pilot failed_before_timing; no timing evidence.",
+      "artifact": "results/rsi/q14-v4/terminal-proof.json"
+    }
+  ],
+  "final_ledger_snapshot": {
+    "Q14_pipeline3_v4": "rejected",
+    "gpu_lease_present": false,
+    "local_incumbent": null
+  }
+}

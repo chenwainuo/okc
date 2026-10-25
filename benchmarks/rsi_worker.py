@@ -3,6 +3,8 @@
 import argparse
 import hashlib
 import importlib
+import importlib.abc
+import importlib.machinery
 import json
 import math
 import os
@@ -21,10 +23,44 @@ def fingerprint(data):
     return digest.hexdigest()
 
 
+class FrozenSGLangFinder(importlib.abc.MetaPathFinder):
+    """Resolve only the frozen SGLang tree, terminating missing-module lookup.
+
+    Merely prepending sys.path is insufficient: an installed editable finder can
+    satisfy a missing submodule from another checkout after PathFinder returns
+    None. Returning None here would permit precisely that fallback.
+    """
+    def __init__(self, root):
+        self.python_root = (Path(root) / 'serving/sglang/python').resolve(strict=True)
+        self.package_root = (self.python_root / 'sglang').resolve(strict=True)
+        if not self.python_root.is_relative_to(Path(root).resolve()) or not self.package_root.is_relative_to(self.python_root):
+            raise RuntimeError('Frozen SGLang package root escaped bundle')
+
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname != 'sglang' and not fullname.startswith('sglang.'):
+            return None
+        parts = fullname.split('.')
+        search = self.python_root.joinpath(*parts[:-1])
+        if fullname != 'sglang' and not search.resolve().is_relative_to(self.package_root):
+            raise ModuleNotFoundError(f'SGLang namespace escaped frozen bundle: {fullname}', name=fullname)
+        spec = importlib.machinery.PathFinder.find_spec(fullname, [str(search)])
+        if spec is None:
+            raise ModuleNotFoundError(f'Frozen SGLang bundle has no module {fullname}', name=fullname)
+        if spec.origin is not None and not Path(spec.origin).resolve().is_relative_to(self.package_root):
+            raise ModuleNotFoundError(f'SGLang source escaped frozen bundle: {fullname}', name=fullname)
+        for location in spec.submodule_search_locations or ():
+            if not Path(location).resolve().is_relative_to(self.package_root):
+                raise ModuleNotFoundError(f'SGLang package path escaped frozen bundle: {fullname}', name=fullname)
+        return spec
+
+
 def setup_paths(root):
     own = [root / 'muse_moe_w4a16', root / 'benchmarks', root / 'serving/sglang/python']
     if not all(path.is_dir() for path in own):
         raise RuntimeError('Bundle must contain fixtures, benchmarks and serving/sglang/python')
+    if any(name == 'sglang' or name.startswith('sglang.') for name in sys.modules):
+        raise RuntimeError('SGLang imported before frozen namespace isolation')
+    sys.meta_path.insert(0, FrozenSGLangFinder(root))
     script_dir = Path(__file__).resolve().parent
     cwd = Path.cwd().resolve()
     # Remove ambient PYTHONPATH and central script directory; only the bundle may

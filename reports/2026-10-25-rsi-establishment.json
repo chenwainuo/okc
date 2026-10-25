@@ -13,7 +13,10 @@
     "ledger": "results/rsi/ledger.json",
     "rewrite_plan": "docs/kernel-rewrite-plan.json",
     "measurement_audit": "docs/rsi-measurement-audit.json",
-    "actual_preflight": "docs/rsi-q14-preflight.json"
+    "actual_preflight": "docs/rsi-q14-preflight.json",
+    "agent_framework": "docs/rsi-agent-framework.json",
+    "framework_review": "docs/rsi-framework-review.json",
+    "pilot": "reports/2026-10-25-rsi-runner-pilot.json"
   },
   "exercised": [
     "initialize with $5 run-accounting budget at authorized $5/hour",
@@ -22,18 +25,26 @@
     "verify single-file candidate diff",
     "register fixed-suite/fresh-holdout proposal",
     "independent critic withheld approval on isolation and shared-header scope",
-    "create MoE-scoped V2 candidate without modifying incumbent"
+    "create MoE-scoped V2 candidate without modifying incumbent",
+    "Implemented separate persistent worker processes with content-addressed read-only source bundles and private JIT caches",
+    "Independent runner preflight; unchanged-control pilot exposed editable import fallback before timing",
+    "Verified failed pilot container, launcher and GPU compute processes absent; rejected experiment and released owned lease",
+    "Added frozen namespace import isolation and Docker error case regression tests",
+    "Independent framework audit found and blocked unproven incumbent replacement",
+    "Pinned-image CPU-only smoke test confirmed frozen namespace isolation and version metadata fallback"
   ],
   "pending": [
-    "isolated paired persistent-worker runner with bounded process-tree lifetime",
-    "independent preflight for runner and scoped V2",
-    "optimizer-method frozen portfolio evaluator; method promotion remains disabled",
-    "full serving validation and 3x goal proof"
+    "Successful unchanged-control GPU pilot of repaired reviewed runner",
+    "Candidate screening and two fresh independent holdout sessions",
+    "Explicit candidate-versus-current-incumbent replacement evaluator",
+    "Optimizer-method frozen portfolio evaluator; method promotion remains disabled",
+    "Full serving validation and 3x goal proof"
   ],
   "performance_state": "No new speedup promoted; current selected patch remains incumbent",
-  "gpu_state": "idle after completed narrow sweep and Nsight captures",
+  "gpu_state": "idle; Q14-v4 aborted with authoritative terminal proof",
   "framework_schema_version": 2,
-  "test_count": 35,
   "explicit_v1_archive": "results/rsi/ledger-v1-archived.json",
-  "container_pin": "serving/benchmark-contract.json; exact digest and holdout device/runtime consistency enforced"
+  "container_pin": "serving/benchmark-contract.json; exact digest and holdout device/runtime consistency enforced",
+  "validation_note": "python3 -m unittest discover -s benchmarks -p test_*.py: 60 passed. Frozen namespace smoke test passed in pinned image without GPU. Independent agent reviewed Docker absence parser.",
+  "test_count": 60
 }

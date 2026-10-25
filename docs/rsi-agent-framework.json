@@ -1,0 +1,449 @@
+{
+  "schema_version": 1,
+  "purpose": "Operational sub-agent framework for improving kernels and the optimizer while preserving the original 3x objective",
+  "authority": {
+    "normative_protocol": "rsi/protocol.json",
+    "proposal_schema": "rsi/proposal.schema.json",
+    "evidence_schema": "rsi/evidence.schema.json",
+    "usage": "rsi/usage.json",
+    "immutable_objective": "docs/threefold-target.json",
+    "kernel_design_and_priors": "docs/kernel-rewrite-plan.json",
+    "live_priority": "docs/optimization-queue.json",
+    "precedence": "This document supplements role operation and selection; it does not override protocol gates or the frozen ledger plan. Actual ledger and process evidence override snapshot statuses.",
+    "excluded_alternative": "proj_rsi/ is a pre-existing unrelated BF16 framework; not adopted as authority or as a substitute for the protected RSI gates."
+  },
+  "execution_model": {
+    "type": "agent_directed",
+    "not": "autonomous persistent daemon",
+    "supervisor": "root",
+    "maximum_parallel_agents_including_root": 4,
+    "parallel_work": [
+      "source analysis",
+      "isolated candidate implementation",
+      "independent review",
+      "CPU tests on separately owned files"
+    ],
+    "serialized_work": [
+      "GPU benchmarks",
+      "GPU profiling",
+      "ledger lease operations",
+      "incumbent promotion",
+      "shared patch integration"
+    ],
+    "liveness": "An active goal requests future supervisor turns; it is not a running process. Record actual child-agent and GPU process handles separately.",
+    "trust": "Actor strings and artifact hashes support coordination/provenance, not authenticated identity or proof against dishonest local attestations. Root must actually invoke independent agents."
+  },
+  "roles": [
+    {
+      "role": "supervisor/executor",
+      "actor": "root",
+      "owns": [
+        "immutable objective and current budget",
+        "canonical GPU coordinator",
+        "actual process/container handles and deadlines",
+        "dispatch and cross-agent conflict resolution",
+        "integration and user-visible claims"
+      ],
+      "inputs": [
+        "ranked queue",
+        "reviewed immutable plan",
+        "critic findings"
+      ],
+      "outputs": [
+        "assigned task contracts",
+        "GPU evidence manifests",
+        "terminal process proof",
+        "ledger decisions"
+      ],
+      "must_not": [
+        "infer process termination from elapsed time or a stale state file",
+        "run competing GPU jobs",
+        "promote before independent validation",
+        "claim serving gain from component results"
+      ]
+    },
+    {
+      "role": "planner/kernel researcher",
+      "suggested_actor": "kernel_audit",
+      "owns": [
+        "profile interpretation",
+        "falsifiable kernel hypotheses",
+        "ROI priors and information value",
+        "source-level rewrite design"
+      ],
+      "inputs": [
+        "all positive and negative outcomes",
+        "counter profiles",
+        "frozen target and allowed transformations"
+      ],
+      "outputs": [
+        "proposal with bottleneck attribution, predicted counter changes, cost and downside",
+        "updated prior after each result"
+      ],
+      "must_not": [
+        "cherry-pick winning shapes",
+        "convert an upside envelope into a calibrated success probability",
+        "repeat rejected variants without new causal evidence",
+        "change correctness oracle or goal"
+      ]
+    },
+    {
+      "role": "implementer/framework engineer",
+      "suggested_actor": "rsi_framework",
+      "owns": [
+        "isolated candidate or runner change",
+        "complete immutable dependency bundle",
+        "unit/subprocess tests and precise diff"
+      ],
+      "inputs": [
+        "approved hypothesis",
+        "owned file list",
+        "protected interfaces"
+      ],
+      "outputs": [
+        "content-addressed candidate",
+        "dependency manifest",
+        "test evidence",
+        "limitations"
+      ],
+      "must_not": [
+        "edit incumbent in place during candidate testing",
+        "modify another agent-owned file",
+        "self-approve validation or promotion",
+        "start GPU work without root handoff"
+      ]
+    },
+    {
+      "role": "critic/validator",
+      "suggested_actor": "measurement_audit",
+      "owns": [
+        "independent preflight",
+        "baseline/import/JIT/input isolation audit",
+        "raw-sample recomputation and correctness evidence review",
+        "local promotion decision"
+      ],
+      "inputs": [
+        "exact frozen plan and bundles",
+        "runtime identities",
+        "raw paired samples",
+        "structured correctness and terminal evidence"
+      ],
+      "outputs": [
+        "explicit review scope and unresolved conditions",
+        "reject/validate findings with file/hash evidence"
+      ],
+      "must_not": [
+        "treat static review as runtime proof",
+        "accept identities only because their labels differ",
+        "relax gates after observing results",
+        "validate a candidate authored or executed by the same actor"
+      ]
+    },
+    {
+      "role": "optimizer-method reviewer",
+      "actor_assignment": "an independent non-author agent; may reuse critic role with a fresh explicit contract",
+      "owns": [
+        "search-policy/harness change review",
+        "frozen portfolio experiment design",
+        "cost/outcome accounting audit"
+      ],
+      "outputs": [
+        "method trial approval or rejection"
+      ],
+      "must_not": [
+        "equate a single kernel win with optimizer improvement",
+        "grant optimizer-method promotion while evaluator remains unimplemented"
+      ]
+    }
+  ],
+  "task_contract": {
+    "required": [
+      "task_id",
+      "role",
+      "hypothesis_or_review_question",
+      "input_artifact_paths_and_hashes",
+      "owned_files",
+      "forbidden_mutations",
+      "expected_outputs",
+      "completion_evidence",
+      "budget_and_deadline_if_executing",
+      "handoff_recipient"
+    ],
+    "completion": "Agent returns artifacts and evidence, not a self-declared pass. Root reconciles actual state.",
+    "file_conflicts": "Separate ownership or isolated worktrees; integration by root after reviewing diffs.",
+    "disagreement": "Preserve both findings, locate conflicting evidence, run a discriminating controlled test if permitted; no majority-vote override of correctness/provenance gates."
+  },
+  "inner_loop": [
+    {
+      "step": "profile/measure incumbent",
+      "owner": "root with planner analysis",
+      "artifact": "clean timing plus separate hardware profile",
+      "decision": "Choose the attributed cost that can affect the fixed benchmark."
+    },
+    {
+      "step": "hypothesis/preregister",
+      "owner": "planner + root",
+      "artifact": "immutable proposal, full suite, screening and unused holdout seeds, budget, expected counter changes",
+      "decision": "Reject unfalsifiable or infeasible hypotheses before implementation."
+    },
+    {
+      "step": "isolated implementation",
+      "owner": "implementer",
+      "artifact": "candidate/baseline dependency bundles and source hashes",
+      "decision": "Count conversion, gather, scratch and epilogue work in candidate cost."
+    },
+    {
+      "step": "independent preflight",
+      "owner": "critic",
+      "artifact": "hash-bound review with runtime conditions",
+      "decision": "Review invalidated by any source/dependency/plan change; new experiment ID for revisions."
+    },
+    {
+      "step": "unchanged-control pilot when harness/runtime changes",
+      "owner": "root",
+      "artifact": "preregistered control evidence including real import/JIT identities",
+      "decision": "Failure stops candidate testing. No after-the-fact retry; diagnose and preregister a reviewed revision."
+    },
+    {
+      "step": "screen candidate",
+      "owner": "root under exclusive lease",
+      "artifact": "all attempts, raw timing and correctness, environment and terminal state",
+      "decision": "Reject clear failure; a screen win is not promotion."
+    },
+    {
+      "step": "independent holdout validation",
+      "owner": "root executes, critic validates",
+      "artifact": "all frozen shapes and at least two unused seeds/independent sessions",
+      "decision": "Use current rsi/protocol.json local_gate exactly; recompute from samples."
+    },
+    {
+      "step": "promote or reject",
+      "owner": "independent validator; root integrates accepted source separately",
+      "artifact": "ledger decision and rationale",
+      "decision": "Ledger promotion is local only; no source patch application or full-goal completion implied."
+    },
+    {
+      "step": "update model/rerank",
+      "owner": "planner",
+      "artifact": "changed prior, failed-candidate archive, next discriminating hypothesis",
+      "decision": "Treat rejected experiments as evidence; do not silently erase them."
+    }
+  ],
+  "outer_loop": {
+    "unit_of_change": "ranking policy, candidate-generation strategy, experiment design or harness architecture",
+    "trigger": [
+      "poor prediction calibration",
+      "many zero-gain trials with a shared failure mode",
+      "excess compile/setup cost",
+      "isolation or measurement defect",
+      "candidate selection ignores measured bottleneck"
+    ],
+    "sequence": [
+      "retain protected target/oracle/gates",
+      "propose optimizer_method change",
+      "independent method review",
+      "freeze portfolio and equal budgets before exposure",
+      "run control/treatment method trials",
+      "independently validate resulting kernel wins",
+      "compare portfolio outcomes and costs",
+      "promote method only after evaluator implementation and review"
+    ],
+    "current_boundary": "Method-trial contract is specified, not implemented. Current CLI deliberately rejects optimizer_method validation/promotion; do not claim autonomous self-improvement of the optimizer has been proven.",
+    "bug_fixes": "A correctness/isolation repair can be integrated as a reviewed harness fix, but requires fresh runtime control before kernel evidence and is not itself a measured optimizer-ROI improvement."
+  },
+  "roi_ranking": {
+    "status": "advisory formula for planner; not an implemented statistical decision engine",
+    "eligibility": "0 if prerequisites, allowed transformations, budget, or required review fail; otherwise1",
+    "benefit": "B = p_pass * E[max(log(S_primary),0) | pass] - lambda_downside * p_regress * E[max(-log(S_primary),0) | regress]",
+    "cost": "C = GPU_dollars + lambda_tokens * agent_tokens/1000 + lambda_time * engineering_hours; all conversion weights must be declared/frozen by root for a ranking cycle. If weights/costs are unavailable, report the cost vector and ordinal rank instead of fabricating a score.",
+    "score": "eligible * (conservative_prior_quantile(B) + beta_information * expected_information_value) / C",
+    "uncertainty": "Prior quantiles and p_pass are engineering judgments until calibrated; they are not bootstrap confidence intervals. Preserve ranges and sensitivity to weights. Avoid exact scores when estimates are weak.",
+    "scope": "S_primary refers to fixed current expert benchmark; translate to serving only after measuring critical-path share with Amdahl. Do not add overlapping candidate gains.",
+    "cost_accounting": [
+      "include failed trials and controls",
+      "include JIT compilation, setup and all agents/reviews in method comparisons",
+      "record GPU lease walltime separately from provider idle billing",
+      "missing token accounting blocks per-token ROI claims, not ordinary kernel research"
+    ],
+    "update_rule": [
+      "record predicted vs realized speedup and cost",
+      "reduce confidence after repeated same-mechanism failures",
+      "increase measurement priority when it changes the next decision",
+      "reserve a declared small exploration budget for high-upside uncertain rewrites; never bypass validation"
+    ],
+    "examples": [
+      "Nsight profiling has direct speedup1.0 but positive information value.",
+      "Global N/K and N64 sweeps are now low-priority because observed primary-shape regressions contradict their gain priors.",
+      "Coupled stage/register work retains a conditional upside prior because counters show a concrete resource constraint; it still may regress."
+    ]
+  },
+  "frozen_portfolio_evaluator": {
+    "implementation_status": "future prerequisite for optimizer-method promotion; no evaluator exists yet",
+    "control": "snapshot of current planner/ranking/search procedure, prompts, candidate catalog and harness",
+    "treatment": "one explicitly changed method component with all other controls fixed",
+    "freeze_before_any_holdout_exposure": [
+      "representative task portfolio and fixed weights",
+      "baseline method and treatment method snapshots",
+      "development tasks disjoint from evaluation tasks/seeds",
+      "kernel correctness/performance gates and full primary/regression suite",
+      "equal GPU-dollar/time and agent-token ceilings",
+      "initial compilation-cache policy and starting artifacts",
+      "multiple independent search seeds and paired order",
+      "maximum trials, no adaptive unregistered retries, stopping rule"
+    ],
+    "portfolio_definition": "Use several genuinely distinct optimization tasks/regimes, not just the winning shape from one kernel. Keep the original kernel evaluation suite intact inside every task; include failures and no-gain outcomes.",
+    "quality_metric": "U = sum_t weight_t * log(S_t_final_validated_vs_fixed_anchor), with sum(weights)=1. No validated improvement yields S_t=1. Count only independently validated final incumbents, not sums of overlapping intermediate wins.",
+    "efficiency_metrics": [
+      "U / total GPU dollars including failures/setup",
+      "U / total agent tokens including planner, implementer and reviewers",
+      "time to first validated improvement",
+      "correctness/provenance failure rate and harmful-promotion count"
+    ],
+    "decision": "Compare paired portfolio outcomes over independent search seeds, with uncertainty and practical margin preregistered. Require zero weakened gates and independently revalidated kernel wins. A single successful kernel or faster screen is insufficient.",
+    "leakage_controls": [
+      "do not train/tune the method on evaluation task outcomes within the same trial",
+      "keep every attempted candidate in the ledger",
+      "do not let treatment reuse control-only discoveries or compilation work unless symmetrically permitted",
+      "new method revisions require fresh evaluation tasks/seeds, not repeated testing until significant"
+    ]
+  },
+  "gpu_ownership": {
+    "coordinator": "results/rsi/gpu-lease.json (canonical across ledgers)",
+    "owner": "root is sole physical GPU scheduler/executor in this team",
+    "subagents": "CPU/source/review work only unless root explicitly transfers a named executor lease; no independent ssh benchmark launches",
+    "start": "reserve budget and obtain lease only after plan review; record actual container/process handle",
+    "timeout": "deadline stops new admission and triggers root inspection/termination procedure; it does not prove the process exited or release the lease automatically",
+    "finish": "verify container/process/child termination, collect evidence, account actual walltime, then finish/abort with owned token",
+    "profiling": "serialized with all timing, separate artifacts, never mix counter-instrumented durations into speedup evidence"
+  },
+  "stop_reject_promote": {
+    "stop": [
+      "failed unchanged control",
+      "baseline/import/JIT/input identity mismatch",
+      "runtime correctness failure",
+      "budget deadline or user stop",
+      "unexpected competing GPU process"
+    ],
+    "reject": [
+      "forbidden model/precision shortcut",
+      "source/dependency drift after review",
+      "missing or nonfinite samples, incomplete suite, reused holdouts",
+      "failure of any normative local gate",
+      "unaccounted candidate setup/conversion work"
+    ],
+    "local_promote": [
+      "normative v2 protocol gates all proven",
+      "independent validator distinct from author/executor",
+      "frozen-anchor gain and all-shape noninferiority",
+      "actual termination and provenance verified",
+      "Incremental replacement additionally requires paired candidate-v-current-incumbent evidence under a reviewed evaluator; until implemented, do not bypass the fail-closed promotion guard."
+    ],
+    "goal_complete": "Only full original3x objective proven against frozen benchmark; single-GPU local promotion cannot substitute for full-serving agreement, TTFT and throughput/interactivity validation."
+  },
+  "next_queue_snapshot": {
+    "authority_note": "Read current ledger and docs/optimization-queue.json before execution; this is a planning snapshot, not live process state.",
+    "items": [
+      {
+        "rank": 0,
+        "id": "RSI01",
+        "task": "Freeze repaired isolated runner, independently review the revision, and establish successful unchanged GPU control",
+        "estimated_direct_speedup": [
+          1.0,
+          1.0
+        ],
+        "why": "Q14-v4 stopped before timings. Root reports pinned-image import-only verification and60 passing CPU tests after repair; GPU control still unproven.",
+        "gate": "Fresh reviewed unchanged-control pilot; no reuse of superseded evidence."
+      },
+      {
+        "rank": 0.5,
+        "id": "INCUMBENT01",
+        "task": "Implement independent candidate-v-current-incumbent paired replacement evaluation",
+        "estimated_direct_speedup": [
+          1.0,
+          1.0
+        ],
+        "why": "Protect monotonic progress: an anchor-beater may still be slower than current incumbent.",
+        "gate": "Keep original anchor3x proof separate; fail closed on replacement until both required comparisons are reviewed and supported."
+      },
+      {
+        "rank": 1,
+        "id": "Q14-successor",
+        "task": "MoE-scoped pipeline-depth/register-lifetime experiment",
+        "conditional_expert_speedup_prior": [
+          1.05,
+          1.2
+        ],
+        "confidence": "low-medium",
+        "cost": "use fresh reviewed proposal budget; previous proposal45 GPU minutes is not new authorization",
+        "why": "M128 register and shared-memory limits both3 CTAs/SM; M8 shared-memory limit3 vs register limit4.",
+        "gate": "Preserve dense Marlin, FP32 reductions and BF16 boundaries; reject spills/latency loss/full-suite regressions."
+      },
+      {
+        "rank": 2,
+        "id": "R03",
+        "task": "Complete-K schedule and compact valid-expert work descriptors",
+        "conditional_expert_speedup_prior": [
+          1.05,
+          1.25
+        ],
+        "confidence": "low",
+        "prerequisite": "Measure split-slice/reduction or metadata stall share; do not infer a win from fewer locks."
+      },
+      {
+        "rank": 3,
+        "id": "R04",
+        "task": "Bounded Hopper-specific WGMMA prototype",
+        "conditional_expert_speedup_prior": [
+          1.1,
+          1.6
+        ],
+        "confidence": "low",
+        "prerequisite": "Counter-guided design and full accounting for BF16 staging/dequantization; separate large-M/prefill feasibility from sparse decode."
+      },
+      {
+        "rank": 4,
+        "id": "R05",
+        "task": "Gate/up epilogue plus SwiGLU fusion",
+        "conditional_expert_speedup_prior": [
+          1.01,
+          1.06
+        ],
+        "confidence": "low-medium",
+        "prerequisite": "Co-owned fully reduced gate/up tiles and preserved rounding; direct fusion is not currently free."
+      },
+      {
+        "rank": 5,
+        "id": "METHOD01",
+        "task": "Implement and test frozen portfolio evaluator for optimizer-method changes",
+        "estimated_direct_speedup": [
+          1.0,
+          1.0
+        ],
+        "why": "Required before claiming improved search efficiency; current method validation intentionally fails closed."
+      }
+    ],
+    "estimate_warning": "Conditional engineering upside envelopes only, not measured gains, expected values, or calibrated probabilities. All candidates can fail or regress. Full-serving speedup estimates remain unavailable."
+  },
+  "known_gaps": [
+    {
+      "id": "G01",
+      "gap": "Successful unchanged GPU control after runner isolation repairs",
+      "status": "unproven",
+      "evidence_to_date": "Root reports import isolation repaired and checked in the pinned image without GPU;60 CPU tests pass. Q14-v4 closed before timings.",
+      "required": "Fresh frozen plan, independent preflight and actual unchanged-control evidence; CPU/image import checks do not prove GPU runtime isolation or performance."
+    },
+    {
+      "id": "G02",
+      "gap": "Candidate-v-current-incumbent paired replacement evaluator",
+      "status": "not implemented; promotion guard fails closed",
+      "reason": "Beating the original fixed anchor does not prove a candidate improves the current incumbent.",
+      "required": "Preserve fixed-anchor measurements for the3x goal AND independently validate incremental replacement against the actual current incumbent. Do not replace a stronger incumbent with a weaker anchor-beater."
+    },
+    {
+      "id": "G03",
+      "gap": "Optimizer-method frozen portfolio evaluator",
+      "status": "specified_not_implemented; method promotion fails closed",
+      "required": "Implement/review portfolio execution, costs, uncertainty and independent holdout validation before claiming improved optimizer efficiency."
+    }
+  ]
+}

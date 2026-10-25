@@ -344,6 +344,8 @@ class Ledger:
         with self.transaction() as state:
             exp = state['experiments'][experiment_id]
             require(exp['state'] == 'validated' and reviewer == exp['validation_reviewer'], 'Independent validated review required')
+            require(state['local_incumbent'] in (None, experiment_id),
+                    'Incumbent replacement requires a paired current-incumbent comparison; not implemented')
             self.unchanged(exp)
             self.validate_evidence(state, exp)
             exp['state'] = 'promoted'

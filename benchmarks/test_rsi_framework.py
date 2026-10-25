@@ -94,6 +94,29 @@ class RSIFrameworkTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.ledger.validate('e1',actor)
 
+    def test_anchor_gain_cannot_replace_existing_incumbent(self):
+        self.finish()
+        self.ledger.validate('e1', 'independent')
+        self.ledger.promote('e1', 'independent')
+        self.candidate = self.write('second_candidate.py', 'different candidate')
+        self.plan = {**self.plan, 'candidate': str(self.candidate), 'holdout_seeds': [400, 500]}
+        exp = self.ledger.propose('e2', 'author', self.plan)
+        self.ledger.review('e2', 'reviewer', self.checklist)
+        lease = self.ledger.start('e2', 'executor')
+        def weaker_anchor_gain(report):
+            for row in report['results']:
+                row['candidate_samples_us'] = [90.] * 20
+        self.ledger.finish('e2', 'executor', lease['token'], self.evidence(exp, weaker_anchor_gain))
+        self.ledger.validate('e2', 'independent')
+        before = self.ledger.path.read_bytes()
+        with self.assertRaisesRegex(ValueError, 'current-incumbent comparison'):
+            self.ledger.promote('e2', 'independent')
+        self.assertEqual(before, self.ledger.path.read_bytes())
+        self.assertEqual(self.ledger.status()['local_incumbent'], 'e1')
+        # Existing lifecycle semantics remain: promotion is not an idempotent command.
+        with self.assertRaisesRegex(ValueError, 'Independent validated review'):
+            self.ledger.promote('e1', 'independent')
+
     def test_promotion_cannot_skip_states(self):
         self.proposed()
         with self.assertRaises(ValueError):self.ledger.promote('e1','reviewer')

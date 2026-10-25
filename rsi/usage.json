@@ -29,10 +29,12 @@
     ]
   },
   "integration_required": [
-    "Current moe_local.py legacy reports lack new strict provenance and structured correctness fields. Extend harness or reviewed executor adapter before promotion; never fabricate assertions after the fact.",
-    "Freeze isolated baseline transitive imports and fixtures; a class source string alone is insufficient.",
-    "Use canonical GPU coordinator for every executor; existing direct run_h200.sh does not acquire RSI lease automatically.",
-    "A measured failure can be recorded and rejected; validation errors do not silently alter experiment state."
+    "Use benchmarks/run_rsi_h200.py only with an immutable proposal, independent review and live supervisor lease; it invokes isolated persistent workers.",
+    "Legacy moe_local.py reports remain observational and cannot substitute for the reviewed runner provenance and correctness evidence.",
+    "Use canonical GPU coordinator for every executor; direct run_h200.sh bypasses RSI admission and must not overlap.",
+    "A measured failure can be recorded and rejected; validation errors do not silently alter experiment state.",
+    "After any reviewed runner change, create a fresh proposal and review; do not reuse the failed v4 control or its consumed seeds.",
+    "Optimizer-method evaluation and incumbent replacement require additional evidence contracts; unsupported promotion stays disabled."
   ],
   "terminal_proof": {
     "process_terminal": true,
@@ -46,5 +48,6 @@
     "cuda": "actual CUDA runtime version",
     "container_digest": "sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
     "exclusive_gpu": true
-  }
+  },
+  "framework": "docs/rsi-agent-framework.json"
 }

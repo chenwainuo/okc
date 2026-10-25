@@ -65,7 +65,8 @@
     "provenance": "candidate/baseline adapter hashes, complete transitive bundle snapshot, baseline source must match immutable anchor, plan hash, environment fingerprint, unique independent session IDs",
     "profiling": "false; exclusive GPU required",
     "primary_aggregate": "each holdout primary geometric-mean point speedup >1.02 AND geometric mean of marginal lower bounds >1.0; latter is a conservative screening statistic, not a joint 95% confidence interval",
-    "environment": "Exact frozen container sha256 digest; GPU UUID, driver, Torch and CUDA must be identical across all holdout sessions. Session IDs must remain distinct."
+    "environment": "Exact frozen container sha256 digest; GPU UUID, driver, Torch and CUDA must be identical across all holdout sessions. Session IDs must remain distinct.",
+    "incumbent_replacement": "Fail closed when a different local incumbent already exists. Fixed-anchor success alone cannot replace it; paired candidate-versus-current-incumbent evidence contract is not yet implemented."
   },
   "goal_gate": {
     "local_promotion": "updates ledger incumbent only; no source patch application and no full-goal completion",
