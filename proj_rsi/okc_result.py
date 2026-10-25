@@ -145,3 +145,17 @@ def parse_bake(log_text: str) -> list[dict]:
         if match:
             rows.append({"layer": match.group(1), "m": int(match.group(2)), "path": match.group(3), "us": float(match.group(4))})
     return rows
+
+
+PROBE_LINE = re.compile(r"^PROBE\s+(\S+)\s+(\S+)\s+([0-9.]+)(?:\s+([0-9.]+))?")
+
+
+def parse_probe(log_text: str) -> list[dict]:
+    """'PROBE <engine> <config> <us> [<TB/s>]' lines printed by prepare()'s streaming probe."""
+    rows = []
+    for line in log_text.splitlines():
+        match = PROBE_LINE.match(line.strip())
+        if match:
+            rows.append({"engine": match.group(1), "config": match.group(2), "us": float(match.group(3)),
+                         "tbps": float(match.group(4)) if match.group(4) else None})
+    return rows

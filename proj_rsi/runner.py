@@ -14,7 +14,7 @@ import time
 from pathlib import Path
 
 from .ledger import ROOT, Ledger
-from .okc_result import format_table, load_sums, parse_bake, profiles, shapes, speedup_from_table
+from .okc_result import format_table, load_sums, parse_bake, parse_probe, profiles, shapes, speedup_from_table
 from .static_check import check_file
 
 JOBS = ROOT / "results" / "proj-rsi" / "jobs"
@@ -131,7 +131,10 @@ def report(job: dict, against: dict | None = None, log_text: str = "") -> str:
         kernels.append("%-10s %-9s | " % key + " || ".join(t.strip() for t in top))
     bake = parse_bake(log_text)
     bake_lines = ["BAKE %-9s m=%-4d %-18s %8.2f" % (b["layer"], b["m"], b["path"], b["us"]) for b in bake]
-    return "\n".join(head + [body, "", "profiles:"] + kernels + ([""] + bake_lines if bake_lines else []))
+    probe_lines = ["PROBE %-8s %-24s %8.2f us %s" % (b["engine"], b["config"], b["us"], ("%.2f TB/s" % b["tbps"]) if b["tbps"] else "")
+                   for b in parse_probe(log_text)]
+    return "\n".join(head + [body, "", "profiles:"] + kernels + ([""] + probe_lines if probe_lines else [])
+                     + ([""] + bake_lines if bake_lines else []))
 
 
 def run(candidate: str | Path, kind: str, experiment: str | None, reserve: int, against_job: str | None) -> str:
