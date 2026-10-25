@@ -72,8 +72,12 @@ def candidate_source(source, directory, up, down, blocks):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--minutes', type=float, default=45)
+    p.add_argument('--pairs', type=int, default=40)
+    p.add_argument('--seed', type=int, default=14009)
     p.add_argument('--directory', type=Path, default=ROOT / 'results/execution-sweep')
     args = p.parse_args()
+    if args.pairs < 20 or args.pairs % 2:
+        p.error('--pairs must be even and at least 20')
     directory = args.directory.resolve()
     directory.mkdir(parents=True, exist_ok=True)
     import fcntl
@@ -84,6 +88,10 @@ def main():
     adapter(directory / 'incumbent.py', source)
     state = dict(status='running',jit=metadata,source_sha256=hashlib.sha256(source.encode()).hexdigest(),results=[])
     statefile = directory / 'state.json'
+    if statefile.exists():
+        previous = json.loads(statefile.read_text())
+        atomic(directory / f'previous-state-{time.time_ns()}.json', previous)
+    state.update(seed=args.seed,pairs=args.pairs)
     deadline = time.monotonic() + args.minutes * 60
     try:
         for up, down, blocks in [(-1,-1,-1),(0,0,-1),(0,1,-1),(1,0,-1),(1,1,-1),(-1,-1,1),(-1,-1,2)]:
@@ -92,17 +100,17 @@ def main():
             changed = candidate_source(source, directory, up, down, blocks)
             adapter(candidate, changed)
             candidate.write_text(f'import sys\nsys.path.insert(0, {str(directory)!r})\n' + candidate.read_text())
-            output = directory / f'{name}.json'
+            output = directory / f'{name}-seed{args.seed}-pairs{args.pairs}.json'
             state['current'] = name
             atomic(statefile, state)
             remaining = deadline-time.monotonic()
             if remaining <= 0 or (directory / 'STOP').exists():
                 state['status'] = 'stopped'
                 break
-            with (directory / f'{name}.log').open('w') as log:
+            with output.with_suffix('.log').open('w') as log:
                 proc = subprocess.run([sys.executable,str(ROOT / 'benchmarks/moe_local.py'),
                     '--baseline',str(directory / 'incumbent.py'),'--candidate',str(candidate),
-                    '--output',str(output),'--seed','13001','--pairs','20',
+                    '--output',str(output),'--seed',str(args.seed),'--pairs',str(args.pairs),
                     '--batches',*map(str,BATCHES)], stdout=log,stderr=subprocess.STDOUT,cwd=ROOT,timeout=remaining)
             if proc.returncode:
                 state['results'].append(dict(name=name,status='failed',returncode=proc.returncode))
