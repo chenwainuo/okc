@@ -1,0 +1,59 @@
+{
+  "id": "pw3",
+  "parent": "pw2",
+  "claim": "Two measurements and one m=128 design. (A) pw2's b8t1 took about 19 kernel-µs on pooler m=1, against 12.5 µs for the same bytes through a pure bulk stream. This check decomposes that 6.5 µs. The same bulk kernel is run with its consumer work switched on step by step (wait/arrive only, then smem loads, then decode, then mma without escapes, then full), in three CTA shapes and with one-arrive-per-two-stages. The next design can then target the stage that costs time, not a guess. (B) At m=128, split-K reductions cost about 0.8 µs per 2 MB on this judge, so KS must stay at or below 4 and x cannot be stationary. Instead each 64-k stage carries ONE 2D TMA copy of the x tile [128 x 64] (16 KB, 128B-swizzled) plus the 12 KB W chunk on the same full barrier: 28 KB stages, 6 deep, 1 CTA/SM, BN=128. Compute is mma.sync at about 1.6 clk per m16n8k16 per SM (about 13 µs for pooler); the stream is 50 MB at 3.8 TB/s (13 µs); 8 MB of reductions (about 3 µs, partly overlapped). That points to pooler m=128 near 16-18 kernel-µs, against cuBLAS's ~25 kernel-µs (30.1 in prepare).",
+  "target_shapes": [
+    "pooler m=128 <= 17 yours (r6 20.32; prepare-µs bar about 22 vs cuBLAS 30.1)",
+    "unpooler m=128 <= 17 (r6 19.32)", "qkv_gate m=128 <= 11 (r6 15.43)", "o m=128 <= 5.5 (r6 7.23)",
+    "m <= 32: no target this check (paths b8t1/b8t2/b8t4 unchanged from pw2 apart from runtime ST); the PROBE cons table is the deliverable"
+  ],
+  "kill_if": "m=128 TMA x-ring: kill it if the best of tm/tmh/tms is above 1.5x cuBLAS (prepare µs) on pooler and unpooler m=128. Refine if it lands between 1.0x and 1.5x and the decomposition shows the consumer path as the gap. Bulk m<=32 family: kill it if PROBE cons shows the L5-L1 gap staying above 4 µs at m=1 in every CTA shape (8w1, 8w2, 16w1). That would mean the decode+mma consumer cannot be hidden behind a 3.8 TB/s stream with this structure.",
+  "design": {
+    "kept": "Codec, fragment maps, escape lists (15-bit step field), split-K workspace, last-arriver epilogue, x-stationary bulk kernel for m <= 32 (grid chooser unchanged). The smem ring depth ST is now a runtime argument, with incremental slot/round counters instead of s % ST, so one instantiation serves both the 8w1 (ST 4) and 8w2 (ST 2, 2 CTAs/SM) probe shapes.",
+    "dropped": "All register-ring GEMM paths and the ring/bulk stream probes (pw2 settled those). Also the x-stationary m=128 path (bm24/bm12): with the runtime ring depth it needs a few registers more than the 168 cap ptxas sets for a 9-warp CTA, and spills 12-36 B. The design is ruled out anyway, because its x slice forces KS >= 15 against the KS <= 4 bound.",
+    "register_budget_ptxas": "nvcc 12.8 sm_90a -O3, all 25 kernels 0 bytes stack and 0 spill. Paths: b8t1 59, b8t2 67, b8t4 88, tm 150. Probes: p8t1L1 40, L2 45, L3 44, L4 58; p8t4L1 52, L2 54, L3 56, L4 91; p16t1L1 32, L2 32, L3 38, L4 46, L5 55; p16t4L1-L3 42, L4 84, L5 87; p8t1AG2 58, p8t4AG2 88; empty 10.",
+    "instantiations": "24 pwk/pwt + 1 empty kernel. 4 are GEMM paths (b8t1, b8t2, b8t4, tm); 20 are probe-only bulk kernels below 100 regs each. Local nvcc -cubin for all 25 takes about 6 s.",
+    "paths": "pw-b8t1 (m 1, 8), pw-b8t2 (m 16), pw-b8t4 (m 32), pw-tm, pw-tmh, pw-tms (m 128). All on qkv_gate / o / pooler / unpooler; router, m=256 and odd m stay on the fallback."
+  },
+  "m128_design": {
+    "kernel": "pwt<RT=2, WN=4, WTOK=2, TTW=8, ST=6>, 8 consumer warps + 1 producer warp (288 threads), 150 regs, 1 CTA/SM. Smem: 1024 B alignment pad + 6 x 28672 B stages + barriers = 173 KB.",
+    "stage": "28 KB stage: [x tile 128 rows x 64 k, 16 KB, 128B-swizzled TMA box at coordinates (k = (chunk*64) % K, row 0)][W chunk 8 tiles x 1536 B = 12 KB, cp.async.bulk]. One full barrier per stage with expect_tx = 16384 + 12288. Rows >= m are zero-filled by the TMA out-of-bounds fill (the map uses the exact m), so expect_tx is always the full box.",
+    "warp_layout": "Warp (wn, wt) owns row tiles 2wn, 2wn+1 and tokens 64wt..64wt+63 (8 n8 tiles). Accumulators 2 x 8 x 4 = 64 regs. Each decoded A fragment is reused across 8 token tiles and each B fragment across 2 row tiles. B fragment loads read row R = 64wt + 8tt + g at R*128 + (((2t)^g)<<4) and (((2t+1)^g)<<4), which matches the swizzle (chunk ^ (row & 7)) and is conflict-free.",
+    "grid_and_split": "Grid (NB = N/128, KS). tm: KS = clamp(round(132/NB), 1, 4): qkv 18x4 = 72 CTAs, o 64x2 = 128, pooler 32x4 = 128, unpooler 64x2 = 128. Reductions 4.7 / 8.4 / 8.4 / 8.4 MB, at most about 3.4 µs at the probed 2.5 TB/s. tmh: KS halved: qkv 2, o 1, pooler 2, unpooler 1, so o and unpooler have no reductions at half a wave of CTAs. This is the reduction-vs-occupancy trade-off measured directly.",
+    "tensor_map": "cuTensorMapEncodeTiled, fetched once through cudaGetDriverEntryPoint (no -lcuda): bf16, dims {K, m}, stride K*2, box {64, 128}, SWIZZLE_128B, L2 promotion 128B, OOB fill zero. pw-tm/pw-tmh encode it on the host on every call for that call's x pointer and pass it as a __grid_constant__ kernel parameter (alignas(64) 128-byte struct). The kernel hands its generic address to cp.async.bulk.tensor.2d.",
+    "graph_safety_note": "The brief's worry was that a host-encoded map would be stale on a graph replay with new x. Every kernel argument, including the plain x pointer that pw1 and pw2 already pass (and that passed their timed-correctness checks), is frozen at capture time. So the judge necessarily refills the captured x storage on every replay, and a map baked into the parameters is exactly as valid as the raw pointer. pw-tms implements the requested staging variant anyway (x copied into a buffer allocated in build, then the map is encoded over that fixed address), at about 1 µs of extra D2D copy. The bake-off decides between them on speed, and both are validated."
+  },
+  "probe_plan": {
+    "where": "prepare(), after compile and before the bake-off, <= 15 s, try/except, selects nothing. All on pooler (N 4096, K 8192, 50 MB packed) at m=1 and at m=32, timed with the bake-off's own _time_us (graph replay, cold L2; includes the ~5 µs replay cost shown by PROBE empty).",
+    "lines": "PROBE empty grid=132 (replay floor). Then, for m in {1, 32}, 16 lines of 'PROBE cons m=<m> <config> L<level> NG=.. KS=.. grid=.. <us>': 3 configs x 5 levels + 1 AG2. 33 PROBE lines plus PROBE done.",
+    "levels": {
+      "L1": "Producer streams W exactly as in the path; consumers only wait(full) and arrive(empty), no smem reads. Stream + handshake + x-slice load + epilogue cost.",
+      "L2": "+ the 3 x 16 B ld.shared per unit per warp, XOR-consumed into a register stored at the end: smem read bandwidth/latency of the W stage.",
+      "L3": "+ the 12-bit decode (pw_unit, 16 prmt-based registers per unit) XOR-consumed: ALU cost of decode.",
+      "L4": "+ the B-fragment loads and mma.sync for all token tiles, with pw_fix compiled out (results wrong, timed only): tensor-core issue and B traffic.",
+      "L5": "the full path (= b8t1 at m=1, b8t4 at m=32), adding the escape walk."
+    },
+    "configs": {
+      "c8w1": "8 consumer warps (BN 128, 1 tile per warp), 24 KB stages (CPS 2), ST 4, 1 CTA/SM. This is the shipped shape. Pooler grid 18x7 = 126.",
+      "c8w2": "Same instantiation with ST 2 (half the ring) and the grid sized for 2 CTAs/SM: 26x10 = 260, smem 62 KB (m=1) / 105 KB (m=32). Tests whether more resident warps hide the consumer.",
+      "c16w1": "16 consumer warps (BN 256), 24 KB stages of 1 chunk x 16 tiles, so each warp owns 1 unit per stage instead of 2. ST 4, 1 CTA/SM, pooler grid 16x8 = 128.",
+      "c8w1 AG2": "The L5 c8w1 kernel with one empty-barrier arrive per 2 stages (paired slots): the handshake cost."
+    },
+    "reading": "L2-L1 = smem read cost, L3-L2 = decode, L4-L3 = mma + B loads, L5-L4 = escapes, L1 - (bulk stream probe 16.5-17 in prepare) = handshake + x-slice + epilogue. Compare against pw2's PROBE bulk lines (3.8 TB/s, 16.5 µs in prepare for the same 50 MB)."
+  },
+  "changes_from_pw2": [
+    "New kernel pwt (m=128): x streamed per stage by one 128B-swizzled 2D TMA tile next to the W chunk; KS <= 4; paths pw-tm, pw-tmh (half KS) and pw-tms (staged x).",
+    "Bulk kernel pwk gained compile-time LV (consumer work level) and AG (arrive granularity) switches, plus a runtime ring depth ST; the shipped paths are LV5/AG1.",
+    "PROBE section replaced: consumer-cost decomposition (33 lines) instead of stream-engine probes.",
+    "Dropped: register-ring GEMM paths, ring/bulk/red stream probes, the x-stationary m=128 paths.",
+    "Glue: pw_run takes the ring depth; new pw_run_tma (host-side map encoding through the driver entry point); pw_empty."
+  ],
+  "compile_check": "nvcc 12.8 -arch=sm_90a -cubin -O3 -Xptxas -v on KERNELS_SRC: 25 kernels in about 6 s, all with 0 bytes stack and 0 spill (registers in design.register_budget_ptxas). The full CUDA_SRC, including the <cuda.h> tensor-map glue, compiles with -std=c++20 against the minimal torch mock with no errors or warnings.",
+  "verification_done_offline": "emu_pw3.py (scratchpad). (1) Emulates pwt end to end: TMA box placement with the 128B swizzle at the stage's k coordinate (rows >= m zero), W chunk after the 16 KB x tile, decode, escape walk, swizzled B-fragment reads (it asserts no unwritten byte is read), fragments, split-K flush, finalize, and workspace/counters back to zero. 3 geometries are bit-exact on one-hot rows and fp64-exact on random rows: uneven KS=3, KS=1 with m=121, KS=2. (2) A randomized-schedule simulation of the mbarrier protocols (pwk with ST 2/4/6/8, NSTOT 1-32, AG 1/2; pwt with ST 2/6, KCS 1-32): 30 schedules each, no deadlock, no read before fill, no overwrite before release. Mutating the producer's parity or the AG2 release slot is caught. The pwk address math is unchanged from pw2, whose emulator passed and whose 120+ builds validated on the judge.",
+  "risks": [
+    "TMA tensor-map path is new to this candidate family (r7's encode was the 2D no-swizzle form via -lcuda). If cudaGetDriverEntryPoint or the encode fails, pw_run_tma returns a code, run() falls back, and the BAKE line still validates (it measures the fallback). A wrong swizzle assumption shows up as INVALID, not a crash. A hang is possible only if expect_tx disagreed with the bytes delivered: the TMA always delivers the full box (16384) and the bulk copy 12288, matching expect_tx.",
+    "qkv m=128 has only 18 n-blocks at BN=128, so tm runs 72 CTAs (KS capped at 4): probably bandwidth-short. tmh is worse there; cuBLAS likely keeps qkv.",
+    "PROBE budget: 32 GEMM-kernel timings plus an extra BN=256 pooler layout (50 MB). Estimated 5-8 s; lines past 15 s are logged as skipped-budget.",
+    "Log: about 33 PROBE + ~30 PW build lines + ~120 BAKE/PICK lines, about 8 KB."
+  ]
+}
