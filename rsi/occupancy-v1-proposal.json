@@ -1,0 +1,69 @@
+{
+  "kind": "kernel",
+  "hypothesis": "The conservative255KiB register estimate excludes four128-register CTAs. For scoped BF16 NVFP4 EP M-tile8/16,N128/K64, query exact CUDA occupancy using actual dynamic-smem launch budgets and choose highest feasible count. Four stages and math unchanged. Could still choose3 or regress bandwidth; reject on failed correctness, noninferiority or primary aggregate gain.",
+  "suite": [
+    1,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    257,
+    384,
+    512,
+    513,
+    753,
+    3012,
+    16384
+  ],
+  "screen_seeds": [
+    39019
+  ],
+  "holdout_seeds": [
+    40009,
+    41011
+  ],
+  "min_pairs": 60,
+  "max_gpu_minutes": 20,
+  "roi_prior": {
+    "basis": "engineering_prior",
+    "speedup_range": [
+      1.0,
+      1.3
+    ],
+    "confidence": "low",
+    "component": "expert path; full serving unknown"
+  },
+  "baseline_isolation": "immutable_tree",
+  "baseline_anchor_source": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+  "candidate": "/home/ubuntu/okc/results/rsi/bundles/occupancy-v1.tar.gz",
+  "baseline": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+  "dependencies": [
+    "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+    "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+    "/home/ubuntu/okc/results/rsi/bundles/occupancy-v1.tar.gz.manifest.json",
+    "/home/ubuntu/okc/benchmarks/measurement.py",
+    "/home/ubuntu/okc/serving/benchmark-contract.json",
+    "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+    "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+    "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+    "/home/ubuntu/okc/benchmarks/run_rsi_h200.py",
+    "/home/ubuntu/okc/benchmarks/check_rsi_control.py"
+  ],
+  "execution_note": "Read-only isolated persistent workers with private caches, matched input bytes and immutable inputs. Unchanged-control pilot on screening seed before candidate measurements; all subprocesses/container must be terminal before lease release.",
+  "supersedes": "Independent occupancy-only variant on fixed incumbent; not combined with full-K or pipeline3. Allocation shared memory differs from minimum cache requirement.",
+  "control_policy": {
+    "pairs": 120,
+    "seed": 39019,
+    "primary_batches": [
+      8,
+      32,
+      128,
+      256
+    ],
+    "gate": "Every marginal bootstrap CI wholly inside[1/1.02,1.02]; primary geometric-mean POINT estimate inside same band. No aggregate or simultaneous confidence claim.",
+    "retry": "none in this revision; one prespecified120-pair control; on failure stop and audit",
+    "failure": "no candidate sweep until new reviewed plan"
+  }
+}

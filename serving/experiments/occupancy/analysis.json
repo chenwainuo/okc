@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "status": "occupancy_only_cuda_compile_passed_other_variants_uncompiled_all_gpu_unmeasured",
+  "scope": "Files in this directory only; live source and frozen archives untouched; no GPU activity",
+  "priority": [
+    "occupancy-only",
+    "pipeline3-only if attributable further improvement remains plausible",
+    "pipeline3-plus-occupancy after separate variants"
+  ],
+  "baseline": {
+    "bundle": "results/rsi/bundles/baseline-v2.tar.gz",
+    "member": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/moe_wna16_marlin.cuh"
+  },
+  "correction_to_prior_interpretation": {
+    "statement": "Measured allocated shared memory is not minimum pipeline cache requirement. Three-CTA dispatch itself chooses roughly 76.5KB dynamic per CTA; observing a shared-memory residency limit of three does not prove four-stage minimum cache requires this allocation.",
+    "minimum_cache_bytes_Mblocks1_N128_K64": {
+      "stage4": 28736,
+      "stage3": 21568
+    },
+    "four_CTA_dynamic_bytes_for_optin232448": 57088,
+    "register_heuristic": "255*1024 bytes divided by numRegs*threads*4. At 128 registers and 128 threads gives 3 instead of ideal integer register-file capacity 4; actual CUDA occupancy accounts for granularity and other constraints.",
+    "provenance": "No rationale comment found; local SGLang checkout is shallow. Historical intent of 255KiB remains unknown. Do not assert it was necessarily an upstream bug."
+  },
+  "occupancy_only": {
+    "source": "occupancy-only.cuh",
+    "patch": "occupancy-only.diff",
+    "scope": "SM90 BF16 EP no bias, NVFP4 group16, no activation order/zero points, Mblocks1, 128threads N128 K64; K4096 with gate/up N8192 top8 M1..256 or down N4096 top1 M8..2048",
+    "algorithm": [
+      "Preserve baseline four-stage kernel",
+      "Set function dynamic-shared permission ceiling once to device optin minus static sharedSizeBytes; skip requests exceeding ceiling",
+      "Try target CTA residency 4,3,2,1",
+      "Compute exact final-launch dynamic memory: optin/target-1024 when target>1, else optin",
+      "Require minimum cache plus512 bytes fits",
+      "Query cudaOccupancyMaxActiveBlocksPerMultiprocessor with actual kernel, threads, and actual dynamic allocation",
+      "Accept highest target with returned residency at least target; throw on CUDA error or no feasible target",
+      "Existing final dispatch applies selected CTA count, derives same dynamic budget, and sets attribute before launch"
+    ],
+    "legality": [
+      "No math or kernel template changes",
+      "Grid remains at most4*SMs as existing bound",
+      "Existing generic stripe scheduler handles changed grid",
+      "More CTAs can change FP32 partial-reduction order: oracle required",
+      "Outside scope unchanged"
+    ],
+    "remaining_checks": [
+      "CUDA compile in pinned image",
+      "Actual queried occupancy and chosen grid verification",
+      "No-local-expert and routing/skew/zero-output oracle suite",
+      "Graph capture and replay",
+      "Candidate-v-current paired randomized clean timings"
+    ],
+    "risks": [
+      "Lower dynamic allocation shrinks spare A-cache space; more CTAs can regress despite higher residency",
+      "Existing function-attribute mutability becomes more frequent; concurrent host invocation needs review",
+      "Host API overhead may matter in eager/full serving, even if hidden in captured replay",
+      "Returned occupancy may still be3",
+      "Other thread configurations retain heuristic and can win dispatcher comparison"
+    ],
+    "engineering_prior_not_measurement": {
+      "expert_speedup_range": [
+        0.9,
+        1.2
+      ],
+      "confidence": "low",
+      "three_x_claim": false,
+      "full_serving_speedup": "unknown"
+    },
+    "concurrency_limit": "No concurrent host configuration/launch of the same kernel symbol is supported by this candidate. Once-per-search ceiling reduces mutations but existing final launch setter can lower the shared function ceiling between another thread's query and launch. Serialize host dispatch/configuration through launch; persistent initialization/caching is separate future work."
+  },
+  "pipeline3_scoped": {
+    "source": "moe_wna16_marlin.cuh",
+    "patch": "candidate.diff",
+    "failure_root_cause": "Epilogue reuses B shared storage: assertion reduces to Mblocks*pack_factor <= 2*stages*Kblocks. NVFP4 Mblocks4 Kblocks4 fails at3 stages (32 >24); blanket stage edit instantiates these shapes even when benchmark only exercises smaller blocks.",
+    "repair": "Compile-time selector returns3 only SM90 BF16 NVFP4 EP no-bias Mblocks1 with capacity inequality; all others retain4. Host cache and validity calculations receive matching selected depth; dense/global pipe_stages unchanged.",
+    "assertions": "Preserved",
+    "unproven": "Odd ring depth pipeline semantics need GPU oracle; static capacity proof alone is insufficient. Comment about even pipeline length requires caution.",
+    "host_coherence": "Template instantiation, A/B/scales/gidx cache sizing, validity checks and occupancy estimate use same depth decision. Final dynamic allocation remains selected block-count budget."
+  },
+  "precompile_feasibility": {
+    "local_nvcc_available": false,
+    "cuda_compile_status": "PASS: full BF16 EP/no-bias production dispatch compiled nvcc -O3 SM90a in pinned image, no GPU exposure; see compile-status.json",
+    "cpu_checks": "cpu-validation.json: 23 capacity/scheduling-model and patch-reproduction checks pass",
+    "limits": "CPU checks do not validate C++ template compilation, GPU synchronization, actual occupancy, numerical correctness or speed",
+    "api": "Runtime occupancy API already supported by pinned CUDA runtime; templated cudaFuncSetAttribute usage matches existing final launch path",
+    "pinned_container_local": "Absent locally; existing remote pinned image used without GPU exposure"
+  },
+  "evidence_paths": [
+    "reports/2026-10-25-hardware-bs8.json",
+    "reports/2026-10-25-hardware-bs128.json",
+    "baseline-moe_wna16_marlin.cuh:512",
+    "baseline-moe_wna16_marlin.cuh:568",
+    "baseline-moe_wna16_marlin.cuh:753"
+  ],
+  "api_references": [
+    "https://docs.nvidia.com/cuda/cuda-runtime-api/cuda_runtime_api/group__CUDART__OCCUPANCY.html",
+    "https://github.com/NVIDIA/cutlass/blob/main/include/cutlass/gemm/device/gemm_universal_adapter.h",
+    "https://docs.nvidia.com/cuda/cuda-runtime-api/cuda_runtime_api/group__CUDART__EXECUTION.html"
+  ]
+}

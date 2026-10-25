@@ -499,7 +499,7 @@
       ]
     }
   ],
-  "latest_result": "FULLK10-v1 control validated; candidate screenrunning. NVFP4 WGMMA exact oracle passed throughK4096; routed downprojection prototype CPUcompiled and queued forreview/GPUcorrectness.",
+  "latest_result": "FULLK10 rejected:0.99890x primary screen. Routed and full-expert WGMMA correctness probes passed; performance unknown. Occupancy-only reviewed/CPUcompiled, fresh controlrunning.",
   "rsi_protocol": "rsi/protocol.json",
   "kernel_roi_details": "docs/kernel-rewrite-plan.json",
   "active_priority": [
@@ -513,6 +513,18 @@
     },
     {
       "rank": 1,
+      "id": "OCCUPANCY-v1",
+      "task": "Replace conservative register estimate with exact residency query for scoped Hopper NVFP4 EP tiles",
+      "conditional_expert_speedup_prior": [
+        1.0,
+        1.3
+      ],
+      "confidence": "low",
+      "status": "reviewed; CPUcompile passed; controlrunning",
+      "caveat": "Actualchosen residency unknown; baseline4stages unchanged. Allocated shared memory is not minimalcache requirement."
+    },
+    {
+      "rank": 2,
       "id": "Q14-pipeline3-v5",
       "task": "MoE-specific pipeline/register specialization",
       "conditional_expert_speedup_prior": [
@@ -523,7 +535,7 @@
       "status": "rejected compile; tile-scoped revision in development"
     },
     {
-      "rank": 2,
+      "rank": 3,
       "id": "R03",
       "task": "Complete-K scheduling plus compact metadata",
       "conditional_expert_speedup_prior": [
@@ -531,10 +543,10 @@
         1.25
       ],
       "confidence": "low",
-      "status": "candidate screen running after independent control validation"
+      "status": "rejected on screen:0.99890x primary; no holdouts"
     },
     {
-      "rank": 3,
+      "rank": 4,
       "id": "R04",
       "task": "Bounded Hopper WGMMA rewrite",
       "conditional_expert_speedup_prior": [
@@ -542,10 +554,10 @@
         1.6
       ],
       "confidence": "low",
-      "status": "NVFP4 GPUoracle passed throughK4096; routed downprototype CPUcompiled; correctness pending"
+      "status": "Routed and full expert GPU correctness passed; immutable benchmark bundle in preparation"
     },
     {
-      "rank": 4,
+      "rank": 5,
       "id": "R05",
       "task": "Gate/up epilogue plus SwiGLU fusion",
       "conditional_expert_speedup_prior": [

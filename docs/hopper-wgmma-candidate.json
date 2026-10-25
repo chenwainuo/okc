@@ -196,6 +196,17 @@
     "source": "serving/experiments/wgmma_rs/routed_down.cuh",
     "adapter": "serving/experiments/wgmma_rs/routed_adapter.py",
     "validation": "serving/experiments/wgmma_rs/check_routed.py",
-    "status": "CPU compiled; independent static review and GPU correctness pending"
+    "status": "GPU bounded routing correctness passed",
+    "report": "reports/2026-10-25-wgmma-routed.json"
+  },
+  "full_expert_prototype": {
+    "source": "serving/experiments/wgmma_rs/serving_wgmma_down.py",
+    "harness": "serving/experiments/wgmma_rs/check_full_expert.py",
+    "report": "reports/2026-10-25-wgmma-full-expert.json",
+    "status": "9development correctness cases passed; performance unmeasured",
+    "scope": "down replacement only; inherited gate/up/SwiGLU/norm/finalizer",
+    "worker_bundle": "results/rsi/bundles/wgmma-down-v1.tar.gz",
+    "worker_bundle_sha256": "25e677474e171c6858654bb0e2268b8773353efc8e21474292e4e0463eeb55b0",
+    "worker_bundle_note": "newimportglue stillrequiresworker correctness; no promotioneligibility fromdevelopmentprobe"
   }
 }

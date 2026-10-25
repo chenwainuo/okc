@@ -1,0 +1,38 @@
+{
+  "status": "frozen-for-review; Python syntax and exact-prefix static check passed; routedJIT/GPU/fullintegration untested",
+  "scope": "candidate full-expert adapter preserves incumbent gateup/SwiGLU and inherited norm/finalizer; replace down only",
+  "files": {
+    "serving_wgmma_down.py": "0b5df011b4c51f9d4872ef9d73a33f0900e53be027227f340c325ce44ffe5811",
+    "check_full_expert.py": "6dddff95f11d6d023e9333c5972de037b21d558d19f0308d766cc4a66a4fbe38",
+    "routed_down.cuh": "e3a83da389f8646431e22009114143bc36d53dc4fa60296572f19d35babe71ae",
+    "routed_adapter.py": "c098f02c86a9f7128bf215665c866615277a9b0fef67ef1bf600d81330855dc7",
+    "check_routed.py": "e97606427885a5a98c4fcd65fb2423847d53607987af7513d4efefb6d2894ea5"
+  },
+  "source_method_sha256": "781aecba1270deb918366284e4f8245ac48cce5e99f77f1a1ea95025aeaef266",
+  "development_seed": 910231,
+  "checks": [
+    "official frozenreference normal andskewed",
+    "eager no-local exactzero",
+    "graphvalid then no-local thenfreshskewed",
+    "inputbytefingerprints beforeafter",
+    "input fingerprint taken before warmup, checked after each warmup and capture, before every reference check; explicit separately reviewed runner-root"
+  ],
+  "root_only_commands": {
+    "routed": "PYTHONPATH=/bundle/serving/sglang/python python /probe/check_routed.py (use existing frozenimportguard launcher to block editablefallback)",
+    "full": "python /probe/check_full_expert.py --bundle-root /baseline --runner-root /runner --output /results/wgmma-full-expert-correctness.json"
+  },
+  "mounts": [
+    "immutable verified bundle ->/baseline:ro",
+    "separately reviewed central runner dir ->/runner:ro",
+    "isolated candidate dir ->/probe:ro",
+    "outputdir ->/results:rw",
+    "perrole pinned JIT cache -> supported cacheenv"
+  ],
+  "limitations": [
+    "No baseline mutation or globalfunction monkeypatch.",
+    "Copied prefix SHAguard requires same incumbent method in /bundle.",
+    "Fulladapter nowcopies onlyoriginal downpackedlocaltensor references, but baselinepreparation stillretains Marlinbanks: extra~288MiB localdownmemory.",
+    "Routed kernel stillsynchronizes eachK16 andcanonical stridedloads; correctnessfirst, likelyslow.",
+    "No measuredspeedup or promotionclaim."
+  ]
+}

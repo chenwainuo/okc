@@ -1,0 +1,45 @@
+--- a/python/sglang/kernels/jit/csrc/gemm/marlin_moe/moe_wna16_marlin.cuh
++++ b/python/sglang/kernels/jit/csrc/gemm/marlin_moe/moe_wna16_marlin.cuh
+@@ -570,6 +570,42 @@
+         min(device_max_reg_size / reg_size,
+             max_shared_mem / (cache_size + kSharedMemoryValidityMargin + kSharedMemoryLaunchReserve));
+     allow_count = max(min(allow_count, thread_m_blocks == 1 ? 4 : 2), 1);
++#if SGL_CUDA_ARCH == 900
++    // Ask CUDA about the actual per-CTA allocation used by the launch below.
++    // The 255-KiB estimate excludes four 128-register/128-thread CTAs by one KiB.
++    if constexpr (std::is_same_v<scalar_t, __nv_bfloat16> && kIsEP && !kHasBias) {
++      const bool scoped_shape =
++          prob_k == 4096 && ((prob_n == 8192 && top_k == 8 && prob_m >= 1 && prob_m <= 256) ||
++                             (prob_n == 4096 && top_k == 1 && prob_m >= 8 && prob_m <= 2048));
++      if (scoped_shape && q_type == host::kFE2M1f && group_size == 16 && !has_act_order && !has_zp &&
++          !is_zp_float && thread_m_blocks == 1 && th_config.num_threads == 128 &&
++          th_config.thread_k == 64 && th_config.thread_n == 128) {
++        // Opt in once to the legal ceiling; occupancy uses each actual allocation.
++        // Host launch configuration must remain serialized for this function.
++        const int dynamic_smem_ceiling = max_shared_mem - static_cast<int>(attr.sharedSizeBytes);
++        host::RuntimeCheck(dynamic_smem_ceiling > 0, "No dynamic shared-memory capacity");
++        host::RuntimeDeviceCheck(cudaFuncSetAttribute(
++            kernel, cudaFuncAttributeMaxDynamicSharedMemorySize, dynamic_smem_ceiling));
++        int exact_allow_count = 0;
++        for (int target_blocks = 4; target_blocks >= 1; --target_blocks) {
++          const int dynamic_smem = target_blocks > 1
++              ? max_shared_mem / target_blocks - kSharedMemoryLaunchReserve
++              : max_shared_mem;
++          if (dynamic_smem < cache_size + kSharedMemoryValidityMargin || dynamic_smem > dynamic_smem_ceiling)
++            continue;
++          int resident_blocks = 0;
++          host::RuntimeDeviceCheck(cudaOccupancyMaxActiveBlocksPerMultiprocessor(
++              &resident_blocks, kernel, th_config.num_threads, static_cast<size_t>(dynamic_smem)));
++          if (resident_blocks >= target_blocks) {
++            exact_allow_count = target_blocks;
++            break;
++          }
++        }
++        host::RuntimeCheck(exact_allow_count > 0, "No feasible exact Marlin occupancy configuration");
++        allow_count = exact_allow_count;
++      }
++    }
++#endif
+ 
+     if (thread_m_blocks > 1) {
+       int problem_blocks = prob_n / th_config.thread_n * prob_m * top_k * 4;

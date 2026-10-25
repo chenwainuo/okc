@@ -1,0 +1,77 @@
+{
+  "status": "complete",
+  "parent_lease": "FULLK10-v1",
+  "started_at": 1792891471.6559386,
+  "container": "okc-wgmma-full-001",
+  "purpose": "correctness-only full expert prototype",
+  "cache": "private wgmma-routed, preseeded verified same-source baseline JIT cache",
+  "exit_code": 0,
+  "result": {
+    "status": "complete",
+    "scope": "full expert synthetic correctness only; not performance or official serving score",
+    "development_seed": 910231,
+    "results": [
+      {
+        "kind": "eager_4_normal",
+        "pass": true,
+        "detail": "relative L2 error 5.517e-03 (worst row 5.541e-03)"
+      },
+      {
+        "kind": "eager_33_normal",
+        "pass": true,
+        "detail": "relative L2 error 5.554e-03 (worst row 5.881e-03)"
+      },
+      {
+        "kind": "eager_257_normal",
+        "pass": true,
+        "detail": "relative L2 error 5.555e-03 (worst row 6.003e-03)"
+      },
+      {
+        "kind": "eager_128_skewed",
+        "pass": true,
+        "detail": "relative L2 error 5.371e-03 (worst row 5.595e-03)"
+      },
+      {
+        "kind": "eager_1_normal",
+        "pass": true,
+        "detail": "relative L2 error 5.743e-03 (worst row 5.743e-03)"
+      },
+      {
+        "kind": "eager_empty",
+        "pass": true,
+        "detail": "exact zero"
+      },
+      {
+        "kind": "graph_valid",
+        "pass": true,
+        "detail": "relative L2 error 5.542e-03 (worst row 5.734e-03)"
+      },
+      {
+        "kind": "graph_empty_after_valid",
+        "pass": true,
+        "detail": "exact zero"
+      },
+      {
+        "kind": "graph_fresh_skewed",
+        "pass": true,
+        "detail": "relative L2 error 5.418e-03 (worst row 5.565e-03)"
+      }
+    ],
+    "runner_sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+    "reference_sha256": "a7e0b4fa86aa477a4e7bb5745b2b258954d72636b6da153bd239a717927cba44",
+    "candidate_sha256": {
+      "serving_wgmma_down.py": "0b5df011b4c51f9d4872ef9d73a33f0900e53be027227f340c325ce44ffe5811",
+      "routed_adapter.py": "c098f02c86a9f7128bf215665c866615277a9b0fef67ef1bf600d81330855dc7",
+      "routed_down.cuh": "e3a83da389f8646431e22009114143bc36d53dc4fa60296572f19d35babe71ae",
+      "check_full_expert.py": "6dddff95f11d6d023e9333c5972de037b21d558d19f0308d766cc4a66a4fbe38"
+    }
+  },
+  "terminal_proof": {
+    "container": "okc-wgmma-full-001",
+    "docker_ps_all": [],
+    "gpu_compute_pids": [],
+    "verified_at_unix": 1792891519.2471666
+  },
+  "elapsed_seconds": 47.591228723526,
+  "accounting_note": "Included in parent FULLK10 elapsed cost, no additional ledgercharge"
+}
