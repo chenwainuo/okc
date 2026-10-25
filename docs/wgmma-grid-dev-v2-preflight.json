@@ -1,0 +1,394 @@
+{
+  "schema_version": 1,
+  "reviewer": "measurement_audit",
+  "decision": "standalone_observational_sweep_approved",
+  "reviews": [
+    {
+      "id": "8sm",
+      "author": "root",
+      "state": "reviewed",
+      "plan": {
+        "kind": "kernel",
+        "purpose": "bounded observational persistent-grid cap comparison, not promotion eligible",
+        "promotion_eligible": false,
+        "hypothesis": "Exact GPU-validated persistent-v2 kernel, Bank.prepare grid cap 8*SMs (1056 on H200). Test dispatch reduction versus occupancy/latency-hiding tradeoff without kernel math changes. Compare against unchanged baseline-v2.",
+        "suite": [
+          8,
+          32,
+          128,
+          256
+        ],
+        "screen_seeds": [
+          930031
+        ],
+        "holdout_seeds": [],
+        "min_pairs": 20,
+        "max_gpu_minutes": 5,
+        "baseline": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+        "candidate": "/home/ubuntu/okc/results/rsi/bundles/wgmmagrid-8sm-v2.tar.gz",
+        "baseline_anchor_source": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+        "baseline_isolation": "immutable_tree",
+        "dependencies": [
+          "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+          "/home/ubuntu/okc/results/rsi/bundles/wgmmagrid-8sm-v2.tar.gz.manifest.json",
+          "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+          "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+          "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+          "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+          "/home/ubuntu/okc/benchmarks/run_rsi_h200.py",
+          "/home/ubuntu/okc/benchmarks/measurement.py",
+          "/home/ubuntu/okc/serving/benchmark-contract.json",
+          "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/build_bundles.py",
+          "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/bundle-validation.json",
+          "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/sweep.json"
+        ],
+        "execution_note": "Fixed sweep order8SM,2SM,16SM; one attempt/cap, seed930031 shared to match fixtures across separate runs. Same existing rsi_pair20pairs4shapes. Root supplies independent review and live per-cap lease. No GPU execution by preparer. Keep per-cap private cache; unchanged SGLang same-candidate-role preseed allowed only before worker start, no forced cache validity bypass.",
+        "stop_policy": "One attempt each. Stop sweep on compile/correctness/nonfinite/timeout/ownership failure; retain evidence and prove processes terminal before closing lease. Ordinary measured regressions do not trigger retries or change remaining fixed-order caps.",
+        "measurement": "20 raw paired graph replay samples per shape; cold128MiB flush; matched actual inputbytes, everytimedoutput officialreferencechecked. Report all4shapes, rawarrays and descriptivegeomean; no calibratedsignificance/promotion claim.",
+        "next_decision": "Descriptive comparison only; fixed cap order may confound drift, balanced AB/BA protects each baseline comparison but does not calibrate inter-cap significance. Pick next hypothesis only after all admitted caps or explicit stop; no promotion/holdout claims."
+      },
+      "plan_sha256": "bc68105557a59392722e2741f45f3912cc939f78002f741faf084a5f5783e447",
+      "preflight_reviewer": "measurement_audit",
+      "preflight_checklist": {
+        "baseline_bundle_complete": true,
+        "candidate_bundle_complete": true,
+        "baseline_isolated": true,
+        "hypothesis_falsifiable": true,
+        "suite_and_holdouts_frozen": true,
+        "precision_preserved": true,
+        "scope": "Standalone development only; exact4shape and explicitly empty holdout set frozen, not fullRSI promotion.",
+        "promotion_eligible": false,
+        "maximum_seconds": 300,
+        "maximum_runs": 1
+      },
+      "artifacts": [
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/wgmmagrid-8sm-v2.tar.gz",
+          "sha256": "a0457eab30655a1c44f63bcbe5b02770c1288b28707e37851a014af4b39c72e9"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+          "sha256": "a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+          "sha256": "a6405ec90466bbc5c13458382e6c5c6480dadecbbaf10feacd46b2101146f6a9"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/wgmmagrid-8sm-v2.tar.gz.manifest.json",
+          "sha256": "5b7fdb0c9b1eca58bda4b56061e130c0d18cb4e5948b2a8546150b354d0177d3"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+          "sha256": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+          "sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+          "sha256": "713d5d43e4e14162f3133f77f668fd8c6d27fbfcca4d6bd341c276faf3348449"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+          "sha256": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/run_rsi_h200.py",
+          "sha256": "9ef6201a52af8811d75eae0e084863d370b2d5d00f0472c7177dbab373ad06d4"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/measurement.py",
+          "sha256": "2306238af49c263d6f2b3bf4313d8e8b712cbe8f36f789e32df29c0ec620b3ab"
+        },
+        {
+          "path": "/home/ubuntu/okc/serving/benchmark-contract.json",
+          "sha256": "ce8ce13b67f2335ff7a764f4b03ed590691f15eb1a909d5253ff560c82954efd"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/build_bundles.py",
+          "sha256": "5ee5701fa5b0958815884b74184780b2124f6b1158b5b2245f39dcf91ac68cfe"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/bundle-validation.json",
+          "sha256": "c3fe751b7907fe1ec8edff7c2dbdf10428a660a12964999b5b10c056f2bcb0e9"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/sweep.json",
+          "sha256": "6af531e6959c53ca33ca7afe7ad2a029a35a2eefd380b8e5976a0aa3c9077ef9"
+        }
+      ],
+      "review_kind": "standalone_observational_admission_not_RSI_ledger_review",
+      "promotion_eligible": false,
+      "conditions": [
+        "Separate live root-owned300s canonical lease/sharedhostflock and actual GPUidle; terminal proof before release.",
+        "Current worker reference/inputimmutability/graph checks mandatory pervariant, including after importglue changes.",
+        "Only same-role unchangedSGLang cachepreseed into absenttarget, retain source/runtime dependencyvalidation; no forcedroutedJIT reuse.",
+        "Oneattempt, no retries, report all4shapes and failures; partialsuite/nonheldout/descriptive results only."
+      ],
+      "verified_delta": "Originalbundle unchanged except serving_moe shim, preservedoriginal adaptercopy, exactreviewed kernel/adapter plusimportglue and gridcap=8",
+      "prior_source_review": "docs/wgmma-persistent-v2-preflight.json",
+      "gpu_calls_by_reviewer": false,
+      "sweep_rules": "Fixed8->2->16order, shareddevelopmentseed930031, max15min/threeattempts. Changes in caps are adaptive-search observations, not independentmethod validation or calibratedwinnerclaim."
+    },
+    {
+      "id": "2sm",
+      "author": "root",
+      "state": "reviewed",
+      "plan": {
+        "kind": "kernel",
+        "purpose": "bounded observational persistent-grid cap comparison, not promotion eligible",
+        "promotion_eligible": false,
+        "hypothesis": "Exact GPU-validated persistent-v2 kernel, Bank.prepare grid cap 2*SMs (264 on H200). Test dispatch reduction versus occupancy/latency-hiding tradeoff without kernel math changes. Compare against unchanged baseline-v2.",
+        "suite": [
+          8,
+          32,
+          128,
+          256
+        ],
+        "screen_seeds": [
+          930031
+        ],
+        "holdout_seeds": [],
+        "min_pairs": 20,
+        "max_gpu_minutes": 5,
+        "baseline": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+        "candidate": "/home/ubuntu/okc/results/rsi/bundles/wgmmagrid-2sm-v2.tar.gz",
+        "baseline_anchor_source": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+        "baseline_isolation": "immutable_tree",
+        "dependencies": [
+          "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+          "/home/ubuntu/okc/results/rsi/bundles/wgmmagrid-2sm-v2.tar.gz.manifest.json",
+          "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+          "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+          "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+          "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+          "/home/ubuntu/okc/benchmarks/run_rsi_h200.py",
+          "/home/ubuntu/okc/benchmarks/measurement.py",
+          "/home/ubuntu/okc/serving/benchmark-contract.json",
+          "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/build_bundles.py",
+          "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/bundle-validation.json",
+          "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/sweep.json"
+        ],
+        "execution_note": "Fixed sweep order8SM,2SM,16SM; one attempt/cap, seed930031 shared to match fixtures across separate runs. Same existing rsi_pair20pairs4shapes. Root supplies independent review and live per-cap lease. No GPU execution by preparer. Keep per-cap private cache; unchanged SGLang same-candidate-role preseed allowed only before worker start, no forced cache validity bypass.",
+        "stop_policy": "One attempt each. Stop sweep on compile/correctness/nonfinite/timeout/ownership failure; retain evidence and prove processes terminal before closing lease. Ordinary measured regressions do not trigger retries or change remaining fixed-order caps.",
+        "measurement": "20 raw paired graph replay samples per shape; cold128MiB flush; matched actual inputbytes, everytimedoutput officialreferencechecked. Report all4shapes, rawarrays and descriptivegeomean; no calibratedsignificance/promotion claim.",
+        "next_decision": "Descriptive comparison only; fixed cap order may confound drift, balanced AB/BA protects each baseline comparison but does not calibrate inter-cap significance. Pick next hypothesis only after all admitted caps or explicit stop; no promotion/holdout claims."
+      },
+      "plan_sha256": "d8861c441c9e49c2ec21f93b4099f7aff0cf828ec6535f5fb2da7fa64ef50072",
+      "preflight_reviewer": "measurement_audit",
+      "preflight_checklist": {
+        "baseline_bundle_complete": true,
+        "candidate_bundle_complete": true,
+        "baseline_isolated": true,
+        "hypothesis_falsifiable": true,
+        "suite_and_holdouts_frozen": true,
+        "precision_preserved": true,
+        "scope": "Standalone development only; exact4shape and explicitly empty holdout set frozen, not fullRSI promotion.",
+        "promotion_eligible": false,
+        "maximum_seconds": 300,
+        "maximum_runs": 1
+      },
+      "artifacts": [
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/wgmmagrid-2sm-v2.tar.gz",
+          "sha256": "f27537b425e602f20de5a9b307ed21e9a8c6c38e6dfb043d26e95d7cad0a3335"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+          "sha256": "a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+          "sha256": "a6405ec90466bbc5c13458382e6c5c6480dadecbbaf10feacd46b2101146f6a9"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/wgmmagrid-2sm-v2.tar.gz.manifest.json",
+          "sha256": "4bf84a8a9eb7ed79902b15250eb999d1e50648baa83f226c8c6cfc2c05876802"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+          "sha256": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+          "sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+          "sha256": "713d5d43e4e14162f3133f77f668fd8c6d27fbfcca4d6bd341c276faf3348449"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+          "sha256": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/run_rsi_h200.py",
+          "sha256": "9ef6201a52af8811d75eae0e084863d370b2d5d00f0472c7177dbab373ad06d4"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/measurement.py",
+          "sha256": "2306238af49c263d6f2b3bf4313d8e8b712cbe8f36f789e32df29c0ec620b3ab"
+        },
+        {
+          "path": "/home/ubuntu/okc/serving/benchmark-contract.json",
+          "sha256": "ce8ce13b67f2335ff7a764f4b03ed590691f15eb1a909d5253ff560c82954efd"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/build_bundles.py",
+          "sha256": "5ee5701fa5b0958815884b74184780b2124f6b1158b5b2245f39dcf91ac68cfe"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/bundle-validation.json",
+          "sha256": "c3fe751b7907fe1ec8edff7c2dbdf10428a660a12964999b5b10c056f2bcb0e9"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/sweep.json",
+          "sha256": "6af531e6959c53ca33ca7afe7ad2a029a35a2eefd380b8e5976a0aa3c9077ef9"
+        }
+      ],
+      "review_kind": "standalone_observational_admission_not_RSI_ledger_review",
+      "promotion_eligible": false,
+      "conditions": [
+        "Separate live root-owned300s canonical lease/sharedhostflock and actual GPUidle; terminal proof before release.",
+        "Current worker reference/inputimmutability/graph checks mandatory pervariant, including after importglue changes.",
+        "Only same-role unchangedSGLang cachepreseed into absenttarget, retain source/runtime dependencyvalidation; no forcedroutedJIT reuse.",
+        "Oneattempt, no retries, report all4shapes and failures; partialsuite/nonheldout/descriptive results only."
+      ],
+      "verified_delta": "Originalbundle unchanged except serving_moe shim, preservedoriginal adaptercopy, exactreviewed kernel/adapter plusimportglue and gridcap=2",
+      "prior_source_review": "docs/wgmma-persistent-v2-preflight.json",
+      "gpu_calls_by_reviewer": false,
+      "sweep_rules": "Fixed8->2->16order, shareddevelopmentseed930031, max15min/threeattempts. Changes in caps are adaptive-search observations, not independentmethod validation or calibratedwinnerclaim."
+    },
+    {
+      "id": "16sm",
+      "author": "root",
+      "state": "reviewed",
+      "plan": {
+        "kind": "kernel",
+        "purpose": "bounded observational persistent-grid cap comparison, not promotion eligible",
+        "promotion_eligible": false,
+        "hypothesis": "Exact GPU-validated persistent-v2 kernel, Bank.prepare grid cap 16*SMs (2112 on H200). Test dispatch reduction versus occupancy/latency-hiding tradeoff without kernel math changes. Compare against unchanged baseline-v2.",
+        "suite": [
+          8,
+          32,
+          128,
+          256
+        ],
+        "screen_seeds": [
+          930031
+        ],
+        "holdout_seeds": [],
+        "min_pairs": 20,
+        "max_gpu_minutes": 5,
+        "baseline": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+        "candidate": "/home/ubuntu/okc/results/rsi/bundles/wgmmagrid-16sm-v2.tar.gz",
+        "baseline_anchor_source": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+        "baseline_isolation": "immutable_tree",
+        "dependencies": [
+          "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+          "/home/ubuntu/okc/results/rsi/bundles/wgmmagrid-16sm-v2.tar.gz.manifest.json",
+          "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+          "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+          "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+          "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+          "/home/ubuntu/okc/benchmarks/run_rsi_h200.py",
+          "/home/ubuntu/okc/benchmarks/measurement.py",
+          "/home/ubuntu/okc/serving/benchmark-contract.json",
+          "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/build_bundles.py",
+          "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/bundle-validation.json",
+          "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/sweep.json"
+        ],
+        "execution_note": "Fixed sweep order8SM,2SM,16SM; one attempt/cap, seed930031 shared to match fixtures across separate runs. Same existing rsi_pair20pairs4shapes. Root supplies independent review and live per-cap lease. No GPU execution by preparer. Keep per-cap private cache; unchanged SGLang same-candidate-role preseed allowed only before worker start, no forced cache validity bypass.",
+        "stop_policy": "One attempt each. Stop sweep on compile/correctness/nonfinite/timeout/ownership failure; retain evidence and prove processes terminal before closing lease. Ordinary measured regressions do not trigger retries or change remaining fixed-order caps.",
+        "measurement": "20 raw paired graph replay samples per shape; cold128MiB flush; matched actual inputbytes, everytimedoutput officialreferencechecked. Report all4shapes, rawarrays and descriptivegeomean; no calibratedsignificance/promotion claim.",
+        "next_decision": "Descriptive comparison only; fixed cap order may confound drift, balanced AB/BA protects each baseline comparison but does not calibrate inter-cap significance. Pick next hypothesis only after all admitted caps or explicit stop; no promotion/holdout claims."
+      },
+      "plan_sha256": "7437419790096bc4f0856ebffea0edd0bbb161a6f983c222d785ef2477f82a5c",
+      "preflight_reviewer": "measurement_audit",
+      "preflight_checklist": {
+        "baseline_bundle_complete": true,
+        "candidate_bundle_complete": true,
+        "baseline_isolated": true,
+        "hypothesis_falsifiable": true,
+        "suite_and_holdouts_frozen": true,
+        "precision_preserved": true,
+        "scope": "Standalone development only; exact4shape and explicitly empty holdout set frozen, not fullRSI promotion.",
+        "promotion_eligible": false,
+        "maximum_seconds": 300,
+        "maximum_runs": 1
+      },
+      "artifacts": [
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/wgmmagrid-16sm-v2.tar.gz",
+          "sha256": "dea7d7ed69b9d5ca0cb69d2a79d0cd1c90c980e24b19d7dbde7eec5b40437994"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+          "sha256": "a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+          "sha256": "a6405ec90466bbc5c13458382e6c5c6480dadecbbaf10feacd46b2101146f6a9"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/wgmmagrid-16sm-v2.tar.gz.manifest.json",
+          "sha256": "4c3001643b5c06321ce56d50fc70e908d89580226533c475009aae06401d5c67"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+          "sha256": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+          "sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+          "sha256": "713d5d43e4e14162f3133f77f668fd8c6d27fbfcca4d6bd341c276faf3348449"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+          "sha256": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/run_rsi_h200.py",
+          "sha256": "9ef6201a52af8811d75eae0e084863d370b2d5d00f0472c7177dbab373ad06d4"
+        },
+        {
+          "path": "/home/ubuntu/okc/benchmarks/measurement.py",
+          "sha256": "2306238af49c263d6f2b3bf4313d8e8b712cbe8f36f789e32df29c0ec620b3ab"
+        },
+        {
+          "path": "/home/ubuntu/okc/serving/benchmark-contract.json",
+          "sha256": "ce8ce13b67f2335ff7a764f4b03ed590691f15eb1a909d5253ff560c82954efd"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/build_bundles.py",
+          "sha256": "5ee5701fa5b0958815884b74184780b2124f6b1158b5b2245f39dcf91ac68cfe"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/bundle-validation.json",
+          "sha256": "c3fe751b7907fe1ec8edff7c2dbdf10428a660a12964999b5b10c056f2bcb0e9"
+        },
+        {
+          "path": "/home/ubuntu/okc/results/rsi/wgmma-grid-dev-v2/sweep.json",
+          "sha256": "6af531e6959c53ca33ca7afe7ad2a029a35a2eefd380b8e5976a0aa3c9077ef9"
+        }
+      ],
+      "review_kind": "standalone_observational_admission_not_RSI_ledger_review",
+      "promotion_eligible": false,
+      "conditions": [
+        "Separate live root-owned300s canonical lease/sharedhostflock and actual GPUidle; terminal proof before release.",
+        "Current worker reference/inputimmutability/graph checks mandatory pervariant, including after importglue changes.",
+        "Only same-role unchangedSGLang cachepreseed into absenttarget, retain source/runtime dependencyvalidation; no forcedroutedJIT reuse.",
+        "Oneattempt, no retries, report all4shapes and failures; partialsuite/nonheldout/descriptive results only."
+      ],
+      "verified_delta": "Originalbundle unchanged except serving_moe shim, preservedoriginal adaptercopy, exactreviewed kernel/adapter plusimportglue and gridcap=16",
+      "prior_source_review": "docs/wgmma-persistent-v2-preflight.json",
+      "gpu_calls_by_reviewer": false,
+      "sweep_rules": "Fixed8->2->16order, shareddevelopmentseed930031, max15min/threeattempts. Changes in caps are adaptive-search observations, not independentmethod validation or calibratedwinnerclaim."
+    }
+  ]
+}

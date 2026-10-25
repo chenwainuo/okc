@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "reviewer": "measurement_audit",
+  "decision": "eligible_for_bounded_development_correctness_probe",
+  "source_hashes": {
+    "routed_down.cuh": "b190f65250f0a61618df41d746767e601301072a60309366e34a3dd8f6629e70",
+    "routed_adapter.py": "3fe4e64a349d38cd8c4daa1e741389d8140e32097ddd7abfe6cf62b038b51e9d",
+    "work_model.py": "55765790f9e84acaf771816a5a665dac059745e0bc34662c9a8410023fd367ef",
+    "work_model.json": "c43ac1b9f73d24480fca19d0900edc37eedce931db0afb599be0ec2342088ffd",
+    "check_full_expert.py": "6dddff95f11d6d023e9333c5972de037b21d558d19f0308d766cc4a66a4fbe38"
+  },
+  "checks": [
+    "All status hashes match; independently ran CPU scheduler partition checks.",
+    "K16 loop through epilogue text exactly identical to reviewedv1.",
+    "Static gridstride enumerates post-bounded tasks exactly once; task->position/channel bijection. CTA-uniform metadata returns leave other task iterations intact.",
+    "Last Kstep waits for GMMA and CTA sync before reuse; output epilogue uses registers, so next tile shared writes do not race prior shared reads.",
+    "Host max_tasks<=INT_MAX-4096 and grid_limit<=4096 guard signed loopincrement for scoped sizes.",
+    "Gridlimit computed duringprepare2*SMs, no GPUhost query introduced inside graph."
+  ],
+  "limits": [
+    "264CTAs on132SMH200 is engineering launch cap, not established occupancy or optimality.",
+    "Synthetic work_model counts conditional on routing histogram, not measured actual routes or DRAMbytes.",
+    "Still computes padding-only validexpert tiles and all256 K16steps; no latencygain inferred.",
+    "Trusted alignment metadata and fixedK4096/Nmultiple64 retained; arbitrary invalid API inputs not comprehensively covered.",
+    "Actual JITbinding and full reference/graph valid-empty-fresh must pass under v1 fixtures before performance investigation."
+  ],
+  "execution": "Fresh bounded root-owned canonicallease+hostflock, noGPUoverlap, exactsource/image/cacheprovenance, stoponfailure and verifyterminal. No promotion gates demanded for this observational correctnessprobe.",
+  "gpu_calls_by_reviewer": false
+}

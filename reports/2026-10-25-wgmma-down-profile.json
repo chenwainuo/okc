@@ -1,0 +1,137 @@
+{
+  "status": "profile_complete",
+  "scope": "one logicalM128 downkernel,3replaypasses; no benchmark latency claim",
+  "metadata": {
+    "scope": "observational Nsight counters; no benchmark timing",
+    "weight_seed": 920023,
+    "input_seed": 921151,
+    "batch": 128,
+    "input_sha256": "80830e26b4efa26693af1c22d1e3e255310943f302337365c0748ac69d1a24ef",
+    "full_expert_reference_pass": true,
+    "full_expert_detail": "relative L2 error 5.528e-03 (worst row 5.919e-03)",
+    "isolated_down_repeat_exact_pass": true,
+    "bundle_sha256": "25e677474e171c6858654bb0e2268b8773353efc8e21474292e4e0463eeb55b0",
+    "grid": [
+      64,
+      610,
+      1
+    ],
+    "block": [
+      128,
+      1,
+      1
+    ],
+    "total_ctas": 39040,
+    "local_expert_groups_of8": 52,
+    "all_padding_groups_of8": 16,
+    "useful_ctas": 2304,
+    "all_padding_ctas": 1024,
+    "padded_rows_in_local_groups": 225,
+    "captured_input_sha256": "f6fac10e7d768bac81e8a357f7822b603d33af4442aa5774089189b4ae1c3962",
+    "loaded_down_jit_libraries": {
+      "/cache/candidate/25e677474e171c6858654bb0e2268b8773353efc8e21474292e4e0463eeb55b0/sglang/sm90a/sgl_kernel_jit_rsi_wgmma_routed_down_e3a83da389f86464/build-60fa4d48f5777f49/deps-c4b860394c13bb29/sgl_kernel_jit_rsi_wgmma_routed_down_e3a83da389f86464.so": "01283d522dba25327d28b81ac0f8c01b177c0288e6193a759463c5a8e257046d"
+    },
+    "nonlocal_or_beyond_post_ctas": 35712,
+    "local_route_rows": 191,
+    "sorted_capacity": 4880,
+    "num_post": 1264,
+    "block_m": 16,
+    "cache_mode": "NCU cache-control all; kernel replay; not clean latency",
+    "source_pins": {
+      "bundle_sha256": "25e677474e171c6858654bb0e2268b8773353efc8e21474292e4e0463eeb55b0",
+      "files": {
+        "benchmarks/serving_moe.py": "2f471b71e24c07ce2f0b9f15b6caeac2d1326718ea0b7171ccbc0128aee43dfd",
+        "benchmarks/serving_wgmma_down.py": "77bebb4cdd3eb4bd550e6a3958e6e630eba2cfda1c3b6c26e08319abe96e820a",
+        "benchmarks/serving_moe_base.py": "13285ce5b3409d6080f46bbd9ba452b63711f906c12640246552b3145b32744a",
+        "benchmarks/routed_adapter.py": "c098f02c86a9f7128bf215665c866615277a9b0fef67ef1bf600d81330855dc7",
+        "benchmarks/routed_down.cuh": "e3a83da389f8646431e22009114143bc36d53dc4fa60296572f19d35babe71ae",
+        "muse_moe_w4a16/reference.py": "a7e0b4fa86aa477a4e7bb5745b2b258954d72636b6da153bd239a717927cba44"
+      },
+      "worker_sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5"
+    }
+  },
+  "metrics": {
+    "launch__grid_size": {
+      "value": "39,040",
+      "unit": ""
+    },
+    "launch__registers_per_thread": {
+      "value": "56",
+      "unit": "register/thread"
+    },
+    "launch__shared_mem_per_block": {
+      "value": "1.280000",
+      "unit": "Kbyte/block"
+    },
+    "sm__warps_active.avg.pct_of_peak_sustained_active": {
+      "value": "52.729038",
+      "unit": "%"
+    },
+    "smsp__warps_eligible.avg.per_cycle_active": {
+      "value": "0.595799",
+      "unit": "warp"
+    },
+    "dram__bytes_read.sum": {
+      "value": "220.452608",
+      "unit": "Mbyte"
+    },
+    "dram__bytes_write.sum": {
+      "value": "3.602688",
+      "unit": "Mbyte"
+    },
+    "smsp__warp_issue_stalled_barrier_per_warp_active.pct": {
+      "value": "3.651811",
+      "unit": "%"
+    },
+    "smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct": {
+      "value": "72.520945",
+      "unit": "%"
+    },
+    "sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed": {
+      "value": "0.636717",
+      "unit": "%"
+    }
+  },
+  "lease": {
+    "experiment": "WGMMA-PROFILE-v1",
+    "executor": "root",
+    "started_at": 1792892790.1417036,
+    "deadline_unix": 1792893090.1417036,
+    "reserved_usd": 0.4166666666666667,
+    "purpose": "observational single-kernel Nsight profile; remote staging verified",
+    "status": "complete",
+    "elapsed_seconds": 205.0079700946808,
+    "terminal_proof": {
+      "status": "terminal",
+      "container": "okc-wgmma-down-profile-v1",
+      "container_absent": true,
+      "client_exit_code": 0,
+      "observations": [
+        {
+          "argv": [
+            "docker",
+            "rm",
+            "-f",
+            "okc-wgmma-down-profile-v1"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "Error response from daemon: No such container: okc-wgmma-down-profile-v1\n"
+        },
+        {
+          "argv": [
+            "docker",
+            "inspect",
+            "okc-wgmma-down-profile-v1"
+          ],
+          "returncode": 1,
+          "stdout": "[]\n",
+          "stderr": "error: no such object: okc-wgmma-down-profile-v1\n"
+        }
+      ],
+      "root_instruction": "Close lease only if terminal proof passes; termination_unknown leaves canonical lease active and blocks further GPU work pending root reconciliation."
+    },
+    "accounted_usd": 0.28473329179816775
+  },
+  "interpretation": "High long-scoreboard waits and low tensoractivity despite substantial activewarp occupancy; investigate memoryload issue/latency and serialized K16 feed. Grid includes large rejected and padding-only work; counters do not prove scheduling-only fix ROI."
+}

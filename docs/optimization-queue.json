@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "ranking_policy": "Expected information/improvement per engineering and GPU cost; evidence-weighted ordinal estimates, not measured ROI. Feasible work first; nonpreemptive active measurement. Re-rank after each result.",
-  "runtime_state": "results/optimization-loop/state.json overrides snapshot status for executed items",
+  "ranking_policy": "Separate framework prerequisites from kernel experiments. Rank by actionable information/expected benefit versus engineering+GPU cost, using evidence-weighted ordinal judgments; uncalibrated probabilities and speedups remain unknown. Reviewed work is ready for admission, not evidence of gain. Root serializes GPU; no implicit lease or autonomous daemon.",
+  "runtime_state": "Snapshot only. Current root-owned canonical lease/process evidence and RSI ledger override this document; legacy results/optimization-loop/state.json applies only to its historical runs.",
   "lifecycle": [
     "profile",
     "measure baseline",
@@ -26,7 +26,7 @@
         "confidence": "high that counters improve diagnosis",
         "effort": "low"
       },
-      "next_action": "Prioritize coupled register lifetime/pipeline work and investigate dependency stalls; avoid occupancy-only claims.",
+      "next_action": "Use measured counters and allocation-vs-cache correction; incumbent exact-residency candidate remains unmeasured after rejected control. WGMMA v1 has separate measured counters.",
       "evidence": [
         "reports/2026-10-25-hardware-bs128.json",
         "reports/2026-10-25-hardware-bs8.json"
@@ -71,7 +71,7 @@
         "effort": "medium",
         "basis": "Selected GEMMs dominate; current selector maximizes occupancy, which need not minimize latency. Independent M tile sweep failed."
       },
-      "next_action": "Guarded batch512 tuning parked (~4% component gain); prioritize new narrow NVFP4 specialization on primary decode shapes.",
+      "next_action": "Narrow NVFP4 specialization also rejected. Preserve history; do not repeat tile sweep absent new evidence.",
       "validation": [
         "unchanged JIT control must match incumbent before alternative configs",
         "same source baseline and isolated candidate",
@@ -291,7 +291,7 @@
         "boundary and prefill noninferiority",
         "full serving gate before claiming serving gain"
       ],
-      "next_action": "Use selected-stack GEMM attribution to prioritize Q03; hardware occupancy counters still unmeasured.",
+      "next_action": "Attribution and incumbent hardware counters measured; use newer profiles and active_priority rather than repeating completed work.",
       "executor": "agent"
     },
     {
@@ -499,76 +499,303 @@
       ]
     }
   ],
-  "latest_result": "OCCUPANCY-v1 control rejected for unverifiedexclusivity, not provencontamination; knownprojectionlauncher nowsharesdeviceflock. WGMMA development20pairs4shapes measured0.15106x, correctbut6.6xslower; profile launchgrid/load/K16barriers before optimization.",
+  "latest_result": "Coalesced-v3 .43438x baseline; fixedpersistentgrid caps8/2/16 .15388/.10578/.14209x baseline. All4shapedevelopment regressions; no promotion, full3x goal unchanged. K64 grouping CPUcompiles46regs0spills, awaiting profile and GPUcorrectness.",
   "rsi_protocol": "rsi/protocol.json",
   "kernel_roi_details": "docs/kernel-rewrite-plan.json",
   "active_priority": [
     {
       "rank": 0,
-      "id": "RSI01",
-      "task": "Implement and independently review isolated paired worker runner",
-      "expected_speedup": "none directly; prerequisite for trustworthy global-kernel experiments",
-      "status": "validated full-suite unchanged control",
-      "next_action": "Use reviewed isolated runner for candidate screening and fresh holdouts"
+      "id": "INCUMBENT01",
+      "loop_layer": "framework_prerequisite",
+      "task": "Implement paired current-incumbent replacement contract while preserving fixed-anchor3x accounting",
+      "status": "gap_fail_closed",
+      "evidence": [
+        "rsi/ledger.py:347",
+        "docs/rsi-agent-framework.json"
+      ],
+      "prerequisites": [
+        "Independent evaluator/schema review",
+        "Frozen anchor and current-incumbent identities"
+      ],
+      "roi_estimate": {
+        "expected_benefit": "Prevents promoting a weaker anchor-beater over stronger current incumbent; enables trustworthy cumulative progress",
+        "speedup_prior": "not applicable: validation prerequisite, no direct kernel speedup claimed",
+        "confidence": "ordinal priority judgment, not measured ROI",
+        "cost": "CPU implementation/review; GPU evidence only after reviewed paired contract",
+        "serving_gain": "unknown"
+      },
+      "stop_criteria": "Do not weaken existing promotion guard; reject missing/stale/incorrect-incumbent evidence",
+      "next_handoff": "framework implementer \u2192 independent measurement reviewer \u2192 root integration",
+      "promotion_scope": "Prerequisite for replacing an existing different incumbent; beating fixed anchor alone insufficient"
     },
     {
       "rank": 1,
-      "id": "OCCUPANCY-v1",
-      "task": "Replace conservative register estimate with exact residency query for scoped Hopper NVFP4 EP tiles",
-      "conditional_expert_speedup_prior": [
-        1.0,
-        1.3
+      "id": "METHOD01",
+      "loop_layer": "optimizer_outer_loop",
+      "task": "Freeze optimizer-method portfolio evaluator before claiming RSI-method improvement",
+      "status": "design_defined_evaluator_not_implemented",
+      "evidence": [
+        "docs/rsi-agent-framework.json",
+        "rsi/ledger.py:340"
       ],
-      "confidence": "low",
-      "status": "v1 rejected oncontrolprovenance; freshreviewed plan required aftercoordination repair",
-      "caveat": "Actualchosen residency unknown; baseline4stages unchanged. Allocated shared memory is not minimalcache requirement."
+      "prerequisites": [
+        "Frozen representative tasks/weights/budgets/seeds",
+        "Unchanged kernel correctness and promotion gates",
+        "Independent review of utility and cost accounting"
+      ],
+      "roi_estimate": {
+        "expected_benefit": "Distinguishes better search policy from a lucky kernel win; no direct kernel speedup",
+        "speedup_prior": "not applicable: validation prerequisite, no direct kernel speedup claimed",
+        "confidence": "ordinal priority judgment, not measured ROI",
+        "cost": "CPU specification/implementation first; trial budget unknown until preregistered",
+        "serving_gain": "unknown"
+      },
+      "stop_criteria": "No optimizer promotion from local kernel results; include failures and no-gain outcomes; do not run expensive portfolio before review",
+      "next_handoff": "framework implementer proposes frozen evaluator \u2192 independent reviewer \u2192 root admits bounded trial",
+      "promotion_scope": "Prerequisite for optimizer-method promotion; kernel trial evidence insufficient"
     },
     {
       "rank": 2,
-      "id": "Q14-pipeline3-v5",
-      "task": "MoE-specific pipeline/register specialization",
-      "conditional_expert_speedup_prior": [
-        1.05,
-        1.2
+      "id": "WGMMA-COALESCED-DEV-v3",
+      "loop_layer": "kernel_inner_loop",
+      "task": "Measure isolated lossless lane-coalesced FP4/scales layout with v1 direct grid and K16 loop",
+      "status": "rejected",
+      "evidence": [
+        "reports/2026-10-25-wgmma-coalesced-correctness.json",
+        "docs/wgmma-coalesced-dev-v3-preflight.json",
+        "results/rsi/wgmma-coalesced-dev-v3/plan.json",
+        "docs/wgmma-profile-interpretation.json",
+        "reports/2026-10-25-wgmma-coalesced-development.json"
       ],
-      "confidence": "low-medium",
-      "status": "rejected compile; tile-scoped revision in development"
+      "prerequisites": [
+        "Root live standalone lease and verified idle GPU",
+        "Exact reviewed archive/dependencies/privatecache",
+        "Worker correctness after final import glue"
+      ],
+      "roi_estimate": {
+        "expected_benefit": "Highest ready operand-load hypothesis: directly tests dominant long-scoreboard diagnosis; may recover v1 regression, not necessarily beat incumbent",
+        "speedup_prior": "unknown; uncalibrated unless explicitly stated",
+        "confidence": "ordinal priority judgment, not measured ROI",
+        "cost": "One \u2264300s GPU admission;20pairs\u00d74shapes; \u2264$0.4167 reservation at$5/hour",
+        "serving_gain": "unknown"
+      },
+      "stop_criteria": "Compile/correctness/nonfinite/timeout/ownership failure: stop, retain evidence, verify terminal processes; no automatic retry, extra seeds or promotion.",
+      "next_handoff": "root executor \u2192 independent measurement reviewer \u2192 rerank from per-shape raw pairs; no serving claim",
+      "measured_development_geomean": 0.4343848276427362,
+      "next_action": "No promotion. Separate profile of coalesced source before any further performance trial; K64 candidate CPU feasibility only."
     },
     {
       "rank": 3,
-      "id": "R03",
-      "task": "Complete-K scheduling plus compact metadata",
-      "conditional_expert_speedup_prior": [
-        1.05,
-        1.25
+      "id": "WGMMA-GRID-DEV-v2",
+      "loop_layer": "kernel_inner_loop",
+      "task": "Measure persistent scheduling caps in fixed8\u21922\u219216SM order, exact same kernel math",
+      "status": "rejected",
+      "evidence": [
+        "reports/2026-10-25-wgmma-persistent-correctness.json",
+        "docs/wgmma-grid-dev-v2-preflight.json",
+        "results/rsi/wgmma-grid-dev-v2/sweep.json",
+        "docs/wgmma-profile-interpretation.json",
+        "reports/2026-10-25-wgmma-grid-development.json"
       ],
-      "confidence": "low",
-      "status": "rejected on screen:0.99890x primary; no holdouts"
+      "prerequisites": [
+        "Root individual livelease/review percap",
+        "Fresh seed930031,20pairs\u00d74shapes",
+        "Canonical GPU owner excludes profiling/other runs"
+      ],
+      "roi_estimate": {
+        "expected_benefit": "Separates dispatch savings from loss of latency hiding.2SM cap can reduce available warps from observed33.75 to8;8/16SM controls informative",
+        "speedup_prior": "unknown; uncalibrated unless explicitly stated",
+        "confidence": "ordinal priority judgment, not measured ROI",
+        "cost": "Up to3\u00d7300s; oneattempt/cap; \u2264$1.25 aggregate reservation; stop on execution/correctness fault",
+        "serving_gain": "unknown"
+      },
+      "stop_criteria": "Compile/correctness/nonfinite/timeout/ownership failure: stop, retain evidence, verify terminal processes; no automatic retry, extra seeds or promotion. Ordinary timing regression does not change preregistered remaining cap order.",
+      "next_handoff": "root executor \u2192 reviewer reports all admitted caps and failures; fixed inter-cap order limits causal comparisons",
+      "measured_development_geomeans": {
+        "8SM": 0.15387856758638613,
+        "2SM": 0.10577643516948036,
+        "16SM": 0.1420898274419536
+      },
+      "next_action": "Allcaps regress; do not expand grid sweep. Retain CPUcompile overlap caveat for8SM; no timing contamination established."
     },
     {
       "rank": 4,
-      "id": "R04",
-      "task": "Bounded Hopper WGMMA rewrite",
-      "conditional_expert_speedup_prior": [
-        1.1,
-        1.6
+      "id": "OCCUPANCY-v2-REVIEW",
+      "loop_layer": "kernel_inner_loop",
+      "task": "Refresh exact-residency experiment after coordination repair; require accepted unchanged control",
+      "status": "needs_new_review_and_control",
+      "evidence": [
+        "reports/2026-10-25-occupancy.json",
+        "docs/occupancy-v1-control-provenance-review.json",
+        "results/rsi/candidates/pipeline3-scoped/analysis.json"
       ],
-      "confidence": "low",
-      "status": "initialdownprototype measured0.15106x; profiling andpersistent-grid v2 inpreparation",
-      "measured_development_speedup": 0.15106107093193985,
-      "measured_scope": "partial4shape20pair; notpromotioneligible"
+      "prerequisites": [
+        "New reviewed plan/control seed",
+        "Root verified shared-lock ownership for all known launchers",
+        "Actual residency diagnostic separate from clean timing"
+      ],
+      "roi_estimate": {
+        "expected_benefit": "Low-cost dispatch hypothesis on current incumbent, independent of slower WGMMA prototype; prior candidate never received accepted timing",
+        "speedup_prior": "unknown; uncalibrated unless explicitly stated",
+        "confidence": "ordinal priority judgment, not measured ROI",
+        "cost": "CPU review then bounded control/screen cost must be preregistered",
+        "serving_gain": "unknown"
+      },
+      "stop_criteria": "Compile/correctness/nonfinite/timeout/ownership failure: stop, retain evidence, verify terminal processes; no automatic retry, extra seeds or promotion. No reuse of rejected exclusivity evidence.",
+      "next_handoff": "root proposal \u2192 independent reviewer \u2192 admitted control; candidate timing only after control passes"
     },
     {
       "rank": 5,
-      "id": "R05",
-      "task": "Gate/up epilogue plus SwiGLU fusion",
-      "conditional_expert_speedup_prior": [
-        1.01,
-        1.06
+      "id": "WGMMA-ALLPAD",
+      "loop_layer": "kernel_inner_loop",
+      "task": "Isolate uniform all-padding subgroup rejection after current frozen experiments",
+      "status": "design_only_not_implemented",
+      "evidence": [
+        "docs/wgmma-profile-interpretation.json",
+        "results/rsi/candidates/wgmma-persistent-v2/padded_subtile_design.json"
       ],
-      "confidence": "low-medium",
-      "status": "deferred until co-owned output tiles feasible"
+      "prerequisites": [
+        "Keep reviewed v2/v3 archives unchanged",
+        "New isolated candidate/review",
+        "Preserve partially valid groups and outputzeroing/emptygraph semantics"
+      ],
+      "roi_estimate": {
+        "expected_benefit": "M128 fixture has16/52 fullK groups entirelypadding. Equal-cost model52/36=1.444x down-only if these dominate; not forecast, bound or expert/serving estimate",
+        "speedup_prior": "unknown; uncalibrated unless explicitly stated",
+        "confidence": "ordinal priority judgment, not measured ROI",
+        "cost": "Small implementation plus correctness and new screen; GPU budget not yet specified",
+        "serving_gain": "unknown"
+      },
+      "stop_criteria": "Compile/correctness/nonfinite/timeout/ownership failure: stop, retain evidence, verify terminal processes; no automatic retry, extra seeds or promotion. Reject partialvalid-group omission or graph-empty corruption.",
+      "next_handoff": "kernel implementer \u2192 independent source+oracle review \u2192 root admission"
+    },
+    {
+      "rank": 6,
+      "id": "WGMMA-K64",
+      "loop_layer": "kernel_inner_loop",
+      "task": "Design bounded K64 pipelining/load reuse using measured layout/grid findings",
+      "status": "cpu_compile_pass_gpu_unproven",
+      "evidence": [
+        "docs/wgmma-profile-interpretation.json",
+        "serving/experiments/wgmma_variants/wgmma-pipeline-v4/status.json"
+      ],
+      "prerequisites": [
+        "Observe v3layout and v2grid effects before combining",
+        "SASS/L1-sector diagnosis if ambiguity remains",
+        "Pinned rounding/FP32 accumulation and noBF16 weightbank"
+      ],
+      "roi_estimate": {
+        "expected_benefit": "Targets256 serialized K16 steps and immediate wait_group0; major prototype recovery possible but magnitude unknown",
+        "speedup_prior": "unknown; uncalibrated unless explicitly stated",
+        "confidence": "ordinal priority judgment, not measured ROI",
+        "cost": "Medium/high engineering; GPU cost unknown until bounded candidate exists",
+        "serving_gain": "unknown"
+      },
+      "stop_criteria": "Compile/correctness/nonfinite/timeout/ownership failure: stop, retain evidence, verify terminal processes; no automatic retry, extra seeds or promotion. No speculative combined rewrite without attributable baseline.",
+      "next_handoff": "kernel implementer submits one bounded hypothesis and immutable variant",
+      "next_action": "Coalesced-v3 profile completed. Obtain independent source review; run reviewed GPU correctness before any new performance screen."
+    },
+    {
+      "rank": 7,
+      "id": "Q14-pipeline3-SCOPED",
+      "loop_layer": "kernel_inner_loop",
+      "task": "Revisit legal scoped stage3 Marlin variant only with renewed evidence",
+      "status": "parked_unmeasured",
+      "evidence": [
+        "results/rsi/candidates/pipeline3-scoped/analysis.json",
+        "docs/rsi-q14-v5-preflight.json"
+      ],
+      "prerequisites": [
+        "Preserve epilogue shared-capacity assertion",
+        "Consistent host/template stage policy",
+        "Compile and odd-ring correctness proof"
+      ],
+      "roi_estimate": {
+        "expected_benefit": "Potential resource/scheduling improvement; blanket3-stage variant failed compile, and4-stage minimumcache already fits4CTAs",
+        "speedup_prior": "unknown; uncalibrated unless explicitly stated",
+        "confidence": "ordinal priority judgment, not measured ROI",
+        "cost": "Medium validation effort; lower present information ROI",
+        "serving_gain": "unknown"
+      },
+      "stop_criteria": "Compile/correctness/nonfinite/timeout/ownership failure: stop, retain evidence, verify terminal processes; no automatic retry, extra seeds or promotion.",
+      "next_handoff": "root reranks only after executable higher-information tests"
     }
   ],
-  "estimate_contract": "Conditional engineering priors for whole expert component vs current selected incumbent; not measured, not additive, regressions possible; full serving estimates unavailable."
+  "estimate_contract": "Current ranking is advisory ordinal information/benefit per cost; no calibrated expected-gain probabilities. Old item priors remain historical hypotheses, not forecasts after rejection. Expert/down-kernel gains cannot be equated with serving gains. Partial development plans have no promotion eligibility.",
+  "snapshot_date_utc": "2026-10-25",
+  "latest_evidence": [
+    {
+      "scope": "measured_development_performance",
+      "path": "reports/2026-10-25-wgmma-down-development.json",
+      "result": "0.1510610709x vs baseline-v2;20pairs4shapes; not promotion eligible"
+    },
+    {
+      "scope": "profile_only",
+      "path": "reports/2026-10-25-wgmma-down-profile.json",
+      "interpretation": "docs/wgmma-profile-interpretation.json",
+      "result": "39040CTAs=2304useful+1024allpadding+35712rejected;9CTA register residency limit; DRAM bytes do not establish coalescing or saturation"
+    },
+    {
+      "scope": "correctness_only",
+      "path": "reports/2026-10-25-wgmma-persistent-correctness.json",
+      "result": "routed5+full9 development checks pass; no timing"
+    },
+    {
+      "scope": "correctness_only",
+      "path": "reports/2026-10-25-wgmma-coalesced-correctness.json",
+      "result": "routed/full development checks pass; no timing"
+    },
+    {
+      "scope": "reviewed_plan_not_executed",
+      "path": "docs/wgmma-grid-dev-v2-preflight.json",
+      "result": "8\u21922\u219216SM cap sweep reviewed; seed930031;20pairs4shapes"
+    },
+    {
+      "scope": "reviewed_plan_not_executed",
+      "path": "docs/wgmma-coalesced-dev-v3-preflight.json",
+      "result": "lossless load-layout isolated from scheduling; seed940033;20pairs4shapes"
+    }
+  ],
+  "framework_readiness": {
+    "paired_worker": "Implemented and previously full-suite unchanged control validated; acceptance is per experiment, not blanket guarantee",
+    "replacement_evaluator": "Missing; fail-closed guard must remain",
+    "optimizer_portfolio_evaluator": "Missing; specification is not execution evidence",
+    "execution_model": "Agent-directed supervisor with explicit role handoffs; no persistent autonomous daemon",
+    "authority": "rsi/protocol.json, immutable reviewed plans, canonical GPU lease/process evidence"
+  },
+  "history_append": [
+    {
+      "id": "Q14-pipeline3-v5",
+      "outcome": "compile_rejected_no_timings",
+      "reason": "Blanket3-stage epilogue shared-capacity static assertions fail",
+      "evidence": "docs/rsi-q14-v5-preflight.json"
+    },
+    {
+      "id": "FULLK10-v1",
+      "outcome": "screen_rejected",
+      "primary_speedup": 0.9989029731481105,
+      "holdouts_run": 0,
+      "evidence": "reports/2026-10-25-fullk10.json"
+    },
+    {
+      "id": "OCCUPANCY-v1",
+      "outcome": "control_not_accepted_exclusivity_unverified",
+      "candidate_runs": 0,
+      "reason": "Unknown overlapping GPU usage is not proven contamination",
+      "evidence": "reports/2026-10-25-occupancy.json"
+    },
+    {
+      "id": "WGMMA-DOWN-v1",
+      "outcome": "correct_but_development_performance_regression",
+      "primary_speedup": 0.15106107093193985,
+      "evidence": "reports/2026-10-25-wgmma-down-development.json"
+    }
+  ],
+  "items_role": "Retained historical/backlog records. Their original rank and priors do not override active_priority; rejected entries stay rejected.",
+  "next_kernel_action": {
+    "task": "independent review and GPU correctness for K64 grouping, then preregister matched performance screen if correct",
+    "prerequisite_completed": "coalesced-v3 separate profile;54.5%longscoreboard,11.9%barrier,2.76%tensor activity; profiler timing excluded",
+    "candidate": "serving/experiments/wgmma_variants/wgmma-pipeline-v4",
+    "scope": "No correctness/performance claim yet; increased46registers may reduce occupancy"
+  }
 }

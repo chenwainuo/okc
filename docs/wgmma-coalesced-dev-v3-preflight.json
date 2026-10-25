@@ -1,0 +1,113 @@
+{
+  "id": "wgmma-coalesced-dev-v3",
+  "author": "root",
+  "state": "reviewed",
+  "plan": {
+    "kind": "kernel",
+    "purpose": "developmental characterization; partialsuite, not promotion eligible",
+    "promotion_eligible": false,
+    "hypothesis": "Characterize lossless lane-coalesced FP4/scales only, preserving direct v1 grid and K16 steps. GPU development correctness passed; performance unknown.",
+    "suite": [
+      8,
+      32,
+      128,
+      256
+    ],
+    "screen_seeds": [
+      940033
+    ],
+    "holdout_seeds": [],
+    "min_pairs": 20,
+    "max_gpu_minutes": 5,
+    "baseline": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+    "candidate": "/home/ubuntu/okc/results/rsi/bundles/wgmma-coalesced-v3.tar.gz",
+    "baseline_anchor_source": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+    "baseline_isolation": "immutable_tree",
+    "dependencies": [
+      "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+      "/home/ubuntu/okc/results/rsi/bundles/wgmma-coalesced-v3.tar.gz.manifest.json",
+      "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+      "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+      "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+      "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+      "/home/ubuntu/okc/benchmarks/run_rsi_h200.py",
+      "/home/ubuntu/okc/benchmarks/measurement.py",
+      "/home/ubuntu/okc/serving/benchmark-contract.json"
+    ],
+    "execution_note": "Existing rsi_pair through run_rsi_h200, serialized AB/BA isolated workers; fresh worker eager/reference/empty/graph checks mandatory after importglue revision. Root provides independent reviewed plan and live matching lease. No ledger validation/promotion ingestion: missing fullsuite and independent holdouts. Hard pilot timeout300s; use verified same-role candidatebaseline SGLang preseed if targetabsent to reduce unchangedbaseline compilation. Root checks livelease remaining andidleGPU.",
+    "stop_policy": "One bounded run only; on compile/correctness/nonfinite/timeout/ownership failure abort, verify container/process termination, retain failure evidence. No automatic retries or additional seeds.",
+    "measurement": "20 raw paired graph replay samples per shape; cold128MiB flush; matched actual inputbytes, everytimedoutput officialreferencechecked. Report all4shapes, rawarrays and descriptivegeomean; no calibratedsignificance/promotion claim.",
+    "next_decision": "If slow, attribute downprojection/kernel costs with new separate profiled run before changes; prioritize canonical load coalescing and K64 buffering. If faster, require fullsuite+independent holdouts and unchangedcontrol under new reviewed plan."
+  },
+  "plan_sha256": "60d15f2cef6c1bc795b20effeaa6b3ff6dc09a75aa043a214344b9bab6805a37",
+  "preflight_reviewer": "measurement_audit",
+  "preflight_checklist": {
+    "baseline_bundle_complete": true,
+    "candidate_bundle_complete": true,
+    "baseline_isolated": true,
+    "hypothesis_falsifiable": true,
+    "suite_and_holdouts_frozen": true,
+    "precision_preserved": true,
+    "scope": "Standalone development only; exact4shape and explicitly empty holdout set frozen, not fullRSI promotion.",
+    "promotion_eligible": false,
+    "maximum_seconds": 300,
+    "maximum_runs": 1
+  },
+  "artifacts": [
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/wgmma-coalesced-v3.tar.gz",
+      "sha256": "90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087"
+    },
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz",
+      "sha256": "a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab"
+    },
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+      "sha256": "a6405ec90466bbc5c13458382e6c5c6480dadecbbaf10feacd46b2101146f6a9"
+    },
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/wgmma-coalesced-v3.tar.gz.manifest.json",
+      "sha256": "73b2440082888ea426c59aa1cc95e7d30a6391c55b508b7c7002164c7db73df4"
+    },
+    {
+      "path": "/home/ubuntu/okc/results/rsi/bundles/baseline_expert.py",
+      "sha256": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/rsi_worker.py",
+      "sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/rsi_pair.py",
+      "sha256": "713d5d43e4e14162f3133f77f668fd8c6d27fbfcca4d6bd341c276faf3348449"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/rsi_bundle.py",
+      "sha256": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/run_rsi_h200.py",
+      "sha256": "9ef6201a52af8811d75eae0e084863d370b2d5d00f0472c7177dbab373ad06d4"
+    },
+    {
+      "path": "/home/ubuntu/okc/benchmarks/measurement.py",
+      "sha256": "2306238af49c263d6f2b3bf4313d8e8b712cbe8f36f789e32df29c0ec620b3ab"
+    },
+    {
+      "path": "/home/ubuntu/okc/serving/benchmark-contract.json",
+      "sha256": "ce8ce13b67f2335ff7a764f4b03ed590691f15eb1a909d5253ff560c82954efd"
+    }
+  ],
+  "review_kind": "standalone_observational_admission_not_RSI_ledger_review",
+  "promotion_eligible": false,
+  "conditions": [
+    "Separate live root-owned300s canonical lease/sharedhostflock and actual GPUidle; terminal proof before release.",
+    "Current worker reference/inputimmutability/graph checks mandatory pervariant, including after importglue changes.",
+    "Only same-role unchangedSGLang cachepreseed into absenttarget, retain source/runtime dependencyvalidation; no forcedroutedJIT reuse.",
+    "Oneattempt, no retries, report all4shapes and failures; partialsuite/nonheldout/descriptive results only."
+  ],
+  "verified_delta": "Originalbundle unchanged except serving_moe shim, preservedoriginal adaptercopy, exactreviewed kernel/adapter plusimportglue",
+  "prior_source_review": "docs/wgmma-coalesced-v3-preflight.json",
+  "gpu_calls_by_reviewer": false
+}

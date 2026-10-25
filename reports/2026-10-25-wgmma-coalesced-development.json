@@ -1,0 +1,189 @@
+{
+  "status": "development_measurement_complete_regression",
+  "reviewer": "measurement_audit",
+  "scope": "20pairedsamples per4primaryshapes, one developmentseed940033; notpromotioneligible",
+  "promotion_eligible": false,
+  "decision": "Do not promote or spend holdouts on currentv3; allshape matchedbaseline results are regressions. Use separate profile/ablation before claiming mechanism or further optimization.",
+  "rows": [
+    {
+      "bs": 8,
+      "baseline_median_us": 124.11199882626534,
+      "candidate_median_us": 307.0400059223175,
+      "balanced_speedup": 0.39536581295096856,
+      "order_balanced_blocks": 10,
+      "bootstrap_95": [
+        0.36065664858510743,
+        0.41158249407377134
+      ],
+      "assessment": "regression"
+    },
+    {
+      "bs": 32,
+      "baseline_median_us": 207.3119953274727,
+      "candidate_median_us": 492.75200068950653,
+      "balanced_speedup": 0.4257144991822329,
+      "order_balanced_blocks": 10,
+      "bootstrap_95": [
+        0.4138472573343442,
+        0.43222378296642733
+      ],
+      "assessment": "regression"
+    },
+    {
+      "bs": 128,
+      "baseline_median_us": 355.3759902715683,
+      "candidate_median_us": 789.9680137634277,
+      "balanced_speedup": 0.4560797299764299,
+      "order_balanced_blocks": 10,
+      "bootstrap_95": [
+        0.44756749595014594,
+        0.46486519696811984
+      ],
+      "assessment": "regression"
+    },
+    {
+      "bs": 256,
+      "baseline_median_us": 476.78399085998535,
+      "candidate_median_us": 1046.176016330719,
+      "balanced_speedup": 0.46381016705949557,
+      "order_balanced_blocks": 10,
+      "bootstrap_95": [
+        0.45769589186033016,
+        0.4663303735878714
+      ],
+      "assessment": "regression"
+    }
+  ],
+  "primary_geomean_balanced_speedup": 0.4343848276427362,
+  "baseline_over_candidate_ratio_definition": "<1 means candidate slower. Ratios recomputed from rawAB/BA pairs using frozen measurement.py; geometricmean across allfourshapes.",
+  "source_report": "results/rsi/wgmma-coalesced-dev-v3/development-940033.json",
+  "source_report_sha256": "a1807cf86c1596211947520eb60a678698044d3d2eec2aa63c7fdcf398c2b2a5",
+  "plan_sha256": "60d15f2cef6c1bc795b20effeaa6b3ff6dc09a75aa043a214344b9bab6805a37",
+  "evidence_hashes": {
+    "results/rsi/wgmma-coalesced-dev-v3/development-940033.json": "a1807cf86c1596211947520eb60a678698044d3d2eec2aa63c7fdcf398c2b2a5",
+    "results/rsi/wgmma-coalesced-dev-v3/development-940033.correctness.json": "54ce7c372c934b70aaf8da53f5db857ade96e16fa4149fc8c55f938b5a9d7d76",
+    "results/rsi/wgmma-coalesced-dev-v3/development-940033.process.json": "ffe691b6f53a6b2240e8d6a265d4c6c6764dede3bd80a2858c3f37c1a0669fd3",
+    "results/rsi/wgmma-coalesced-dev-v3/ownership-observations.json": "0b8c553098569e6c65786e4eb0a285479c82c81d641243bb249b417b7bc3b86f",
+    "results/rsi/wgmma-coalesced-dev-v3/lease-record.json": "b0db7840b10ec2782d78e6fd29b02b3e78964a334cb241d7ca00b6d142022f10",
+    "results/rsi/wgmma-coalesced-dev-v3/review.json": "0eaf3832dfc408268b0448d3f0dde89c2da1282ba615e823771a2d4a9c41cd1b"
+  },
+  "candidate_archive_sha256": "90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087",
+  "baseline_archive_sha256": "a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab",
+  "environment": {
+    "gpu_uuid": "GPU-fa9b7c07-ca7c-1ae6-16af-ea31a02fa469",
+    "driver": "595.99.02",
+    "torch": "2.14.1+cu130",
+    "cuda": "13.0",
+    "container_digest": "sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
+    "exclusive_gpu": true
+  },
+  "validation": {
+    "all_reviewed_artifact_hashes_unchanged": true,
+    "source_fixture_imports_and_privatecache_paths_verified": true,
+    "runner_worker_plan_dependencies_verified": true,
+    "exact_input_pair_fingerprints_and_orders_verified": true,
+    "reference_pass": true,
+    "input_immutable_pass": true,
+    "reference_cases_total": 178,
+    "input_fingerprint_checks": 84,
+    "worker_evidence": {
+      "baseline": {
+        "counts": {
+          "reference_cases": 89,
+          "eager_reference_cases": 5,
+          "captured_valid_cases": 4,
+          "timed_reference_cases": 80,
+          "empty_local_eager_cases": 1,
+          "empty_local_graph_cases": 4,
+          "input_immutability_checks": 98
+        },
+        "clean_exit": true,
+        "jit_libraries": {
+          "/cache/baseline/a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab/sglang/sm90a/sgl_kernel_jit_moe_wna16_marlin_bf16_t_true_false/build-58ff30bcd1580202/deps-7aa675e1601d6128/sgl_kernel_jit_moe_wna16_marlin_bf16_t_true_false.so": {
+            "so_sha256": "7bda2651e2e13b211d3edc9b61d459d128b7ebfce08bd4674646d019cf0399c4",
+            "dependency_manifest": "/cache/baseline/a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab/sglang/sm90a/sgl_kernel_jit_moe_wna16_marlin_bf16_t_true_false/build-58ff30bcd1580202/deps-7aa675e1601d6128/sgl_deps.json",
+            "dependency_manifest_sha256": "9e658ccf912093c7f51b7af879159f7ef30165ec204a396e7801e809e895c785"
+          },
+          "/cache/baseline/a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab/sglang/sm90a/sgl_kernel_jit_activation_bf16_t_true/build-c19885d21a4a8f22/deps-afb95efcf2a7bd4b/sgl_kernel_jit_activation_bf16_t_true.so": {
+            "so_sha256": "a968aa555b400486f3fecfe4ab13090e79f57ff1fce0aca73f6965201d17df0e",
+            "dependency_manifest": "/cache/baseline/a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab/sglang/sm90a/sgl_kernel_jit_activation_bf16_t_true/build-c19885d21a4a8f22/deps-afb95efcf2a7bd4b/sgl_deps.json",
+            "dependency_manifest_sha256": "64fe2770ce5fc1f264bae296e16caf611aad43608bc8236e8e5e0338e092b726"
+          },
+          "/cache/baseline/a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab/sglang/sm90a/sgl_kernel_jit_gptq_marlin_repack/build-3006ce8f23bb4cfd/deps-ab9fcbe3c8b2ee75/sgl_kernel_jit_gptq_marlin_repack.so": {
+            "so_sha256": "f6c9b8979e428822d38c80b2d130ed69e504a3c4752a5f5ae3221bb98c5b7391",
+            "dependency_manifest": "/cache/baseline/a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab/sglang/sm90a/sgl_kernel_jit_gptq_marlin_repack/build-3006ce8f23bb4cfd/deps-ab9fcbe3c8b2ee75/sgl_deps.json",
+            "dependency_manifest_sha256": "03e8e08f0fd0969deb7eb8edb6e9b9cbea5dd5e5445220db826e05b5cd9f2602"
+          }
+        }
+      },
+      "candidate": {
+        "counts": {
+          "reference_cases": 89,
+          "eager_reference_cases": 5,
+          "captured_valid_cases": 4,
+          "timed_reference_cases": 80,
+          "empty_local_eager_cases": 1,
+          "empty_local_graph_cases": 4,
+          "input_immutability_checks": 98
+        },
+        "clean_exit": true,
+        "jit_libraries": {
+          "/cache/candidate/90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087/sglang/sm90a/sgl_kernel_jit_moe_wna16_marlin_bf16_t_true_false/build-58ff30bcd1580202/deps-7aa675e1601d6128/sgl_kernel_jit_moe_wna16_marlin_bf16_t_true_false.so": {
+            "so_sha256": "19d76c0b7a137ec38c28a4dd2f3f4275b483101bde52ad32587b5a06378a990c",
+            "dependency_manifest": "/cache/candidate/90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087/sglang/sm90a/sgl_kernel_jit_moe_wna16_marlin_bf16_t_true_false/build-58ff30bcd1580202/deps-7aa675e1601d6128/sgl_deps.json",
+            "dependency_manifest_sha256": "9e658ccf912093c7f51b7af879159f7ef30165ec204a396e7801e809e895c785"
+          },
+          "/cache/candidate/90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087/sglang/sm90a/sgl_kernel_jit_activation_bf16_t_true/build-c19885d21a4a8f22/deps-afb95efcf2a7bd4b/sgl_kernel_jit_activation_bf16_t_true.so": {
+            "so_sha256": "03b6700f46e7f3ca41743a2d12c4f98c7536eab5adf887466ec4319cf38af418",
+            "dependency_manifest": "/cache/candidate/90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087/sglang/sm90a/sgl_kernel_jit_activation_bf16_t_true/build-c19885d21a4a8f22/deps-afb95efcf2a7bd4b/sgl_deps.json",
+            "dependency_manifest_sha256": "64fe2770ce5fc1f264bae296e16caf611aad43608bc8236e8e5e0338e092b726"
+          },
+          "/cache/candidate/90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087/sglang/sm90a/sgl_kernel_jit_gptq_marlin_repack/build-3006ce8f23bb4cfd/deps-ab9fcbe3c8b2ee75/sgl_kernel_jit_gptq_marlin_repack.so": {
+            "so_sha256": "a473f52d44c16effdd4268974d1a3ba6dd2c43dcd403211aff8a05d217e700cd",
+            "dependency_manifest": "/cache/candidate/90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087/sglang/sm90a/sgl_kernel_jit_gptq_marlin_repack/build-3006ce8f23bb4cfd/deps-ab9fcbe3c8b2ee75/sgl_deps.json",
+            "dependency_manifest_sha256": "03e8e08f0fd0969deb7eb8edb6e9b9cbea5dd5e5445220db826e05b5cd9f2602"
+          },
+          "/cache/candidate/90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087/sglang/sm90a/sgl_kernel_jit_rsi_wgmma_coalesced_down_28ad39648ed3ad77/build-cb3f187d99d3444c/deps-a2bea184a2162343/sgl_kernel_jit_rsi_wgmma_coalesced_down_28ad39648ed3ad77.so": {
+            "so_sha256": "5621fc96013d6ea4cd2a81d870d187702ce82ec1f83bf6645ab02f8601a23052",
+            "dependency_manifest": "/cache/candidate/90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087/sglang/sm90a/sgl_kernel_jit_rsi_wgmma_coalesced_down_28ad39648ed3ad77/build-cb3f187d99d3444c/deps-a2bea184a2162343/sgl_deps.json",
+            "dependency_manifest_sha256": "f74abba9a171bedee7384c24c38da3a0e9629b7996f94a977fb3ae96e87bf9ea"
+          }
+        }
+      }
+    },
+    "report_bound_correctness": true
+  },
+  "ownership": {
+    "scope": "sampled evidence plus cooperativehostlock; not continuousproofagainstunrelatedrootprocess",
+    "sample_count": 43,
+    "poll_interval_seconds": 1,
+    "first_time": 1792894398.8397899,
+    "last_time": 1792894441.7437959,
+    "max_observed_gap_seconds": 1.0333545207977295,
+    "foreign_or_unresolved_observed": false,
+    "terminal_proof": {
+      "container": "okc-rsi-362ce62843c8",
+      "experiment": "WGMMA-COALESCED-DEV-v3",
+      "status": "terminal",
+      "client_returncode": 0,
+      "container_absent": true,
+      "launcher_and_observer_absent": true,
+      "gpu_compute_pids": []
+    }
+  },
+  "accounting": {
+    "elapsed_seconds": 84.65239834785461,
+    "accounted_usd": 0.11757277548313141,
+    "deadline_exceeded": false,
+    "billing_scope": "activeleasewalltime; provideridlecost andagenttokens excluded"
+  },
+  "limitations": [
+    "Noholdouts orfull14suite; cannot validate3xgoal or officialserving performance.",
+    "CI describes withinrunAB/BA blockresampling only; developmentselection and crosssession variation not covered.",
+    "Priorv1 uses differentseed/session; do not report v3-v1matchedgain or attribute improvements fromcrossseed comparison.",
+    "Actualloaded JITidentity is workerattested; localreview verified hashestructure/provenance/stability, notremoteobjectbytes.",
+    "Weightbytefingerprints notcollected; pinnedfixture/runtime/seed and officialreference validation used.",
+    "Nohardwarecounterprofile ofv3yet; coalescing/registercount changes alone do not prove cause ofregression."
+  ],
+  "gpu_calls_by_reviewer": false
+}

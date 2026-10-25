@@ -1,0 +1,89 @@
+{
+  "id": "coalesced-research-handoff-example",
+  "kind": "kernel",
+  "evidence_scope": "development",
+  "queue_item_id": "WGMMA-COALESCED-DEV-v3",
+  "tasks": [
+    {
+      "id": "implement",
+      "role": "implementer",
+      "actor": "/root/rsi_framework",
+      "inputs": [
+        "docs/threefold-target.json",
+        "rsi/protocol.json",
+        "docs/kernel-rewrite-plan.json"
+      ],
+      "owned_files": [
+        "results/rsi/candidates/example/candidate.py",
+        "results/rsi/candidates/example/cpu-check.json"
+      ],
+      "outputs": [
+        "results/rsi/candidates/example/candidate.py",
+        "results/rsi/candidates/example/cpu-check.json"
+      ],
+      "forbidden_actions": [
+        "gpu_execution",
+        "incumbent_mutation",
+        "oracle_or_gate_change",
+        "self_approval"
+      ],
+      "completion_evidence": [
+        "Source hashes and CPU correctness report; report all failures"
+      ],
+      "hypothesis": "Contiguous packed loads reduce down-projection load dependency stalls; performance remains unmeasured.",
+      "handoff_recipient": "/root"
+    },
+    {
+      "id": "review-design",
+      "role": "critic",
+      "actor": "/root/measurement_audit",
+      "inputs": [
+        "docs/threefold-target.json",
+        "rsi/protocol.json",
+        "docs/kernel-rewrite-plan.json"
+      ],
+      "owned_files": [
+        "results/rsi/candidates/example/design-review.json"
+      ],
+      "outputs": [
+        "results/rsi/candidates/example/design-review.json"
+      ],
+      "forbidden_actions": [
+        "gpu_execution",
+        "candidate_mutation",
+        "promotion"
+      ],
+      "completion_evidence": [
+        "Independent design review with scope and unresolved runtime conditions"
+      ],
+      "review_question": "Does the proposed experiment preserve precision, benchmark scope, and isolated measurement? This is design review only. Candidate review requires a fresh manifest containing actual generated source hashes.",
+      "handoff_recipient": "/root"
+    },
+    {
+      "id": "plan",
+      "role": "planner",
+      "actor": "/root/kernel_audit",
+      "inputs": [
+        "docs/optimization-queue.json",
+        "docs/threefold-target.json",
+        "rsi/protocol.json"
+      ],
+      "owned_files": [
+        "results/rsi/candidates/example/hypothesis.json"
+      ],
+      "outputs": [
+        "results/rsi/candidates/example/hypothesis.json"
+      ],
+      "forbidden_actions": [
+        "gpu_execution",
+        "incumbent_mutation",
+        "promotion"
+      ],
+      "completion_evidence": [
+        "Falsifiable hypothesis, prior, cost, counter prediction and stopping criteria"
+      ],
+      "hypothesis": "Prioritize a discriminating test using current measured bottleneck and failed trials.",
+      "handoff_recipient": "/root"
+    }
+  ]
+}

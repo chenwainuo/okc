@@ -1,0 +1,260 @@
+{
+  "status": "profile_complete_independently_parsed",
+  "reviewer": "measurement_audit",
+  "scope": "one logicalM128 coalesceddownkernel;3NCUreplaypasses; no cleanbenchmark timing/promotion",
+  "metadata": {
+    "scope": "observational Nsight counters; no benchmark timing",
+    "weight_seed": 940033,
+    "input_seed": 941161,
+    "batch": 128,
+    "input_sha256": "c0be5c3382e005813be0eb0c81c8f453685513ec1f70f518b967e95e42488f16",
+    "full_expert_reference_pass": true,
+    "full_expert_detail": "relative L2 error 5.540e-03 (worst row 5.906e-03)",
+    "isolated_down_repeat_exact_pass": true,
+    "bundle_sha256": "90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087",
+    "bank_packed_shape": [
+      32,
+      64,
+      256,
+      128
+    ],
+    "bank_scales_shape": [
+      32,
+      64,
+      256,
+      64
+    ],
+    "bank_packed_storage_bytes": 268435456,
+    "bank_scales_storage_bytes": 33554432,
+    "grid": [
+      64,
+      610,
+      1
+    ],
+    "block": [
+      128,
+      1,
+      1
+    ],
+    "total_ctas": 39040,
+    "local_expert_groups_of8": 52,
+    "all_padding_groups_of8": 19,
+    "useful_ctas": 2112,
+    "all_padding_ctas": 1216,
+    "padded_rows_in_local_groups": 252,
+    "captured_input_sha256": "e3cc3be932edb9f4716aba8c88e023394402449d471b5dc45a4f9d37b9eca781",
+    "loaded_down_jit_libraries": {
+      "/cache/candidate/90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087/sglang/sm90a/sgl_kernel_jit_rsi_wgmma_coalesced_down_28ad39648ed3ad77/build-cb3f187d99d3444c/deps-a2bea184a2162343/sgl_kernel_jit_rsi_wgmma_coalesced_down_28ad39648ed3ad77.so": "5621fc96013d6ea4cd2a81d870d187702ce82ec1f83bf6645ab02f8601a23052"
+    },
+    "nonlocal_or_beyond_post_ctas": 35712,
+    "local_route_rows": 164,
+    "sorted_capacity": 4880,
+    "num_post": 1280,
+    "block_m": 16,
+    "cache_mode": "NCU cache-control all; kernel replay; not clean latency",
+    "source_pins": {
+      "bundle_sha256": "90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087",
+      "manifest_sha256": "73b2440082888ea426c59aa1cc95e7d30a6391c55b508b7c7002164c7db73df4",
+      "files": {
+        "benchmarks/serving_moe.py": "751b48fafca1bfa10f022f2e55ea09cf6edb9a866f0952f171f5083700e9df93",
+        "benchmarks/serving_wgmma_down.py": "77bebb4cdd3eb4bd550e6a3958e6e630eba2cfda1c3b6c26e08319abe96e820a",
+        "benchmarks/serving_moe_base.py": "13285ce5b3409d6080f46bbd9ba452b63711f906c12640246552b3145b32744a",
+        "benchmarks/routed_adapter.py": "cde9c407a93b69218b64c6fea835150768c99fa9cf2cd547bc66c8e01c0687ce",
+        "benchmarks/routed_down.cuh": "28ad39648ed3ad778711f05be18e49c41944c262171346fb79970c2bb1bb3089",
+        "muse_moe_w4a16/reference.py": "a7e0b4fa86aa477a4e7bb5745b2b258954d72636b6da153bd239a717927cba44"
+      },
+      "worker_sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+      "bundle_verifier_sha256": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25"
+    }
+  },
+  "metrics": {
+    "dram__bytes_read.sum": {
+      "value": 227.0336,
+      "unit": "Mbyte"
+    },
+    "dram__bytes_write.sum": {
+      "value": 2.9568,
+      "unit": "Mbyte"
+    },
+    "dram__sectors_read.sum": {
+      "value": 7094800.0,
+      "unit": "sector"
+    },
+    "dram__sectors_write.sum": {
+      "value": 92400.0,
+      "unit": "sector"
+    },
+    "launch__block_size": {
+      "value": 128.0,
+      "unit": ""
+    },
+    "launch__grid_size": {
+      "value": 39040.0,
+      "unit": ""
+    },
+    "launch__registers_per_thread": {
+      "value": 34.0,
+      "unit": "register/thread"
+    },
+    "launch__registers_per_thread_allocated": {
+      "value": 40.0,
+      "unit": "register/thread"
+    },
+    "launch__shared_mem_per_block": {
+      "value": 1.28,
+      "unit": "Kbyte/block"
+    },
+    "launch__shared_mem_per_block_allocated": {
+      "value": 1.28,
+      "unit": "Kbyte/block"
+    },
+    "launch__shared_mem_per_block_driver": {
+      "value": 1.024,
+      "unit": "Kbyte/block"
+    },
+    "launch__shared_mem_per_block_dynamic": {
+      "value": 0.0,
+      "unit": "byte/block"
+    },
+    "launch__shared_mem_per_block_static": {
+      "value": 256.0,
+      "unit": "byte/block"
+    },
+    "profiler__replayer_passes": {
+      "value": 3.0,
+      "unit": "pass"
+    },
+    "profiler__replayer_passes_type_warmup": {
+      "value": 0.0,
+      "unit": "pass"
+    },
+    "sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed": {
+      "value": 2.763287,
+      "unit": "%"
+    },
+    "sm__warps_active.avg.pct_of_peak_sustained_active": {
+      "value": 60.924673,
+      "unit": "%"
+    },
+    "sm__warps_active.avg.per_cycle_active": {
+      "value": 38.991791,
+      "unit": "warp"
+    },
+    "smsp__warp_issue_stalled_barrier_per_warp_active.pct": {
+      "value": 11.871869,
+      "unit": "%"
+    },
+    "smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct": {
+      "value": 54.513651,
+      "unit": "%"
+    },
+    "smsp__warps_eligible.avg.per_cycle_active": {
+      "value": 1.337315,
+      "unit": "warp"
+    }
+  },
+  "unit_audit": {
+    "decimal_Mbyte_bytes": 1000000,
+    "decimal_Kbyte_bytes": 1000,
+    "DRAM_read_bytes": 227033600,
+    "DRAM_write_bytes": 2956800,
+    "sector_bytes": 32,
+    "sector_counts_match_byte_metrics": true,
+    "shared_memory_bytes_total": 1280,
+    "shared_memory_bytes_static": 256,
+    "shared_memory_bytes_driver": 1024,
+    "registers_compiler_per_thread": 34,
+    "registers_allocated_per_thread": 40,
+    "note": "Do not call1.28Kbyte allkernelstatic shared, or use34 whenoccupancy depends on rounded40allocatedregisters."
+  },
+  "actual_work": {
+    "total_ctas": 39040,
+    "useful_ctas": 2112,
+    "all_padding_ctas": 1216,
+    "nonlocal_or_tail_ctas": 35712,
+    "all_padding_fraction_of_fullK_compute_ctas": 0.36538461538461536,
+    "valid_route_rows": 164,
+    "padded_rows_in_local_groups": 252,
+    "interpretation": "Only3328CTAs executefullK;1216ofthese have no validroute row. Counts derive actual capturedmetadata, not assumedexpertcounts. Early-returnCTAcount alone doesnotpredict scheduleroptimization payoff."
+  },
+  "interpretation": [
+    "54.513651%longscoreboard alongside1.337315eligiblewarps/cycle and2.763287%tensoractivity supports investigating operandfeed/dependency latency. It doesnot prove HBMbandwidth saturation or isolatecoalescing.",
+    "11.871869%barrierstall and source256serialK16commit/wait groups motivate testinggroupedK64issue/barrierreduction. Counterdoesnot identifyexactbarrier or proveK64gain;46registers andlargershared v4 mayintroducenewtradeoffs.",
+    "60.924673%activewarp figure is Nsight avg percentage with its stateddenominator, notproofallSMscontinuouslybusy;34compilerregisters allocate40perthread.",
+    "227.033600MBread is selectedkernel traffic underNCUcachecontrol/replay, not minimumweight bytes, bandwidthrate orfull-expert traffic. No byte/count division byprofilerelapsed used."
+  ],
+  "next_test": {
+    "priority": "Boundedv4routed+full-expert correctness after separate exactsource/synchronization review, before anytiming.",
+    "reason": "GroupfourK16issues andwaitonce directlytests a source-identified serialization mechanism whilev3alreadyhaslosslesscoalescedlayout; do not combinepersistentgrid orpadskip in samechange.",
+    "acceptance": "Preserve actualFP4decode,ascendingK16accumulation/rounding, operandslive untilwait, sharedreusebarriers and inheritedfinalizer; run fixedreference andgraphvalid-empty-fresh fixtures. Failure stops.",
+    "if_correct": "One separatelypreregistered matchedsamefixture v3-v4 ablation or pairedincumbent developmentrun; profileonly ifdiscriminating. Do not infermethodsuperiority orfull3x.",
+    "alternative": "All-padding-subtile skip targets1216/3328computeCTAs on thisfixture; separate correctness-reviewed candidate. The36.54%workfraction isnot anexpectedlatencyspeedup."
+  },
+  "cross_v1_boundary": "V1profileweightseed920023 had191localroute rows and16paddinggroups; v3seed940033 has164rows and19paddinggroups. Descriptivecountervalues differ but causal before/after benefit cannot be attributed tolayout fromthese unmatchedfixtures.",
+  "memory_observation": {
+    "packed_bank_GPU_storage_bytes": 268435456,
+    "scale_bank_GPU_storage_bytes": 33554432,
+    "scope": "Actual preparedbank storage only; nottotalmodelGPU peak, no assertionotherincumbentbanks freed."
+  },
+  "validation": {
+    "full_expert_reference_pass": true,
+    "direct_repeat_and_post_profile_exact_pass": true,
+    "input_and_captured_operand_hashes_recorded": true,
+    "frozen_sourcepins_and_script_hashes_unchanged": true,
+    "loaded_routed_JIT_identity_recorded": true,
+    "terminal_verified": true
+  },
+  "artifact_hashes": {
+    "results/rsi/wgmma-coalesced-profile-v3/down-m128.csv": "a54885a50981b25c3fdaa266be4cd32d3dbc99837139b532a1c1a7f58409aa39",
+    "results/rsi/wgmma-coalesced-profile-v3/down-m128.ncu-rep": "a8562c5479a40f6bab7e724c6cfa90a8ac8669ef18e9fe0c9df61268c4d00d57",
+    "results/rsi/wgmma-coalesced-profile-v3/setup.json": "d2fb2072a108689370fb4db66dc370fb38c8760022f705f2975d6a904f3002fa",
+    "results/rsi/wgmma-coalesced-profile-v3/terminal.json": "c567352a10f946b9702258c0e3c721e649916681adea058ed07075eb55276433",
+    "results/rsi/wgmma-coalesced-profile-v3/host-terminal.json": "dfc9d76f9feb4b54d6431039ef23b7be049824a9ea43c5b6ac72d5ac30599196",
+    "results/rsi/wgmma-coalesced-profile-v3/ncu-version.txt": "2d9d5b790a56200c6f276274de256d1ef993da377405dd41fba702d892ba88f0",
+    "results/rsi/probes/coalesced-profile-v3-lease.json": "7694a0a9761f3d061da1528bec384235ffdb92746e64e0766d9c4ce21c5c1b93"
+  },
+  "lease": {
+    "experiment": "WGMMA-COALESCED-PROFILE-v3",
+    "executor": "root",
+    "started_at": 1792894818.0216784,
+    "deadline_unix": 1792895118.0216784,
+    "reserved_usd": 0.4166666666666667,
+    "purpose": "reviewed observational Nsight counters; no benchmark timing",
+    "status": "complete",
+    "elapsed_seconds": 45.109068870544434,
+    "terminal_proof": {
+      "status": "terminal",
+      "container": "okc-wgmma-coalesced-profile-v3",
+      "container_absent": true,
+      "client_exit_code": 0,
+      "observations": [
+        {
+          "argv": [
+            "docker",
+            "rm",
+            "-f",
+            "okc-wgmma-coalesced-profile-v3"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "Error response from daemon: No such container: okc-wgmma-coalesced-profile-v3\n"
+        },
+        {
+          "argv": [
+            "docker",
+            "inspect",
+            "okc-wgmma-coalesced-profile-v3"
+          ],
+          "returncode": 1,
+          "stdout": "[]\n",
+          "stderr": "error: no such object: okc-wgmma-coalesced-profile-v3\n"
+        }
+      ],
+      "root_instruction": "Close lease only if terminal proof passes; termination_unknown leaves canonical lease active and blocks further GPU work pending root reconciliation.",
+      "launcher_absent": true,
+      "gpu_compute_pids": []
+    },
+    "accounted_usd": 0.06265148454242282
+  },
+  "gpu_calls_by_reviewer": false
+}

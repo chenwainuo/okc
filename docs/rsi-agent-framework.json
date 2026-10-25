@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "purpose": "Operational sub-agent framework for improving kernels and the optimizer while preserving the original 3x objective",
   "authority": {
     "normative_protocol": "rsi/protocol.json",
@@ -341,96 +341,19 @@
     "goal_complete": "Only full original3x objective proven against frozen benchmark; single-GPU local promotion cannot substitute for full-serving agreement, TTFT and throughput/interactivity validation."
   },
   "next_queue_snapshot": {
-    "authority_note": "Read current ledger and docs/optimization-queue.json before execution; this is a planning snapshot, not live process state.",
-    "items": [
-      {
-        "rank": 0,
-        "id": "RSI01",
-        "task": "Freeze repaired isolated runner, independently review the revision, and establish successful unchanged GPU control",
-        "estimated_direct_speedup": [
-          1.0,
-          1.0
-        ],
-        "why": "Q14-v4 stopped before timings. Root reports pinned-image import-only verification and60 passing CPU tests after repair; GPU control still unproven.",
-        "gate": "Fresh reviewed unchanged-control pilot; no reuse of superseded evidence."
-      },
-      {
-        "rank": 0.5,
-        "id": "INCUMBENT01",
-        "task": "Implement independent candidate-v-current-incumbent paired replacement evaluation",
-        "estimated_direct_speedup": [
-          1.0,
-          1.0
-        ],
-        "why": "Protect monotonic progress: an anchor-beater may still be slower than current incumbent.",
-        "gate": "Keep original anchor3x proof separate; fail closed on replacement until both required comparisons are reviewed and supported."
-      },
-      {
-        "rank": 1,
-        "id": "Q14-successor",
-        "task": "MoE-scoped pipeline-depth/register-lifetime experiment",
-        "conditional_expert_speedup_prior": [
-          1.05,
-          1.2
-        ],
-        "confidence": "low-medium",
-        "cost": "use fresh reviewed proposal budget; previous proposal45 GPU minutes is not new authorization",
-        "why": "M128 register and shared-memory limits both3 CTAs/SM; M8 shared-memory limit3 vs register limit4.",
-        "gate": "Preserve dense Marlin, FP32 reductions and BF16 boundaries; reject spills/latency loss/full-suite regressions."
-      },
-      {
-        "rank": 2,
-        "id": "R03",
-        "task": "Complete-K schedule and compact valid-expert work descriptors",
-        "conditional_expert_speedup_prior": [
-          1.05,
-          1.25
-        ],
-        "confidence": "low",
-        "prerequisite": "Measure split-slice/reduction or metadata stall share; do not infer a win from fewer locks."
-      },
-      {
-        "rank": 3,
-        "id": "R04",
-        "task": "Bounded Hopper-specific WGMMA prototype",
-        "conditional_expert_speedup_prior": [
-          1.1,
-          1.6
-        ],
-        "confidence": "low",
-        "prerequisite": "Counter-guided design and full accounting for BF16 staging/dequantization; separate large-M/prefill feasibility from sparse decode."
-      },
-      {
-        "rank": 4,
-        "id": "R05",
-        "task": "Gate/up epilogue plus SwiGLU fusion",
-        "conditional_expert_speedup_prior": [
-          1.01,
-          1.06
-        ],
-        "confidence": "low-medium",
-        "prerequisite": "Co-owned fully reduced gate/up tiles and preserved rounding; direct fusion is not currently free."
-      },
-      {
-        "rank": 5,
-        "id": "METHOD01",
-        "task": "Implement and test frozen portfolio evaluator for optimizer-method changes",
-        "estimated_direct_speedup": [
-          1.0,
-          1.0
-        ],
-        "why": "Required before claiming improved search efficiency; current method validation intentionally fails closed."
-      }
-    ],
-    "estimate_warning": "Conditional engineering upside envelopes only, not measured gains, expected values, or calibrated probabilities. All candidates can fail or regress. Full-serving speedup estimates remain unavailable."
+    "authority": "docs/optimization-queue.json:active_priority",
+    "policy": "Do not duplicate volatile ranks/statuses in this protocol. Read live ledger and verify evidence before dispatch. Queue priors are advisory; ledger gates remain authoritative."
   },
   "known_gaps": [
     {
       "id": "G01",
-      "gap": "Successful unchanged GPU control after runner isolation repairs",
-      "status": "unproven",
-      "evidence_to_date": "Root reports import isolation repaired and checked in the pinned image without GPU;60 CPU tests pass. Q14-v4 closed before timings.",
-      "required": "Fresh frozen plan, independent preflight and actual unchanged-control evidence; CPU/image import checks do not prove GPU runtime isolation or performance."
+      "gap": "GPU measurement isolation",
+      "status": "reviewed unchanged controls exist; renewed control required after harness/runtime changes",
+      "evidence": [
+        "docs/rsi-q14-v5-control-validation.json",
+        "reports/2026-10-25-wgmma-down-development.json"
+      ],
+      "remaining": "Known launchers cooperate through host flock and canonical lease. Sampling cannot prove continuous exclusivity or prevent an unrelated root process. OCCUPANCY-v1 remains rejected for unverified provenance; do not reuse it."
     },
     {
       "id": "G02",
@@ -445,5 +368,50 @@
       "status": "specified_not_implemented; method promotion fails closed",
       "required": "Implement/review portfolio execution, costs, uncertainty and independent holdout validation before claiming improved optimizer efficiency."
     }
-  ]
+  ],
+  "operational_cycle": {
+    "implementation": "rsi/cycle.py",
+    "scope": "CPU-only immutable handoff contracts and advisory next-action status; root invokes actual sub-agents and owns all GPU actions.",
+    "commands": [
+      "python3 -m rsi.cycle init --spec rsi/cycle.example.json --manifest results/rsi/cycles/example.json --ledger results/rsi/ledger.json --queue docs/optimization-queue.json --gpu-state results/rsi/gpu-lease.json --root .",
+      "python3 -m rsi.cycle check --manifest results/rsi/cycles/example.json",
+      "python3 -m rsi.cycle status --manifest results/rsi/cycles/example.json"
+    ],
+    "handoff_sequence": [
+      "Read actual ledger, queue, agent states, and GPU coordinator. Inspect any active/expired lease before scheduling.",
+      "Assign genuinely separate planner/implementer/critic actors and disjoint write ownership. Freeze existing input hashes and task contract before dispatch.",
+      "Dispatch through collaboration tools. Record returned agent IDs and artifact paths; status output never spawns a worker.",
+      "Root verifies outputs and hashes. Freeze a new handoff manifest when new artifacts become review inputs; never treat anticipated outputs as already reviewed.",
+      "Independent critic reviews exact candidate/plan; root runs only admitted, bounded, exclusive GPU work.",
+      "Root collects raw evidence and terminal proof. Independent validator applies existing ledger gates, then planner records realized gain/cost and reranks."
+    ],
+    "revision": "A changed required input invalidates the handoff; preserve old manifest and create a newly reviewed revision. Queue/ledger snapshot drift alone is context to reconcile, not permission to reuse stale candidate review.",
+    "completion": "Artifact existence, task completion, numerical correctness, local promotion, and full goal achievement are different states. Only authoritative evidence establishes each.",
+    "no_daemon": "This framework supports agent-directed cycles within live supervisor turns. It does not establish unattended persistent execution.",
+    "protected": [
+      "docs/threefold-target.json",
+      "serving/benchmark-contract.json",
+      "rsi/protocol.json",
+      "benchmarks/measurement.py",
+      "rsi/ledger.py",
+      "rsi/cycle.py"
+    ],
+    "budget": "Hourly authorization is $5/hour. Ledger admission allocation is distinct from total cloud billing. Account failed runs/setup separately and report idle cost uncertainty; a task manifest grants no spending authority.",
+    "maintenance": "Framework changes require a separately scoped, independently reviewed maintenance task with regression tests; freeze a new manifest after integration. A passing cycle check is provenance/coordination evidence, never proof that the checker or benchmark is correct.",
+    "example_scope": "cycle.example.json is a CPU research/design handoff example, not a reviewed GPU execution plan. If its selected queue item is already ready for measurement, status deliberately reports missing executor contract and ready=false. Freeze an actual execution handoff only after existing review/lease prerequisites are satisfied."
+  },
+  "failure_learning": {
+    "per_attempt": [
+      "experiment ID and immutable revision",
+      "hypothesis + predicted counter movement",
+      "prior speedup range and uncertainty",
+      "measured result and exact comparison scope",
+      "correctness/provenance failures",
+      "GPU walltime and dollar accounting; tokens when available",
+      "decision and evidence links",
+      "next discriminating test or reason to park"
+    ],
+    "rerank_trigger": "Every terminal experiment, meaningful profile, or disproven premise; retain failed attempts and original priors.",
+    "method_trigger": "Repeated zero-gain trials, calibration failures, or dominant setup/review cost motivate a separately reviewed method hypothesis; no method-promotion claim from a single kernel win."
+  }
 }

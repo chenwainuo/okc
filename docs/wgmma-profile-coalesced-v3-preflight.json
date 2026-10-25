@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "reviewer": "measurement_audit",
+  "decision": "approved_bounded_observational_profile",
+  "promotion_eligible": false,
+  "plan_sha256": "00bff54162e94e6a9720a9912fba837d172ac18a6e25e96c65f800e77e7be122",
+  "artifact_sha256": {
+    "metric-query.txt": "d809bce140f9bcaf364d92cb938929ab877c79065128a41b34a23f8e4099d26f",
+    "teardown.py": "b7de95d8301dd9d6b768de855bb81dfdeafde4ab598424e4355168aca0facc14",
+    "root-command.sh": "6360deb9dadd9eab3f9defc72fb9b5da8c2203413b27b5511cdc10b815d84fb7",
+    "inside-command.sh": "043f856134999ebc65a8a4ad4e092996d8c900c74e2fd1bf0ac0076c2f00aac0",
+    "profile_down.py": "225de7fcf048b9de8eeedf7cf0fff1381f8aa68997e540c3be5813e5a1f7ae78",
+    "source-pins.json": "4c92f02a1052de249458f6950e8d9341953c5bae625cf80cd1cea89fc62f8ee6"
+  },
+  "source_pins": {
+    "bundle_sha256": "90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087",
+    "manifest_sha256": "73b2440082888ea426c59aa1cc95e7d30a6391c55b508b7c7002164c7db73df4",
+    "files": {
+      "benchmarks/serving_moe.py": "751b48fafca1bfa10f022f2e55ea09cf6edb9a866f0952f171f5083700e9df93",
+      "benchmarks/serving_wgmma_down.py": "77bebb4cdd3eb4bd550e6a3958e6e630eba2cfda1c3b6c26e08319abe96e820a",
+      "benchmarks/serving_moe_base.py": "13285ce5b3409d6080f46bbd9ba452b63711f906c12640246552b3145b32744a",
+      "benchmarks/routed_adapter.py": "cde9c407a93b69218b64c6fea835150768c99fa9cf2cd547bc66c8e01c0687ce",
+      "benchmarks/routed_down.cuh": "28ad39648ed3ad778711f05be18e49c41944c262171346fb79970c2bb1bb3089",
+      "muse_moe_w4a16/reference.py": "a7e0b4fa86aa477a4e7bb5745b2b258954d72636b6da153bd239a717927cba44"
+    },
+    "worker_sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+    "bundle_verifier_sha256": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25"
+  },
+  "independent_checks": [
+    "Allprofileartifact hashes, fullbundle manifest hash/sourcepins and worker/treeverifier hashes match.",
+    "Independent bashsyntax/PythonAST checks pass; compared against reviewedv1profile package.",
+    "Grid_x corrected to NT=packed.shape[1] for[E,NT,256,128]int32; scale/output/activation shapeassertions agree withactualkernelgrid.",
+    "Capturedoriginal M128 downoperands, fullreference/inputimmutability, restored temporarywrapper, exactdirectrepeat andpostprofile checks preserved.",
+    "Roleprivatecoalescedcache/pinnedimage/readonlybundle/networknone; complete treeverified beforeGPU.",
+    "SameNCUsmallmetrics andonefilteredlogicallaunch; possibleseveralreplayexecutions; loadedcoalescedJITidentified.",
+    "Boundedcleanup/explicitabsence/ignoredrepeatTERMINT/nooverwrite protections unchanged and reviewed."
+  ],
+  "execution_conditions": [
+    "Root separate300s canonicallease plushostflock, GPUidle and no competingGPUorCPUbenchmark/compile jobs.",
+    "240stimeout+15skillgrace+25scleanup=280sworstpostlaunch; leaveprelaunch/hostoverhead headroom orcancelwithin300s.",
+    "Actualclient/container/GPUterminalproof beforelease release; unknownexit42 retainscanonicallease andblocksadmission.",
+    "Postrunhashes and actualdevice/tool/import/JIT/sourceprovenance retained; failuresstop,noautoretries."
+  ],
+  "interpretation_limits": [
+    "Observationalcounters only; profilerlatency excludedfromspeedup/promotions.",
+    "Fixture940033/input941161 differsv1profile920023/input921151; compare actualrouting/workcounts, no matchedcausalv3/v1effectclaim.",
+    "SMoccupancy/scoreboard/DRAMaverages cannot alone identifycoalescing, pipeline, scheduler or warpimbalance causes.",
+    "Bankstorage fields reportactualGPUallocation fornewpackedbank; do not inferoverallmodelpeakmemory fromthesealone."
+  ],
+  "gpu_calls_by_reviewer": false
+}

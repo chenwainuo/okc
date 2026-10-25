@@ -1,0 +1,87 @@
+{
+  "status": "CPU_source_checks_lossless_pack_and_CUDA_compile_passed",
+  "mechanism": "K64 grouping; not interiteration double buffering",
+  "parent_source_sha256": "28ad39648ed3ad778711f05be18e49c41944c262171346fb79970c2bb1bb3089",
+  "candidate_source_sha256": "50120fdc47b2026be404447aa3bba0aab28bff331e6613a919e080f4399b8e24",
+  "unchanged": [
+    "dispatch",
+    "packed layout",
+    "perK16 dequant arithmetic",
+    "ascendingK16 accumulation",
+    "output epilogue",
+    "host validation",
+    "grid"
+  ],
+  "source_counts": {
+    "GMMA_ops": 256,
+    "commit_wait_pairs": 64,
+    "CTA_barriers": 192
+  },
+  "CUDA_compile": "pass; pinned CUDA13.0 image;SM90a; noGPUexposure",
+  "GPU_correctness": false,
+  "performance": "unknown",
+  "compile_resources": {
+    "registers_per_thread": 46,
+    "static_shared_bytes": 1024,
+    "stack_bytes": 0,
+    "spill_store_bytes": 0,
+    "spill_load_bytes": 0,
+    "parent_v3_reported_registers": 34,
+    "parent_v3_reported_shared_bytes": 256
+  },
+  "SASS": {
+    "HGMMA_per_loop": 4,
+    "WARPGROUP_DEPBAR_per_loop": 1,
+    "CTA_barriers_per_loop": 3,
+    "local_load_or_store_ops": 0,
+    "accumulator_registers": "R32..R35",
+    "register_A_fragments": [
+      "R40..R43",
+      "R24..R27",
+      "R28..R31",
+      "R36..R39"
+    ],
+    "inspection": "No writes to pending A or accumulator registers between issue and DEPBAR; descriptor pointer arithmetic may be scheduled between operations."
+  },
+  "CPU_pack": {
+    "cases": 3,
+    "nibbles_checked": 279552,
+    "CUDA_calls": 0,
+    "lossless_roundtrip": true,
+    "scale_roundtrip": true,
+    "dequant_input_words_equal": true
+  },
+  "compile_history": [
+    {
+      "source_sha256": "c4897581f1c60aefd23abc8dd68f414fcd5a5b549f86cc7ddf6e801f1fb5fdf5",
+      "exit_code": 2,
+      "reason": "NVCC named inlinePTX operands unsupported; switched to positional syntax",
+      "log": "compile-attempt1.log"
+    },
+    {
+      "source_sha256": "50120fdc47b2026be404447aa3bba0aab28bff331e6613a919e080f4399b8e24",
+      "exit_code": 0,
+      "log": "compile.log"
+    }
+  ],
+  "files_sha256": {
+    "candidate.diff": "3856d3b3874cb8fbc6b79aad845a2dfd0475c7e3428e5cdf22e57b7755bd9fb9",
+    "routed_down.cuh": "50120fdc47b2026be404447aa3bba0aab28bff331e6613a919e080f4399b8e24",
+    "build_candidate.py": "395cd2d83ea4a7339eee605c92a8db70adfe97a94d1aa52aef523dd2372ca359",
+    "compile.log": "9880ac8118e87e59633da211d3c514d3ca5cdbd2d2d516a888cf7277fa2a3d14",
+    "check_full_expert.py": "6dddff95f11d6d023e9333c5972de037b21d558d19f0308d766cc4a66a4fbe38",
+    "design.json": "ad05157406250c2cb4b4dd55b4605d4208ebafb5ab05fdf5201f760d589a52de",
+    "compile.cu": "2992000469991beae44765b9e9791653d3a327aceb066ef399f303f9ed3b14a4",
+    "compile-attempt1.log": "24dd0baff10d8687e84c6e808820cc07a620a8618aa25cf37af0e9007c6443d8",
+    "run_routed_probe.py": "377ec61a333975bd7dfc8ac98ed49c4d577ef3bf8250e9cf23d5c613af8eb419",
+    "check_routed.py": "e97606427885a5a98c4fcd65fb2423847d53607987af7513d4efefb6d2894ea5",
+    "docker-events.json": "8504a468b7cc000b091ed237ed18f13437cba6da740de543705f71efdf3df98d",
+    "parent-routed_down.cuh": "28ad39648ed3ad778711f05be18e49c41944c262171346fb79970c2bb1bb3089",
+    "routed_adapter.py": "08fd372d84b9b7ec42e2dff8b00f1eef6d997bf14dd1d989b93131612d393140",
+    "failed-attempt1-routed_down.cuh": "c4897581f1c60aefd23abc8dd68f414fcd5a5b549f86cc7ddf6e801f1fb5fdf5",
+    "routed_down.sass": "795593194e43693b9e9523a3f1de6bca07250b5574bd08194c6f22ac8f3232c1",
+    "compile.sh": "4a4e4729ab17c1b39b4b9eba5d651ec064bf297eb29aa6ef88f9f9f5278b8235",
+    "serving_wgmma_down.py": "0b5df011b4c51f9d4872ef9d73a33f0900e53be027227f340c325ce44ffe5811",
+    "check_pack_cpu.py": "fc17e186112aab21da145d935bc51015dbd9fc5a43bb9745692b5b63ce0bb57e"
+  }
+}

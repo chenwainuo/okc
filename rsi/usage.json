@@ -49,5 +49,13 @@
     "container_digest": "sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
     "exclusive_gpu": true
   },
-  "framework": "docs/rsi-agent-framework.json"
+  "framework": "docs/rsi-agent-framework.json",
+  "agent_cycle": {
+    "commands": [
+      "python3 -m rsi.cycle init --spec rsi/cycle.example.json --manifest results/rsi/cycles/example.json --ledger results/rsi/ledger.json --queue docs/optimization-queue.json --gpu-state results/rsi/gpu-lease.json --root .",
+      "python3 -m rsi.cycle check --manifest results/rsi/cycles/example.json",
+      "python3 -m rsi.cycle status --manifest results/rsi/cycles/example.json"
+    ],
+    "boundary": "Contracts and advisory status only. Independent agents, real GPU leases, and existing ledger validation remain required."
+  }
 }

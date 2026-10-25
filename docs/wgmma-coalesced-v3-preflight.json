@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "reviewer": "measurement_audit",
+  "decision": "approved_bounded_routed_then_full_expert_development_correctness",
+  "files": {
+    "routed_down.cuh": "28ad39648ed3ad778711f05be18e49c41944c262171346fb79970c2bb1bb3089",
+    "cpu-check.json": "0f6b8588c5fb864d0b8bbad9ad30f2e63b5b0f25496984d870491398d40ee352",
+    "check_full_expert.py": "6dddff95f11d6d023e9333c5972de037b21d558d19f0308d766cc4a66a4fbe38",
+    "check_routed.py": "e97606427885a5a98c4fcd65fb2423847d53607987af7513d4efefb6d2894ea5",
+    "routed_adapter.py": "cde9c407a93b69218b64c6fea835150768c99fa9cf2cd547bc66c8e01c0687ce",
+    "serving_wgmma_down.py": "0b5df011b4c51f9d4872ef9d73a33f0900e53be027227f340c325ce44ffe5811",
+    "check_pack_cpu.py": "fc17e186112aab21da145d935bc51015dbd9fc5a43bb9745692b5b63ce0bb57e"
+  },
+  "independent_checks": [
+    "All frozen status hashes match.",
+    "Ran CPU279552nibble roundtrip, dequant-word equivalence, scale byte roundtrip and payload-size tests:pass.",
+    "Additional random2expert/2Ntile/K4096 sliced-backing CPU test across groups0,1,129,255: all lane nibbles match canonical source.",
+    "Repacked CPU bank uses fresh storage exactly local packed payload size, not original4expert backing. ActualGPU peak/ownership measurements still required for GPUmemory claim.",
+    "AMap constexpr formula checked against CUTLASS atcompile; lane uses two rows perK16 so scale pair reuse acrossh preserves dequant operands.",
+    "FFI expects contiguous int32[E,NT,256,128] payload and uint8[E,NT,256,64] scales; reinterpreting signed int32 asuint32 preserves bitpayload.",
+    "Canonical rawbyte nibble packing is lossless; BF16 conversion/WGMMA/epilogue unchanged; no quantization or BF16 weight expansion.",
+    "Same directgrid routing guards and capturedzeroing; prepare-only Torchreshape/permute allocation outsidegraph."
+  ],
+  "limits": [
+    "CPU storage evidence is not GPU peak-memory measurement; prepare allocates temporary transforms.",
+    "Little-endian byteview required, matching targetH200host; CPU test asserts this.",
+    "FixedK4096,Nmultiple64,trustedalignment; generic malformed metadata and extreme shapes not comprehensivelyvalidated.",
+    "NewGPU repack/JITbinding untested: require original5routed cases then9full expert developmentcases inclgraph valid-empty-fresh/inputimmutability.",
+    "34register compile stat and semantic load reduction do not establish runtime speedup; no promotion or performance approval."
+  ],
+  "execution": "Root bounded standalonecanonicallease/sharedflock; pinnedimage+immutablebaseline fixtures+reviewedrunner+isolatedv3candidate/cache; fresh verifiedGPUidle and terminalproof. Stoponfailure.",
+  "gpu_calls_by_reviewer": false
+}

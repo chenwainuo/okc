@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "reviewer": "measurement_audit",
+  "status": "conditional_primary_bound_complete_exact80developmentinputSHA_matches",
+  "objective_unchanged": "3x original14shape benchmark/geomean; primary4 diagnostic does not prove fullgoal possible or impossible.",
+  "conclusion": "No impossibility established. Routing uniqueness and retained/compressed representation govern the weight-traffic floor; averaged DRAM utilization and191localroute slots are insufficient.",
+  "sources": [
+    {
+      "url": "https://docs.nvidia.com/enterprise-reference-architectures/hgx-ai-factory-h100-h200-b200/latest/components.html",
+      "claim": "H200141GB HBM3e and published4.8TB/s GPUmemory bandwidth; primary NVIDIA documentation consulted2026-10-25."
+    },
+    {
+      "path": "results/rsi/wgmma-down-profile-v1/down-m128.csv",
+      "sha256": "5e3348def0b002f53773182e86a254dd7fb4acf7bb98a867c1860cde0803f8de",
+      "claim": "Actual device attributes:6016bit bus,3201000kHz memoryclock,62914560B L2, generic_compression_supported=1. Clock convention DDR estimate is nominal4.814304TB/s, not sustained measured bandwidth."
+    }
+  ],
+  "device": {
+    "bandwidth_bytes_per_second_nominal": 4814304000000.0,
+    "published_bandwidth_bytes_per_second": 4800000000000.0,
+    "l2_bytes": 62914560,
+    "cold_flush_bytes": 134217728,
+    "flush_claim": "Flush larger thanL2 is a protocol, not proof all useful cache lines evicted. Grant fullL2 useful retention when calculating optimistic floor."
+  },
+  "bytes_per_unique_local_expert": {
+    "gate_up_FP4": 16777216,
+    "gate_up_group16_scales": 2097152,
+    "down_FP4": 8388608,
+    "down_group16_scales": 1048576,
+    "combined_fixed_layout": 28311552,
+    "FP4_payload_only": 25165824,
+    "globals": "O(1) perexpert; omit in optimistic floor"
+  },
+  "model": {
+    "fixed_layout_floor_us": "max(0,U*27MiB - retained_useful_bytes)/nominal_peak_bytes_per_second *1e6",
+    "scale_free_floor_us": "max(0,U*24MiB - retained_useful_bytes)/nominal_peak_bytes_per_second *1e6",
+    "compression_generalization": "max(0,compressed_weight_bytes(U)+compressed_scale_bytes(U)-retained_useful_bytes)/peakBW",
+    "scope": "Assumes all weights/scales of each active localexpert read at mostonce per fullgateup+down; all reusedroutes/batchedtokens share thatread ideally. Ignores activations/output traffic, compute, dequant, alignment, normalization and launch costs, so it is optimistic within the stated representation.",
+    "data_reuse": "U=number of distinct localexpert IDs among actual active routes, not number of route slots, paddedrows, CTAs, expertsassignedtorank or batchsize. Fused up/down reuse and expertgrouping cannot reduce required denseweight bytes belowone-read under this model, but can eliminate repeatedtraffic."
+  },
+  "limitations": [
+    "This is conditional representation/algorithm floor, not information-theoretic impossibility. Lossless compression/weight reencoding/exact shortcut algorithms can change bytes.",
+    "Uniform random FP4code generator suggests littlecodeentropy compression on average, but no measured compressed footprint or entropy proof supplied. Global/scales may be highly compressible;24MiB variant grants allscales free. Generic compression capability is not proof actualallocation compression is enabled or effective.",
+    "FullL2 subtraction grants60MiB retained; persistentL2 setting39MiBmax/11.8MiBlaunch reservation do not justify tighter retention bound. Othercache/residentstate could further weaken bound; verify actualmemory hierarchy/lifetime before claiming hardceiling.",
+    "FP4 code equality/signedzero numerical rules and allowed precision-preserving representations matter; do not silently equate bitwisecompression with acceptable numericaltransformation.",
+    "Weights and model are fixed across runs; allowed loadtime transformations may paycost outside timing. Include their storage/representation, do not assume originalpacked size universal.",
+    "Compute lowerbounds cannot be added to bandwidthfloor without overlapmodel; usemax if separately valid. Neither52%warpoccupancy nor72%longscoreboard proves bandwidthsaturation.",
+    "Historicalanchor medians on different input seeds are context only; perinput bounds need exactmatched inputSHA and currentbaseline rawsample.",
+    "Fourprimary diagnostic cannot establish original14shape3xgoal. Fullsuite route identities and matchingbaseline/candidate aggregation required."
+  ],
+  "primary_sensitivity": [
+    {
+      "bs": 8,
+      "historical_anchor_us": 137.2000053524971,
+      "threefold_time_us": 45.73333511749903,
+      "max_U_meeting_3x_point_for_27MiB_minus_fullL2": 9,
+      "max_U_for_24MiB_FP4_only_minus_fullL2": 11,
+      "floor_us_by_U": {
+        "8": 33.97746714789926,
+        "16": 81.0231908911444,
+        "24": 128.06891463438953,
+        "32": 175.11463837763463
+      }
+    },
+    {
+      "bs": 32,
+      "historical_anchor_us": 231.6800057888031,
+      "threefold_time_us": 77.2266685962677,
+      "max_U_meeting_3x_point_for_27MiB_minus_fullL2": 15,
+      "max_U_for_24MiB_FP4_only_minus_fullL2": 17,
+      "floor_us_by_U": {
+        "8": 33.97746714789926,
+        "16": 81.0231908911444,
+        "24": 128.06891463438953,
+        "32": 175.11463837763463
+      }
+    },
+    {
+      "bs": 128,
+      "historical_anchor_us": 350.76799988746643,
+      "threefold_time_us": 116.92266662915547,
+      "max_U_meeting_3x_point_for_27MiB_minus_fullL2": 22,
+      "max_U_for_24MiB_FP4_only_minus_fullL2": 24,
+      "floor_us_by_U": {
+        "8": 33.97746714789926,
+        "16": 81.0231908911444,
+        "24": 128.06891463438953,
+        "32": 175.11463837763463
+      }
+    },
+    {
+      "bs": 256,
+      "historical_anchor_us": 477.1679937839508,
+      "threefold_time_us": 159.0559979279836,
+      "max_U_meeting_3x_point_for_27MiB_minus_fullL2": 29,
+      "max_U_for_24MiB_FP4_only_minus_fullL2": 32,
+      "floor_us_by_U": {
+        "8": 33.97746714789926,
+        "16": 81.0231908911444,
+        "24": 128.06891463438953,
+        "32": 175.11463837763463
+      }
+    }
+  ],
+  "exact_input_audit": {
+    "script": "results/rsi/candidates/roofline-input-audit/regenerate_inputs.py",
+    "status": "root regenerated80inputs; reviewer independently matched hashes/counts/report binding",
+    "does": "Generate originalCUDAfixtures only, compareeverytimed inputSHA, emit32expert histograms, no weights/model/timing",
+    "development_report": "results/rsi/wgmma-down-dev-v1/development-920023.json",
+    "per_sample_analysis": "For each matchedpair j compute floorLj from Uj, point upper bound baseline_us_j/Lj conditional on assumptions. AdjacentAB/BA logmeans then median follow frozen measurement estimator; monotonicity gives conditional shape point bound. Geomean of allshape bounds applies only samefrozen shape set, notunobserved14shapes. Do not attach statisticalconfidence to physical bound derived from assumedrepresentation.",
+    "result": "docs/threefold-exact-primary-route-bounds.json",
+    "primary_geomean_upper27": 3.0194256412595597,
+    "primary_geomean_upper24": 3.475767532326616
+  },
+  "gpu_calls_by_reviewer": false
+}

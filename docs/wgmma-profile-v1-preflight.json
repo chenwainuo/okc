@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "reviewer": "measurement_audit",
+  "decision": "approved_bounded_observational_profile",
+  "promotion_eligible": false,
+  "profile_plan_sha256": "5959cf1b906e331c017688035e9faa891d4f06df4ca0da0ca1b42b144723382b",
+  "artifact_sha256": {
+    "metric-query.txt": "d809bce140f9bcaf364d92cb938929ab877c79065128a41b34a23f8e4099d26f",
+    "teardown.py": "b7de95d8301dd9d6b768de855bb81dfdeafde4ab598424e4355168aca0facc14",
+    "root-command.sh": "76eb9dfc0ca15e71f8463575c3810215eca7f82a5668e74bb7e9571b2ed55bde",
+    "inside-command.sh": "043f856134999ebc65a8a4ad4e092996d8c900c74e2fd1bf0ac0076c2f00aac0",
+    "profile_down.py": "231a2cf77176b466f14b9b645df9a829a643c2107fccbe5814604e9af7cdee0e",
+    "source-pins.json": "5581fd4649746b6d18bf4170bdc3c122e1fe84dfd867d05ff500cec435ee425c"
+  },
+  "additional_dependency_sha256": {
+    "benchmarks/rsi_worker.py": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+    "benchmarks/rsi_bundle.py": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25",
+    "results/rsi/bundles/wgmma-down-v1.tar.gz.manifest.json": "3be1fe6921793b7b611e423ed6afa0670312fee8705c6534441fa58e662da25f"
+  },
+  "checks": [
+    "Exact frozen profile hashes and bundle member pins match; bash syntax/Python AST checks independently pass.",
+    "Full immutable tree verified before GPU; role-specific private cache and immutable code mounts; network disabled.",
+    "Full expert official reference and original input immutability before profiling; captured actual expanded activation+metadata fingerprint verified around direct repeats/profile.",
+    "Temporary wrapper restored before validation/profile; source files not mutated.",
+    "Actual local/useful/padding/tail CTA counts computed from captured metadata; loaded routed JIT object hashed.",
+    "NCU selects one logical routed kernel launch, possible multiple replay executions; zeroing excluded only from selected counters, remains executed.",
+    "Refuses evidence overwrite; bounded removal and case-insensitive explicit missing-container/object proof; repeated TERM/INT ignored during cleanup."
+  ],
+  "execution_conditions": [
+    "Root owns standalone300s canonical lease and obtains actual idle/exclusiveGPU; script acquires hostflock itself, do not nest lock.",
+    "Worst configured post-launch interval is240s timeout+15s forced-kill grace+25s cleanup=280s, not265s. Prelaunch verification and host overhead must fit remaining20s or root must cancel early.",
+    "Root verifies actual client/container/GPU terminal state before lease release. Unknown exit42 retains canonicallease and blocks ALL admission even though shellflock releases.",
+    "Record actual image/driver/GPU/tool provenance, ownership, exit/report artifacts and postrun hashes; unsupported metrics/error/timeout stop, no automatic retries."
+  ],
+  "interpretation_limits": [
+    "Profiler timings are not clean benchmark samples or speedup/serving evidence.",
+    "Counter averages include returning/padding CTAs; distinguish actual work counts before inferring occupancy/scheduler ROI.",
+    "DRAM counters alone do not prove uncoalesced loads; barrier metrics do not uniquely attribute individual WGMMA waits.",
+    "This authorizes developmental profiling only, no promotion."
+  ],
+  "gpu_calls_by_reviewer": false
+}

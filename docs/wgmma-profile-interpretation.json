@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "status": "independent_observational_review_no_GPU_execution",
+  "sources": ["reports/2026-10-25-wgmma-down-profile.json", "results/rsi/wgmma-down-profile-v1/down-m128.csv", "results/rsi/wgmma-down-profile-v1/setup.json", "results/rsi/candidates/wgmma-profile-v1/profile_down.py", "results/rsi/candidates/wgmma-profile-v1/source-pins.json"],
+  "artifact_identity": {"bundle_sha256": "25e677474e171c6858654bb0e2268b8773353efc8e21474292e4e0463eeb55b0", "kernel_sha256": "e3a83da389f8646431e22009114143bc36d53dc4fa60296572f19d35babe71ae", "batch": 128, "weight_seed": 920023, "input_seed": 921151, "replay_passes": 3},
+  "validation": {
+    "raw_csv": "All summarized metric values and units match raw CSV exactly. One target kernel row present.",
+    "metadata": "Report metadata equals setup.json. Counts satisfy source classifier identities below; raw captured routing tensors were not saved, so this review does not independently regenerate the 191 valid rows from tensor bytes.",
+    "correctness": "Reported official full-expert reference passes; isolated-down exact repeat before/after profiling passes. Different from proving all-shape correctness.",
+    "read_bytes": {"sectors": 6889144, "bytes_per_sector": 32, "bytes": 220452608, "check": "exact equality to raw DRAM bytes"},
+    "write_bytes": {"sectors": 112584, "bytes_per_sector": 32, "bytes": 3602688, "check": "exact equality to raw DRAM bytes"}
+  },
+  "routing_counts": {
+    "grid": [64, 610, 1], "threads_per_CTA": 128, "total_CTAs": 39040,
+    "sorted_capacity": 4880, "num_post": 1264, "group_rows": 8, "alignment_rows": 16,
+    "within_post_groups": 158, "beyond_post_groups": 452,
+    "local_expert_groups": 52, "local_groups_with_at_least_one_valid_row": 36, "all_padding_local_groups": 16,
+    "local_valid_rows": 191, "local_padded_rows": 225,
+    "useful_CTAs": 2304, "all_padding_CTAs": 1024,
+    "beyond_post_CTAs": 28928, "nonlocal_within_post_CTAs": 6784, "all_rejected_CTAs": 35712,
+    "identities": ["64*610=39040", "1264/8=158", "(610-158)*64=28928", "(158-52)*64=6784", "(52-16)*64=2304", "16*64=1024", "2304+1024+35712=39040", "52*8=191+225"],
+    "implication": "91.48% of launched CTAs return before the expensive K loop. This is not 91.48% of elapsed time. Of 3328 K-loop CTAs, 30.77% are padding-only. Useful groups still have only191/288=66.32% valid rows."
+  },
+  "measured_counters": {
+    "active_warps_per_SM": 33.746584, "active_warps_percent_peak": 52.729038,
+    "eligible_warps_per_scheduler_cycle": 0.595799,
+    "long_scoreboard_percent_active_warps": 72.520945,
+    "CTA_barrier_percent_active_warps": 3.651811,
+    "tensor_pipe_percent_peak_elapsed": 0.636717,
+    "registers_per_thread": 56, "register_residency_limit_CTAs": 9,
+    "shared_memory_residency_limit_CTAs": 25, "maximum_active_warps": 36,
+    "allocated_shared_bytes_per_CTA": 1280,
+    "scope": "Cold-cache kernel replay observations, including early-return and padding work. Active-warp and elapsed tensor metrics use different denominators. Profiler latency is excluded from performance claims."
+  },
+  "inference": {
+    "supported_hypothesis": "High long-scoreboard stalls with substantial active warps but few eligible warps and very low tensor activity prioritize the operand-loading/dependency chain and serialized K16 feeding. This is stronger evidence than a generic low-occupancy diagnosis.",
+    "not_proven": ["DRAM bytes alone neither prove bad coalescing nor exclude HBM saturation; this minimal metric set does not measure sustained DRAM bandwidth directly.", "Long-scoreboard identifies L1TEX dependency waits, potentially global/local loads; it does not identify which operand or distinguish issue pressure, cache misses and latency without further evidence.", "Low CTA-barrier stall share does not prove the immediate WGMMA wait or serial pipeline is cheap; these dependencies need not appear in the CTA-barrier category.", "Rejected CTA count does not establish scheduling-only speedup, and aggregate occupancy includes different CTA lifetimes.", "One routing fixture is not representative proof across M8/M32/M128/M256 or all skew patterns."]
+  },
+  "source_level_facts_not_instruction_measurements": {
+    "per_nonreturning_CTA": "256 K16 iterations; each contains three CTA barrier statements, shared-operand fence, weight/scale decode, one WGMMA issue, commit and immediate wait_group0.",
+    "source_expressions": "262144 packed-byte references versus131072 distinct packed bytes;262144 scale references versus16384 distinct scale bytes. Compiler/CSE, warp transactions and caches determine actual instructions and traffic.",
+    "investigation": "Inspect SASS load width/address mapping plus L1TEX load requests/sectors and L2 hit/sector metrics before attributing the long-scoreboard share to poor coalescing. Preserve same kernel hash and separate profiler from clean timings."
+  },
+  "prioritized_queue": [
+    {"rank": 1, "candidate": "Cheap exact all-padding subgroup early exit and filtered task scheduling", "why": "Eliminate demonstrably unnecessary full K-loop work and reduce empty launch dispatch with small mathematical change", "guard": "Every CTA uniformly checks all8 slot indices; never reject partially valid group; output zeroing and empty-local graph semantics preserved", "estimate_kind": "engineering conditional model, not measurement", "model": "If expensive CTA costs were equal and dominated runtime, dropping16/52 all-padding groups alone yields52/36=1.444x downkernel. This is not a measured bound or a forecast for full serving.", "validation": "Frozen correctness including partial/padding/empty groups, then paired actual expert timing"},
+    {"rank": 2, "candidate": "Bounded persistent-grid cap sweep after identical-math correctness", "caps_SM_multiples": [2, 8, 16], "why": "Isolate launch-overhead reduction from loss of latency hiding", "risk": "At balanced mapping2CTAs/SM supplies only8warps versus observed33.75 and measured9CTA/36warp register ceiling. An8SM grid supplies at most32warps;16SM leaves enough work for the9CTA residency limit. Do not equate grid cap with actual occupancy.", "validation": "Same scheduling implementation and source math across caps; balanced paired timings on at least M8/M128/M256, keep pristine v1 as development control; no heldout gate changes"},
+    {"rank": 3, "candidate": "Packed operand layout/load reuse and K64 software pipeline", "why": "Targets the observed operand dependency bottleneck rather than only wasted dispatch", "bounded_first_step": "Audit actual SASS and address map; implement lossless load-time packed permutation or vectorized FP4/group-scale loads as a separate variant before combining with overlap", "invariants": "No BF16-expanded weight bank; preserve dequant rounding and FP32 accumulation/global-scale output order; retain official oracle tolerances", "estimate": "No defensible numeric gain yet; most plausible route to major v1 recovery, but v1 is far slower than incumbent and recovery is not incumbent improvement."}
+  ],
+  "objective_alignment": "WGMMA v1 down replacement regresses full expert heavily. Prioritize bounded experiments and reject unless they recover incumbent performance; neither counters nor scheduler cleanup support a3x serving claim. Full serving impact remains unknown."
+}

@@ -1,0 +1,357 @@
+{
+  "status": "development_sweep_complete_all_caps_regress",
+  "reviewer": "measurement_audit",
+  "scope": "Fixed8->2->16SMcaps, sameGPU/developmentseed930031,20pairs per4primaryshapes; observational notpromotion",
+  "promotion_eligible": false,
+  "results": [
+    {
+      "cap_SM_multiple": 8,
+      "requested_H200_grid_cap": 1056,
+      "rows": [
+        {
+          "bs": 8,
+          "baseline_median_us": 118.22399869561195,
+          "candidate_median_us": 501.5040189027786,
+          "balanced_speedup": 0.23357861879100952,
+          "order_balanced_blocks": 10,
+          "bootstrap_95": [
+            0.22373905659918758,
+            0.24056043090202747
+          ],
+          "assessment": "regression"
+        },
+        {
+          "bs": 32,
+          "baseline_median_us": 220.44799476861954,
+          "candidate_median_us": 1688.1760358810425,
+          "balanced_speedup": 0.13474453399692654,
+          "order_balanced_blocks": 10,
+          "bootstrap_95": [
+            0.13324926849581786,
+            0.13795823942117216
+          ],
+          "assessment": "regression"
+        },
+        {
+          "bs": 128,
+          "baseline_median_us": 346.671998500824,
+          "candidate_median_us": 2584.015965461731,
+          "balanced_speedup": 0.1333488798953023,
+          "order_balanced_blocks": 10,
+          "bootstrap_95": [
+            0.1321284586782585,
+            0.1343134293214053
+          ],
+          "assessment": "regression"
+        },
+        {
+          "bs": 256,
+          "baseline_median_us": 455.26400208473206,
+          "candidate_median_us": 3435.647964477539,
+          "balanced_speedup": 0.1335915303341064,
+          "order_balanced_blocks": 10,
+          "bootstrap_95": [
+            0.13242043035457254,
+            0.13488486369726913
+          ],
+          "assessment": "regression"
+        }
+      ],
+      "primary_geomean_balanced_speedup": 0.15387856758638613,
+      "report_sha256": "096759477b595e03c0a8c65bd41e741c275ce2ea3dadccf64b2c8c68851d8684",
+      "plan_sha256": "bc68105557a59392722e2741f45f3912cc939f78002f741faf084a5f5783e447",
+      "evidence_hashes": {
+        "results/rsi/wgmma-grid-dev-v2/8sm/development-930031.json": "096759477b595e03c0a8c65bd41e741c275ce2ea3dadccf64b2c8c68851d8684",
+        "results/rsi/wgmma-grid-dev-v2/8sm/development-930031.correctness.json": "138eddd0683b0a804249e261d8039edd99f6b9b4abe4f9f65c97d16aa45917ae",
+        "results/rsi/wgmma-grid-dev-v2/8sm/ownership-observations.json": "e096a2189eb8d556a1a842ea11fa51ff23b154eeb097ae6a8c67c5147f032249",
+        "results/rsi/wgmma-grid-dev-v2/8sm/lease-record.json": "1861b9d9f40ffafba3d4bdc5d81aeeef47f63f1d23cee343ec559e0da591e854",
+        "results/rsi/wgmma-grid-dev-v2/8sm/review.json": "8b9649b95d8d68fc35a79efa524b594eb01b1074b8ff46cfa423d88e5dafcede"
+      },
+      "environment": {
+        "gpu_uuid": "GPU-fa9b7c07-ca7c-1ae6-16af-ea31a02fa469",
+        "driver": "595.99.02",
+        "torch": "2.14.1+cu130",
+        "cuda": "13.0",
+        "container_digest": "sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
+        "exclusive_gpu": true
+      },
+      "validation": {
+        "source_import_JIT_hashes_private_caches_and_runtime_verified": true,
+        "reference_cases": 178,
+        "immutability_checks": 196,
+        "matched_input_fingerprint_checks": 84,
+        "clean_worker_exit": true,
+        "report_bound_correctness": true
+      },
+      "sampled_ownership": {
+        "samples": 43,
+        "first": 1792894519.5557814,
+        "last": 1792894562.459981,
+        "max_gap_seconds": 1.0330381393432617,
+        "foreign_or_unresolved_observed": false
+      },
+      "lease": {
+        "experiment": "WGMMA-GRID-8SM-DEV-v2",
+        "executor": "root",
+        "started_at": 1792894518.3715932,
+        "deadline_unix": 1792894818.3715932,
+        "reserved_usd": 0.4166666666666667,
+        "purpose": "fixed grid sweep firstcap8; standalone observational no promotion",
+        "status": "complete",
+        "elapsed_seconds": 66.43400287628174,
+        "terminal_proof": {
+          "container": "okc-rsi-41430eec5cc4",
+          "experiment": "WGMMA-GRID-8SM-DEV-v2",
+          "status": "terminal",
+          "client_returncode": 0,
+          "container_absent": true,
+          "launcher_and_observer_absent": true,
+          "gpu_compute_pids": []
+        },
+        "accounted_usd": 0.09226944843928019
+      }
+    },
+    {
+      "cap_SM_multiple": 2,
+      "requested_H200_grid_cap": 264,
+      "rows": [
+        {
+          "bs": 8,
+          "baseline_median_us": 117.47200042009354,
+          "candidate_median_us": 633.32799077034,
+          "balanced_speedup": 0.1600595889149375,
+          "order_balanced_blocks": 10,
+          "bootstrap_95": [
+            0.15264146425368602,
+            0.17249206551088286
+          ],
+          "assessment": "regression"
+        },
+        {
+          "bs": 32,
+          "baseline_median_us": 222.83199429512024,
+          "candidate_median_us": 2415.4399633407593,
+          "balanced_speedup": 0.09311210441182832,
+          "order_balanced_blocks": 10,
+          "bootstrap_95": [
+            0.09124687929213184,
+            0.09408807959604548
+          ],
+          "assessment": "regression"
+        },
+        {
+          "bs": 128,
+          "baseline_median_us": 345.15200555324554,
+          "candidate_median_us": 3718.095898628235,
+          "balanced_speedup": 0.09196808550149281,
+          "order_balanced_blocks": 10,
+          "bootstrap_95": [
+            0.0915622407160555,
+            0.0930054715800503
+          ],
+          "assessment": "regression"
+        },
+        {
+          "bs": 256,
+          "baseline_median_us": 453.3120095729828,
+          "candidate_median_us": 4933.135986328125,
+          "balanced_speedup": 0.09133363045205074,
+          "order_balanced_blocks": 10,
+          "bootstrap_95": [
+            0.09048030190653819,
+            0.09193586595689446
+          ],
+          "assessment": "regression"
+        }
+      ],
+      "primary_geomean_balanced_speedup": 0.10577643516948036,
+      "report_sha256": "239e4a9f94d21ec4b9064833cc5fa0f0ff39f5cb80f663fd65f233e4f604fca8",
+      "plan_sha256": "d8861c441c9e49c2ec21f93b4099f7aff0cf828ec6535f5fb2da7fa64ef50072",
+      "evidence_hashes": {
+        "results/rsi/wgmma-grid-dev-v2/2sm/development-930031.json": "239e4a9f94d21ec4b9064833cc5fa0f0ff39f5cb80f663fd65f233e4f604fca8",
+        "results/rsi/wgmma-grid-dev-v2/2sm/development-930031.correctness.json": "09dddd28ebc3d8ef00a82350864376cd65d91e2643ce2a647626da6b94ebc46c",
+        "results/rsi/wgmma-grid-dev-v2/2sm/ownership-observations.json": "c1bc87adce54bf22d3793d77b2546998d94bfc844af15057eb316c119b63f183",
+        "results/rsi/wgmma-grid-dev-v2/2sm/lease-record.json": "9e4901778d8f815822e6c2911caf1506d0972c5dedacf2bba4c8bd11bd164a85",
+        "results/rsi/wgmma-grid-dev-v2/2sm/review.json": "cbe16040cca7f43fa53d678012f092cde3ee03d0a61459d48f51c0ea201600c0"
+      },
+      "environment": {
+        "gpu_uuid": "GPU-fa9b7c07-ca7c-1ae6-16af-ea31a02fa469",
+        "driver": "595.99.02",
+        "torch": "2.14.1+cu130",
+        "cuda": "13.0",
+        "container_digest": "sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
+        "exclusive_gpu": true
+      },
+      "validation": {
+        "source_import_JIT_hashes_private_caches_and_runtime_verified": true,
+        "reference_cases": 178,
+        "immutability_checks": 196,
+        "matched_input_fingerprint_checks": 84,
+        "clean_worker_exit": true,
+        "report_bound_correctness": true
+      },
+      "sampled_ownership": {
+        "samples": 44,
+        "first": 1792894586.0073178,
+        "last": 1792894629.9590027,
+        "max_gap_seconds": 1.0323612689971924,
+        "foreign_or_unresolved_observed": false
+      },
+      "lease": {
+        "experiment": "WGMMA-GRID-2SM-DEV-v2",
+        "executor": "root",
+        "started_at": 1792894584.8377504,
+        "deadline_unix": 1792894884.8377504,
+        "reserved_usd": 0.4166666666666667,
+        "purpose": "fixed grid sweep secondcap2; standalone observational no promotion",
+        "status": "complete",
+        "elapsed_seconds": 67.28901386260986,
+        "terminal_proof": {
+          "container": "okc-rsi-57934228036a",
+          "experiment": "WGMMA-GRID-2SM-DEV-v2",
+          "status": "terminal",
+          "client_returncode": 0,
+          "container_absent": true,
+          "launcher_and_observer_absent": true,
+          "gpu_compute_pids": []
+        },
+        "accounted_usd": 0.09345696369806926
+      }
+    },
+    {
+      "cap_SM_multiple": 16,
+      "requested_H200_grid_cap": 2112,
+      "rows": [
+        {
+          "bs": 8,
+          "baseline_median_us": 118.76799911260605,
+          "candidate_median_us": 521.9520032405853,
+          "balanced_speedup": 0.22168341751343001,
+          "order_balanced_blocks": 10,
+          "bootstrap_95": [
+            0.21265188196373364,
+            0.22717516039279434
+          ],
+          "assessment": "regression"
+        },
+        {
+          "bs": 32,
+          "baseline_median_us": 220.2720046043396,
+          "candidate_median_us": 1959.8720073699951,
+          "balanced_speedup": 0.11687953679018606,
+          "order_balanced_blocks": 10,
+          "bootstrap_95": [
+            0.10740318503503848,
+            0.12285983679741005
+          ],
+          "assessment": "regression"
+        },
+        {
+          "bs": 128,
+          "baseline_median_us": 346.560001373291,
+          "candidate_median_us": 2709.6320390701294,
+          "balanced_speedup": 0.12578679787588173,
+          "order_balanced_blocks": 10,
+          "bootstrap_95": [
+            0.12385543749383833,
+            0.12672046725841066
+          ],
+          "assessment": "regression"
+        },
+        {
+          "bs": 256,
+          "baseline_median_us": 457.4719965457916,
+          "candidate_median_us": 3642.751932144165,
+          "balanced_speedup": 0.1250677094557894,
+          "order_balanced_blocks": 10,
+          "bootstrap_95": [
+            0.12310915115361373,
+            0.126655229701734
+          ],
+          "assessment": "regression"
+        }
+      ],
+      "primary_geomean_balanced_speedup": 0.1420898274419536,
+      "report_sha256": "a59d28a43957296d5d0f052ef07c58c62a451810e4dfadf00cba49331a0d1ef0",
+      "plan_sha256": "7437419790096bc4f0856ebffea0edd0bbb161a6f983c222d785ef2477f82a5c",
+      "evidence_hashes": {
+        "results/rsi/wgmma-grid-dev-v2/16sm/development-930031.json": "a59d28a43957296d5d0f052ef07c58c62a451810e4dfadf00cba49331a0d1ef0",
+        "results/rsi/wgmma-grid-dev-v2/16sm/development-930031.correctness.json": "28ba2e74863f5e1d2d1a1e049fca13d0b269c9c1ce8aca145a2cf21ad7f6cba8",
+        "results/rsi/wgmma-grid-dev-v2/16sm/ownership-observations.json": "eb0e00e5d7269732c05d0d303f654b97787fce256a0cb96ceec4d2fdb29cd5d5",
+        "results/rsi/wgmma-grid-dev-v2/16sm/lease-record.json": "91dcdfb612d5e485904d730f4871593b0c5d247aaa277fe5a1268c7f09548c26",
+        "results/rsi/wgmma-grid-dev-v2/16sm/review.json": "b3c0cf5aeddd0160a3b44a063314e1104024d3707e89825d30d744e947808e4f"
+      },
+      "environment": {
+        "gpu_uuid": "GPU-fa9b7c07-ca7c-1ae6-16af-ea31a02fa469",
+        "driver": "595.99.02",
+        "torch": "2.14.1+cu130",
+        "cuda": "13.0",
+        "container_digest": "sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
+        "exclusive_gpu": true
+      },
+      "validation": {
+        "source_import_JIT_hashes_private_caches_and_runtime_verified": true,
+        "reference_cases": 178,
+        "immutability_checks": 196,
+        "matched_input_fingerprint_checks": 84,
+        "clean_worker_exit": true,
+        "report_bound_correctness": true
+      },
+      "sampled_ownership": {
+        "samples": 44,
+        "first": 1792894653.343885,
+        "last": 1792894697.3514233,
+        "max_gap_seconds": 1.0742003917694092,
+        "foreign_or_unresolved_observed": false
+      },
+      "lease": {
+        "experiment": "WGMMA-GRID-16SM-DEV-v2",
+        "executor": "root",
+        "started_at": 1792894652.15805,
+        "deadline_unix": 1792894952.15805,
+        "reserved_usd": 0.4166666666666667,
+        "purpose": "fixed grid sweep finalcap16; standalone observational no promotion",
+        "status": "complete",
+        "elapsed_seconds": 69.3419201374054,
+        "terminal_proof": {
+          "container": "okc-rsi-9e6463ebb832",
+          "experiment": "WGMMA-GRID-16SM-DEV-v2",
+          "status": "terminal",
+          "client_returncode": 0,
+          "container_absent": true,
+          "launcher_and_observer_absent": true,
+          "gpu_compute_pids": []
+        },
+        "accounted_usd": 0.09630822241306305
+      }
+    }
+  ],
+  "crosscap_input_fingerprints_match_all80": true,
+  "decision": "Reject these caps as production candidates; no holdout escalation from this sweep.8SM has largest observedratio but remains severe regression; fixedorder/sessionenvironment effects prevent calibratedwinner or causalclaim.",
+  "cpu_overlap_caveat_8sm": {
+    "CPU_container": "c015c4b09eed",
+    "root_reported_CPU_only": true,
+    "root_reported_cpus_limit": 2,
+    "lease_start_UTC": "2026-10-25T02:15:18.371593Z",
+    "CPU_container_start_UTC": "2026-10-25T02:15:19.058488939Z",
+    "CPU_container_end_UTC": "2026-10-25T02:15:28.588654259Z",
+    "event_artifact": "results/rsi/candidates/wgmma-pipeline-v4/docker-events.json",
+    "event_artifact_sha256": "8504a468b7cc000b091ed237ed18f13437cba6da740de543705f71efdf3df98d",
+    "interpretation": "CPUcontainer lifetime overlaps8SMlease; rawtiming report does not timestampindividual timedkernel windows, so exacttimingoverlap unverified. Do not assume contamination or CPUexclusivity; retaincaveat and no8SMretest perpreregisteredoneattempt policy.",
+    "later_caps": "Root reports no remoteCPUcompile during2/16; not an independentcontinuousCPUtrace.",
+    "independent_event_check": {
+      "start": 1792894519058488939,
+      "die": 1792894528588654259
+    },
+    "CPU_container_duration_seconds": 9.53016532
+  },
+  "limits": [
+    "Ratios are matchedbaseline/candidate within eachcap; sharedinput hashes acrosscaps verified but sessions are not interleaved/randomizedcrosscap experiment.",
+    "Withinrunbootstrap intervals only; no multiplecomparison or acrosssession calibration.",
+    "Ownership sampled about1second pluscooperativehostlock; cannot exclude subpollGPUactivity; noforeign/unresolvedobserved.",
+    "Partial4shape/nonheldout data cannot establish original14shape3xgoal, servingimprovement or optimizermethod superiority.",
+    "JITidentities workerattested and validatedstructure/provenance; remotebinarybytes notindependentlyfetched.",
+    "No actualoccupancy/warp-loadbalance profile percap; requestedgridSMmultiple is not achievedresidentCTAs."
+  ],
+  "gpu_calls_by_reviewer": false
+}

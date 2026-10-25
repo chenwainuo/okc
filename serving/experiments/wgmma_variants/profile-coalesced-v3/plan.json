@@ -1,0 +1,105 @@
+{
+  "status": "prepared_not_executed",
+  "owner": "root executor only; serialized observational profiling lease",
+  "representative_fixture": {
+    "batch": 128,
+    "weight_seed": 940033,
+    "input_seed": 941161,
+    "distribution": "ep8 default official generate_input",
+    "note": "Exactly matches coalesced-v3 development configure fixture; development observational profile, not fresh heldout timing"
+  },
+  "method": [
+    "Pin exact immutable coalesced-v3 archive90e3f427... adapters/reference bySHA256 and use frozen SGLang namespace isolation; no candidate edits",
+    "Prepare official fixture once, run original full expert and verify official reference + input immutability",
+    "Diagnostic-only temporary Python operand capture; restore original adapter immediately",
+    "Validate direct down projection exactly repeats validated intermediate",
+    "Emit routing metadata and total versus local-expert CTA counts before profiling",
+    "Mark NVTX range and CUDA profiler start/stop around one original project call",
+    "NCU filter selects routed_nvfp4_down only; output zeroing and input setup outside collected kernel counters",
+    "Kernel replay may execute target more than once; launch-count1 is one selected logical launch, not one hardware execution",
+    "Check direct down output unchanged after profiler",
+    "Coalesced Bank shape[E,N/64,K/16,128]: grid_x=packed.shape[1], not packed.shape[1]//64; validate dtype/shape and outputchannels before profiling"
+  ],
+  "metrics": {
+    "launch": [
+      "launch__grid_size",
+      "launch__block_size",
+      "launch__registers_per_thread",
+      "launch__shared_mem_per_block"
+    ],
+    "active_warps": [
+      "sm__warps_active.avg.per_cycle_active",
+      "sm__warps_active.avg.pct_of_peak_sustained_active",
+      "smsp__warps_eligible.avg.per_cycle_active"
+    ],
+    "dram": [
+      "dram__bytes_read.sum",
+      "dram__bytes_write.sum",
+      "dram__sectors_read.sum",
+      "dram__sectors_write.sum"
+    ],
+    "stall": [
+      "smsp__warp_issue_stalled_barrier_per_warp_active.pct",
+      "smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct"
+    ],
+    "tensor": [
+      "sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed"
+    ]
+  },
+  "interpretation": {
+    "grid": "Compare metadata-derived early-return CTA count to total; average occupancy can be diluted by skipped CTAs. Does not alone prove scheduler fix ROI.",
+    "barrier": "Warp wait at CTA barriers; high fraction supports synchronization bottleneck but does not identify a specific source barrier. WGMMA wait may require later dedicated instruction analysis.",
+    "long_scoreboard": "Waits on L1TEX dependency including global/local loads; not synonymous with saturated HBM or proof uncoalesced transactions.",
+    "dram": "Cold replay actual DRAM traffic; sector/byte metrics do not by themselves isolate coalescing because cache effects and repeated loads matter.",
+    "tensor": "Tensor-active fraction contextualized with useful versus padded work; low activity does not imply hardware fault.",
+    "timing": "Profiler timings explicitly excluded from speedup, serving throughput and promotion claims"
+  },
+  "tool_validation": {
+    "version": "Nsight Compute2025.3.1.0 build36398880",
+    "method": "Reuses reviewed v1 metric-query.txt validation from identical pinned image/tool; preparer ran no remote or GPU jobs for this revision",
+    "metric_names": "All10 requested hardware metric names confirmed; four launch metrics exist in previous same-tool H200 reports",
+    "record": "metric-query.txt"
+  },
+  "execution": {
+    "command": "bash results/rsi/candidates/wgmma-profile-coalesced-v3/root-command.sh",
+    "gpu_executed_by_preparer": false,
+    "deadline_seconds": 240,
+    "forced_cleanup_grace_seconds": 15,
+    "same_host_flock": ".gpu-cache/rsi-device0.lock",
+    "cache": "Existing private coalesced-v3 role+bundle90e3... cache at same /cache/candidate/90e3... path; no cache mixing",
+    "output": "results/rsi/wgmma-coalesced-profile-v3",
+    "require": "Root ensure no concurrent timing/profiling and record lease/terminal proof; shell takes flock itself, do not nest same lock",
+    "cleanup": "rm15s then inspect10s; host-terminal.json absent proof. Unknown exits42; root must retain lease and reconcile GPU/container before further admission. Flock held through cleanup attempt.",
+    "evidence_overwrite": "Refused: output mkdir fails if existing; no --force-overwrite"
+  },
+  "validation": "Prepared locally; Python compile/bashsyntax/sourcepins verified. GPU fullreference/inputfingerprint/repeat checks are runtime gates, not yet executed in this revision.",
+  "artifact_sha256": {
+    "metric-query.txt": "d809bce140f9bcaf364d92cb938929ab877c79065128a41b34a23f8e4099d26f",
+    "teardown.py": "b7de95d8301dd9d6b768de855bb81dfdeafde4ab598424e4355168aca0facc14",
+    "root-command.sh": "6360deb9dadd9eab3f9defc72fb9b5da8c2203413b27b5511cdc10b815d84fb7",
+    "inside-command.sh": "043f856134999ebc65a8a4ad4e092996d8c900c74e2fd1bf0ac0076c2f00aac0",
+    "profile_down.py": "225de7fcf048b9de8eeedf7cf0fff1381f8aa68997e540c3be5813e5a1f7ae78",
+    "source-pins.json": "4c92f02a1052de249458f6950e8d9341953c5bae625cf80cd1cea89fc62f8ee6"
+  },
+  "static_inner_loop_model": {
+    "scope": "Per nonreturningCTA, sourceexpression counts before compileroptimization; not measuredmemory transactions",
+    "tile": [
+      64,
+      8,
+      4096
+    ],
+    "k16_steps": 256,
+    "cta_barrier_statements": 768,
+    "wgmma_wait_group0_statements": 256,
+    "packed_uint32_load_expressions": 32768,
+    "distinct_packed_payload_bytes": 131072,
+    "scale_byte_expressions": 65536,
+    "distinct_scale_payload_bytes": 16384,
+    "activation_payload_bytes": 65536,
+    "layout": "Onecoalesced uint32/lane contains8FP4codes; two scalebytes reuse acrossbothdecodehalves; no fullBF16materialization",
+    "interpretation": "Same directallocationgrid andK16wait structure asv1. Compare longscoreboard/DRAM/tensor counters cautiously: fixtureseed differsfromv1profile so routingcounts must accompany interpretation; no controlledspeedup inference."
+  },
+  "candidate_archive": "results/rsi/bundles/wgmma-coalesced-v3.tar.gz",
+  "candidate_archive_sha256": "90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087",
+  "remote_immutable_tree": "/root/okc/results/rsi/immutable-trees/candidate-90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087"
+}

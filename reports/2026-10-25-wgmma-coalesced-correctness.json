@@ -1,0 +1,2550 @@
+{
+  "status": "development_correctness_pass",
+  "routed_and_full_results": [
+    {
+      "pass": true,
+      "cases": [
+        "mixed",
+        "skew",
+        "empty",
+        "graph_valid",
+        "graph_empty_after_valid"
+      ],
+      "scope": "canonical layout actual route alignment, down projection N64 K4096; no timing"
+    },
+    {
+      "status": "complete",
+      "scope": "correctness-only routed down projection",
+      "runtime": {
+        "torch": "2.14.1+cu130",
+        "cuda": "13.0",
+        "gpu": "NVIDIA H200"
+      },
+      "sglang_imports": {
+        "sglang.srt.environ": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/environ.py",
+          "sha256": "aa4b3f150b684269760017b19983a8f85f9ecc52cf380a38e0c8ebca530b99f1"
+        },
+        "sglang.srt.observability.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/observability/utils.py",
+          "sha256": "797ed7c3ab8785bc0d8b783bbdd70420a3363a9fb473e7a6642583fb8ea16680"
+        },
+        "sglang.srt.observability.func_timer": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/observability/func_timer.py",
+          "sha256": "5bac9017a6dbc69468d3a9706bb91e5901d1a1b788e8b2ab2d836f8a8fccd179"
+        },
+        "sglang.srt.platforms.device_mixin": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/platforms/device_mixin.py",
+          "sha256": "fb77deb4382391837feda25f718af59769fe14a2e4a0eaea3466d9e744b896a1"
+        },
+        "sglang.srt.platforms.interface": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/platforms/interface.py",
+          "sha256": "c3784b3691ead0804a39da5d2df4efcd09b17fba5c7201868e65b960282073fb"
+        },
+        "sglang.srt.platforms.cpu": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/platforms/cpu.py",
+          "sha256": "94b748f7082be66bc48ed5f9c60ae9354adf15d3cd8015b74e51692c0eb73ed3"
+        },
+        "sglang.srt.platforms.cuda": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/platforms/cuda.py",
+          "sha256": "6579d5afc34bf3511175b82a2ae9a77c2fed86488f9f7b04079c668af49090e2"
+        },
+        "sglang.srt.platforms.mps": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/platforms/mps.py",
+          "sha256": "63f6558f674c70c561aed4ecb6d11428966da3b3bbc2cd741dc60db27578e791"
+        },
+        "sglang.srt.platforms.musa": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/platforms/musa.py",
+          "sha256": "2a25da76a249b12b48da133e7acc6460ee6626af2746a08d0cd83a56583c7b0a"
+        },
+        "sglang.srt.platforms.npu": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/platforms/npu.py",
+          "sha256": "7d0a6f2b1f3d92cc8dc444cc12a7c3ee467ce48197d52439c831d33c05c98416"
+        },
+        "sglang.srt.platforms.rocm": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/platforms/rocm.py",
+          "sha256": "c8f77ed3720b4f7b6dc4a697da73825dfcea645412ad677b4acba4e51c2ba19c"
+        },
+        "sglang.srt.platforms.xpu": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/platforms/xpu.py",
+          "sha256": "db6c420440371e8297d4010c7664e695325ebba36741322d8269fba79c90dbe3"
+        },
+        "sglang.srt.plugins.hook_registry": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/plugins/hook_registry.py",
+          "sha256": "0144d8c3e5ee294322894f88b8ad3bd49edad15c124650e4e834d0366815dc7d"
+        },
+        "sglang.srt.plugins": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/plugins/__init__.py",
+          "sha256": "3a975a73f1a7887e68c81ea7a2530250597ac8ae978efc0b0f70f038a99a3164"
+        },
+        "sglang.srt.platforms": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/platforms/__init__.py",
+          "sha256": "67b2ead299b6ff10f1871f1522967819c91a66b6ad4d51162598ea0a0b230806"
+        },
+        "sglang.srt.arg_groups": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sglang.srt.arg_groups.prefill_buffer_ceiling": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/prefill_buffer_ceiling.py",
+          "sha256": "452c98c806833fb2625926f72ccedf7168ec1e9accdb820c1d46135667b0ba94"
+        },
+        "sglang.srt.arg_groups.arg_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/arg_utils.py",
+          "sha256": "2a5b4e36dfb5ffcf2fe9dc9ead716f2e7951e3c5658e6333e2f68d2de4df4400"
+        },
+        "sglang.srt.arg_groups.field_order": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/field_order.py",
+          "sha256": "c28b5160358cff6938cee716a8e4fbf797cda5a4268dbb9debdb3791ce9f31ca"
+        },
+        "sglang.srt.arg_groups.fields": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/__init__.py",
+          "sha256": "1123322908fef29cc844456dee627ea579251736bf4bea26e4e02bdf265e446f"
+        },
+        "sglang.srt.arg_groups.fields.parallel": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/parallel.py",
+          "sha256": "b3ddf8952093cd7a67a08a56ac30fc21a57cf65c79178f4bd05dd9e3c298dc33"
+        },
+        "sglang.srt.runtime_context": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/runtime_context.py",
+          "sha256": "b8510f48bb90fa22474a64f6769c1e71e3fb47a95dd313cffb11df7bf414c975"
+        },
+        "sglang.srt.utils.msgspec_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/msgspec_utils.py",
+          "sha256": "f5149a93d6c3de0eb79db2bbb9516418b2d8445638ab9b1d61f6719b2bf58b90"
+        },
+        "sglang.srt.utils.video_decoder": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/video_decoder.py",
+          "sha256": "6762a7088adbb23b6d299e632c96f8a0dba7a090c6de968cd244f86de5b1f005"
+        },
+        "sglang.srt.utils.common": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/common.py",
+          "sha256": "61293a66e44b76cb4f4320a0942cc6b817387f10d472d8615373da01641b1063"
+        },
+        "sglang.srt.utils.network": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/network.py",
+          "sha256": "335811df5b7125ffa02dd12a206c3f42977b35091fe83618db4b511ad1ad1968"
+        },
+        "sglang.srt.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/__init__.py",
+          "sha256": "d4c887ce6d68fb14d2f870c50dabc621da1c67a85823e8c8cf704392865963c8"
+        },
+        "sglang.srt.utils.hf_transformers_patches": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/hf_transformers_patches.py",
+          "sha256": "8b469aba4abadf6da883118964ee8472cf300186f4a44d5e192a91a24f1b9bb9"
+        },
+        "sglang.lang.chat_template": {
+          "path": "/baseline/serving/sglang/python/sglang/lang/chat_template.py",
+          "sha256": "d91a4548101b581828c3e7b0517360a9a42e06d8295760972200147bb51c6a19"
+        },
+        "sglang.lang.choices": {
+          "path": "/baseline/serving/sglang/python/sglang/lang/choices.py",
+          "sha256": "b868fb61327b37f53610c0556ac83a2cc990cfe56cb937b875eddc1ecf1dc5f9"
+        },
+        "sglang.lang.global_config": {
+          "path": "/baseline/serving/sglang/python/sglang/lang/global_config.py",
+          "sha256": "54fe54e9eb2d1bce7309de5f5ede799706defe06b202ee17af9a9adcac3c38af"
+        },
+        "sglang.lang.ir": {
+          "path": "/baseline/serving/sglang/python/sglang/lang/ir.py",
+          "sha256": "837ae11a00bd08851402e4fcfa75c8101cae5f0ab6145623345a2a263f0e5146"
+        },
+        "sglang.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/utils.py",
+          "sha256": "7da52dcf63e3399c3d04dfe5ca4b99aabac54fa3a034e0a6526252462e75d4ef"
+        },
+        "sglang.lang.interpreter": {
+          "path": "/baseline/serving/sglang/python/sglang/lang/interpreter.py",
+          "sha256": "6dcff66a47adb598a6d9c3d9eb8728e9bc7ce83efd5ce2dfe17bd7ba07f2c8de"
+        },
+        "sglang.lang.backend.base_backend": {
+          "path": "/baseline/serving/sglang/python/sglang/lang/backend/base_backend.py",
+          "sha256": "b44bad182539b678b5c4696b223015bc0f5a7e5241b7676e2ab203cea69b2567"
+        },
+        "sglang.lang.api": {
+          "path": "/baseline/serving/sglang/python/sglang/lang/api.py",
+          "sha256": "4edfca46371b3de699d15299119f35489399ce9b3620b06a02fe0f561c96d174"
+        },
+        "sglang.lang.backend.runtime_endpoint": {
+          "path": "/baseline/serving/sglang/python/sglang/lang/backend/runtime_endpoint.py",
+          "sha256": "8aba01611518bf64370d6ad6998971816b003c3fa55d131d45a1d2c14456e727"
+        },
+        "sglang.version": {
+          "path": "/baseline/serving/sglang/python/sglang/version.py",
+          "sha256": "b10f7d9ea276972352b1e9de0eb0bbb47d8ebe64c29469e15ea016a12019bb22"
+        },
+        "sglang": {
+          "path": "/baseline/serving/sglang/python/sglang/__init__.py",
+          "sha256": "0c6bd1b5bc75da013d49d26f7799ca36d682779293405dce1adc193b97a0e6bd"
+        },
+        "sglang.srt.arg_groups.model_override_base": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_override_base.py",
+          "sha256": "fec2982fe6fcd04a6f330de1abcbcfcdbc2e92b4706c8b519adabce357aac362"
+        },
+        "sglang.srt.compilation.compilation_config": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/compilation/compilation_config.py",
+          "sha256": "0eb0d6586ad6d28a194ffa084e5d4b326caa317cbd09d0d8dd809219d75aac41"
+        },
+        "sglang.srt.distributed.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/distributed/utils.py",
+          "sha256": "c15020f4d013eff37daad37a9a96089d5bb70e7b7f192c6c22fb020148871f1b"
+        },
+        "sglang.srt.model_executor.runner_backend_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_executor/runner_backend_utils/__init__.py",
+          "sha256": "7b7119efcfd59dad25698a73771656856e533c0e393b073fd3ad0afd38f34279"
+        },
+        "sglang.srt.model_executor.cuda_graph_config": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_executor/cuda_graph_config.py",
+          "sha256": "a7e16d34042149bf488d62dcb0240a17a7ddefa025b6bf5c9cfabc7bcab00b91"
+        },
+        "sglang.srt.model_executor.runner_backend_utils.tc_piecewise_cuda_graph.context_manager": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_executor/runner_backend_utils/tc_piecewise_cuda_graph/context_manager.py",
+          "sha256": "1f51ba025ea2130b9c13483dabd1e505edd75bae61f9a05d22bb8273ae238d95"
+        },
+        "sglang.srt.model_executor.runner_backend_utils.tc_piecewise_cuda_graph": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_executor/runner_backend_utils/tc_piecewise_cuda_graph/__init__.py",
+          "sha256": "364c2cdfabfc7c1e746f87aced897c54f10790fd5a05c4f9100d342ab6db85a6"
+        },
+        "sglang.kernels.kernel_api_logging": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/kernel_api_logging.py",
+          "sha256": "d3cfbaa939422f47b84b96a8878a98b178a7182a79656440c08938804517c4f7"
+        },
+        "sglang.kernels.spec": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/spec.py",
+          "sha256": "7ecf13d26b8c9a7117513b25bf85fcdc5dcae942c95b8cc2b7f2975b45015f1e"
+        },
+        "sglang.kernels.registry": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/registry.py",
+          "sha256": "9d9614b4a54647fa40c66d6baf962b4a105c653239075542ce2482fcded01cea"
+        },
+        "sglang.kernels.fused_op": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/fused_op.py",
+          "sha256": "652ceeea3bbbdc2b864c3fa3cf914148d486392a90384506043d5c2ccf60eb3e"
+        },
+        "sglang.kernels.selector": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/selector.py",
+          "sha256": "e13283e97d664d9ad70422c0b0b4c27c046dd934332d40bb5610887018741504"
+        },
+        "sglang.kernels.ops.activation": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/activation/__init__.py",
+          "sha256": "580180b482029f8582009e2d4158d1aa88025cd412e058799e5e1ff577206c57"
+        },
+        "sglang.kernels.ops.attention": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/attention/__init__.py",
+          "sha256": "dbc46ba23d5fd1e8eb0180adc2dcff1437a7ef24e22c48620998bb7191b6400a"
+        },
+        "sglang.kernels.ops.communication": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/communication/__init__.py",
+          "sha256": "05bcbaa0ca736980706b0c79d96a9ccb9bf9b9985da4dad686c4faa131d5bf85"
+        },
+        "sglang.kernels.ops.diffusion": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/diffusion/__init__.py",
+          "sha256": "263263a99513a504967b7b192bfb3fed0c7f4cb2ceb9d7354286c9f55b61160d"
+        },
+        "sglang.kernels.ops.elementwise": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/elementwise/__init__.py",
+          "sha256": "5d620c1a2d5aa86a7b865879b19f61a607a7805e92acd65d63723a7da2d1f594"
+        },
+        "sglang.kernels.ops.embeddings": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/embeddings/__init__.py",
+          "sha256": "584c0abd5fc35f53ea681bc8ed816ffa71ed32f62c704a466eff9ee0f9c9efcc"
+        },
+        "sglang.kernels.ops.gemm": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/gemm/__init__.py",
+          "sha256": "ee798e339ef5747c394a2d906f09f561d3bb4bc68f245f6e64a34111a4c8c734"
+        },
+        "sglang.kernels.ops.grammar": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/grammar/__init__.py",
+          "sha256": "650612778d49fc2fc68e5641dab243c22ae5f73117f9d363e1477ed77847fc6d"
+        },
+        "sglang.kernels.ops.kvcache": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/kvcache/__init__.py",
+          "sha256": "c68dc6b9fb9bd312917fd181e1dede72c4ddf73f9453d213a90457e402a46c81"
+        },
+        "sglang.kernels.ops.layernorm": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/layernorm/__init__.py",
+          "sha256": "f56f6877497d52345bbb7e36a0528ad43163c75c4c853e1d7f27d61ec9931d39"
+        },
+        "sglang.kernels.ops.lora": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/lora/__init__.py",
+          "sha256": "940aa26ac7c9dbdb9161f91b32b15f928d91517a583e39c82c7e9aad1e156e73"
+        },
+        "sglang.kernels.ops.mamba": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/mamba/__init__.py",
+          "sha256": "42c2cb6be933fd232d834806827da8496fad9cdc2ace364939096e9d80dc4e2a"
+        },
+        "sglang.kernels.ops.memory": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/memory/__init__.py",
+          "sha256": "c5ec41822fb7731f62f24d931a7824cd68c3f610e397244e6a54fdcf92b77621"
+        },
+        "sglang.kernels.ops.mm": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/mm/__init__.py",
+          "sha256": "7c019ad75cded2f2971a9a8e7c1d9a5f75fef1d98b8d54efa796d0ecb86d627d"
+        },
+        "sglang.kernels.ops.moe": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/moe/__init__.py",
+          "sha256": "dc6f224d2e9e396a8272742eda88643e0a1cf812ac32bba7f6d12b4a37894434"
+        },
+        "sglang.kernels.ops.muse_spark_v12": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/muse_spark_v12/__init__.py",
+          "sha256": "8b0f83dc261323194e8fd6876e38f2cb888e4d120f68e026a5b62fd2b2e34175"
+        },
+        "sglang.kernels.ops.quantization": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/quantization/__init__.py",
+          "sha256": "56717b4c95ae81f5d953c8395f4710c1eff1f2fe959eebcc076b3aeef6153e52"
+        },
+        "sglang.kernels.ops.sampling": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/sampling/__init__.py",
+          "sha256": "7b28087423d586f267b90e6a6651621be2c80ea8be7b8e5a9ff2b434a6302bd2"
+        },
+        "sglang.kernels.ops.speculative": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/speculative/__init__.py",
+          "sha256": "d89f69867027e5f7f9d40e3dbce79ef5fcc598177f38a79a5a02f2f22a5ebdae"
+        },
+        "sglang.kernels.ops.lplb": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/lplb/__init__.py",
+          "sha256": "cc59c1c96943b4860375c4d45b2bdfd668f653613cccc1dca62e4cf38766b1d7"
+        },
+        "sglang.kernels.ops.kv_canary": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/kv_canary/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sglang.kernels.ops": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/__init__.py",
+          "sha256": "d32e1c8293550da8c85b195cc89296283d463e59ef18e44dc94d8e9a4b2a8455"
+        },
+        "sglang.kernels": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/__init__.py",
+          "sha256": "8699543ca891f901b829d318d14314ce516a03a5814e27db02ecf09b49250faa"
+        },
+        "sglang.srt.utils.custom_op": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/custom_op.py",
+          "sha256": "d7c760c7fb45985679517561d034a8568897dd15b7a3e371aa5b1add6925f776"
+        },
+        "sglang.srt.utils.stale_shm_cleanup": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/stale_shm_cleanup.py",
+          "sha256": "7a9047c6108ac87db752d947ec632d00f5be433b9b51cbf57178959a4b2c1896"
+        },
+        "sglang.srt.distributed.parallel_state": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/distributed/parallel_state.py",
+          "sha256": "49f4ecb8627b469d1e6972ba6eba0c54412ea5eec756da587b3ad375f607a5c7"
+        },
+        "sglang.srt.distributed.communication_op": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/distributed/communication_op.py",
+          "sha256": "f93114fdfe4583bcb93ce80505476691453b19aec51ec67c9c0207834afe97b9"
+        },
+        "sglang.srt.distributed": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/distributed/__init__.py",
+          "sha256": "8c539ccadfb01403cc05401ff739196a535096dfb8aea993ea908a073d44e2aa"
+        },
+        "sglang.srt.distributed.device_communicators.pynccl_allocator": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/distributed/device_communicators/pynccl_allocator.py",
+          "sha256": "cec2f1df527cc2c5569bcd555734bc1b97f7ce2280c33b099e1a6b5accb93c22"
+        },
+        "sglang.kernels.ops.memory.memcpy_triton": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/memory/memcpy_triton.py",
+          "sha256": "a81f299bb4186f9cae247cb3f5c97c8554e9ec7f248aa34266156964ca8a939f"
+        },
+        "sglang.srt.layers.dp_attention": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/dp_attention.py",
+          "sha256": "f128669ebd206148f9ef4eb5cca9f4481702cf65177ed8a279a219b84c466915"
+        },
+        "sglang.srt.layers.moe.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/utils.py",
+          "sha256": "dd4bc85f40ee72622631b8dee52ed8a6368bf4dc257a4a78228901d283a63dd0"
+        },
+        "sglang.srt.layers.moe.moe_runner.base": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/base.py",
+          "sha256": "200a97cb92dff7853dd4befb954e57fdde0c78313892a6473cccb420b366d3b7"
+        },
+        "sglang.kernels.jit": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/__init__.py",
+          "sha256": "7d3a182933356ee4a73edae72cde73251f9b4ba13b7a1b1731b6bc8acae20f5c"
+        },
+        "sglang.kernels.jit.utils.common": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/utils/common.py",
+          "sha256": "28eb4d7c984bf1df8612e55654a32e0f349ca5b6da6a1b540f7ea17e4c7853a9"
+        },
+        "sglang.kernels.jit.utils.arch": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/utils/arch.py",
+          "sha256": "a984b2509fb38bd19bf2e756af22c1621dc01a89c0fa7f32456a56a89ab25ef6"
+        },
+        "sglang.kernels.jit.utils.compile.cpp_args": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/utils/compile/cpp_args.py",
+          "sha256": "84be4f6ab4b3a435a424e2762cf2f48c25ccf57119e6971e83f4856d779757c3"
+        },
+        "sglang.kernels.jit.utils.compile.toolchain": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/utils/compile/toolchain.py",
+          "sha256": "20531e1083e5cd97c3f8dfd7ea2b046bcc4478ef4ddb217dc2ef24cffc0c683a"
+        },
+        "sglang.kernels.jit.utils.compile.paths": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/utils/compile/paths.py",
+          "sha256": "bfa8a912174607c74237f1b5f45b0a87dc8da8b5f1f5be39868966787fae76e2"
+        },
+        "sglang.kernels.jit.utils.compile.spec": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/utils/compile/spec.py",
+          "sha256": "f762d7d90adb2770988ab0d17b444496d9d611531ab136eb37b8c8707dd42b2f"
+        },
+        "sglang.kernels.jit.utils.compile.cache": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/utils/compile/cache.py",
+          "sha256": "93add080f9ee85405085f5d2a0f6f395408436375e5e6b19a42d046756d0b16a"
+        },
+        "sglang.kernels.jit.utils.compile.ninja": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/utils/compile/ninja.py",
+          "sha256": "082dff0b50a890f4987e1fb8caa0e0c6e77edfef766836ee4b17b5d3e514e218"
+        },
+        "sglang.kernels.jit.utils.deps": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/utils/deps.py",
+          "sha256": "d1a8f3310081e7be917bb99659e40e7cac3d953b0b485762478660ed05da42d9"
+        },
+        "sglang.kernels.jit.utils.compile.loader": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/utils/compile/loader.py",
+          "sha256": "2a48d429aa1068e0b2084e271ee2c08e7dca8388aee73edd3a5e5824cf950b02"
+        },
+        "sglang.kernels.jit.utils.compile": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/utils/compile/__init__.py",
+          "sha256": "3b40be665e89d9a9304036b42c8ad8ef5a278b94112ddab2ceb3046a1b8120fb"
+        },
+        "sglang.kernels.jit.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/jit/utils/__init__.py",
+          "sha256": "3115b954dc1f463f27f657d6e34e4cc9acbda9b9afa222b1d2f0f4e39a070120"
+        },
+        "sglang.kernels.ops.moe.dsv4": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/moe/dsv4.py",
+          "sha256": "b61949842809048e1eb9d05f86ca346bd10d36e00951fdff2764ab1a256fff43"
+        },
+        "sglang.kernels.ops.moe.triton_pad_expert_counts": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/moe/triton_pad_expert_counts.py",
+          "sha256": "4f4d3e06c0f13f04aac83c4386f1de3aaf4790aae1832b25f8a5925506d9c93d"
+        },
+        "sglang.kernels.ops.quantization.per_token_group_quant": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/quantization/per_token_group_quant.py",
+          "sha256": "5b0f1f929a1e142d4fcdcfcb1445a641847e6697861e6d7c2fcf21871fa2d15e"
+        },
+        "sglang.srt.layers.deep_gemm_wrapper.configurer": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/deep_gemm_wrapper/configurer.py",
+          "sha256": "d22936de0461a1d5d45a319ef9b57a0e235b4a13e25e302c370c47d8e81aba2b"
+        },
+        "sglang.kernels.ops.attention.clamp_position": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/attention/clamp_position.py",
+          "sha256": "c81d677bade616ca54dcddd52a07f6dd45ffc92fe693af33503f9169b8c65aa9"
+        },
+        "sglang.kernels.ops.attention.position": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/attention/position.py",
+          "sha256": "5b0c61b2bd74d4eeb1d3fa21dfb37c52838ce3533701c4f9f66f6031fdabfb17"
+        },
+        "sglang.srt.configs.afmoe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/afmoe.py",
+          "sha256": "7ab65afe8a3afb6934916907313ba8aadc3db3b733bbb5447399c69ad8e98cec"
+        },
+        "sglang.srt.configs.mamba_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/mamba_utils.py",
+          "sha256": "659d941b57b6960f1144e7c6a6e0449ea630b273ea69cb4f89312c10e0a8ff11"
+        },
+        "sglang.srt.configs.qwen3_vl": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/qwen3_vl.py",
+          "sha256": "8e35615208bb75e8943a210db0bce22baeaeaf8a5f14304d2438dc2af729b38f"
+        },
+        "sglang.srt.configs.bailing_hybrid": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/bailing_hybrid.py",
+          "sha256": "5985b3fe2cbe55fe8e2ee670885dcd090a0c041b4087b847fefc277ddb4c8429"
+        },
+        "sglang.srt.configs.bailing_moe_v2": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/bailing_moe_v2.py",
+          "sha256": "354c2ee0d21c5184dd5983cfa0d5750d1c6be3cfdc642e8bd8a96348349721e9"
+        },
+        "sglang.srt.configs.chatglm": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/chatglm.py",
+          "sha256": "a1b9af316a8cad3ebcffc83103e3d1a748cae081ca3364f0ab73c5b2089526ee"
+        },
+        "sglang.srt.configs.cohere2_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/cohere2_moe.py",
+          "sha256": "e62e7ae6f6a851ff94900b8f106600575e08768862f2dbe97c502aaf0222c36f"
+        },
+        "sglang.srt.configs.cosmos3": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/cosmos3.py",
+          "sha256": "0eb52cfb70fc59af5cedd831bf288fb89c07c1ea9700ed9d82654beb1c6cd293"
+        },
+        "sglang.srt.configs.dbrx": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/dbrx.py",
+          "sha256": "b5d848917010975cabd0cc6a166b031b51347b6a6e4534ca9ba513c803412da7"
+        },
+        "sglang.srt.configs.deepseekvl2": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/deepseekvl2.py",
+          "sha256": "977d89366c8f20002a106fb88726efea4e3f5a3c2db60b4791c7b81c3e8eeaaf"
+        },
+        "sglang.srt.multimodal": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/multimodal/__init__.py",
+          "sha256": "1eccef4346506ea01312ea8f8cf5a37307704a53acccdca0e8c3e94c5f7e29ef"
+        },
+        "sglang.srt.multimodal.customized_mm_processor_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/multimodal/customized_mm_processor_utils.py",
+          "sha256": "288a2c31f8de0e69212ebbdf4814802959a877e4070f0a830e57a2916a7fd78c"
+        },
+        "sglang.srt.configs.dots3": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/dots3.py",
+          "sha256": "dc26150c448dc5689e853934ba21bcfc42b77fe156e9df25d3f2e1517f12b3f8"
+        },
+        "sglang.srt.configs.dots_vlm": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/dots_vlm.py",
+          "sha256": "436a9a3fae6c6022869a0fdbbdce20e726fea5ab1d64dc78c679e5ceee847755"
+        },
+        "sglang.srt.configs.dots_ocr": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/dots_ocr.py",
+          "sha256": "23093622e7984d04cec4fc3a4479b4c525fd850579f62de805a4dc8c6061c134"
+        },
+        "sglang.srt.configs.exaone": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/exaone.py",
+          "sha256": "a25dd4679414f075e5edd34af38945f451138d4c51d2d0937ecee477f66f98e7"
+        },
+        "sglang.srt.configs.falcon_h1": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/falcon_h1.py",
+          "sha256": "b3530c0499b64677ec0602d9d2c334421a6e9e2bb31265bbad55894f652e1622"
+        },
+        "sglang.srt.configs.linear_attn_model_registry": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/linear_attn_model_registry.py",
+          "sha256": "1a0918ddae1316919214b935c2f71f4a5c4bcaef66fa3993196973d585638759"
+        },
+        "sglang.srt.configs.gigachat35": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/gigachat35.py",
+          "sha256": "4e541d29a7c26c5e665df4be514a0c82a00842369be0fbc06155d308bca5ea7b"
+        },
+        "sglang.srt.configs.glm5_next": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/glm5_next.py",
+          "sha256": "3b3c7aa3ae60e1cf59edf91e1c11a6aa49be7532340c8e2482f7f75ed859f3e0"
+        },
+        "sglang.srt.configs.granitemoehybrid": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/granitemoehybrid.py",
+          "sha256": "3206e6cb01b64ff829d09fdfdb1061eeddf08b0c8187341911a41320a541b299"
+        },
+        "sglang.srt.configs.hy_v4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/hy_v4.py",
+          "sha256": "809fb6452f3d768286e3d8645d3bcc4b8412733e4a8439b35214709d83978a4e"
+        },
+        "sglang.srt.configs.inkling": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/inkling.py",
+          "sha256": "7a42e9f28c983ffe417406819cb4b819cc922be969c4f35ee35b9656d843d639"
+        },
+        "sglang.srt.configs.update_config": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/update_config.py",
+          "sha256": "1ba9d99ebab7ca819c0386f835ee4e0b56d31612b060bde54578da4a728f80e6"
+        },
+        "sglang.srt.configs.qwen3_next": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/qwen3_next.py",
+          "sha256": "d55b9516ab517b04180f3a0c6de650d98c5a7408235e52736a9132b101479ca0"
+        },
+        "sglang.srt.configs.qwen3_5": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/qwen3_5.py",
+          "sha256": "53f92b2be9d880716a1850cb4484ea2fa46408ab0b05be847ce0fa88edf71890"
+        },
+        "sglang.srt.configs.interns2_mobius": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/interns2_mobius.py",
+          "sha256": "a8dd86da6d06667293918acf21315f6d41500ac1f23ada810cfbc8a7c62dd41b"
+        },
+        "sglang.srt.configs.interns2preview": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/interns2preview.py",
+          "sha256": "988c6190727a5a3fae89184dacb8c0670e0a3a0eaf7cd6e05d6372ff8db34940"
+        },
+        "sglang.srt.configs.iquest_q1": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/iquest_q1.py",
+          "sha256": "5421e4ed1dc894c39474cc932fd978186b4d5dfb952a32156b1b9920b0fecb77"
+        },
+        "sglang.srt.configs.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/utils.py",
+          "sha256": "25ffe3de229612d00dde2dbb96a0f7c945ea77f7f0ab6700dca16972dbd1f5dc"
+        },
+        "sglang.srt.multimodal.mm_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/multimodal/mm_utils.py",
+          "sha256": "d2d58ad6446331d495bcaa3312c22fdd9143762e9455ccacdf529748521ba05b"
+        },
+        "sglang.srt.configs.janus_pro": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/janus_pro.py",
+          "sha256": "3575df5c35a1ffc9d0a885d578b0f29343575311972a780a4e111107531e4e10"
+        },
+        "sglang.srt.configs.jet_nemotron": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/jet_nemotron.py",
+          "sha256": "832c015209fc1a2f5003781b730a0fca5782e942c98a0c13fbc1a4eba4586522"
+        },
+        "sglang.srt.configs.jet_vlm": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/jet_vlm.py",
+          "sha256": "503e645fa2ae2940aa619addeb6c8f6ea8752d9bf8138674c9f2f75762efb3fb"
+        },
+        "sglang.srt.configs.k2_horizon": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/k2_horizon.py",
+          "sha256": "0d7be07c509ddb9500a89293521dc23fe4bce07cec88c02acc2355885cfde3c7"
+        },
+        "sglang.srt.configs.kimi_linear": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/kimi_linear.py",
+          "sha256": "9e314f7421dcc466852b8b0d8c09b5e4dc12a74f8658bb32fa74c2d40c741472"
+        },
+        "sglang.srt.configs.kimi_k3": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/kimi_k3.py",
+          "sha256": "e4e9adeccb746c358880e1734a98073ceea58acc21353dde2a33107ae76896ce"
+        },
+        "sglang.srt.configs.kimi_k25": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/kimi_k25.py",
+          "sha256": "30210e7ef5c728c69ee4ce6975903e82a22216ff896c63f2758468cc753e7af6"
+        },
+        "sglang.srt.configs.kimi_vl_moonvit": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/kimi_vl_moonvit.py",
+          "sha256": "871d91b7825215bbf2d8751378b8c1a607bcee6f0ce884c086ab2074d7ff25de"
+        },
+        "sglang.srt.configs.kimi_vl": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/kimi_vl.py",
+          "sha256": "6049ff02df4d0ce0e816622c1c6f33dc8092b5c7f991412feae895b63a70e737"
+        },
+        "sglang.srt.configs.laguna": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/laguna.py",
+          "sha256": "1a879080217dfdee90fd326cf5017e87e025e728d29ac5888e4b50442169d910"
+        },
+        "sglang.srt.configs.lfm2": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/lfm2.py",
+          "sha256": "0763b5bb25964872d4c6833f401b2baab08425612b5b75fd7253d643789c936a"
+        },
+        "sglang.srt.configs.lfm2_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/lfm2_moe.py",
+          "sha256": "a948fc589dea7a31d54102f1186fb31783b18afd7ec09e7dfa2a85567ffbf1d8"
+        },
+        "sglang.srt.configs.lfm2_vl": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/lfm2_vl.py",
+          "sha256": "9ca6f220a548849f04109a215bd8bfd17a98a35d58febea044046d5d90b5be7c"
+        },
+        "sglang.srt.configs.locate_anything": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/locate_anything.py",
+          "sha256": "30223f8d0865ac98815ec9967fb6ed8abe3f5af47ddb547df86e84aa7f742042"
+        },
+        "sglang.srt.configs.longcat_flash": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/longcat_flash.py",
+          "sha256": "b791b526e912b4c43660912ab5e8dc642575ea2416942c366e2bab2d041be8bd"
+        },
+        "sglang.srt.configs.mamba": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/mamba.py",
+          "sha256": "42a7b267416d66f6b6ad4ad2b11380494b9afcc63458271a2512404ac7939d64"
+        },
+        "sglang.srt.configs.mamba2": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/mamba2.py",
+          "sha256": "87351e47edbb3a0035605c44b8323f5f33bbfc04dcc5576734f5dffd025bc88f"
+        },
+        "sglang.srt.configs.minicpm": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/minicpm.py",
+          "sha256": "067152d3bafd25bc00b73d643a1a2fe7306d3b5f92ab4195a6c29017d5e19b93"
+        },
+        "sglang.srt.configs.minicpmv4_6": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/minicpmv4_6.py",
+          "sha256": "4ff4f19844846a36feb303042ef257e6ebffdff0173f74fd3ec449e4336f226d"
+        },
+        "sglang.srt.configs.minimax_vl": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/minimax_vl.py",
+          "sha256": "85528b038441724e90aea555d9e8d28575810b9f078889fe4c9fbb7ad4a8a915"
+        },
+        "sglang.srt.configs.muse_glimmer_processing": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/muse_glimmer_processing.py",
+          "sha256": "e822f8d7fb526e6ab8188ed47702044b24782da062327a08ef10581f9a8ac59e"
+        },
+        "sglang.srt.configs.muse_glimmer": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/muse_glimmer.py",
+          "sha256": "8f092f52a17d443989a9eb47d436bf2c6398798e432b093b73c43a1ac72120c1"
+        },
+        "sglang.srt.configs.muse_spark": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/muse_spark.py",
+          "sha256": "00a8aea1bece20afaf12be997933edb89fdad2aaa9e864bf911031d0fec138a4"
+        },
+        "sglang.srt.configs.nanbeige": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/nanbeige.py",
+          "sha256": "745d6aa363a8e0a0a4af754ed637191e2c740658d64d42c860b26661373f9fc2"
+        },
+        "sglang.srt.configs.nemotron_h": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/nemotron_h.py",
+          "sha256": "9b6c4a801032da1b5404fe5f04e5aee1c9d60252d0d650734d9eefe2eb304889"
+        },
+        "sglang.srt.configs.radio": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/radio.py",
+          "sha256": "bc6557ca461e83c76b938949eda17d65cc8d0596a93e7ee54a94bd1d85660966"
+        },
+        "sglang.srt.multimodal.internvl_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/multimodal/internvl_utils.py",
+          "sha256": "06fcd349896e1a3c1fd12ea0ee26801bd265e91602ff47c1c496ce226d479da5"
+        },
+        "sglang.srt.configs.nano_nemotron_vl": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/nano_nemotron_vl.py",
+          "sha256": "31b4daaa272e8510869025c4d79a5af42398ed9cbb189d500ae5cc232b6fde50"
+        },
+        "sglang.srt.configs.olmo3": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/olmo3.py",
+          "sha256": "a440629756faa25deb901291afab7c30e16b2913902e5886f233c7d56e4735b0"
+        },
+        "sglang.srt.configs.qwen3_omni": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/qwen3_omni.py",
+          "sha256": "dad039e0b7c3553ce2c16646a9d706aabb5ff684ea2ad1e4664f69dcc2083366"
+        },
+        "sglang.srt.configs.qwen3_asr": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/qwen3_asr.py",
+          "sha256": "25dbc515527e5cc42490ebee476d382a458508d868dfe5a0113eafc603bc6088"
+        },
+        "sglang.srt.configs.qwen4_exp": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/qwen4_exp.py",
+          "sha256": "1216ba02275114c6d669eebec58746c24e662b9fbbcb28b63e33092ce3270846"
+        },
+        "sglang.srt.configs.spark2_5": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/spark2_5.py",
+          "sha256": "cb9ca7774c2dd3ceac2c58cdb881f7ba05eaa240bbd6e5991b57faf82e91c349"
+        },
+        "sglang.srt.configs.step3_vl": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/step3_vl.py",
+          "sha256": "fceb609f29b9ec356007f919ffff1cd7f62ce6049a940fcad19b958dc1b9d53d"
+        },
+        "sglang.srt.configs.step3p5": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/step3p5.py",
+          "sha256": "3c816182ede55d65fd9200be63fb1cddb55c2eaf54fde830d5e0da1ac46eee91"
+        },
+        "sglang.srt.configs.step3p7": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/step3p7.py",
+          "sha256": "5f2e2f3a538f38ea1b4d67ff4cd2ff72233b00519765df9c4a67dec332c1958c"
+        },
+        "sglang.srt.sampling.custom_logit_processor": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/sampling/custom_logit_processor.py",
+          "sha256": "e490093f004e8ae8364d3b2259747c9c999854557d9aa4370b54a1d1b904a4bb"
+        },
+        "sglang.srt.configs.deepseek_ocr": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/deepseek_ocr.py",
+          "sha256": "afb335136068a8169283d826b7f160f7e763457fd57dad2d4023ec84559d062f"
+        },
+        "sglang.srt.configs.unlimited_ocr": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/unlimited_ocr.py",
+          "sha256": "12897bcb503f2f5e7ddfdff85323aab335d58734aac87cfcb4ae6828bc03bdad"
+        },
+        "sglang.srt.configs.zaya": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/zaya.py",
+          "sha256": "c79f9a9a1c4f7dcd7b64588f30fef44952d53b5be57c10d4673f417c85daceb8"
+        },
+        "sglang.srt.configs": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/__init__.py",
+          "sha256": "b909b87a261a892ea48e0532fd1d007ef68e3f632250e663298440b40d510be2"
+        },
+        "sglang.srt.configs.deepseek_v41": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/deepseek_v41.py",
+          "sha256": "23ffdb2c0201b449963f83dca9b9783decceb57f5a1ab5bf49bbae77faddf63e"
+        },
+        "sglang.srt.configs.internvl": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/internvl.py",
+          "sha256": "1bd0d64b0414ae1bd48486ffe46dff08c9041ae93adcebc58caf6c2ffb925733"
+        },
+        "sglang.srt.utils.runai_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/runai_utils.py",
+          "sha256": "fa0f6349a489b86ff61b7ab976ee583616e8e65b60b12cbe540b719d2522a2c8"
+        },
+        "sglang.srt.utils.hf_transformers.common": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/hf_transformers/common.py",
+          "sha256": "4ada46b24aaa98a1c706582824748a1eeb313a2ef36849082b93a9b70df20b05"
+        },
+        "sglang.srt.configs.model_config_parser_registry": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/model_config_parser_registry.py",
+          "sha256": "4f11ddb4ecde882e267f96eaceb6e61efc4b38f72f9f977d91fb8d113c45c2e9"
+        },
+        "sglang.srt.connector.base_connector": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/connector/base_connector.py",
+          "sha256": "fb16cac206c216c01e99fa61b9a70ccf1cd791609043fb8bec9fcbae06980e8f"
+        },
+        "sglang.srt.connector.serde.serde": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/connector/serde/serde.py",
+          "sha256": "86e0076ea285320b4c217a03f594c08aa4f9a843954bca18d121bfd1f112b5a0"
+        },
+        "sglang.srt.connector.serde.safe_serde": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/connector/serde/safe_serde.py",
+          "sha256": "1047415308173469317caefa7a1e9a5610e2bbf2838f1bf7185cec128192c4c5"
+        },
+        "sglang.srt.connector.serde": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/connector/serde/__init__.py",
+          "sha256": "cee95ec9837e8eb0f288f8978d36d0280dbb9656f81fb1ee0d365c070acb9355"
+        },
+        "sglang.srt.connector.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/connector/utils.py",
+          "sha256": "8ac4efc5abb3d7ff27a39316ea9f01c23d87f66424c1e6913bf452c003c0ed1f"
+        },
+        "sglang.srt.connector.redis": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/connector/redis.py",
+          "sha256": "73742d15c26e353d0751ee733a703b944c3fe99f4e9332cfe342600ce1271b03"
+        },
+        "sglang.srt.connector.remote_instance": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/connector/remote_instance.py",
+          "sha256": "750ea79c31d2d28c1b769a9306515a44f8a06ff5bfb92c32828719df2a63eeeb"
+        },
+        "sglang.srt.connector.s3": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/connector/s3.py",
+          "sha256": "5dd71de3451a6de796199933cf65b8f3e4d16d69e94cdadc324e5a3569ffabab"
+        },
+        "sglang.srt.connector": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/connector/__init__.py",
+          "sha256": "704cb5da6e56637690e5716243bf910e72f963c4dd83f7a3a253a5c18af05a8d"
+        },
+        "sglang.srt.utils.hf_transformers.gguf_native": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/hf_transformers/gguf_native.py",
+          "sha256": "67a1976c796179a9da0e071b14de52c7d5ec3d2fa37437152662d3a7e2cf0c0a"
+        },
+        "sglang.srt.utils.hf_transformers.mistral_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/hf_transformers/mistral_utils.py",
+          "sha256": "4901354303976f3a0215b1a21e9cc4011ce9697404be37750e221846d4b796cb"
+        },
+        "sglang.srt.utils.hf_transformers.config": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/hf_transformers/config.py",
+          "sha256": "84ed0bd606b191cf07f1ba2ecdb88d203e4b9b1e8825172cc309cb3ee821fe10"
+        },
+        "sglang.srt.utils.patch_tokenizer": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/patch_tokenizer.py",
+          "sha256": "c692e950a24b8284b51b548a36b5f58c74adb701f2ce143ddc1d96846809f9bc"
+        },
+        "sglang.srt.utils.hf_transformers.tokenizer": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/hf_transformers/tokenizer.py",
+          "sha256": "1150719b60247ea837f4a4035688462625c55c003eca487c2f56a0afa0884e6a"
+        },
+        "sglang.srt.utils.hf_transformers.processor": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/hf_transformers/processor.py",
+          "sha256": "bc2dc7b80f82687307870f79e406424d42834cac04a376b79765bbf862cb79d2"
+        },
+        "sglang.srt.utils.hf_transformers": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/hf_transformers/__init__.py",
+          "sha256": "bd270b1977cdd6e52932b7d06397f925f30887713b490357e550b52e2c9478b0"
+        },
+        "sglang.srt.configs.hybrid_arch": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/hybrid_arch.py",
+          "sha256": "0d8a23c8eb88abd930041c417923b0e2f43ad028a04bceced3784454926a33c3"
+        },
+        "sglang.srt.kv_canary": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/kv_canary/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sglang.kernels.ops.kv_canary.scatter_req_token_ids": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/kv_canary/scatter_req_token_ids.py",
+          "sha256": "c14ef46d47a3b3039da885d349448c8091f8760b95a00a0fdca136a0573d1e0b"
+        },
+        "sglang.srt.kv_canary.req_to_expected_token_ids_manager": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/kv_canary/req_to_expected_token_ids_manager.py",
+          "sha256": "dd236499cf61f30cbe4c7d314ed023f0a69c3927dc259a41aa836be19818fecc"
+        },
+        "sglang.kernels.ops.kvcache.kv_indices": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/kvcache/kv_indices.py",
+          "sha256": "2e31d9c6c46899f0350abb493794f5b7ebcf8471a42a9085baba9cc97a02785d"
+        },
+        "sglang.kernels.ops.attention.dcp_kernels": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/attention/dcp_kernels.py",
+          "sha256": "6f8384760b22dcda30d2c1b95b5c4d1c67b2b261614f0da1d66a36c7bde94e9e"
+        },
+        "sglang.srt.layers.dcp.comm": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/dcp/comm.py",
+          "sha256": "a09524d7bc98ffd87ce75ff3cc682f6fcbec5f247af38058f7d5f801185bbb75"
+        },
+        "sglang.srt.layers.dcp.layout": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/dcp/layout.py",
+          "sha256": "1d24effaf994a2067a5e2fc8c3e314bba779fb9380ef45756ead24cf00568cde"
+        },
+        "sglang.srt.layers.dcp.metadata": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/dcp/metadata.py",
+          "sha256": "64d83b24672768d497f9fb2eec174ded2e23477a0b0230d375166a1214c91e80"
+        },
+        "sglang.srt.layers.dcp": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/dcp/__init__.py",
+          "sha256": "299ae3fd7031480684a6f522ef6fbfd67d89312b666701cfd338897b78d1119a"
+        },
+        "sglang.srt.model_executor.forward_context": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_executor/forward_context.py",
+          "sha256": "63900e43eaf683bcc50991e56dac6d194566b9fcef2ed452ff8e5818e503d2d0"
+        },
+        "sglang.srt.model_executor.forward_batch_deepseek_mha_mixin": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_executor/forward_batch_deepseek_mha_mixin.py",
+          "sha256": "50da305b3c1b77232307f02470ddffb0613c8b0acd92cfdb5bf2eaa5399a9d84"
+        },
+        "sglang.srt.arg_groups.model_overrides.bailing_moe_v3": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/bailing_moe_v3.py",
+          "sha256": "b2f9e6681a8022d9830df9b5f8713564b654661fc5bed01d47504b8da7040b12"
+        },
+        "sglang.srt.arg_groups.model_overrides.cohere2_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/cohere2_moe.py",
+          "sha256": "dcbc7af27486d900abb3d4f54017d6f21d28087ab0eb6dcd19bc4f5c613921ba"
+        },
+        "sglang.srt.arg_groups.model_overrides.deepseek_v2": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/deepseek_v2.py",
+          "sha256": "de0ea2ce6affccd8b14ff939c251b3764521c6872c26554c1a90aaf9afad6e91"
+        },
+        "sglang.srt.arg_groups.model_overrides.deepseek_v4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/deepseek_v4.py",
+          "sha256": "926be95cecf83d5051a1b4a4caf7250ff29e5c55b4fef390e83e390ccb96c098"
+        },
+        "sglang.srt.arg_groups.model_overrides.embedding_gemma2": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/embedding_gemma2.py",
+          "sha256": "81ed9e65c449add219e0feeb46ba68dcf797ae8b90abc41ad6d15f9add60bef1"
+        },
+        "sglang.srt.arg_groups.model_overrides.ernie45_vl": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/ernie45_vl.py",
+          "sha256": "56445ad41fec119a9dfacd7bfa52c522d99e2f06da62f4fa5e0dee9ea59a7f56"
+        },
+        "sglang.srt.arg_groups.model_overrides.exaone": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/exaone.py",
+          "sha256": "d207eacf2960d847fe5a44cadf5090f3ae43e045aa01d1024d2e9961a6d33ff5"
+        },
+        "sglang.srt.arg_groups.model_overrides.falcon_h1": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/falcon_h1.py",
+          "sha256": "f6fc13a57c88c9dbadaa6d7fdba605c53a7f835d6bc030131fd4fcaa9baf18d6"
+        },
+        "sglang.srt.arg_groups.model_overrides.gemma2_gemma3": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/gemma2_gemma3.py",
+          "sha256": "f0c4565cde5b90fcdefb64fa646915e4d45ce56abfa565800157bc194d0eeb65"
+        },
+        "sglang.srt.arg_groups.model_overrides.gemma4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/gemma4.py",
+          "sha256": "0671701abaeffad6ab49165c765091840385dc1089d9a40b90f6633adb9de125"
+        },
+        "sglang.srt.arg_groups.model_overrides.gigachat35": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/gigachat35.py",
+          "sha256": "0abf5b0ad7a83551552720d356c2ab6cf94e2848ef83a0e01cdc6359fc66cf3f"
+        },
+        "sglang.srt.arg_groups.model_overrides.glm4_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/glm4_moe.py",
+          "sha256": "87ad0c6ea424fadb69093567f2d539234b3c79f3fdb247fb5c56e22aecbed85b"
+        },
+        "sglang.srt.hardware_backend.mlx.runtime": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/mlx/runtime.py",
+          "sha256": "11c8f454bc6d6b71ee649a6777ccff4ee36bc931618f8e3be9ae19a4408d010f"
+        },
+        "sglang.srt.arg_groups.model_overrides.gpt_oss": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/gpt_oss.py",
+          "sha256": "2c761dc9962aa7a8ab77b884d0ba2abfb0b3177f7a95df2b64e16db55c6a1ca1"
+        },
+        "sglang.srt.arg_groups.model_overrides.granitemoehybrid": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/granitemoehybrid.py",
+          "sha256": "c86df8890f6c7ea43a9ff6aaf0c3c9ac22f5890cd866c07ccfbb490067c1747a"
+        },
+        "sglang.srt.arg_groups.model_overrides.inkling": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/inkling.py",
+          "sha256": "059a0f54a68c609cb616ae7f424423d00d9e8585ce6c13f3e03c479cb136b10e"
+        },
+        "sglang.srt.arg_groups.model_overrides.interns2_mobius": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/interns2_mobius.py",
+          "sha256": "8a98aec0708868f35c49f6b61b3138a58bcc4efc4801dea2616eeedef8100a65"
+        },
+        "sglang.srt.arg_groups.model_overrides.iquest_q1": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/iquest_q1.py",
+          "sha256": "255c0b3fdc0fb1a93973fa131d5ec4a0c0222704415791d29e8d3217a35904fb"
+        },
+        "sglang.srt.arg_groups.model_overrides.kimi_k3": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/kimi_k3.py",
+          "sha256": "8e01d4833b92ecefb760851da056ae0277fe752b780ca12de580c9178fd3d162"
+        },
+        "sglang.srt.arg_groups.model_overrides.lfm2": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/lfm2.py",
+          "sha256": "ced2474feb1bc4bb0e583e8885e8bcca71b3a061158c386e6d8822fa152d87a5"
+        },
+        "sglang.srt.arg_groups.model_overrides.llama4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/llama4.py",
+          "sha256": "56b5d36e60a091c90a24f2910b02a9504e319047e50288e819a29051ae158255"
+        },
+        "sglang.srt.arg_groups.model_overrides.mimo_v2": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/mimo_v2.py",
+          "sha256": "41c4a15b9a5ef0f675c119383ac07214dccb3eb907dc412b8452546be789d696"
+        },
+        "sglang.srt.arg_groups.model_overrides.minicpm": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/minicpm.py",
+          "sha256": "554477c452e2aa89b0656c563004630c37c55adc9e19b048d7d72e65ea4f669d"
+        },
+        "sglang.srt.arg_groups.model_overrides.minicpmv": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/minicpmv.py",
+          "sha256": "e8f30c49bbc952babda727ec64730fec2d5565bee7f6e545e3698a2e68508a4b"
+        },
+        "sglang.srt.arg_groups.model_overrides.minimax_m2": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/minimax_m2.py",
+          "sha256": "4a74a6a4d95a4f702f78d06833b5ac689103da6fb9eb4e4c65e5629566691188"
+        },
+        "sglang.srt.arg_groups.model_overrides.minimax_m3": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/minimax_m3.py",
+          "sha256": "6488bea89bab4347c71829791aaed0d60289b8bc2db8db913ff9bc6c76c56de9"
+        },
+        "sglang.srt.arg_groups.model_overrides.moss_vl": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/moss_vl.py",
+          "sha256": "beda93c1941a5778b2cfa901c165bdcc6c74b3ac0d941f4f52d71caa8f587ca2"
+        },
+        "sglang.srt.arg_groups.model_overrides.muse_glimmer": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/muse_glimmer.py",
+          "sha256": "412b92be9ec20c016883f0f33437ddadfeba40b9a9943fa1e988ef689e34966e"
+        },
+        "sglang.srt.arg_groups.model_overrides.nemotron_h": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/nemotron_h.py",
+          "sha256": "b71651f0a3497fd2c40c9e9ad5debf5a5ce556c75d4ef5410faf431ad7b041f1"
+        },
+        "sglang.srt.arg_groups.model_overrides.olmo2": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/olmo2.py",
+          "sha256": "261b46639d4ad457b729bde271ba4504168e881a060f4483568ef460418129cb"
+        },
+        "sglang.srt.arg_groups.model_overrides.qwen3_5": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/qwen3_5.py",
+          "sha256": "5ced16dc4ee340f3e0a3a8668eb2fcd0d08225455e429903b5b2da18b23e8fb5"
+        },
+        "sglang.srt.arg_groups.model_overrides.qwen3_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/qwen3_moe.py",
+          "sha256": "942de6681802b15d9864c1560049b4f1b5874e5e0658f5b8ebdd5556ec718c50"
+        },
+        "sglang.srt.arg_groups.model_overrides.qwen3_vl": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/qwen3_vl.py",
+          "sha256": "75234e7243c653e8bd17d8544d0a7e06103da659046686ff4974bc49f555f91a"
+        },
+        "sglang.srt.arg_groups.model_overrides.qwen4_exp": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/qwen4_exp.py",
+          "sha256": "2079447712764da464eedff1f934bf6a99568ad7fbd53ea17513cab32e44741e"
+        },
+        "sglang.srt.arg_groups.model_overrides": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/model_overrides/__init__.py",
+          "sha256": "0c672fe21356e2bc34c392929450eb5c59605cd371eccc3fa3a9f5df02f3d0b2"
+        },
+        "sglang.srt.arg_groups.overrides": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/overrides.py",
+          "sha256": "e7887fe00392f2eb7de91655692bf2da0a58edb9caf397fd06b137800dbaa544"
+        },
+        "sglang.srt.speculative.spec_registry": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/speculative/spec_registry.py",
+          "sha256": "c080ed73628a039e780c82c33600fd495526d4fd4fcda00e21faa5369861abdf"
+        },
+        "sglang.srt.speculative.spec_info": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/speculative/spec_info.py",
+          "sha256": "43e59f9d15b711753a9170807452f5643085cc9d9811345761559b0e908d2fa9"
+        },
+        "sglang.srt.model_executor.forward_batch_info": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_executor/forward_batch_info.py",
+          "sha256": "9fedcb5d0415ba719d1f996f99b831de29f903faeb32f3da180bdc5ac9b02a99"
+        },
+        "sglang.srt.layers.deep_gemm_wrapper.compile_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/deep_gemm_wrapper/compile_utils.py",
+          "sha256": "74e98bb5c5a4b01a619ce8a32c05658cbf730fb82f1e9a7ee8bd0a97d7266968"
+        },
+        "sglang.srt.layers.deep_gemm_wrapper.entrypoint": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/deep_gemm_wrapper/entrypoint.py",
+          "sha256": "428fb5252c4b956f8ca8ede3770e2f9771993893926e2288311364d68c7687c0"
+        },
+        "sglang.srt.layers.deep_gemm_wrapper": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/deep_gemm_wrapper/__init__.py",
+          "sha256": "7ac24c77462e8faf2de9060ea66205ba258fd89d9dc53302e1b441347d1793a2"
+        },
+        "sglang.srt.layers.moe.moe_runner.deep_gemm_sm120": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/deep_gemm_sm120.py",
+          "sha256": "e26537ece494b14426d7c873ddd96ed35694b56e4efcf0e8cac00642759faa6a"
+        },
+        "sglang.srt.distributed.naive_distributed": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/distributed/naive_distributed.py",
+          "sha256": "197ec21e151bf6b210b9a20f5f84d89b4d52ed741d057bdda9a2683ddc45c802"
+        },
+        "sglang.srt.layers.utils.common": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/utils/common.py",
+          "sha256": "5d3b3d71926e31aa0495ca7453efaeefd4e59802619826b91276761074764f0b"
+        },
+        "sglang.srt.layers.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/utils/__init__.py",
+          "sha256": "f6466abd5caef7d5dbf091e1551325a86220c86b7336dc82547ed042e8898699"
+        },
+        "sglang.srt.layers.parameter": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/parameter.py",
+          "sha256": "0e5b09e820b9fd3ad2d5d36107f55861e50c8226dea56fb27d0edb09fbe32330"
+        },
+        "sglang.srt.utils.host_shared_memory": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/host_shared_memory.py",
+          "sha256": "d2d3b7a8c95b98422cd755ef748ec107402d1f8679866f6f584904c9abb8be53"
+        },
+        "sglang.srt.utils.offloader": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/offloader.py",
+          "sha256": "dd22b59385b01b4a05ef98436679811b863c4a581e50d2a4753c2a3e0218899d"
+        },
+        "sglang.kernels.ops.activation.activation": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/activation/activation.py",
+          "sha256": "416b4d2eb24d2abfbd215277f508b9786ade0c2fc736e470d37621cc3cd605bc"
+        },
+        "sglang.srt.layers.moe.moe_runner.deep_gemm": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/deep_gemm.py",
+          "sha256": "2173ffda1b18bd058857eadac16cc4be92deca658cfca623943d9ed79e2bc431"
+        },
+        "sglang.srt.layers.moe.moe_runner.triton": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/triton.py",
+          "sha256": "e45a86545e9140dbe31d85683396de57722f477ee5e0b2b0b42cbee42e8d2e1e"
+        },
+        "sglang.srt.layers.moe.moe_runner.triton_kernels": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/triton_kernels.py",
+          "sha256": "6969dcdafc9fae269888700b63e3e22cf1f6bf54c8dd1a8889cf5ac9408c58c9"
+        },
+        "sglang.srt.layers.moe.moe_runner.runner": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/runner.py",
+          "sha256": "cf7974e72355bff82ca95002e823cf6fd42b8892f5bd6512cfea376fde15ca95"
+        },
+        "sglang.srt.layers.moe.moe_runner": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/__init__.py",
+          "sha256": "44ae69054cf66db5e7b92af6dcc20893b54e368e945a40b4796f97e61c79e6a5"
+        },
+        "sglang.srt.layers.moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/__init__.py",
+          "sha256": "37e7c74fa8d0f15cc16c0c0db23898ed930e2aec9415c237738ee577cf57043a"
+        },
+        "sglang.srt.batch_overlap.single_batch_overlap": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/batch_overlap/single_batch_overlap.py",
+          "sha256": "3c23bcfe109466ca63b46a925ac1ae1711c8d0703683673b3982c41b732f56df"
+        },
+        "sglang.srt.utils.nvtx_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/nvtx_utils.py",
+          "sha256": "c97d6b542d463f37b54c6e983b0d6ac40ca57f0402b17584ea35103339fd5775"
+        },
+        "sglang.srt.batch_overlap.operations": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/batch_overlap/operations.py",
+          "sha256": "b657273827329b176e76d748fc9e6b7226ae60c9bbe9c5f6eb4af0a66caea07c"
+        },
+        "sglang.srt.hardware_backend.npu.moe.finalize_routing": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/npu/moe/finalize_routing.py",
+          "sha256": "5f405ae3f69794eb21e6fa3a9a72c0c6e3abc954b69bc5895233359b1b341426"
+        },
+        "sglang.srt.hardware_backend.npu.moe.init_routing": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/npu/moe/init_routing.py",
+          "sha256": "50acb69f5b5ff4f26f1df82f274b415a36de2843f1e94293b97e9e42c7a3d384"
+        },
+        "sglang.srt.layers.moe.token_dispatcher.base": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/token_dispatcher/base.py",
+          "sha256": "71ea39977a00bbee1d4db15b3a38c4e9dde5ec3293f5417abf44272abdcf539e"
+        },
+        "sglang.srt.eplb": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/eplb/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sglang.srt.eplb.expert_location": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/eplb/expert_location.py",
+          "sha256": "40c0a2b679f0093ef4b3dbf47a10eb25f6c59207c2c6db9f65629d7e053b6887"
+        },
+        "sglang.srt.eplb.expert_location_dispatch": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/eplb/expert_location_dispatch.py",
+          "sha256": "5a9c78047106987f2a5d64e2743e0b80b01737765c8f3c618dc56cd30cff0d41"
+        },
+        "sglang.srt.configs.embedding_model_spec": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/embedding_model_spec.py",
+          "sha256": "57260cfb02c19b610532c746c16e2f84900d9a4835612baf2f81efa2b9db430e"
+        },
+        "sglang.kernels.ops.quantization.fp8_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/quantization/fp8_utils.py",
+          "sha256": "98d78ce79860f027c0b5989de2aff153529e28258d53bb6f4f6e32f51b308549"
+        },
+        "sglang.srt.utils.patch_torch": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/patch_torch.py",
+          "sha256": "eb039c700a2cd108135795ac9e63871e83eb7cf614fea7e02a6de4db4872c436"
+        },
+        "sglang.kernels.ops.quantization.per_tensor_quant_fp8": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/quantization/per_tensor_quant_fp8.py",
+          "sha256": "7fc8f52c4802eb4d33840e14e4261bb7baf45bbda336bbd861726a7b62ac9f27"
+        },
+        "sglang.kernels.ops.quantization.fp8_kernel": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/quantization/fp8_kernel.py",
+          "sha256": "0bd65a2d9bef33c4e6dae7c6b9bef0fae4e3a75105dc9ba6873192a4d99f3ad5"
+        },
+        "sglang.srt.layers.quantization.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/utils.py",
+          "sha256": "a5c45d9e5a35b996d254e59ecefedaae04cf3fee48b85082d4f23539741f93e2"
+        },
+        "sglang.srt.layers.modelopt_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/modelopt_utils.py",
+          "sha256": "b1edc1277c09c84d39b77bd121852eb6110f71744e5d765bcba2a121af56e27f"
+        },
+        "sglang.srt.layers.quantization.base_config": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/base_config.py",
+          "sha256": "ba6c629d2dfa48eced91a393f71b07ffe51794d74725cd77ee1676ff45e1026f"
+        },
+        "sglang.srt.layers.quantization.auto_round": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/auto_round.py",
+          "sha256": "13ee26c0b28f4be4b5ec033498928ef3e76f565f49492aaf4e2370e0e87d2298"
+        },
+        "sglang.kernels.ops.quantization.awq_triton": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/quantization/awq_triton.py",
+          "sha256": "d50c29c4fa2a71f7b7b0353cb91b372d705170366fabe33dc50ecd13d455d0c7"
+        },
+        "sglang.srt.layers.layernorm_sp": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layernorm_sp.py",
+          "sha256": "ffdde97e6282103614d7cec20cc29fb3cf0157d051778e315b03a99bb8e81090"
+        },
+        "sglang.srt.layers.linear": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/linear.py",
+          "sha256": "3ce31df0a8aab09ed8afa0ada8c0ce30ca207a748c02c3073d7f53648b9b7c3c"
+        },
+        "sglang.kernels.ops.gemm.gptq_marlin": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/gemm/gptq_marlin.py",
+          "sha256": "0541c20e8ad89299bfae0dfb1d409c3443afdcec1f942b64f16e97cb9ddbeb8b"
+        },
+        "sglang.srt.layers.quantization.marlin_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/marlin_utils.py",
+          "sha256": "468b7d842c77c8cd29ca8fb4211fe60d33b74838423462152025347800622cf4"
+        },
+        "sglang.srt.batch_invariant_ops.batch_invariant_ops": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/batch_invariant_ops/batch_invariant_ops.py",
+          "sha256": "116abe217cae8d402783006ab0ddf60d9eef9e39a18ebe656d391fe6f5520ec5"
+        },
+        "sglang.srt.batch_invariant_ops": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/batch_invariant_ops/__init__.py",
+          "sha256": "e277fb7cc6addb8f34f40a7692db170d4fe2e3474ec740fd6aa2b89415748ff0"
+        },
+        "sglang.srt.layers.amx_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/amx_utils.py",
+          "sha256": "bfe1ba8397dd3fa8eb8795c5c64247a1790d5d82dcb3c8007a6e57ab7efb421f"
+        },
+        "sglang.srt.hardware_backend.npu.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/npu/utils.py",
+          "sha256": "c4b56ecd816b6e3f27bb40afadc8108a75f7d5d76c4aeb5236324a91d40124d5"
+        },
+        "sglang.srt.hardware_backend.npu.moe.matmul": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/npu/moe/matmul.py",
+          "sha256": "103ee3efc3fb7472f123caa90f6bbee78ad54b539ea4c6029728292449343bca"
+        },
+        "sglang.srt.hardware_backend.npu.moe.quant": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/npu/moe/quant.py",
+          "sha256": "3b509b138c80e56e1424994110915a12939cc98ffe7f8482b2e44c84f079ebcd"
+        },
+        "sglang.srt.hardware_backend.npu.quantization.linear_method_npu": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/npu/quantization/linear_method_npu.py",
+          "sha256": "ee71ed98226135b519325f0ae1a84cfa4c2bdfc4eb9ab8027ae72800c82afa36"
+        },
+        "sglang.srt.hardware_backend.npu.quantization.moe_methods": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/npu/quantization/moe_methods.py",
+          "sha256": "efa998fa184c436aacfdc00a9ac1c7ca0ad80fa168f39ad90222c131c7e733ab"
+        },
+        "sglang.srt.layers.quantization.unquant": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/unquant.py",
+          "sha256": "f428022195466613e7e988265a1090862a5aa0557bb7a063c0c172f9bd3988c5"
+        },
+        "sglang.srt.hardware_backend.cpu.quantization.awq_kernels": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/cpu/quantization/awq_kernels.py",
+          "sha256": "813d5f966923c91f3741a313598e08b3e1f72537df11c2c2d935c9afb3340fd2"
+        },
+        "sglang.srt.layers.quantization.base_scheme": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/base_scheme.py",
+          "sha256": "8443e8f810e130b95de96a7bced3b0c4922af5210d495b2052b524c7e3c1d55d"
+        },
+        "sglang.srt.layers.quantization.awq.schemes.awq_scheme": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/awq/schemes/awq_scheme.py",
+          "sha256": "f5c37bf94c578b3193986eb9c7e23706f7fc84363c0c7e5aa2a9e109212fdb42"
+        },
+        "sglang.srt.layers.quantization.awq.schemes.awq_linear": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/awq/schemes/awq_linear.py",
+          "sha256": "cda3a8a9950edd0030f65748928ee8b17b1dad3555290509c5d55fade723bf4c"
+        },
+        "sglang.srt.layers.quantization.awq.schemes.awq_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/awq/schemes/awq_moe.py",
+          "sha256": "b6635d40313094835fa29687e6069ee44cfe74139cbc377b496a89e4a393fe25"
+        },
+        "sglang.srt.layers.quantization.awq.schemes.awq_cpu": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/awq/schemes/awq_cpu.py",
+          "sha256": "a285cad90cfa5df3b6f48f162ca4c3426efe02125ee9218e934b40a280d8c00d"
+        },
+        "sglang.srt.layers.quantization.awq.schemes.awq_marlin": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/awq/schemes/awq_marlin.py",
+          "sha256": "1ef9c44e1c4b9fbc4e8f370d30afcdc36525be7a0964a7e31dd3b454cfe4765f"
+        },
+        "sglang.srt.layers.quantization.awq.schemes": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/awq/schemes/__init__.py",
+          "sha256": "73ff9e9b3c07150628702179ee5dcbc0fa8a1c5e37ea1ff4e66316a17c73a41a"
+        },
+        "sglang.srt.layers.quantization.awq.awq": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/awq/awq.py",
+          "sha256": "99f7d31d65c6a23935b93e9d736a936fcad1f8d77b08eafd50e0b7ab4675164d"
+        },
+        "sglang.srt.layers.quantization.awq": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/awq/__init__.py",
+          "sha256": "9ae077ae23e0705cc1b8efad69c530b8e4887b92db209825be3e3788d433a0ec"
+        },
+        "sglang.srt.layers.quantization.bitsandbytes": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/bitsandbytes.py",
+          "sha256": "e25e8039374219bd2a40c99a27a9f4944e1a24e5b8a63911f9b7401fb37e6774"
+        },
+        "sglang.kernels.ops.gemm.int8_kernel": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/gemm/int8_kernel.py",
+          "sha256": "c98ec294d6259b904764bbe787185935889ea3425613a1a59f4ae30814e51791"
+        },
+        "sglang.kernels.ops.quantization.int8_kernel": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/quantization/int8_kernel.py",
+          "sha256": "83ec5f7efc8cb17f794b8fb08c2ce668270012847868706202a87f59bd53abd5"
+        },
+        "sglang.srt.layers.quantization.int8_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/int8_utils.py",
+          "sha256": "8041b89a66eb4d49b967c40a8e3d244157411bb9984a1a9df55335fcfba0f27b"
+        },
+        "sglang.srt.layers.quantization.blockwise_int8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/blockwise_int8.py",
+          "sha256": "92e55af8b6862fd94203c29fcce51c8190213f21095e53b34813ff0f1cf4c1de"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_scheme": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_scheme.py",
+          "sha256": "0b442a3be2ce68b9f6ec75852398a2c9f0b073a15e1f3116b991715ca2cc6b79"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_w4a4_mxint4_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w4a4_mxint4_moe.py",
+          "sha256": "1a1825a4e2f48515ead48717cf5796e9b7c4a7c41d1e7966b113ac7640351250"
+        },
+        "sglang.srt.layers.quantization.fp4_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/fp4_utils.py",
+          "sha256": "1ea8403f9c0bca2e21b551c6fe08f5feb37486a1854b4c7c0de55953cccd05a7"
+        },
+        "sglang.srt.layers.moe.flashinfer_trtllm_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/flashinfer_trtllm_moe.py",
+          "sha256": "1af623e8a23553a3dcd0e89f3cc36493bdecaff6f24819ff2444f281a032593a"
+        },
+        "sglang.srt.layers.moe.moe_runner.flashinfer_trtllm": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/flashinfer_trtllm.py",
+          "sha256": "2f6f14ae1d95030db1ec249856b331f4e6880b0218727e8701c3944376acaaf9"
+        },
+        "sglang.kernels.ops.gemm.fp8_kernel": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/gemm/fp8_kernel.py",
+          "sha256": "6f7c1ca7e17c9d7b686255f6c4e9fa9830e8ef4f6f898c15c26f0b834722c3da"
+        },
+        "sglang.srt.layers.quantization.mxfp4_tensor": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/mxfp4_tensor.py",
+          "sha256": "2fa61ad1e7c0d8eabb521458fd431f1a710faf79e7f1b88461c3a9911921a76a"
+        },
+        "sglang.kernels.ops.gemm.fp8_blockwise_gemm": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/gemm/fp8_blockwise_gemm.py",
+          "sha256": "a1994439dc53b92074ff3a3d380a921ed2ac500eaf3e8d21ca7da9f2a2542521"
+        },
+        "sglang.srt.layers.quantization.fp8_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/fp8_utils.py",
+          "sha256": "35b18fd41b7f096b9616ad54bbc78dde3ae6d65d499ec360701d554e7b160052"
+        },
+        "sglang.srt.layers.quantization.kv_cache": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/kv_cache.py",
+          "sha256": "4180c5559d5bf6005a6fb5459e31aa7700b9827a9f92d043aa21951def716df7"
+        },
+        "sglang.kernels.ops.quantization.gptq_marlin_repack": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/quantization/gptq_marlin_repack.py",
+          "sha256": "f6b7ef8dc42a44eea1f594cca33e2848bed12ec7f28b1860de5f86ffb034071b"
+        },
+        "sglang.srt.layers.quantization.marlin_utils_fp8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/marlin_utils_fp8.py",
+          "sha256": "09fa81ce2f92415035ec6ace5ab0108e2d0d5cbe85962d4d5c37a68520075f5d"
+        },
+        "sglang.srt.layers.quantization.mxfp8_input": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/mxfp8_input.py",
+          "sha256": "02033012ebbcbb4b6140092ccadf8ce3dbb1105e81fb1e2bbe2b9afa3af6171a"
+        },
+        "sglang.srt.layers.quantization.fp8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/fp8.py",
+          "sha256": "0d45c3860f504ed373cf79b14f14e7e3d9602e87c4e486e47a061507fbf1172b"
+        },
+        "sglang.srt.layers.quantization.marlin_utils_fp4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/marlin_utils_fp4.py",
+          "sha256": "a9011b5af7f8c9d25755d2ea4125e9fbdad06b862138be3ca27c85fc2f8a8e08"
+        },
+        "sglang.srt.model_executor.runner_backend_utils.breakable_cuda_graph.cuda_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_executor/runner_backend_utils/breakable_cuda_graph/cuda_utils.py",
+          "sha256": "48401eceaf0c0d006f85d86abf70c2db56ddd142cbb2feb028f05a936ca1142a"
+        },
+        "sglang.srt.model_executor.runner_backend_utils.breakable_cuda_graph.breakable_cuda_graph": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_executor/runner_backend_utils/breakable_cuda_graph/breakable_cuda_graph.py",
+          "sha256": "b622a9791e421a9a1329a1ecc0c5d8548aa7f0395c25f21fc7177a1ee80c48ad"
+        },
+        "sglang.srt.model_executor.runner_backend_utils.breakable_cuda_graph.context": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_executor/runner_backend_utils/breakable_cuda_graph/context.py",
+          "sha256": "f7cf9d819d872d4c0d3c0201ba9853939e4509ac8309445ba9f75aefa6525729"
+        },
+        "sglang.srt.model_executor.runner_backend_utils.breakable_cuda_graph": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_executor/runner_backend_utils/breakable_cuda_graph/__init__.py",
+          "sha256": "7cc27ba46d122dfe8f37ff11f02223e4fb2cc5577165a5d6d4dabd7b023488c7"
+        },
+        "sglang.srt.layers.radix_attention": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/radix_attention.py",
+          "sha256": "df6e94b67b61feb4f8e3a7b1fdb0c0444cc56e4bf9d90a622e028bddff31619e"
+        },
+        "sglang.srt.layers.quantization.modelopt_quant": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelopt_quant.py",
+          "sha256": "59fd4dd7a9395e63ab4a8a844486e7751fbde77e2755b36a640e221c456e5db8"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_w4a4_nvfp4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w4a4_nvfp4.py",
+          "sha256": "f5a6efd61a9bb8b6e6d791891eaae440d60b04417f04ae67ed015f35df61b646"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_w4a4_nvfp4_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w4a4_nvfp4_moe.py",
+          "sha256": "6356d5433bbc4b5d54326b653496ed245a7177cc6e536cd65846c4d05e6a4f1e"
+        },
+        "sglang.srt.layers.quantization.w4afp8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/w4afp8.py",
+          "sha256": "21e9c527c9b83e350cdc35ce2bc62891cda1550934b2a5d302f0f807f752f125"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_w4a8_fp8_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w4a8_fp8_moe.py",
+          "sha256": "e7a4fdc7381b0e9dd6fd1774087942bd1712c2fc0379faef7ceb989dcf53f548"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_w4a8_int8_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w4a8_int8_moe.py",
+          "sha256": "bf99b8258561034bd5d766ccfa49433fb99887b7d02043dab813268d3e05a774"
+        },
+        "sglang.srt.hardware_backend.npu.moe.activation": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/npu/moe/activation.py",
+          "sha256": "4076e0fcc38af54f4f20a661d39d1beb193617b0995c61038d5b996a2593f4ff"
+        },
+        "sglang.srt.layers.moe.moe_runner.ascend": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/ascend.py",
+          "sha256": "8c790f384fec5970fc57a0b4cf471d2d8a99311dda98160496089700442097c3"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_w4a8_mxfp4_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w4a8_mxfp4_moe.py",
+          "sha256": "7eca5e812ad7764576e06590cd671dbd788c8f1d41ce2ba95ec504a7f097278f"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_w8a8_fp8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_fp8.py",
+          "sha256": "c853c513b29883c16dde974fe6b2d6e8ed6c4ab442509fd8a8f0f27c6cc15a85"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_w8a8_fp8_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_fp8_moe.py",
+          "sha256": "6e0020136d17bbfabf25a6f15e42ac1e40df56b79220a6ee56cb2207908c1d88"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_w8a8_int8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py",
+          "sha256": "0733f1579908b0a07470923fa07530af5b3672b7498c42a19c4c216634407003"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_w8a8_int8_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8_moe.py",
+          "sha256": "59de000d2f107dc717cc61bcce9b06d97ba3d7af475c7b83a053e9f6e5d9cb1a"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_w8a16_fp8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a16_fp8.py",
+          "sha256": "7714b0dd7621a2c8a542cdafadaf573ddf8fa60e4b2feb826ec831b0edbe565e"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_wNa16": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_wNa16.py",
+          "sha256": "2da4f9871d098e4107737dbfa89994df5b8e7beae498263aab1168326477047d"
+        },
+        "sglang.srt.lora.marlin_lora_temp": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/lora/marlin_lora_temp/__init__.py",
+          "sha256": "fa121557e964bf92c935e13df5e7cdcb6346b3c90410d217827a84d97d54d08d"
+        },
+        "sglang.srt.lora.marlin_lora_temp.sgl_backend": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/lora/marlin_lora_temp/sgl_backend.py",
+          "sha256": "cab7e5c17f46e227ebea5f3ff54e25a2ba639ff423cb7f937fc97e276eefc854"
+        },
+        "sglang.srt.layers.moe.moe_runner.marlin": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/marlin.py",
+          "sha256": "9aab49cf29fcfe81ed7bd3ae111df597b82a3a794ed40fde9d23e805cde977c1"
+        },
+        "sglang.srt.hardware_backend.gpu.quantization.gptq_kernels": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/gpu/quantization/gptq_kernels.py",
+          "sha256": "4134148fcc97957eee13f0e3f4b0bd4ddaca52a5fd36ccc81e8b43c8242493a7"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes.compressed_tensors_wNa16_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_wNa16_moe.py",
+          "sha256": "ff1aab0c527e6c8b4be22e2d0c374fb90a8888cc0c83cd273002c7dd6f6454d2"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.schemes": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/schemes/__init__.py",
+          "sha256": "f768d36561ccb3f0810dba7e07321d1e2ac46f7fcb5ad7be6fb62932d94c12dc"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/utils.py",
+          "sha256": "6f43153656248fd7fa3782fbc30ab052aa13e368ecdbd6fb00fac6c5e122df6d"
+        },
+        "sglang.srt.layers.quantization.compressed_tensors.compressed_tensors": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/compressed_tensors/compressed_tensors.py",
+          "sha256": "fafa8e24bcc7d2bab81ccddc15f8bfce4c1bb8cf017b53bda0b004b04e7ef25a"
+        },
+        "sglang.srt.layers.quantization.gguf": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/gguf.py",
+          "sha256": "73c952bec5b74cd2b1440334471c6201a1664b5d8f705e8ecd5407c786d3adc2"
+        },
+        "sglang.srt.hardware_backend.cpu.quantization.gptq_kernels": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/cpu/quantization/gptq_kernels.py",
+          "sha256": "544a89915c8755b8a4c20f6ff8928e329aabc3ad82fddd4ea5ca40472a994cea"
+        },
+        "sglang.srt.layers.quantization.gptq.schemes.gptq_scheme": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/gptq/schemes/gptq_scheme.py",
+          "sha256": "72dd1818001dea7c4a02d45778aa1078499a587a448e9afab057159b2957c482"
+        },
+        "sglang.srt.layers.quantization.gptq.schemes.gptq_linear": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/gptq/schemes/gptq_linear.py",
+          "sha256": "9b29fb6dedda009bfd3871f1d9bb1e7301dc6dc6277136b2e0a5779f813b7a68"
+        },
+        "sglang.srt.layers.quantization.gptq.schemes.gptq_cpu": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/gptq/schemes/gptq_cpu.py",
+          "sha256": "58bd9993efadc3a8afafd60154ea64aff78eefb42fda16976679d86527b9cca2"
+        },
+        "sglang.srt.layers.quantization.gptq.schemes.gptq_marlin": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/gptq/schemes/gptq_marlin.py",
+          "sha256": "0648295334c1df8e33c008801616a0127333a0a9cd282c1dfa1d95716ac7ba07"
+        },
+        "sglang.srt.layers.quantization.gptq.schemes.gptq_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/gptq/schemes/gptq_moe.py",
+          "sha256": "135e004f7613a59aa0765cbe3d779c9bb0c459f3a199b868358759e020aaeb5d"
+        },
+        "sglang.srt.layers.quantization.gptq.schemes": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/gptq/schemes/__init__.py",
+          "sha256": "df614ddc009b147da107f6a80072bc4d327706fa7e95f3efd336d0f545a4bdfa"
+        },
+        "sglang.srt.layers.quantization.gptq.gptq": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/gptq/gptq.py",
+          "sha256": "af29ed750464e2149779bbbe4e1d26bb9f3abd5a6dfc2dd24608c4365b59ffbc"
+        },
+        "sglang.srt.layers.quantization.gptq": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/gptq/__init__.py",
+          "sha256": "5e901a3be7dd1d63e01b355cb8d538d7d30de416a63ce951477bf702a3709e4e"
+        },
+        "sglang.srt.layers.quantization.humming": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/humming.py",
+          "sha256": "5a156f4376bcc221dc0c8f7828c4a2c0c9e6e47e57cf7e61336bf97692db1b91"
+        },
+        "sglang.srt.layers.quantization.mlx": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/mlx.py",
+          "sha256": "1ce4c98f6b93abc250d8c43f3aff659a6146a1ff1265fa73f5b50a19ed40e490"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes.modelslim_scheme": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/modelslim_scheme.py",
+          "sha256": "3c35094a703eb80d8ba4e44a436405850f0c876195fe19e53628ec9fa4ff2d12"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes.modelslim_mxfp8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/modelslim_mxfp8.py",
+          "sha256": "c7eb5edd79e80d800b9bd265991501f3bc541a11fc4e304e810cd1ea864e6593"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes.modelslim_mxfp4_w4a8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/modelslim_mxfp4_w4a8.py",
+          "sha256": "3ed04e02fccabf6b0422d6199c68fee66c579c37026834ceb0653837d6002878"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes.modelslim_mxfp4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/modelslim_mxfp4.py",
+          "sha256": "13915c338ef514fbf65e167c67e236839ed9b22b575a19148afa51e7eae4bf56"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes.modelslim_mxfp8_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/modelslim_mxfp8_moe.py",
+          "sha256": "2111aa441fb8831d02a594172153b3dca66506914b5cee43e9e12352fd4be75c"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes.modelslim_w4a4_int4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/modelslim_w4a4_int4.py",
+          "sha256": "d03a46205c0e5c8245d4c290d1391a798bdc26b1495b0cf30d67c604ece20a35"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes.modelslim_w4a4_int4_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/modelslim_w4a4_int4_moe.py",
+          "sha256": "ccda8039be906206ac224be6854e038b9ea2bbe6f9039facb9cdae0a8c6e80ec"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes.modelslim_w4a4_mxfp4_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/modelslim_w4a4_mxfp4_moe.py",
+          "sha256": "aa7dccb644b14d34a583ffe1bdc37c8a48698034347700ceb5bcbac489e3feef"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes.modelslim_w4a8_int8_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/modelslim_w4a8_int8_moe.py",
+          "sha256": "cea0df9233d6456f892edfaf25bc3b298c2623c85c4aa2d91a59ccbb63a03df4"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes.modelslim_w4a8_mxfp4_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/modelslim_w4a8_mxfp4_moe.py",
+          "sha256": "f47ccc6324eb90742c3771874b653d41981e1f2a6f4ad5cd147c0d06dbca5f53"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes.modelslim_w8a8_int8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/modelslim_w8a8_int8.py",
+          "sha256": "20220a1f8da70a2cfb73c81fa3114efc7e6f6058f684755e40eab86d5b426093"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes.modelslim_w8a8_int8_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/modelslim_w8a8_int8_moe.py",
+          "sha256": "257a44e9071827dd4b6e094b9cfe809bb332fc3a23044b6809c863cf09e30ef8"
+        },
+        "sglang.srt.layers.quantization.modelslim.schemes": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/schemes/__init__.py",
+          "sha256": "4578a432c4fb90f705fd3201bddc4ea996c435b06ff2046e29bac918e5e65ec0"
+        },
+        "sglang.srt.layers.quantization.modelslim.modelslim": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/modelslim/modelslim.py",
+          "sha256": "6a4e09aa0c24468ecea54456090ee4a3b8728911e350048ebd069f3e1438e14e"
+        },
+        "sglang.srt.layers.quantization.moe_wna16": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/moe_wna16.py",
+          "sha256": "ea673ae19abf2bf8ab61cf4f9b05b2029c5593fc605b276fd8828e4437083291"
+        },
+        "sglang.srt.layers.quantization.mxfp4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/mxfp4.py",
+          "sha256": "2d4a8d4e854d24b5d375b04c87a73b4deff518e35bc69c048c497a968c8fdff9"
+        },
+        "sglang.srt.layers.quantization.npu_mxfp4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/npu_mxfp4.py",
+          "sha256": "dea73ffa5ff92b1006e54fa2e2c8a6b5124d63ecb7ab089c5c2050112d2779d9"
+        },
+        "sglang.srt.layers.quantization.npu_mxfp4_w4a4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/npu_mxfp4_w4a4.py",
+          "sha256": "eec4fa7db564e0f084c85b740047bef1e5baaf63624a9b933ff969070b2aab22"
+        },
+        "sglang.srt.layers.quantization.nvfp4_online": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/nvfp4_online.py",
+          "sha256": "9f740647caf4423dae01d0c738006239da39f4d744c53cb8c722d8b8087824bb"
+        },
+        "sglang.srt.layers.quantization.petit_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/petit_utils.py",
+          "sha256": "7b9cf1ac10923060ec083a6e98188da51981e2dedf6598aa135ee2e0f4e10117"
+        },
+        "sglang.srt.layers.quantization.petit": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/petit.py",
+          "sha256": "0b97a5f38c87774f3e4b21ac3b424b5566734785be497f2e8ea84474ae3ffe62"
+        },
+        "sglang.srt.layers.quantization.quark": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/quark/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sglang.srt.layers.quantization.quark.schemes.quark_scheme": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/quark/schemes/quark_scheme.py",
+          "sha256": "4655c2f81fb7169c07393f11bd080717ab1a34fe9da32e1d0392acc706a9e77e"
+        },
+        "sglang.srt.layers.quantization.dequantization": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/dequantization.py",
+          "sha256": "3ca0ba003afe0cef18e835aa72af425ed9af0e43b72b4c99d98e19b9696fcf6c"
+        },
+        "sglang.srt.layers.quantization.online_quantization": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/online_quantization.py",
+          "sha256": "410088a35d9364617f522ba8eaef5a6bd9a63446883ed6a70882715492e21e48"
+        },
+        "sglang.srt.layers.quantization.quark.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/quark/utils.py",
+          "sha256": "c41d0af790079f118ed5f05c35285d8f73ebfc2cbf39aada6ec5fabb3d31347a"
+        },
+        "sglang.srt.layers.quantization.quark.schemes.quark_w4a4_mxfp4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/quark/schemes/quark_w4a4_mxfp4.py",
+          "sha256": "a39b1c745c354782e91aaf54ec1673638aeaa7601acb19b35569a22653976570"
+        },
+        "sglang.srt.layers.quantization.quark.schemes.quark_w4a4_mxfp4_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/quark/schemes/quark_w4a4_mxfp4_moe.py",
+          "sha256": "db24cd7f27b2435f3293983d672803bcbfbf307234a8549a4dbdf71c8d70107a"
+        },
+        "sglang.srt.layers.quantization.quark.schemes.quark_w4a8_mxfp4_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/quark/schemes/quark_w4a8_mxfp4_moe.py",
+          "sha256": "919817aef53fdec60c6adc6fb2dc88def8665815b2d4a81c937fefa28be5d7a8"
+        },
+        "sglang.srt.layers.quantization.quark.schemes.quark_w8a8_fp8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/quark/schemes/quark_w8a8_fp8.py",
+          "sha256": "0260b37c35bb631fe2a3da3c5941a3b8656517fdb56085bbebec2d46e75d6091"
+        },
+        "sglang.srt.layers.quantization.quark.schemes.quark_w8a8_fp8_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/quark/schemes/quark_w8a8_fp8_moe.py",
+          "sha256": "5278d989d192c029d31cd8c1a7df0f58e2b55128743a00903cdfdb6408b6c9f9"
+        },
+        "sglang.srt.layers.quantization.quark.schemes": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/quark/schemes/__init__.py",
+          "sha256": "8593d4ee997ffc3cf14ba6768f093011046e70ceb2144c627e013eac23c8d35c"
+        },
+        "sglang.srt.layers.quantization.quark.quark": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/quark/quark.py",
+          "sha256": "ec3a19bffd47136228532977f8142f453bbf6f47e4699b6f4e44d60df324d7fb"
+        },
+        "sglang.srt.layers.int4fp8_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/int4fp8_utils.py",
+          "sha256": "3d3268e58de63a4c211846c32e65b58df0c2933105ab153c219157be3a15c5b4"
+        },
+        "sglang.srt.layers.quantization.quark_int4fp8_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/quark_int4fp8_moe.py",
+          "sha256": "ef8f7272226d42f0db4c155cd98c44c8ceadfa96918db734fbd4c43cfa4134d2"
+        },
+        "sglang.srt.layers.quantization.w8a8_fp8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/w8a8_fp8.py",
+          "sha256": "c612731090e5921e2bcf3f94fe98a990304537b642ca8a01fdf1fad73edbf50d"
+        },
+        "sglang.srt.layers.quantization.w8a8_int8": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/w8a8_int8.py",
+          "sha256": "37f8b6a5eb286a6051f49ff26dddf2212bd2fa8d27a57bd9f08da6bc6aa5f4b0"
+        },
+        "sglang.srt.layers.quantization": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/__init__.py",
+          "sha256": "13a9f194ce7693840529647e818fd784cbd221b7120ceafa98a986762a85512c"
+        },
+        "sglang.srt.arg_groups.argparse_actions": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/argparse_actions.py",
+          "sha256": "efb79a5521857ccbdd3533d2628730ea7efaf0b5051f1a93c5fc1c6addc8b405"
+        },
+        "sglang.srt.distributed.device_communicators.mooncake_transfer_engine": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/distributed/device_communicators/mooncake_transfer_engine.py",
+          "sha256": "3324cb41e0ef7e8b25aec46711b66f9ba3e3a68d4f010d1e11beaf610a9753ff"
+        },
+        "sglang.srt.arg_groups.validation_hook": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/validation_hook.py",
+          "sha256": "c3d4bb3d3bc3ed0d8ed0f0622bf8c01da998f16f0fd5369b8c428f4984347245"
+        },
+        "sglang.srt.hardware_backend.mps": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/mps/__init__.py",
+          "sha256": "e88f66ebaa6df0506f6aa05005c20fc7b24833eb69a8a60d11f20e482aefc465"
+        },
+        "sglang.srt.hardware_backend.mps.runtime": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/mps/runtime.py",
+          "sha256": "86352e1faa84d5ad60d4ef4b4af3a48055dc9a9f51ba9daefba989d6ffab3ce2"
+        },
+        "sglang.srt.speculative.decoupled_spec_io": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/speculative/decoupled_spec_io.py",
+          "sha256": "e4e0951b45d720538c26784b9dd05817f0a9e76d748cecb3efdf9a6d1acbdff5"
+        },
+        "sglang.srt.arg_groups.choices": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/choices.py",
+          "sha256": "bb68619a6f3a31126d4c9a87496f3eabe9298a9f6ba73a7adec33036d64d6643"
+        },
+        "sglang.srt.arg_groups.fields.device": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/device.py",
+          "sha256": "4bb4b4e2999358946c510a3fd6d56c1bbbf5f1c2972c5cda8cd57e4f5595cdd7"
+        },
+        "sglang.srt.arg_groups.fields.disagg": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/disagg.py",
+          "sha256": "c07bf6b5fb6140cb8f108906c3e083576f15714ad5ee87f4f89fc967e6ef1568"
+        },
+        "sglang.srt.arg_groups.fields.exec_": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/exec_.py",
+          "sha256": "828584b50d85000daa80b24ae433d25fe6db00db68d969d461c0a205a92a8316"
+        },
+        "sglang.srt.utils.aio_rwlock": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/aio_rwlock.py",
+          "sha256": "db32ca27e0d7ca53859a17c65464dddef6420f8dd971d9659f7671ce9f88cf6c"
+        },
+        "sglang.srt.lora.lora_registry": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/lora/lora_registry.py",
+          "sha256": "d0ee0947334e82892b81a9201714fd6dca0e2111a542ea354eb2100452bbc81b"
+        },
+        "sglang.srt.arg_groups.fields.lora": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/lora.py",
+          "sha256": "d6cf8551bb8ea115ca9169487d8b9b6652a9351cbf450b55947b92cca491dd44"
+        },
+        "sglang.srt.arg_groups.fields.memory": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/memory.py",
+          "sha256": "260a4d9600a9a9806423ef0f390890e29a2d91bb2c712ba1c971abd51266910d"
+        },
+        "sglang.srt.arg_groups.fields.mm": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/mm.py",
+          "sha256": "5a1d3ea911d6b1447ca235fda01f97f06b8ef13535d77b5d3bf1574d66fb3462"
+        },
+        "sglang.srt.arg_groups.fields.model": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/model.py",
+          "sha256": "cd7b684ac555dfc59f87625f1ddc7f28d18e0736200789929c83fc0e720eef25"
+        },
+        "sglang.srt.arg_groups.fields.observability": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/observability.py",
+          "sha256": "b8b5086afdff9fcbc65934b1fbf948188067cebc822cc67452881dbc78c1ce92"
+        },
+        "sglang.srt.arg_groups.fields.schedule": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/schedule.py",
+          "sha256": "907f9f0a4280d4f04b9b0efc3d9727167fd6ec1d5ebfb1d957e78a91a1d852e9"
+        },
+        "sglang.srt.arg_groups.fields.serving": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/serving.py",
+          "sha256": "66a9ab458053c31290f21d9b7ce6686c7a9d83e6387f2a12a61a0e5599ff4923"
+        },
+        "sglang.srt.arg_groups.fields.spec": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/arg_groups/fields/spec.py",
+          "sha256": "747ff1187fd33d1dffab06130942b209bc887ff69e846b50609ca40cbe3757b5"
+        },
+        "sglang.srt.server_args": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/server_args.py",
+          "sha256": "06e1912f52dcfbc360b532a4e3d71cc4388cffd59ee9bc6fe58c7d5251f72ae3"
+        },
+        "sglang.srt.utils.hf_transformers_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/hf_transformers_utils.py",
+          "sha256": "7936a23e92f552e8c854af19134a8e19d512998cf8d1c897fe56b30af6751f78"
+        },
+        "sglang.srt.configs.model_config": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/model_config.py",
+          "sha256": "83a1f2fa620a679f1b189e4cb3985ba0a1b7ccf2eccaaa64e719fb14ab2e36be"
+        },
+        "sglang.srt.disaggregation.base.conn": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/disaggregation/base/conn.py",
+          "sha256": "32bf5076a19d3d88f58dc906620ee9113bd2cce8274c6a1213dcedb8492f03c1"
+        },
+        "sglang.srt.disaggregation.base": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/disaggregation/base/__init__.py",
+          "sha256": "e15c14bf4696c709952f5d38f572bcd9a2d33719add1663944fcbd962fb0c959"
+        },
+        "sglang.srt.disaggregation.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/disaggregation/utils.py",
+          "sha256": "845cb0e19fe8eb202ee056dd1d260f910a18433d58a46c79082a53b2cfb08b05"
+        },
+        "sglang.srt.observability.scheduler_stage_metrics": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/observability/scheduler_stage_metrics.py",
+          "sha256": "9ddc9ba789c10e990c9840328ecb2ee1b497ec127e751ed3c4bdbb66e1e56460"
+        },
+        "sglang.srt.utils.gauge_histogram": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/gauge_histogram.py",
+          "sha256": "8ab119aaf7e1c5ae497948ac51d6656e5676e4659edd410c5e940b5ed68e21db"
+        },
+        "sglang.srt.observability.metrics_collector": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/observability/metrics_collector.py",
+          "sha256": "4bd83e9a0c5b38567c3b7374f2865716a3deae0deaa1802260e3adfabf7f6980"
+        },
+        "sglang.srt.eplb.expert_distribution": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/eplb/expert_distribution.py",
+          "sha256": "8079eaf69d54b97c6420066202660d3e02442db87d2ef99cc69aed7a4948ef8f"
+        },
+        "sglang.srt.state_capturer": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/state_capturer/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sglang.kernels.ops.attention.dsa.paged_mqa_logits": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/attention/dsa/paged_mqa_logits.py",
+          "sha256": "51591504130457f6e423f8930749ab8744e4bece16ca0cd19c79d2196634807e"
+        },
+        "sglang.kernels.ops.attention.dsa": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/attention/dsa/__init__.py",
+          "sha256": "e5a6166b0b49aa607226067dde70ae0bb447aca2e44e3d8df1652d826efdfd3d"
+        },
+        "sglang.kernels.ops.attention.dsa.quant_k_cache": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/attention/dsa/quant_k_cache.py",
+          "sha256": "d7878092620b606ce6fd685c43a205c90c02be65f5949d0c319207d1b01e6055"
+        },
+        "sglang.kernels.ops.kvcache.cache_move": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/kvcache/cache_move.py",
+          "sha256": "162af0b85adc7df324946b467b0045404f3c93e3e8299f80a4b5f83e146ee18f"
+        },
+        "sglang.kernels.ops.kvcache.kvcache": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/kvcache/kvcache.py",
+          "sha256": "fe75ca2abad09ee4911f1049f1c054d93f0470578f2a3e234452d19980e0ad81"
+        },
+        "sglang.srt.constants": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/constants.py",
+          "sha256": "628038505a2e4e9bd4f0f335695d08b207719b7d22a7beeea614a8163eda96e2"
+        },
+        "sglang.srt.layers.attention.dsa.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/attention/dsa/utils.py",
+          "sha256": "4e2d716446e7245d41c5524321cd2218330b4d224bb1119341155dbecc41a2b4"
+        },
+        "sglang.srt.layers.quantization.kvfp4_tensor": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/kvfp4_tensor.py",
+          "sha256": "9ef89ebead9540a3bccf76a2294c46e0a9fafe5871eaf814837ce3d134e0826f"
+        },
+        "sglang.srt.layers.quantization.fp4_kv_cache_quant_method": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/quantization/fp4_kv_cache_quant_method.py",
+          "sha256": "9800db3ab0968c921ca66ce806f1e842b9c61d4db577358712d6fdd0466de2d2"
+        },
+        "sglang.srt.mem_cache.allocation_sizing": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/allocation_sizing.py",
+          "sha256": "c0a757827ab883850058a517629c98b9cfab69a2a9e0d26a3d5b9b4730f2f484"
+        },
+        "sglang.srt.mem_cache.allocator.base": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/allocator/base.py",
+          "sha256": "52ec022545c0d5d794d3504c6ef514bee286a1fa09a92fc5fa7139b75b7c480e"
+        },
+        "sglang.kernels.ops.memory.allocator": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/memory/allocator.py",
+          "sha256": "9afa04af577797f88f7b41e97d52ff23112904a6b1ecf7e4f6bd7575201b5495"
+        },
+        "sglang.srt.mem_cache.allocator.paged": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/allocator/paged.py",
+          "sha256": "c72f28d9c5b953a05fcc0a0451307ecdbfbfb756eca3f0073f7be3eb737d38f6"
+        },
+        "sglang.srt.mem_cache.allocator.token": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/allocator/token.py",
+          "sha256": "ee09d0021b69b111e3262811e2fdaf2f495ecfc2cf6ed142070a7f7e95a030ec"
+        },
+        "sglang.srt.mem_cache.allocator": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/allocator/__init__.py",
+          "sha256": "a4a0a05c8c4a79c6550d121d4a39569674501fab325f73ecafb8f523f319dbac"
+        },
+        "sglang.srt.mem_cache.allocator.mamba": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/allocator/mamba.py",
+          "sha256": "610d6b3b8452741812efb549cca2903aed8f6e4e585f5b34fa23b935116c0e01"
+        },
+        "sglang.kernels.ops.attention.dsa.index_buf_accessor": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/attention/dsa/index_buf_accessor.py",
+          "sha256": "5c46b642c0cb27a5dac0f8e47db7b5cb4c4dc1bc98b869cc07188b2a797ca7bd"
+        },
+        "sglang.srt.mem_cache.index_key_cache": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/index_key_cache.py",
+          "sha256": "d8341d470f9f57be98b43595c0cb24f62af68ea0beb0be271a128fbeb07a01f8"
+        },
+        "sglang.srt.utils.cuda_vmm_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/cuda_vmm_utils.py",
+          "sha256": "8d3dd9358c22cb2a5e84292e28c3211756a3df3667b217f3c217ea6c85058c34"
+        },
+        "sglang.srt.mem_cache.kv_vmm_backing": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/kv_vmm_backing.py",
+          "sha256": "9c3e04a073e908f1af85d9d34876f3c01e7a7bde93def580945ac13c2856a333"
+        },
+        "sglang.srt.mem_cache.layout": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/layout/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sglang.srt.mem_cache.layout.token_major": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/layout/token_major.py",
+          "sha256": "fe46f588c40865e5a47b3ead9c315ad81c1ada65eb4298b7851fd8d0d1cf8053"
+        },
+        "sglang.kernels.ops.kvcache.mla_buffer": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/kvcache/mla_buffer.py",
+          "sha256": "55ca4d984f2e4d8cb0bd3932ace9fcac9464102e61f5561c2421fb5f2e2a1549"
+        },
+        "sglang.srt.mem_cache.cpp_utils.native_hash": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/cpp_utils/native_hash.py",
+          "sha256": "5829608e4c9e8a7cdfdd272ae320fe1a2a2a9d1fa8522ca970dc9bf830248a19"
+        },
+        "sglang.srt.mem_cache.evict_policy": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/evict_policy.py",
+          "sha256": "fff4330dd8e0c04670642ba721f0a1d64e17ff6f3137521d5ca80cc699bf9573"
+        },
+        "sglang.srt.mem_cache.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/utils.py",
+          "sha256": "0e4a54ae8eb35bf773d0bcb58be85cb029e927e01375f71c6a1947335348cebe"
+        },
+        "sglang.srt.utils.async_probe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/async_probe.py",
+          "sha256": "10b5fce7ec812e5277d29c864a6411833d7e10f56609dcf6590b35911ecdfedf"
+        },
+        "sglang.srt.utils.torch_memory_saver_adapter": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/torch_memory_saver_adapter.py",
+          "sha256": "139937ef272be19ddc48e0c5024d7860fa74f7321b4479694c234408b4c60f12"
+        },
+        "sglang.srt.mem_cache.memory_pool": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/memory_pool.py",
+          "sha256": "b439441448d1112952876cd5f814ea47fcd561ece1a9aa0e7d2080d5f4874106"
+        },
+        "sglang.srt.mem_cache.host_memory": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/host_memory.py",
+          "sha256": "96be32c23831dd5d6cd7d54ca85de10cdcb850316172008299448b3d9b81cab5"
+        },
+        "sglang.srt.mem_cache.hicache_storage": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/hicache_storage.py",
+          "sha256": "83d4d0db68de239eb7d50839e4c3e16d50620f23c6200bfa2d0d8933bd9a67db"
+        },
+        "sglang.srt.mem_cache.storage.backend_factory": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/storage/backend_factory.py",
+          "sha256": "99a3585d4d715f74f1d4190a958c3e764dd0300d9b9d64cb955cd6705ca867a6"
+        },
+        "sglang.srt.mem_cache.storage": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/storage/__init__.py",
+          "sha256": "1c3cc715455e38796bcbb1e57cbe6d45de47500d3637de29f2ecc0fd56bc9e53"
+        },
+        "sglang.srt.mem_cache.storage.mmap.mmap_allocator": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/storage/mmap/mmap_allocator.py",
+          "sha256": "e0e25cf5155b3531755dd0b04752c20c1ef8367735ac531aa16cb2434fa0bb9b"
+        },
+        "sglang.srt.mem_cache.storage.mmap": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/storage/mmap/__init__.py",
+          "sha256": "3d355914915afc1ebb316292a60ad0f55281c88e103505aa1d4d75e3be21073f"
+        },
+        "sglang.srt.mem_cache.pool_host.common": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/pool_host/common.py",
+          "sha256": "781e248146afe68b140e874702f2dbe53f00dd996b457726a37b3f3b847e6f56"
+        },
+        "sglang.srt.mem_cache.pool_host.base": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/pool_host/base.py",
+          "sha256": "982db6b57fe90ced7d9b052f8ce965c48ccfec7f4d71ec9cdab03cbce253ad4c"
+        },
+        "sglang.srt.mem_cache.pool_host.group": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/pool_host/group.py",
+          "sha256": "50b2902ada5308a299eb45c5b56aecb9f0bb42e23766b8dd85666f86dd7dda74"
+        },
+        "sglang.srt.mem_cache.pool_host": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/pool_host/__init__.py",
+          "sha256": "feff06e55eeb105ddeda93e8d8666821861c487f62d4e3bf5029c2578f830882"
+        },
+        "sglang.srt.state_capturer.base": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/state_capturer/base.py",
+          "sha256": "68c5eea01d8bf4c5a5d5292fb056c3816dac918760d3d607e2ab861231c1673c"
+        },
+        "sglang.srt.state_capturer.routed_experts": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/state_capturer/routed_experts.py",
+          "sha256": "9aa5c19779341afb73a3a3ccd1addfd161d8adb886c5ec5a646b5eb3e63179d5"
+        },
+        "sglang.kernels.ops.moe.moe_topk_sigmoid": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/moe/moe_topk_sigmoid.py",
+          "sha256": "d4351193f9cf41e51086f50432c88eb9ee1a3e3ddf06c50be05fa2050398c52f"
+        },
+        "sglang.kernels.ops.moe.fill_padded_rows": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/moe/fill_padded_rows.py",
+          "sha256": "18439c7bf44073acc136ff644052e9b9a0d76a2312108ff3d0a2203a251bc022"
+        },
+        "sglang.srt.layers.moe.topk": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/topk.py",
+          "sha256": "3f9d2d57bb11b26d4b24acc577ba1345ea9f3bdbb38d002d3d506346ed487b79"
+        },
+        "sglang.srt.layers.moe.token_dispatcher.ascend_tp": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/token_dispatcher/ascend_tp.py",
+          "sha256": "28e97cf60dc67a01444f97b66e9bcab6b99cbc35a29b3a3c9c93b601066bbd67"
+        },
+        "sglang.srt.layers.moe.token_dispatcher.deepep": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/token_dispatcher/deepep.py",
+          "sha256": "bf13fb741e8059c104c1ded56a4a806e767973f91c28a89fdc83f8e4cf294cef"
+        },
+        "sglang.srt.layers.moe.token_dispatcher.deepep_v2": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/token_dispatcher/deepep_v2.py",
+          "sha256": "64583877cde142591bbb4a7ad216625c5b8d1d8fbffe35ea7d87e5049c95b942"
+        },
+        "sglang.srt.layers.moe.token_dispatcher.flashinfer_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/token_dispatcher/flashinfer_utils.py",
+          "sha256": "d26bf7c4fc811d42e30373e4495cd3163540aa8071dadc3534b675e627793389"
+        },
+        "sglang.srt.layers.moe.token_dispatcher.standard": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/token_dispatcher/standard.py",
+          "sha256": "ae50c4634f4024db4f6e80d09b028c2ce2f6e99805f7a89e2b8e15f90836aa19"
+        },
+        "sglang.srt.layers.moe.token_dispatcher.flashinfer": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/token_dispatcher/flashinfer.py",
+          "sha256": "61d79191720f8231f965be7f971155f139bf683b8b7625733b49e0031fbd2ad3"
+        },
+        "sglang.srt.elastic_ep.elastic_ep": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/elastic_ep/elastic_ep.py",
+          "sha256": "c7438fe56602fafb2734a2fd0c03a3b91c72204245f3202eba0a6f36b8c80688"
+        },
+        "sglang.srt.layers.moe.token_dispatcher.mooncake": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/token_dispatcher/mooncake.py",
+          "sha256": "8cb40fd9f8c4e78828b89d9b765eff6021203bc90132ddb5303d7d6c4101f4e1"
+        },
+        "sglang.srt.layers.moe.token_dispatcher.moriep": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/token_dispatcher/moriep.py",
+          "sha256": "0d7b74bb647b3fcfbaeab54ace0f0cbee679ad276f651b2daf8c4e8adf41735d"
+        },
+        "sglang.srt.layers.moe.token_dispatcher.nixl": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/token_dispatcher/nixl.py",
+          "sha256": "50a9e83b7a23bd83a570a702413e3c5c1249a8b9c8a8cf8769bce194c0d6f0c9"
+        },
+        "sglang.srt.layers.moe.token_dispatcher.pplx": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/token_dispatcher/pplx.py",
+          "sha256": "052053b7ba7b3d0070585d7eb81bf20cb6ccb1480859fe00d65e779998207e16"
+        },
+        "sglang.srt.layers.moe.token_dispatcher": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/token_dispatcher/__init__.py",
+          "sha256": "d0433f6a5403de9b10cbdb0481ad4c28c77f3160f87b0612f6d3ecd2bbb29cb6"
+        },
+        "sglang.srt.batch_overlap.operations_strategy": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/batch_overlap/operations_strategy.py",
+          "sha256": "a9c4b5cbe65975058a68982f9d40a9a6afeff34daeff3bc162a91ec617dea47b"
+        },
+        "sglang.srt.layers.layer_boundary.adapters": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/adapters/__init__.py",
+          "sha256": "ba7f72c16aa09ceefc1fbf78accde4e3a35a3d73a702119e9467e7fd45467d37"
+        },
+        "sglang.srt.layers.cp.base": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/cp/base.py",
+          "sha256": "23e4922adc5eb8ed7a87041163e65909c91a03f4297cc659f751a9f4bab35341"
+        },
+        "sglang.srt.layers.cp.padding": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/cp/padding.py",
+          "sha256": "9ee71e9795699fd5063d4b0c158132ebd1624858e75f6c3f261bf97c30e1a9f1"
+        },
+        "sglang.srt.layers.cp.interleave": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/cp/interleave.py",
+          "sha256": "6c30dc138aad63ef91daf2b10778dbc6299ea2735d521445e76e252a0d995e62"
+        },
+        "sglang.srt.layers.cp.zigzag": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/cp/zigzag.py",
+          "sha256": "fa7c8e9f936835d043312199a15a9784c8ea9a14348435d66ae04b5c7da2f491"
+        },
+        "sglang.srt.layers.cp": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/cp/__init__.py",
+          "sha256": "fef93024570eebcfb78444c297d309267fbc830ea9f6d5bd9838c63641bda1b2"
+        },
+        "sglang.srt.layers.cp.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/cp/utils.py",
+          "sha256": "598d3325630af188fc6f221f59ced352352e632f0f254ae38bbbbb6f1078c7c5"
+        },
+        "sglang.srt.layers.layer_boundary.layout": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/layout.py",
+          "sha256": "dda7dc049fac4d2d5819963acbfb5828bf5f983195698607fc30ff066f2a7570"
+        },
+        "sglang.srt.layers.layer_boundary.adapters.attention": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/adapters/attention.py",
+          "sha256": "7b419e7efa2636ed321d5e174136b5e538ce7cdbb4ca059b4804a8b61db7f157"
+        },
+        "sglang.srt.layers.layer_boundary.output": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/output.py",
+          "sha256": "6dd640768fef2434fa9e727de5d491a37b0a60b9f546d525b30c98c24186ebc6"
+        },
+        "sglang.srt.layers.layer_boundary.residual": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/residual/__init__.py",
+          "sha256": "878badcc615d1df5ca9e5545eaedff6e3fa898228d36b44559c35920f28def65"
+        },
+        "sglang.srt.layers.flashinfer_comm_fusion": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/flashinfer_comm_fusion.py",
+          "sha256": "617808518cdadbc45cd694095868aecc7c9da124669645b16006a446e326f96a"
+        },
+        "sglang.srt.layers.layer_boundary.residual.add_norm": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/residual/add_norm.py",
+          "sha256": "d1487cec748f0a513f4b27579043f1250532a753330ed3776fc019b387d5bc49"
+        },
+        "sglang.srt.layers.layer_boundary.contracts": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/contracts.py",
+          "sha256": "971be06eb6335646beb77b370d2954d4b781090f6eb7fa20fad4d55c9e1f2930"
+        },
+        "sglang.srt.layers.layer_boundary.ops": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/ops.py",
+          "sha256": "224f41be0b36ca4fdb36f7d589cd77b217258f06601b9dc1b278178a14846fc6"
+        },
+        "sglang.srt.layers.layer_boundary.residual.stream": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/residual/stream.py",
+          "sha256": "329014b4878bd7f0fc5aa02dfd95914fb44eb81acb5efbade8d6732d4eaa8587"
+        },
+        "sglang.srt.layers.layer_boundary.prepare": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/prepare.py",
+          "sha256": "221815ab3fa222404612ee546791cd5702b92113b0cc25f312b44301d20e2359"
+        },
+        "sglang.srt.layers.layer_boundary.boundary": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/boundary.py",
+          "sha256": "39e0f762b220eae1eb54d51f4cffa91de0fb2dcdb1ba43c2f896bb89b6eee372"
+        },
+        "sglang.srt.layers.layer_boundary.exit": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/exit.py",
+          "sha256": "ba65bc1c41974e6decc8ba8bd7f4a4d125bcc63e2f4f27300d573e938db984e4"
+        },
+        "sglang.srt.layers.layer_boundary.fusions": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/fusions/__init__.py",
+          "sha256": "6397a9c8802da3ef44cef23a8695e16cc820f4cb117cab7849cbcf90a789ef2a"
+        },
+        "sglang.kernels.ops.layernorm.rmsnorm_hf": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/layernorm/rmsnorm_hf.py",
+          "sha256": "9933deb3f66af9e04c125727819d47b392cd804f509d04bd23484301efac6d87"
+        },
+        "sglang.kernels.ops.layernorm.norm": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/layernorm/norm.py",
+          "sha256": "ad31f150da1a2c6619d7f3da5597f25ac338e5ffaf12ce9a46c241743bf853a6"
+        },
+        "sglang.srt.layers.layernorm": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layernorm.py",
+          "sha256": "98072d836e0c77312058521ee1015c80177b2c370da7408fd066eec61015ff21"
+        },
+        "sglang.srt.layers.layer_boundary.fusions.allreduce": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/fusions/allreduce.py",
+          "sha256": "eaf118c917f5c1df6e004d108a2697eb09fdbb32864cf97b62ae85b1db559ab4"
+        },
+        "sglang.srt.layers.aux_hidden_states": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/aux_hidden_states.py",
+          "sha256": "1c0b2055a5bfef2b06096ffac1fdea073cf471f0c48ccd3b4ab577118facae92"
+        },
+        "sglang.srt.layers.layer_boundary.adapters.branch": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/adapters/branch.py",
+          "sha256": "50e93d71c8f8cbb35592ec1cb4985e1664220cd0c6cbc0a863e51d338f7dc4a7"
+        },
+        "sglang.srt.layers.layer_boundary.adapters.lora": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/adapters/lora.py",
+          "sha256": "954ee1a11315085216624077509f6e24208c78b23d85382c7d55123f14ae1112"
+        },
+        "sglang.srt.layers.layer_boundary.residual.access": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/residual/access.py",
+          "sha256": "ab3f54c7da2da421172f5e04c077ffc2fbb460055f53dafb6ea16653a382e113"
+        },
+        "sglang.srt.layers.layer_boundary.residual.batch": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/residual/batch.py",
+          "sha256": "1162be30ca6a5cae0bbd4d141e2a3a493cdddf4b1c2bb5444a9bb8cb5a0bce80"
+        },
+        "sglang.srt.layers.layer_boundary.stage": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/stage.py",
+          "sha256": "c496ad878963c724c0a46db4489798a139c34e5c0b22a273e4af71f3ae45e276"
+        },
+        "sglang.srt.layers.layer_boundary.construction": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/construction.py",
+          "sha256": "381762593a7ea6de0af21bc3811fd793af80d8d113231a3b81e4baff34ac154b"
+        },
+        "sglang.srt.layers.layer_boundary.adapters.overlap": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/adapters/overlap.py",
+          "sha256": "f4d30aa8d3571236f67372773ed83710027a816e43331f4789bb179f165a8bff"
+        },
+        "sglang.srt.layers.layer_boundary.factories": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/factories.py",
+          "sha256": "5b6f1ae0ce3d3772bb9d2ed35b750478ef7b1b8ee830735f1d3ca178f6e38557"
+        },
+        "sglang.srt.layers.layer_boundary.residual.gated": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/residual/gated.py",
+          "sha256": "23591faa4c33710f6204d300ee27a0598c15acabbff1d4fc4d365ed56d1b4ee9"
+        },
+        "sglang.srt.layers.layer_boundary.residual.ihc": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/residual/ihc.py",
+          "sha256": "e2564457d06658300bcb3ca3ce3c5dfcc013ae3591e9843221ea9ff6ac8fa02f"
+        },
+        "sglang.kernels.ops.layernorm.mhc": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/layernorm/mhc.py",
+          "sha256": "1a84af3cf334e67a66253bf4c58a39e617ebf85353fe2980ea6defa47bf9d42d"
+        },
+        "sglang.srt.layers.layer_boundary.residual.mhc": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/residual/mhc.py",
+          "sha256": "b624c1bf6e426bf9fe716178d3033b651a755fab671b6a55b946b697c6a36cb6"
+        },
+        "sglang.srt.layers.layer_boundary": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/layer_boundary/__init__.py",
+          "sha256": "bd37c8c4aaa596a69ca3038fe35f8dbaeb537234bfa1c96b64c227c61cc162a7"
+        },
+        "sglang.srt.dllm.config": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/dllm/config.py",
+          "sha256": "644794379c40502aa4a414743cc7eb86ffae280a1852dea5653d59b7df3ae45f"
+        },
+        "sglang.srt.utils.weight_versions": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/weight_versions.py",
+          "sha256": "c4a233ade05e6c4c41e896e9fa29c150f7b0071daca1233288981e8e223d6a61"
+        },
+        "sglang.srt.beam_search.fork": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/beam_search/fork.py",
+          "sha256": "90064a586e97a983186798c3c7345d3abad9559f3b13a01cf121ac6863f3277f"
+        },
+        "sglang.srt.beam_search.history": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/beam_search/history.py",
+          "sha256": "1d080fdbf306750eb38b6934c22fa7c5cd9e182109cb4adcc01e5787da538e83"
+        },
+        "sglang.srt.beam_search.joint_select": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/beam_search/joint_select.py",
+          "sha256": "4db7a978aeb6e8b57ed3c12668a4319693c8741d1de9811c940bf04d45146d8a"
+        },
+        "sglang.srt.beam_search.beam_group": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/beam_search/beam_group.py",
+          "sha256": "f8762b83b467e18d3d4759d0bf7ef7dd776a03d72bef3b9b1438a733699d6177"
+        },
+        "sglang.srt.beam_search": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/beam_search/__init__.py",
+          "sha256": "423055565833161dd57fec6d6c32a6f4ad98eecba6059be3c20caf406b547cd2"
+        },
+        "sglang.srt.beam_search.batch_tail": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/beam_search/batch_tail.py",
+          "sha256": "4c8f6c0fc8302c79d50cb8342cadabf1fe2c7d20bc64f5bada52a5df14f0beb9"
+        },
+        "sglang.srt.entrypoints.openai": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/entrypoints/openai/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sglang.srt.entrypoints.openai.encoding_dsv4": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/entrypoints/openai/encoding_dsv4.py",
+          "sha256": "4c2b93ebdb9f14b4c2fe9820368b1a91e15d610d548e25392d94c88e5eafe251"
+        },
+        "sglang.srt.entrypoints.openai.protocol": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/entrypoints/openai/protocol.py",
+          "sha256": "d26b45374f730f232c86f969ecc5ac2919f19978ae27540e8e512bf89824d070"
+        },
+        "sglang.srt.function_call.core_types": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/function_call/core_types.py",
+          "sha256": "c0b52c5bc99403e8be212cf94140cbec48eaef65be2b51c88456bd5a6fbfa00f"
+        },
+        "sglang.srt.function_call.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/function_call/utils.py",
+          "sha256": "3c1caf6907f05ddd4a44634f2c907d514de2191a45ee76b2ffaf962bf30a0902"
+        },
+        "sglang.srt.function_call.base_format_detector": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/function_call/base_format_detector.py",
+          "sha256": "c01527332719ec627a65a77aaf1fe5341e5823a97326b2e3e06928cd18d932c2"
+        },
+        "sglang.srt.function_call.hunyuan_detector": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/function_call/hunyuan_detector.py",
+          "sha256": "cbb9ababcb41cbcda770d2c00d83a7c0d49b19480597311f6101cafce23a3173"
+        },
+        "sglang.srt.function_call.kimik3_format": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/function_call/kimik3_format.py",
+          "sha256": "65b893bb3314c02ef2537cc4a8c85b3d798101a5cebebb548a2cac1caa5a3a63"
+        },
+        "sglang.srt.function_call.muse_glimmer_format": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/function_call/muse_glimmer_format.py",
+          "sha256": "91126a99c959c98e287db819411b099a6db3fa0d9060bb736694e33d8b89e8e6"
+        },
+        "sglang.srt.parser.harmony_parser": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/parser/harmony_parser.py",
+          "sha256": "630786e1acd69b98e6cd819a00711749a391a6059cb4fa5219093f8e9e47f821"
+        },
+        "sglang.srt.parser.inkling_tokenizer": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/parser/inkling_tokenizer.py",
+          "sha256": "8c3a9f8d0c05434a44902155da14bc1bd54ce22837fb7b7bc3848f2da3067120"
+        },
+        "sglang.srt.parser.reasoning_parser": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/parser/reasoning_parser.py",
+          "sha256": "425836b8f7c850af2fdb59f30932dc1ddeca7410d3f123d6c902a736b008a06f"
+        },
+        "sglang.srt.constrained.base_grammar_backend": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/constrained/base_grammar_backend.py",
+          "sha256": "b88176aa869e72895a77d791fefc0f26839c3340f9c69b445062a61a2ba15dde"
+        },
+        "sglang.kernels.ops.speculative.gather_spec_extras": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/speculative/gather_spec_extras.py",
+          "sha256": "5b4e41ce94ef81db8a6a80cdbfbbf379675288a9f922a74a2cb4ac2b9f8c35e9"
+        },
+        "sglang.srt.managers.overlap_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/managers/overlap_utils.py",
+          "sha256": "376837c12f94021695d4cb9247100ded8cec231f7f806a57d2c1cb65b49f9c61"
+        },
+        "sglang.kernels.ops.memory.common": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/memory/common.py",
+          "sha256": "a2377e0d262b8a527475477a7e76a3dd137ff8cd589f9af0067f5c23378a6aa3"
+        },
+        "sglang.srt.mem_cache.allocator.page_interleave": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/allocator/page_interleave.py",
+          "sha256": "83a8fe87e8d757b5a2d30b27b0b27d8be53645c0dcd86469ef918e2890d7b2e1"
+        },
+        "sglang.srt.disaggregation.kv_events": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/disaggregation/kv_events.py",
+          "sha256": "0e3d7e7159ff8d34cf2e931885e9be52235de6419f39be134545d576f14178ad"
+        },
+        "sglang.srt.mem_cache.events": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/events.py",
+          "sha256": "288faf4883cc59ad09be9ad6982fed52903bc2a3429d6d346f2d8f00053e31ac"
+        },
+        "sglang.srt.mem_cache.unified_cache": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/unified_cache/__init__.py",
+          "sha256": "dfe2244f37bf6c26b2b8473d6c0317fa4996ec16a1e98afb8dabd1ed93c90efc"
+        },
+        "sglang.srt.mem_cache.unified_cache.component_type": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/unified_cache/component_type.py",
+          "sha256": "df978797a6ddc376477d01931d8bb30b8185499a27fe8c9691db19a429155332"
+        },
+        "sglang.srt.mem_cache.base_prefix_cache": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/base_prefix_cache.py",
+          "sha256": "ecf04bc817466b23d6ac6392613ea22f513055d2a5ed865a9a7bbd927fd73774"
+        },
+        "sglang.srt.mem_cache.cache_init_params": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/cache_init_params.py",
+          "sha256": "5f8d789f87cfba2d06deccf545df26d23528a015c13fe871ba679cc223ac6b5e"
+        },
+        "sglang.srt.mem_cache.radix_cache": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/radix_cache.py",
+          "sha256": "fbb8c52a7abad8cda047941d7fc662c65a77848820bb55e9d505d8c9adc469ab"
+        },
+        "sglang.srt.mem_cache.common": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/common.py",
+          "sha256": "32112d8a228fa2d2c70062408f63a4e2e4bca1d1c99a3e9a584719de4b5407d3"
+        },
+        "sglang.srt.sampling.penaltylib.orchestrator": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/sampling/penaltylib/orchestrator.py",
+          "sha256": "829be20bdfad1d6f92c9eb830f320602a92203ebbf692c7d92a325bfdc0dd2a9"
+        },
+        "sglang.srt.sampling.penaltylib.frequency_penalty": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/sampling/penaltylib/frequency_penalty.py",
+          "sha256": "50753c89717f0817b0b7688060a8ee2bf89947b47addb78f39283c5f106e33d3"
+        },
+        "sglang.srt.sampling.penaltylib.min_new_tokens": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/sampling/penaltylib/min_new_tokens.py",
+          "sha256": "e27e0827a8c87cfed52abccb618546acce31a8db28dcd35ddafd7719094e3020"
+        },
+        "sglang.srt.sampling.penaltylib.presence_penalty": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/sampling/penaltylib/presence_penalty.py",
+          "sha256": "e06b61e6a7fd3d91920c7b9087f56dfc030b9e457161c4f8da97181ff8ae0632"
+        },
+        "sglang.srt.sampling.penaltylib.repetition_penalty": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/sampling/penaltylib/repetition_penalty.py",
+          "sha256": "62f88e04e5c93fe0130130b375d625dc51a210ac72aba6fe60f50fcd5526e85c"
+        },
+        "sglang.srt.sampling.penaltylib": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/sampling/penaltylib/__init__.py",
+          "sha256": "75ad2cf0aabb156ec1aecffdeb906058f2fbf5669d258fefc420e50a27b0c7ba"
+        },
+        "sglang.srt.sampling.sampling_params": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/sampling/sampling_params.py",
+          "sha256": "443fdeadc67e0a1b6c5a5c6adf6bb3eedfb02dbf353160e829b3667df2d3979a"
+        },
+        "sglang.srt.sampling.sampling_batch_info": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/sampling/sampling_batch_info.py",
+          "sha256": "6a0da2eaa11cce8c2686f7a0bbfc428db8e7d7f2211556907cc4de47ff4c75d0"
+        },
+        "sglang.srt.disaggregation.decode_schedule_batch_mixin": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/disaggregation/decode_schedule_batch_mixin.py",
+          "sha256": "4512b5a93a1a0ee522a4224d887cbc7c18731706e649c763f088cd0e553d990d"
+        },
+        "sglang.srt.dllm.mixin.req": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/dllm/mixin/req.py",
+          "sha256": "b1eff03bc74826706f1419c8950405364b0044f68af272f69e738e788ffad457"
+        },
+        "sglang.srt.managers.embed_types": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/managers/embed_types.py",
+          "sha256": "a82f4dec31163faf0982b1346290698b1a19aa648f7b6381d3b129d73046de75"
+        },
+        "sglang.srt.managers.kv_hints": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/managers/kv_hints.py",
+          "sha256": "d304a9675087bde28d7df994813e78e4cb3b662eac633b0df10e7f41983d3f2f"
+        },
+        "sglang.srt.managers.scheduler_components": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/managers/scheduler_components/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sglang.srt.managers.scheduler_components.new_token_ratio_tracker": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/managers/scheduler_components/new_token_ratio_tracker.py",
+          "sha256": "d6ad7ede11e9262318649cc5427ee44fb14973d22f8ada26b6d5383a1e77a271"
+        },
+        "sglang.srt.hardware_backend.npu.dsv4.dsv4_common_hooks": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/hardware_backend/npu/dsv4/dsv4_common_hooks.py",
+          "sha256": "fa72b1a8a4bb26580e1cbabbdf5d1c43f7bb0acac3fb754a14f67955735e971d"
+        },
+        "sglang.srt.mem_cache.allocation": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/mem_cache/allocation.py",
+          "sha256": "dc040eabc4e179a538adb359c0bb0a66b88bd620707d8e02ceb81f3a8a341911"
+        },
+        "sglang.srt.multimodal.transport": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/multimodal/transport/__init__.py",
+          "sha256": "5ada54db0cf95b53fc4452bb2f2bb1a08d7e9e3d51d8736bd0e1914ae453d65c"
+        },
+        "sglang.srt.multimodal.transport.memory_pool": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/multimodal/transport/memory_pool.py",
+          "sha256": "56ffd932157fd0f9aeefb68e8b1b84bb0e1e2e696424e99b488b22e5f4e7347c"
+        },
+        "sglang.srt.multimodal.transport.cuda_ipc": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/multimodal/transport/cuda_ipc.py",
+          "sha256": "6e9f4ba94a9da7850bcf7397e18bbf81e758d1ddbd6f8b0add95f0bb868941b2"
+        },
+        "sglang.srt.observability.trace": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/observability/trace.py",
+          "sha256": "2e5f7096feb3a8a9b7bd281340b5dfd3078e4383062699cbff35137d3c23ef2c"
+        },
+        "sglang.srt.observability.trace_async": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/observability/trace_async.py",
+          "sha256": "1208ed781ed1b00c9bdadd382fc99999ecd35d69131a23d3b71af406947893c3"
+        },
+        "sglang.srt.observability.req_time_stats": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/observability/req_time_stats.py",
+          "sha256": "d3d07bfc9c3d1d688e6216f41ede9078b3602aab37a71b63af5032655a78f8d2"
+        },
+        "sglang.srt.sampling.sampling_mask": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/sampling/sampling_mask.py",
+          "sha256": "fd2b1d229a2c79b1017a3c86c2c842185511090ea74c16ec9e224f981d50e7a0"
+        },
+        "sglang.srt.utils.token_sequence_matcher": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/utils/token_sequence_matcher.py",
+          "sha256": "392c9c96d5832a1c1ea1b05b30cc4a0cd94151f919d30cf589e75fd858c386c9"
+        },
+        "sglang.srt.managers.schedule_batch": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/managers/schedule_batch.py",
+          "sha256": "fdce33f09997f667431cf18b7f0397c64f3e707f98c7ec9cc775414a9ad837f6"
+        },
+        "sglang.srt.batch_overlap.two_batch_overlap": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/batch_overlap/two_batch_overlap.py",
+          "sha256": "73f142d0161efe3b0eab3ff25de62da214680c5b91b48eaaaee2000bdcac2ab0"
+        },
+        "sglang.srt.configs.moe_model_registry": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/moe_model_registry.py",
+          "sha256": "20c95960c3ed8583b68915684418e78d6b9032af214c4b912f4e987c661f060e"
+        },
+        "sglang.srt.layers.moe.kt_ep_wrapper": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/kt_ep_wrapper.py",
+          "sha256": "50c22e24de9b2c44aebb02461a670120df9572d1b0662a161c492374f9e6d59c"
+        },
+        "sglang.srt.model_loader.post_load": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_loader/post_load.py",
+          "sha256": "566638279a4c27d66a000b046f52b970a3e9b614802651f74c46ce5484ad5b88"
+        },
+        "sglang.srt.model_loader.remote_instance_weight_loader_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_loader/remote_instance_weight_loader_utils.py",
+          "sha256": "6e4743a6715a7a24bd854144b9d9383fd6479da8ca39991845f4e96d5a5c6b2a"
+        },
+        "sglang.srt.configs.modelopt_config": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/modelopt_config.py",
+          "sha256": "a6be10fc9e06d457fec32db805847359a374508df8aeb78679fecdb7a7745f73"
+        },
+        "sglang.srt.configs.load_config": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/configs/load_config.py",
+          "sha256": "9255a24fe8a1553360190e7a6e5baeb94caa2a4e6d2170eee37391e91f6844cc"
+        },
+        "sglang.srt.model_loader.utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_loader/utils.py",
+          "sha256": "0d16696a77496a5cfbfb4ed2fdfab0654420af57610c46d24ec455b83dfc8e22"
+        },
+        "sglang.srt.model_loader.checkpoint_quantization": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_loader/checkpoint_quantization.py",
+          "sha256": "6c894232c43e2648ef790ab65a5d0a519f6184bd24dcadebdc95892be1b77a33"
+        },
+        "sglang.srt.model_loader.ci_weight_validation": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_loader/ci_weight_validation.py",
+          "sha256": "e6b9bd825ea66e2dbf021985a1e48fee15447dc0bbef4769c9558ccb4ab299a9"
+        },
+        "sglang.srt.model_loader.weight_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_loader/weight_utils.py",
+          "sha256": "bec12a8fc5fa8ae80352f4193d8c547be0d6b1d74c46fb94719f380da800ccd7"
+        },
+        "sglang.srt.model_loader.loader": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_loader/loader.py",
+          "sha256": "d99ac646233af81ef73cd6834f2d80abf7d48f2a8570cddc03239db087d1becc"
+        },
+        "sglang.srt.model_loader": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/model_loader/__init__.py",
+          "sha256": "8cfa1f43a634864baf70c664ad8bc911a9da50a1cf84a7942f5187bef477ce00"
+        },
+        "sglang.srt.layers.moe.fused_moe_triton.layer": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/fused_moe_triton/layer.py",
+          "sha256": "fdd118531930836e1403259d9c24022843a5aa908b6f0e2a47f1619048f88dba"
+        },
+        "sglang.kernels.ops.moe.fused_moe_triton_kernels": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/moe/fused_moe_triton_kernels.py",
+          "sha256": "6d1196007462bc0ffc432ee122798331cb4a0b052660a043f3f906c2a2a7a82a"
+        },
+        "sglang.srt.layers.moe.moe_runner.triton_utils.fused_moe_triton_config": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/triton_utils/fused_moe_triton_config.py",
+          "sha256": "022c8aa47972dd975ebf7be9c6d04ac4c60604cf705cf80c9b38e45973193d09"
+        },
+        "sglang.kernels.ops.moe.moe_align_small_numel": {
+          "path": "/baseline/serving/sglang/python/sglang/kernels/ops/moe/moe_align_small_numel.py",
+          "sha256": "ddeb1b65e6b86338c51077029fbd1e1a9c61b6fd625ef6fb272435c0b8608008"
+        },
+        "sglang.srt.layers.moe.moe_runner.triton_utils.moe_align_block_size": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/triton_utils/moe_align_block_size.py",
+          "sha256": "b9fe04c12c7ace9a32d7489907dda5ce4de7646d45713aec589e5e5cec6d1fee"
+        },
+        "sglang.srt.layers.moe.moe_runner.triton_utils.fused_moe": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/triton_utils/fused_moe.py",
+          "sha256": "e4ddc6c14bfe63cd0894bcbe6347392bbc96784afd18b5fb83ef2ac95e003a3b"
+        },
+        "sglang.srt.layers.moe.moe_runner.triton_utils": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/moe_runner/triton_utils/__init__.py",
+          "sha256": "17001b79d53924601d242d37aa2ba0b144002f02a5b6f1a75e168d97e508829d"
+        },
+        "sglang.srt.layers.moe.fused_moe_triton": {
+          "path": "/baseline/serving/sglang/python/sglang/srt/layers/moe/fused_moe_triton/__init__.py",
+          "sha256": "be2cc3fbe561df1d6eef6eaac65238eeecece81c00f85dc8b5cd1cb504c7d1fc"
+        }
+      },
+      "jit_libraries": {
+        "/cache/sglang/sm90a/sgl_kernel_jit_rsi_wgmma_coalesced_down_28ad39648ed3ad77/build-bdc451927ebc9ca5/deps-20cb613396e9eed5/sgl_kernel_jit_rsi_wgmma_coalesced_down_28ad39648ed3ad77.so": "a997489316bac7128287b59b3aa5c0585a73f52df6ad9978be6779aefd9d6460"
+      },
+      "source_hashes": {
+        "routed_down.cuh": "28ad39648ed3ad778711f05be18e49c41944c262171346fb79970c2bb1bb3089",
+        "routed_adapter.py": "cde9c407a93b69218b64c6fea835150768c99fa9cf2cd547bc66c8e01c0687ce",
+        "check_routed.py": "e97606427885a5a98c4fcd65fb2423847d53607987af7513d4efefb6d2894ea5",
+        "run_routed_probe.py": "377ec61a333975bd7dfc8ac98ed49c4d577ef3bf8250e9cf23d5c613af8eb419"
+      }
+    },
+    {
+      "status": "complete",
+      "scope": "full expert synthetic correctness only; not performance or official serving score",
+      "development_seed": 910231,
+      "results": [
+        {
+          "kind": "eager_4_normal",
+          "pass": true,
+          "detail": "relative L2 error 5.517e-03 (worst row 5.541e-03)"
+        },
+        {
+          "kind": "eager_33_normal",
+          "pass": true,
+          "detail": "relative L2 error 5.554e-03 (worst row 5.881e-03)"
+        },
+        {
+          "kind": "eager_257_normal",
+          "pass": true,
+          "detail": "relative L2 error 5.555e-03 (worst row 6.003e-03)"
+        },
+        {
+          "kind": "eager_128_skewed",
+          "pass": true,
+          "detail": "relative L2 error 5.371e-03 (worst row 5.595e-03)"
+        },
+        {
+          "kind": "eager_1_normal",
+          "pass": true,
+          "detail": "relative L2 error 5.743e-03 (worst row 5.743e-03)"
+        },
+        {
+          "kind": "eager_empty",
+          "pass": true,
+          "detail": "exact zero"
+        },
+        {
+          "kind": "graph_valid",
+          "pass": true,
+          "detail": "relative L2 error 5.542e-03 (worst row 5.734e-03)"
+        },
+        {
+          "kind": "graph_empty_after_valid",
+          "pass": true,
+          "detail": "exact zero"
+        },
+        {
+          "kind": "graph_fresh_skewed",
+          "pass": true,
+          "detail": "relative L2 error 5.418e-03 (worst row 5.565e-03)"
+        }
+      ],
+      "runner_sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+      "reference_sha256": "a7e0b4fa86aa477a4e7bb5745b2b258954d72636b6da153bd239a717927cba44",
+      "candidate_sha256": {
+        "serving_wgmma_down.py": "0b5df011b4c51f9d4872ef9d73a33f0900e53be027227f340c325ce44ffe5811",
+        "routed_adapter.py": "cde9c407a93b69218b64c6fea835150768c99fa9cf2cd547bc66c8e01c0687ce",
+        "routed_down.cuh": "28ad39648ed3ad778711f05be18e49c41944c262171346fb79970c2bb1bb3089",
+        "check_full_expert.py": "6dddff95f11d6d023e9333c5972de037b21d558d19f0308d766cc4a66a4fbe38"
+      }
+    }
+  ],
+  "lease": {
+    "experiment": "WGMMA-COALESCED-v3-CORRECTNESS",
+    "executor": "root",
+    "started_at": 1792893349.0539935,
+    "deadline_unix": 1792893589.0539935,
+    "reserved_usd": 0.3333333333333333,
+    "purpose": "development correctness only; no performanceclaim",
+    "status": "complete",
+    "elapsed_seconds": 279.558801651001,
+    "terminal_proof": {
+      "container": "okc-wgmma-coalesced-v3",
+      "container_absent": true,
+      "gpu_compute_pids": [],
+      "verified_at_unix": 1792893628.6127956
+    },
+    "accounted_usd": 0.388276113404168
+  },
+  "scope": "same v1 fixtures; no timing or promotion claim"
+}
