@@ -1,0 +1,66 @@
+{
+  "schema": "independent-development-preflight-v1",
+  "reviewer": "measurement_audit",
+  "reviewed_at_utc": "2026-10-25T02:25:35.618448+00:00",
+  "decision": "PASS_SOURCE_REVIEW_FOR_BOUNDED_CORRECTNESS_ONLY",
+  "scope": "K64 grouped down projection; no timing admission, no promotion, no serving speedup claim",
+  "source_root": "serving/experiments/wgmma_variants/wgmma-pipeline-v4",
+  "files_sha256": {
+    "routed_down.cuh": "50120fdc47b2026be404447aa3bba0aab28bff331e6613a919e080f4399b8e24",
+    "routed_adapter.py": "08fd372d84b9b7ec42e2dff8b00f1eef6d997bf14dd1d989b93131612d393140",
+    "serving_wgmma_down.py": "0b5df011b4c51f9d4872ef9d73a33f0900e53be027227f340c325ce44ffe5811",
+    "check_routed.py": "e97606427885a5a98c4fcd65fb2423847d53607987af7513d4efefb6d2894ea5",
+    "check_full_expert.py": "6dddff95f11d6d023e9333c5972de037b21d558d19f0308d766cc4a66a4fbe38",
+    "run_routed_probe.py": "377ec61a333975bd7dfc8ac98ed49c4d577ef3bf8250e9cf23d5c613af8eb419",
+    "routed_down.sass": "795593194e43693b9e9523a3f1de6bca07250b5574bd08194c6f22ac8f3232c1",
+    "status.json": "c454b4a3f54d0d455de1e13341f4879ad032f156140271a33497a168c4740fda"
+  },
+  "checks": {
+    "all_status_member_hashes": "pass",
+    "results_candidate_matches_serving_copy": "pass",
+    "parent_adapter_delta": "JIT namespace only; pack/scale/project unchanged",
+    "parent_harness_delta": "none; routed five and full nine cases unchanged",
+    "async_register_ordering": "One inline PTX region fences all prepared A/c before four same-shape WGMMA operations; commit and wait0 finish before C++ reuse. Pinned SASS has disjoint c R32..35 and A R40..43/R24..27/R28..31/R36..39, with no writes to pending fragments before DEPBAR. This validates inspected build, not arbitrary compiler versions.",
+    "shared_descriptor_lifetime": "Four distinct 256-byte slices, 128-byte alignment; uniform fill and CTA sync/proxy fence before consumption; wait0 then CTA barrier before next overwrite. Descriptor registers may be reused after issue; shared operand bytes remain live until wait.",
+    "accumulation": "K16 operand math unchanged, issues ascending K, same-shape accumulator ordering supplied by PTX. Initial scaleD false only on base0 first op; all following operations true. FP32 accumulation with same BF16 epilogue retained; GPU verification still required, not a universal bitwise equivalence proof.",
+    "bounds": "K fixed4096 divisible64; dispatch and metadata guards unchanged; same direct grid and routing; no new partial-K branch",
+    "CPU_compile": "Recorded success46 registers/1024 shared/no spills; independently checked frozen log/source/SASS hashes; no compilation or GPU executed by reviewer",
+    "reference_independence": "Routed CPU raw FP4 LUT/dyadic reference exact comparisons; full expert frozen official reference, input immutability before oracle, graph valid->empty->fresh-skewed. Routed fixture small N64; full expert covers full dimensions."
+  },
+  "blockers": [],
+  "execution_conditions": [
+    "Root alone acquires canonical300s lease plus shared host GPU flock; authoritative idle check before launch.",
+    "Pinned image and verified immutable baseline archive; /baseline or /bundle, /probe, /runner readonly; separate v4 private cache namespace and checked imports. Do not silently load old candidate library.",
+    "Single attempt, routed five checks then full expert nine checks, fixed development seeds761 and910231. Fail fast on missing/malformed output, wrong counts or false checks. No benchmark events or performance claim.",
+    "Root wrapper timeout, kill grace and bounded teardown together must fit300s (example240+15+25=280). Unknown termination retains canonical lease until reconciliation.",
+    "Record actual runtime source hashes and loaded JIT libraries; source pins rechecked after run; terminal container/launcher absence and GPU-empty proof before release.",
+    "GPU correctness pass is required before separate review/admission of any v4 timing plan; this document does not review or authorize that timing plan."
+  ],
+  "known_limits": [
+    "Fixed synthetic development fixtures are not unseen validation or full challenge proof.",
+    "Full expert harness records candidate/runner/reference hashes but not every JIT library itself; outer wrapper/routed bootstrap must supply private-cache and import provenance.",
+    "Grouping four operations changes resource use and scheduling; fewer barriers alone does not establish speedup."
+  ],
+  "primary_source": "https://docs.nvidia.com/cuda/parallel-thread-execution/#asynchronous-warpgroup-level-matrix-instructions-wgmma-fence",
+  "wrapper_review": {
+    "decision": "PASS_BOUNDED_CORRECTNESS_WRAPPER",
+    "root": "results/rsi/candidates/wgmma-pipeline-v4-probe",
+    "plan_sha256": "c1d7500099d06a50f50cbf6a7b8302c448ec09df9f667b96eea61f2316ff0661",
+    "artifact_sha256": {
+      "summarize.py": "a9c22585e8404d8ade1cb4b2fa8bf132dc2b9e51408680ade2224665e0acd1ce",
+      "preseed.py": "97a634c58a686869eb42233444753d0246a7ab68456f3fd7628ad9df89cf018e",
+      "verify_inputs.py": "1e2a76d96ed502ccb26d940e8ccf7beae9d3ebc34429f79e344499fca57752ee",
+      "teardown.py": "b7de95d8301dd9d6b768de855bb81dfdeafde4ab598424e4355168aca0facc14",
+      "root-command.sh": "1486b4b8d95483770c4bc8d939446581709bb22c5d7173c0169409c0e84adf3e",
+      "inside-command.sh": "cbd391e95b78c46a3dc2232210514e525284723714a25138c48f18ec47f42ccf",
+      "source-pins.json": "873df5e71414f2225c586768867dde7a3927b20f27efe58325d17fe3b3d5bf7f"
+    },
+    "verified": "All wrapper artifacts, six candidate pins, runner/verifier and external baseline manifest hashes match current bytes. Exact five routed plus nine full checks required. Matching canonical lease >=285s checked after full tree verification; exclusive host flock held through teardown. 240+15+25=280s bounded GPU lifecycle. No GPU by reviewer.",
+    "operational_requirements": [
+      "Root synchronizes live canonical lease to remote before invocation and verifies wrapper plan/artifact hashes remotely.",
+      "Optional preseed excluded from approval unless root verifies same-source baseline cache provenance; fresh private cache is acceptable.",
+      "Root checks clientexit0, correctness-summary, terminal container absent, launcher absent and GPUempty before closing lease; unknown state retains lease."
+    ],
+    "limit": "Host nvidia-smi/full-tree preflight precedes bounded docker timeout; root must supervise a stalled preflight/SSH client. No GPU starts until matching live lease check passes."
+  }
+}

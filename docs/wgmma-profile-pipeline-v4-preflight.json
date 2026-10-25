@@ -1,0 +1,45 @@
+{
+  "reviewer": "measurement_audit",
+  "decision": "PASS_OBSERVATIONAL_PROFILE_ONLY",
+  "scope": "One selected logical down kernel on exact v4 M128 fixture; no benchmark/promotion/serving claim",
+  "plan_sha256": "a631a9a4f46654aa7f86d3892a7ce445c6d4f285130476373faf63217b64fc4a",
+  "artifact_sha256": {
+    "metric-query.txt": "d809bce140f9bcaf364d92cb938929ab877c79065128a41b34a23f8e4099d26f",
+    "teardown.py": "b7de95d8301dd9d6b768de855bb81dfdeafde4ab598424e4355168aca0facc14",
+    "root-command.sh": "22f87e0d00240e8a2cd69fa65a68918a8eddadd76b12b47ff065a63a92d33eeb",
+    "inside-command.sh": "043f856134999ebc65a8a4ad4e092996d8c900c74e2fd1bf0ac0076c2f00aac0",
+    "profile_down.py": "892359f8dce801d8231233c207e8764f4d8c24c06d6c671a458bda1b4ae1b892",
+    "source-pins.json": "fde5ae0a04e7abcfe91f44445b1bc388ffbda3ac392c38133bce87e90a6e7a25"
+  },
+  "bundle_sha256": "286d681185ac16e9f288938e35e3e516e28ae04803c01e5529eae6798748828b",
+  "kernel_sha256": "50120fdc47b2026be404447aa3bba0aab28bff331e6613a919e080f4399b8e24",
+  "fixture": {
+    "batch": 128,
+    "weight_seed": 950041,
+    "input_seed": 951169,
+    "distribution": "ep8 default official generate_input",
+    "note": "Matches pipeline-v4 development configure fixture; observational development counters, not heldout timing"
+  },
+  "checks": [
+    "All artifact/source/manifest/archive/worker/verifier hashes checked against current bytes.",
+    "Compared entire profile script to reviewed v3: only weight seed, actual JIT name and NVTX label changed; corrected tiled grid and reference/input/repeat guards retained.",
+    "Wrapper uses exact candidate-role archive cache, readonly source/runner/probe, no network, cooperative host flock, idle query fails closed, no overwrite.",
+    "240s timeout+15s kill grace+15s rm+10s inspect=280s; ignores further termination signals during bounded cleanup. Unknown exits42.",
+    "Full immutable tree verified before launch; all candidate source pins and reference check inside before profiling.",
+    "NCU start/stop selects one routed kernel, kernel replay may execute it multiple times; zeroing excluded from counters, remains real application work."
+  ],
+  "conditions": [
+    "Root first verifies other CPU compiler container terminal; no concurrent profiling/timing or remote compilation.",
+    "Separate root canonical300s lease; supervisor verifies >=280s plus admission margin immediately before launch because this wrapper does not enforce canonical lease itself.",
+    "Remote plan/artifact hashes checked before launch and after completion; no source/cache mutation by another process.",
+    "Accept only client0, full official reference + input immutability + exact repeat/postprofile pass, expected CSV units/counters and exact v4 JIT source.",
+    "Container absent, launcher absent and GPUempty before lease release; unknown retains canonical lease until reconciliation."
+  ],
+  "limitations": [
+    "No independent GPU calls by reviewer.",
+    "Different development fixture from v3 prevents causal before/after counter or timing interpretation.",
+    "NCU replay/cache policy differs from clean benchmark; profile latency excluded from speedup.",
+    "Prelaunch checks are outside Docker timeout; root supervises stalled preflight."
+  ],
+  "promotion_eligible": false
+}

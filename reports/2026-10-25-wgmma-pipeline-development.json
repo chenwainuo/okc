@@ -1,0 +1,83 @@
+{
+  "status": "development_measurement_complete_regression",
+  "reviewer": "measurement_audit",
+  "promotion_eligible": false,
+  "scope": "One seed950041;20 paired AB/BA graph samples for each of four primary shapes; descriptive development only",
+  "rows": [
+    {
+      "bs": 8,
+      "baseline_median_us": 122.81600013375282,
+      "candidate_median_us": 232.84800350666046,
+      "balanced_speedup": 0.5112889570333872,
+      "order_balanced_blocks": 10,
+      "bootstrap_95": [
+        0.4872868142950801,
+        0.5350823272236835
+      ],
+      "assessment": "regression"
+    },
+    {
+      "bs": 32,
+      "baseline_median_us": 208.25599879026413,
+      "candidate_median_us": 421.88800871372223,
+      "balanced_speedup": 0.4972778259864092,
+      "order_balanced_blocks": 10,
+      "bootstrap_95": [
+        0.48801566936554963,
+        0.506123133943486
+      ],
+      "assessment": "regression"
+    },
+    {
+      "bs": 128,
+      "baseline_median_us": 343.9359962940216,
+      "candidate_median_us": 669.2480146884918,
+      "balanced_speedup": 0.5113144041588152,
+      "order_balanced_blocks": 10,
+      "bootstrap_95": [
+        0.509193729905154,
+        0.5207016168397803
+      ],
+      "assessment": "regression"
+    },
+    {
+      "bs": 256,
+      "baseline_median_us": 447.6480036973953,
+      "candidate_median_us": 873.3600080013275,
+      "balanced_speedup": 0.5157533557613534,
+      "order_balanced_blocks": 10,
+      "bootstrap_95": [
+        0.5113031719262593,
+        0.5205733819021611
+      ],
+      "assessment": "regression"
+    }
+  ],
+  "primary_geomean_balanced_speedup": 0.5088606861176813,
+  "ratio_definition": "baseline/candidate; below1 means candidate slower",
+  "decision": "Retain negative evidence; no promotion or holdout spending. Profile exact v4 before combined T16 timing. No matched crossseed v3 comparison or causal grouping gain established.",
+  "audit": {
+    "raw_summarization": "all4 rows recomputed exactly using frozen measurement.py",
+    "counts": "80 pairs;84 input fingerprint matches;178 official reference cases;196 immutability checks; eager and graph empty checks pass",
+    "provenance": "All reviewed artifacts and dependency hashes match; both archive/import hashes match manifests; same weight fingerprints; JIT libraries and dependency-manifest hashes recorded in isolated role/archive caches",
+    "process": "both workers clean exit0/process groups terminated; root terminal proof container/launcher/observer absent,GPUempty,canonical lease released",
+    "ownership_samples": 44,
+    "foreign_or_unresolved_samples": 0,
+    "ownership_limit": "1s sampled observations plus cooperative lock, not continuous exclusion proof",
+    "elapsed_seconds": 63.77282381057739,
+    "accounted_usd": 0.08857336640357971
+  },
+  "limitations": [
+    "Partial suite, one development seed, no independent holdouts/control or serving measurement.",
+    "Bootstrap intervals describe within-run sampling variation; not calibrated multiple-comparison or cross-session guarantees.",
+    "No GPU/remote calls by reviewer; terminal proof produced by root."
+  ],
+  "evidence_sha256": {
+    "results/rsi/wgmma-pipeline-dev-v4/development-950041.json": "c869cc6da605f07235a2a8438f7841739efbd1f245f6052d047fa30681616a7e",
+    "results/rsi/wgmma-pipeline-dev-v4/development-950041.correctness.json": "373bb93c69cb0e0b6291bccd52b47cbf358337c07ebb9afab15f56147025e597",
+    "results/rsi/wgmma-pipeline-dev-v4/development-950041.process.json": "466ebb57d65cb6aa6d3a91dc5c47d661ddfa553ccbd99438fe16a0271461eba0",
+    "results/rsi/wgmma-pipeline-dev-v4/ownership-observations.json": "ef946009d18d84f1b47f924897219d5661d0fc3c22c9c166496b8e27259e6a0c",
+    "results/rsi/wgmma-pipeline-dev-v4/lease-record.json": "3fc67f446c52c2fe3d79321ed61b2cbe923e35ac4d01b90b4b367a04b1d70c2a",
+    "results/rsi/wgmma-pipeline-dev-v4/review.json": "9f7e60124688922584b66af3d4d85dab9ea794005d31542342a9ded6b6e2d7e6"
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "status": "prepared_not_executed",
+  "owner": "root executor only; serialized observational profiling lease",
+  "representative_fixture": {
+    "batch": 128,
+    "weight_seed": 950041,
+    "input_seed": 951169,
+    "distribution": "ep8 default official generate_input",
+    "note": "Matches pipeline-v4 development configure fixture; observational development counters, not heldout timing"
+  },
+  "method": [
+    "Pin immutable pipeline-v4 archive286d6811... and exactheader50120fdc...; frozen SGLang namespace isolation; no candidate mutation",
+    "Prepare official fixture once, run original full expert and verify official reference + input immutability",
+    "Diagnostic-only temporary Python operand capture; restore original adapter immediately",
+    "Validate direct down projection exactly repeats validated intermediate",
+    "Emit routing metadata and total versus local-expert CTA counts before profiling",
+    "Mark NVTX range and CUDA profiler start/stop around one original project call",
+    "NCU filter selects routed_nvfp4_down only; output zeroing and input setup outside collected kernel counters",
+    "Kernel replay may execute target more than once; launch-count1 is one selected logical launch, not one hardware execution",
+    "Check direct down output unchanged after profiler",
+    "Coalesced Bank shape[E,N/64,K/16,128]: grid_x=packed.shape[1], not packed.shape[1]//64; validate dtype/shape and outputchannels before profiling"
+  ],
+  "metrics": {
+    "launch": [
+      "launch__grid_size",
+      "launch__block_size",
+      "launch__registers_per_thread",
+      "launch__shared_mem_per_block"
+    ],
+    "active_warps": [
+      "sm__warps_active.avg.per_cycle_active",
+      "sm__warps_active.avg.pct_of_peak_sustained_active",
+      "smsp__warps_eligible.avg.per_cycle_active"
+    ],
+    "dram": [
+      "dram__bytes_read.sum",
+      "dram__bytes_write.sum",
+      "dram__sectors_read.sum",
+      "dram__sectors_write.sum"
+    ],
+    "stall": [
+      "smsp__warp_issue_stalled_barrier_per_warp_active.pct",
+      "smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct"
+    ],
+    "tensor": [
+      "sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed"
+    ]
+  },
+  "interpretation": {
+    "grid": "Compare metadata-derived early-return CTA count to total; average occupancy can be diluted by skipped CTAs. Does not alone prove scheduler fix ROI.",
+    "barrier": "Warp wait at CTA barriers; high fraction supports synchronization bottleneck but does not identify a specific source barrier. WGMMA wait may require later dedicated instruction analysis.",
+    "long_scoreboard": "Waits on L1TEX dependency including global/local loads; not synonymous with saturated HBM or proof uncoalesced transactions.",
+    "dram": "Cold replay actual DRAM traffic; sector/byte metrics do not by themselves isolate coalescing because cache effects and repeated loads matter.",
+    "tensor": "Tensor-active fraction contextualized with useful versus padded work; low activity does not imply hardware fault.",
+    "timing": "Profiler timings explicitly excluded from speedup, serving throughput and promotion claims"
+  },
+  "tool_validation": {
+    "version": "Nsight Compute2025.3.1.0 build36398880",
+    "method": "Reuses reviewed v1 metric-query.txt validation from identical pinned image/tool; preparer ran no remote or GPU jobs for this revision",
+    "metric_names": "All10 requested hardware metric names confirmed; four launch metrics exist in previous same-tool H200 reports",
+    "record": "metric-query.txt"
+  },
+  "execution": {
+    "command": "bash results/rsi/candidates/wgmma-profile-pipeline-v4/root-command.sh",
+    "gpu_executed_by_preparer": false,
+    "deadline_seconds": 240,
+    "forced_cleanup_grace_seconds": 15,
+    "same_host_flock": ".gpu-cache/rsi-device0.lock",
+    "cache": "Existing pipeline-v4 candidate-role cache keyed by exact286d6811... bundle, mounted at identical /cache/candidate/286d6811... path; no preseed/mixing",
+    "output": "results/rsi/wgmma-pipeline-profile-v4",
+    "require": "Root ensure no concurrent timing/profiling and record lease/terminal proof; shell takes flock itself, do not nest same lock",
+    "cleanup": "rm15s then inspect10s; host-terminal.json absent proof. Unknown exits42; root must retain lease and reconcile GPU/container before further admission. Flock held through cleanup attempt.",
+    "evidence_overwrite": "Refused: output mkdir fails if existing; no --force-overwrite"
+  },
+  "validation": "Local Python/bash syntax, immutablearchive/memberhashes, gridmetadata expression andfixtureseeds verified. NoGPU orremotejobs executed bypreparer; runtimecorrectness checks remain required.",
+  "artifact_sha256": {
+    "metric-query.txt": "d809bce140f9bcaf364d92cb938929ab877c79065128a41b34a23f8e4099d26f",
+    "teardown.py": "b7de95d8301dd9d6b768de855bb81dfdeafde4ab598424e4355168aca0facc14",
+    "root-command.sh": "22f87e0d00240e8a2cd69fa65a68918a8eddadd76b12b47ff065a63a92d33eeb",
+    "inside-command.sh": "043f856134999ebc65a8a4ad4e092996d8c900c74e2fd1bf0ac0076c2f00aac0",
+    "profile_down.py": "892359f8dce801d8231233c207e8764f4d8c24c06d6c671a458bda1b4ae1b892",
+    "source-pins.json": "fde5ae0a04e7abcfe91f44445b1bc388ffbda3ac392c38133bce87e90a6e7a25"
+  },
+  "static_inner_loop_model": {
+    "scope": "Per nonreturningCTA, sourceexpression counts before compileroptimization; not measuredmemory transactions",
+    "tile": [
+      64,
+      8,
+      4096
+    ],
+    "k16_steps": 256,
+    "cta_barrier_statements": 192,
+    "wgmma_wait_group0_statements": 64,
+    "packed_uint32_load_expressions": 32768,
+    "distinct_packed_payload_bytes": 131072,
+    "scale_byte_expressions": 65536,
+    "distinct_scale_payload_bytes": 16384,
+    "activation_payload_bytes": 65536,
+    "layout": "Unchanged lane-coalesced packed4bitweights/scales; K64group retains four consecutiveK16fragments, commits/waits oncepergroup; nofullBF16weights",
+    "interpretation": "Same directallocationgrid asv3; compare counters with own exactroute metadata. Different fixtureseed acrossv1/v3/v4profile prevents naive controlledspeedup inference. NCUtimes excluded.",
+    "k64_groups": 64,
+    "serialized_pipeline": "Four ascendingK16 WGMMA ops perK64 group, then wait0; this is grouped synchronization, not interiterationdoublebuffering"
+  },
+  "candidate_archive": "results/rsi/bundles/wgmma-pipeline-v4.tar.gz",
+  "candidate_archive_sha256": "286d681185ac16e9f288938e35e3e516e28ae04803c01e5529eae6798748828b",
+  "remote_immutable_tree": "/root/okc/results/rsi/immutable-trees/candidate-286d681185ac16e9f288938e35e3e516e28ae04803c01e5529eae6798748828b",
+  "runtime_JIT_name": "rsi_wgmma_k64group_down",
+  "kernel_filter": "regex:.*routed_nvfp4_down.*"
+}

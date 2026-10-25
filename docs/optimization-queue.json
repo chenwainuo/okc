@@ -499,7 +499,7 @@
       ]
     }
   ],
-  "latest_result": "Coalesced-v3 .43438x baseline; fixedpersistentgrid caps8/2/16 .15388/.10578/.14209x baseline. All4shapedevelopment regressions; no promotion, full3x goal unchanged. K64 grouping CPUcompiles46regs0spills, awaiting profile and GPUcorrectness.",
+  "latest_result": "K64v4 correct14developmentcases, then all4timedshapes regress; geometricmean.508860686x baseline. No promotion. Fullgoal roadmap requiresbothGEMMs andprefill; free-downalone attributioncap~1.46\u20131.48x primary.",
   "rsi_protocol": "rsi/protocol.json",
   "kernel_roi_details": "docs/kernel-rewrite-plan.json",
   "active_priority": [
@@ -674,10 +674,12 @@
       "id": "WGMMA-K64",
       "loop_layer": "kernel_inner_loop",
       "task": "Design bounded K64 pipelining/load reuse using measured layout/grid findings",
-      "status": "cpu_compile_pass_gpu_unproven",
+      "status": "rejected",
       "evidence": [
         "docs/wgmma-profile-interpretation.json",
-        "serving/experiments/wgmma_variants/wgmma-pipeline-v4/status.json"
+        "serving/experiments/wgmma_variants/wgmma-pipeline-v4/status.json",
+        "reports/2026-10-25-wgmma-pipeline-correctness.json",
+        "reports/2026-10-25-wgmma-pipeline-development.json"
       ],
       "prerequisites": [
         "Observe v3layout and v2grid effects before combining",
@@ -693,7 +695,8 @@
       },
       "stop_criteria": "Compile/correctness/nonfinite/timeout/ownership failure: stop, retain evidence, verify terminal processes; no automatic retry, extra seeds or promotion. No speculative combined rewrite without attributable baseline.",
       "next_handoff": "kernel implementer submits one bounded hypothesis and immutable variant",
-      "next_action": "Coalesced-v3 profile completed. Obtain independent source review; run reviewed GPU correctness before any new performance screen."
+      "next_action": "Allshapes regress. Profile exactv4 before any combinedtoken16 timing; no holds/promotion.",
+      "measured_development_geomean": 0.5088606861176814
     },
     {
       "rank": 7,
@@ -719,6 +722,32 @@
       },
       "stop_criteria": "Compile/correctness/nonfinite/timeout/ownership failure: stop, retain evidence, verify terminal processes; no automatic retry, extra seeds or promotion.",
       "next_handoff": "root reranks only after executable higher-information tests"
+    },
+    {
+      "id": "WGMMA-TOKEN16-v5",
+      "rank": 2.1,
+      "task": "Increase routed down token tile8 to16 withunchangedT8fallback",
+      "status": "cpu_compile_pass_gpu_unproven",
+      "scope": "wholeexpert development includesprefill; eventualoriginal14shape gate",
+      "expected_speedup": "unknown; nominal repeatedweight/dequantwork halves forT16eligiblemetadata, not an end-to-end forecast",
+      "cost": "boundedGPUcorrectness thenpreregisteredperformance budget; current55registers mayreduceoccupancy",
+      "prerequisites": [
+        "independent source/async/outputmappingreview",
+        "bounded GPU routed+fullreference correctness",
+        "new sentinelplan8/128/3012/16384 independentreview"
+      ],
+      "evidence": [
+        "docs/wgmma-full-goal-roadmap.json",
+        "reports/2026-10-25-wgmma-pipeline-profile.json",
+        "serving/experiments/wgmma_variants/wgmma-token16-v5/status.json"
+      ],
+      "stop_criteria": [
+        "any reference/inputmutation/graphempty failure",
+        "invalidblockdivisor routing",
+        "source/provenance drift",
+        "screenregression: no promotion or holdouts"
+      ],
+      "next_handoff": "measurement_audit source review; rootcorrectness execution only afterreview"
     }
   ],
   "estimate_contract": "Current ranking is advisory ordinal information/benefit per cost; no calibrated expected-gain probabilities. Old item priors remain historical hypotheses, not forecasts after rejection. Expert/down-kernel gains cannot be equated with serving gains. Partial development plans have no promotion eligibility.",
@@ -793,9 +822,10 @@
   ],
   "items_role": "Retained historical/backlog records. Their original rank and priors do not override active_priority; rejected entries stay rejected.",
   "next_kernel_action": {
-    "task": "independent review and GPU correctness for K64 grouping, then preregister matched performance screen if correct",
-    "prerequisite_completed": "coalesced-v3 separate profile;54.5%longscoreboard,11.9%barrier,2.76%tensor activity; profiler timing excluded",
-    "candidate": "serving/experiments/wgmma_variants/wgmma-pipeline-v4",
-    "scope": "No correctness/performance claim yet; increased46registers may reduce occupancy"
-  }
+    "task": "Independent T16source review and bounded GPUcorrectness, then new sentinel development8/128/3012/16384 ifcorrect",
+    "prerequisite_completed": "Separate v4profile completed; counters41.8%longscoreboard/10.3%barrier/3.68%tensor, noperformanceclaim",
+    "candidate": "serving/experiments/wgmma_variants/wgmma-token16-v5",
+    "scope": "T16plannedweightreuse withhigherregistercost; no GPUcorrectness orspeedclaim; full14shape goalunchanged"
+  },
+  "full_goal_roadmap": "docs/wgmma-full-goal-roadmap.json"
 }

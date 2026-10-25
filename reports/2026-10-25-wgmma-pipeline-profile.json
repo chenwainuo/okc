@@ -1,0 +1,127 @@
+{
+  "reviewer": "measurement_audit",
+  "status": "observational_profile_valid",
+  "promotion_eligible": false,
+  "scope": "Exact v4 grouped K64 down projection M128, seed950041 input951169; counters only",
+  "metrics": {
+    "launch__grid_size": {
+      "unit": "",
+      "value": "39,040"
+    },
+    "launch__block_size": {
+      "unit": "",
+      "value": "128"
+    },
+    "launch__registers_per_thread": {
+      "unit": "register/thread",
+      "value": "46"
+    },
+    "launch__shared_mem_per_block": {
+      "unit": "Kbyte/block",
+      "value": "2.048000"
+    },
+    "sm__warps_active.avg.per_cycle_active": {
+      "unit": "warp",
+      "value": "35.556339"
+    },
+    "sm__warps_active.avg.pct_of_peak_sustained_active": {
+      "unit": "%",
+      "value": "55.556780"
+    },
+    "smsp__warps_eligible.avg.per_cycle_active": {
+      "unit": "warp",
+      "value": "1.938483"
+    },
+    "dram__bytes_read.sum": {
+      "unit": "Mbyte",
+      "value": "222.587648"
+    },
+    "dram__bytes_write.sum": {
+      "unit": "Mbyte",
+      "value": "3.024896"
+    },
+    "dram__sectors_read.sum": {
+      "unit": "sector",
+      "value": "6955864.000000"
+    },
+    "dram__sectors_write.sum": {
+      "unit": "sector",
+      "value": "94528.000000"
+    },
+    "smsp__warp_issue_stalled_barrier_per_warp_active.pct": {
+      "unit": "%",
+      "value": "10.346706"
+    },
+    "smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct": {
+      "unit": "%",
+      "value": "41.803104"
+    },
+    "sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed": {
+      "unit": "%",
+      "value": "3.677100"
+    }
+  },
+  "units_audit": {
+    "DRAM_read_bytes": 222587648,
+    "DRAM_write_bytes": 3024896,
+    "sector_bytes": 32,
+    "registers_per_thread": 46,
+    "allocated_registers_per_thread": 48,
+    "shared_total_bytes": 2048,
+    "shared_static_bytes": 1024,
+    "shared_driver_bytes": 1024,
+    "shared_dynamic_bytes": 0,
+    "replay_passes": 3.0
+  },
+  "routing": {
+    "grid": [
+      64,
+      610,
+      1
+    ],
+    "block": [
+      128,
+      1,
+      1
+    ],
+    "total_ctas": 39040,
+    "local_expert_groups_of8": 54,
+    "useful_ctas": 2112,
+    "all_padding_ctas": 1344,
+    "nonlocal_or_beyond_post_ctas": 35584,
+    "local_route_rows": 164,
+    "padded_rows_in_local_groups": 268
+  },
+  "all_padding_fraction_of_full_K_CTAs": 0.3888888888888889,
+  "correctness": {
+    "full_reference": "relative L2 error 5.538e-03 (worst row 5.852e-03)",
+    "direct_repeat_exact": true,
+    "post_profile_repeat_exact": true,
+    "input_immutability": "Reviewed harness checks full and captured input fingerprints; completion establishes no failed assertion",
+    "source_pins": "exact reviewed source/runner/manifest matched; current profile package hashes unchanged",
+    "loaded_down_jit_libraries": {
+      "/cache/candidate/286d681185ac16e9f288938e35e3e516e28ae04803c01e5529eae6798748828b/sglang/sm90a/sgl_kernel_jit_rsi_wgmma_k64group_down_50120fdc47b2026b/build-0e493c29a8ff077b/deps-eaf4a557fec7bfa5/sgl_kernel_jit_rsi_wgmma_k64group_down_50120fdc47b2026b.so": "b7690b56d02909ff54d143c8dfb8692bff8eb6527c135c7f52feac72ca2dea7f"
+    }
+  },
+  "interpretation": [
+    "Long-scoreboard41.803104% and low tensor activity3.6771% suggest exposed operand dependencies remain; these counters do not prove HBM saturation or identify a unique cause.",
+    "CTA barrier10.346706% plus eligible warps1.938483 and active warps55.55678% contextualize scheduling; fewer synchronization statements are not an established causal speedup.",
+    "1344/3456 full-K CTAs process only padding (38.8889%); this is work fraction, not predicted latency gain.",
+    "Different fixtures across v3/v4 prohibit controlled before/after or causal batching claims.",
+    "NCU3-pass replay/cache-control all and excluded zeroing differ from clean full-expert benchmark; profiler time cannot establish serving speedup."
+  ],
+  "next_gate": "Independently source-review T16 bounds/layout/accumulator mapping and bounded correctness-only probe before any timing admission. This report grants no T16 correctness or timing approval.",
+  "operational": {
+    "terminal": "root-produced client0, container/launcher absent and GPUempty; lease released",
+    "cpu_compile_overlap": "Root reports compiler container confirmed terminal before launch; reviewer made no remote calls",
+    "elapsed_seconds": 45.74310302734375,
+    "accounted_usd": 0.06353208753797743
+  },
+  "evidence_sha256": {
+    "results/rsi/wgmma-pipeline-profile-v4/down-m128.csv": "968572caafa518f3a12b5cc22a5d84373075a318b03529564307104c7f795e29",
+    "results/rsi/wgmma-pipeline-profile-v4/setup.json": "f98e7937163404545b3939d77d1800b07fa2ed5f8a4c154c8629aa53ecb79236",
+    "results/rsi/wgmma-pipeline-profile-v4/terminal.json": "c567352a10f946b9702258c0e3c721e649916681adea058ed07075eb55276433",
+    "results/rsi/wgmma-pipeline-profile-v4/host-terminal.json": "6e41d64132039708e0113118efcd6bb88f63bc3bb2322256591d88e05654ffd3",
+    "results/rsi/probes/pipeline-profile-v4-lease.json": "283e124a57820cf76fb466afef183ab4406fffe6ed9251d69fda53f9f5615423"
+  }
+}

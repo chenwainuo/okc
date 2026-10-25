@@ -1,0 +1,40 @@
+{
+  "reviewer": "measurement_audit",
+  "decision": "PASS_DEVELOPMENT_CORRECTNESS_ONLY",
+  "kernel_sha256": "50120fdc47b2026be404447aa3bba0aab28bff331e6613a919e080f4399b8e24",
+  "checks": {
+    "routed_cases": 5,
+    "routed_reference": "independent CPU raw FP4/dyadic reference; exact output incl empty and graph",
+    "full_cases": 9,
+    "full_reference": "frozen official reference; all nonempty pass, max reported relativeL2 .005743, max worst-row .006003; eager and graph empty exact zero",
+    "input_immutability": "Reviewed full harness checks fingerprints before oracle, warmup/capture and graph transitions; completed without assertion",
+    "report_hashes": "all summary hashes recomputed and matched",
+    "runtime_source_hashes": "all match reviewed pins; full reference belongs to frozen baseline manifest",
+    "sglang_import_hashes_verified": 609,
+    "jit_libraries": {
+      "/cache/sglang/sm90a/sgl_kernel_jit_rsi_wgmma_k64group_down_50120fdc47b2026b/build-5e7280b062a2e56a/deps-5db5bf7a2414c60f/sgl_kernel_jit_rsi_wgmma_k64group_down_50120fdc47b2026b.so": "79bf25f6ea806b7103cd382861f5d218f19e1853f07d99b0844c4f6f96ee2142"
+    },
+    "runtime": {
+      "torch": "2.14.1+cu130",
+      "cuda": "13.0",
+      "gpu": "NVIDIA H200"
+    },
+    "terminal": "container absent explicit Docker result, client0; root lease records launcher absent/GPUempty, released",
+    "elapsed_seconds": 44.757851123809814,
+    "accounted_usd": 0.06216368211640252
+  },
+  "limitations": [
+    "Development fixtures only, no unseen holdouts or promotion evidence.",
+    "No direct v3-v4 bitwise comparison; correct relative to stated CPU and official references.",
+    "Full harness does not independently enumerate loaded JIT libraries; routed process records actual v4 library and both use reviewed source/private cache.",
+    "Reviewer inspected synced artifacts; remote terminal observations are root-produced, no independent remote/GPU calls."
+  ],
+  "next_gate": "Admit one separately leased300s four-shape20-pair seed950041 developmental timing run; final bundle fresh worker checks mandatory. No promotion/serving/causal crossseed claim.",
+  "evidence_sha256": {
+    "results/rsi/wgmma-pipeline-v4-correctness/correctness-summary.json": "33a2cc4dea4223583ab05ecac718686317fc86cb63a7868d68614b7c4f4591ef",
+    "results/rsi/wgmma-pipeline-v4-correctness/routed.log": "b70b1aa37d9ac00f09d8c48c2cdd5eb7e64cb6f0bd2173f94ac75fe0fa347b6b",
+    "results/rsi/wgmma-pipeline-v4-correctness/full-correctness.json": "cdb4f9ebed41c3afd8c58c2406a5409920fa1812cd164e9000cf362f4970826d",
+    "results/rsi/wgmma-pipeline-v4-correctness/host-terminal.json": "d2168812726208ca2dad7bf0babd92bd7c3e7abfbef386c5f3c0d90bfff4245c",
+    "results/rsi/probes/pipeline-v4-correctness-lease.json": "7b424a0ee2078dc42b119f4c58c984035292c85cee9a1c41675ccaad3ff4023b"
+  }
+}

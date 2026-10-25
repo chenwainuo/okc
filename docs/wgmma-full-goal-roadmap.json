@@ -1,0 +1,297 @@
+{
+  "status": "CPU_only_architecture_ROI_review_no_implementation_or_GPU",
+  "objective": {
+    "source": "docs/threefold-target.json",
+    "anchor_commit": "861333f",
+    "anchor_source_sha256": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5",
+    "target": 3,
+    "primary": [
+      8,
+      32,
+      128,
+      256
+    ],
+    "regression": [
+      1,
+      16,
+      64,
+      257,
+      384,
+      512,
+      513,
+      753,
+      3012,
+      16384
+    ],
+    "rule": "Original14shape suite and independent holdout/noninferiority gates remain fixed. Fourprimary developmental runs are neither goal completion nor promotion evidence. Do not silently redefine goal as downkernel or winning subset.",
+    "serving": "Official8H200 model/TTFT/throughput-interactivity validation remains separate and unmeasured."
+  },
+  "main_decision": "Stop treating down-only polishing as a complete3x strategy. Use bounded down prototypes to establish a transferable engine, then attack both GEMMs and larger token-tile reuse; preserve current Marlin fallback until an entire reviewed expert path wins.",
+  "attribution_method": {
+    "input": "Frozen selected-stack candidate traces,5replays each",
+    "procedure": "Select cat=kernel; remove five explicit128MiBcacheflush FillFunctor kernels; pair ascending-time Marlin launches as gate/up then down, consistent with source call order. Sum remaining kernel durations; do not use these as clean latency benchmarks.",
+    "limitations": "Historical single-fixture profiler shares omit host/launch gaps and do not establish present clean critical-path fractions. Amdahl values are conditional attribution models, not measured speedups. Gather fresh stage attribution in any next architecture test."
+  },
+  "amdahl": {
+    "equation": "S_expert = 1 / (f_other + f_up/S_up + f_down/S_down)",
+    "primary_summary": "Down-only infinite speed gives~1.46\u20131.48x; gate/up alone also below3x. Equal acceleration of both GEMMs requires~3.44\u20134.04x across fourprimary traces if other cost fixed.",
+    "prefill_summary": "M3012/M16384 both-GEMM requirement~3.35x; down-only cap~1.48x. A narrow8token kernel cannot be assumed efficient here.",
+    "smallest_shape": "M1 has~20.24%other work; both-GEMM acceleration alone would need~6.09x for per-shape3x. This is not a new requirement that everyshape individually reach3x; original aggregation/gates govern.",
+    "rows": [
+      {
+        "batch": 1,
+        "gate_up_share": 0.43665894699586866,
+        "down_share": 0.3609459033168941,
+        "other_share": 0.20239514968723732,
+        "free_down_speedup_limit": 1.5648127524576059,
+        "free_gate_up_speedup_limit": 1.7751236034854827,
+        "equal_both_GEMM_speedup_needed_for3x": 6.0914610857025115,
+        "source": "results/selected-validation-profiles/bs1-candidate.trace.json",
+        "source_sha256": "9a5ab1c6b800c71cbb2b02973abedbff0171b0a71ee3fdb918cc7f0290556059"
+      },
+      {
+        "batch": 8,
+        "gate_up_share": 0.5669111272675225,
+        "down_share": 0.3193162910301013,
+        "other_share": 0.11377258170237625,
+        "free_down_speedup_limit": 1.469111111111111,
+        "free_gate_up_speedup_limit": 2.308994903726626,
+        "equal_both_GEMM_speedup_needed_for3x": 4.03636538732212,
+        "source": "results/selected-validation-profiles/bs8-candidate.trace.json",
+        "source_sha256": "6df337d9eca6644123516273ec009178215137813ad210de5814d217679b1818"
+      },
+      {
+        "batch": 16,
+        "gate_up_share": 0.5773002099370188,
+        "down_share": 0.31977886634009794,
+        "other_share": 0.10292092372288325,
+        "free_down_speedup_limit": 1.4701101605290339,
+        "free_gate_up_speedup_limit": 2.3657452014608347,
+        "equal_both_GEMM_speedup_needed_for3x": 3.893362678658567,
+        "source": "results/selected-validation-profiles/bs16-candidate.trace.json",
+        "source_sha256": "804f48d7566e66887755f69dbd1c513026c4abbd03ee307f5dc994a11d56aa10"
+      },
+      {
+        "batch": 32,
+        "gate_up_share": 0.5929222825916853,
+        "down_share": 0.3151958323818091,
+        "other_share": 0.09188188502650557,
+        "free_down_speedup_limit": 1.4602714867786042,
+        "free_gate_up_speedup_limit": 2.4565333773770806,
+        "equal_both_GEMM_speedup_needed_for3x": 3.7610795931921306,
+        "source": "results/selected-validation-profiles/bs32-candidate.trace.json",
+        "source_sha256": "dc748ab33d0a094ed6cc00b3e979416c03020c9172bc2c2914e0c0453c72bfe4"
+      },
+      {
+        "batch": 64,
+        "gate_up_share": 0.6045114064223013,
+        "down_share": 0.3171561598654213,
+        "other_share": 0.07833243371227744,
+        "free_down_speedup_limit": 1.4644636756229865,
+        "free_gate_up_speedup_limit": 2.528517930071572,
+        "equal_both_GEMM_speedup_needed_for3x": 3.6143698616646716,
+        "source": "results/selected-validation-profiles/bs64-candidate.trace.json",
+        "source_sha256": "eeb8f633106db01836d617d4e51a59a41a1bb5013190f3fccfb2107adc446e0a"
+      },
+      {
+        "batch": 128,
+        "gate_up_share": 0.6109765960981312,
+        "down_share": 0.3184794551211951,
+        "other_share": 0.07054394878067377,
+        "free_down_speedup_limit": 1.4673071964071611,
+        "free_gate_up_speedup_limit": 2.570539432769577,
+        "equal_both_GEMM_speedup_needed_for3x": 3.536885832742134,
+        "source": "results/selected-validation-profiles/bs128-candidate.trace.json",
+        "source_sha256": "a570e03335eb2e904c5edf5370e7da03dace056930ed030f874438f5398c2df0"
+      },
+      {
+        "batch": 256,
+        "gate_up_share": 0.6136357054037361,
+        "down_share": 0.32628807168960466,
+        "other_share": 0.060076222906659205,
+        "free_down_speedup_limit": 1.4843139300025512,
+        "free_gate_up_speedup_limit": 2.5882308846498416,
+        "equal_both_GEMM_speedup_needed_for3x": 3.4397047367796136,
+        "source": "results/selected-validation-profiles/bs256-candidate.trace.json",
+        "source_sha256": "4a5a430a1af423805655505a84fb4d0712ee58fa7fa3ea28846d9e70df821b82"
+      },
+      {
+        "batch": 257,
+        "gate_up_share": 0.6205931167169976,
+        "down_share": 0.3234537808019339,
+        "other_share": 0.05595310248106855,
+        "free_down_speedup_limit": 1.4780956150864828,
+        "free_gate_up_speedup_limit": 2.635692824935104,
+        "equal_both_GEMM_speedup_needed_for3x": 3.4034397282686646,
+        "source": "results/selected-validation-profiles/bs257-candidate.trace.json",
+        "source_sha256": "a654807fb40aa24e25480818ac93bd97a1729ad516ac713893c1a13ade4fa636"
+      },
+      {
+        "batch": 384,
+        "gate_up_share": 0.6288143726632167,
+        "down_share": 0.32506776730541764,
+        "other_share": 0.04611786003136564,
+        "free_down_speedup_limit": 1.481630231242069,
+        "free_gate_up_speedup_limit": 2.6940698301679724,
+        "equal_both_GEMM_speedup_needed_for3x": 3.321137712402278,
+        "source": "results/selected-validation-profiles/bs384-candidate.trace.json",
+        "source_sha256": "d6b3681659dac987ed4714a59d3bff1d16386ca744611576d112653bef55c3d0"
+      },
+      {
+        "batch": 512,
+        "gate_up_share": 0.6249482089867238,
+        "down_share": 0.3247132572871859,
+        "other_share": 0.05033853372609032,
+        "free_down_speedup_limit": 1.4808524094264353,
+        "free_gate_up_speedup_limit": 2.6662984258742055,
+        "equal_both_GEMM_speedup_needed_for3x": 3.3557558923058175,
+        "source": "results/selected-validation-profiles/bs512-candidate.trace.json",
+        "source_sha256": "cae728fd3c4c996f0b766b136c036660b566375b12733ec9c648f44aeefced28"
+      },
+      {
+        "batch": 513,
+        "gate_up_share": 0.62820075062101,
+        "down_share": 0.32603071575746023,
+        "other_share": 0.04576853362152977,
+        "free_down_speedup_limit": 1.48374714305249,
+        "free_gate_up_speedup_limit": 2.689623504270875,
+        "equal_both_GEMM_speedup_needed_for3x": 3.318318053304152,
+        "source": "results/selected-validation-profiles/bs513-candidate.trace.json",
+        "source_sha256": "a8b6e6bdd23a7a103c2d8209672c279fd27d60d4d695d30cda0f814e6e04db8b"
+      },
+      {
+        "batch": 753,
+        "gate_up_share": 0.626706887271946,
+        "down_share": 0.3242446204983381,
+        "other_share": 0.04904849222971591,
+        "free_down_speedup_limit": 1.4798254373312623,
+        "free_gate_up_speedup_limit": 2.6788600322463094,
+        "equal_both_GEMM_speedup_needed_for3x": 3.345065829323193,
+        "source": "results/selected-validation-profiles/bs753-candidate.trace.json",
+        "source_sha256": "666897e58e08630e6cb98cbb1812de37a5ec8532b7dcc58ffc2277bf46cbaf2a"
+      },
+      {
+        "batch": 3012,
+        "gate_up_share": 0.6259009151868764,
+        "down_share": 0.3243792643476632,
+        "other_share": 0.04971982046546042,
+        "free_down_speedup_limit": 1.480120350412962,
+        "free_gate_up_speedup_limit": 2.6730886029821144,
+        "equal_both_GEMM_speedup_needed_for3x": 3.350616724589025,
+        "source": "results/selected-validation-profiles/bs3012-candidate.trace.json",
+        "source_sha256": "e8b00f9663981bdae2cbe5eeb2d3bbbdb6425f1f2e41cc8beddaafe0fbb2f252"
+      },
+      {
+        "batch": 16384,
+        "gate_up_share": 0.6229806830148252,
+        "down_share": 0.3267985688230875,
+        "other_share": 0.05022074816208727,
+        "free_down_speedup_limit": 1.4854395039709996,
+        "free_gate_up_speedup_limit": 2.65238398922494,
+        "equal_both_GEMM_speedup_needed_for3x": 3.3547758085830788,
+        "source": "results/selected-validation-profiles/bs16384-candidate.trace.json",
+        "source_sha256": "9dcc173ad035d57a5fe50db522d5d2a9849bb327975fd9ef20706dc2ec7380a7"
+      }
+    ]
+  },
+  "current_evidence": [
+    {
+      "path": "reports/2026-10-25-wgmma-down-development.json",
+      "scope": "v1 fourshape dev",
+      "result": "0.151061x baseline; reject as performance improvement"
+    },
+    {
+      "path": "reports/2026-10-25-wgmma-coalesced-development.json",
+      "scope": "v3 fourshape dev",
+      "result": "~0.43438x baseline; still slower. Differentseed/fixture fromv1; no causal v3/v1 gain claim"
+    },
+    {
+      "path": "reports/2026-10-25-wgmma-coalesced-profile.json",
+      "scope": "oneM128coldreplay",
+      "result": "54.51%longscoreboard,11.87%barrier,2.763%tensor,38.99activewarps/SM. Supports operand-feed/synchronization investigation, not guaranteed throughput improvement."
+    },
+    {
+      "path": "results/rsi/candidates/wgmma-pipeline-v4/status.json",
+      "scope": "CPUcompile/SASS only at design time",
+      "result": "FourK16 operations grouped;46regs,1024Bshared,zero spills;64waits instead256. Root GPU correctness/timing evidence must supersede this snapshot; no gain assumed."
+    }
+  ],
+  "ranked_architectural_steps": [
+    {
+      "rank": 1,
+      "id": "BOTH-GEMMS-TRANSFER",
+      "mechanism": "Transfer validated coalesced/K64 engine to gate/up with explicit routed gather semantics; keep separate up/down dispatch choices",
+      "why": "Gate/up accounts~57\u201363%of kernel work in relevant traces. Improving onlydown leaves dominant work untouched.",
+      "source_design": {
+        "sites": [
+          "serving/sglang/python/sglang/srt/layers/muse_spark_fp4_moe.py:530",
+          "serving/sglang/python/sglang/srt/layers/muse_spark_fp4_moe.py:558",
+          "results/rsi/candidates/wgmma-pipeline-v4/routed_down.cuh"
+        ],
+        "weight_bank": "Repack original local w13 [32,8192,2048] and group16 scales using same lossless mapping asdown; apply w13 global-scale preparation unchanged. No BF16expanded weightbank.",
+        "gather": "Separate input_rows from output_slots. Gate/up slot=sorted[position+lane_token], valid slot<output_slots=M*8; read hidden_states[slot//8,K], write cache1[slot,channel]. Down keeps input/cache2[slot,K] with topk1. Current down route<activation_rows guard is WRONG for gate/up and must not be reused unchanged.",
+        "API": "project_routed(input,bank,sorted,experts,post,block_m,output_slots,gather_divisor,out); choose compile-time divisor8 forup,1 fordown. Verify divisibility/ranges and keepexpertmask exactly.",
+        "epilogue": "Preserve BF16cast-before-global-scale. Keep existing silu_and_mul after full8192 output and unchanged finalizer for initial transfer.",
+        "scope": "No new grid/tile/padding policy in first gather-transfer correctness prototype."
+      },
+      "falsifiable_next_test": "After root validates v4 math, compare standalone up projection with stock Marlin on identical official fixtures, then full expert with up-only/down-only/both variants under new reviewed matched-seed plan. Early sentinel shapes M8,M128,M3012,M16384 expose sparse andprefill failure before any full14suite claim. Include prepare/memory costs separately.",
+      "success_decision": "Engine must show a believable route to multi-fold acceleration in both measured stages; a slower replacement with correct math is not progress toward3x. Compute updated Amdahl from perprojection measurements.",
+      "effort": "medium: gather/API/weightbank/correctness; timing budget must be preregistered",
+      "speedup_prior": "unknown; measured v3 engine is currently slower, so transferring it without improvement may amplify regression"
+    },
+    {
+      "rank": 2,
+      "id": "TOKEN-TILE-REUSE",
+      "mechanism": "Broaden token dimension of transposed WGMMA tile from8 to16/32 for sufficiently populated same-expert tiles, especiallyprefill",
+      "why": "Current weight-A64channel\u00d7K fragments are consumed for only8tokens. Larger token tiles can amortize FP4dequant/weightloads across more rows, while original Marlin already exploits largerMtiles.",
+      "source_design": {
+        "operation": "MMA_64x16x16 or64x32x16 BF16 RS; retainchannel tile64 and coalesced weight-A map. Generate new CLayout from operation traits rather than hand-edit storemapping.",
+        "shared": "BMap becomes token_tile\u00d716; groupedK64 retainsfour independent slices. Register-A fragments unchanged; FP32 accumulator count grows4\u21928\u219216 perthread. CPUcompile/spills/occupancy gates required.",
+        "routing": "Each tile must remain inside one existing expert-alignment block. Require block_m%token_tile==0 and token_tile<=block_m; fallback to8/16 whenblock_m48 is incompatiblewith32. Never span adjacentexperts to filltoken lanes.",
+        "dispatch": "Initial boundedguard M>=3012 and block_m divisible32; preserve sparse8token decode fallback. Later consider16token decode only from measured fillstatistics.",
+        "padding": "Masked activation/output lanes preserveexactzeros; partiallyvalidtiles remain computed. No host sync to inferdevice routecount."
+      },
+      "falsifiable_next_test": "Samekernel/layout/K64engine with token_tile8/16/32 only; paired officialM3012/M16384 andboundary shapes, report actualvalidtokens/tile, register/spills, weightloadrequest counters and completeexpert cost. Then original14suite with frozen fallbackdispatch.",
+      "conditional_model": "For fullypopulated groups, a32token tile reuses sameweightA fragment across4x asmanytokens vs8. This is4x semanticreuse, not4x measuredspeedup; registerpressure, sparsepadding and activation traffic can erase it.",
+      "effort": "medium/high; likely more full-goal relevant than further2SMgrid tuning",
+      "speedup_prior": "unknown"
+    },
+    {
+      "rank": 3,
+      "id": "SPARSE-WORK-PRUNING",
+      "mechanism": "Uniform all-padding subgroup rejection and bounded validtask dispatch",
+      "why": "v1M128 fixture contains16/52 local groups entirelypadding, but this is cleanup rather than a3x architecture byitself.",
+      "source_design": "CTA-uniform check overalltoken slots before Kloop; skiponlywhen every slotinvalid. Keepoutputzeroing andemptygraph contract; partialgroup retained. Newimmutable variant, not amendment to alreadyreviewed v2/v3/v4.",
+      "falsifiable_next_test": "Same-fixture allpadding,onevalidlane,skew,emptyaftervalid graph cases thenpaired sparsefull-expert timings. Verify pruningbenefit persists without forcingharmful residencycap.",
+      "effort": "low/medium",
+      "speedup_prior": "unknown;52/36 source-work model isdown-only conditional, notserving forecast"
+    },
+    {
+      "rank": 4,
+      "id": "GATE-SWIGLU-FUSION",
+      "mechanism": "Only after both GEMMs win, co-own matchinggate/up outputchannels and fuseSwiGLU",
+      "why": "RemainingnonGEMM share~5\u201311%in largerprofiles cannot alone deliver3x. Fusion complicates channelownership androunding.",
+      "source_design": "Paired gatechannelj andupchannelj+4096 must be fullyreduced/co-owned beforeSwiGLU. Preserve BF16gate/up rounding andactivationoperatororder; ordinaryindependentN64tile cannotfusebyaddingoneepilogue expression.",
+      "falsifiable_next_test": "Sameprojectionresult andfusedactivation reference, theninclude removedlaunch/readwrite costs in wholeexpert pairedtest.",
+      "effort": "high relative residualshare",
+      "speedup_prior": "unknown;defer untilcostshare supportsit"
+    }
+  ],
+  "portfolio_and_stop_policy": {
+    "avoid_tunnel_vision": "Limit each nextarchitecture hypothesis toone reviewed bounded screen andpredeclared revision allowance. No endlessdown-only tuning justified by correctnessor counters. Root mustrerank againstAmdahl aftereach measuredresult.",
+    "partial_screen": "Fourprimary proxy isdevelopment only. Addprefill sentinel screening in aNEWplan, not bymutating currentplans. Original14shape promotion/goal suite remainsunchanged.",
+    "stop_conditions": [
+      "Correctnessorresourcefailure:retain evidence andstopvariant",
+      "No measuredprojectionbenefit andno newlysupportedmechanism:park rewrite,retain incumbent",
+      "Strongdecode gain withprefill regression:guardfallback onlyif reviewed fullsuite noninferioritypasses; do notdrop largeMshapes",
+      "Amdahlprojection farbelow3x:prioritizeotherdominantstage orengine reuse,not residualfinalizerpolish"
+    ],
+    "handoff": "root consumes pendingv4 evidence \u2192 planner updatedstagecostmodel \u2192 implementer boundedgather/widertile design \u2192 independent reviewer precision/routing/resources \u2192 rootserialized measurement \u2192 validatorfullsuite/holdouts"
+  },
+  "precision_and_system_boundaries": [
+    "BF16dequant-product rounding,FP32accumulation andBF16global-scale epilogue preserved",
+    "Post-expert RMSNorm remainsbefore routingweighted sum; nofinalizerfusion acrossindependenthidden tiles",
+    "Preparetime lossless repack maytrade memory; measure underlyingstorageownership forup+down banks andretainedfallback; logical tensor sizealone isinsufficient",
+    "No extraGPUs, servingdeployment orperformanceclaims authorizedby thisroadmap; eight-rank serving remainsseparatevalidation"
+  ]
+}
