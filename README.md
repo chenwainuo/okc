@@ -40,6 +40,9 @@ bash benchmarks/run_h200.sh --matrix --profile
 # Representative prefill regression diagnostics; increase pairs for conclusions.
 bash benchmarks/run_h200.sh --matrix --prefill --pairs 20
 
+# Marlin thread configuration / occupancy sweep with an unchanged JIT control.
+bash benchmarks/run_h200.sh --execution --minutes 45
+
 # Tile/padding candidates, with independent code artifacts and source hashes.
 bash benchmarks/run_h200.sh --tiles
 ```

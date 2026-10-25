@@ -11,6 +11,9 @@ if [[ ${1:-} == --matrix ]]; then
 elif [[ ${1:-} == --loop ]]; then
     runner=benchmarks/optimize_loop.py
     shift
+elif [[ ${1:-} == --execution ]]; then
+    runner=benchmarks/sweep_execution.py
+    shift
 elif [[ ${1:-} == --tiles ]]; then
     runner=benchmarks/sweep_tiles.py
     shift

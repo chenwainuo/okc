@@ -18,8 +18,8 @@
       "rank": 0,
       "title": "Tune Marlin N/K thread tiles and persistent block occupancy",
       "stage": "hypothesis",
-      "status": "ready_for_implementation",
-      "executor": "agent",
+      "status": "running",
+      "executor": "execution_sweep",
       "roi_estimate": {
         "potential_component_gain": "unknown",
         "confidence": "medium",
@@ -28,12 +28,15 @@
       },
       "next_action": "Build isolated JIT experiment exposing configuration index; compare each valid config against frozen incumbent; retain FP32 reductions and BF16 boundaries.",
       "validation": [
+        "unchanged JIT control must match incumbent before alternative configs",
         "same source baseline and isolated candidate",
         "reference agreement",
         "invalid and empty routes",
         "all-load shapes and prefill",
         "independent holdouts"
-      ]
+      ],
+      "command": "bash benchmarks/run_h200.sh --execution --minutes 45",
+      "runtime_state": "results/execution-sweep/state.json"
     },
     {
       "id": "Q03",
