@@ -1,0 +1,31 @@
+--- a/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h
++++ b/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h
+@@ -405,6 +405,28 @@
+     }
+   }
+ 
++  // Bounded complete-K stripes for the measured Hopper NVFP4 EP decode path.
++  // Keep the original split-K schedule unless its longest stripe grows <=10%.
++  if constexpr (kIsEP && !kHasBias && std::is_same<scalar_t, nv_bfloat16>::value &&
++                w_type == host::kFE2M1f && s_type == host::kFE4M3fn && group_blocks == 1 &&
++                threads == 128 && thread_m_blocks == 1 && thread_n_blocks == 8 && thread_k_blocks == 4) {
++#if SGL_CUDA_ARCH == 900
++    const bool scoped_shape =
++        prob_k == 4096 && ((prob_n == 8192 && top_k == 8 && prob_m >= 128 && prob_m <= 256) ||
++                           (prob_n == 4096 && top_k == 1 && prob_m >= 1024 && prob_m <= 2048));
++    if (scoped_shape && !use_atomic_add && use_fp32_reduce && !mul_topk_weights && iters > 0) {
++      constexpr int full_k_tiles = 4096 / (16 * thread_k_blocks);
++      const int64_t output_tiles = static_cast<int64_t>(parallel) * n_tiles;
++      const int64_t whole_k_iters =
++          ((static_cast<int64_t>(iters) + full_k_tiles - 1) / full_k_tiles) * full_k_tiles;
++      if (output_tiles >= 2 * static_cast<int64_t>(gridDim.x) &&
++          whole_k_iters <= static_cast<int64_t>(iters) * 11 / 10 && whole_k_iters <= 2147483647LL) {
++        iters = static_cast<int>(whole_k_iters);
++      }
++    }
++#endif
++  }
++
+   int slice_row = (iters * blockIdx.x) % k_tiles;
+   int slice_col_par = (iters * blockIdx.x) / k_tiles;
+   int slice_col = slice_col_par;

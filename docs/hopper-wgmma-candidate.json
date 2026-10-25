@@ -1,0 +1,170 @@
+{
+  "status": "research_plus_successful_compile_only_fragment_probe; no_GPU_execution; no_measured_speedup",
+  "objective_anchor": "docs/threefold-target.json",
+  "candidate": "Hopper transposed NVFP4 group16 -> BF16 register/shared WGMMA",
+  "recommendation": {
+    "first_projection": "down only, K=N=4096; preserve existing routing, norm and weighted reduction",
+    "first_tile": "physical GMMA M64=output channels, N8=expert token slots, K16; expand tokens to16 only after correct",
+    "why": "Swap W and X operands: W[N,K] @ X^T[K,M]. Decoded W occupies registers A, activation occupies shared B. Avoid minimum64-token padding and BF16 model materialization.",
+    "engineering_prior_speedup": {
+      "projection_target_range": [
+        1.2,
+        2.0
+      ],
+      "confidence": "low; speculative success target, not forecast or measured result",
+      "whole_local_MoE": "Amdahl 1/((1-f)+f/s), where f is newly measured down-projection fraction; no numeric promise",
+      "full_serving": "unproven; singleH200 local proxy cannot establish official score"
+    },
+    "roi": "high-upside, high implementation cost; separate rewrite branch, retain incumbent fallback"
+  },
+  "measured_anchors": [
+    {
+      "report": "reports/2026-10-25-hardware-bs8.json",
+      "scope": "profiler counters only; not valid speedup timing",
+      "kernels": [
+        {
+          "id": "0",
+          "registers_per_thread": 128.0,
+          "active_warps_pct": 16.553961
+        },
+        {
+          "id": "1",
+          "registers_per_thread": 128.0,
+          "active_warps_pct": 16.216824
+        }
+      ]
+    },
+    {
+      "report": "reports/2026-10-25-hardware-bs128.json",
+      "scope": "profiler counters only; not valid speedup timing",
+      "kernels": [
+        {
+          "id": "0",
+          "registers_per_thread": 155.0,
+          "active_warps_pct": 16.872388
+        },
+        {
+          "id": "1",
+          "registers_per_thread": 155.0,
+          "active_warps_pct": 17.027283
+        }
+      ]
+    }
+  ],
+  "current_path": {
+    "source": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h",
+    "compute": "mma.sync m16n8k16 BF16, FP32 accum; cp.async pipeline; NVFP4 fragment dequant and E4M3 group16 scales; splitK locks/reduction",
+    "shape": "32 local experts, global256, topK8, hidden4096, intermediate4096; gate/up N8192 and down N4096",
+    "precision": "BF16 activation; FP32 GEMM accumulation; BF16 quantized/scaled fragments; BF16 output conversion BEFORE processed global-scale BF16 multiplication"
+  },
+  "native_FP4": {
+    "conclusion": "SM90 has no native FP4 tensor-core operand path in inspected instruction/library implementation; BF16 conversion required for this precision-preserving proposal.",
+    "evidence": "Pinned cute/arch/mma_sm90_gmma.hpp exposes BF16 RS instructions; pinned flashinfer/gemm/gemm_bf16_fp4.py supported_compute_capability excludes90 (100,103,110,120,121). CurrentMarlin dequantizes E2M1.",
+    "caveat": "Required conversion does NOT establish conversion as dominant bottleneck. Compare dequant instruction issue, memory stalls, register pressure and WGMMA overlap; hardware counters currently only motivate investigation."
+  },
+  "library_candidates": [
+    {
+      "source": "flashinfer/data/cutlass/include/cutlass/gemm/collective/sm90_mma_tma_gmma_rs_warpspecialized_mixed_input.hpp",
+      "use": "RS mixed-input pipeline skeleton and operand swap",
+      "blocker": "can_implement requires group_size==K or group_size%tileK==0, line484. NVFP4group16 with pipelineK64 requires custom scale scheduling; not drop-in."
+    },
+    {
+      "source": "flashinfer/fused_moe/cute_dsl/hopper/contiguous_grouped_gemm_finalize_fusion.py",
+      "use": "Hopper BF16 grouped WGMMA schedule and unfused per-expert output mode",
+      "blocker": "expects BF16 full weights. Wrapper fullMoE finalization differs from Muse expert RMSNorm-before-weighted-sum. Lowlevel use_fused_finalize=False is useful, highlevel wrapper still unpermutes/sums."
+    },
+    {
+      "source": "deep_gemm/include/deep_gemm/impls/sm90_bf16_gemm.cuh",
+      "use": "Pinned image contains SM90 BF16 grouped-capable scheduler implementation; alternate fullBF16 oracle",
+      "blocker": "FullBF16 weights and routing integration still required; source existence is not integration validation."
+    },
+    {
+      "source": "sglang/srt/layers/moe/moe_runner/flashinfer_cutlass.py",
+      "rejected_dropin": "SM90 MXFP4 W4A16 uses E8M0 group32, differs from NVFP4 E4M3 group16. HummingW4A8 changes activation precision; excluded."
+    }
+  ],
+  "resources_estimates_not_compiler_results": {
+    "RS_tile64x16x64": {
+      "packed_weight_bytes": 2048,
+      "processed_scale_bytes": 256,
+      "activation_smem_bytes": 2048,
+      "three_stages_combined_bytes": 13056,
+      "notes": "Combined stages assume packedweights+scales+activations buffered; add barriers/alignment/output scratch. Decode oneK16 slice at a time.",
+      "minimum_operand_registers_per_thread": 4,
+      "minimum_accumulator_registers_per_thread": 8,
+      "notes_registers": "K16 decoded A=64*16*2bytes /128threads=16bytes=4regs. N16 accum=64*16floats/128=8regs. These are lower bounds, not final occupancy; scale/decode/routing/address/pipeline/compiler lifetimes add substantially."
+    },
+    "SS_BF16_tile64x128x64": {
+      "A_bytes_per_stage": 8192,
+      "B_bytes_per_stage": 16384,
+      "two_stages_bytes": 49152,
+      "risk": "Large token dimension wastes work for sparse per-expert rows; BF16decodedweight shared materialization adds traffic."
+    },
+    "full_BF16_staging": {
+      "bytes_per_expert": 100663296,
+      "bytes_local32_expert_layer": 3221225472,
+      "packed_weight_bytes_local_layer": 805306368,
+      "E4M3_scale_bytes_local_layer": 100663296,
+      "assessment": "3GiB temporary one-layer staging fitsH200 in isolation, but adds dequant/write/read and competes withKV/model memory. Permanent full-modelBF16 cache infeasible. Treat as timed oracle or largeprefill experiment, never untimed predequant benchmark advantage."
+    }
+  },
+  "precision_invariants": [
+    "Reuse existing dequant<nv_bfloat162,kFE2M1f,true>, dequant_fp8_scales<nv_bfloat162,kFE4M3fn> and BF16 __hmul2. Processed scale bits/global compensation are not raw checkpoint scales.",
+    "No FP8 activation conversion, requantization, E8M0 substitution or FP32->BF16 rounding reordering. Match current processed global-scale operation after GEMM BF16 conversion.",
+    "Pure lossless layout repack may happen once at model load; account memory. Verify everyFP4code and representative processed scales before using random end-to-end tests.",
+    "Maintain expanded expert-slot outputs, padded/invalid routes and empty-local zeros, graph replay semantics; expert RMSNorm remains before weighted topK sum.",
+    "WGMMA reduction order can change last bits: require existing official reference tolerances and independent heldouts, not bitwise GEMM equivalence. BF16/FP32 precision contract unchanged."
+  ],
+  "implementation_queue": [
+    {
+      "order": 1,
+      "work": "Implement CPU lane-layout oracle and lossless mapping from Marlin packed weights/scales into RS A fragments; validate all16codes, group/channel boundaries and processedscale/global compensation."
+    },
+    {
+      "order": 2,
+      "work": "Implement oneCTA64channels x8tokens xK16 with real shared activation descriptor and RS output remap; compare against decoded BF16 reference onGPU only when leased."
+    },
+    {
+      "order": 3,
+      "work": "Loop K4096 with two/three bufferedK64 stages, group16 conversion perK16; FP32accum and incumbentBF16/global-scale epilogue. Start oneexpert,no splitK."
+    },
+    {
+      "order": 4,
+      "work": "Integrate existing sorted route metadata and down expanded rows. Allgroups, skewed, emptylocal and graph replay; preserve current finalizer."
+    },
+    {
+      "order": 5,
+      "work": "Cold paired projection timings versus incumbent; inspect ptxas registers/spills and Nsight stall attribution. Reject if no >10% projection gain at useful shapes before expanding scope."
+    },
+    {
+      "order": 6,
+      "work": "Only then add gate/up, parallelK or persistent grouped scheduling; run whole frozen suite+holdouts and localpromotion gate. Fullserving achievement remains separate."
+    }
+  ],
+  "compile_probe": {
+    "source": "results/rsi/candidates/wgmma_rs/rs_tile_compile.cu",
+    "sass": "results/rsi/candidates/wgmma_rs/rs_tile_compile.sass",
+    "object": "results/rsi/candidates/wgmma_rs/rs_tile_compile.o",
+    "result": "compile success; SASS HGMMA.64x8x16.F32.BF16 present; ptxas0stack/0spill; no kernel launched",
+    "missing": "Caller lane packing, valid descriptor/shared data setup, output mapping, Kloop, global-scale epilogue, routes, host launcher; this devicefunction is not benchmarkable MoE.",
+    "image": "lmsysorg/sglang@sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
+    "flags": "-std=c++20 --expt-relaxed-constexpr -gencode arch=compute_90a,code=sm_90a -DSGL_CUDA_ARCH=900 -dc -Xptxas=-v",
+    "warning": "-arch=sm_90a alone emitted a genericSM90 fallback in this image; explicit90a gencode required for unguardedWGMMA.",
+    "sha256": {
+      "rs_tile_compile.o": "fe8c0b0138fedc6ccaf91e651c497117458239c8c8e5c7301521820e3db159ed",
+      "rs_tile_compile.sass": "4f0caf2a86ad539efe9916bcabe7514785526652d141568834119ca93043d5a8",
+      "rs_tile_compile.cu": "1a81c86c6b45eb6ff48bfe8c6240835d4640520314ae1815717d6986f2cd5754",
+      "compile.sh": "913583b024714e0d3c7e4b93f9d2502cf5935f90ecd3e74809a847c8a4ba2d86"
+    }
+  },
+  "source_roots": {
+    "runtime_repository": "serving/sglang",
+    "pinned_image_library": "/opt/sglang/lib/python3.12/site-packages",
+    "inspection_copy": "/tmp/okc-wgmma-research"
+  },
+  "tracked_probe": {
+    "source": "serving/experiments/wgmma_rs/rs_tile_compile.cu",
+    "compile_command": "serving/experiments/wgmma_rs/compile.sh",
+    "status": "compile-only, no runnable MoE kernel"
+  }
+}

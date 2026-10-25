@@ -1,0 +1,383 @@
+{
+  "schema_version": 1,
+  "status": "isolated_source_candidate_created; CPU scheduling model checked; not CUDA-compiled, GPU-tested or reviewed",
+  "decision": "Test bounded complete-K stripe rounding before a full scheduler rewrite. Do not unconditionally remove split-K.",
+  "anchor": {
+    "schema_version": 1,
+    "status": "unreviewed_uncompiled_unmeasured",
+    "anchor_archive": "results/rsi/bundles/baseline-v2.tar.gz",
+    "anchor_archive_sha256": "a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab",
+    "member": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h",
+    "baseline_source_sha256": "6b43bc72d64a591bc86f62df2db14bdea5adce7b70b00af1a3e601a3c0d24fdb",
+    "candidate_source_sha256": "8e7494555bdc10c97eee0df3973eafb6c5660db893b7b1f5adfe6298a4cd99b5",
+    "diff_sha256": "0d3d9462cde028c415814f233cdbb019c1d60bccf373bfabee08ea3223178988",
+    "scope": "Hopper BF16 NVFP4 EP; original M128..256 gate/up and corresponding down calls; current128-thread N128/K64 config;FP32 reduction and no weighted/atomic GEMM",
+    "only_change": "Conditionally round per-CTA stripe length to complete-K multiple; no MMA/scales/reduction/store modifications",
+    "gpu_jobs_started": false,
+    "production_source_changed": false
+  },
+  "artifacts": {
+    "candidate_source": "results/rsi/candidates/fullk10/marlin_template.h",
+    "baseline_source": "results/rsi/candidates/fullk10/baseline-marlin_template.h",
+    "diff": "results/rsi/candidates/fullk10/candidate.diff",
+    "manifest": "results/rsi/candidates/fullk10/manifest.json",
+    "cpu_analysis": "results/rsi/candidates/fullk10/analyze_schedule.py",
+    "cpu_results": "results/rsi/candidates/fullk10/schedule-analysis.json"
+  },
+  "source_evidence": [
+    {
+      "file": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h",
+      "line": 384,
+      "fact": "Every CTA derives valid-block count by scanning the complete expert-block list in EP specialization."
+    },
+    {
+      "file": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h",
+      "line": 395,
+      "fact": "K/N tiles and per-CTA stripe length are computed from valid block count; stripe length is ceil(K_tiles*N_tiles*valid_blocks/gridDim.x)."
+    },
+    {
+      "file": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h",
+      "line": 517,
+      "fact": "Initial valid-block lookup scans from beginning when invalid blocks exist; subsequent lookups advance from previous block."
+    },
+    {
+      "file": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h",
+      "line": 566,
+      "fact": "init_slice derives each stripe/output-tile intersection and the number/order of K-split CTAs."
+    },
+    {
+      "file": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h",
+      "line": 1456,
+      "fact": "FP32 global reduction reads previous partials and writes nonfinal partials, masking some padded rows."
+    },
+    {
+      "file": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h",
+      "line": 1822,
+      "fact": "Lock acquisition, global FP32 reduction and release only occur when slice_count>1."
+    },
+    {
+      "file": "serving/sglang/python/sglang/kernels/ops/moe/moe_align_small_numel.py",
+      "line": 63,
+      "fact": "Bucket=local_expert_id+1; filtered -1 routes occupy bucket0, before valid experts."
+    }
+  ],
+  "exact_arithmetic_model": {
+    "symbols": {
+      "V": "number of valid padded M blocks = sum_e ceil(local_route_count_e / block_M)",
+      "D": "invalid prefix M blocks = ceil(nonlocal_route_count / block_M)",
+      "B": "V+D total M blocks",
+      "G": "launched CTAs",
+      "K": "K tiles per output tile =4096/64=64 for measured configuration",
+      "N": "output N tiles =8192/128=64 for gate/up;4096/128=32 for down",
+      "P": "V*N output tiles",
+      "I": "ceil(K*P/G), original maximum stripe K-tile count"
+    },
+    "count_scan_work": "G*B loop iterations at CTA level per GEMM. This is not an instruction count or DRAM byte count: threads share uniform accesses and caches can serve repeated reads.",
+    "split_boundaries": "{j*I |1<=j<G, j*I<K*P, (j*I)%K !=0}; distinct floor(boundary/K) counts split output tiles.",
+    "scratch_upper_bound": "2 * number_of_boundaries * block_M *128*4 bytes (read+write FP32 partials). Padded-row masks can reduce actual traffic; hardware traffic must be measured.",
+    "fullK_unconditional": "I_full=ceil(I/K)*K; every stripe boundary aligns with output-tile K boundaries, so existing init_slice yields slice_count=1.",
+    "tradeoff": "Rounding increases maximum per-CTA K work and reduces active CTAs in the tail. Removing locks can lose more in load balance than it saves. Fraction of split output tiles is not fraction of execution time."
+  },
+  "shape_quantification": {
+    "status": "cpu_arithmetic_model_pass",
+    "partition_cases_checked": 5145,
+    "cases_with_bounded_schedule_change": 510,
+    "source_report": "results/selected-validation.json",
+    "assumptions": [
+      "N tile128,K tile64; grid396 CTAs from incumbent Nsight M8/M128; confirm runtime grid before extrapolating.",
+      "Histograms reconstruct alignment padding; invalid bucket is ordered first by the +1 bucket convention.",
+      "Source-level CTA loop and scratch upper-bound counts, not executed instructions, DRAM traffic, or measured time.",
+      "FP32 scratch upper bound ignores partial-row masks; real traffic may be smaller."
+    ],
+    "shapes": [
+      {
+        "M": 1,
+        "M_tile": 8,
+        "samples": 20,
+        "median_valid_blocks": 3.0,
+        "median_invalid_prefix_blocks": 1.0,
+        "median_count_scan_CTA_iterations_per_GEMM": 1584.0,
+        "stages": {
+          "up": {
+            "median_output_tiles": 192.0,
+            "median_split_output_tile_fraction": 1.0,
+            "median_cross_CTA_K_boundaries": 192.0,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 1572864.0,
+            "median_unconditional_rounding_max_stripe_ratio": 2.0,
+            "fraction_samples_changed_by_candidate": 0.0
+          },
+          "down": {
+            "median_output_tiles": 96.0,
+            "median_split_output_tile_fraction": 1.0,
+            "median_cross_CTA_K_boundaries": 288.0,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 2359296.0,
+            "median_unconditional_rounding_max_stripe_ratio": 4.0,
+            "fraction_samples_changed_by_candidate": 0.0
+          }
+        }
+      },
+      {
+        "M": 8,
+        "M_tile": 8,
+        "samples": 20,
+        "median_valid_blocks": 8.5,
+        "median_invalid_prefix_blocks": 7.0,
+        "median_count_scan_CTA_iterations_per_GEMM": 5940.0,
+        "stages": {
+          "up": {
+            "median_output_tiles": 544.0,
+            "median_split_output_tile_fraction": 0.7087673611111112,
+            "median_cross_CTA_K_boundaries": 382.0,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 3129344.0,
+            "median_unconditional_rounding_max_stripe_ratio": 1.3617021276595744,
+            "fraction_samples_changed_by_candidate": 0.0
+          },
+          "down": {
+            "median_output_tiles": 272.0,
+            "median_split_output_tile_fraction": 1.0,
+            "median_cross_CTA_K_boundaries": 378.0,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 3096576.0,
+            "median_unconditional_rounding_max_stripe_ratio": 1.5238095238095237,
+            "fraction_samples_changed_by_candidate": 0.0
+          }
+        }
+      },
+      {
+        "M": 16,
+        "M_tile": 8,
+        "samples": 20,
+        "median_valid_blocks": 13.0,
+        "median_invalid_prefix_blocks": 13.0,
+        "median_count_scan_CTA_iterations_per_GEMM": 10098.0,
+        "stages": {
+          "up": {
+            "median_output_tiles": 832.0,
+            "median_split_output_tile_fraction": 0.46634615384615385,
+            "median_cross_CTA_K_boundaries": 384.5,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 3149824.0,
+            "median_unconditional_rounding_max_stripe_ratio": 1.2307692307692308,
+            "fraction_samples_changed_by_candidate": 0.0
+          },
+          "down": {
+            "median_output_tiles": 416.0,
+            "median_split_output_tile_fraction": 0.8822115384615384,
+            "median_cross_CTA_K_boundaries": 382.5,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 3133440.0,
+            "median_unconditional_rounding_max_stripe_ratio": 1.5915971578622181,
+            "fraction_samples_changed_by_candidate": 0.0
+          }
+        }
+      },
+      {
+        "M": 32,
+        "M_tile": 16,
+        "samples": 20,
+        "median_valid_blocks": 16.5,
+        "median_invalid_prefix_blocks": 13.0,
+        "median_count_scan_CTA_iterations_per_GEMM": 11880.0,
+        "stages": {
+          "up": {
+            "median_output_tiles": 1056.0,
+            "median_split_output_tile_fraction": 0.3549262152777778,
+            "median_cross_CTA_K_boundaries": 385.0,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 6307840.0,
+            "median_unconditional_rounding_max_stripe_ratio": 1.1936978683966637,
+            "fraction_samples_changed_by_candidate": 0.0
+          },
+          "down": {
+            "median_output_tiles": 528.0,
+            "median_split_output_tile_fraction": 0.7087673611111112,
+            "median_cross_CTA_K_boundaries": 380.0,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 6225920.0,
+            "median_unconditional_rounding_max_stripe_ratio": 1.498357064622125,
+            "fraction_samples_changed_by_candidate": 0.0
+          }
+        }
+      },
+      {
+        "M": 64,
+        "M_tile": 16,
+        "samples": 20,
+        "median_valid_blocks": 21.5,
+        "median_invalid_prefix_blocks": 27.0,
+        "median_count_scan_CTA_iterations_per_GEMM": 19008.0,
+        "stages": {
+          "up": {
+            "median_output_tiles": 1376.0,
+            "median_split_output_tile_fraction": 0.2738602543290043,
+            "median_cross_CTA_K_boundaries": 388.0,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 6356992.0,
+            "median_unconditional_rounding_max_stripe_ratio": 1.1743119266055047,
+            "fraction_samples_changed_by_candidate": 0.0
+          },
+          "down": {
+            "median_output_tiles": 688.0,
+            "median_split_output_tile_fraction": 0.5440340909090909,
+            "median_cross_CTA_K_boundaries": 387.0,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 6340608.0,
+            "median_unconditional_rounding_max_stripe_ratio": 1.1743119266055047,
+            "fraction_samples_changed_by_candidate": 0.0
+          }
+        }
+      },
+      {
+        "M": 128,
+        "M_tile": 16,
+        "samples": 20,
+        "median_valid_blocks": 27.0,
+        "median_invalid_prefix_blocks": 52.5,
+        "median_count_scan_CTA_iterations_per_GEMM": 31680.0,
+        "stages": {
+          "up": {
+            "median_output_tiles": 1728.0,
+            "median_split_output_tile_fraction": 0.20260416666666667,
+            "median_cross_CTA_K_boundaries": 389.0,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 6373376.0,
+            "median_unconditional_rounding_max_stripe_ratio": 1.1428571428571428,
+            "fraction_samples_changed_by_candidate": 0.4
+          },
+          "down": {
+            "median_output_tiles": 864.0,
+            "median_split_output_tile_fraction": 0.42824074074074076,
+            "median_cross_CTA_K_boundaries": 381.0,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 6242304.0,
+            "median_unconditional_rounding_max_stripe_ratio": 1.3257142857142856,
+            "fraction_samples_changed_by_candidate": 0.0
+          }
+        }
+      },
+      {
+        "M": 256,
+        "M_tile": 16,
+        "samples": 20,
+        "median_valid_blocks": 37.5,
+        "median_invalid_prefix_blocks": 105.0,
+        "median_count_scan_CTA_iterations_per_GEMM": 56628.0,
+        "stages": {
+          "up": {
+            "median_output_tiles": 2400.0,
+            "median_split_output_tile_fraction": 0.15748355263157895,
+            "median_cross_CTA_K_boundaries": 388.0,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 6356992.0,
+            "median_unconditional_rounding_max_stripe_ratio": 1.0667407458851308,
+            "fraction_samples_changed_by_candidate": 0.7
+          },
+          "down": {
+            "median_output_tiles": 1200.0,
+            "median_split_output_tile_fraction": 0.29573170731707316,
+            "median_cross_CTA_K_boundaries": 381.5,
+            "median_fp32_scratch_read_plus_write_upper_bytes": 6250496.0,
+            "median_unconditional_rounding_max_stripe_ratio": 1.0909090909090908,
+            "fraction_samples_changed_by_candidate": 0.3
+          }
+        }
+      }
+    ]
+  },
+  "why_low_M_falls_back": {
+    "M8": "Median gate/up stripe inflation1.36x and down1.52x for unconditional rounding; down has only272 output tiles for396 CTAs. Eliminating split-K would reduce available parallelism.",
+    "M128": "Median split-output fractions20.3% up/42.8% down, but unconditional stripe inflation1.14x/1.33x. A bound excludes most harmful cases.",
+    "M256": "Median split-output fractions15.7% up/29.6% down; median stripe inflation1.067x/1.091x makes bounded scheduling plausible. Estimated FP32 scratch upper bound is only~6.3MB per GEMM, so the hypothesis is synchronization/load scheduling, not a huge DRAM-byte elimination."
+  },
+  "implemented_candidate": {
+    "change": "Insert one compile/runtime guarded adjustment immediately before slice_row computation; all downstream existing scheduling/math/store code retained.",
+    "compile_guard": [
+      "Hopper SGL_CUDA_ARCH900",
+      "BF16 scalar",
+      "EP and no bias",
+      "NVFP4 E2M1 weights/E4M3 group16 scales",
+      "128 threads, M blocks1, N tile128, K tile64"
+    ],
+    "runtime_guard": [
+      "K4096",
+      "gate/up N8192,top_k8,original M128..256 OR down N4096,top_k1,expanded M1024..2048",
+      "FP32 reduction enabled",
+      "atomic_add false",
+      "mul_topk_weights false",
+      "I>0",
+      "P>=2*G",
+      "I_full<=floor(1.10*I)",
+      "I_full fits signed32-bit"
+    ],
+    "operation": "I := I_full only when all guards hold.",
+    "historical_application_rate": "On20 routing samples per shape: changes M128 gate/up40%, down0%; M256 gate/up70%, down30%. Other measured M cases untouched by shape guard. These are source-model predictions, not runtime measurements.",
+    "zero_case": "V=0 ->I=0; explicitI>0 prevents rounding. Original empty-route path and masked finalizer remain intact.",
+    "overflow": "New products/rounding use int64_t and cast only after explicit signed32-bit range check; full_K_tiles is compile-time64. Original preexisting stripe expression remains unchanged; declared shape/input bounds keep it within signed32-bit.",
+    "math_invariants": [
+      "No change to FP4 decode, block/global scales, MMA fragments, BF16 activation boundaries or finalizer.",
+      "All K tiles assigned exactly once; output ownership differs only by removal of split boundaries.",
+      "FP32 accumulation order changes relative to distributed partial reduction; unchanged numerical oracle and full-model output-agreement gate still required.",
+      "No new atomic BF16 reduction, host synchronization, omitted expert, or altered norm.",
+      "No extra allocation, metadata kernel, global work queue or weight repack.",
+      "Dynamic decision depends only on already device-resident routing counts and uniform kernel shape values; it is graph safe in design, still requires capture/replay tests."
+    ]
+  },
+  "cpu_validation": {
+    "cases": 5145,
+    "grid_sizes": [
+      1,
+      132,
+      264,
+      396,
+      528
+    ],
+    "proof_observed": "For modeled P values, original and bounded partitions cover [0,K*P) without gaps/overlap; changed schedules have slice_count1 and max-stripe inflation<=10%; zero-work cases remain empty.",
+    "limits": "CPU arithmetic checks do not validate CUDA compilation, pointer progression, GPU races, precision, graph safety or performance."
+  },
+  "bounded_experiment": {
+    "executor": "root only; no GPU work performed by author",
+    "before_run": [
+      "independent source review against immutable baseline-v2",
+      "new complete source bundle and plan/runner hashes",
+      "fresh screening/holdout seeds; do not reuse pipeline3 holdouts",
+      "successful isolated unchanged-control gate under current protocol"
+    ],
+    "screen": [
+      "original full suite including M8/32/128/256 primaries and boundaries127/128/129/255/256/257 if approved before freeze",
+      "normal and skewed routing; route counts straddling P>=2G and rounding10% threshold",
+      "all-nonlocal eager/captured replay after valid input"
+    ],
+    "profile": [
+      "verify intended branch incidence through separate diagnostic instrumentation, not timed path",
+      "confirm decreased scratch/global-reduction/lock activity on changed shapes",
+      "record register count to detect guard/predicate-induced pressure",
+      "use clean paired latency as decision; profiler timings never establish speedup"
+    ],
+    "kill_conditions": [
+      "any correctness/provenance/precision failure",
+      "primary aggregate fails protocol",
+      "any shape fails noninferiority",
+      "register/spill growth erases savings",
+      "candidate rarely triggers or gain stays below practical threshold across holdouts"
+    ],
+    "estimate": {
+      "basis": "conditional engineering prior, not measured",
+      "whole_expert_upside": [
+        1.0,
+        1.1
+      ],
+      "confidence": "low",
+      "small_M_direct_upside": 1.0,
+      "effort": "small source change plus independent review/JIT/correctness/full-suite validation; one bounded screen before considering larger rewrite",
+      "warning": "Not a3x solution by itself. A negative result sharply reduces ROI of further split-K cleanup; then prioritize dominant dequant/register/warp-group compute architecture."
+    }
+  },
+  "secondary_scan_candidate_not_implemented": {
+    "idea": "Export invalid-prefix block count from alignment and pass it to both GEMMs; replace total valid-block scan and initial lookup with V=B-D and block_id=D+par_id.",
+    "implementation_path": "Reuse alignment cumsum metadata for generic align; tiny-align fast path must explicitly publish equivalent prefix count. Preserve default API and use opt-in metadata pointer. No new standalone count kernel unless its launch cost is included and justified.",
+    "legality": "Only valid for the verified bucket-ordered +1 offset alignment contract; arbitrary expert_ids with interior -1 blocks must retain original scan. Prove all-invalid, empty, padding and graph replay behavior.",
+    "roi_reason_for_deferral": "Earlier ignore-nonlocal alignment ablation eliminated much of this same work without useful isolated gain. At M128 current count scan is~31680 CTA-level loop iterations/GEMM, M256~56628; this is cached scalar metadata, not weight traffic. Do not present O(B) cleanup as likely3x.",
+    "conditional_expert_upside_prior": [
+      1.0,
+      1.03
+    ]
+  },
+  "next_if_success": "Keep fixed-anchor3x evidence distinct from paired current-incumbent replacement. Test interaction with any validated pipeline-stage candidate in a separately frozen experiment; grid/residency may change guard incidence.",
+  "next_if_failure": "Archive exact branch-incidence, profile and clean timing evidence; stop schedule tweaking unless new stall attribution identifies a separate cost. Proceed toward a bounded Hopper producer/dequantizer/consumer rewrite only with full cost and precision accounting.",
+  "tracked_reproduction": {
+    "diff": "serving/experiments/fullk10/candidate.diff",
+    "analysis": "serving/experiments/fullk10/analyze_schedule.py",
+    "manifest": "serving/experiments/fullk10/manifest.json",
+    "note": "Experimental only; not applied to serving patch."
+  }
+}

@@ -499,7 +499,7 @@
       ]
     }
   ],
-  "latest_result": "Q14-v5 repaired runner independently reviewed; unchanged-control container650ae31a76b7 verified live; no speedup evidence.",
+  "latest_result": "V5 full14-shape unchanged control passed equivalence and independent provenance/correctness review. Pipeline3 screen running; no candidate speedup established.",
   "rsi_protocol": "rsi/protocol.json",
   "kernel_roi_details": "docs/kernel-rewrite-plan.json",
   "active_priority": [
@@ -508,19 +508,19 @@
       "id": "RSI01",
       "task": "Implement and independently review isolated paired worker runner",
       "expected_speedup": "none directly; prerequisite for trustworthy global-kernel experiments",
-      "status": "repaired; CPU/image checks passed; reviewed v5 unchanged-control running",
-      "next_action": "Freeze repaired runner, obtain independent review, run new unchanged-control pilot with fresh seeds"
+      "status": "validated full-suite unchanged control",
+      "next_action": "Use reviewed isolated runner for candidate screening and fresh holdouts"
     },
     {
       "rank": 1,
-      "id": "Q14-pipeline3-v2",
+      "id": "Q14-pipeline3-v5",
       "task": "MoE-specific pipeline/register specialization",
       "conditional_expert_speedup_prior": [
         1.05,
         1.2
       ],
       "confidence": "low-medium",
-      "status": "hypothesis; requires RSI01"
+      "status": "candidate screen running after control validation"
     },
     {
       "rank": 2,
@@ -531,7 +531,7 @@
         1.25
       ],
       "confidence": "low",
-      "status": "requires reduction/stall evidence"
+      "status": "bounded full-K candidate isolated;5145 CPU partition checks passed; uncompiled/unmeasured"
     },
     {
       "rank": 3,
@@ -542,7 +542,7 @@
         1.6
       ],
       "confidence": "low",
-      "status": "prototype after counter-guided design"
+      "status": "WGMMA conversion fragment compile passed; runnable lane-layout oracle in development; no GPU validation"
     },
     {
       "rank": 4,

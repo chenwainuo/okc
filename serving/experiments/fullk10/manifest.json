@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "status": "unreviewed_uncompiled_unmeasured",
+  "anchor_archive": "results/rsi/bundles/baseline-v2.tar.gz",
+  "anchor_archive_sha256": "a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab",
+  "member": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h",
+  "baseline_source_sha256": "6b43bc72d64a591bc86f62df2db14bdea5adce7b70b00af1a3e601a3c0d24fdb",
+  "candidate_source_sha256": "8e7494555bdc10c97eee0df3973eafb6c5660db893b7b1f5adfe6298a4cd99b5",
+  "diff_sha256": "0d3d9462cde028c415814f233cdbb019c1d60bccf373bfabee08ea3223178988",
+  "scope": "Hopper BF16 NVFP4 EP; original M128..256 gate/up and corresponding down calls; current128-thread N128/K64 config;FP32 reduction and no weighted/atomic GEMM",
+  "only_change": "Conditionally round per-CTA stripe length to complete-K multiple; no MMA/scales/reduction/store modifications",
+  "gpu_jobs_started": false,
+  "production_source_changed": false
+}

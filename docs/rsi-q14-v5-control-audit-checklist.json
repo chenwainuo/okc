@@ -1,0 +1,58 @@
+{
+  "experiment": "Q14-pipeline3-v5",
+  "status": "prepared_pending_complete_report",
+  "reviewer": "measurement_audit",
+  "required_artifacts": [
+    "complete control report",
+    "report-hash-bound correctness sidecar",
+    "launcher process terminal record",
+    "actual host/container terminal proof",
+    "frozen review receipt and proposal",
+    "baseline archive manifest"
+  ],
+  "provenance": [
+    "Rehash every reviewed source/dependency and bind exact plan hash.",
+    "Candidate and baseline must both equal registered BASELINE archive SHA256, not candidate archive.",
+    "Worker and coordinator SHA256 match frozen artifacts; dependency map exact.",
+    "Seed33013, pairs120, full14-shape suite, run_kind control, profiling false.",
+    "Frozen image digest and H200 UUID/driver/Torch/CUDA evidence; both workers same runtime."
+  ],
+  "imports_and_jit": [
+    "Both init and terminal source roots and archives match /baseline and /candidate with same registered baseline bytes.",
+    "Critical imported module path resolves beneath appropriate root and relative path hash matches frozen manifest.",
+    "Every recorded transitive SGLang module path remains beneath role root.",
+    "Actual Marlin loaded shared-object SHA256 and dependency-manifest SHA256 present at init and terminal.",
+    "Check role-private cache paths and reject cross-role paths; distinct shared-object hashes alone are not a failure because builds may embed root paths.",
+    "Reference/baseline/nvfp4 hashes agree across roles; same unchanged control adapter bytes."
+  ],
+  "counts_per_worker": {
+    "eager_reference_cases": 5,
+    "captured_valid_cases": 14,
+    "timed_reference_cases": 1680,
+    "reference_cases": 1699,
+    "empty_local_eager_cases": 1,
+    "empty_local_graph_cases": 14,
+    "input_immutability_checks": 1728
+  },
+  "counts_aggregate": {
+    "input_fingerprint_checks": 1694,
+    "reference_cases": 3398
+  },
+  "input_checks": [
+    "Every row has120 valid SHA256 fingerprints,120 finite positive samples per arm and exact alternatingAB/BA order.",
+    "Terminal and aggregate reference/empty-local/input_immutable booleans all true; exact counters.",
+    "No assertion of weight byte identity: weight_fingerprint explicitly uncollected; rely on frozen deterministic generator/runtime/seed and reference validation."
+  ],
+  "process_checks": [
+    "Both worker clean_exit true and exit_code0; process_groups_terminated true.",
+    "Launcher terminal record identifies actual container; authoritative host check confirms no matching container/client/GPU process before releasing lease.",
+    "No acceptance of intermediate partial-shape statistics or timeout-derived termination."
+  ],
+  "statistics": [
+    "Recompute all14 raw paired summaries through frozen measurement.py.",
+    "Every marginal95% CI wholly inside[1/1.02,1.02].",
+    "Primary M8/32/128/256 point-geomean same equivalence band.",
+    "No retries or partial-suite success; no simultaneous confidence claim."
+  ],
+  "decision": "Control pass authorizes candidate measurement only; no candidate gain, holdout success, optimizer improvement or serving goal claim."
+}
