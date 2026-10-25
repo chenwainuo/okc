@@ -197,3 +197,14 @@ recompute, dead n-block test, late arrive). No bank conflicts. Issue and tensor 
 bandwidth is the closest-to-binding resource at m=32 (54 %, 64 % at 4.5 TB/s)** because every warp re-reads the same x
 fragments — the fix is 2 row tiles per warp sharing one x fragment set. Six edits filed for pw7 (five numerics-preserving).
 
+## Queued for the 00:00 UTC reset (built while the quota was exhausted)
+
+- **pw7** = pw6 (carveout probes + cluster-DSMEM split-K) + the SASS-audit edits: 111 → 84 instr/chunk at m=32, 90 → 69 at
+  m=1 (verified by cuobjdump), early arrive, chunk-major x prefetched before the wait, RT=2 warp-shape paths. Critic: APPROVE.
+  Runs first (check #7); pw6 is the fallback.
+- **pw8** = pw7 + the fused router: hi/lo 12-bit packs laid out as one K' = 2K stream per n-block, x read with K-wrap,
+  FP32 output, BN=32 paths with cluster (8×8) and global (8×16, 8×32) epilogues for m ≤ 32 and a global 8×32 path at
+  m=128. Critic caught a **blocker** — the FP32 store helper recursed into itself and nvcc emitted an infinite loop in
+  every BF16 epilogue (prepare would have hung and killed the check); fixed to call `pw_put`, PTX re-verified
+  (0 self-loops, 352 bf16 stores, 0 spills). Runs as check #8 after pw7's result is read.
+

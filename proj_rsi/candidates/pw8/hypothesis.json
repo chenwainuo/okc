@@ -1,0 +1,39 @@
+{
+  "id": "pw8",
+  "parent": "pw7",
+  "claim": "pw7 plus the router as one packed tensor-core GEMM. W (fp32 [256, 8192]) runs as the BF16 hi + lo pair the rules allow: hi = bf16(W), lo = bf16(W - hi). Each part is packed with the same proven 12-bit codec (its own window base and escapes) and laid out as one contiguous range per n-block, [n-block][hi chunks 0..127, lo chunks 128..255][tile][1536]. The kernel treats the router as a K' = 2K = 16384 GEMM: x is read at chunk c % 128 (the K-wrap hook), the decode base switches to lo's at chunk 128, and accumulation and output are fp32. The router is 6.3 MB packed (vs 8.4 MB fp32 for r6's m<=8 kernel) and latency-bound, so it uses small CTAs: BN = 32 (2 consumer warps), 3 KB stages, 8 deep. Either cluster split-K (8 x 8 = 64 CTAs, DSMEM reduce) or the global epilogue (8 x 16 = 128 or 8 x 32 = 256 CTAs; the finalize read-back is at most 32 KB at m=32). At m=128 a 4-consumer-warp tile (2 x 64 tokens) with the global epilogue runs 8 x 32 = 256 CTAs. Target: <= 3.6 judge-µs at m <= 32 (r6: 4.1 / 5.1 / 5.9 / 5.1 at m = 1 / 8 / 16 / 32) and <= 5.0 at m=128 (r6 10.3, three kernels).",
+  "target_shapes": [
+    "router m=1, 8, 16, 32: <= 3.6 judge yours (in-prepare about +4.8)",
+    "router m=128: <= 5.0 judge yours",
+    "router m=256 stays on the fallback (the kernel's x prologue holds at most 128 token rows)",
+    "all BF16 shapes: unchanged from pw7 (the router switch is compiled out of those instances; SASS identical, 84.25 / 68.75 instructions per chunk)"
+  ],
+  "kill_if": "Kill the router paths if every pw-rt* path loses to the fallback at m <= 32 within the run, or if any is INVALID (the hi/lo one-hot rows must match hi.float() + lo.float() bit-for-bit). If the cluster variant (64 CTAs) loses to the global ones, keep global; if KS 32 loses to KS 16, the finalize/reduction cost dominates at this size.",
+  "router_design": {
+    "split": "hi = bf16(W), lo = bf16(W - hi) (the same split as the template's fallback for m > 8). hi + lo is exact in fp32: hi has 8 significant bits and lo the next 8 (rounded), so their sum needs at most 16 bits. A one-hot row therefore produces exactly 8*hi + 8*lo in any reduction order. That is why the router's one-hot reference is hi.float() + lo.float() and the kernel must reproduce it bit for bit.",
+    "packs": "_c12(_pack(hi)) and _c12(_pack(lo)), each proven exact by _unc12 on its own, concatenated along the chunk dimension. lo's escapes are shifted by K/64 = 128 chunks. Real router weights (seed 5151): both packs exact, window bases 54 (hi) / 49 (lo), 1403 escapes in total, at most 29 per warp list.",
+    "kernel": "pwc<..., RTR = 1>: W chunks 0..255 of the n-block, x chunk = c % (K/64) (the x copy reads column (c*64) % K), decode base Tb for c < 128 and Tb2 for c >= 128 (one select per chunk, compiled only into RTR instances), fp32 output through pw_putp (runtime p.of, outside the hot loop). The launcher rejects RTR/of mismatches; the tm launcher rejects fp32 outputs.",
+    "instances": "rc1 (cluster, TTW 1: m 1/8), rc4 (cluster, TTW 4: m 16/32), rg1, rg4 (global), rg128 (global, WTOK 2 x TTW 8 = 128 tokens). All BN 32 (WN 2, RT 1), CPS 1 (3 KB stages), ST 8. ptxas: rc1 63, rc4 98, rg1 68, rg4 108, rg128 160 regs, 0 spill. The first attempt with 12 KB stages (CPS 4) needed 242-255 registers and spilled at m=128, because 4 chunks of decoded A and x fragments were live at once.",
+    "paths": "pw-rtc1 (m 1, 8) and pw-rtc4 (m 16, 32): cluster, grid 8 x 8 (KS 8 is the largest portable cluster), 32 chunks per CTA. pw-rtg16-1 / pw-rtg32-1 (m 1, 8) and pw-rtg16-4 / pw-rtg32-4 (m 16, 32): global, grid 8 x 16 (16 chunks per CTA) and 8 x 32 (8 chunks per CTA). pw-rtg128 (m 128): global, 8 x 32 = 256 CTAs, smem 168 KB (1 CTA/SM, so about 2 waves). smem: 33-168 KB.",
+    "sass": "Router hot path per chunk per warp (static count, as for pw7): 71.75 at m<=8 (rc1), 87.1 at m=16/32 (rc4).",
+    "validation": "_validate gains an optional exact_w, used only for the router (prepare passes state['router_hl'] = hi.float() + lo.float() when the layer is fp32). One-hot rows must equal it exactly; random rows are checked against FP64 of the original fp32 W within the harness's 2e-5. The judge's bounds are 1e-4 overall and 1e-3 on probe rows; the emulator gives 2-3e-6 against W. The one-hot pass runs at the router's own K = 8192 (x is [m, 8192]), so m=1 is 8192 launches per path for 3 paths (about 3 s), no batching needed.",
+    "fallback": "Unchanged: the template's router fallback (fp32 matmul at m <= 8, hi/lo torch.mm above), and the per-call fallback on any launch error code."
+  },
+  "changes_from_pw7": [
+    "PwP gains Tb2 (lo pack window base), kx (= K/64, the K-wrap chunk count) and of (fp32 output). pw_putp stores bf16 or fp32 and replaces the four pw_put call sites (flush, finalize, cluster reduce).",
+    "pwc gets a 9th template parameter RTR (router mode: per-chunk decode base select). All BF16 instances have RTR = 0 and identical SASS hot loops (verified: 84.25 / 68.75 per chunk).",
+    "Cluster launcher: slice ownership now requires FRAG % KS == 0 instead of whole row tiles per rank (BN 32 with 8 ranks gives quarter-tile slices; the reduce indexing was already fragment-granular). The grid chooser was relaxed the same way.",
+    "Python: _pw_c12 builds the combined router pack; the runner uses K' = 2K and Tb/Tb2 for RTR instances and accepts any m <= TOK for them; _pw_path takes a fixed grid; seven router paths registered; _validate takes exact_w (router only) and prepare stores state['router_hl'].",
+    "pw_run glue takes Tb2; pw_fill sets Tb2 = Tb, kx = K/64 and of from the output dtype."
+  ],
+  "register_budget_ptxas": "nvcc 12.8 sm_90a -O3, all 0 stack and 0 spill: b16t1c 60, b16t2c 72, b16t4c 95, r2t2c 81, r2t4c 93, b16t1g 66, b16t2g 80, b16t4g 96, b8t1 92, b8t1c 84, rc1 63, rc4 98, rg1 68, rg4 108, rg128 160, tm 152; probes 10-48.",
+  "instantiations": "21 kernels: 16 GEMM (10 BF16 m<=32, 5 router, tm) + 5 small probe kernels. Local nvcc -cubin about 4 s.",
+  "compile_check": "21/21 kernels spill-free. The full CUDA_SRC compiles with -std=c++20 against the minimal torch mock with no errors or warnings.",
+  "verification_done_offline": "emu_pw8.py (scratchpad): the pw7 emulator (chunk-major x, cluster/global epilogues) with the kernel's per-chunk decode base, on router-like fp32 weights with injected zeros, tiny and huge values. rc1 (KS 8: the hi|lo wrap is a CTA boundary), rc4 (odd m=27), rg1 (uneven K' split, one slice straddles the wrap), rg4 and rg128 match FP64 of hi+lo to 1e-17, fp32 W to 2-3e-6, and one-hot rows bit-exactly against both FP64 hi+lo and fp32 hi.float() + lo.float(). The real router weights pack exactly, and every router path's grid, smem and escape lists fit. The pw7 BF16 emulator re-run against pw8 passes unchanged. Lint ok; cpu-check --official 9/9 (includes router m=8 and m=9 outliers on the fallback).",
+  "risks": [
+    "The router is tiny (6.3 MB): fixed costs (prologue, x copy of 8-32 chunks per CTA, epilogue, launch) dominate. The 64-CTA cluster grid may be too few CTAs to reach bandwidth, and the 256-CTA global grid pays more reductions. The bake-off picks.",
+    "pw-rtg128 at 168 KB smem is 1 CTA/SM with 256 CTAs (2 waves); it may lose to the fallback at m=128.",
+    "Log: about 30 more PW/BAKE lines for the router (5 shapes x 3 paths), about 12 KB in total; close to but under the 14 KB budget.",
+    "Prepare: about 3 s more for router validation (3 paths x 8192 one-hot launches at m=1, smaller at the other m)."
+  ]
+}
