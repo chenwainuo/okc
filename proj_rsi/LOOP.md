@@ -132,3 +132,30 @@ Decision: refine → pw4: skeleton-isolation probes on the L1 kernel (no epilogu
 with no empty waits; n-blocks per CTA 1/2/4; KS 3/7/14; grid 126/132/264; stage 16/24/32 KB), each one PROBE line, so
 check #4 names the microseconds. Keep the GEMM paths unchanged.
 
+## Iteration 4 — pw4: skeleton isolation. Check `6267697e34674a82`: 9/9, 4765.0 µs.
+
+PROBE skel (pooler, in-prepare µs, same run; the judge drifts ~10% between runs — `pure` was 16.5 in pw2, 18.7 here —
+so only within-run deltas count):
+
+| line | m=1 | m=32 | | line | m=1 | m=32 |
+|---|---:|---:|---|---|---:|---:|
+| pure stream (reference) | 18.7 | – | | free (no empty waits) | 20.8 | 25.1 |
+| base (L1 skeleton) | 20.4 | 25.1 | | latecopy | 21.2 | 25.8 |
+| **noepi** | **18.1** | **19.9** | | nb1 / nb2 / nb4 | 20.8 / 21.1 / 22.1 | 25.1 / 26.9 / 31.8 |
+| nopro | 20.6 | 23.4 | | ks3(5) / ks7 / ks14 | 22.9 / 20.5 / 21.3 | 25.4 / 24.9 / 26.9 |
+| noepi+nopro | 18.2 | 18.0 | | g132 / g264 | 21.9 / 22.1 | 27.9 / 29.0 |
+| xreg (m=1 kernel, m=32 prologue) | – | 22.1 | | st16 / st24 / st32 | 21.1 / 20.6 / 20.6 | 25.3 / 25.4 / 25.3 |
+| smallws | – | 23.5 | | | | |
+
+The epilogue (per-n-block `red.global.add.v4` flush → `__threadfence` → counter atomic → last-arriver read/convert/
+store/zero) is the whole gap: 2.3 µs at m=1, 5.2 µs at m=32; without it the skeleton equals the pure stream. The
+handshake, prologue order, n-block range, K-split count, grid and stage size do not matter (≤ 0.5 µs, or worse).
+GEMM paths: 16-warp (BN=256) beats 8-warp on every shape except unpooler n=1024 (b16t1 qkv m=1 17.0 vs b8 19.7;
+pooler m=32 26.4 vs 28.8); the judge picked pw on qkv/pooler at m ≤ 16, still behind r6 by the epilogue margin.
+
+Decision: refine → pw5: (1) epilogue decomposition probes on the L1 skeleton at m=1/32: red-only, +threadfence,
++counter, +finalize (full), finalize with all 512 threads reading, and an overlapped variant; (2) real-path change:
+consumers dump each finished n-block's accumulators to shared memory and continue; two dedicated epilogue warps do
+red.global + fence + counter + finalize from that buffer while the stream runs on, so only the last n-block's finalize
+is exposed; (3) keep b16 paths, drop b8 except for unpooler n=1024.
+
