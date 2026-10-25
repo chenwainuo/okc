@@ -189,3 +189,11 @@ flush; pure bulk stream with 8/16/32/64/100 KB rings; flushes performed by our o
 accumulators in its own smem, one cluster barrier, each CTA reduces a 1/KS slice across the peers' smem
 (`ld.shared::cluster`), converts and stores bf16; no workspace, no counters, no atomics, no read-back. Tail ≈ 0.3 µs.
 
+### SASS audit (between checks, 2026-10-25 20:40 UTC) — `proj_rsi/audits/pw6-sass-audit.md`
+
+Per 64-k chunk per warp the consumer loop issues 111 instructions at m=32 (ideal ~74) and 90 at m=1 (ideal ~56); decode is at
+its floor (36), the ~45 extra are bookkeeping (runtime ring depth and x row stride, rematerialized addresses, escape seq
+recompute, dead n-block test, late arrive). No bank conflicts. Issue and tensor pipe have ~3× slack; **shared-memory read
+bandwidth is the closest-to-binding resource at m=32 (54 %, 64 % at 4.5 TB/s)** because every warp re-reads the same x
+fragments — the fix is 2 row tiles per warp sharing one x fragment set. Six edits filed for pw7 (five numerics-preserving).
+
