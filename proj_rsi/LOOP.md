@@ -159,3 +159,33 @@ consumers dump each finished n-block's accumulators to shared memory and continu
 red.global + fence + counter + finalize from that buffer while the stream runs on, so only the last n-block's finalize
 is exposed; (3) keep b16 paths, drop b8 except for unpooler n=1024.
 
+## Iteration 5 — pw5: epilogue decomposition + overlapped epilogue. Check `eff33a46f7394a11`: 9/9, 4828.6 µs.
+
+PROBE epi (pooler, in-prepare µs, same run; pure 18.6):
+
+| line | m=1 | m=32 | | line | m=1 | m=32 |
+|---|---:|---:|---|---|---:|---:|
+| noepi | 17.8 | 19.3 | | fin512 (wide finalize) | 20.6 | 23.7 |
+| redonly | 18.1 | 20.3 | | redv1 (scalar atomics) | 21.1 | 31.3 |
+| red+fence | 18.6 | 20.7 | | fencecta | 20.5 | 24.5 |
+| red+fence+cnt | 18.9 | 21.3 | | overlap (2 epilogue warps) | 21.7 | 31.3 |
+| full (+finalize) | 20.5 | 25.1 | | overlap-nb4 / nored | 25.4 / 21.9 | 44.9 / 31.3 |
+
+The split-K **finalize** — the last-arriving CTA reading the fp32 partials back from L2, converting, storing and
+re-zeroing — is the cost: 3.8 of 5.8 µs at m=32, 1.5 of 2.6 at m=1. It is dependent L2 round trips at the tail of a
+one-wave grid, so nothing in the CTA overlaps it. The reds, fence and counter together are ≤ 2 µs. The overlapped
+epilogue (pw5's real paths) was worse everywhere: it needed more K-splits (grid 116–120 with ≥ 2 n-blocks per CTA)
+and still serialized the last finalize; b16t4 pooler m=32 went 26.4 → 34.1. Rejected.
+
+Second observation, from `yours` vs profiled kernel time across pw3/pw4/r6: r6's zero-smem `gv` kernels run at
+their profiled time (gap −0.3…+0.9 µs); every large-smem kernel — ours (+2.5…3.5 at m=1), cuBLAS nvjet (+1.5…4.9),
+the FP32 xmma (+6.8) — shows `yours` above its profiled time. That is what an L1/shared-memory carveout
+reconfiguration at launch would look like under the judge's alternating replay (flush kernel → ours → SGLang's), and
+it would tax every TMA/smem-heavy design in this repo's history by ~2 µs per shape. Must be measured, not assumed.
+
+Decision: reject pw5 → pw6: (1) carveout probes: empty kernel with 0 / 64 / 200 KB dynamic smem after the same
+flush; pure bulk stream with 8/16/32/64/100 KB rings; flushes performed by our own 0-smem and 200-KB-smem kernels;
+(2) real paths: **cluster split-K with DSMEM reduction** — KS CTAs of one n-block form a cluster, each parks its fp32
+accumulators in its own smem, one cluster barrier, each CTA reduces a 1/KS slice across the peers' smem
+(`ld.shared::cluster`), converts and stores bf16; no workspace, no counters, no atomics, no read-back. Tail ≈ 0.3 µs.
+
