@@ -1,0 +1,47 @@
+{
+  "id": "pw1",
+  "parent": "template",
+  "claim": "A packed-weight streaming tensor-core GEMM ('pw') beats r6 on the four BF16 layers at m in {16, 32, 128}, and holds or beats it at m in {1, 8}. Weights use r6's judge-proven lossless 12-bit codec in A-fragment order (swap-AB: W rows are the mma M dimension, tokens the n8 dimension), so each layer moves 1.5 B/weight instead of 2. prepare() re-lays the 1536 B units per BN-row block as [n-block][chunk][tile][1536], so any K-slice of an n-block is one contiguous range. That range is streamed once, either through a per-warp register ring of ld.global.nc.L1::no_allocate.v4 (D=3-4 chunks deep) or through 6-12 KB cp.async.bulk stages into a 4-6 deep smem ring with full/empty mbarriers. x is staged in the same ring by 1D bulk copies per token row, with a 16 B row pad so the B-fragment loads are conflict-free. K is split across CTAs to fill 132 SMs, and the partial sums meet through red.global.add.v4.f32 in a fragment-ordered fp32 workspace. The last-arriving CTA converts to bf16, writes out, and re-zeroes its slice and counter, so there is no memset, no second kernel, and graph replays stay consistent. At m=128 the 12-bit stream is about 12 us for pooler at 4.2 TB/s, and mma.sync at roughly 1.6 clk per m16n8k16 per SM is about 13-14 us. That puts pooler/unpooler m=128 near 15-17 us against r6's 20.3/19.3.",
+  "target_shapes": [
+    "pooler m=128 <= 17 (r6 20.32)", "unpooler m=128 <= 17 (r6 19.32)", "qkv_gate m=128 <= 11 (r6 15.43)", "o m=128 <= 5.5 (r6 7.23)",
+    "pooler m=32 <= 15 (r6 16.94)", "qkv_gate m=32 <= 10 (r6 14.21)", "pooler m=16 <= 14.0 (r6 14.30)",
+    "pooler m=1 <= 13.5 (r6 13.95)", "unpooler m=1 <= 3.5 (r6 4.88)", "qkv_gate m=1 <= 8.5 (r6 9.97)"
+  ],
+  "kill_if": "Kill the pw family if every BAKE line shows each pw variant INVALID or ERROR. Also kill it if the best valid pw variant is slower than the r6 'yours' figure minus the ~1 us judge offset on all of pooler m=128, pooler m=32 and qkv m=32, with pooler m=128 above 19 us. Refine instead of kill when one stream type (ring or bulk) or one m bucket wins and the others lose. If prepare hangs or the CUDA context dies (a kernel fault or deadlock the bake-off cannot catch), reject pw1 as an execution failure. That is not evidence against the mechanism; fix the kernel and re-check.",
+  "design": {
+    "operands": "mma.sync.m16n8k16.row.col bf16 -> f32. A = decoded W unit (16 rows x 16 k per step, r6 order {row g, row g+8, row g k+8, row g+8 k+8}), B = x (16 k x 8 tokens). K is permuted within each 64-chunk exactly as r6's _pack: lane t owns k = 16t..16t+15, step q uses 16t+4q..+3, and B registers are the lane's 16 contiguous bf16 of the token row.",
+    "codec": "r6 _pack + _c12(dv=1) unchanged (exactness proven in prepare by _unc12; a failed proof makes every pw path decline). Escapes (values whose exponent falls outside the 16-binade window: zeros, tiny or huge values) are fixed in registers by XOR from per-consumer-warp lists. The lists are CSR, one sentinel-terminated list per warp, built per launch geometry and loaded on demand (warp-uniform __ldg). Real weights give at most 4-20 entries per warp.",
+    "tiles": "CTA = BN W rows x all m tokens x one K-slice. BN = WN*RT*16 is 32 or 64 for m <= 32, and 64 or 128 for m = 128. At m=128 the x re-read from L2 is (N/BN)*m*K*2 B: 2.7x the packed W bytes at BN=64 and 1.3x at BN=128, so BN=128 is the main m=128 variant.",
+    "warp_ownership": "Consumer warp (wn, wt) owns RT 16-row tiles x TTW n8 token tiles. Ring mode has WTOK=1, so each W unit is loaded by exactly one warp. Bulk mode at m=128 uses WTOK=2 (64 tokens per warp) with RT=2, so each x B-fragment is reused 2x and each W unit 8x per warp. smem traffic is about 176 B per mma. One extra producer warp per CTA issues every bulk copy.",
+    "register_budget": "acc RT*TTW*4 + decoded A RT*16 + B 8 transient + ring D*RT*12 (+12 current). ptxas -v, CUDA 12.8 sm_90a, every instance 0 bytes spill: r64t1 96, r32t1 93, r64t2 100, r64t4 121, b64t1 48, b32t1 48, b64t2 51, b64t4 70, b32t4 71, b128m 160, b64m2 160, b64m1 98, r64m 210. ptxas rounds a 5-warp CTA up when capping registers (MINB=2 at 160 threads capped at 168 and spilled), so r64m and b64m1 use MINB=1.",
+    "stream_variants": "MODE 0 ring (register ring, D=4 for m<=32, D=3 at m=128) and MODE 1 bulk (cp.async.bulk 1D, CPS=2 chunks per stage = 12 KB at BN=64, 6 KB at BN=32; CPS=1 at m=128 = 12 KB at BN=128). Smem ring ST=4 (6 for BN=32, 3 for r64m). Empty barrier count = consumer warps, full barrier = 1 arrive.expect_tx(m*CPS*128 + W bytes).",
+    "reduction": "Split-K over gridDim.y with an uneven split (stage ranges ks*NST/KS), KS chosen per path as about 1 or 2 waves of the measured CTAs/SM (_pw_ks). Partials: red.global.add.v4.f32 per fragment into ws[nb][tile][tokentile][lane][4], only for lanes holding a valid token. Then __threadfence, __syncthreads, and an atomicAdd on cnt[nb]. The last arriver does __threadfence, then __ldcg reads, a bf16 store to out, a __stcg zero, and cnt[nb]=0. KS==1 stores straight from registers. Each path and shape has its own workspace and counters, so a broken variant cannot poison another's validation.",
+    "k_wrap_hook": "The producer reads x columns (chunk*64) % K and the launcher only requires KCW*64 to be a multiple of K. A router mode with W' = [hi | lo] along K (KCW = 2K/64) needs only an fp32 output variant of pw_put, not a restructure.",
+    "verification_done_offline": "A CPU emulator (scratchpad emu_pw.py) mirrors the kernel's address formulas, byte decode (prmt), escape-list walk, PTX m16n8k16 fragment maps, fragment-order workspace and last-arriver scatter. It ran on 7 geometries (ring/bulk, BN 32/64/128, m 1/8/16/32/128, uneven KS, injected zeros/tiny/huge weights): random rows match fp64, one-hot rows are bit-exact. Mutations (dropped escape lists, wrong unit layout) are caught."
+  },
+  "paths": {
+    "pw-r64t1-w1, pw-r64t1-w2": "ring BN=64, m in {1, 8}, all four BF16 layers (unpooler n=1024)",
+    "pw-r32t1-w1, pw-r32t1-w2": "ring BN=32, m in {1, 8}",
+    "pw-b64t1-w1, pw-b64t1-w2": "bulk BN=64, m in {1, 8}",
+    "pw-b32t1-w1, pw-b32t1-w2": "bulk BN=32, m in {1, 8}",
+    "pw-r64t2-w1, pw-r64t2-w2": "ring BN=64, m=16",
+    "pw-b64t2-w1, pw-b64t2-w2": "bulk BN=64, m=16",
+    "pw-r64t4-w1, pw-r64t4-w2": "ring BN=64, m=32",
+    "pw-b64t4-w1, pw-b64t4-w2": "bulk BN=64, m=32",
+    "pw-b32t4-w1, pw-b32t4-w2": "bulk BN=32, m=32",
+    "pw-b128m-w1": "bulk BN=128, 8 consumer warps (RT=2 x 64 tokens), 1 CTA/SM, m=128",
+    "pw-b64m2-w1": "bulk BN=64, 4 consumer warps (RT=2 x 64 tokens), 2 CTAs/SM, m=128",
+    "pw-b64m1-w1": "bulk BN=64, 8 consumer warps (RT=1 x 64 tokens), m=128",
+    "pw-r64m-w1": "ring BN=64, 4 warps x 128 tokens, 1 CTA/SM, m=128",
+    "not_served": "router (all m), m=256, every odd m -> torch fallback. A -w2 entry declines when its KS equals the -w1 KS."
+  },
+  "compile_check": "nvcc 12.8 -arch=sm_90a -cubin -O3 -Xptxas -v on KERNELS_SRC (13 instantiations): compiles in about 3 s, 13/13 with 0 bytes stack frame and 0 bytes spill. Registers are listed in design.register_budget. The full CUDA_SRC (kernels + glue) also compiles with -std=c++20 against a minimal torch mock, because the local CPU torch wheel lacks the CUDA c10 headers. The real torch glue has not been compiled locally.",
+  "risks": [
+    "A hang (mbarrier deadlock) or an illegal address cannot be caught by the bake-off: it kills prepare or the CUDA context and the check fails outright. Mitigations: the barrier and parity scheme is the r7 producer/consumer pipeline that ran on this judge; the launcher range-checks every size (m, N, BN, KCW, KS, workspace, counter and offset lengths) and returns an error, which becomes a Python exception and a BAKE ERROR line, instead of launching; x is bulk-copied only when contiguous and 16 B aligned (otherwise that call uses the fallback).",
+    "m=128 may be limited by the fp32 vector reductions (m*N*KS floats: 8.4 MB for pooler at KS=4) or by the last arriver's serial 32-64 KB read, rather than by mma or HBM. The bake-off keeps r6/cuBLAS on any shape where pw loses.",
+    "m=128 smem bandwidth (about 176 B/mma for b128m/b64m2, 256 B/mma for r64m) and mma.sync issue rate may cap it near 15-18 us. 128 small (128 B) bulk copies per stage at m=128 may throttle the producer/TMA.",
+    "The small-m ring variants have short per-CTA streams (KCS 2-21 chunks), so ramp-up and the reduction tail may dominate unpooler m<=8 (6.3 MB). The w1/w2 KS pairs let the bake-off choose.",
+    "Prepare time: 22 paths. m=1 validation is K one-hot launches per path and layer (8 paths x 21.5k calls at about 100 us each, roughly 20 s), plus the c12 packs (4 layers, 3 BN layouts, about 0.6 GB) and compile. The harness's 240 s guard skips the remaining variants if the budget runs out.",
+    "Requires PTX ISA 8.x (red.global.add.v4.f32, cp.async.bulk, mbarrier expect_tx), i.e. CUDA >= 12.1. An older judge toolkit fails the compile, prepare logs 'PREP compile failed', and everything runs on the fallback."
+  ]
+}

@@ -39,4 +39,16 @@ so one check times every variant and never dies on a kernel bug.
 
 ## Iteration 1 — pw1: packed tensor-core streaming GEMM for m ∈ {16, 32, 128}, four BF16 layers
 
-(brief, result and decision follow)
+Brief (to Opus implementer, medium): start from the template; reuse r6's judge-proven 12-bit codec and
+m16n8k16 fragment order; pack W in fragment order per n-block so each CTA streams one contiguous range; two stream
+engines as separate paths (register ring of ld.global.nc.v4, and cp.async.bulk 1D stages with mbarriers); x staged
+in smem; K split across CTAs with fp32 red.global.add partials and a self-cleaning last-arriver epilogue; serve the
+four BF16 layers at m ∈ {1, 8, 16, 32, 128}; router and m=256 stay on the fallback. Pass bars (yours µs): pooler
+m=128 ≤ 17, unpooler m=128 ≤ 17, qkv m=128 ≤ 11, pooler m=32 ≤ 15, qkv m=32 ≤ 10, pooler m=16 ≤ 14.0,
+pooler m=1 ≤ 13.5, unpooler m=1 ≤ 3.5.
+
+Delivered: `candidates/pw1/` — 13 instantiations behind 22 paths, 0 spills (nvcc 12.8 local, now installed at
+/usr/local/cuda-12.8), CPU emulator bit-exact on 7 geometries. Critic (separate Opus agent): APPROVE, no blockers;
+applied its fix (launch error in kernel_fn now falls back instead of raising) and moved the prepare budget guard
+after serves() so a timeout cannot flood the log. Spent check #1 (5 left today before the 00:00 UTC reset).
+

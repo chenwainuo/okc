@@ -213,10 +213,10 @@ def prepare(weights: Weights) -> dict:
             best_name, best_fn, best_us = "torch", base, _time_us(base, x, out, flush, sink)
             _log("BAKE %s m=%d torch %.2f" % (layer, m, best_us))
             for name, serves, build in PATHS:
+                if not serves(layer, m):
+                    continue
                 if time.time() - _T0 > PREPARE_BUDGET_S:
                     _log("BAKE %s m=%d %s skipped-budget" % (layer, m, name))
-                    continue
-                if not serves(layer, m):
                     continue
                 try:
                     fn = build(state, layer, m)
