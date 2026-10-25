@@ -14,11 +14,33 @@
   ],
   "items": [
     {
+      "id": "Q11",
+      "rank": 0,
+      "title": "Tune Marlin N/K thread tiles and persistent block occupancy",
+      "stage": "hypothesis",
+      "status": "ready_for_implementation",
+      "executor": "agent",
+      "roi_estimate": {
+        "potential_component_gain": "unknown",
+        "confidence": "medium",
+        "effort": "medium",
+        "basis": "Selected GEMMs dominate; current selector maximizes occupancy, which need not minimize latency. Independent M tile sweep failed."
+      },
+      "next_action": "Build isolated JIT experiment exposing configuration index; compare each valid config against frozen incumbent; retain FP32 reductions and BF16 boundaries.",
+      "validation": [
+        "same source baseline and isolated candidate",
+        "reference agreement",
+        "invalid and empty routes",
+        "all-load shapes and prefill",
+        "independent holdouts"
+      ]
+    },
+    {
       "id": "Q03",
       "rank": 1,
       "title": "Tune gate/up and down GEMM independently",
       "stage": "hypothesis",
-      "status": "ready_for_implementation",
+      "status": "measured_rejected_variants",
       "roi_estimate": {
         "potential_component_gain": "high",
         "confidence": "medium",
@@ -38,7 +60,7 @@
         "boundary and prefill noninferiority",
         "full serving gate before claiming serving gain"
       ],
-      "next_action": "Use Q01 attribution; implement separate tile choices with independently matched alignment metadata.",
+      "next_action": "Independent M tiles added alignment cost and regressed; investigate thread N/K tiles and persistent block count instead.",
       "executor": "agent"
     },
     {
@@ -286,7 +308,7 @@
       "rank": 1.0,
       "title": "Independent GEMM tiles up=16, down=8",
       "stage": "hypothesis",
-      "status": "queued",
+      "status": "rejected",
       "executor": "split_tiles",
       "up_tile": 16,
       "down_tile": 8,
@@ -312,6 +334,9 @@
         "paired incumbent screen",
         "independent seeds",
         "prefill and boundary validation"
+      ],
+      "evidence": [
+        "reports/2026-10-25-split-tiles.json"
       ]
     },
     {
@@ -319,7 +344,7 @@
       "rank": 1.1,
       "title": "Independent GEMM tiles up=8, down=16",
       "stage": "hypothesis",
-      "status": "queued",
+      "status": "rejected",
       "executor": "split_tiles",
       "up_tile": 8,
       "down_tile": 16,
@@ -345,6 +370,9 @@
         "paired incumbent screen",
         "independent seeds",
         "prefill and boundary validation"
+      ],
+      "evidence": [
+        "reports/2026-10-25-split-tiles.json"
       ]
     },
     {
@@ -352,7 +380,7 @@
       "rank": 1.2,
       "title": "Independent GEMM tiles up=16, down=32",
       "stage": "hypothesis",
-      "status": "queued",
+      "status": "rejected",
       "executor": "split_tiles",
       "up_tile": 16,
       "down_tile": 32,
@@ -378,6 +406,9 @@
         "paired incumbent screen",
         "independent seeds",
         "prefill and boundary validation"
+      ],
+      "evidence": [
+        "reports/2026-10-25-split-tiles.json"
       ]
     },
     {
@@ -385,7 +416,7 @@
       "rank": 1.3,
       "title": "Independent GEMM tiles up=32, down=16",
       "stage": "hypothesis",
-      "status": "queued",
+      "status": "rejected",
       "executor": "split_tiles",
       "up_tile": 32,
       "down_tile": 16,
@@ -411,8 +442,11 @@
         "paired incumbent screen",
         "independent seeds",
         "prefill and boundary validation"
+      ],
+      "evidence": [
+        "reports/2026-10-25-split-tiles.json"
       ]
     }
   ],
-  "latest_result": "Both expanded tile16 cutoffs rejected; incumbent unchanged. Next: independently tune gate/up versus down GEMM with consistent alignment metadata."
+  "latest_result": "Four independent M tile combinations rejected; incumbent unchanged. Next: N/K thread tiles and occupancy, then serving-level opportunities for the full 3x target."
 }
