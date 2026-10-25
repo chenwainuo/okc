@@ -1,0 +1,49 @@
+{
+  "id": "pw7",
+  "parent": "pw6",
+  "claim": "pw6 with the SASS audit's numerics-preserving edits applied to the m<=32 bulk kernel, rewritten as pwc. Statically measured on the cluster instances, the consumer hot path per 64-k chunk per warp drops 111 -> 84.25 instructions at m=32 (-24%), 90 -> 68.75 at m=1 (-24%) and 99 -> 75.75 at m=16. The x fragments are now loaded before the full-barrier wait, and the ring slot is released right after the decode instead of after the mma. The new RT=2 cluster shape (two W row tiles per warp sharing one x fragment set) halves the x shared-memory reads per W unit: 8 -> 4 LDS per W unit at m=32, the read bandwidth the audit found closest to binding (54%). Its cost is 62.9 instructions per W unit at m=32. Results are bit-identical to pw6 (same per-accumulator mma sequence). pw6's probe section is kept unchanged.",
+  "target_shapes": [
+    "same shapes as pw6 (m in {1, 8, 16, 32}, four BF16 layers; unpooler n=1024 via b8t1/b8t1c; m=128 tm/tms unchanged)",
+    "within the run: pw-b16t*c (pw7) at or below pw6's pw-b16t*c, and pw-r2t*c at or below pw-b16t*c at m=16/32 if shared-memory reads were binding"
+  ],
+  "kill_if": "Revert to pw6's kernel if any pw7 path is INVALID (the edits must be bit-identical) or if pw-b16t4c / b16t1c are slower than pw6's same-named paths in a same-day comparison by more than the run-to-run noise (~3%). Drop the RT=2 paths if they do not beat RT=1 at m=32 within the run: then shared-memory read bandwidth was not the limiter.",
+  "sass_before_after": {
+    "method": "nvcc 12.8 -arch=sm_90a -cubin -O3, cuobjdump -sass, then a static hot-path walk of the consumer main loop (scratchpad sasscount.py). The walk runs from the header of the smallest backward branch containing all HMMAs to that back-edge. Conditional forward branches inside the loop that skip no HMMA are taken (escape bodies, n-block flushes); branches leaving the loop, going backward (spin retries, escape reloads) or skipping HMMAs (unrolled-loop breaks) are not. The count is divided by the chunks per loop iteration (pw6: 1; pw7 cluster: ST = 4; pw7 global: 1). It reproduces the audit's pw6 numbers exactly (111 / 90, class by class). Instructions per 64-k chunk per warp.",
+    "table": {
+      "columns": ["class", "pw6 m=32 c", "pw7 m=32 c", "pw6 m=1 c", "pw7 m=1 c", "pw6 m=16 c", "pw7 m=16 c", "pw7 m=32 RT=2 (per warp / per W unit)", "pw7 m=16 RT=2 (per warp / per W unit)", "pw6 m=32 g", "pw7 m=32 g"],
+      "LDS.128": [11, 11, 5, 5, 7, 7, "10 / 5", "8 / 4", 11, 11],
+      "HMMA": [16, 16, 4, 4, 8, 8, "16 / 8", "8 / 4", 16, 16],
+      "decode": [36, 36, 36, 36, 36, 36, "72 / 36", "72 / 36", 36, 36],
+      "int/address": [20, 7.5, 16, 6.5, 18, 7.5, "10.25 / 5.1", "10.25 / 5.1", 16, 9],
+      "predicate/select": [7, 2.5, 7, 2.5, 7, 2.5, "3.5 / 1.75", "3.5 / 1.75", 7, 7],
+      "branch/convergence": [11, 5.25, 11, 5.25, 11, 5.25, "8.25 / 4.1", "8.25 / 4.1", 11, 10],
+      "S2R/LDC/ULDC": [5, 2, 4, 3, 5, 3, "2 / 1", "4 / 2", 4, 1],
+      "mbarrier": [2, 2, 2, 2, 2, 2, "2 / 1", "2 / 1", 2, 2],
+      "NOP": [3, 2, 5, 4.5, 5, 4.5, "1.75 / 0.9", "4.5 / 2.25", 3, 3],
+      "TOTAL": [111, 84.25, 90, 68.75, 99, 75.75, "125.75 / 62.9", "120.5 / 60.25", 106, 95]
+    },
+    "order_check": "pw7 m=32 cluster loop order in the SASS: 8 x LDS -> TRYWAIT -> 3 W LDS -> 16 PRMT (decode) -> ARRIVE -> HMMAs. The x loads precede the wait and the slot is released before any HMMA.",
+    "x_smem_reads_per_W_unit": "m=32: 8 (pw6, RT=1) -> 8 (pw7 RT=1) -> 4 (pw7 RT=2); m=16: 4 -> 4 -> 2. W LDS per unit unchanged (3).",
+    "not_reached": "The audit's ~80 (m=32) / ~62 (m=1) targets were missed by about 4-7 instructions. The S2R/LDC remnants (2-3 per chunk: the escape list pointer and the ub/stage index) and the per-chunk break test of the unrolled loop remain. The global instance (b16t4g) keeps a non-unrolled loop and loads x after the wait: its ST-unrolled flush and an x prefetch both exceed the 96-register cap of a 17-warp CTA (8-16 B of spill), so it gets only the hoisting/escape/arrive edits (106 -> 95)."
+  },
+  "changes_from_pw6": [
+    "New kernel pwc<RT, WN, WTOK, TTW, CPS, ST, CLU, MINB> replaces pwk for every m<=32 path. pwk's probe-era switches (LV, AG, PRB flags, byte-sized stages) are gone; the cluster and global epilogues are carried over unchanged.",
+    "(1) ST is a template parameter (4). The cluster stage loop is unrolled by ST with `if (s0 + k >= NSTOT) break;`. W base wl = sbase + wn*RT*1536 + lane*16 and x base are hoisted; barrier/W/x offsets are immediates; the phase flips once per outer iteration. The global path keeps a non-unrolled stage loop (register cap, see sass_before_after.not_reached).",
+    "(2) Chunk-major x slice [chunk][row][144 B]: the prologue copy writes it, and B fragments are read at xl + chunk*TOK*144 + tt*8*144 (+16) with immediate tile offsets. Bank groups (g + 2t) mod 8 are distinct per quarter-warp (checked for TOK 8/16/32/128). x fragments are loaded before pw_mbwait for all instances except the global m=32 one (loaded after the wait there, register cap). The x-slice smem is KCSmax*TOK*144 B (was TOK*(KCSmax*128+16)), accounted for in the grid choosers and the launcher.",
+    "(3) Escape compare against a loop-carried nxs = nx >> 17 (updated only on the hit path), with seq = (stage*CPS + cc)*RT + j (equal to pw6's ((cnb-nb0)*KCS+u)*RT + j). No per-chunk n-block boundary test in the cluster path. The launcher requires NG == NB for every cluster launch, including KS = 1, which flushes after the loop.",
+    "(4) Empty-barrier arrive right after pw_unit, before pw_fix and the mma (W smem is dead after the decode; x lives outside the ring).",
+    "(5) lane pinned with asm volatile(\"\" : \"+r\"(lane)); p.Tb hoisted into a pinned register.",
+    "(6) New cluster paths pw-r2t2c (m=16: RT=2, WN=8, WTOK=2, TTW=1) and pw-r2t4c (m=32: RT=2, WN=8, WTOK=2, TTW=2). Same BN=256 n-block and pack layout as the b16 paths, 16 consumer warps.",
+    "Paths: pw-b16t{1,2,4}g, pw-b16t{1,2,4}c, pw-r2t2c, pw-r2t4c, pw-b8t1, pw-b8t1c (unpooler n=1024), pw-tm, pw-tms. The probe section is unchanged from pw6 (PROBE carve)."
+  ],
+  "rt2_bit_identity": "Each accumulator acc[j][tt] receives the same sequence of mma.sync operations as in RT=1: chunks in ascending order, k16 steps q = 0..3 within a chunk, with the same decoded A registers and the same B fragments. RT=2 only changes which warp owns which row tile and token tile. The fp32 rounding sequence per output element is therefore identical. The emulator confirms equal outputs for RT=1 and RT=2 at m=16 and m=32 on the same weights and grid.",
+  "register_budget_ptxas": "nvcc 12.8 sm_90a -O3, all 0 stack and 0 spill: b16t1c 62, b16t2c 72, b16t4c 95, r2t2c 81, r2t4c 93, b16t1g 66, b16t2g 80, b16t4g 96, b8t1 92, b8t1c 84, tm 150; probes pw_probe_bulk 22, pw_probe_ring8 48, pw_probe_flush 16, pw_probe_empty2 10, pw_probe_empty 10. 17-warp CTAs cap at 96 registers; b16t4c (95) and b16t4g (96) are at the cap.",
+  "compile_check": "16/16 kernels spill-free (above). The full CUDA_SRC compiles with -std=c++20 against the minimal torch mock with no errors or warnings.",
+  "verification_done_offline": "emu_pw7.py (scratchpad). (1) The pw2 emulator with pw7's chunk-major copy and B addressing, plus the pw6 cluster reduce (cluster instances) or the global workspace/finalize (global instances). Bit-exact on one-hot rows and fp64-exact on random rows for b16t4c, r2t4c, b16t2c, r2t2c, r2t4c (odd m=27, KS 8), b16t1c, b16t4c (KS 1), b8t1c, b16t4g, b16t1g and b8t1 (m=5). RT=2 outputs equal RT=1 outputs. (2) Bank check of the chunk-major layout: conflict-free. (3) Early-arrive protocol: 400 randomized schedules (read W -> arrive -> mma) show no refill before every consumer has read its W; a mutation that arrives before the W read is caught 40/40. Lint ok; cpu-check --official 9/9.",
+  "risks": [
+    "Loading x before the wait raises register pressure. b16t4c sits at 95 of 96, so any later addition to that instance will spill; the global m=32 instance had to keep the old ordering.",
+    "The static count is a hot-path estimate (first poll succeeds, no escape hit). The measured effect depends on whether issue or latency, rather than the HBM stream, limits the edges of the stream; pw3 measured the whole compute layer at 1.3-2.3 µs, so the expected wall-clock gain is a fraction of that.",
+    "RT=2 doubles the decode work per warp (72 decode instructions per chunk per warp) with the same 16 warps. If issue rather than shared-memory bandwidth limits, RT=2 can lose; the bake-off decides.",
+    "Log: 15 PROBE carve + about 50 PW build + about 160 BAKE/PICK lines, about 10 KB. Prepare: 12 paths; m=1 validation for 4 b16 paths x 4 layers + 2 b8 paths, about 15 s."
+  ]
+}
