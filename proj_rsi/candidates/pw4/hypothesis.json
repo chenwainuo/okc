@@ -1,0 +1,51 @@
+{
+  "id": "pw4",
+  "parent": "pw3",
+  "claim": "pw3 showed the compute is nearly hidden (L5 full only 1.3-2.3 µs above the L1 wait/arrive skeleton). The skeleton itself is 4-5 µs slower than a pure bulk stream of the same 50 MB at m=1, and about 5 µs slower again at m=32 with identical W bytes. pw4 names those microseconds with one-change-per-line probes on the L1 skeleton (16 consumer warps, pooler, m=1 and m=32). In the same check it measures the likely fixes on the real paths: the producer issues its first W stages before any other prologue work and exits when done; the split-K epilogue runs on the consumer warps only behind a named barrier; the escape-list loads are issued before the x copy. Prediction: the x-slice prologue is the dominant term, about 1 µs at m=1 and 3-4 µs at m=32. Its 66 KB per CTA is copied by all threads before any consumer starts, and the W ring stalls once its 4 stages are full. If nopro/xreg confirm that, the next design overlaps the x copy with consumption (per-chunk x readiness) instead of front-loading it.",
+  "target_shapes": [
+    "m <= 32 paths (b8t*, b16t* with the skeleton fixes): pooler m=1 / m=32 in-prepare at or below pw3's 22.7 / 26.6 (16w) and 23.5 / 29.3 (8w); the bar for beating r6 is about 18.5 in-prepare (judge yours ~13.6)",
+    "m=128 tm / tms: pw3 tm 41.7 (pooler) is the reference; the prologue/epilogue fixes apply there too"
+  ],
+  "kill_if": "If noepi+nopro+free together bring the L1 skeleton within 1 µs of the pure line and the GEMM paths stay above 1.15x pure, the remaining gap is in the consumer path after all: refine compute, not the skeleton. If no single-change line moves base by more than 1 µs and pure is still 3-4 µs faster, the gap is structural to a 1-producer + N-consumer CTA (per-stage consumer barrier traffic). Then stop the bulk-ring m<=32 family and keep r6 there.",
+  "probe_plan": {
+    "where": "prepare(), after compile and before the bake-off, <= 15 s, try/except, selects nothing. Kernel: pwk<RT 1, WN 16, WTOK 1, TTW 1|4, CPS 1, LV 1, AG 1, MINB 1, PRB 1> (s16t1 / s16t4). L1 = producer streams W, consumers only wait(full)/arrive(empty), no smem reads. Pooler (N 4096, K 8192, 50 MB packed, BN 256 -> 16 n-blocks). Timing is the bake-off's _time_us (cold L2, graph replay ~4.8 µs included).",
+    "config_line": "PW skel-config m=<m> prints NG, KS, grid, n-blocks per CTA, stages per CTA, W bytes per CTA, stage bytes, smem bytes, ST for the base grid. Expected: NG 16, KS 8, grid 128, 1 n-block/CTA, 16 stages of 24 KB, 384 KB per CTA, smem 112 KB (m=1) / 161 KB (m=32), ST 4.",
+    "lines": {
+      "pure": "pw2's pure bulk probe (1 consumer warp, 16 KB x 4, 132 CTAs) as the in-run reference. Predict 16.5-17.0.",
+      "base": "L1 skeleton as in pw3 but with the pw4 ordering fixes (escape loads early, producer exits). Predict m=1 about 20.0 (pw3 20.4), m=32 about 24.8 (pw3 25.2).",
+      "noepi": "No per-n-block flush, reductions, arrivals or finalize. Isolates the split-K epilogue + tail. Predict -0.4 at m=1, -1.0 at m=32 (finalize reads 32 tokens x 256 rows per n-block serially).",
+      "nopro": "No escape loads, no x copy, no x zero-fill. Isolates the prologue. Predict -1.0 at m=1, -3 to -4 at m=32. This is the main hypothesis.",
+      "noepi+nopro": "Both. Predict within ~1.5 µs of pure at m=1 and ~2 µs at m=32.",
+      "free": "Producer never waits on empty barriers (one full barrier per stage). Isolates the producer<-consumer handshake. Predict -0.3 to -0.5 (the 4-deep ring rarely blocks the producer at L1).",
+      "latecopy": "W prologue issued only AFTER the x copy (the opposite of the fix). Measures what issuing W first buys. Predict +0.5 at m=1, +1.5 to +2 at m=32.",
+      "nb1 / nb2 / nb4": "n-blocks per CTA 1 / 2 / 4 at about one wave (NGxKS 16x8, 8x16, 4x33). The same 384 KB per CTA, but the x slice per CTA shrinks with KS. Predict nb1 = base; nb2/nb4 about base at m=1 and -1 to -2 at m=32 (smaller prologue), partly paid back by more reductions.",
+      "ks3 (m=1) / ks5 (m=32) / ks7 / ks14": "K-splits with NG = min(16, 132/KS). ks3 = 48 CTAs; ks5 = 80 CTAs (m=32's x slice at KS 3 exceeds smem); ks7 = 112; ks14 = 126. Predict ks3 much worse (~35, too few SMs), ks5 ~+5, ks7 ~+1, ks14 about base.",
+      "g132 / g264": "Grid exactly 132 (12x11) and 264 (12x22, ring halved to ST 2, 2 CTAs/SM). Predict g132 about base; g264 -0.5 at m=1 and -1 at m=32 (a second CTA per SM hides one CTA's prologue behind the other's stream).",
+      "st16 / st24 / st32": "Stage bytes 16/24/32 KB at depth 4 at the base grid (the n-block's contiguous bytes cut into stb copies; L1 only). Predict all within ±0.5 of base (pw2's pure probe was flat across 16/32 KB).",
+      "m=32 xreg": "The m=1 kernel (TTW 1, 8-token tiles, small accumulators and workspace) fed the m=32 x prologue: 32 real rows copied, the same smem footprint. Predict about the m=32 base, i.e. the m=32 vs m=1 gap comes from the prologue/footprint, not the token count.",
+      "m=32 smallws": "The m=32 kernel with flush/finalize sized as for m=1 (results wrong). Isolates the larger reduction/finalize. Predict -0.5 to -1."
+    },
+    "line_count": "1 pure + 17 (m=1) + 18 (m=32 incl. smallws) + 1 xreg = 37 PROBE skel lines, plus 2 PW skel-config lines and PROBE done.",
+    "precheck": "Every probe launch was pre-checked offline against the launcher's constraints (smem <= 220 KB, FREE <= 256 stages, KS <= NST, NG <= NB); m=32 ks3 was the only rejection and became ks5."
+  },
+  "fixes_applied": {
+    "a_consumer_only_epilogue": "The end-of-CTA arrival counting and last-arriver finalize (pw_arrive) now synchronise only the consumer warps (bar.sync 1, NWC*32). The producer warp returns right after its last issue, in pwk and pwt. Note: pwk's per-n-block flush never had a __syncthreads (it is fire-and-forget red.v4), so the producer was never blocked mid-stream by the epilogue. The only CTA-wide barrier left is the one after the prologue. Expected gain is small (the producer no longer joins the final barrier).",
+    "b_w_first": "pwk already issued the first ST W stages from the producer thread before the x copy (since pw2). pwt (m=128) now does the same: barrier init + first ST stages (x TMA tile + W chunk each) before the CTA sync, and the loop starts at stage ST.",
+    "c_escape_prefetch": "The eoff / first esc loads are issued before the x copy, in pwk and pwt, so their two dependent global loads overlap the prologue instead of following the CTA sync.",
+    "extra_paths": "pw-b16t1 / b16t2 / b16t4 (16 consumer warps, BN 256, 24 KB stages) added beside the 8-warp paths, because pw3's probes had 16 warps 0.8-2.7 µs faster at L5. Existing paths are unchanged apart from the fixes. pw-tmh (parked in LOOP.md) removed; pw-tm and pw-tms kept.",
+    "correctness": "PRB (probe switches) is a template flag; the GEMM instances compile with PRB=0, where the launcher also rejects non-zero probe fields. Named-barrier count = consumer threads exactly (warps 0..NWC-1 are the consumers); the producer never takes part. The randomized protocol simulation covers the producer exiting early with a consumer-only final barrier, the prologue issued before the sync (pwk, pwt) or after it (LATE), FREE per-stage barriers, and two copies per stage (pwt). No deadlock, no read before fill, no overwrite before release in any schedule; a producer that skips its empty wait is caught in 20/20 runs."
+  },
+  "design": {
+    "instances": "9 GEMM/probe instantiations + 2 small probe kernels: b8t1, b8t2, b8t4, b16t1, b16t2, b16t4 (PRB 0), tm, s16t1, s16t4 (PRB 1), pw_probe_bulk, pw_probe_empty.",
+    "register_budget_ptxas": "nvcc 12.8 sm_90a -O3, all 11 kernels 0 bytes stack and 0 spill: b8t1 65, b8t2 72, b8t4 94, b16t1 60, b16t2 66, b16t4 92, tm 150, s16t1 48, s16t4 52, pw_probe_bulk 22, pw_probe_empty 10.",
+    "paths": "pw-b8t1, pw-b16t1 (m 1, 8); pw-b8t2, pw-b16t2 (m 16); pw-b8t4, pw-b16t4 (m 32); pw-tm, pw-tms (m 128). All on qkv_gate / o / pooler / unpooler; router, m=256 and odd m stay on the fallback."
+  },
+  "compile_check": "nvcc 12.8 -arch=sm_90a -cubin -O3 -Xptxas -v: 11/11 kernels with 0 stack and 0 spill. The full CUDA_SRC compiles with -std=c++20 against the minimal torch mock with no errors and no warnings.",
+  "verification_done_offline": "emu_pw4.py (scratchpad). (1) The pw2 emulator re-derived with pw4's W source expression and escape builder: b8t1, b16t1 (BN 256, 2 n-blocks, uneven K), b16t2 (KS 1, odd m), b16t4 and b8t4 are bit-exact on one-hot rows and fp64-exact on random rows. (2) The pwt emulator against the pw4 module (KS 3; KS 1 with m=121) is exact. (3) The protocol simulations described in fixes_applied.correctness pass. Lint ok; cpu-check --official 9/9.",
+  "risks": [
+    "The PRB probe modes are new. FREE uses a static 256-entry per-stage barrier array (PRB kernels only, 2 KB) and the launcher rejects FREE grids above 256 stages per CTA. Byte-sized stages (stb) are allowed only at L1, because the data layout no longer matches the decoder. A probe hang would still cost the check, so every mode is in the protocol simulation.",
+    "The fixes may not move the GEMM paths much: per the probe hypothesis, the prologue x copy (not the epilogue) is the main cost, and these fixes only overlap the escape loads with it. The probe lines are the main deliverable.",
+    "Prepare time: 8 paths plus 37 probe timings (about 5-8 s). The m=1 validations (4 paths at K one-hot calls each) take about 10 s; well inside 240 s.",
+    "Log: about 40 PROBE + about 40 PW build + about 150 BAKE/PICK lines, about 9 KB."
+  ]
+}
