@@ -1,0 +1,17 @@
+--- a/benchmarks/run_proj_h200.sh
++++ b/benchmarks/run_proj_h200.sh
+@@ -4,6 +4,14 @@
+ set -euo pipefail
+ workspace=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+ image='8cfc5a72cb29'
++# Shared with the serving RSI executor; hold through check and container exit.
++# The busy check alone has a race while another launcher is still initializing.
++mkdir -p "$workspace/.gpu-cache"
++exec 9>"$workspace/.gpu-cache/rsi-device0.lock"
++if ! flock -n 9; then
++    echo "GPU device lock held by another benchmark; not starting" >&2
++    exit 2
++fi
+ if nvidia-smi --query-compute-apps=pid --format=csv,noheader | grep -q .; then
+     echo "GPU is busy; not starting" >&2
+     nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv
