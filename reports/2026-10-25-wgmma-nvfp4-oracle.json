@@ -1,0 +1,81 @@
+{
+  "status": "complete",
+  "parent_lease": "FULLK10-v1",
+  "executor": "root",
+  "purpose": "separate correctness-only auxiliary probe",
+  "started_at": 1792890949.0571172,
+  "deadline_unix": 1792891049.0571175,
+  "container": "okc-wgmma-nvfp4-oracle-001",
+  "exit_code": 0,
+  "result": {
+    "mode": "gpu-correctness",
+    "cases": 12,
+    "decoded_checks": 826368,
+    "output_checks": 6144,
+    "reference_checksum": 0,
+    "reference_abs_checksum": 38521.0625,
+    "pass": true
+  },
+  "oracle_manifest": {
+    "status": "GPU correctness passed for stated restricted fixtures; not serving or performance evidence",
+    "source": "rs_nvfp4_oracle.cu",
+    "binary": "rs_nvfp4_oracle",
+    "compile_script": "compile_nvfp4.sh",
+    "image": "lmsysorg/sglang@sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
+    "kernel_resources": {
+      "registers_per_thread": 48,
+      "shared_bytes": 256,
+      "spill_bytes": 0,
+      "stack_bytes": 0
+    },
+    "cpu_checks": {
+      "cases": 12,
+      "K": [
+        16,
+        64,
+        128,
+        4096
+      ],
+      "signed_reference_checksum": 0,
+      "absolute_reference_checksum": 38521.0625,
+      "exact_FP32_sums_checked": true
+    },
+    "expected_gpu_checks": {
+      "cases": 12,
+      "decoded_weights": 826368,
+      "projection_outputs_and_epilogue": 6144,
+      "required_abs_error": 0
+    },
+    "input_contract": {
+      "weights": "canonical twoFP4nibbles/byte [64,K/2]; not incumbent Marlin interleave",
+      "group_scales": "processedE4M3 bytes [64,K/16], derived from rawpositive E4M3 0x38..0x3f (1..1.875), all8mantissas",
+      "codes": "all16E2M1 codes, sign inclnegativezero; comparison numeric, signedzero not bitwise enforced",
+      "activations": "CPU deterministicBF16 dyadic signed values",
+      "global_scale": "BF16(2^119), same incumbent exponent compensation for originalglobal1"
+    },
+    "independent_reference": "rawE2M1 LUT + arithmetic E4M3 decoding, BF16weight rounding, double accumulation checked exactlyFP32 representable, BF16 output conversion before BF16processedglobalmultiply",
+    "device_path": "exact existing marlin::dequant<nv_bfloat162,kFE2M1f,true> and dequant_fp8_scales<nv_bfloat162,kFE4M3fn>; pairBF16multiply then WGMMA; blocksync perK16 and no pipelining",
+    "limitations": [
+      "No GPU correctness claim yet.",
+      "No production weightlayout inverse/loadtime repack.",
+      "Restricted normal scales and global1; exponent extremes/subnormal rawscales/exceptional checkpoint values remain future correctness coverage.",
+      "N64 and8tokens only, singleexpert, no routing or padding.",
+      "Slow correctness oracle writes everydecoded weight and synchronizes everyK16; not performance evidence."
+    ],
+    "sha256": {
+      "rs_nvfp4_oracle.cu": "300d422fe2b67d8ed09bdbb803768ebb81ee76f56bfe6c1a3bb6f54f60d744f4",
+      "rs_nvfp4_oracle": "246f53ae1f0b017dbe7c5b0e365de473771a45bf5605cc2db984b16896182c07",
+      "compile_nvfp4.sh": "9576413d4a54b3596f5a5cd1fdcf770147eaa040157ab6a14579dd7743c3d5e3"
+    }
+  },
+  "dequant_header_sha256": "f07f0e1284431bd630d605b438c054509573c495d66d3a2b2e017396d84887a0",
+  "terminal_proof": {
+    "container": "okc-wgmma-nvfp4-oracle-001",
+    "docker_ps_all": [],
+    "gpu_compute_pids": [],
+    "verified_at_unix": 1792890983.8473055
+  },
+  "elapsed_seconds": 34.7901885509491,
+  "auxiliary_accounted_usd": 0.048319706320762636,
+  "accounting_note": "Included in parent FULLK10 lease elapsed cost, not additional ledger charge"
+}

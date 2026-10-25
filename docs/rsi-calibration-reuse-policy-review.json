@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "reviewer": "measurement_audit",
+  "status": "proposed_for_future_independent_review_only",
+  "existing_plans": "FULLK and all previously frozen plans unchanged; required controls still run.",
+  "verdict": "Defensible to reuse a validated unchanged-control as evidence that the exact measurement implementation is calibrated, with bounded hardware/runtime applicability and fresh session health checks. It does not establish that a later session is free of drift.",
+  "why": [
+    "An A/A control tests measurement pipeline/order/process asymmetry, while fresh paired A/B holdouts directly test candidate correctness and regression. Repeating expensive identical A/A suites is not logically necessary for every candidate when implementation/runtime identity is unchanged.",
+    "Reuse changes experiment admission policy, not candidate numerical or performance gates. Treat estimated time savings as an engineering hypothesis; no validated optimizer-method improvement claim."
+  ],
+  "cache_key": [
+    "Frozen baseline archive and complete transitive fixture/source manifest hashes.",
+    "Worker/coordinator/launcher/extractor/statistics/control-checker/benchmark-contract hashes; include exact control-policy version and suite/pair/order/cache-flush/graph/precision settings.",
+    "Exact container digest, driver, Torch/CUDA and GPU UUID/model; baseline JIT dependency identity and loaded library provenance.",
+    "Hardware operating regime: MIG/partition state, power limit, application/locked clocks, persistence/compute mode; record and compare actual values.",
+    "Calibration report/correctness/terminal evidence hashes and independent reviewer approval; no summary-only cache entries."
+  ],
+  "important_key_rule": "Candidate source hash is not the unchanged-control key. Candidate implementation changes are expected; changes to any shared runtime/harness/baseline dependency invalidate calibration. JIT outputs may differ due to role/root paths; compare an explicitly reviewed normalized source/dependency identity, not unexplained binary mismatches.",
+  "validity_window": {
+    "initial_conservative_policy": "Same uninterrupted GPU allocation/boot and unchanged operating configuration, with maximum24h from accepted control completion; expiry forces new control. This is a conservative proposed operational bound, not an empirically established duration.",
+    "required_metadata": "Record calibration completion time and node boot/allocation identity. Existing report may lack hardware-regime/boot metadata; do not backfill fabricated evidence. Either attest contemporaneous logs with review or establish a new fully recorded calibration."
+  },
+  "each_new_session": [
+    "Verify cache key and current source/image/runtime/hardware identities before start; acquire canonical GPU lease and assert no other GPU process.",
+    "Use same prespecified warmup and cache protocol; record temperature/clocks/power/throttle state, and retain paired order/time diagnostics without adapting acceptance after outcomes.",
+    "All candidate runs retain full exact suite, reference/empty-local/input immutability checks, fresh independent holdouts, raw matched AB/BA samples, fixed correctness/noninferiority/gain gates and independent review.",
+    "Candidate/report binds reused calibration artifact and policy hashes; reviewer explicitly checks applicability before candidate admission.",
+    "If cheap A/A sentinels are introduced, freeze shapes/counts/bands/stopping rule in advance; their success does not renew an expired full calibration. Failure stops work for diagnosis rather than repeated attempts until pass."
+  ],
+  "invalidate_immediately": [
+    "Any cache-key mismatch, missing required metadata, source mutation or unreviewed runtime/compiler/cache configuration change.",
+    "GPU reset, driver reload, node reboot/migration/reallocation, GPU partition or clock/power mode change.",
+    "Calibration correctness/provenance failure, subsequent discovered harness bug, worker import/JIT mismatch or failed process cleanup.",
+    "Concurrent workload, throttling or hardware health event, or prespecified session diagnostics indicating drift/order asymmetry.",
+    "Failed unchanged-control or sentinel under this regime: invalidate matching cached acceptance; preserve failure. No fallback to an older passing control.",
+    "Expired maximum age or lost evidence of uninterrupted operating regime."
+  ],
+  "failure_policy": "Stop candidate admission, preserve all measurements and costs, diagnose independently, then create a reviewed new plan/calibration. Do not silently retry/recalibrate and discard failure; do not selectively reuse old calibration after new failure.",
+  "future_implementation": [
+    "Add calibration artifact/identity/applicability schema and validator checks.",
+    "Preregister cache invalidation, diagnostics, maximum age and optional sentinel policy before any new candidate results.",
+    "Record saved calibration time separately from candidate compile/evaluation/auxiliary costs, including failed attempts.",
+    "Evaluate optimizer efficiency separately on held-out portfolios before claiming improved optimizer."
+  ],
+  "claim_boundary": "Reused A/A calibration is conditional measurement evidence, not candidate correctness, lack of drift, serving speedup, or method superiority."
+}

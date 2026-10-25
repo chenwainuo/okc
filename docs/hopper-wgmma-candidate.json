@@ -176,5 +176,26 @@
     "outputs_checked": 1536,
     "max_abs_error": 0,
     "limits": "single CTA BF16 K16; no FP4 integration/fullK or performance claim"
+  },
+  "nvfp4_oracle": {
+    "status": "GPU correctness passed for restricted fixtures",
+    "report": "reports/2026-10-25-wgmma-nvfp4-oracle.json",
+    "source": "serving/experiments/wgmma_rs/rs_nvfp4_oracle.cu",
+    "cases": 12,
+    "decoded_weights_checked": 826368,
+    "outputs_checked": 6144,
+    "K": [
+      16,
+      64,
+      128,
+      4096
+    ],
+    "limits": "raw group scales1..1.875/global1; canonical packed layout; no routing or performance claim"
+  },
+  "routed_prototype": {
+    "source": "serving/experiments/wgmma_rs/routed_down.cuh",
+    "adapter": "serving/experiments/wgmma_rs/routed_adapter.py",
+    "validation": "serving/experiments/wgmma_rs/check_routed.py",
+    "status": "CPU compiled; independent static review and GPU correctness pending"
   }
 }

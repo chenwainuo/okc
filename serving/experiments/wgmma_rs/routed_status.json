@@ -1,0 +1,43 @@
+{
+  "status": "CUDA header compile and Python syntax pass; TVM-FFI JIT binding and GPU correctness pending root lease",
+  "files": [
+    "routed_down.cuh",
+    "routed_adapter.py",
+    "check_routed.py"
+  ],
+  "API": {
+    "prepare": "prepare(raw_local_w2:uint8[E,N,K/2],raw_local_scale:E4M3[E,N,K/16],raw_global:float[E])->Bank",
+    "project": "project(cache2:BF16[slots,K],bank,sorted_token_ids,expert_ids,num_post,block_m,out=cache3)",
+    "checks": "check_routed.py: actual moe_align_block_size, canonical checkpointpackedbytes, independent CPU rawdecode/matmul; mixed/skew/empty plus graphvalid->empty"
+  },
+  "compile_resources": {
+    "registers": 56,
+    "shared_bytes": 256,
+    "spill_bytes": 0
+  },
+  "integration_plan": [
+    "Capture original w2/w2_scale/w2_global before prepare_moe_nvfp4_layer_for_marlin replaces params; attach separate preparedBank only in candidate class.",
+    "Keep existing gateup, silu_and_mul, routing/alignment and existing norm-before-weighted-sum finalizer. Replace only return downGEMM with project(cache2,bank,existingmetadata,out=cache3).",
+    "Retain rawpackedcheckpoint buffers ascanonicalbank (contiguous aliases whenpossible); scale processing copies uint8 group16 values with same half/bit transform. Original rawglobal converted through existinghelper.",
+    "For syntheticbenchmark candidate prepare, use original weights dict w2/w2_sf/w2_gs [0:32] before baseline.prepare; avoid inversepackedlayout.",
+    "Use directprojection correctness first, then actual `_marlin_expert_outputs` comparison. No routing/model adapter mutation has yet occurred."
+  ],
+  "memory": {
+    "local32_downpacked_extra_bytes": 268435456,
+    "local32_downscale_extra_bytes": 33554432,
+    "notes": "Incumbent packedMarlinbank retained forfallback means ~288MiB extra perlayer if bothlive. Production must select one layout or budget mixedfallback; cannot blindly double everylayer. NoBF16weights."
+  },
+  "coalescing_risks": [
+    "Canonical K-contiguous weights with GMMA A lanes spread overchannels produce narrow loads perrow, repeated nibble loads and redundant group16scale loads. Correctnessfirst path likely slower thanincumbent.",
+    "Current eachK16 sharedload/sync/GMMAwait serializes256steps forK4096. Implement K64cp.async buffers and overlap conversion only after correctness.",
+    "RS N8 covers8expert tokens, sparse padding still costscompute. Launchcap uses sortedallocationcapacity and devicepostguard; excessCTAs return.",
+    "Future loadtime permutation should arrange packedweights in [expert,channel_tile,Ktile,warpgroup_lane,packedfragment] blocks and group16scales alongside; validate losslessinverse and bytecost before adopting.",
+    "FullK singleCTA removes splitK scheduling parallelism; atsmallbatch grid32experts*64outputtiles ispotentially sufficient, but sparseEP routes andmemorytraffic dominate. Need measured roofline; no speedup claimed."
+  ],
+  "safety_boundary": "Onlyisolatedcandidate files; no live serving import/dispatch changes. GPU harness may onlyrun under root serializedlease. Metadata trustedfromexistingalignment; API validatesdtype/device/shape and skipsinvalidexpert/slot IDs.",
+  "sha256": {
+    "routed_down.cuh": "e3a83da389f8646431e22009114143bc36d53dc4fa60296572f19d35babe71ae",
+    "routed_adapter.py": "c098f02c86a9f7128bf215665c866615277a9b0fef67ef1bf600d81330855dc7",
+    "check_routed.py": "e97606427885a5a98c4fcd65fb2423847d53607987af7513d4efefb6d2894ea5"
+  }
+}
