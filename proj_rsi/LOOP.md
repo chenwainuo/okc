@@ -208,3 +208,14 @@ fragments — the fix is 2 row tiles per warp sharing one x fragment set. Six ed
   every BF16 epilogue (prepare would have hung and killed the check); fixed to call `pw_put`, PTX re-verified
   (0 self-loops, 352 bf16 stores, 0 spills). Runs as check #8 after pw7's result is read.
 
+
+## Parallel branch opened 23:40 UTC (before check #7): pw9 = wgmma m=128/256 kernel
+
+Earlier rule ("design m=128 after the carveout answer") dropped: both answers go into the bake-off, and building does not
+consume quota. Reason the branch is needed: verify16 72.6 µs and verify32 86.8 µs are cuBLAS on 67 MB uncompressed;
+a packed stream gives ~15 (pooler/unpooler) and ~9.5 (qkv) → ~17 + ~20 µs → ~0.3 of the 0.8 ln-gain. Why pw3's m=128
+path lost (41.7 vs 29.8): mma.sync tops at ~600 TFLOP/s, so 8.6 GFLOP (pooler m=128) is ~14 µs of issue on top of
+decode — not hideable under a 13 µs stream. pw9 therefore uses wgmma m64nNk16 with A (decoded W) in registers and B
+(x tile, 2D TMA, 128B swizzle) via smem descriptor; BN=128, KS from {2,4,7,8}, cluster-DSMEM split-K as pw7.
+Implementer: build on pw8 (m≤32 + router unchanged). Critic: independent PTX-ISA layout/descriptor study
+(audits/wgmma-layout.md) to cross-check fragment order before a check is spent.
