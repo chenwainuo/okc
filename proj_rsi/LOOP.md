@@ -693,3 +693,11 @@ Agents on the H100 (2026-10-26 ~16:30 UTC): CUTLASS bf16 config sweep at our eig
 P1 small-shape iteration (pw27h); P2 qkv balancing iteration (pw28h); P3 router m=128/256 iteration (pw29h). Each
 edits a local copy here, rsyncs to the box, and measures under the GPU lock; judge candidates stay untouched until a
 measured win is ported. The understand/design workflow for the m>=128 packed kernel runs in parallel.
+H100 local result, pw26 (CUTLASS 64x64 sweep, in-prepare bake on the box, µs): pooler m=128 cuBLAS 27.65 | cw7c2
+31.97 | cw7 32.10 | cwk128 34.21 | cw13 34.46; qkv m=128 19.46 | cw13 23.97 | cw7 26.37; unpooler m=128 27.07 |
+cw7c2 28.48; o m=128 11.23 | cw7c2 11.01 (picked); m=256 all 40–250% behind. So with -DNDEBUG and 64x64 tiles the
+stock CUTLASS warp-specialised kernel is 16–23% behind cuBLAS at m=128 on this box and far behind at m=256; the
+cluster-2 (x multicast) config is the best of the four at pooler/unpooler. The wide sweep agent continues from here.
+pw23's and pw26's harness tables agree within noise (pooler m=128 39.5–39.9 vs torch 40.5), confirming the box's
+replay overhead (~9 µs) and repeatability. First harness runs of pw27/pw28/pw29/pw24 failed on a probe bug (fixed,
+re-queued).
