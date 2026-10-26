@@ -388,3 +388,25 @@ Tally for m ≥ 128: pw3-tm, pw9, pw10, pw13, pw15 — best ever 31.5 vs cuBLAS 
 Consequence (ceiling at r6's calibration): m ≤ 32 + router alone reach 3067 at best, ~3300 realistically. 3000 is not
 reachable from the current evidence without an m=128 kernel that beats cuBLAS by ~5 µs per big shape, and no design
 tried here has come within 2 µs of it.
+
+## Iteration 14 — pw16: x cache policy on r6's m=16/32 geometries. Check `f03e2e7785224172`: 9/9, 3365.0 µs. REJECTED (= r6).
+
+In-prepare: pooler m=32 r6 20.93 | -xel 20.77 | -xcg 29.06 | -L1 28.38; pooler m=16 r6 18.14 | -xel 18.14 | -xcg 22.53;
+qkv m=32 r6 18.50 | -xel 18.46 | -xcg 23.20; qkv m=16 r6 16.61 | -xel 16.13; unpooler m=32 r6 20.93 | -xel 20.77 |
+-xcg 29.47 | -L1 42.72. Bypassing L1 for x costs 2–9 µs, so r6 already reuses x lines in L1 between co-resident CTAs;
+evict_last is a tie; a maximal L1 carveout is a disaster (reduction smem/occupancy). The x-traffic lever is exhausted.
+
+## State of the loop after 16 checks (2026-10-26 ~07:00 UTC)
+
+Board unchanged: r6-c12 at 3428 (re-measured 3365–3386 in today's drift). Every lineage and lever has been measured:
+- m ≤ 8: at the HBM stream (two independent lineages within 0.6 µs of the bare bulk probe). Nothing left.
+- m = 16/32: excess over m=1 is x loads (2.5–2.8 µs) + qkv decode/occupancy (2–3). Wide tiles + cross-CTA split-K
+  (pw11), bulk W ring (pw12), x cache policy (pw16) all tie or lose; L1 reuse already happens. Remaining ideas
+  (qkv m=32 geometry with more bytes in flight; cluster-2 x multicast) are each worth ≤ 1 µs net.
+- m ≥ 128: five designs, best 31.5 vs cuBLAS 29.4–30.5; closed. Structural lesson: decode must leave the MMA warpgroup.
+- router: latency-bound at 4.1–5.9 vs 3.4 floor (≈ 50–70 score-µs if brought to the floor at all m) — the largest
+  remaining identifiable pool; 12-bit codec made it slower.
+- codec: 11-bit needs 1.3% escapes; ≤ 5% stream saving at best.
+Conclusion: 3000 is not reachable from this evidence (ceiling 3067 without m ≥ 128 gains; realistic ≤ 3300–3350).
+Options for the user: (A) stop, r6 stands; (B) continue cheap m ≤ 32 / router iterations for ≤ 2–3%; (C) a long
+project on an m=128 transform-warpgroup kernel with uncertain payoff (≈ 0.2 ln if it beats cuBLAS by 3 µs).
