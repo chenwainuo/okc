@@ -1,0 +1,17 @@
+{
+  "id": "pw34",
+  "parent": "pw33",
+  "claim": "pw33 (board incumbent, 3332.1 us) unchanged plus rs128's m=128 wins: the RS128 section of commit e8d7ab8 (swap-AB register-A split-K wgmma on the lossless 12-bit pack, merged-barrier ring, in-kernel zeroing + TMA bf16 reduce-add, background compile, r6 baseline timed before the pack and after the variants, fallback to r6 on any failure or nonzero launch) served only at m exactly 128 / 256 where its bake beats r6 by 1%. Box (rs128 bake): pooler m=128 r6 27.36 | rq 24.77, qkv_gate 18.75 | 16.77, unpooler 26.72 | 24.83; o m=128 and all m=256 stay r6. Expected judge gain: the m=128 (verify16) pooler / qkv / unpooler shapes, each >= ~1-1.5 us if the H200 keeps rs128's margin.",
+  "paths": "Everything of pw33 byte-identical; rs128 bake entries per (pooler, qkv_gate, unpooler, o) x (m=128: rq:s4s5hz, rq:s4hz, rq:s4s5z; m=256: rq:n256s5hz, rq:n256s4hz, rq:n256s5z), validated in prepare (one-hot x8 exact over every K column, random normal + 1%-outlier rows within 4e-3..8e-3 by KS, zero-handshake counters back at 0) and picked against min(r6 before pack, r6 after variants).",
+  "target_shapes": [
+    "pooler / qkv_gate / unpooler m=128: rs128 picked in the judge bake, each under r6",
+    "every other shape: pw33's picks"
+  ],
+  "kill_if": "any official check fails, or rs128 not picked at pooler m=128 in the judge bake",
+  "local_checks": "diff vs pw33: only the rs128 docstring lines, the background-compile start and rq bake call in prepare(), the rq dispatch at the top of kernel_fn, and the appended RS128 section (identical to rs128 e8d7ab8). lint ok; cpu-check --official 9/9; box /root/bench.sh pw34 ... --official (see commit message).",
+  "risks": [
+    "rs128 has no judge data yet: the H200 may be SM-bound at ~0.44 us per k64 stage and shrink the margin; the bake then keeps r6.",
+    "Prepare time: rs128's bake is skipped if prepare passes budget-100 s after pw33's own bakes (no gain, no harm).",
+    "Zero handshake needs the one-wave grid co-resident; it traps on timeout."
+  ]
+}
