@@ -127,20 +127,15 @@ A   = lop3(e, 0x807f807f, prmt(plane, 0, 0x1100 | 0x3322), 0xb8)   // (0xe4 in v
 
 ## pw17 post-mortem (check 9f6de54218a447d5): why E ran at 1.45–2.1× the stream
 
-- **Measured.** ge-p512r took 26.24 µs in-prepare. The in-prepare offset is about 4.3 µs (r6 runs 18.30 in-prepare against 13.95 in the judge profile). That leaves about 21.9 kernel-µs; less about 1.5 µs of start and epilogue, 20.4 µs at 1.98 GHz is **≈ 2,500 clk per unit per warp** (16 units, 16 warps/SM). The stream needs ≈ 1,560 clk.
-- **Chain estimate.** Each unit runs 16 dependent pair lookups, each about 3 ALU (≈ 13 clk) plus one LDS, and 4 refill LDS on the same chain. At a nominal 30-clk LDS that is ≈ 800 clk.
-- **What closes the gap.** Matching 2,500 clk needs about 110 clk per chained LDS. Unpooler n=1024 runs 4 warps/SM, so there is no contention, yet it still implies ≈ 65 clk.
-- **Bank conflicts explain the excess.** These are wavefronts per warp from a replay of the real pooler pack:
+- **Cycles.** ge-p512r took 26.24 µs in-prepare, about 21.9 kernel-µs after the 4.3 µs offset (r6: 18.30 in-prepare against 13.95 judge). Less about 1.5 µs of start, that is **≈ 2,500 clk per unit per warp** at 16 warps/SM. The stream needs ≈ 1,560.
+- **Chain estimate.** 16 dependent pair lookups (3 ALU ≈ 13 clk + LDS) plus 4 chained refill LDS give ≈ 800 clk at a 30-clk LDS. Matching 2,500 needs **≈ 110 clk per chained LDS**. Unpooler n=1024 runs 4 warps/SM, with no contention, and still implies ≈ 65.
+- **Cause: bank conflicts.** Replaying the real pooler pack, wavefronts per warp are:
 
   | LDS | Wavefronts |
   |---|---|
-  | v2 ring refill, ED 4 | **12.0** |
-  | v2 ring refill, ED 8 | **22.0** |
-  | Single LUT | 3.7 |
-  | Replicated LUT | 1.0 |
-  | `[slot][lane]` ring | 3.8 |
-  | `[slot][lane]` ring + per-lane word rotation | 2.2 |
+  | v2 ring refill, ED 4 / ED 8 | **12.0 / 22.0** |
+  | Single / replicated LUT | 3.7 / 1.0 |
+  | `[slot][lane]` ring + word rotation | 2.2 |
 
-  Lanes advance in near-lockstep, so v2's 64-B lane stride puts them on the same banks. The layout spec's "2–3-way" was wrong.
-- **This fits the ordering.** d8 (36.3) is slower than single (29.4), which is slower than rep (26.2), although d8 has more bytes in flight.
-- **v3 removes both.** Code lengths come from ALU ops, so no LDS sits on the bit-position chain. The ring moves to `[slot][lane]` with word rotation, and refill words are prefetched.
+  Lanes advance in lockstep, so v2's 64-B lane stride puts them on the same banks; the spec's "2–3-way" was wrong. This fits d8 (36.3) > single (29.4) > rep (26.2).
+- **v3.** Code lengths come from ALU ops, so no LDS sits on the chain. The ring is rotated `[slot][lane]` and refill words are prefetched.
