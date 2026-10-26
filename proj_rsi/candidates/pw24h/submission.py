@@ -44,39 +44,25 @@ def _wg(n, rs):
 # (name, ST, BM, BN, CL, PP, WN, CG, RS, FN, PRB). PRB = 0 entries are bake paths; the rest are ladder probes.
 BHV = [  # (name, ST, BM, BN, CL, PP, WN, CG, RS, FN, PRB[, INS[, SY[, KS]]])
     ("b12", 12, 64, 64, 0, 0, 1, 0, 0, 0, 0),
+    ("b12.L1w", 12, 64, 64, 0, 0, 1, 0, 0, 0, 1),
     ("b12.L1wx", 12, 64, 64, 0, 0, 1, 0, 0, 0, 2),
     ("b12.L3", 12, 64, 64, 0, 0, 1, 0, 0, 0, 3),
-    ("mb", 12, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 1),
-    ("mb.L3", 12, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 1),
-    ("mb.ins", 12, 64, 64, 0, 0, 1, 0, 0, 1, 0, 1, 1),
-    ("k2m7.L1wx", 7, 64, 64, 0, 0, 1, 0, 0, 1, 2, 0, 3, 2),
-    ("k2m7.L3", 7, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 3, 2),
-    ("k2m7", 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 3, 2),
+    ("k2s1.L1w", 7, 64, 64, 0, 0, 1, 0, 0, 1, 1, 0, 1, 2),
     ("k2s1.L1wx", 7, 64, 64, 0, 0, 1, 0, 0, 1, 2, 0, 1, 2),
     ("k2s1.L3", 7, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 1, 2),
-    ("k2s1.L8spin", 7, 64, 64, 0, 0, 1, 0, 0, 1, 8, 0, 1, 2),
+    ("k2s1.L4mma", 7, 64, 64, 0, 0, 1, 0, 0, 1, 4, 0, 1, 2),
     ("k2s1", 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 1, 2),
-    ("k2s1.ins", 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 1, 1, 2),
-    ("k2s1wn2", 7, 64, 64, 0, 0, 2, 0, 0, 1, 0, 0, 1, 2),
-    ("k4.L3", 3, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 1, 4),
-    ("k4", 3, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 1, 4),
-    ("k2c.L1wx", 7, 64, 64, 1, 0, 1, 0, 0, 1, 2, 0, 1, 2),
-    ("k2c.L3", 7, 64, 64, 1, 0, 1, 0, 0, 1, 3, 0, 1, 2),
-    ("k2c", 7, 64, 64, 1, 0, 1, 0, 0, 1, 0, 0, 1, 2),
-    # (4) register-A
-    ("rs.L3", 12, 64, 64, 0, 0, 1, 0, 1, 0, 3),
-    ("rs", 12, 64, 64, 0, 0, 1, 0, 1, 0, 0),
-    ("rsm.L3", 12, 64, 64, 0, 0, 1, 0, 1, 0, 3, 0, 1),
-    ("rsm", 12, 64, 64, 0, 0, 1, 0, 1, 0, 0, 0, 1),
+    ("k2x", 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 9, 2),
+    ("k2x6", 6, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 9, 2),
     ("rsk2.L3", 7, 64, 64, 0, 0, 1, 0, 1, 0, 3, 0, 1, 2),
     ("rsk2", 7, 64, 64, 0, 0, 1, 0, 1, 0, 0, 0, 1, 2),
-    ("rsk2.ins", 7, 64, 64, 0, 0, 1, 0, 1, 0, 0, 1, 1, 2),
-    # 64 x 128 tiles (m = 256 at 128 CTAs)
-    ("n128m", 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 3),
+    ("rsk2x", 7, 64, 64, 0, 0, 1, 0, 1, 0, 0, 0, 9, 2),
     ("n128s1", 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 1),
-    ("n128k2", 4, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 1, 2),
-    ("n128rs", 9, 64, 128, 0, 0, 1, 0, 1, 0, 0, 0, 1),
-    ("n128rsk2", 4, 64, 128, 0, 0, 1, 0, 1, 0, 0, 0, 1, 2),
+    ("n128x", 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 9),
+    ("n128x8", 8, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 9),
+    ("n128rsx", 9, 64, 128, 0, 0, 1, 0, 1, 0, 0, 0, 9),
+    ("n128x.L1wx", 9, 64, 128, 0, 0, 1, 0, 0, 1, 2, 0, 9),
+    ("n128x.L3", 9, 64, 128, 0, 0, 1, 0, 0, 1, 3, 0, 9),
 ]
 BHI = {v[0]: i for i, v in enumerate(BHV)}
 
@@ -359,7 +345,21 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
           }
         }
       }
-      if (!PP || c == 0) {  // bf16 tile [BN tok][BM n] in the drained x ring
+      constexpr bool SX = (SY & 8) && !PP;  // SY bit 3: stmatrix.trans into a chunk-swizzled tile (chunk ^= tok & 7)
+      if (SX) {
+        const int j = lane >> 3, rr = lane & 7, nc = 64 * c + 16 * w + 8 * (j & 1);
+#pragma unroll
+        for (int i = 0; i < NR / 4; i += 2) {
+          uint32_t q0, q1, q2, q3;
+          asm("cvt.rn.bf16x2.f32 %0, %2, %1;\n" : "=r"(q0) : "f"(D[4 * i]), "f"(D[4 * i + 1]));
+          asm("cvt.rn.bf16x2.f32 %0, %2, %1;\n" : "=r"(q1) : "f"(D[4 * i + 2]), "f"(D[4 * i + 3]));
+          asm("cvt.rn.bf16x2.f32 %0, %2, %1;\n" : "=r"(q2) : "f"(D[4 * i + 4]), "f"(D[4 * i + 5]));
+          asm("cvt.rn.bf16x2.f32 %0, %2, %1;\n" : "=r"(q3) : "f"(D[4 * i + 6]), "f"(D[4 * i + 7]));
+          const int tk = 8 * (i + (j >> 1)) + rr;
+          asm volatile("stmatrix.sync.aligned.m8n8.x4.trans.shared.b16 [%0], {%1,%2,%3,%4};\n"
+                       :: "r"(xring + tk * BM * 2 + (((nc >> 3) ^ (tk & 7)) << 4)), "r"(q0), "r"(q1), "r"(q2), "r"(q3) : "memory");
+        }
+      } else if (!PP || c == 0) {  // bf16 tile [BN tok][BM n] in the drained x ring
         const int r = (PP ? 0 : 64 * c) + 16 * w + g;
 #pragma unroll
         for (int i = 0; i < NR / 4; i++) {
@@ -380,7 +380,7 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
         const int tk = e / CPR, cc = e % CPR;
         if (t0 + tk < m) {
           uint4 v;
-          asm volatile("ld.shared.v4.u32 {%0,%1,%2,%3}, [%4];\n" : "=r"(v.x), "=r"(v.y), "=r"(v.z), "=r"(v.w) : "r"(xring + (tk * BM + cc * 8) * 2));
+          asm volatile("ld.shared.v4.u32 {%0,%1,%2,%3}, [%4];\n" : "=r"(v.x), "=r"(v.y), "=r"(v.z), "=r"(v.w) : "r"(xring + tk * BM * 2 + ((SX ? (cc ^ (tk & 7)) : cc) << 4)));
           *(uint4*)(out + (size_t)(t0 + tk) * N + n0 + cc * 8) = v;
         }
       }
@@ -537,7 +537,7 @@ def _validate(fn, w, m, n, gen, m_odd):
     return True, "ok"
 
 
-BAKE_SHAPES = [("pooler", 128), ("qkv_gate", 128), ("pooler", 256), ("qkv_gate", 256)]
+BAKE_SHAPES = [("pooler", 128), ("qkv_gate", 128), ("unpooler", 128), ("o", 128), ("pooler", 256), ("qkv_gate", 256), ("unpooler", 256), ("o", 256)]
 
 
 def prepare(weights):
