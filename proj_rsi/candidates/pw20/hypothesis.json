@@ -1,0 +1,16 @@
+{
+  "id": "pw20",
+  "parent": "pw18",
+  "claim": "The E paths may be bound by latency and occupancy (pooler 16 warps/SM, unpooler 4) rather than purely by issue. pw20 is pw18 unchanged plus 'lite' codec-E paths at m = 1 and 8 that run 1024 threads per SM like r6's m=1 geometry. Each lite path uses one substream, a single LUT, a plane ring of depth 1, a rolled K loop and one accumulator set, and decodes and consumes each unit one k16 step at a time, so only 4 A registers are live. That fits 64 registers with 0 spills. If latency hiding is what was missing, pooler m=1 drops toward the 11.07-bit stream (about 1 us under r6). If the paths are issue-bound, the lite paths stay at about 1.5x r6.",
+  "paths": "ge-lp1k (pooler 2.16.8, 128 x 1024 threads), ge-lp16 (pooler 1.16.8, 256 x 512, 2/SM), ge-lq16 (qkv 1.16.8, 144 x 512), ge-lq8 (qkv 1.8.16, 144 x 256, up to 4/SM), ge-lu8 (unpooler n=1024 1.8.8, 64 x 256); each at m = 1 and 8, __launch_bounds__ minBlocks = 1024 / CTA threads. All pw18 paths are kept; r6 is the baseline in the same bake; PROBE ecod pooler m=1 / m=16 as in pw18.",
+  "target_shapes": [
+    "pooler m=1 / m=8: >= 0.8 us under r6",
+    "qkv / unpooler m=1 / m=8: under r6"
+  ],
+  "kill_if": "pooler m=1 best E path not ≥ 0.8 µs under r6 in the same bake",
+  "local_checks": "nvcc 12.8 sm_90a -Xptxas -v: the 4 lite instances are at 64 regs with 0 spills and no LDL/STL; every E instance is spill-free; r6's 78 and pw18's 99 gv instances are SASS-identical; 103 instances compile in 28 s locally. The codec_e_emu emulator (lite escape fields included) is bit-exact on the reference weights for every lite path, under early and late landing. lint ok; cpu-check --official 9/9; the CPU mock of the bake builds every plan.",
+  "risks": [
+    "Issue-bound reading: the lite path has the same ~8 instructions per weight. If 32 warps/SM cannot raise IPC, it loses like pw18.",
+    "The plane ring at depth 1 holds less W in flight than pw18's depth 2; the cp.async ring (16 words per lane) is unchanged."
+  ]
+}

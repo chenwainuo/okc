@@ -45,7 +45,7 @@ def fsl(lo, hi, n):  # __funnelshift_l(lo, hi, n): high word of (hi:lo) << n
     return ((((hi << 32) | lo) << n) >> 32) & M32
 
 
-def emulate(fr, pk, geo, ed, rep, imm, late, K=1):
+def emulate(fr, pk, geo, ed, rep, imm, late, K=1, lite=False):
     """v3 kernel (pw18 gv FMT 4): K substreams, ring of ed words per lane ([s][slot][lane], ES = ed / K slots), 3-round
     prologue, per unit NI = 4 / K predicated 4 B issues per substream + commit + wait_group(2), refill word of a
     substream's first step read after the wait and the others prefetched one step ahead, len = PRMT(t0, t1, lo & 7),
@@ -159,7 +159,7 @@ def emulate(fr, pk, geo, ed, rep, imm, late, K=1):
                 if not bool(hit.any()):
                     break
                 ln_ = (nx >> 15) & 31
-                r = (nx >> 11) & 15
+                r = ((nx >> 13) & 3) * 4 + ((nx >> 11) & 3) if lite else (nx >> 11) & 15   # pw20 lite: step, register in step
                 xr = (nx & 0xff) << (7 + ((nx >> 10) & 1) * 16)
                 sel = hit[:, None, None] & (lane[..., None] == ln_[:, None, None]) & (torch.arange(16)[None, None, :] == r[:, None, None])
                 A = torch.where(sel, A ^ xr[:, None, None], A)
@@ -218,7 +218,7 @@ def main():
             ed = 32 if (v >> 19) & 1 else 16
             K = 1 << ((v >> 22) & 3)
             for late in (False, True):
-                r = emulate(fr, pk, (wr, wk, ku, s, rt), ed, bool((v >> 20) & 1), imm, late, K)
+                r = emulate(fr, pk, (wr, wk, ku, s, rt), ed, bool((v >> 20) & 1), imm, late, K, bool((v >> 24) & 1))
                 print("EMU %-10s %-9s n=%d geo %s K%d ed%d %s %s  (%.1fs)" % (name, ly, n, (wr, wk, ku, s, rt), K, ed, "late " if late else "early", "bit-exact" if r else "MISMATCH", time.time() - t0), flush=True)
                 ok_all &= r
                 if not r: break
