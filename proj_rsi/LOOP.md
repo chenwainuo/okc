@@ -879,3 +879,9 @@ Per stage: ~55 INT warp-instr per warp (36 decode) ≈ 220 INT clk per sub-parti
 ~0.44 µs/stage (760 clk) — above the plan's 650 bar and the H200's ~0.375 HBM period, so the H200 would be SM-bound
 at ≈ 17 kernel-µs vs cuBLAS ~19.3 (still a win if the fixed terms hold). 256-row/4-warpgroup fallback does not fit
 the register file. R3/R4 (r6 bake on the pw23 base, all layers, lint/cpu-check) in progress → judge check.
+mx M3 (audits/mx-h100.md; box in-prepare): qkv m=128 18.50 vs r6 19.49 (−1.0), pooler 26.53 vs 27.10 (−0.6),
+unpooler tie, o +2.4; m=256 loses everywhere (compute-bound, RS m64n128 at ~62% of peak). Not stream-bound (no-B −0.6,
+no-decode 0; stages s4/s6/s9 = 36.8/27.5/25.3). Escapes: XOR-patched from a 64 B header per chunk, +0.45 µs with two
+math warpgroups (+3.5 with one); memset node cost 1.5–2 (in-kernel zeroing built); CUTLASS's TMA epilogue needed a
+one-lane fix for reduce-add. Decision: mx is not packaged (RS128 is at −3.2 on the same shape); its author writes
+the comparative lessons and then takes RS128's deferred refinements (deeper W-only barrier, epilogue tail) in rs128b.
