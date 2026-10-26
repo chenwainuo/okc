@@ -582,3 +582,13 @@ seven teams near 1.55x need no codec at all if a bf16 GEMM streams at 4.0–4.2 
 Plan: days 1–2 bf16 version with a ladder (kill if W+x > 20 in-prepare); days 3–4 add the 12-bit decode; days 5–6
 x multicast if delivery still binds; days 7–9 harden + final scored run. (a) CUTLASS mixed-input (8-bit + 4-bit
 planes) is the fallback if (b) stays below 9 TB/s. pw24 = day 1.
+
+## Iteration 22 — pw24 (bf16 cuBLAS-geometry GEMM). Check `5c994bf40c144571`: FAILED at setup. REFINE.
+
+ptxas: wgmma.* "not supported on .target 'sm_90'": the new bg kernel was compiled inside r6's gv extension, which uses
+plain sm_90 flags (the pw lineage always built with compute_90a/sm_90a). Plus advisory warnings on
+'.multicast::cluster' for cp.async.bulk.tensor. The whole run was lost (no fallback when an extension fails to build).
+Fixes: bg in its own load_inline extension with sm_90a flags; prepare continues with r6 + router if any extra
+extension fails to build; loop lint now flags wgmma/setmaxnreg sources without a compute_90a flag in the same build.
+Process lesson: the local nvcc checks compiled the kernel block with -arch=sm_90a by hand, never with the flags the
+submission actually passes to load_inline; the critic's build must use the submission's own flag list per extension.
