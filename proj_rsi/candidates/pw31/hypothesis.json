@@ -1,0 +1,19 @@
+{
+ "id": "pw31",
+ "parent": "pw27h + pw29h (3-way merge on pw23)",
+ "claim": "The two H100-measured wins combined in one scored candidate. (1) pw27h, P1: router m=8/16/32 split-K on r6's gv with an in-kernel zeroed output (V bit 27/29: split-0 warp or zeroer plane zeroes the tile, flag, ld.acquire wait, red.add; no memset node, no cluster) measured -1.15/-1.09/-1.31 in-prepare us vs r6 alternated; router m=1 rr6 (256 x 1024 thr) -0.29 vs rr0; unpooler m<=8 uk-s4z/x, uk-s4w4x -0.2..-0.5 (bf16 S=4 reds, 3.5e-3 rel L2). (2) pw29h: router m=128/256 wgmma split-K (rwk, own sm_90a build) with self-zeroing; rw64k32s8z ~1.9 box-us under pw23's rp64k32s4 at m=128, m=256 at parity with cuBLASLt. The regions are disjoint: pw27h touches GVCU / GRD / _gvcall / _gvprep / _gxbake, pw29h adds RWCU / _rwext / RSPALL and extends _rscall / _rsbake.",
+ "paths": "router m=1: rr0/rr6/rr7 (gv bake); router m=8/16/32: rk-s8z, rk-s16w8z, rk-s16w8x (m 8/16), rk-s32x (m 8/16) vs r6; unpooler m=1/8: uk-s4z, uk-s4x, uk-s4w4x vs r6; router m=128: rp64k32s4 (pw23 in-run reference), rw64k32s8, rw64k32s4z, rw64k32s8z, rw64k32r3x2(z); m=256: rw64k32r3x2(z), rwv64k64s4x2 vs r6 cuBLASLt.",
+ "target_shapes": [
+  "router m=8/16/32: >= 1 box-us under r6 (pw27h bake)",
+  "router m=128: rw64k32s8z picked, >= 1.5 box-us under rp64k32s4",
+  "router m=256: cuBLASLt or a tie kept",
+  "router m=1, unpooler m<=8: under r6"
+ ],
+ "kill_if": "any official check fails, or a merged path loses its own bake (router m=8/16/32 P1 pick not under r6; router m=128 rw pick not >= 1.5 us under rp64k32s4)",
+ "local_checks": "git merge-file pw27h / pw23 / pw29h: 0 conflicts; lint ok (expected multi-build sm_90a warning); cpu-check --official 9/9; file 196 KB.",
+ "risks": [
+  "Two monotonic counter sets (st['p1cnt'] per gv instance, st['rw_cnt']) assume stream-ordered calls.",
+  "Prepare: pw27h 42-45 s + the rw build/bake on the box; judge budget 240 s.",
+  "unpooler bf16 red paths carry 3.5e-3 rel L2 (judge 1e-2)."
+ ]
+}
