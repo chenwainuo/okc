@@ -658,3 +658,8 @@ router 39, decode16 router 39, verify16 unpooler 36, verify32 o 34. Two pools we
 - Router m=128/256 wgmma rewrite ≈ 90 score-µs (P3, after P1). CUTLASS sweep pw26 (ready) at the reset; mixed-input
   fork if parity (P4).
 Sum of P1–P3 at realistic capture ≈ 250–300 score-µs → ~3100–3150 without beating cuBLAS at m ≥ 128.
+pw27 (track P1) ready and approved: PROBE rd8 read-floor ladder (8 MB; 128–1056 CTAs; 16 B loads vs bulk chunks;
++ fp32 atomics / + cluster-8 reduce / memset alone) and atomic-reduce gv paths (router m ≤ 32 fp32 reds, unpooler/o
+m ≤ 8 packed bf16x2 reds; no cluster launch). Accuracy simulated 3.2e-3 relative L2 at a 4-way bf16 split vs the 1%
+rule; one-hot exact. Queue order at the 00:00 UTC reset: pw26 (CUTLASS sweep), pw27 (P1), then pw28 (P2) and pw29
+(P3) as they clear the critic.
