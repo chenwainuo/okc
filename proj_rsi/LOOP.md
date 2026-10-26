@@ -827,3 +827,8 @@ own bake, in-prepare): router m=128 rp64k32s4 13.54 | rw64k32s8z 13.12 (picked, 
 wgmma router's gain shrinks on the H200's faster HBM); m=256 r6 15.68 kept (rw 16.00). Small-shape picks: router
 rk-s16w8x/rk-s16w8z/rk-s8z at m=8/16/32, unpooler uk-s4x at m=1/8. Prepare 161 s (r6 119 + rw 39). Lesson: H100
 deltas for kernels near the latency floor transfer only partially; the judge's bake is the arbiter per shape.
+Transfer rule (P3's H100 vs H200 comparison, audits/p3-h100.md §6): speedups from removing a FIXED delay carry over
+unchanged (dropping the memset node: −1.0 on the H200, −0.9 on the box); speedups from better overlap with the memory
+stream (stage depth, tensor throughput) shrink or reverse on the H200 (the wgmma rewrite: −0.67 on the box, +0.57 on
+the H200). For the 12-bit m ≥ 128 kernels this means the byte saving is worth ~3.5 µs on the H200 (stream 14 → 10.5)
+versus ~5 on the box, while any fixed per-CTA cost they add is paid in full on both.
