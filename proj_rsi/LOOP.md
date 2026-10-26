@@ -493,3 +493,14 @@ Conclusion: on this judge the m ≥ 128 problem is L2→SM delivery (bytes in fl
 not decode placement. Six designs; the best remains pw10's register-A wk2 at 31.3 vs cuBLAS 29.5. Closed. The only
 untried lever consistent with the data is cuBLAS-like pipeline depth (≥ 12 stages of W+x in flight per SM) with
 register-A wgmma and 64-token tiles, and the ring-depth trend in pw10 (4→8 stages: −1.9 µs) suggests ≤ 1–2 µs more.
+
+## Iteration 18 — pw20: codec-E lite paths at 64 registers / 1024 threads per SM. Check `7edbd6544f034326`: 9/9, 3324.8 µs. REJECTED (= r6).
+
+Every pick is r6. In-prepare: pooler m=1 r6 17.95 | ge-lp1k (128x1024) 27.81 | ge-lp16 (256x512) 27.74 — identical to
+pw18's 1-CTA/SM paths (27.8), so doubling the warps per SM changed nothing: the codec decode is issue-bound, not
+occupancy-bound; qkv m=1 r6 13.76 | ge-lq16 25.38; unpooler m=1 r6 8.45 | ge-lu8 14.46. Codec lever closed for good
+(four checks: pw17, pw18, pw20 on hardware + the pw19 structure for decode placement).
+Note on the score: 3324.8 with r6's kernels is 3% under r6's board 3428 and the CI (1.431–1.475) excludes r6's 1.409:
+the judge drifts by that much between runs (SGLang baselines moved too: decode16 76.5 vs 74.9). The board number is
+one draw; a scored re-submission of the same kernel would land anywhere in ~3325–3430. That is noise, not progress,
+and is left to the user as a choice.
