@@ -3046,7 +3046,7 @@ def _bgbake(st):
             print("PROBE ladder %s ERROR %s" % (label, str(error).splitlines()[-1][:120]), flush=True)
     if "L1 W-only" in lad:  # W bytes are read once per cluster pair (multicast)
         wb = n * K * 2
-        print("PROBE bghbm pooler m=128 W-only tbs=%.2f tbs_minus4us=%.2f" % (wb / lad["L1 W-only"] / 1e6, wb / max(lad["L1 W-only"] - 4.0, 0.1) / 1e6), flush=True)
+        print("PROBE bghbm pooler m=128 W-only %.2f %.2f tbs tbs_minus4us" % (wb / lad["L1 W-only"] / 1e6, wb / max(lad["L1 W-only"] - 4.0, 0.1) / 1e6), flush=True)
     for layer in ("qkv_gate", "o", "pooler", "unpooler"):
         w = st[layer + "_raw"]
         n, K = w.shape
