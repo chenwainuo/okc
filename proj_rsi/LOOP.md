@@ -635,3 +635,8 @@ Program status: step A (bf16 parity) failed on the first config. A CUTLASS tile/
 gap (1–2 checks, compile-time bound: 52 s for 3 instantiations), but even at parity the mixed-input fork is ~5 days
 with the deadline 9 days out, and no pipeline of ours — hand-written or CUTLASS — has yet reached cuBLAS on this
 shape. 27 checks in total; the board stands at 3399.3 (pw23).
+CUTLASS sweep plan (audits/cutlass-mixed-input.md): the 128x64 tile count (64 on 132 SMs) explains cut128; a sweep
+of 64x64x64 ping-pong (13 fixed stages), + 1x2 cluster W multicast (nvjet's shape), single-warpgroup 2 CTAs/SM,
+64x64x128, and a non-swapped control, expected 24–29 in-prepare vs cuBLAS 23.8; four instantiations per check fit
+the budget (~220 s). Implementer's odds: bf16 within 10% of cuBLAS ≈ 50% (m=128) / 40% (m=256); mixed-input fork
+beating cuBLAS by ≥ 3 µs by 2026-11-04 ≈ 20–25%; overall ≈ 10–12%. Decision left to the user; loop paused.
