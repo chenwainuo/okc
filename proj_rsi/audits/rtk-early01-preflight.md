@@ -106,4 +106,3 @@ Original remote artifacts: `/root/okc/logs/rtk-early01.{json,log}`; host launche
 - Snapshot of readonly result harvest: `2026-10-26T20:21:57.963571+00:00`.
 
 No accepted gain. Keep source and raw evidence for the closed queue item; parent/integration source is unchanged.
-
