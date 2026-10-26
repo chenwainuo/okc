@@ -592,3 +592,17 @@ Fixes: bg in its own load_inline extension with sm_90a flags; prepare continues 
 extension fails to build; loop lint now flags wgmma/setmaxnreg sources without a compute_90a flag in the same build.
 Process lesson: the local nvcc checks compiled the kernel block with -arch=sm_90a by hand, never with the flags the
 submission actually passes to load_inline; the critic's build must use the submission's own flag list per extension.
+
+## Iteration 23 — pw24 resubmitted (bf16 cuBLAS-geometry GEMM). Check `715ddc0765664971`: 9/9, 3392.7 µs (= pw23). REJECTED; day-1 kill rule hit.
+
+Ladder on bg12c (pooler m=128, in-prepare): W-only 22.43 (67 MB → 3.6 TB/s effective, fine) | W+x 25.57 (> the 20
+kill line) | +wgmma 36.45 (**+10.9**) | full 38.24. Bake pooler m=128: cuBLAS 24.19 | bg12 (no cluster) 28.90 | bg6
+33.02 | bg6c 37.89 | bg12c 38.34 — the cluster-2 W multicast costs ~10 µs, 2 CTAs/SM costs 4. Same order on qkv
+(19.4 vs 28.7), o (11.0 vs 11.7 bg6), unpooler; m=256 far worse (bg6 39 vs 27.8).
+Reading: even with no decode at all, the hand-written pipeline at cuBLAS's geometry is 20% behind cuBLAS, and the
+wgmma rung (+11 µs ≈ 150 cycles per 64-k stage) shows the SS wgmma is not overlapped with the stream — tensor time
+per stage (4 x m64n64k16 ≈ 124 clk) should hide under the ~250-clk stage; suspects: smem bandwidth (TMA writes +
+wgmma reads = 32 KB per stage ≈ 128 B/clk, the smem limit) or wgmma issue serialisation. Multicast is a net loss here.
+Program status: design (b) failed its day-1 test. Options: (a) CUTLASS sm90 warp-specialised mainloop (proven to hide
+wgmma; feasibility = header bundle size + compile time + the 12-bit transform), or stop at 3399. Seven checks since
+the m ≥ 128 branch was "closed" have confirmed the same conclusion from a different direction.
