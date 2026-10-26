@@ -82,3 +82,5 @@ Ping-pong spilled 36 B at 64×64 with auto stages. With fixed stages it must be 
 - A CUTLASS bf16 config within 10% of cuBLAS: about 50% at m=128, about 40% at m=256 (nvjet's m=256 tiles are compute-tuned).
 - Given that, the two-plane mixed-input fork beats cuBLAS by ≥ 3 µs on pooler by 2026-11-04: about 20–25%. The byte cut is worth −5 µs ideal; the RS conversion and the escape correction eat 1.5–2 µs, and the fork is 5 days of work.
 - Overall about 10–12%.
+
+**Correction (critic, pw26):** pw25 was built without -DNDEBUG. CUTLASS's device asserts left a function call inside the mainloop, and ptxas reported C7510 ("wgmma.mma_async instructions are serialized") for all 3 pw25 kernels. pw25's 2× gap therefore mixes the tile-count problem with a serialised wgmma pipeline, and overstates the configuration problem. With -DNDEBUG, rebuilt from pw26's embedded bundle with its own flags: 0 serialisation warnings, 4 × 64 regs, 0 spills, 29 s local.
