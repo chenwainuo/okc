@@ -64,6 +64,16 @@ BHV = [  # (name, ST, BM, BN, CL, PP, WN, CG, RS, FN, PRB[, INS[, SY[, KS]]])
     ("n128x.L1wx", 9, 64, 128, 0, 0, 1, 0, 0, 1, 2, 0, 9),
     ("n128x.L3", 9, 64, 128, 0, 0, 1, 0, 0, 1, 3, 0, 9),
 ]
+SLACK = False  # slack.py (generated from this file by tools/mkslack.py) sets True: P4 decode-slack curve only
+if SLACK:
+    BHV = []
+    for _n in (0, 16, 32, 48, 64, 96, 128):  # (name, ST, BM, BN, CL, PP, WN, CG, RS, FN, PRB, INS, SY, KS, ALU): 4 chains feeding the wgmma
+        a = 3000 + _n
+        BHV += [("k2x-d%d" % _n, 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 9, 2, a), ("n128x-d%d" % _n, 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 9, 1, a)]
+    for _n in (0, 32, 48, 64, 96, 128):  # ping-pong, each warpgroup releases its slot right after its own wgmma (wait_group 0)
+        a = 3000 + _n
+        BHV += [("pp0k2-d%d" % _n, 7, 64, 64, 0, 1, 0, 0, 0, 1, 0, 0, 1, 2, a), ("pp0k1-d%d" % _n, 12, 64, 64, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, a),
+                ("pp0n128-d%d" % _n, 9, 64, 128, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, a)]
 BHI = {v[0]: i for i, v in enumerate(BHV)}
 
 BHCU = r"""
@@ -104,7 +114,7 @@ template <int NA> __device__ __forceinline__ void bh_fa(uint32_t (&A)[NA]) {
   for (int i = 0; i < NA; i++) asm volatile("" : "+r"(A[i]) :: "memory");
 }
 
-template <int ST, int BM, int BN, int CL, int PP, int WN, int CG, int RS, int FN, int PRB, int INS, int SY, int KS>
+template <int ST, int BM, int BN, int CL, int PP, int WN, int CG, int RS, int FN, int PRB, int INS, int SY, int KS, int ALU>
 __global__ void __launch_bounds__((PP ? 2 : BM / 64) * 128 + 64, 1)
 bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bfloat16* out, int m, int N, int K, unsigned long long* prof) {
   // INS: clock64 phase counters per CTA: [0] consumer total, [1] wait_in, [2] fence+issue+commit, [3] wait_group, [4] release,
@@ -203,6 +213,8 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
     const int s0 = PP ? c : 0, ds = PP ? 2 : 1;
     const int nst = PP ? (KC - c + 1) / 2 : KC;
     const uint32_t aoff = PP ? 0u : (uint32_t)c * 8192u;
+    uint32_t alu[4] = {(uint32_t)tid, (uint32_t)tid + 1u, (uint32_t)tid + 2u, (uint32_t)tid + 3u}, dzz = 0u;
+    const uint32_t alu_a = ((uint32_t)K * 2654435761u) | 1u, alu_b = (uint32_t)m * 40503u + (uint32_t)N;  // runtime: no folding
     auto wait_in = [&](int s) {
       cwait(wfull + 8 * (s % ST), (s / ST) & 1);
       if (XON && !MB) cwait(xfull + 8 * (s % ST), (s / ST) & 1);
@@ -224,7 +236,7 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
       const int slot = STALE ? 0 : s % ST;
 #pragma unroll
       for (int kk = 0; kk < KS; kk++) {
-        const uint64_t da = bh_desc(wring + slot * WTB + kk * WT1 + aoff), db = bh_desc(xring + slot * XTB + kk * XT1);
+        const uint64_t da = bh_desc(wring + slot * WTB + kk * WT1 + aoff + dzz), db = bh_desc(xring + slot * XTB + kk * XT1);
 #pragma unroll
         for (int q = 0; q < 4; q++) {
           bh_wg(D, da + 2 * q, db + 2 * q);
@@ -243,6 +255,22 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
           for (int j = 0; j < SPG; j++) wait_in(s0 + (u * SPG + j) * ds);
         }
         BH_T1(1);
+        if (ALU % 1000) {  // synthetic decode load: ALU % 1000 int ops per thread per k64 stage; bit 1000: 4 chains;
+          // bit 2000: the chains feed this unit's W descriptor (an unprovable zero), so ptxas cannot sink them past the wgmma
+          constexpr int NA = ALU % 1000, IL = (ALU / 1000) & 1 ? 4 : 1, NI = NA * KS * SPG / IL;
+          if (ALU >= 2000) {  // the decode reads the landed slot: seed the chains with a word of this unit's W tile
+            uint32_t wv;
+            asm volatile("ld.shared.u32 %0, [%1];\n" : "=r"(wv) : "r"(wring + ((s0 + u * SPG * ds) % ST) * WTB + aoff + lane * 4) : "memory");
+#pragma unroll
+            for (int c4 = 0; c4 < 4; c4++) alu[c4] ^= wv;
+          }
+#pragma unroll
+          for (int i = 0; i < NI; i++) {
+#pragma unroll
+            for (int c4 = 0; c4 < IL; c4++) asm volatile("mad.lo.u32 %0, %0, %1, %2;\n" : "+r"(alu[c4]) : "r"(alu_a), "r"(alu_b));
+          }
+          if (ALU >= 2000) dzz = ((alu[0] ^ alu[1] ^ alu[2] ^ alu[3]) == 0u && m < 0) ? 1024u : 0u;
+        }
         bh_facc(D);
         if (!FN) bh_fence();
 #pragma unroll
@@ -386,6 +414,7 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
       }
       BH_T1(8);
     } else if (D[0] == 1.2345f) out[0] = __float2bfloat16(0.f);
+    if (ALU % 1000 && (alu[0] ^ alu[1] ^ alu[2] ^ alu[3]) == 0x9e3779b9u && D[1] == 1.2345f) out[1] = __float2bfloat16(0.f);
     if (INS && tid == 0) {
       pc[0] = clock64() - tq0;
       for (int i = 0; i < 5; i++) prof[(blockIdx.y * gridDim.x + blockIdx.x) * 16 + i] = pc[i];
@@ -415,11 +444,11 @@ static int bh_map(BgTmap* tm, const void* p, int64_t rows, int64_t K, int box_ro
   return enc((CUtensorMap*)tm, CU_TENSOR_MAP_DATA_TYPE_BFLOAT16, 2, (void*)p, dims, strides, box, estr, CU_TENSOR_MAP_INTERLEAVE_NONE,
              CU_TENSOR_MAP_SWIZZLE_128B, CU_TENSOR_MAP_L2_PROMOTION_L2_128B, CU_TENSOR_MAP_FLOAT_OOB_FILL_NONE) == CUDA_SUCCESS ? 0 : -22;
 }
-template <int ST, int BM, int BN, int CL, int PP, int WN, int CG, int RS, int FN, int PRB, int INS, int SY, int KS>
+template <int ST, int BM, int BN, int CL, int PP, int WN, int CG, int RS, int FN, int PRB, int INS, int SY, int KS, int ALU>
 static int bh_go(torch::Tensor x, torch::Tensor W, torch::Tensor out, torch::Tensor prof, int info) {
   constexpr int NC = PP ? 2 : BM / 64;
   constexpr int SM = 1024 + ST * (BM + BN) * 128 * KS + 32 * ST;
-  auto k = bh<ST, BM, BN, CL, PP, WN, CG, RS, FN, PRB, INS, SY, KS>;
+  auto k = bh<ST, BM, BN, CL, PP, WN, CG, RS, FN, PRB, INS, SY, KS, ALU>;
   if (info) {
     cudaFuncAttributes a;
     if (cudaFuncGetAttributes(&a, k) != cudaSuccess) { cudaGetLastError(); return -1; }
@@ -462,7 +491,7 @@ int64_t bhrun(int64_t v, torch::Tensor x, torch::Tensor W, torch::Tensor out, to
 
 
 def _src():
-    cases = "\n".join("    case %d: return bh_go<%s>(x, W, out, prof, (int)info);" % (i, ", ".join(str(a) for a in tuple(v[1:]) + (0, 0, 1)[len(v) - 11:]))
+    cases = "\n".join("    case %d: return bh_go<%s>(x, W, out, prof, (int)info);" % (i, ", ".join(str(a) for a in tuple(v[1:]) + (0, 0, 1, 0)[len(v) - 11:]))
                       for i, v in enumerate(BHV))
     wg = _wg(64, False) + _wg(128, False) + _wg(64, True) + _wg(128, True)
     return BHCU.replace("@@WG@@", wg).replace("@@CASES@@", cases)
@@ -537,7 +566,10 @@ def _validate(fn, w, m, n, gen, m_odd):
     return True, "ok"
 
 
-BAKE_SHAPES = [("pooler", 128), ("qkv_gate", 128), ("unpooler", 128), ("o", 128), ("pooler", 256), ("qkv_gate", 256), ("unpooler", 256), ("o", 256)]
+BAKE_SHAPES_ALL = [("pooler", 128), ("qkv_gate", 128), ("unpooler", 128), ("o", 128), ("pooler", 256), ("qkv_gate", 256), ("unpooler", 256), ("o", 256)]
+
+
+BAKE_SHAPES = [("pooler", 128), ("pooler", 256)] if SLACK else BAKE_SHAPES_ALL
 
 
 def prepare(weights):
@@ -591,6 +623,12 @@ def prepare(weights):
                 name, mn[0], mx[0], mn[1], mx[1], mn[2], mx[2], mn[3], mx[3], mn[4], mx[4], mn[5] * nst / (K // 64), mn[6] * nst / (K // 64), mn[7] * nst / (K // 64), mn[8] * nst), flush=True)
             continue
         fn = lambda xx, oo, i=i: ext.bhrun(i, xx, w, oo, _E, 0)
+        if SLACK and BHV[i][3] == 128:  # slack mode: the 64x128 tile's W+x rung at its own shape, m = 256
+            x2 = torch.randn((256, K), generator=gen, device=dev).to(torch.bfloat16)
+            o2 = torch.empty((256, n), dtype=torch.bfloat16, device=dev)
+            if fn(x2, o2) == 0:
+                print("PROBE ladder %-14s m=256 %.2f" % (name, _time_us(fn, x2, o2, flush, sink)), flush=True)
+            continue
         code = fn(x, out)
         torch.cuda.synchronize()
         if code:
@@ -608,11 +646,11 @@ def prepare(weights):
         for name in names:
             i = BHI[name]
             v = BHV[i]
-            if v[10] != 0 or (len(v) > 11 and v[11]) or n % v[2]:
+            if v[10] != 0 or (len(v) > 11 and v[11]) or n % v[2] or (SLACK and (m == 128) != (v[3] == 64)):
                 continue
             fn = lambda xx, oo, i=i, w=w: ext.bhrun(i, xx, w, oo, _E, 0)
             try:
-                ok, msg = _validate(fn, w, m, n, gen, m - 7)
+                ok, msg = _validate(fn, w, m, n, gen, m - 7) if not (SLACK and len(v) > 14 and v[14]) else (fn(x, out) == 0, "unvalidated")  # noqa
                 if not ok:
                     print("BAKE %s m=%d %s INVALID %s" % (layer, m, name, msg), flush=True)
                     continue
