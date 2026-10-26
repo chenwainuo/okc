@@ -46,48 +46,37 @@ BHV = [  # (name, ST, BM, BN, CL, PP, WN, CG, RS, FN, PRB[, INS[, SY[, KS]]])
     ("b12", 12, 64, 64, 0, 0, 1, 0, 0, 0, 0),
     ("b12.L1wx", 12, 64, 64, 0, 0, 1, 0, 0, 0, 2),
     ("b12.L3", 12, 64, 64, 0, 0, 1, 0, 0, 0, 3),
-    ("b12.L8spin", 12, 64, 64, 0, 0, 1, 0, 0, 0, 8),
-    ("fn1", 12, 64, 64, 0, 0, 1, 0, 0, 1, 0),
-    ("fn1.L3", 12, 64, 64, 0, 0, 1, 0, 0, 1, 3),
-    # merged barriers / polling
-    ("mb.L1wx", 12, 64, 64, 0, 0, 1, 0, 0, 1, 2, 0, 1),
-    ("mb.L8spin", 12, 64, 64, 0, 0, 1, 0, 0, 1, 8, 0, 1),
-    ("mb.L3", 12, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 1),
     ("mb", 12, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 1),
-    ("sp.L8spin", 12, 64, 64, 0, 0, 1, 0, 0, 1, 8, 0, 2),
-    ("sp.L3", 12, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 2),
-    ("msp.L1wx", 12, 64, 64, 0, 0, 1, 0, 0, 1, 2, 0, 3),
-    ("msp.L8spin", 12, 64, 64, 0, 0, 1, 0, 0, 1, 8, 0, 3),
-    ("msp.L3", 12, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 3),
-    ("msp", 12, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 3),
-    ("msp.ins", 12, 64, 64, 0, 0, 1, 0, 0, 1, 0, 1, 3),
-    ("mspp.L3", 12, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 7),
-    ("mspp", 12, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 7),
-    ("msp13", 13, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 3),
-    # BLOCK_K 128 slots (KS = 2): 6 / 7 slots of 32 KB
-    ("k2.L1wx", 6, 64, 64, 0, 0, 1, 0, 0, 1, 2, 0, 0, 2),
-    ("k2.L3", 6, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 0, 2),
-    ("k2", 6, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 0, 2),
-    ("k2m.L3", 6, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 3, 2),
-    ("k2m", 6, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 3, 2),
+    ("mb.L3", 12, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 1),
+    ("mb.ins", 12, 64, 64, 0, 0, 1, 0, 0, 1, 0, 1, 1),
     ("k2m7.L1wx", 7, 64, 64, 0, 0, 1, 0, 0, 1, 2, 0, 3, 2),
     ("k2m7.L3", 7, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 3, 2),
     ("k2m7", 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 3, 2),
-    ("k2m7.ins", 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 1, 3, 2),
-    ("k2w0", 7, 64, 64, 0, 0, 0, 0, 0, 1, 0, 0, 3, 2),
-    # ping-pong
-    ("pp", 12, 64, 64, 0, 1, 1, 0, 0, 0, 0),
-    ("pp.L3", 12, 64, 64, 0, 1, 1, 0, 0, 0, 3),
-    ("ppm", 12, 64, 64, 0, 1, 1, 0, 0, 1, 0, 0, 3),
-    ("ppm.L3", 12, 64, 64, 0, 1, 1, 0, 0, 1, 3, 0, 3),
-    ("ppk2", 7, 64, 64, 0, 1, 1, 0, 0, 1, 0, 0, 3, 2),
-    # 128 x 64 cooperative (two math warpgroups), BLOCK_K 128
-    ("m128k2", 4, 128, 64, 0, 0, 1, 0, 0, 1, 0, 0, 3, 2),
+    ("k2s1.L1wx", 7, 64, 64, 0, 0, 1, 0, 0, 1, 2, 0, 1, 2),
+    ("k2s1.L3", 7, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 1, 2),
+    ("k2s1.L8spin", 7, 64, 64, 0, 0, 1, 0, 0, 1, 8, 0, 1, 2),
+    ("k2s1", 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 1, 2),
+    ("k2s1.ins", 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 1, 1, 2),
+    ("k2s1wn2", 7, 64, 64, 0, 0, 2, 0, 0, 1, 0, 0, 1, 2),
+    ("k4.L3", 3, 64, 64, 0, 0, 1, 0, 0, 1, 3, 0, 1, 4),
+    ("k4", 3, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 1, 4),
+    ("k2c.L1wx", 7, 64, 64, 1, 0, 1, 0, 0, 1, 2, 0, 1, 2),
+    ("k2c.L3", 7, 64, 64, 1, 0, 1, 0, 0, 1, 3, 0, 1, 2),
+    ("k2c", 7, 64, 64, 1, 0, 1, 0, 0, 1, 0, 0, 1, 2),
+    # (4) register-A
+    ("rs.L3", 12, 64, 64, 0, 0, 1, 0, 1, 0, 3),
+    ("rs", 12, 64, 64, 0, 0, 1, 0, 1, 0, 0),
+    ("rsm.L3", 12, 64, 64, 0, 0, 1, 0, 1, 0, 3, 0, 1),
+    ("rsm", 12, 64, 64, 0, 0, 1, 0, 1, 0, 0, 0, 1),
+    ("rsk2.L3", 7, 64, 64, 0, 0, 1, 0, 1, 0, 3, 0, 1, 2),
+    ("rsk2", 7, 64, 64, 0, 0, 1, 0, 1, 0, 0, 0, 1, 2),
+    ("rsk2.ins", 7, 64, 64, 0, 0, 1, 0, 1, 0, 0, 1, 1, 2),
     # 64 x 128 tiles (m = 256 at 128 CTAs)
-    ("m64n128f", 9, 64, 128, 0, 0, 1, 0, 0, 1, 0),
     ("n128m", 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 3),
-    ("n128k2", 4, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 3, 2),
-    ("pp128m", 9, 64, 128, 0, 1, 1, 0, 0, 1, 0, 0, 3),
+    ("n128s1", 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 1),
+    ("n128k2", 4, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 1, 2),
+    ("n128rs", 9, 64, 128, 0, 0, 1, 0, 1, 0, 0, 0, 1),
+    ("n128rsk2", 4, 64, 128, 0, 0, 1, 0, 1, 0, 0, 0, 1, 2),
 ]
 BHI = {v[0]: i for i, v in enumerate(BHV)}
 
@@ -124,9 +113,9 @@ template <int NR> __device__ __forceinline__ void bh_facc(float (&D)[NR]) {
 #pragma unroll
   for (int i = 0; i < NR; i++) asm volatile("" : "+f"(D[i]) :: "memory");
 }
-__device__ __forceinline__ void bh_fa(uint32_t (&A)[16]) {
+template <int NA> __device__ __forceinline__ void bh_fa(uint32_t (&A)[NA]) {
 #pragma unroll
-  for (int i = 0; i < 16; i++) asm volatile("" : "+r"(A[i]) :: "memory");
+  for (int i = 0; i < NA; i++) asm volatile("" : "+r"(A[i]) :: "memory");
 }
 
 template <int ST, int BM, int BN, int CL, int PP, int WN, int CG, int RS, int FN, int PRB, int INS, int SY, int KS>
@@ -292,32 +281,43 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
           for (int j = 0; j < SPG; j++) release(s0 + (u * SPG + j) * ds);
       }
     } else if (MMA && RS) {  // register-A: ldmatrix.x4 per k16 step from the 128B-swizzled W tile; WN = 1, CG = 0
-      uint32_t A0[16], A1[16];
+      constexpr int NA = 16 * KS;
+      uint32_t A0[NA], A1[NA];
       const int lrow = 16 * w + (lane & 7) + ((lane >> 3) & 1) * 8, lkh = lane >> 4;
-      auto step = [&](uint32_t (&A)[16], uint32_t (&Ap)[16], int s, bool first) {
+      auto step = [&](uint32_t (&A)[NA], uint32_t (&Ap)[NA], int s, bool first) {
+        BH_T0();
         if (WAITS) wait_in(s);
+        BH_T1(1);
         const int slot = STALE ? 0 : s % ST;
-        const uint32_t wb = wring + slot * WTB + aoff + lrow * 128;
 #pragma unroll
-        for (int q = 0; q < 4; q++)
-          asm volatile("ldmatrix.sync.aligned.m8n8.x4.shared.b16 {%0,%1,%2,%3}, [%4];\n"
-                       : "=r"(A[4 * q]), "=r"(A[4 * q + 1]), "=r"(A[4 * q + 2]), "=r"(A[4 * q + 3])
-                       : "r"(wb + ((((2 * q + lkh) ^ (lrow & 7))) << 4)) : "memory");
-        const uint64_t db = bh_desc(xring + slot * XTB);
+        for (int kk = 0; kk < KS; kk++) {
+          const uint32_t wb = wring + slot * WTB + kk * WT1 + aoff + lrow * 128;
+#pragma unroll
+          for (int q = 0; q < 4; q++)
+            asm volatile("ldmatrix.sync.aligned.m8n8.x4.shared.b16 {%0,%1,%2,%3}, [%4];\n"
+                         : "=r"(A[16 * kk + 4 * q]), "=r"(A[16 * kk + 4 * q + 1]), "=r"(A[16 * kk + 4 * q + 2]), "=r"(A[16 * kk + 4 * q + 3])
+                         : "r"(wb + ((((2 * q + lkh) ^ (lrow & 7))) << 4)) : "memory");
+        }
         bh_facc(D);
         bh_fence();
 #pragma unroll
-        for (int q = 0; q < 4; q++) {
-          const uint32_t a4[4] = {A[4 * q], A[4 * q + 1], A[4 * q + 2], A[4 * q + 3]};
-          bh_wgr(D, a4, db + 2 * q);
+        for (int kk = 0; kk < KS; kk++) {
+          const uint64_t db = bh_desc(xring + slot * XTB + kk * XT1);
+#pragma unroll
+          for (int q = 0; q < 4; q++) {
+            const uint32_t a4[4] = {A[16 * kk + 4 * q], A[16 * kk + 4 * q + 1], A[16 * kk + 4 * q + 2], A[16 * kk + 4 * q + 3]};
+            bh_wgr(D, a4, db + 2 * q);
+          }
         }
         bh_commit();
         bh_facc(D);
-        bh_fa(A);
-        if (!first) {
+        BH_T1(2);
+        if (!first) {  // A of stage s - 1 stays live (and unaliased) until the wait covering it
           bh_wgwait<1>();
           bh_fa(Ap);
+          BH_T1(3);
           if (WAITS) release(s - 1);
+          BH_T1(4);
         }
       };
       step(A0, A1, 0, true);
@@ -364,11 +364,14 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
 #pragma unroll
         for (int i = 0; i < NR / 4; i++) {
           const int tk = 8 * i + 2 * t;
-          const __nv_bfloat16 v0 = __float2bfloat16(D[4 * i]), v1 = __float2bfloat16(D[4 * i + 1]), v2 = __float2bfloat16(D[4 * i + 2]), v3 = __float2bfloat16(D[4 * i + 3]);
-          asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + (tk * BM + r) * 2), "h"(*(const unsigned short*)&v0) : "memory");
-          asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + ((tk + 1) * BM + r) * 2), "h"(*(const unsigned short*)&v1) : "memory");
-          asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + (tk * BM + r + 8) * 2), "h"(*(const unsigned short*)&v2) : "memory");
-          asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + ((tk + 1) * BM + r + 8) * 2), "h"(*(const unsigned short*)&v3) : "memory");
+          // inline-asm cvt: __float2bfloat16(D[i]) here makes ptxas serialize the RS kernel's wgmma pipeline (C7514)
+          uint32_t p0, p1;
+          asm("cvt.rn.bf16x2.f32 %0, %2, %1;\n" : "=r"(p0) : "f"(D[4 * i]), "f"(D[4 * i + 2]));
+          asm("cvt.rn.bf16x2.f32 %0, %2, %1;\n" : "=r"(p1) : "f"(D[4 * i + 1]), "f"(D[4 * i + 3]));
+          asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + (tk * BM + r) * 2), "h"((unsigned short)(p0 & 0xffffu)) : "memory");
+          asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + ((tk + 1) * BM + r) * 2), "h"((unsigned short)(p1 & 0xffffu)) : "memory");
+          asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + (tk * BM + r + 8) * 2), "h"((unsigned short)(p0 >> 16)) : "memory");
+          asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + ((tk + 1) * BM + r + 8) * 2), "h"((unsigned short)(p1 >> 16)) : "memory");
         }
       }
       asm volatile("bar.sync 1, %0;\n" :: "n"(NCT) : "memory");
