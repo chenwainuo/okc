@@ -51,10 +51,21 @@ base 107 / 98) interleaved per unit (24576 B) and runs two wgmmas per k16 step i
   the next is decoded; at MP = 256, groups of 2 steps, single-buffered, the other warpgroup covers the tensor pipe), then
   release the *previous* stage (`empty` mbarrier, count 2).
 * Stages: 12 (MP <= 32, 13-16 KB each) .. 7 (MP = 128, 28 KB) .. 4 (MP = 256, 44 KB): 170-200 KB in flight per SM.
-* Epilogue per n-block: accumulators -> per-warpgroup smem transpose (64 n x 8 tokens) -> `red.global.add.v4.f32` into an
-  fp32 workspace `ws[256][N]` (256-byte contiguous runs); escape fix-ups; `__threadfence`; counter atomic per n-block; the
-  **last-arriving CTA** converts the block to bf16 `out[m][n]` (fp32 for the router), re-zeroes `ws` and resets the
-  counter — the workspace is zero between calls, so there is no memset node and no second kernel.
+* Epilogue per n-block (after `wgmma.wait_group 0`):
+  1. **escape fix-ups in registers**: at the start of the n-block the 256 consumer threads prefetch the block's escape
+     list (<= 64 entries: index + delta, and the bf16 column `x[0..m)[k]` of each, 2 dependent L2 loads that overlap the
+     pipeline fill) into smem; at the flush the quad owning accumulator row n adds `delta * x[tok][k]` into its own
+     registers (a few dozen FMAs).  An n-block with > 64 escapes (never seen; P ~ 1e-4) falls back to scalar atomics.
+  2. **2-CTA cluster pre-reduction (DSMEM)**: consecutive CTAs form clusters of 2; for an n-block held by both, the
+     higher rank writes its fragment-layout accumulator tile with `st.shared::cluster.v4` into the leader's pipeline smem
+     (free: a leader's shared block is always its last one), then arrives on the leader's mbarrier; the leader (which
+     set a `ready` flag after its own `wait_group 0`) adds the slot into its registers.  Halves the global atomic traffic.
+  3. accumulators -> per-warpgroup smem transpose (64 n x 8 tokens) -> `red.global.add.v4.f32` into the fp32 workspace
+     `ws[256][N]` (256-byte contiguous runs).
+* A tiny second kernel (`convert_kernel`, m*N/4 threads) turns `ws` into bf16 `out[m][N]` (fp32 copy for the router) and
+  re-zeroes it, so the workspace is zero between calls: no memset node, no counters, no fences in the GEMM.  (The fused
+  "last CTA converts" variant was measured and cost 7-10 us at m = 128/256: the `__threadfence` after 64-128 KB of
+  atomics plus one CTA streaming the block serialised at the kernel tail.)
 
 ## 4. Measured (H100 box, graph replay with L2 flush; us)
 

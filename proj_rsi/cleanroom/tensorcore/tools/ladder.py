@@ -19,8 +19,15 @@ for layer in layers:
     for m in ms:
         data = reference.generate_input(m, layer, 1234 + m, dist="normal")
         n = data["config"]["n"]
-        wt = weights[layer][:n].t().contiguous(); x = data["x"]
-        tb = time_graph(lambda: torch.mm(x, wt), flush, reps)
+        x = data["x"]
+        if layer == "router":
+            w = weights[layer]; hi = w.to(torch.bfloat16); lo = (w - hi.float()).to(torch.bfloat16); hi_t, lo_t = hi.t().contiguous(), lo.t().contiguous()
+            def tfn():
+                acc = torch.mm(x, hi_t, out_dtype=torch.float32); acc += torch.mm(x, lo_t, out_dtype=torch.float32); return acc
+        else:
+            wt = weights[layer][:n].t().contiguous()
+            def tfn(): return torch.mm(x, wt)
+        tb = time_graph(tfn, flush, reps)
         row = f"{layer:9s} m={m:<4d} torch {tb:7.2f}"
         for mode in modes:
             mod.MODE = mode

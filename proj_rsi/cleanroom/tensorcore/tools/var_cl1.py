@@ -40,12 +40,13 @@ class Inputs(TypedDict):
 BN, BK = 128, 64
 WBYTES = BN * BK * 12 // 8  # 12288 bytes per unit
 GRID = 132
-CLUSTER = int(os.environ.get("TC_CLUSTER", "1"))  # CTAs per cluster for the DSMEM pre-reduction of split-K partials (1 = off)
+CLUSTER = int(os.environ.get("TC_CLUSTER", "1"))
+CLUSTER_MAX_MP = 128  # no smem room for a 128 KB slot at MP = 256  # CTAs per cluster for the DSMEM pre-reduction of split-K partials (1 = off)
 MODE = 0  # ladder: 0 full, 3 no flush, 4 red.add flush only, 5 escapes only (no red.add), 6 no x tile (no flush), 7 no wgmma (no flush)
 DEDICATED_MAX_MP = 32  # MP <= this: dedicated producer warp (288 threads); above: thread 0 issues loads (256 threads)
 MPS = [8, 16, 32, 64, 128, 256]
-STAGES = {8: 12, 16: 12, 32: 12, 64: 10, 128: 7, 256: 4}
-DSTAGES = {8: 8, 16: 8, 32: 7, 64: 6, 128: 5, 256: 3}  # router (hi+lo: 24 KB of W per stage)
+STAGES = {8: 11, 16: 10, 32: 9, 64: 8, 128: 4, 256: 4}      # cluster of 2 reserves a 256*MP*2-byte slot (MP<=128)
+DSTAGES = {8: 8, 16: 7, 32: 6, 64: 5, 128: 3, 256: 3}  # router (hi+lo: 24 KB of W per stage)
 ROUTER_GRID = {8: 128, 16: 128, 32: 128, 64: 128, 128: 128, 256: 128}
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -202,8 +203,8 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
   int* em = (int*)(scratch + 2 * 8 * 68);               // ECAP escape indices of the current n-block
   float* ed = (float*)(em + ECAP);                       // ECAP escape deltas
   __nv_bfloat16* xe = (__nv_bfloat16*)(ed + ECAP);       // ECAP x MP x values of the escapes' columns
-  uint64_t* slots_bar = (uint64_t*)(xe + ECAP * MP);     // cluster followers arrive here after writing their slot
-  int* ready = (int*)(slots_bar + 1);                    // leader: pipeline smem free for slots
+  uint64_t* slots_bar = (uint64_t*)(xe + ECAP * MP);     // the cluster follower arrives here after writing its slot
+  float* slot = (float*)(slots_bar + 2);                 // reserved: the follower's fragment-layout partial (256 x NACC floats)
 
   const int c = blockIdx.x;
   auto ustart = [&](int cc) { return (int)(((long long)cc * p.U) / p.G); };
@@ -222,7 +223,6 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
     for (int s = 0; s < STAGES; ++s) { mbar_init(&full[s], 1); mbar_init(&empty[s], 2); }
     int lead, nmem; members((unit1 - 1) / p.KC, lead, nmem);
     mbar_init(slots_bar, (lead == crank && nmem > 1) ? nmem - 1 : 1);
-    *ready = 0;
     asm volatile("fence.mbarrier_init.release.cluster;" ::: "memory");
     asm volatile("fence.proxy.async.shared::cta;" ::: "memory");
   }
@@ -290,27 +290,23 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
       }
     }
     if (p.mode == 5) return;
-    // (1b) cluster pre-reduction: followers push their fragment-layout tile into the leader's (idle) pipeline smem
+    // (1b) cluster pre-reduction: the follower pushes its fragment-layout tile into the leader's reserved slot (DSMEM)
+    // right away (a shared n-block is the follower's first block and the leader's last one), the leader adds it at its
+    // own flush after the follower's remote mbarrier arrival.
     if (p.cl > 1) {
       int lead, nmem; members(j, lead, nmem);
       if (nmem > 1) {
-        const uint32_t sbase = smem_u32(smem);
         if (crank != lead) {
-          const uint32_t rflag = mapa_cluster(smem_u32(ready), lead);
-          while (ld_cluster_acquire(rflag) == 0) { }
-          uint32_t slot = mapa_cluster(sbase + (uint32_t)((crank - lead - 1) * 256 * NACC * 4 + tid * 16), lead);
+          uint32_t ra = mapa_cluster(smem_u32(slot) + (uint32_t)((crank - lead - 1) * 256 * NACC * 4 + tid * 16), lead);
           #pragma unroll
-          for (int q = 0; q < NACC / 4; ++q) { st_cluster_v4(slot, acc[4 * q], acc[4 * q + 1], acc[4 * q + 2], acc[4 * q + 3]); slot += 256 * 16; }
+          for (int q = 0; q < NACC / 4; ++q) { st_cluster_v4(ra, acc[4 * q], acc[4 * q + 1], acc[4 * q + 2], acc[4 * q + 3]); ra += 256 * 16; }
           asm volatile("bar.sync 1, 256;" ::: "memory");
           if (tid == 0) mbar_arrive_remote(mapa_cluster(smem_u32(slots_bar), lead));
           return;
         }
-        // leader: this is its last n-block, so the pipeline buffers are free
-        asm volatile("bar.sync 1, 256;" ::: "memory");
-        if (tid == 0) asm volatile("st.release.cluster.shared::cta.u32 [%0], %1;" :: "r"(smem_u32(ready)), "r"(1) : "memory");
         mbar_wait_cluster(slots_bar, 0);
         for (int f = 0; f < nmem - 1; ++f) {
-          uint32_t sl = smem_u32(smem + f * 256 * NACC * 4) + tid * 16;
+          uint32_t sl = smem_u32(slot) + f * 256 * NACC * 4 + tid * 16;
           #pragma unroll
           for (int q = 0; q < NACC / 4; ++q) {
             float4 v;
@@ -361,11 +357,21 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
     if (cnt <= ECAP) {
       for (int e = tid; e < cnt; e += 256) { em[e] = p.esc_idx[e0 + e]; ed[e] = p.esc_delta[e0 + e]; }
       asm volatile("bar.sync 1, 256;" ::: "memory");
-      for (int i = tid; i < cnt * MP; i += 256) {
-        const int e = i / MP, tok = i % MP;
-        const int idx = em[e];
-        const int k = ((idx >> 13) % p.KC) * BK + (idx & 63);
-        xe[i] = tok < p.m ? p.x[(size_t)tok * p.K + k] : __float2bfloat16(0.f);
+      for (int i0 = tid; i0 < cnt * MP; i0 += 256 * 8) {
+        __nv_bfloat16 v[8];
+        #pragma unroll
+        for (int b = 0; b < 8; ++b) {
+          const int i = i0 + b * 256;
+          const int e = i / MP, tok = i % MP;
+          v[b] = __float2bfloat16(0.f);
+          if (i < cnt * MP && tok < p.m) {
+            const int idx = em[e];
+            const int k = ((idx >> 13) % p.KC) * BK + (idx & 63);
+            v[b] = p.x[(size_t)tok * p.K + k];
+          }
+        }
+        #pragma unroll
+        for (int b = 0; b < 8; ++b) { const int i = i0 + b * 256; if (i < cnt * MP) xe[i] = v[b]; }
       }
     }
     return cnt;
@@ -535,7 +541,8 @@ void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tens
   p.scale2b = (uint32_t)scale2b;
   p.mode = mode;
   size_t smem = 1024 + (size_t)stages * (MP * 128 + (dual ? 2 : 1) * WBYTES) + 2 * stages * 8 + 2 * 8 * 68 * 4 + ECAP * 8 + (size_t)ECAP * MP * 2 + 16;
-  TORCH_CHECK(cl == 1 || (size_t)(cl - 1) * 256 * (MP / 2) * 4 <= (size_t)stages * (MP * 128 + (dual ? 2 : 1) * WBYTES), "slot region too small");
+  smem += (size_t)(cl - 1) * 256 * (MP / 2) * 4;
+  TORCH_CHECK(smem <= 232448, "smem too large: ", smem);
   cudaStream_t stream = at::cuda::getCurrentCUDAStream();
   if (!dual) {
     switch (MP) {
@@ -590,7 +597,7 @@ def _build():
             src = src.replace(f"STAGES_{mp},", f"{st},")
         src = src.replace("DEDICATED_MAX_MP", str(DEDICATED_MAX_MP))
         _ext = load_inline(
-            name="tensorcore_gemm_v19",
+            name="tensorcore_gemm_v20",
             cpp_sources=CPP_SRC,
             cuda_sources=src,
             functions=["tensorcore_gemm"],
@@ -750,5 +757,5 @@ def kernel_fn(data: Inputs, state: dict) -> torch.Tensor:
     out = torch.empty(m, n, dtype=torch.float32 if dual else torch.bfloat16, device=x.device)
     _ext.tensorcore_gemm(mp, (DSTAGES if dual else STAGES)[mp], info["packed"], x, info["ws"], out, info["counters"], exp_t,
                          info["esc_off"], info["esc_idx"], info["esc_delta"], n, info["K"], m, NB, info["KC"], U, G,
-                         CLUSTER, info["scale2"], info.get("scale2b", 0), int(dual), MODE)
+                         CLUSTER if mp <= CLUSTER_MAX_MP else 1, info["scale2"], info.get("scale2b", 0), int(dual), MODE)
     return out
