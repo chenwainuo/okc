@@ -2944,26 +2944,54 @@ def _v12(x, layer, n, state):
 # 4 + wgmma (full mainloop) | 5 bare W stream (producer self-paced, no consumer) | 6 bare W + x stream |
 # 7 epilogue only (no mainloop: D = constant; memset + reduce-add cost) | 8 decode + wgmma on resident slot 0, no TMA
 # and no barriers (SM-side rate) | 10 = 8 with constant A (no LDS / decode).
-RQV = [  # (name, NT, ST, GS, PRB, WG0, INS, HINT): ST k64 slots (W 12 KB + x NT*128 B each), GS k64 stages per consumer round
-    ("f12", 128, 8, 2, 5, 0, 0, 0),
-    ("f12x", 128, 8, 2, 6, 0, 0, 0),
-    ("s0", 128, 8, 2, 1, 0, 0, 0),
-    ("s1", 128, 8, 2, 2, 0, 0, 0),
-    ("s2", 128, 8, 2, 3, 0, 0, 0),
-    ("s3", 128, 8, 2, 4, 0, 0, 0),
-    ("s4", 128, 8, 2, 0, 0, 0, 0),
-    ("s3g1", 128, 8, 1, 4, 0, 0, 0),
-    ("s4g1", 128, 8, 1, 0, 0, 0, 0),
-    ("s3w0", 128, 8, 2, 4, 1, 0, 0),
-    ("s4h", 128, 8, 2, 0, 0, 0, 1),
-    ("ep", 128, 8, 2, 7, 0, 0, 0),
-    ("r8", 128, 8, 2, 8, 0, 0, 0),
-    ("r8g1", 128, 8, 1, 8, 0, 0, 0),
-    ("s3i", 128, 8, 2, 4, 0, 1, 0),
-    ("s4i", 128, 8, 2, 0, 0, 1, 0),
-    ("s3g1i", 128, 8, 1, 4, 0, 1, 0),
-    ("s1i", 128, 8, 2, 2, 0, 1, 0),
-    ("s2i", 128, 8, 2, 3, 0, 1, 0),
+RQV = [  # (name, NT, ST, GS, PRB, WM, INS, FL): ST k64 slots (W 12 KB + x NT*128 B each), GS k64 stages per consumer
+    # round, WM 0 wait_group 1 + lagged x release / 1 decode-next under the wgmma + wait_group 0, FL bit 0 L2 hints,
+    # bit 1 in-kernel zeroing (no memset node)
+    ("f12", 128, 8, 1, 5, 0, 0, 0),
+    ("f12x", 128, 8, 1, 6, 0, 0, 0),
+    ("s0", 128, 8, 1, 1, 0, 0, 0),
+    ("s1", 128, 8, 1, 2, 0, 0, 0),
+    ("s2", 128, 8, 1, 3, 0, 0, 0),
+    ("s3", 128, 8, 1, 4, 0, 0, 0),
+    ("s3g2", 128, 8, 2, 4, 0, 0, 0),
+    ("s3m1", 128, 8, 1, 4, 1, 0, 0),
+    ("s3m2", 128, 8, 1, 4, 2, 0, 0),
+    ("s3m2s7", 128, 7, 1, 4, 2, 0, 0),
+    ("s3s6", 128, 6, 1, 4, 0, 0, 0),
+    ("s3s5", 128, 5, 1, 4, 0, 0, 0),
+    ("s3s4", 128, 4, 1, 4, 0, 0, 0),
+    ("s3s6h", 128, 6, 1, 4, 0, 0, 1),
+    ("s3s5h", 128, 5, 1, 4, 0, 0, 1),
+    ("s3s6g2", 128, 6, 2, 4, 0, 0, 0),
+    ("s1s6", 128, 6, 1, 2, 0, 0, 0),
+    ("s1s5", 128, 5, 1, 2, 0, 0, 0),
+    ("s4s6z", 128, 6, 1, 0, 0, 0, 2),
+    ("s4s5z", 128, 5, 1, 0, 0, 0, 2),
+    ("s4s6hz", 128, 6, 1, 0, 0, 0, 3),
+    ("s4s5hz", 128, 5, 1, 0, 0, 0, 3),
+    ("s4s5hzi", 128, 5, 1, 0, 0, 1, 3),
+    ("s3s7", 128, 7, 1, 4, 0, 0, 0),
+    ("s3h", 128, 8, 1, 4, 0, 0, 1),
+    ("s3m2h", 128, 8, 1, 4, 2, 0, 1),
+    ("s4m2z", 128, 8, 1, 0, 2, 0, 3),
+    ("r8m2", 128, 8, 1, 8, 2, 0, 0),
+    ("s3m2i", 128, 8, 1, 4, 2, 1, 0),
+    ("s3g2m1", 128, 8, 2, 4, 1, 0, 0),
+    ("s4", 128, 8, 1, 0, 0, 0, 1),
+    ("s4m1", 128, 8, 1, 0, 1, 0, 1),
+    ("s4z", 128, 8, 1, 0, 0, 0, 3),
+    ("s4m1z", 128, 8, 1, 0, 1, 0, 3),
+    ("s4g2m1z", 128, 8, 2, 0, 1, 0, 3),
+    ("ep", 128, 8, 1, 7, 0, 0, 0),
+    ("epst", 128, 8, 1, 7, 0, 0, 4),
+    ("ep0", 128, 8, 1, 7, 0, 0, 8),
+    ("s4st", 128, 8, 1, 0, 0, 0, 5),
+    ("s4zi", 128, 8, 1, 0, 0, 1, 3),
+    ("r8", 128, 8, 1, 8, 0, 0, 0),
+    ("r8m1", 128, 8, 1, 8, 1, 0, 0),
+    ("s3i", 128, 8, 1, 4, 0, 1, 0),
+    ("s3m1i", 128, 8, 1, 4, 1, 1, 0),
+    ("s4m1zi", 128, 8, 1, 0, 1, 1, 3),
 ]
 RQI = {v[0]: i for i, v in enumerate(RQV)}
 RQTOL = {1: 4e-3, 2: 5e-3, 3: 6e-3, 4: 6e-3, 5: 7e-3, 6: 7e-3, 7: 8e-3, 8: 8e-3, 9: 8e-3}  # judge 1e-2 (rows 5x)
@@ -2978,8 +3006,10 @@ RQCU = r"""
 struct alignas(64) RqTmap { unsigned long long v[16]; };
 struct RqP {
   const uint8_t* W;                  // packed [NB][KC][8 tiles][1536]
-  const uint32_t* esc;               // escape entries, one sentinel-terminated list per (ks, nb, warp)
-  const int* eoff;                   // [KS][NB][8] list starts
+  const uint32_t* esc;               // escape entries, [KS][NB][8][ecap] sentinel-terminated lists (+32 sentinels)
+  int ecap;                          // entries per (ks, nb, warp) list slot: fixed stride, so no offset load
+  __nv_bfloat16* out;                // [m][N] (in-kernel zeroing only; the reduce-adds go through the out tensor map)
+  int* cnt;                          // [2][NB] zero / poll counters (FL bit 1), all zero between launches
   unsigned long long* prof;          // INS stamps [KS][NB][2 WG][16]
   uint32_t* sink;
   int m, N, K, KC, NB, walias;
@@ -3055,10 +3085,10 @@ template <int NT> __device__ __forceinline__ void rq_wgmma(float (&D)[NT / 2], c
 template <int NT> __device__ __forceinline__ void rq_wgss(float (&D)[NT / 2], uint64_t da, uint64_t db, int scd);
 @@WGMMA@@
 
-template <int NT, int ST, int GS, int PRB, int WG0, int INS, int HINT>
+template <int NT, int ST, int GS, int PRB, int WM, int INS, int FL>
 struct RqC {
   static constexpr int XB = NT * 128, WB = 12288, ND = NT / 2;
-  static constexpr int SMEM = 1024 + ST * (XB + WB) + 24 * ST;
+  static constexpr int SMEM = 1024 + ST * (XB + WB) + 24 * ST + 16;
 };
 
 // Ring: ST k64 slots, slot i = x tile (XB, 1024-aligned) in the x ring + 12 KB W chunk in the W ring. ONE full barrier
@@ -3068,11 +3098,12 @@ struct RqC {
 // slot's full barrier can only happen after the consumers saw the current phase complete (they LDS after the full wait),
 // so phases never mix. Consumers run GS k64 stages per round: GS full waits, one wgmma.fence, 4*GS wgmma, one commit,
 // one wait_group 1 (P4: k128 rounds amortise the per-round bookkeeping).
-template <int NT, int ST, int GS, int PRB, int WG0, int INS, int HINT>
+template <int NT, int ST, int GS, int PRB, int WM, int INS, int FL>
 __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant__ RqTmap tx, const __grid_constant__ RqTmap to) {
 #if defined(__CUDA_ARCH_FEAT_SM90_ALL)
-  using C = RqC<NT, ST, GS, PRB, WG0, INS, HINT>;
+  using C = RqC<NT, ST, GS, PRB, WM, INS, FL>;
   constexpr int XB = C::XB, WB = C::WB, ND = C::ND;
+  constexpr bool HINT = FL & 1, ZI = (FL & 2) && PRB == 0;  // ZI: in-kernel zeroing of out (no memset node)
   constexpr bool RES = PRB == 8 || PRB == 10;                           // resident: no TMA, no barriers
   constexpr bool XON = PRB != 1 && PRB != 5 && PRB != 7 && !RES;       // x streamed
   constexpr bool WON = PRB != 7 && !RES;                               // W streamed
@@ -3080,17 +3111,21 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
   extern __shared__ __align__(1024) uint8_t smem[];
   const uint32_t sraw = (uint32_t)__cvta_generic_to_shared(smem), sbase = (sraw + 1023u) & ~1023u;
   const uint32_t xring = sbase, wring = sbase + ST * XB, bars = wring + ST * WB;
-  const uint32_t full = bars, wempty = bars + 8 * ST, xempty = bars + 16 * ST;
+  const uint32_t full = bars, wempty = bars + 8 * ST, xempty = bars + 16 * ST, zflag = bars + 24 * ST;
   const int tid = threadIdx.x, warp = tid >> 5, lane = tid & 31;
   const int nb = blockIdx.x, ks = blockIdx.y, KS = gridDim.y;
   const int s0 = (int)((long long)ks * p.KC / KS), KCS = (int)((long long)(ks + 1) * p.KC / KS) - s0;
   const unsigned long long gt0 = INS ? rq_gt() : 0;
+  // escape-list window issued before the producers start the W flood (a load issued after it waits behind ~28 MB)
+  const uint32_t* el = p.esc + (size_t)((ks * p.NB + nb) * 8 + (warp & 7)) * p.ecap;
+  uint32_t ec = warp < 8 ? __ldg(el + lane) : 0u;
   if (tid == 0) {
     for (int i = 0; i < ST; i++) {
       asm volatile("mbarrier.init.shared::cta.b64 [%0], %1;\n" :: "r"(full + 8 * i), "r"(XON ? 2 : 1));
       asm volatile("mbarrier.init.shared::cta.b64 [%0], 8;\n" :: "r"(wempty + 8 * i));
       asm volatile("mbarrier.init.shared::cta.b64 [%0], 8;\n" :: "r"(xempty + 8 * i));
     }
+    asm volatile("st.shared.u32 [%0], 0;\n" :: "r"(zflag) : "memory");
     asm volatile("fence.mbarrier_init.release.cluster;\n" ::: "memory");
   }
   if (tid == 320 && XON) asm volatile("prefetch.tensormap [%0];\n" :: "l"((unsigned long long)&tx) : "memory");
@@ -3136,6 +3171,30 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
       }
       if (SELF) for (int s = (KCS > ST ? KCS - ST : 0); s < KCS; s++) rq_wait(full + 8 * (s % ST), (s / ST) & 1);
       if (INS) p.prof[cta * 32 + 10] = tw;
+    } else if (ZI && warp >= 10) {  // in-kernel zeroing: this CTA's 1/KS token slice of its row block's 128 out columns,
+      // then a release increment of the block's counter; every reduce-add into the block first acquires counter == KS
+      const int t = tid - 320, r0 = (int)((long long)ks * p.m / KS), r1 = (int)((long long)(ks + 1) * p.m / KS);
+      for (int e = t; e < (r1 - r0) * 16; e += 64) {
+        __nv_bfloat16* d = p.out + (size_t)(r0 + (e >> 4)) * p.N + nb * 128 + (e & 15) * 8;
+        asm volatile("st.global.v4.u32 [%0], {%1, %1, %1, %1};\n" :: "l"(d), "r"(0) : "memory");
+      }
+      asm volatile("fence.proxy.async.global;\n" ::: "memory");  // generic zero stores -> the TMA (async proxy) adds
+      asm volatile("bar.sync 4, 64;\n" ::: "memory");
+      if (t == 0) {
+        asm volatile("red.release.gpu.global.add.u32 [%0], 1;\n" :: "l"(p.cnt + nb) : "memory");
+        // wait (off the critical path, while the mainloop runs) until every CTA of the block zeroed its slice; publish it
+        // to the epilogue through a shared flag. Bounded: a non-co-resident grid fails validation instead of hanging.
+        uint32_t c = 0;
+        for (int it = 0; it < (1 << 22); it++) {
+          asm volatile("ld.acquire.gpu.global.u32 %0, [%1];\n" : "=r"(c) : "l"(p.cnt + nb) : "memory");
+          if ((int)c >= KS) break;
+          __nanosleep(128);
+        }
+        asm volatile("fence.proxy.async.global;\n" ::: "memory");
+        asm volatile("st.release.cta.shared.u32 [%0], 1;\n" :: "r"(zflag) : "memory");
+        // the last of the block's KS pollers resets both counters for the next launch (the kernel boundary orders it)
+        if (atomicAdd(p.cnt + p.NB + nb, 1) == KS - 1) { p.cnt[nb] = 0; p.cnt[p.NB + nb] = 0; }
+      }
     }
     return;
   }
@@ -3143,9 +3202,7 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
   asm volatile("setmaxnreg.inc.sync.aligned.u32 232;\n");
   if (SELF) return;
   const int g = warp >> 2, w = warp & 3;
-  const uint32_t* el = p.esc + __ldg(p.eoff + (ks * p.NB + nb) * 8 + warp);  // the list is padded by 32 sentinels
   int ei = 0;
-  uint32_t ec = __ldg(el + lane);
   uint32_t nx = __shfl_sync(0xffffffffu, ec, 0), nxs = nx >> 17;
   uint32_t Tb = p.Tb;
   asm volatile("" : "+r"(Tb));
@@ -3166,6 +3223,7 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
 #define RQ_T1(i) do { if (INS) { const unsigned long long t_ = clock64(); pc[i] += t_ - tq; tq = t_; } } while (0)
   if (INS) { tq0 = clock64(); tq = tq0; }
   const unsigned long long gtl0 = INS ? rq_gt() : 0;
+  unsigned long long gtw0 = 0;
   const int NGF = KCS / GS, NGT = (KCS + GS - 1) / GS;  // full rounds, all rounds
   // round G = stages GS*G .. GS*G + GS - 1 (the last round may be partial)
   auto ldr = [&](int G) {  // full waits, LDS of this warp's 48 B per lane per stage, W slots released
@@ -3237,6 +3295,7 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
     }
     asm volatile("wgmma.commit_group.sync.aligned;\n" ::: "memory");
     rq_facc<ND>(D);
+    if (INS && G == 0) gtw0 = rq_gt();
     RQ_T1(5);
   };
   auto fa = [&](uint32_t (&A)[GS][16]) {
@@ -3257,17 +3316,34 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
       if (PRB != 1) xrel(G);
     }
   } else if (PRB == 0 || PRB == 4 || RES) {
-    auto round = [&](int G, auto NSC, uint32_t (&A)[GS][16], uint32_t (&Ap)[GS][16]) {
-      constexpr int NS = decltype(NSC)::value;
-      dec(G, NS, A);
-      mma(G, NSC, A);
-      if (G + 1 < NGT) ldr(G + 1);
-      if (WG0) {
+    // WM 0: dec(G) -> issue(G) -> LDS(G+1) -> wait_group 1 -> release x(G-1)  (decode on the wait->issue chain)
+    // WM 1: issue(G) -> LDS(G+1) + dec(G+1) under wgmma(G) -> wait_group 0 -> release x(G) at once
+    // WM 2: issue(G) -> LDS(G+1) + dec(G+1) -> wait_group 1 -> release x(G-1): the decode of the next round runs under
+    //       the two queued groups; A triple-buffered (G-1 still in flight, G queued, G+1 being written)
+    uint32_t A2[GS][16];
+#pragma unroll
+    for (int j = 0; j < GS; j++)
+#pragma unroll
+      for (int i = 0; i < 16; i++) A2[j][i] = 0u;
+    auto round = [&](int G, auto NSC, uint32_t (&A)[GS][16], uint32_t (&An)[GS][16], uint32_t (&Ap)[GS][16]) {
+      if (WM == 0) {
+        dec(G, decltype(NSC)::value, A);
+        mma(G, NSC, A);
+        if (G + 1 < NGT) ldr(G + 1);
+        asm volatile("wgmma.wait_group.sync.aligned 1;\n" ::: "memory");
+        fa(Ap);
+        RQ_T1(6);
+        if (G > 0) xrel(G - 1);
+      } else if (WM == 1) {
+        mma(G, NSC, A);
+        if (G + 1 < NGT) { ldr(G + 1); dec(G + 1, KCS - GS * (G + 1), An); }
         asm volatile("wgmma.wait_group.sync.aligned 0;\n" ::: "memory");
         fa(A);
         RQ_T1(6);
         xrel(G);
       } else {
+        mma(G, NSC, A);
+        if (G + 1 < NGT) { ldr(G + 1); dec(G + 1, KCS - GS * (G + 1), An); }
         asm volatile("wgmma.wait_group.sync.aligned 1;\n" ::: "memory");
         fa(Ap);
         RQ_T1(6);
@@ -3275,21 +3351,40 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
       }
     };
     using FULLR = std::integral_constant<int, GS>;
+    using ONER = std::integral_constant<int, 1>;
     ldr(0);
-    round(0, FULLR{}, A0, A1);  // host guarantees KCS >= GS
-    int G = 1;
+    if (WM != 0) dec(0, GS, A0);
+    int G = 0;
+    if (WM == 2) {  // buffer of round G = G % 3; host guarantees KCS >= GS
+      round(0, FULLR{}, A0, A1, A2);
+      G = 1;
 #pragma unroll 1
-    for (; G + 1 < NGF; G += 2) { round(G, FULLR{}, A1, A0); round(G + 1, FULLR{}, A0, A1); }
-    if (G < NGF) { round(G, FULLR{}, A1, A0); G++; }
-    if (GS > 1 && NGT > NGF) {  // partial last round (KCS % GS stages; GS = 2: one stage), buffer parity by G
-      if (G & 1) round(G, std::integral_constant<int, 1>{}, A1, A0);
-      else round(G, std::integral_constant<int, 1>{}, A0, A1);
-      G++;
+      for (; G + 2 < NGF; G += 3) { round(G, FULLR{}, A1, A2, A0); round(G + 1, FULLR{}, A2, A0, A1); round(G + 2, FULLR{}, A0, A1, A2); }
+      if (G < NGF) { round(G, FULLR{}, A1, A2, A0); G++; }
+      if (G < NGF) { round(G, FULLR{}, A2, A0, A1); G++; }
+      if (GS > 1 && NGT > NGF) {
+        const int b = G % 3;
+        if (b == 0) round(G, ONER{}, A0, A1, A2);
+        else if (b == 1) round(G, ONER{}, A1, A2, A0);
+        else round(G, ONER{}, A2, A0, A1);
+        G++;
+      }
+    } else {
+      round(0, FULLR{}, A0, A1, A1);
+      G = 1;
+#pragma unroll 1
+      for (; G + 1 < NGF; G += 2) { round(G, FULLR{}, A1, A0, A0); round(G + 1, FULLR{}, A0, A1, A1); }
+      if (G < NGF) { round(G, FULLR{}, A1, A0, A0); G++; }
+      if (GS > 1 && NGT > NGF) {  // partial last round (KCS % GS stages; GS = 2: one stage), buffer parity by G
+        if (G & 1) round(G, ONER{}, A1, A0, A0);
+        else round(G, ONER{}, A0, A1, A1);
+        G++;
+      }
     }
     asm volatile("wgmma.wait_group.sync.aligned 0;\n" ::: "memory");
     rq_facc<ND>(D);
-    fa(A0); fa(A1);
-    if (!WG0) xrel(NGT - 1);
+    fa(A0); fa(A1); fa(A2);
+    if (WM != 1) xrel(NGT - 1);
   }
   if (INS) pc[0] = clock64() - tq0;
   const unsigned long long gtl1 = INS ? rq_gt() : 0;
@@ -3299,7 +3394,10 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
 #pragma unroll
       for (int i = 0; i < ND; i++) D[i] = (float)((i + tid) & 7) * 0.125f;
     }
+    const unsigned long long ce0 = INS ? clock64() : 0;
+    unsigned long long ce[5] = {0, 0, 0, 0, 0};
     asm volatile("bar.sync 1, 256;\n" ::: "memory");  // both WGs retired every wgmma: the x ring is free
+    if (INS) ce[0] = clock64() - ce0;
     const uint32_t slab = xring + g * XB;
     const int j = lane >> 3, rr = lane & 7;
 #pragma unroll
@@ -3312,20 +3410,35 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
     }
     asm volatile("fence.proxy.async.shared::cta;\n" ::: "memory");
     asm volatile("bar.sync %0, 128;\n" :: "r"(2 + g) : "memory");
+    if (INS) ce[1] = clock64() - ce0;
     if (w == 0 && lane == 0) {
-      asm volatile("cp.reduce.async.bulk.tensor.2d.global.shared::cta.add.tile.bulk_group [%0, {%1, %2}], [%3];\n"
-                   :: "l"((unsigned long long)&to), "r"(nb * 128 + 64 * g), "r"(0), "r"(slab) : "memory");
+      if (ZI) {  // the block's zeroing is complete (flag set by warp 10 long before; bounded spin)
+        uint32_t f = 0;
+        for (int it = 0; it < (1 << 24) && !f; it++) asm volatile("ld.acquire.cta.shared.u32 %0, [%1];\n" : "=r"(f) : "r"(zflag) : "memory");
+        asm volatile("fence.proxy.async.global;\n" ::: "memory");
+      }
+      if (INS) ce[2] = clock64() - ce0;
+      if (FL & 4) asm volatile("cp.async.bulk.tensor.2d.global.shared::cta.bulk_group [%0, {%1, %2}], [%3];\n"
+                               :: "l"((unsigned long long)&to), "r"(nb * 128 + 64 * g), "r"(0), "r"(slab) : "memory");
+      else if (!(FL & 8)) asm volatile("cp.reduce.async.bulk.tensor.2d.global.shared::cta.add.tile.bulk_group [%0, {%1, %2}], [%3];\n"
+                                       :: "l"((unsigned long long)&to), "r"(nb * 128 + 64 * g), "r"(0), "r"(slab) : "memory");
       asm volatile("cp.async.bulk.commit_group;\n" ::: "memory");
+      if (INS) ce[3] = clock64() - ce0;
       asm volatile("cp.async.bulk.wait_group.read 0;\n" ::: "memory");
+      if (INS) ce[4] = clock64() - ce0;
     }
     RQ_T1(8);
+    if (INS && g == 0 && w == 0 && lane == 0) {
+#pragma unroll
+      for (int i = 0; i < 5; i++) p.prof[cta * 32 + 26 + i] = ce[i];
+    }
   } else {
     if (sink == 0x9e3779b9u || D[0] == 1.2345f) p.sink[0] = sink;
   }
   if (INS && w == 0 && lane == 0) {
 #pragma unroll
     for (int i = 0; i < 9; i++) p.prof[cta * 32 + 16 * g + i] = pc[i];
-    if (g == 0) { p.prof[cta * 32 + 11] = gt0; p.prof[cta * 32 + 12] = gtl0; p.prof[cta * 32 + 13] = gtl1; p.prof[cta * 32 + 14] = rq_gt(); }
+    if (g == 0) { p.prof[cta * 32 + 11] = gt0; p.prof[cta * 32 + 12] = gtl0; p.prof[cta * 32 + 13] = gtl1; p.prof[cta * 32 + 14] = rq_gt(); p.prof[cta * 32 + 25] = gtw0; }
   }
 #undef RQ_T0
 #undef RQ_T1
@@ -3353,10 +3466,10 @@ static int rq_map(RqTmap* tm, const void* ptr, int64_t inner, int64_t outer, int
   return enc((CUtensorMap*)tm, CU_TENSOR_MAP_DATA_TYPE_BFLOAT16, 2, (void*)ptr, dims, strides, box, estr, CU_TENSOR_MAP_INTERLEAVE_NONE,
              CU_TENSOR_MAP_SWIZZLE_128B, CU_TENSOR_MAP_L2_PROMOTION_L2_256B, CU_TENSOR_MAP_FLOAT_OOB_FILL_NONE) == CUDA_SUCCESS ? 0 : -22;
 }
-template <int NT, int ST, int GS, int PRB, int WG0, int INS, int HINT>
+template <int NT, int ST, int GS, int PRB, int WM, int INS, int FL>
 static int rq_go(RqP& p, torch::Tensor x, torch::Tensor out, int KS, int info) {
-  using C = RqC<NT, ST, GS, PRB, WG0, INS, HINT>;
-  auto k = rq<NT, ST, GS, PRB, WG0, INS, HINT>;
+  using C = RqC<NT, ST, GS, PRB, WM, INS, FL>;
+  auto k = rq<NT, ST, GS, PRB, WM, INS, FL>;
   if (info) {
     cudaFuncAttributes a;
     if (cudaFuncGetAttributes(&a, k) != cudaSuccess) { cudaGetLastError(); return -1; }
@@ -3377,14 +3490,17 @@ static int rq_go(RqP& p, torch::Tensor x, torch::Tensor out, int KS, int info) {
   const cudaError_t e = cudaGetLastError();
   return e == cudaSuccess ? 0 : (int)e;
 }
-int64_t rqrun(int64_t v, torch::Tensor W, torch::Tensor x, torch::Tensor out, torch::Tensor esc, torch::Tensor eoff, int64_t KS,
+int64_t rqrun(int64_t v, torch::Tensor W, torch::Tensor x, torch::Tensor out, torch::Tensor esc, torch::Tensor cnt, int64_t KS,
               int64_t Tb, int64_t walias, torch::Tensor prof, torch::Tensor sink, int64_t info) {
   RqP p = {};
   if (!info) {
     if (W.dim() != 4 || W.size(2) != 8 || W.size(3) != 1536 || x.dim() != 2 || out.dim() != 2 || x.size(0) != out.size(0)) return -10;
     if (x.size(1) != W.size(1) * 64 || out.size(1) != W.size(0) * 128 || x.scalar_type() != torch::kBFloat16 || out.scalar_type() != torch::kBFloat16) return -11;
-    if (eoff.numel() < KS * W.size(0) * 8 || sink.numel() < 1) return -12;
-    p.W = (const uint8_t*)W.data_ptr(); p.esc = (const uint32_t*)esc.data_ptr(); p.eoff = eoff.data_ptr<int>();
+    const int64_t nl = KS * W.size(0) * 8;
+    if (esc.numel() < nl * 32 + 32 || (esc.numel() - 32) % nl || sink.numel() < 1) return -12;
+    if (cnt.numel() < 2 * W.size(0) || cnt.scalar_type() != torch::kInt32) return -13;
+    p.W = (const uint8_t*)W.data_ptr(); p.esc = (const uint32_t*)esc.data_ptr(); p.ecap = (int)((esc.numel() - 32) / nl);
+    p.out = (__nv_bfloat16*)out.data_ptr(); p.cnt = cnt.data_ptr<int>();
     p.prof = prof.numel() >= KS * W.size(0) * 32 ? (unsigned long long*)prof.data_ptr() : nullptr;
     p.sink = (uint32_t*)sink.data_ptr();
     p.m = (int)x.size(0); p.K = (int)x.size(1); p.N = (int)out.size(1); p.KC = (int)W.size(1); p.NB = (int)W.size(0);
@@ -3477,7 +3593,8 @@ def _rqunpack(lay, tab, esc, N, K):
 
 
 def _rqesc(esc6, NB, KC, KS, dev):
-    """per-(ks, nb, warp) sentinel-terminated escape lists for grid (NB, KS): entries int32 (+32 trailing sentinels) and starts [KS][NB][8]"""
+    """escape lists for grid (NB, KS): one fixed-stride slot of CAP entries per (ks, nb, warp) (CAP a multiple of 32,
+    > the longest list, so every list ends in a sentinel), + 32 trailing sentinels; int32 [KS*NB*8*CAP + 32]"""
     G = KS * NB * 8
     if len(esc6):
         tile, ch, q, ln, v, xr = [t.long() for t in esc6.t()]
@@ -3490,15 +3607,14 @@ def _rqesc(esc6, NB, KC, KS, dev):
         o = torch.argsort(gw * 65536 + u)
         gw, ent = gw[o], ent[o]
         rank = torch.arange(len(gw), device=dev) - torch.searchsorted(gw, gw)
-        cnt = torch.bincount(gw, minlength=G)
+        cap = (int(torch.bincount(gw, minlength=G).max()) + 1 + 31) // 32 * 32
     else:
-        cnt = torch.zeros(G, dtype=torch.long, device=dev)
-    starts = torch.cumsum(cnt + 1, 0) - (cnt + 1)
-    arr = torch.full((int((cnt + 1).sum()) + 32,), 0xffffffff, dtype=torch.long, device=dev)  # + 32: the kernel reads 32-entry windows
+        cap = 32
+    arr = torch.full((G * cap + 32,), 0xffffffff, dtype=torch.long, device=dev)
     if len(esc6):
-        arr[starts[gw] + rank] = ent
+        arr[gw * cap + rank] = ent
     arr = torch.where(arr >= 2 ** 31, arr - 2 ** 32, arr).int()
-    return arr.contiguous(), starts.int().contiguous()
+    return arr.contiguous(), torch.zeros(1, dtype=torch.int32, device=dev)
 
 
 RQKS = {"pooler": 4, "unpooler": 2, "o": 2, "qkv_gate": 7}  # one-wave KS grid: N/128 x KS <= 132

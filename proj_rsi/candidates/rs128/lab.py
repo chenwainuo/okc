@@ -47,19 +47,19 @@ def plan_r1(layers, ms):
     for ly in layers:
         for m in ms:
             v.append(("cublas", None, ly, m, 0, 0))
-            for nm in ("f12", "f12x", "s0", "s1", "s2", "s3", "s3g1", "s3w0", "s4", "s4g1", "s4h", "ep"):
+            for nm in ("f12x", "s1", "s1s5", "s3", "s3s5", "s3s5h", "s3s6h", "s4z", "s4s5hz", "s4s6hz"):
                 v.append((nm, nm, ly, m, S.RQKS[ly], 0))
     return v
 
 
 def plan_e5(layers, ms):
-    """L2-resident period probe: every CTA re-reads row block 0 (walias 1); plus the resident-smem rates (r8 / r9)"""
+    """L2-resident period probe: every CTA re-reads row block 0 (walias 1); r8 = SM-side rate on resident slots"""
     v = []
     for ly in layers:
         for m in ms:
-            for nm in ("s1", "s2", "s3", "s3g1", "s3w0"):
+            for nm in ("s1", "s2", "s3", "s3m1"):
                 v.append((nm + "-L2", nm, ly, m, S.RQKS[ly], 1))
-            for nm in ("s3", "r8", "r8g1"):
+            for nm in ("s3", "r8", "r8m1"):
                 v.append((nm, nm, ly, m, S.RQKS[ly], 0))
     return v
 
@@ -68,13 +68,10 @@ def plan_ins(layers, ms):
     v = []
     for ly in layers:
         for m in ms:
-            v.append(("s1i", "s1i", ly, m, S.RQKS[ly], 0))
-            v.append(("s2i", "s2i", ly, m, S.RQKS[ly], 0))
-            v.append(("s3i", "s3i", ly, m, S.RQKS[ly], 0))
-            v.append(("s3i-L2", "s3i", ly, m, S.RQKS[ly], 1))
-            v.append(("s4i", "s4i", ly, m, S.RQKS[ly], 0))
-            v.append(("s3g1i", "s3g1i", ly, m, S.RQKS[ly], 0))
-            v.append(("s3g1i-L2", "s3g1i", ly, m, S.RQKS[ly], 1))
+            for nm in ("s3i", "s4s5hzi"):
+                v.append((nm, nm, ly, m, S.RQKS[ly], 0))
+            for nm in ("s3i",):
+                v.append((nm + "-L2", nm, ly, m, S.RQKS[ly], 1))
     return v
 
 
@@ -192,7 +189,7 @@ def main():
         print("PACK %s %s esc=%d Tb=%#x blocked-unpack %s (%.1fs)" % (ly, tuple(lay.shape), len(esc), tab & 0xffffffff, "EXACT" if ok else "MISMATCH", time.time() - t1), flush=True)
         assert ok
         packs[ly] = pk
-    escs = {}
+    escs, cnts = {}, {}
     gen = torch.Generator(device=dev).manual_seed(1281)
     flush = torch.empty(64 << 20, dtype=torch.float32, device=dev)
     fsink = torch.empty((), dtype=torch.float32, device=dev)
@@ -212,10 +209,13 @@ def main():
         lay, tab, esc = packs[ly]
         if (ly, KS) not in escs:
             escs[(ly, KS)] = S._rqesc(esc, lay.shape[0], lay.shape[1], KS, dev)
-        el, eo = escs[(ly, KS)]
+        el, _ = escs[(ly, KS)]
+        if ly not in cnts:
+            cnts[ly] = torch.zeros(2 * lay.shape[0], dtype=torch.int32, device=dev)
+        eo = cnts[ly]
         i = names.index(nm)
         v = S.RQV[S.RQI[nm]]
-        full = v[4] in (0, 7)
+        full = v[4] in (0, 7) and not (v[4] == 0 and v[7] & 2)
         ins = v[6]
 
         def run(xx, oo, i=i, lay=lay, el=el, eo=eo, KS=KS, tab=tab, wal=wal, full=full, ins=ins):
@@ -228,6 +228,10 @@ def main():
             print("SKIP %s launch=%d" % (tag, r), flush=True)
             continue
         info = ""
+        if v[4] == 0 and v[7] & 2:
+            torch.cuda.synchronize()
+            if int(eo.abs().sum()):
+                print("COUNTERS %s not reset: %s" % (tag, eo.tolist()[:8]), flush=True)
         if v[4] == 0 and wal == 0 and not args.no_validate:
             t1 = time.time()
             ok, msg = validate(run, w, ly, m, gen)
@@ -257,11 +261,16 @@ def main():
                       tag, gg, mn[0], mx[0], mn[1], mx[1], mn[2], mx[2], mn[3], mx[3], mn[4], mx[4], mn[5], mx[5], mn[6], mx[6], mn[7], mx[7], mn[8] * nst), flush=True)
         pw = pr[:, 0, 9:11].mean(0) / nst
         print("INS %s producer empty-wait per stage: W %.0f x %.0f clk" % (tag, pw[0], pw[1]), flush=True)
-        gt = prof[: nc * 32].view(nc, 32)[:, 11:16].double()
+        pv = prof[: nc * 32].view(nc, 32).double()
+        gt = torch.cat((pv[:, 11:16], pv[:, 25:26]), 1)
         t0 = gt[:, 0].min()
         q = lambda c: (float(gt[:, c].sub(t0).min()) / 1e3, float(gt[:, c].sub(t0).median()) / 1e3, float(gt[:, c].sub(t0).max()) / 1e3)
         print("INS %s timeline us (min/med/max from the first CTA entry): entry %.2f/%.2f/%.2f loop-start %.2f/%.2f/%.2f "
-              "loop-end %.2f/%.2f/%.2f exit %.2f/%.2f/%.2f W-lane-done %.2f/%.2f/%.2f" % ((tag,) + q(0) + q(1) + q(2) + q(3) + q(4)), flush=True)
+              "loop-end %.2f/%.2f/%.2f exit %.2f/%.2f/%.2f W-lane-done %.2f/%.2f/%.2f first-wgmma %.2f/%.2f/%.2f" % ((tag,) + q(0) + q(1) + q(2) + q(3) + q(4) + q(5)), flush=True)
+        ec = pv[:, 26:31]
+        if float(ec[:, 4].max()) > 0:
+            print("INS %s epilogue clk (cumulative, mean/max): bar256 %.0f/%.0f stsm+bar %.0f/%.0f poll %.0f/%.0f issue %.0f/%.0f wait.read %.0f/%.0f" % (
+                (tag,) + tuple(x for c in range(5) for x in (float(ec[:, c].mean()), float(ec[:, c].max())))), flush=True)
     tcalls = [c for c in calls if c[5] is None or not c[5][6]]
     from torch.profiler import profile, ProfilerActivity
     for tag, fn, x, out, _, _ in tcalls:
