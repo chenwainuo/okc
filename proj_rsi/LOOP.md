@@ -513,3 +513,15 @@ N=256 means the x re-read factor is only 256/rows, so the big-layer L2 problem d
 router paths (12-bit hi+lo, K split across many CTAs, token tiles looped in-CTA, reduction folded into the launch).
 Probe only: decode-to-L2-scratch + chunked cuBLAS pipeline on pooler m=128. Rejected as rule violations: persisting-L2
 carve-out, persistent kernels holding weights, RNG regeneration.
+
+## Iteration 19 — pw21: router m=128/256 on r6's gv + L2-scratch probe. Check `15cb5198043e436d` (run by the implementer at the user's request): 9/9, 1.432× (= r6). REFINE.
+
+Router m=128 in-prepare: r6 (cuBLASLt) 14.72 | rt-c16 15.71 | rt-c8 15.90 | rt-c16s2 18.88 | rt-g16s2 26.82; m=256:
+15.65 | cluster variants declined (occupancy) | c16s2 21.12 | g16s2 27.90. Latency-bound: 4 warps per SM, each chunk's x
+waits a full L2 round trip; no better than cuBLAS. PROBE l2scratch: two-stream decode→L2 scratch + chunked cuBLAS
+110.5 vs plain cuBLAS 23.8 (decode alone 45.4, chunked cuBLAS alone 75.7) — chunking makes cuBLAS 3x slower; closed.
+Process note: the user is also driving the implementer directly; it ran this check itself and I submitted a duplicate
+(`801c044fd5ad48d6`) before learning of it. Coordination rule added: job ids are posted to the head on submission.
+Decision: refine → pw22, a standard split-K router for m=128/256 (4 output tiles x 32 K-splits = 128 CTAs, all x and
+hi/lo loads issued up front, mma from smem, fp32 reduction by red.global into a zeroed output (memset node in the
+graph) or last-arriver). Expected 4–5 µs vs 10.3/11.1 → ≈ 2–3% of score; kill at < 3 µs under torch.
