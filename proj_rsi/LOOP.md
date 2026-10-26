@@ -924,3 +924,10 @@ New tracks while waiting for the reset: P4 instruments RS128's stage with clock6
 per stage: precomputed descriptors, batched releases, blocking waits, escape-walk placement); P3 makes a bounded
 attempt at router m=256 (55 score-µs pool; fewer longer-lived CTAs, fixed terms instrumented, F1 baseline rule) in
 pw29m. pw34 (= pw33 + rs128's m=128 paths) is being prepared as the scored follow-up to rs128's check.
+
+## Scored submission of pw34 (= pw33 + RS128 m=128/256 paths): job `5a39372456514f20`
+
+Box bake (F1 baseline rule): pooler m=128 27.36 → 24.48, qkv 18.72 → 17.12, unpooler 26.82 → 24.70 (RS128 picked);
+narrow m=256 picks at pooler (30.24 → 29.50) and qkv (21.41 → 21.12) that may flip on the judge; o and unpooler
+m=256 stay r6. 65/65 box checks; diff vs pw33 purely additive. If the H200 keeps ~1.5–2 µs on the three m=128 shapes
+the expected effect is ≈ 40–50 score-µs (verify16 leverage 7.9). rs128's own check still runs first at the reset.
