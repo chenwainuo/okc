@@ -713,3 +713,11 @@ Box pitfall found and fixed: torch 2.8 in the container appends -gencode compute
 box; CUTLASS survives via its __CUDA_ARCH_FEAT_SM90_ALL guards). /root/okc_run.sh now sets TORCH_CUDA_ARCH_LIST=9.0a;
 pw24 and pw29 re-queued. Candidates should guard wgmma/setmaxnreg/multicast code with __CUDA_ARCH_FEAT_SM90_ALL so a
 stray sm_90 pass compiles to a stub instead of failing the extension.
+H100 local results after the arch fix (in-prepare µs on the box): pw29 — router m=128 cuBLASLt 16.10 | incumbent
+rp64k32s4 13.60 | **rw64k32s8 12.38** (wgmma split-K, −1.2 vs incumbent), m=256 cuBLASLt 14.75 | best rwv64k64s4x2
+17.34 (loses); harness verify16 router 16.40 vs torch 24.26. pw24 — ladder pooler m=128: W-only 27.33 | W+x 28.22 |
++wgmma 36.29 | full 37.44; bake cuBLAS 27.46 | bg12 29.02 | bg6 34.78 | bg12c 37.47. The W-only stream equals
+cuBLAS's whole GEMM on this box (2.88 TB/s(−4) of 3.35 peak), x tiles cost only +0.9 here (vs +3.2 on the judge), and
+the wgmma rung costs +8.1 on both machines: the overlap failure is reproducible locally. Track P4 opened: an agent
+runs a variant ladder on pw24h (groups in flight, commit granularity, ping-pong / 128x64 two-warpgroup tiles,
+register-A, release placement, smem-port test) to find and fix the mechanism.
