@@ -518,7 +518,6 @@ void run3(torch::Tensor A, torch::Tensor A2, torch::Tensor x, torch::Tensor out,
 GVCU = r"""
 #include <torch/extension.h>
 #include <ATen/cuda/CUDAContext.h>
-#include <cuda.h>
 #include <cuda_bf16.h>
 #include <stdint.h>
 
@@ -1430,192 +1429,6 @@ int rs_launch(int v, const __nv_bfloat16* x, const __nv_bfloat16* hi, const __nv
   }
   return -2;
 }
-// ---------------------------------------------------------------- pw24: plain BF16 GEMM for m = 128 / 256 ("bg")
-// out[tok][n] = x[tok] . W[n] with W kept BF16 (no decode). cuBLAS's geometry: a CTA owns 64 W rows x 64 tokens over the
-// full K (no split-K, no reduction); swap-AB wgmma m64n64k16 with BOTH operands in smem (A = W tile, B = x tile, both
-// K-major 64 x 64 bf16 boxes written by 2D TMA with 128B swizzle; there is no transform to fuse, so the register-A
-// path would only add 4 ldmatrix per k16 step). Two producer lanes in separate warps: warp 4 streams the W ring, warp 5
-// the x ring; each waits only on its own ring's empty barriers. CL = 1: clusters (2,1,1) over the two token tiles of
-// an n-block; each CTA issues one 32-row half of every W tile with .multicast::cluster into both CTAs (W leaves L2
-// once); a W slot is refilled only when both CTAs released it (empty barrier counts both CTAs' MMA warps, the peer
-// arrives remotely). The MMA warpgroup releases slot s-1 after wgmma.wait_group(1); the epilogue writes bf16 from the
-// accumulators through an smem [64 tok][64 n] tile as 16-B row stores. PRB (probes, no epilogue): 1 = W only,
-// 2 = W + x (waits / releases only), 3 = + wgmma.
-struct alignas(64) BgTmap { unsigned long long v[16]; };
-__device__ __forceinline__ void bg_mbwait(uint32_t b, uint32_t ph) {
-  asm volatile("{\n.reg .pred p;\nBG_W_%=:\nmbarrier.try_wait.parity.shared::cta.b64 p, [%0], %1;\n@!p bra BG_W_%=;\n}\n" :: "r"(b), "r"(ph) : "memory");
-}
-__device__ __forceinline__ void bg_tile(uint32_t dst, const BgTmap* tm, int k0, int r0, uint32_t bar) {
-  asm volatile("cp.async.bulk.tensor.2d.shared::cluster.global.mbarrier::complete_tx::bytes [%0], [%1, {%2, %3}], [%4];\n"
-               :: "r"(dst), "l"((unsigned long long)tm), "r"(k0), "r"(r0), "r"(bar) : "memory");
-}
-__device__ __forceinline__ void bg_tile_mc(uint32_t dst, const BgTmap* tm, int k0, int r0, uint32_t bar, uint16_t mask) {
-  asm volatile("cp.async.bulk.tensor.2d.shared::cluster.global.mbarrier::complete_tx::bytes.multicast::cluster [%0], [%1, {%2, %3}], [%4], %5;\n"
-               :: "r"(dst), "l"((unsigned long long)tm), "r"(k0), "r"(r0), "r"(bar), "h"(mask) : "memory");
-}
-__device__ __forceinline__ uint64_t bg_desc(uint32_t saddr) {  // K-major, 128B swizzle, SBO 1024, 1024-aligned base
-  return (uint64_t)((saddr & 0x3FFFFu) >> 4) | ((uint64_t)1 << 16) | ((uint64_t)(1024 >> 4) << 32) | ((uint64_t)1 << 62);
-}
-__device__ __forceinline__ void bg_wgmma(float (&D)[32], uint64_t da, uint64_t db) {
-  asm volatile("{\n.reg .pred p;\nsetp.ne.b32 p, %34, 0;\n"
-    "wgmma.mma_async.sync.aligned.m64n64k16.f32.bf16.bf16 {%0,%1,%2,%3,%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15,%16,%17,%18,%19,%20,%21,%22,%23,%24,%25,%26,%27,%28,%29,%30,%31}, %32, %33, p, 1, 1, 0, 0;\n}\n"
-    : "+f"(D[0]), "+f"(D[1]), "+f"(D[2]), "+f"(D[3]), "+f"(D[4]), "+f"(D[5]), "+f"(D[6]), "+f"(D[7]), "+f"(D[8]), "+f"(D[9]), "+f"(D[10]), "+f"(D[11]),
-      "+f"(D[12]), "+f"(D[13]), "+f"(D[14]), "+f"(D[15]), "+f"(D[16]), "+f"(D[17]), "+f"(D[18]), "+f"(D[19]), "+f"(D[20]), "+f"(D[21]), "+f"(D[22]), "+f"(D[23]),
-      "+f"(D[24]), "+f"(D[25]), "+f"(D[26]), "+f"(D[27]), "+f"(D[28]), "+f"(D[29]), "+f"(D[30]), "+f"(D[31])
-    : "l"(da), "l"(db), "r"(1));
-}
-__device__ __forceinline__ void bg_csync() { asm volatile("barrier.cluster.arrive.release.aligned;\nbarrier.cluster.wait.acquire.aligned;\n" ::: "memory"); }
-
-template <int ST, int CL, int PRB, int MINB>
-__global__ void __launch_bounds__(192, MINB) bg(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bfloat16* out, int m, int N, int K) {
-  constexpr int TB = 8192;  // one 64 x 64 bf16 tile
-  constexpr bool XON = PRB != 1, MMA = PRB == 0 || PRB == 3;
-  extern __shared__ __align__(16) uint8_t smem[];
-  const uint32_t sraw = (uint32_t)__cvta_generic_to_shared(smem), sbase = (sraw + 1023u) & ~1023u;
-  const uint32_t wring = sbase, xring = sbase + ST * TB, bars = xring + ST * TB;
-  const uint32_t wfull = bars, wempty = bars + 8 * ST, xfull = bars + 16 * ST, xempty = bars + 24 * ST;
-  const int tid = threadIdx.x, warp = tid >> 5, lane = tid & 31;
-  const int tt = blockIdx.x, nb = blockIdx.y, KC = K / 64;
-  const int t0 = tt * 64, n0 = nb * 64;
-  uint32_t rank = 0;
-  if (CL) asm volatile("mov.u32 %0, %%cluster_ctarank;\n" : "=r"(rank));
-  if (tid == 0) {
-    for (int i = 0; i < ST; i++) {
-      asm volatile("mbarrier.init.shared::cta.b64 [%0], 1;\n" :: "r"(wfull + 8 * i));
-      asm volatile("mbarrier.init.shared::cta.b64 [%0], %1;\n" :: "r"(wempty + 8 * i), "r"(CL ? 8 : 4));
-      asm volatile("mbarrier.init.shared::cta.b64 [%0], 1;\n" :: "r"(xfull + 8 * i));
-      asm volatile("mbarrier.init.shared::cta.b64 [%0], 4;\n" :: "r"(xempty + 8 * i));
-    }
-    asm volatile("fence.mbarrier_init.release.cluster;\n" ::: "memory");
-  }
-  __syncthreads();
-  if (CL) bg_csync();  // both CTAs' barriers exist before either multicasts into the pair
-  if (warp == 4) {  // W producer
-    if (lane == 0) {
-      for (int s = 0; s < KC; s++) {
-        const int slot = s % ST;
-        if (s >= ST) bg_mbwait(wempty + 8 * slot, ((s / ST) - 1) & 1);
-        asm volatile("mbarrier.arrive.expect_tx.shared::cta.b64 _, [%0], %1;\n" :: "r"(wfull + 8 * slot), "n"(TB) : "memory");
-        if (CL) bg_tile_mc(wring + slot * TB + rank * 4096, &tw, s * 64, n0 + 32 * (int)rank, wfull + 8 * slot, (uint16_t)3);
-        else { bg_tile(wring + slot * TB, &tw, s * 64, n0, wfull + 8 * slot); bg_tile(wring + slot * TB + 4096, &tw, s * 64, n0 + 32, wfull + 8 * slot); }
-      }
-    }
-  } else if (warp == 5) {  // x producer
-    if (lane == 0 && XON) {
-      for (int s = 0; s < KC; s++) {
-        const int slot = s % ST;
-        if (s >= ST) bg_mbwait(xempty + 8 * slot, ((s / ST) - 1) & 1);
-        asm volatile("mbarrier.arrive.expect_tx.shared::cta.b64 _, [%0], %1;\n" :: "r"(xfull + 8 * slot), "n"(TB) : "memory");
-        bg_tile(xring + slot * TB, &tx, s * 64, t0, xfull + 8 * slot);
-      }
-    }
-  } else {  // MMA warpgroup (warps 0-3): warp w owns W rows 16w .. 16w+15 of the tile
-    float D[32];
-#pragma unroll
-    for (int i = 0; i < 32; i++) D[i] = 0.f;
-    auto wait_in = [&](int s) {
-      bg_mbwait(wfull + 8 * (s % ST), (s / ST) & 1);
-      if (XON) bg_mbwait(xfull + 8 * (s % ST), (s / ST) & 1);
-    };
-    auto release = [&](int s) {
-      __syncwarp();
-      if (lane == 0) {
-        const uint32_t we = wempty + 8 * (s % ST);
-        asm volatile("mbarrier.arrive.shared::cta.b64 _, [%0];\n" :: "r"(we) : "memory");
-        if (CL) {
-          uint32_t ra;
-          asm volatile("mapa.shared::cluster.u32 %0, %1, %2;\n" : "=r"(ra) : "r"(we), "r"(rank ^ 1u));
-          asm volatile("mbarrier.arrive.shared::cluster.b64 _, [%0];\n" :: "r"(ra) : "memory");
-        }
-        if (XON) asm volatile("mbarrier.arrive.shared::cta.b64 _, [%0];\n" :: "r"(xempty + 8 * (s % ST)) : "memory");
-      }
-    };
-    auto mma = [&](int s) {
-      const uint64_t da = bg_desc(wring + (s % ST) * TB), db = bg_desc(xring + (s % ST) * TB);
-#pragma unroll
-      for (int i = 0; i < 32; i++) asm volatile("" : "+f"(D[i]) :: "memory");
-      asm volatile("wgmma.fence.sync.aligned;\n" ::: "memory");
-#pragma unroll
-      for (int q = 0; q < 4; q++) bg_wgmma(D, da + 2 * q, db + 2 * q);
-      asm volatile("wgmma.commit_group.sync.aligned;\n" ::: "memory");
-#pragma unroll
-      for (int i = 0; i < 32; i++) asm volatile("" : "+f"(D[i]) :: "memory");
-    };
-    if (MMA) {
-      wait_in(0); mma(0);
-#pragma unroll 1
-      for (int s = 1; s < KC; s++) {
-        wait_in(s); mma(s);
-        asm volatile("wgmma.wait_group.sync.aligned 1;\n" ::: "memory");
-        release(s - 1);
-      }
-      asm volatile("wgmma.wait_group.sync.aligned 0;\n" ::: "memory");
-#pragma unroll
-      for (int i = 0; i < 32; i++) asm volatile("" : "+f"(D[i]) :: "memory");
-      release(KC - 1);
-    } else {
-#pragma unroll 1
-      for (int s = 0; s < KC; s++) { wait_in(s); release(s); }
-    }
-    if (PRB == 0) {  // bf16 tile [64 tok][64 n] in the drained x ring slot 0, then 16-B row stores of out
-      asm volatile("bar.sync 1, 128;\n" ::: "memory");
-      const int g = lane >> 2, t = lane & 3, r = 16 * warp + g;
-#pragma unroll
-      for (int i = 0; i < 8; i++) {  // D[4i..4i+3] = (row r, tok 8i+2t), (r, 8i+2t+1), (r+8, 8i+2t), (r+8, 8i+2t+1)
-        const int tk = 8 * i + 2 * t;
-        const __nv_bfloat16 v0 = __float2bfloat16(D[4 * i]), v1 = __float2bfloat16(D[4 * i + 1]), v2 = __float2bfloat16(D[4 * i + 2]), v3 = __float2bfloat16(D[4 * i + 3]);
-        asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + (tk * 64 + r) * 2), "h"(*(const unsigned short*)&v0) : "memory");
-        asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + ((tk + 1) * 64 + r) * 2), "h"(*(const unsigned short*)&v1) : "memory");
-        asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + (tk * 64 + r + 8) * 2), "h"(*(const unsigned short*)&v2) : "memory");
-        asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + ((tk + 1) * 64 + r + 8) * 2), "h"(*(const unsigned short*)&v3) : "memory");
-      }
-      asm volatile("bar.sync 1, 128;\n" ::: "memory");
-      for (int e = tid; e < 64 * 8; e += 128) {
-        const int tk = e >> 3, c = e & 7;
-        if (t0 + tk < m) {
-          uint4 v;
-          asm volatile("ld.shared.v4.u32 {%0,%1,%2,%3}, [%4];\n" : "=r"(v.x), "=r"(v.y), "=r"(v.z), "=r"(v.w) : "r"(xring + tk * 128 + c * 16));
-          *(uint4*)(out + (size_t)(t0 + tk) * N + n0 + c * 8) = v;
-        }
-      }
-    } else if (D[0] == 1.2345f) out[0] = __float2bfloat16(0.f);
-  }
-  if (CL) bg_csync();  // no multicast write or remote arrive reaches a CTA that has exited
-}
-template <int ST, int CL, int PRB, int MINB>
-static int bg_go(const BgTmap& tw, const BgTmap& tx, __nv_bfloat16* out, int m, int N, int K, int TT, cudaStream_t st) {
-  constexpr int SM = 1024 + 2 * ST * 8192 + 32 * ST;
-  if (N % 64 || K % 64 || m < 1 || TT * 64 < m || (CL && TT % 2)) return -4;
-  auto k = bg<ST, CL, PRB, MINB>;
-  static bool once = false;
-  if (!once) {
-    if (cudaFuncSetAttribute(k, cudaFuncAttributeMaxDynamicSharedMemorySize, SM) != cudaSuccess) { cudaGetLastError(); return -6; }
-    once = true;
-  }
-  cudaLaunchConfig_t cfg = {};
-  cfg.gridDim = dim3(TT, N / 64); cfg.blockDim = dim3(192); cfg.dynamicSmemBytes = SM; cfg.stream = st;
-  cudaLaunchAttribute at[1];
-  at[0].id = cudaLaunchAttributeClusterDimension;
-  at[0].val.clusterDim.x = 2; at[0].val.clusterDim.y = 1; at[0].val.clusterDim.z = 1;
-  cfg.attrs = at; cfg.numAttrs = CL ? 1 : 0;
-  const cudaError_t e = cudaLaunchKernelEx(&cfg, k, tw, tx, out, m, N, K);
-  if (e != cudaSuccess) { cudaGetLastError(); return (int)e; }
-  return 0;
-}
-// variant: 0 ST 12 cluster | 1 ST 12 no cluster | 2 ST 6 cluster 2/SM | 3 ST 6 no cluster 2/SM | probes on variant 0's
-// shape: 4 W-only, 5 W + x, 6 + wgmma (no epilogue)
-int bg_launch(int v, const BgTmap& tw, const BgTmap& tx, __nv_bfloat16* out, int m, int N, int K, int TT, cudaStream_t st) {
-  switch (v) {
-    case 0: return bg_go<12, 1, 0, 1>(tw, tx, out, m, N, K, TT, st);
-    case 1: return bg_go<12, 0, 0, 1>(tw, tx, out, m, N, K, TT, st);
-    case 2: return bg_go<6, 1, 0, 2>(tw, tx, out, m, N, K, TT, st);
-    case 3: return bg_go<6, 0, 0, 2>(tw, tx, out, m, N, K, TT, st);
-    case 4: return bg_go<12, 1, 1, 1>(tw, tx, out, m, N, K, TT, st);
-    case 5: return bg_go<12, 1, 2, 1>(tw, tx, out, m, N, K, TT, st);
-    case 6: return bg_go<12, 1, 3, 1>(tw, tx, out, m, N, K, TT, st);
-  }
-  return -2;
-}
 int64_t rrrun(int64_t inst, torch::Tensor W, torch::Tensor x, torch::Tensor out) {
   const int m = x.size(0), K = x.size(1), N = out.size(1);
   auto st = at::cuda::getCurrentCUDAStream();
@@ -1650,42 +1463,6 @@ int64_t gvrun(int64_t inst, torch::Tensor W, torch::Tensor W2, torch::Tensor x, 
 }
 int64_t gvocc(int64_t inst, torch::Tensor W, torch::Tensor W2, torch::Tensor x, torch::Tensor out, torch::Tensor esc, torch::Tensor ws, torch::Tensor cnt, int64_t T, int64_t U) {
   return gvgo(inst, W, W2, x, out, esc, ws, cnt, T, U, 1);
-}
-typedef CUresult (*BgEncodeFn)(CUtensorMap*, CUtensorMapDataType, cuuint32_t, void*, const cuuint64_t*, const cuuint64_t*,
-                               const cuuint32_t*, const cuuint32_t*, CUtensorMapInterleave, CUtensorMapSwizzle,
-                               CUtensorMapL2promotion, CUtensorMapFloatOOBfill);
-static_assert(sizeof(CUtensorMap) == sizeof(BgTmap), "CUtensorMap size");
-static int bg_map(BgTmap* tm, const void* p, int64_t rows, int64_t K, int box_rows) {
-  static BgEncodeFn enc = nullptr;
-  if (!enc) {
-    void* fn = nullptr;
-    cudaDriverEntryPointQueryResult q;
-#if CUDART_VERSION >= 12050
-    if (cudaGetDriverEntryPointByVersion("cuTensorMapEncodeTiled", &fn, 12000, cudaEnableDefault, &q) != cudaSuccess || !fn) { cudaGetLastError(); return -20; }
-#else
-    if (cudaGetDriverEntryPoint("cuTensorMapEncodeTiled", &fn, cudaEnableDefault, &q) != cudaSuccess || !fn) { cudaGetLastError(); return -20; }
-#endif
-    enc = (BgEncodeFn)fn;
-  }
-  if (((uintptr_t)p) % 16) return -21;
-  cuuint64_t dims[2] = {(cuuint64_t)K, (cuuint64_t)rows};
-  cuuint64_t strides[1] = {(cuuint64_t)K * 2};
-  cuuint32_t box[2] = {64, (cuuint32_t)box_rows};
-  cuuint32_t estr[2] = {1, 1};
-  return enc((CUtensorMap*)tm, CU_TENSOR_MAP_DATA_TYPE_BFLOAT16, 2, (void*)p, dims, strides, box, estr, CU_TENSOR_MAP_INTERLEAVE_NONE,
-             CU_TENSOR_MAP_SWIZZLE_128B, CU_TENSOR_MAP_L2_PROMOTION_L2_128B, CU_TENSOR_MAP_FLOAT_OOB_FILL_NONE) == CUDA_SUCCESS ? 0 : -22;
-}
-// pw24: plain bf16 GEMM (bg). W map: box 64 k x 32 rows (half tiles, multicast halves); x map: box 64 k x 64 tokens, rows >= m
-// zero-filled. Maps are encoded per call (under graph capture they are baked into the kernel node like a raw pointer).
-int64_t bgrun(int64_t v, torch::Tensor x, torch::Tensor W, torch::Tensor out) {
-  if (x.dim() != 2 || W.dim() != 2 || x.size(1) != W.size(1) || out.size(0) != x.size(0) || out.size(1) > W.size(0)) return -10;
-  BgTmap tw, tx;
-  int r = bg_map(&tw, W.data_ptr(), out.size(1), W.size(1), 32);
-  if (r) return r;
-  r = bg_map(&tx, x.data_ptr(), x.size(0), x.size(1), 64);
-  if (r) return r;
-  const int m = (int)x.size(0), TT = ((m + 127) / 128) * 2;
-  return (int64_t)bg_launch((int)v, tw, tx, (__nv_bfloat16*)out.data_ptr(), m, (int)out.size(1), (int)x.size(1), TT, at::cuda::getCurrentCUDAStream());
 }
 int64_t rsrun(int64_t v, torch::Tensor x, torch::Tensor hi, torch::Tensor lo, torch::Tensor out, torch::Tensor ws, torch::Tensor cnt) {
   if (x.size(1) != hi.size(1) || out.size(0) != x.size(0) || out.size(1) != hi.size(0)) return -10;
@@ -1872,9 +1649,253 @@ def _gvext():
     global _gvmod
     if _gvmod is None:
         cases = "\n".join("    case %d: return gvl<%s>(p, st, occ);" % (i, ",".join(map(str, c))) for i, c in enumerate(GVI))
-        _gvmod = load_inline("gv20_%x" % (hash(tuple(GVI)) & 0xffffffff), cpp_sources="int64_t gvrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t gvocc(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t gvregs(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t rrrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor); int64_t rsrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor); int64_t bgrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor);",
-                             cuda_sources=GVCU.replace("@@CASES@@", cases), functions=["gvrun", "gvocc", "gvregs", "rrrun", "rsrun", "bgrun"], extra_cuda_cflags=["-O3", "-lineinfo"], verbose=False)
+        _gvmod = load_inline("gv20_%x" % (hash(tuple(GVI)) & 0xffffffff), cpp_sources="int64_t gvrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t gvocc(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t gvregs(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t rrrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor); int64_t rsrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor);",
+                             cuda_sources=GVCU.replace("@@CASES@@", cases), functions=["gvrun", "gvocc", "gvregs", "rrrun", "rsrun"], extra_cuda_cflags=["-O3", "-lineinfo"], verbose=False)
     return _gvmod
+
+
+# pw24: the bf16 GEMM (wgmma, TMA multicast) lives in its OWN extension built for sm_90a with the pw lineage's flags;
+# r6's gv extension keeps its source and flags (plain sm_90, which rejects wgmma). A failed build only drops the bg paths.
+BGCU = r"""
+#include <torch/extension.h>
+#include <ATen/cuda/CUDAContext.h>
+#include <cuda.h>
+#include <cuda_bf16.h>
+#include <stdint.h>
+
+// ---------------------------------------------------------------- pw24: plain BF16 GEMM for m = 128 / 256 ("bg")
+// out[tok][n] = x[tok] . W[n] with W kept BF16 (no decode). cuBLAS's geometry: a CTA owns 64 W rows x 64 tokens over the
+// full K (no split-K, no reduction); swap-AB wgmma m64n64k16 with BOTH operands in smem (A = W tile, B = x tile, both
+// K-major 64 x 64 bf16 boxes written by 2D TMA with 128B swizzle; there is no transform to fuse, so the register-A
+// path would only add 4 ldmatrix per k16 step). Two producer lanes in separate warps: warp 4 streams the W ring, warp 5
+// the x ring; each waits only on its own ring's empty barriers. CL = 1: clusters (2,1,1) over the two token tiles of
+// an n-block; each CTA issues one 32-row half of every W tile with .multicast::cluster into both CTAs (W leaves L2
+// once); a W slot is refilled only when both CTAs released it (empty barrier counts both CTAs' MMA warps, the peer
+// arrives remotely). The MMA warpgroup releases slot s-1 after wgmma.wait_group(1); the epilogue writes bf16 from the
+// accumulators through an smem [64 tok][64 n] tile as 16-B row stores. PRB (probes, no epilogue): 1 = W only,
+// 2 = W + x (waits / releases only), 3 = + wgmma.
+struct alignas(64) BgTmap { unsigned long long v[16]; };
+__device__ __forceinline__ void bg_mbwait(uint32_t b, uint32_t ph) {
+  asm volatile("{\n.reg .pred p;\nBG_W_%=:\nmbarrier.try_wait.parity.shared::cta.b64 p, [%0], %1;\n@!p bra BG_W_%=;\n}\n" :: "r"(b), "r"(ph) : "memory");
+}
+__device__ __forceinline__ void bg_tile(uint32_t dst, const BgTmap* tm, int k0, int r0, uint32_t bar) {
+  asm volatile("cp.async.bulk.tensor.2d.shared::cluster.global.mbarrier::complete_tx::bytes [%0], [%1, {%2, %3}], [%4];\n"
+               :: "r"(dst), "l"((unsigned long long)tm), "r"(k0), "r"(r0), "r"(bar) : "memory");
+}
+__device__ __forceinline__ void bg_tile_mc(uint32_t dst, const BgTmap* tm, int k0, int r0, uint32_t bar, uint16_t mask) {
+  asm volatile("cp.async.bulk.tensor.2d.shared::cluster.global.mbarrier::complete_tx::bytes.multicast::cluster [%0], [%1, {%2, %3}], [%4], %5;\n"
+               :: "r"(dst), "l"((unsigned long long)tm), "r"(k0), "r"(r0), "r"(bar), "h"(mask) : "memory");
+}
+__device__ __forceinline__ uint64_t bg_desc(uint32_t saddr) {  // K-major, 128B swizzle, SBO 1024, 1024-aligned base
+  return (uint64_t)((saddr & 0x3FFFFu) >> 4) | ((uint64_t)1 << 16) | ((uint64_t)(1024 >> 4) << 32) | ((uint64_t)1 << 62);
+}
+__device__ __forceinline__ void bg_wgmma(float (&D)[32], uint64_t da, uint64_t db) {
+  asm volatile("{\n.reg .pred p;\nsetp.ne.b32 p, %34, 0;\n"
+    "wgmma.mma_async.sync.aligned.m64n64k16.f32.bf16.bf16 {%0,%1,%2,%3,%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15,%16,%17,%18,%19,%20,%21,%22,%23,%24,%25,%26,%27,%28,%29,%30,%31}, %32, %33, p, 1, 1, 0, 0;\n}\n"
+    : "+f"(D[0]), "+f"(D[1]), "+f"(D[2]), "+f"(D[3]), "+f"(D[4]), "+f"(D[5]), "+f"(D[6]), "+f"(D[7]), "+f"(D[8]), "+f"(D[9]), "+f"(D[10]), "+f"(D[11]),
+      "+f"(D[12]), "+f"(D[13]), "+f"(D[14]), "+f"(D[15]), "+f"(D[16]), "+f"(D[17]), "+f"(D[18]), "+f"(D[19]), "+f"(D[20]), "+f"(D[21]), "+f"(D[22]), "+f"(D[23]),
+      "+f"(D[24]), "+f"(D[25]), "+f"(D[26]), "+f"(D[27]), "+f"(D[28]), "+f"(D[29]), "+f"(D[30]), "+f"(D[31])
+    : "l"(da), "l"(db), "r"(1));
+}
+__device__ __forceinline__ void bg_csync() { asm volatile("barrier.cluster.arrive.release.aligned;\nbarrier.cluster.wait.acquire.aligned;\n" ::: "memory"); }
+
+template <int ST, int CL, int PRB, int MINB>
+__global__ void __launch_bounds__(192, MINB) bg(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bfloat16* out, int m, int N, int K) {
+  constexpr int TB = 8192;  // one 64 x 64 bf16 tile
+  constexpr bool XON = PRB != 1, MMA = PRB == 0 || PRB == 3;
+  extern __shared__ __align__(16) uint8_t smem[];
+  const uint32_t sraw = (uint32_t)__cvta_generic_to_shared(smem), sbase = (sraw + 1023u) & ~1023u;
+  const uint32_t wring = sbase, xring = sbase + ST * TB, bars = xring + ST * TB;
+  const uint32_t wfull = bars, wempty = bars + 8 * ST, xfull = bars + 16 * ST, xempty = bars + 24 * ST;
+  const int tid = threadIdx.x, warp = tid >> 5, lane = tid & 31;
+  const int tt = blockIdx.x, nb = blockIdx.y, KC = K / 64;
+  const int t0 = tt * 64, n0 = nb * 64;
+  uint32_t rank = 0;
+  if (CL) asm volatile("mov.u32 %0, %%cluster_ctarank;\n" : "=r"(rank));
+  if (tid == 0) {
+    for (int i = 0; i < ST; i++) {
+      asm volatile("mbarrier.init.shared::cta.b64 [%0], 1;\n" :: "r"(wfull + 8 * i));
+      asm volatile("mbarrier.init.shared::cta.b64 [%0], %1;\n" :: "r"(wempty + 8 * i), "r"(CL ? 8 : 4));
+      asm volatile("mbarrier.init.shared::cta.b64 [%0], 1;\n" :: "r"(xfull + 8 * i));
+      asm volatile("mbarrier.init.shared::cta.b64 [%0], 4;\n" :: "r"(xempty + 8 * i));
+    }
+    asm volatile("fence.mbarrier_init.release.cluster;\n" ::: "memory");
+  }
+  __syncthreads();
+  if (CL) bg_csync();  // both CTAs' barriers exist before either multicasts into the pair
+  if (warp == 4) {  // W producer
+    if (lane == 0) {
+      for (int s = 0; s < KC; s++) {
+        const int slot = s % ST;
+        if (s >= ST) bg_mbwait(wempty + 8 * slot, ((s / ST) - 1) & 1);
+        asm volatile("mbarrier.arrive.expect_tx.shared::cta.b64 _, [%0], %1;\n" :: "r"(wfull + 8 * slot), "n"(TB) : "memory");
+        if (CL) bg_tile_mc(wring + slot * TB + rank * 4096, &tw, s * 64, n0 + 32 * (int)rank, wfull + 8 * slot, (uint16_t)3);
+        else { bg_tile(wring + slot * TB, &tw, s * 64, n0, wfull + 8 * slot); bg_tile(wring + slot * TB + 4096, &tw, s * 64, n0 + 32, wfull + 8 * slot); }
+      }
+    }
+  } else if (warp == 5) {  // x producer
+    if (lane == 0 && XON) {
+      for (int s = 0; s < KC; s++) {
+        const int slot = s % ST;
+        if (s >= ST) bg_mbwait(xempty + 8 * slot, ((s / ST) - 1) & 1);
+        asm volatile("mbarrier.arrive.expect_tx.shared::cta.b64 _, [%0], %1;\n" :: "r"(xfull + 8 * slot), "n"(TB) : "memory");
+        bg_tile(xring + slot * TB, &tx, s * 64, t0, xfull + 8 * slot);
+      }
+    }
+  } else {  // MMA warpgroup (warps 0-3): warp w owns W rows 16w .. 16w+15 of the tile
+    float D[32];
+#pragma unroll
+    for (int i = 0; i < 32; i++) D[i] = 0.f;
+    auto wait_in = [&](int s) {
+      bg_mbwait(wfull + 8 * (s % ST), (s / ST) & 1);
+      if (XON) bg_mbwait(xfull + 8 * (s % ST), (s / ST) & 1);
+    };
+    auto release = [&](int s) {
+      __syncwarp();
+      if (lane == 0) {
+        const uint32_t we = wempty + 8 * (s % ST);
+        asm volatile("mbarrier.arrive.shared::cta.b64 _, [%0];\n" :: "r"(we) : "memory");
+        if (CL) {
+          uint32_t ra;
+          asm volatile("mapa.shared::cluster.u32 %0, %1, %2;\n" : "=r"(ra) : "r"(we), "r"(rank ^ 1u));
+          asm volatile("mbarrier.arrive.shared::cluster.b64 _, [%0];\n" :: "r"(ra) : "memory");
+        }
+        if (XON) asm volatile("mbarrier.arrive.shared::cta.b64 _, [%0];\n" :: "r"(xempty + 8 * (s % ST)) : "memory");
+      }
+    };
+    auto mma = [&](int s) {
+      const uint64_t da = bg_desc(wring + (s % ST) * TB), db = bg_desc(xring + (s % ST) * TB);
+#pragma unroll
+      for (int i = 0; i < 32; i++) asm volatile("" : "+f"(D[i]) :: "memory");
+      asm volatile("wgmma.fence.sync.aligned;\n" ::: "memory");
+#pragma unroll
+      for (int q = 0; q < 4; q++) bg_wgmma(D, da + 2 * q, db + 2 * q);
+      asm volatile("wgmma.commit_group.sync.aligned;\n" ::: "memory");
+#pragma unroll
+      for (int i = 0; i < 32; i++) asm volatile("" : "+f"(D[i]) :: "memory");
+    };
+    if (MMA) {
+      wait_in(0); mma(0);
+#pragma unroll 1
+      for (int s = 1; s < KC; s++) {
+        wait_in(s); mma(s);
+        asm volatile("wgmma.wait_group.sync.aligned 1;\n" ::: "memory");
+        release(s - 1);
+      }
+      asm volatile("wgmma.wait_group.sync.aligned 0;\n" ::: "memory");
+#pragma unroll
+      for (int i = 0; i < 32; i++) asm volatile("" : "+f"(D[i]) :: "memory");
+      release(KC - 1);
+    } else {
+#pragma unroll 1
+      for (int s = 0; s < KC; s++) { wait_in(s); release(s); }
+    }
+    if (PRB == 0) {  // bf16 tile [64 tok][64 n] in the drained x ring slot 0, then 16-B row stores of out
+      asm volatile("bar.sync 1, 128;\n" ::: "memory");
+      const int g = lane >> 2, t = lane & 3, r = 16 * warp + g;
+#pragma unroll
+      for (int i = 0; i < 8; i++) {  // D[4i..4i+3] = (row r, tok 8i+2t), (r, 8i+2t+1), (r+8, 8i+2t), (r+8, 8i+2t+1)
+        const int tk = 8 * i + 2 * t;
+        const __nv_bfloat16 v0 = __float2bfloat16(D[4 * i]), v1 = __float2bfloat16(D[4 * i + 1]), v2 = __float2bfloat16(D[4 * i + 2]), v3 = __float2bfloat16(D[4 * i + 3]);
+        asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + (tk * 64 + r) * 2), "h"(*(const unsigned short*)&v0) : "memory");
+        asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + ((tk + 1) * 64 + r) * 2), "h"(*(const unsigned short*)&v1) : "memory");
+        asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + (tk * 64 + r + 8) * 2), "h"(*(const unsigned short*)&v2) : "memory");
+        asm volatile("st.shared.u16 [%0], %1;\n" :: "r"(xring + ((tk + 1) * 64 + r + 8) * 2), "h"(*(const unsigned short*)&v3) : "memory");
+      }
+      asm volatile("bar.sync 1, 128;\n" ::: "memory");
+      for (int e = tid; e < 64 * 8; e += 128) {
+        const int tk = e >> 3, c = e & 7;
+        if (t0 + tk < m) {
+          uint4 v;
+          asm volatile("ld.shared.v4.u32 {%0,%1,%2,%3}, [%4];\n" : "=r"(v.x), "=r"(v.y), "=r"(v.z), "=r"(v.w) : "r"(xring + tk * 128 + c * 16));
+          *(uint4*)(out + (size_t)(t0 + tk) * N + n0 + c * 8) = v;
+        }
+      }
+    } else if (D[0] == 1.2345f) out[0] = __float2bfloat16(0.f);
+  }
+  if (CL) bg_csync();  // no multicast write or remote arrive reaches a CTA that has exited
+}
+template <int ST, int CL, int PRB, int MINB>
+static int bg_go(const BgTmap& tw, const BgTmap& tx, __nv_bfloat16* out, int m, int N, int K, int TT, cudaStream_t st) {
+  constexpr int SM = 1024 + 2 * ST * 8192 + 32 * ST;
+  if (N % 64 || K % 64 || m < 1 || TT * 64 < m || (CL && TT % 2)) return -4;
+  auto k = bg<ST, CL, PRB, MINB>;
+  static bool once = false;
+  if (!once) {
+    if (cudaFuncSetAttribute(k, cudaFuncAttributeMaxDynamicSharedMemorySize, SM) != cudaSuccess) { cudaGetLastError(); return -6; }
+    once = true;
+  }
+  cudaLaunchConfig_t cfg = {};
+  cfg.gridDim = dim3(TT, N / 64); cfg.blockDim = dim3(192); cfg.dynamicSmemBytes = SM; cfg.stream = st;
+  cudaLaunchAttribute at[1];
+  at[0].id = cudaLaunchAttributeClusterDimension;
+  at[0].val.clusterDim.x = 2; at[0].val.clusterDim.y = 1; at[0].val.clusterDim.z = 1;
+  cfg.attrs = at; cfg.numAttrs = CL ? 1 : 0;
+  const cudaError_t e = cudaLaunchKernelEx(&cfg, k, tw, tx, out, m, N, K);
+  if (e != cudaSuccess) { cudaGetLastError(); return (int)e; }
+  return 0;
+}
+// variant: 0 ST 12 cluster | 1 ST 12 no cluster | 2 ST 6 cluster 2/SM | 3 ST 6 no cluster 2/SM | probes on variant 0's
+// shape: 4 W-only, 5 W + x, 6 + wgmma (no epilogue)
+int bg_launch(int v, const BgTmap& tw, const BgTmap& tx, __nv_bfloat16* out, int m, int N, int K, int TT, cudaStream_t st) {
+  switch (v) {
+    case 0: return bg_go<12, 1, 0, 1>(tw, tx, out, m, N, K, TT, st);
+    case 1: return bg_go<12, 0, 0, 1>(tw, tx, out, m, N, K, TT, st);
+    case 2: return bg_go<6, 1, 0, 2>(tw, tx, out, m, N, K, TT, st);
+    case 3: return bg_go<6, 0, 0, 2>(tw, tx, out, m, N, K, TT, st);
+    case 4: return bg_go<12, 1, 1, 1>(tw, tx, out, m, N, K, TT, st);
+    case 5: return bg_go<12, 1, 2, 1>(tw, tx, out, m, N, K, TT, st);
+    case 6: return bg_go<12, 1, 3, 1>(tw, tx, out, m, N, K, TT, st);
+  }
+  return -2;
+}
+typedef CUresult (*BgEncodeFn)(CUtensorMap*, CUtensorMapDataType, cuuint32_t, void*, const cuuint64_t*, const cuuint64_t*,
+                               const cuuint32_t*, const cuuint32_t*, CUtensorMapInterleave, CUtensorMapSwizzle,
+                               CUtensorMapL2promotion, CUtensorMapFloatOOBfill);
+static_assert(sizeof(CUtensorMap) == sizeof(BgTmap), "CUtensorMap size");
+static int bg_map(BgTmap* tm, const void* p, int64_t rows, int64_t K, int box_rows) {
+  static BgEncodeFn enc = nullptr;
+  if (!enc) {
+    void* fn = nullptr;
+    cudaDriverEntryPointQueryResult q;
+#if CUDART_VERSION >= 12050
+    if (cudaGetDriverEntryPointByVersion("cuTensorMapEncodeTiled", &fn, 12000, cudaEnableDefault, &q) != cudaSuccess || !fn) { cudaGetLastError(); return -20; }
+#else
+    if (cudaGetDriverEntryPoint("cuTensorMapEncodeTiled", &fn, cudaEnableDefault, &q) != cudaSuccess || !fn) { cudaGetLastError(); return -20; }
+#endif
+    enc = (BgEncodeFn)fn;
+  }
+  if (((uintptr_t)p) % 16) return -21;
+  cuuint64_t dims[2] = {(cuuint64_t)K, (cuuint64_t)rows};
+  cuuint64_t strides[1] = {(cuuint64_t)K * 2};
+  cuuint32_t box[2] = {64, (cuuint32_t)box_rows};
+  cuuint32_t estr[2] = {1, 1};
+  return enc((CUtensorMap*)tm, CU_TENSOR_MAP_DATA_TYPE_BFLOAT16, 2, (void*)p, dims, strides, box, estr, CU_TENSOR_MAP_INTERLEAVE_NONE,
+             CU_TENSOR_MAP_SWIZZLE_128B, CU_TENSOR_MAP_L2_PROMOTION_L2_128B, CU_TENSOR_MAP_FLOAT_OOB_FILL_NONE) == CUDA_SUCCESS ? 0 : -22;
+}
+// pw24: plain bf16 GEMM (bg). W map: box 64 k x 32 rows (half tiles, multicast halves); x map: box 64 k x 64 tokens, rows >= m
+// zero-filled. Maps are encoded per call (under graph capture they are baked into the kernel node like a raw pointer).
+int64_t bgrun(int64_t v, torch::Tensor x, torch::Tensor W, torch::Tensor out) {
+  if (x.dim() != 2 || W.dim() != 2 || x.size(1) != W.size(1) || out.size(0) != x.size(0) || out.size(1) > W.size(0)) return -10;
+  BgTmap tw, tx;
+  int r = bg_map(&tw, W.data_ptr(), out.size(1), W.size(1), 32);
+  if (r) return r;
+  r = bg_map(&tx, x.data_ptr(), x.size(0), x.size(1), 64);
+  if (r) return r;
+  const int m = (int)x.size(0), TT = ((m + 127) / 128) * 2;
+  return (int64_t)bg_launch((int)v, tw, tx, (__nv_bfloat16*)out.data_ptr(), m, (int)out.size(1), (int)x.size(1), TT, at::cuda::getCurrentCUDAStream());
+}
+"""
+_bgmod = None
+
+
+def _bgext():
+    global _bgmod
+    if _bgmod is None:
+        _bgmod = load_inline("bg24_%x" % (hash(BGCU) & 0xffffffff), cpp_sources="int64_t bgrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor);",
+                             cuda_sources=BGCU, functions=["bgrun"],
+                             extra_cuda_cflags=["-O3", "-lineinfo", "--use_fast_math", "-gencode=arch=compute_90a,code=sm_90a"], verbose=False)
+    return _bgmod
 
 
 # code-word bit of each value's 3-bit offset and of its sign, per decode variant (see dec0 / dec1)
@@ -1998,8 +2019,8 @@ def _name(i):
 
 
 def _gvcall(st, p, x, out):
-    if p[0] == -8:  # pw24 plain bf16 GEMM (m = 128 / 256)
-        return _gvext().bgrun(p[1], x, p[2], out)
+    if p[0] == -8:  # pw24 plain bf16 GEMM (m = 128 / 256), own sm_90a extension
+        return _bgext().bgrun(p[1], x, p[2], out)
     if p[0] == -7:  # pw22 router split-K
         return _rscall(st, p, x, out)
     if p[0] >= 1000:
@@ -3026,7 +3047,13 @@ def _bgbake(st):
     flush = torch.empty(64 << 20, dtype=torch.float32, device=dev)
     sink = torch.empty((), dtype=torch.float32, device=dev)
     gen = torch.Generator(device=dev).manual_seed(2424)
-    ext = _gvext()
+    t0 = time.time()
+    try:
+        ext = _bgext()
+    except Exception as error:  # never let this extension take the submission down: r6 + router stand
+        print("PREP bg build failed: %s" % str(error).splitlines()[-1][:300], flush=True)
+        return
+    print("PREP bg compiled in %.0fs" % (time.time() - t0), flush=True)
     # PROBE ladder on the primary (bg12c) shape, pooler m = 128 (64 x 2 tiles = 128 CTAs, 64 clusters)
     w = st["pooler_raw"]
     n, K = w.shape

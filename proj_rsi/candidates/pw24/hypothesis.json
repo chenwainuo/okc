@@ -13,5 +13,6 @@
     "Our pipelines peaked at 7-8.7 TB/s L2->SM; if bg12 W+x lands at pw19/pw13 levels (25-30 in-prepare), the delivery gap is structural rather than decode.",
     "The cluster-2 launch: pw9/pw10 attributed several us to clusters; bg12 (no cluster) prices it directly.",
     "The epilogue's st.shared.u16 transposition has bank conflicts (64 rows x 2 B stride); it is about 8 KB per CTA, small."
-  ]
+  ],
+  "fix_after_5c994bf40c144571": "Check 5c994bf40c144571 failed at setup: the bg kernel had been spliced into r6's gv extension, which load_inline builds for plain sm_90, so ptxas rejected wgmma; the 8 multicast warnings were only the advisory 'use sm_90a'. bg and bgrun now live in their own extension (BGCU, load_inline 'bg24_*', flags -O3 -lineinfo --use_fast_math -gencode=arch=compute_90a,code=sm_90a), built inside _bgbake. If that build fails, prepare prints 'PREP bg build failed: <reason>' and continues with r6 + router. GVCU and GVI are byte-identical to pw23's; GVCU and the skinny CUDA source contain no wgmma, setmaxnreg or multicast. Local, with judge-style flags: gv block at sm_90 gives 0 errors and 0 advisories, and r6's 78 instances are SASS-identical; bg block at sm_90a gives 0 errors and 0 advisories, 58 regs and 0 spills. Negative control: the bg block at sm_90 reproduces the judge's 70 'not supported' errors."
 }
