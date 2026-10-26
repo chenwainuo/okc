@@ -910,3 +910,7 @@ box gains −3.9 (pooler), −3.0 (unpooler), −2.1 (qkv) at m=128. Caveat for 
 candidate's variants (or before heavy prepare work) and keep the lower number. Epilogue, zeroing, escapes, build all
 correct (168 regs, 0 spills incl. m=256); keep the background compile. Fix in progress; rs128 submits first at the
 reset once the marker is written.
+rs128 fixes in (e8d7ab8): r6 timed before the pack and after the variants (lower wins, both printed), fallback on a
+nonzero launch return, trapping zero-handshake timeouts; box rerun 65/65. Picks at m=128 (in-prepare): pooler 27.36 →
+24.77, qkv 18.75 → 16.77, unpooler 26.72 → 24.83 (~−2 each; variants noisy ±2 between runs). Approval marker written:
+rs128 submits first at the 00:00 UTC reset.
