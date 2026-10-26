@@ -82,14 +82,17 @@ def plan_anat(layers, ms):
         for m in ms:
             v.append(("cublas", None, ly, m, 0, 0))
             for nm in ANAT:
+                if ly != "pooler" and not nm.startswith("s4"):
+                    continue
                 v.append((nm, nm, ly, m, S.RQKS[ly], 0))
-            for nm in ():
+            for nm in (("r8", "r8i", "s4s5hz", "s4s5hzi") if ly == "pooler" else ("s4s5hz", "s4s5hzi")):
                 v.append((nm + "-noesc", nm, ly, m, S.RQKS[ly], 0))
             pass
     return v
 
 
-ANAT = ["r10", "r10d1", "r10d2", "r10d3", "r10d4", "r10d5", "r11d1"]
+ANAT = ["r10", "r10i", "r11", "r10d2", "r8", "r8i", "r8x", "r8xi", "r8z", "r8zi", "r8p", "r8pi", "r8pz", "r8pzi", "r8w5", "r8w5i",
+        "s4s5hz", "s4s5hzi", "s4s5hzx", "s4s5hzxi", "s4s5hzp", "s4s5hzpi", "s4s5hzz", "s4s5hzzi", "s4s5hzw5", "s4s5hzw5i"]
 PLANS = {"r1": plan_r1, "e5": plan_e5, "ins": plan_ins, "anat": plan_anat}
 
 
@@ -209,7 +212,7 @@ def main():
     flush = torch.empty(64 << 20, dtype=torch.float32, device=dev)
     fsink = torch.empty((), dtype=torch.float32, device=dev)
     sink = torch.zeros(4, dtype=torch.int32, device=dev)
-    prof = torch.zeros(1 << 16, dtype=torch.int64, device=dev)
+    prof = torch.zeros(1 << 17, dtype=torch.int64, device=dev)
     calls = []
     for lab, nm, ly, m, KS, wal in var:
         w = weights[ly]
@@ -268,7 +271,7 @@ def main():
         N, K = SHAPES[ly]
         KS = S.RQKS[ly]
         nc = (N // 128) * KS
-        pr = prof[: nc * 32].view(nc, 2, 16).double()
+        pr = prof[: nc * 48].view(nc, 48)[:, :32].reshape(nc, 2, 16).double()
         nst = (K // 64) / KS
         for gg in range(2):
             mn = pr[:, gg].mean(0) / nst
@@ -278,7 +281,9 @@ def main():
                       tag, gg, mn[0], mx[0], mn[1], mx[1], mn[2], mx[2], mn[3], mx[3], mn[4], mx[4], mn[5], mx[5], mn[6], mx[6], mn[7], mx[7], mn[8] * nst), flush=True)
         pw = pr[:, 0, 9:11].mean(0) / nst
         print("INS %s producer empty-wait per stage: W %.0f x %.0f clk" % (tag, pw[0], pw[1]), flush=True)
-        pv = prof[: nc * 32].view(nc, 32).double()
+        pv = prof[: nc * 48].view(nc, 48).double()
+        pe = pv[:, 32:34].mean(0) / nst
+        print("INS %s escape walk+apply per-stage clk WG0 %.0f WG1 %.0f (part of decode / wait_group)" % (tag, float(pe[0]), float(pe[1])), flush=True)
         hits, lp = pv[:, 31] / 5.0, pr[:, 0, 0] / nst  # 5 launches accumulate the hit counter
         if float(hits.sum()) > 0 or True:
             order = torch.argsort(lp, descending=True)

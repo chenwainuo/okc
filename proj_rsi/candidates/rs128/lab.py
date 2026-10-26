@@ -126,7 +126,17 @@ def plan_ks(layers, ms):
     return v
 
 
-PLANS = {"ks": plan_ks, "dec": plan_dec, "m256b": plan_m256b, "m256": plan_m256, "r1": plan_r1, "e5": plan_e5, "ins": plan_ins}
+def plan_ep(layers, ms):
+    v = []
+    for ly in layers:
+        v.append(("cublas", None, ly, 128, 0, 0))
+        for nm in ("s3s5", "s4s5z", "s4s5hz", "s4s5zp", "s4s5hzp", "s4s6zp", "eps5", "eps5p"):
+            v.append((nm, nm, ly, 128, S.RQKS[ly], 0))
+        v.append(("s4s5zpi", "s4s5zpi", ly, 128, S.RQKS[ly], 0))
+    return v
+
+
+PLANS = {"ep": plan_ep, "ks": plan_ks, "dec": plan_dec, "m256b": plan_m256b, "m256": plan_m256, "r1": plan_r1, "e5": plan_e5, "ins": plan_ins}
 
 
 class Clocks:

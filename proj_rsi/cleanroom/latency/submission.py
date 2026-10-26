@@ -107,6 +107,12 @@ __device__ __forceinline__ void tma_load_1d(void* dst, const void* src, uint32_t
 #endif
 }
 
+__device__ __forceinline__ void mbar_arrive(uint64_t* bar) {
+#ifdef LATENCY_SM90A
+    uint32_t a = (uint32_t)__cvta_generic_to_shared(bar);
+    asm volatile("mbarrier.arrive.shared.b64 _, [%0];" ::"r"(a) : "memory");
+#endif
+}
 __device__ __forceinline__ void cp_async16(void* dst, const void* src) {
     uint32_t d = (uint32_t)__cvta_generic_to_shared(dst);
     asm volatile("cp.async.cg.shared.global [%0], [%1], 16;" ::"r"(d), "l"(src) : "memory");
@@ -402,7 +408,7 @@ __device__ __forceinline__ void stamp(int dbg, int cta, int warp, int lane, int 
 }
 
 template <int NB, int MT, int MODE>
-__global__ void __launch_bounds__(256, 1)
+__global__ void __launch_bounds__(384, 1)
 latency_gemv_w(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restrict__ x, void* __restrict__ out,
                const uint8_t* __restrict__ excw, int ecap, int ksplit, int dbg,
                int m, int K, int N, int nstages, int S, uint32_t lut_lo, uint32_t lut_hi, uint32_t lut2_lo, uint32_t lut2_hi)
@@ -414,6 +420,7 @@ latency_gemv_w(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
     constexpr int STAGE = 8 * WB;
     constexpr int WCH = WB / 16;
     extern __shared__ __align__(128) uint8_t smem[];
+    __shared__ __align__(8) uint64_t fullb[8 * 16], emptyb[8 * 16];
 
     const int tid = threadIdx.x, warp = tid >> 5, lane = tid & 31, g = lane >> 2, c = lane & 3;
     const int cta = blockIdx.x;                    // = n_tile * ksplit + kq; a cluster = the ksplit CTAs of one n_tile
@@ -422,46 +429,74 @@ latency_gemv_w(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
     const int XB = m * 128;
     const int SLOT = (WB + XB + 127) & ~127;
     const int EB = ecap * 8;
-    uint8_t* eslot = smem + warp * EB;
-    uint8_t* ring = smem + 8 * EB + warp * S * SLOT;
+    const bool prod = dbg & 32;                    // producer warps (warps 8..) feed the 8 consumer warps
+    const int P = (int)(blockDim.x >> 5) - 8;
     stamp(dbg, cta, warp, lane, 0);
     const bool wl = dbg & 8;   // warp-contiguous layout: [n_tile][warp][stage][pl][L|H]
-    const uint8_t* src = wl ? packed + (((size_t)ntile * 8 + warp) * (size_t)nstages + st0) * WB
-                            : packed + ((size_t)ntile * (size_t)nstages + st0) * STAGE;
     const uint8_t* xb = reinterpret_cast<const uint8_t*>(x);
 
-    // exception list of this (cta, warp): rides in the first group
-    {
-        const uint8_t* es = excw + (size_t)(cta * 8 + warp) * EB;
-        for (int i = lane; i < EB / 16; i += 32) cp_async16(eslot + i * 16, es + i * 16);
-    }
-    auto issue = [&](int st) {
-        if (st < nst) {
-            uint8_t* d = ring + (st % S) * SLOT;
-            if (wl) {
-                const uint8_t* gs = src + (size_t)st * WB;
+    // copy (warp w, stage st) into w's ring slot: its weight planes and its x slice
+    auto issue_for = [&](int w, int st) {
+        uint8_t* d = smem + 8 * EB + w * S * SLOT + (st % S) * SLOT;
+        if (wl) {
+            const uint8_t* gs = packed + (((size_t)ntile * 8 + w) * (size_t)nstages + st0 + st) * WB;
 #pragma unroll 4
-                for (int i = lane; i < WCH; i += 32) cp_async16(d + i * 16, gs + i * 16);
-            } else {
-            const uint8_t* gs = src + (size_t)st * STAGE;
+            for (int i = lane; i < WCH; i += 32) cp_async16(d + i * 16, gs + i * 16);
+        } else {
+            const uint8_t* gs = packed + ((size_t)ntile * (size_t)nstages + st0 + st) * STAGE;
 #pragma unroll 4
             for (int i = lane; i < WCH; i += 32) {
                 const int pl = NPL == 1 ? 0 : i / (NB * 6);
                 const int r = i - pl * (NB * 6);
                 const uint8_t* gp = gs + pl * (8 * NB * 96) +
-                    (r < NB * 4 ? warp * (NB * 64) + r * 16 : 8 * NB * 64 + warp * (NB * 32) + (r - NB * 4) * 16);
+                    (r < NB * 4 ? w * (NB * 64) + r * 16 : 8 * NB * 64 + w * (NB * 32) + (r - NB * 4) * 16);
                 cp_async16(d + i * 16, gp);
             }
-            }
-            const int k0 = (st0 + st) * 512 + warp * 64;
-            if (!(dbg & 1)) for (int i = lane; i < m * 8; i += 32) {
-                const int r = i >> 3, ch = i & 7;
-                cp_async16(d + WB + r * 128 + ((ch ^ ((r & 1) << 2)) << 4), xb + ((size_t)r * K + k0 + ch * 8) * 2);
-            }
         }
+        const int k0 = (st0 + st) * 512 + w * 64;
+        if (!(dbg & 1)) for (int i = lane; i < m * 8; i += 32) {
+            const int r = i >> 3, ch = i & 7;
+            cp_async16(d + WB + r * 128 + ((ch ^ ((r & 1) << 2)) << 4), xb + ((size_t)r * K + k0 + ch * 8) * 2);
+        }
+    };
+
+    if (prod) {
+        if (tid == 0) {
+            for (int i = 0; i < 8 * 16; ++i) { mbar_init(&fullb[i], 32); mbar_init(&emptyb[i], 1); }
+#ifdef LATENCY_SM90A
+            asm volatile("fence.mbarrier_init.release.cluster;" ::: "memory");
+#endif
+        }
+        __syncthreads();
+    }
+    uint8_t* eslot = smem + (warp < 8 ? warp : 0) * EB;
+    uint8_t* ring = smem + 8 * EB + (warp < 8 ? warp : 0) * S * SLOT;
+    if (warp < 8) {   // exception list of this (cta, warp): rides in the first group
+        const uint8_t* es = excw + (size_t)(cta * 8 + warp) * EB;
+        for (int i = lane; i < EB / 16; i += 32) cp_async16(eslot + i * 16, es + i * 16);
+    }
+    auto issue = [&](int st) {
+        if (st < nst) issue_for(warp, st);
         cp_commit();
     };
-    for (int i = 0; i < S; ++i) issue(i);
+    if (!prod) {
+        for (int i = 0; i < S; ++i) issue(i);
+    } else if (warp >= 8) {
+        // producer: stage-major over its consumer warps; a slot is re-armed once its consumer released it
+        for (int st = 0; st < nst; ++st) {
+            const int slot = st % S;
+            for (int w = warp - 8; w < 8; w += P) {
+                if (st >= S) mbar_wait(&emptyb[w * 16 + slot], (uint32_t)(((st / S) - 1) & 1));
+                issue_for(w, st);
+                cp_async_mbar_arrive(&fullb[w * 16 + slot]);
+            }
+        }
+        cp_wait<0>();
+    } else {
+        cp_commit();
+        cp_wait<0>();
+        __syncwarp();
+    }
     stamp(dbg, cta, warp, lane, 1);
 
     float acc[MT][NT][4];
@@ -473,8 +508,10 @@ latency_gemv_w(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
             for (int i = 0; i < 4; ++i) acc[a][t][i] = 0.f;
 
     int ep = 0;
+    if (warp < 8)
     for (int s = 0; s < nst; ++s) {
-        cp_wait_rt(S - 1);
+        if (prod) mbar_wait(&fullb[warp * 16 + (s % S)], (uint32_t)((s / S) & 1));
+        else cp_wait_rt(S - 1);
         __syncwarp();
         if (s == 0) stamp(dbg, cta, warp, lane, 2);
         if (s == nst / 2) stamp(dbg, cta, warp, lane, 3);
@@ -553,7 +590,8 @@ latency_gemv_w(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
             }
         }
         __syncwarp();
-        issue(s + S);
+        if (prod) { if (lane == 0) mbar_arrive(&emptyb[warp * 16 + (s % S)]); }
+        else issue(s + S);
     }
     cp_wait<0>();
     stamp(dbg, cta, warp, lane, 4);
@@ -562,6 +600,7 @@ latency_gemv_w(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
     stamp(dbg, cta, warp, lane, 5);
     float* red = reinterpret_cast<float*>(smem);
     constexpr int RROWS = MT * 16, RCOLS = NT * 8;
+    if (warp < 8)
 #pragma unroll
     for (int a = 0; a < MT; ++a)
 #pragma unroll
@@ -574,7 +613,7 @@ latency_gemv_w(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
     __syncthreads();
     const int total = m * NB;
     if (ksplit == 1) {
-        for (int idx = tid; idx < total; idx += 256) {
+        if (tid < 256) for (int idx = tid; idx < total; idx += 256) {
             const int row = idx / NB, col = idx - row * NB;
             float sum = 0.f;
 #pragma unroll
@@ -588,7 +627,7 @@ latency_gemv_w(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
     }
     // split-K: reduce the 8 warps into red2 [m][NB], then rank kq sums its share of red2 over the cluster (DSMEM)
     float* red2 = red + 8 * RROWS * RCOLS;
-    for (int idx = tid; idx < total; idx += 256) {
+    if (tid < 256) for (int idx = tid; idx < total; idx += 256) {
         const int row = idx / NB, col = idx - row * NB;
         float sum = 0.f;
 #pragma unroll
@@ -598,7 +637,7 @@ latency_gemv_w(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
 #ifdef LATENCY_SM90A
     asm volatile("barrier.cluster.arrive.release.aligned;\nbarrier.cluster.wait.acquire.aligned;" ::: "memory");
     const uint32_t r2 = (uint32_t)__cvta_generic_to_shared(red2);
-    for (int idx = kq * 256 + tid; idx < total; idx += 256 * ksplit) {
+    if (tid < 256) for (int idx = kq * 256 + tid; idx < total; idx += 256 * ksplit) {
         float sum = 0.f;
         for (int r = 0; r < ksplit; ++r) {
             uint32_t ra; float v;
@@ -621,14 +660,14 @@ void launch_w(const torch::Tensor& packed, const torch::Tensor& x, torch::Tensor
     auto kfn = latency_gemv_w<NB, MT, MODE>;
     static bool configured = false;
     if (!configured) {
-        cudaFuncSetAttribute(kfn, cudaFuncAttributeMaxDynamicSharedMemorySize, 227 * 1024);
+        cudaFuncSetAttribute(kfn, cudaFuncAttributeMaxDynamicSharedMemorySize, 220 * 1024);
         cudaFuncSetAttribute(kfn, cudaFuncAttributeNonPortableClusterSizeAllowed, 1);
         configured = true;
     }
     const int n_cta = N / NB * ksplit;
     cudaLaunchConfig_t cfg = {};
     cfg.gridDim = dim3(n_cta);
-    cfg.blockDim = dim3(256);
+    cfg.blockDim = dim3((dbg & 32) ? 256 + 32 * (((dbg >> 6) & 3) + 1) : 256);
     cfg.dynamicSmemBytes = smem_bytes;
     cfg.stream = at::cuda::getCurrentCUDAStream();
     cudaLaunchAttribute attr[1];
@@ -708,7 +747,7 @@ def _ext():
     global _EXT
     if _EXT is None:
         _EXT = load_inline(
-            name=f"latency_gemv_v8_l{LOADER}",
+            name=f"latency_gemv_v10_l{LOADER}",
             cpp_sources=[CPP_SRC],
             cuda_sources=[CUDA_SRC],
             functions=["latency_gemv_run", "latency_gemv_w_run", "latency_stamps"],

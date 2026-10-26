@@ -42,15 +42,15 @@ for m in ms:
         if kind == "small":
             MT = c.get("MT", 1 if m <= 16 else 2); S = c.get("S", 4); D = c.get("D", 4); diag = c.get("diag", 0)
             out = torch.empty((m, N), dtype=torch.float32 if router else torch.bfloat16, device="cuda")
-            fn = lambda: ext.small_launch(L["packed"], x, out, L["esc_off"], L["esc"], m, K, N, L["base2"], S, MT, router, D, diag)
+            fn = lambda: ext.small_launch(L["packed"], x, out, L["esc_off"], L["esc"], m, K, N, L["base2"], S, MT, router, D, diag, L["nboff"], L["sstride"])
         elif kind == "rfma":
             S = c.get("S", 8); D = c.get("D", 4)
             out = torch.empty((m, N), dtype=torch.float32, device="cuda")
-            fn = lambda: ext.rfma_launch(L["packed"], x, out, L["esc_off"], L["esc"], m, K, N, L["base2"], S, D)
+            fn = lambda: ext.rfma_launch(L["packed"], x, out, L["esc_off"], L["esc"], m, K, N, L["base2"], S, D, L["nboff"], L["sstride"])
         elif kind == "big":
             MT = c.get("MT", 4 if m <= 64 else (8 if m <= 128 else 16)); S = c.get("S", 4); G = c.get("G", 1); NB2 = c.get("NB2", 1 if router else 2); KK = c.get("KK", 2); D = c.get("D", 6 if KK == 2 else 12); diag = c.get("diag", 0)
             out = torch.empty((m, N), dtype=torch.float32 if router else torch.bfloat16, device="cuda")
-            fn = lambda: ext.big_launch(L["packed"], x, out, L["esc_off"], L["esc"], L["scratch"], L["counters"], m, K, N, L["base2"], S, G, MT, NB2, router, D, KK, diag)
+            fn = lambda: ext.big_launch(L["packed"], x, out, L["esc_off"], L["esc"], L["scratch"], L["counters"], m, K, N, L["base2"], S, G, MT, NB2, router, D, KK, diag, L["nboff"], L["sstride"])
         else:
             fn = lambda: mod.kernel_fn(data, st)
         try:

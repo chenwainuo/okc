@@ -3047,6 +3047,16 @@ RQV = [  # (name, NT, ST, GS, PRB, WM, INS, FL): ST k64 slots (W 12 KB + x NT*12
     ("s4hzp", 128, 8, 1, 0, 0, 0, 67),
     ("n256s5hzp", 256, 5, 1, 0, 0, 0, 67),
     ("r8z", 128, 8, 1, 8, 0, 0, 128),
+    ("s4s5hzz", 128, 5, 1, 0, 0, 0, 131),
+    ("s4s5hzw5", 128, 5, 1, 0, 5, 0, 3),
+    ("s4s5hzw5i", 128, 5, 1, 0, 5, 1, 3),
+    ("r8w5", 128, 8, 1, 8, 5, 0, 0),
+    ("r8w5i", 128, 8, 1, 8, 5, 1, 0),
+    ("r8xi", 128, 8, 1, 8, 0, 1, 32),
+    ("r8zi", 128, 8, 1, 8, 0, 1, 128),
+    ("r8pzi", 128, 8, 1, 8, 0, 1, 192),
+    ("s4s5hzxi", 128, 5, 1, 0, 0, 1, 35),
+    ("s4s5hzzi", 128, 5, 1, 0, 0, 1, 131),
     ("r8pz", 128, 8, 1, 8, 0, 0, 192),
     ("r10d1", 128, 8, 1, 10, 0, 0, 256),
     ("r10d2", 128, 8, 1, 10, 0, 0, 512),
@@ -3123,12 +3133,12 @@ template <int N0, int NR> __device__ __forceinline__ void rq_xsw(uint32_t* A, in
 // the CTA's range. The warp's list is cached in registers, 32 entries per lane-spread window (entry i in lane i % 32), read
 // by shfl: no dependent global load per hit (pw10 reloaded the next entry from L2 after every hit, ~600 clk per escape).
 template <bool SW, bool XZ = false>
-__device__ __forceinline__ void rq_fix(uint32_t (&A)[16], int seq, uint32_t& nx, uint32_t& nxs, int& ei, uint32_t& ec, const uint32_t* el, int lane, int& rq_nh) {
+__device__ __forceinline__ void rq_fix(uint32_t (&A)[16], int seq, uint32_t& nx, uint32_t& nxs, int& ei, uint32_t& ec, const uint32_t* el, int lane, int& rq_nh, uint32_t rq_zm = 0xffffffffu) {
   while (nxs == (uint32_t)seq) {
     rq_nh++;
     if (lane == (int)((nx >> 12) & 31)) {
       const int r = (int)((nx >> 8) & 15);
-      const uint32_t xr = XZ ? 0u : (nx & 0x7fu) << (8 + ((nx >> 7) & 1) * 16);
+      const uint32_t xr = ((nx & 0x7fu) << (8 + ((nx >> 7) & 1) * 16)) & (XZ ? rq_zm : 0xffffffffu);  // XZ: runtime-opaque 0
       if (SW) rq_xsw<0, 16>(A, r, xr);
       else {
 #pragma unroll
@@ -3251,7 +3261,7 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
         if (++slot == ST) { slot = 0; r++; }
       }
       if (SELF && !XON) for (int s = (KCS > ST ? KCS - ST : 0); s < KCS; s++) rq_wait(full + 8 * (s % ST), (s / ST) & 1);
-      if (INS) { p.prof[cta * 32 + 9] = tw; p.prof[cta * 32 + 15] = rq_gt(); }
+      if (INS) { p.prof[cta * 48 + 9] = tw; p.prof[cta * 48 + 15] = rq_gt(); }
     } else if (warp == 9 && lane == 0 && XON) {
       uint64_t pol = 0;
       if (HINT) asm volatile("createpolicy.fractional.L2::evict_last.b64 %0, 1.0;\n" : "=l"(pol));
@@ -3269,7 +3279,7 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
         if (++slot == ST) { slot = 0; r++; }
       }
       if (SELF) for (int s = (KCS > ST ? KCS - ST : 0); s < KCS; s++) rq_wait(full + 8 * (s % ST), (s / ST) & 1);
-      if (INS) p.prof[cta * 32 + 10] = tw;
+      if (INS) p.prof[cta * 48 + 10] = tw;
     } else if (ZI && warp >= 10) {  // in-kernel zeroing: this CTA's 1/KS token slice of its row block's 128 out columns,
       // then a release increment of the block's counter; every reduce-add into the block first acquires counter == KS
       const int t = tid - 320, r0 = (int)((long long)ks * p.m / KS), r1 = (int)((long long)(ks + 1) * p.m / KS);
@@ -3319,6 +3329,7 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
   for (int j = 0; j < GS; j++) Q[j][0] = Q[j][1] = Q[j][2] = Q2[j][0] = Q2[j][1] = Q2[j][2] = make_uint4(0, 0, 0, 0);
   uint32_t sink = 0;
   int nhits = 0;  // escape hits of this warp (INS: summed per CTA into prof slot 31)
+  unsigned long long pesc = 0;  // INS: clk in the escape walk + apply (prof slot 32 + WG), a part of the decode / wait_group stamps
   unsigned long long pc[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0}, tq = 0, tq0 = 0;
 #define RQ_T0() do { if (INS) tq = clock64(); } while (0)
 #define RQ_T1(i) do { if (INS) { const unsigned long long t_ = clock64(); pc[i] += t_ - tq; tq = t_; } } while (0)
@@ -3384,12 +3395,14 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
   // no SHFL chain sits between the full wait and the wgmma.fence (where it held the warpgroup's other 3 warps)
   static_assert(!(FL & 64) || (GS == 1 && WM == 0), "FL bit 6: GS 1, WM 0 only");
   uint32_t er0 = 0xffu, ex0 = 0u, er1 = 0xffu, ex1 = 0u, er2 = 0xffu, ex2 = 0u;
+  const uint32_t zmask = 0u - (uint32_t)(p.m < 0);  // 0 at run time, unknown to the compiler (FL bit 7 probe)
   auto prewalk = [&](int seq) {
+    const unsigned long long te = INS ? clock64() : 0;
     er0 = er1 = er2 = 0xffu;
     while (nxs == (uint32_t)seq) {
       nhits++;
       if (lane == (int)((nx >> 12) & 31)) {
-        const uint32_t r = (nx >> 8) & 15u, xr = (FL & 128) ? 0u : (nx & 0x7fu) << (8 + ((nx >> 7) & 1) * 16);  // bit 7: XOR 0 (probe)
+        const uint32_t r = (nx >> 8) & 15u, xr = ((nx & 0x7fu) << (8 + ((nx >> 7) & 1) * 16)) & ((FL & 128) ? zmask : 0xffffffffu);  // bit 7: XOR 0 (probe)
         if (er0 == 0xffu) { er0 = r; ex0 = xr; } else if (er1 == 0xffu) { er1 = r; ex1 = xr; } else { er2 = r; ex2 = xr; }
       }
       ++ei;
@@ -3397,6 +3410,7 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
       nx = __shfl_sync(0xffffffffu, ec, ei & 31);
       nxs = nx >> 17;
     }
+    if (INS) pesc += clock64() - te;
   };
   auto dec = [&](int G, int ns, uint32_t (&A)[GS][16]) {
     if (INS) {  // force the LDS results in: time the data wait separately from the decode ALU work
@@ -3426,9 +3440,22 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
           }
         } else {
           rq_unit(Q[j][0], Q[j][1], Q[j][2], Tb, A[j]);
+          if (INS) {  // separate the escape walk from the decode: force the decoded registers first
+            uint32_t t = 0;
+#pragma unroll
+            for (int i = 0; i < 16; i++) t ^= A[j][i];
+            asm volatile("" : "+r"(t));
+            sink += t & 1;
+          }
+          const unsigned long long te = INS ? clock64() : 0;
           if (FL & 64) {
             if (er0 != 0xffu) { rq_xsw<0, 16>(A[j], (int)er0, ex0); if (er1 != 0xffu) { rq_xsw<0, 16>(A[j], (int)er1, ex1); if (er2 != 0xffu) rq_xsw<0, 16>(A[j], (int)er2, ex2); } }
-          } else rq_fix<(FL & 32) != 0, (FL & 128) != 0>(A[j], GS * G + j, nx, nxs, ei, ec, el, lane, nhits);
+          } else rq_fix<(FL & 32) != 0, (FL & 128) != 0>(A[j], GS * G + j, nx, nxs, ei, ec, el, lane, nhits, zmask);
+          if (INS) {
+#pragma unroll
+            for (int i = 0; i < 16; i++) asm volatile("" : "+r"(A[j][i]));
+            pesc += clock64() - te;
+          }
         }
       }
     }
@@ -3521,6 +3548,14 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
         fa(Ap);
         RQ_T1(6);
         if (G > 0) xrel(G - 1);
+      } else if (WM == 5) {  // rs128p: x release before the next LDS (the release-semantics arrive then has no LDS in flight)
+        dec(G, decltype(NSC)::value, A);
+        mma(G, NSC, A);
+        asm volatile("wgmma.wait_group.sync.aligned 1;\n" ::: "memory");
+        fa(Ap);
+        RQ_T1(6);
+        if (G > 0) xrel(G - 1);
+        if (G + 1 < NGT) ldr(G + 1);
       } else if (WM == 0) {
         dec(G, decltype(NSC)::value, A);
         mma(G, NSC, A);
@@ -3629,16 +3664,17 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
     RQ_T1(8);
     if (INS && g == 0 && w == 0 && lane == 0) {
 #pragma unroll
-      for (int i = 0; i < 5; i++) p.prof[cta * 32 + 26 + i] = ce[i];
+      for (int i = 0; i < 5; i++) p.prof[cta * 48 + 26 + i] = ce[i];
     }
   } else {
     if (sink == 0x9e3779b9u || D[0] == 1.2345f) p.sink[0] = sink;
   }
-  if (INS && lane == 0) atomicAdd(p.prof + cta * 32 + 31, (unsigned long long)nhits);
+  if (INS && lane == 0) atomicAdd(p.prof + cta * 48 + 31, (unsigned long long)nhits);
   if (INS && w == 0 && lane == 0) {
 #pragma unroll
-    for (int i = 0; i < 9; i++) p.prof[cta * 32 + 16 * g + i] = pc[i];
-    if (g == 0) { p.prof[cta * 32 + 11] = gt0; p.prof[cta * 32 + 12] = gtl0; p.prof[cta * 32 + 13] = gtl1; p.prof[cta * 32 + 14] = rq_gt(); p.prof[cta * 32 + 25] = gtw0; }
+    for (int i = 0; i < 9; i++) p.prof[cta * 48 + 16 * g + i] = pc[i];
+    p.prof[cta * 48 + 32 + g] = pesc;
+    if (g == 0) { p.prof[cta * 48 + 11] = gt0; p.prof[cta * 48 + 12] = gtl0; p.prof[cta * 48 + 13] = gtl1; p.prof[cta * 48 + 14] = rq_gt(); p.prof[cta * 48 + 25] = gtw0; }
   }
 #undef RQ_T0
 #undef RQ_T1
@@ -3701,7 +3737,7 @@ int64_t rqrun(int64_t v, torch::Tensor W, torch::Tensor x, torch::Tensor out, to
     if (cnt.numel() < 2 * W.size(0) || cnt.scalar_type() != torch::kInt32) return -13;
     p.W = (const uint8_t*)W.data_ptr(); p.esc = (const uint32_t*)esc.data_ptr(); p.ecap = (int)((esc.numel() - 32) / nl);
     p.out = (__nv_bfloat16*)out.data_ptr(); p.cnt = cnt.data_ptr<int>();
-    p.prof = prof.numel() >= KS * W.size(0) * 32 ? (unsigned long long*)prof.data_ptr() : nullptr;
+    p.prof = prof.numel() >= KS * W.size(0) * 48 ? (unsigned long long*)prof.data_ptr() : nullptr;
     p.sink = (uint32_t*)sink.data_ptr();
     p.m = (int)x.size(0); p.K = (int)x.size(1); p.N = (int)out.size(1); p.KC = (int)W.size(1); p.NB = (int)W.size(0);
     p.walias = (int)walias; p.Tb = (uint32_t)(Tb & 0xffffffff);

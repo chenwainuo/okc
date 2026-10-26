@@ -2375,6 +2375,7 @@ def prepare(weights):
     if weights["qkv_gate"].device.type != "cuda":  # pw11: CPU (proj_rsi cpu-check) runs the plain torch math
         return {"cpu": True, "raw": dict(weights)}
     rqt = _rqstart() if RQ else None  # rs128: compile overlapped with r6's phase (CPU only)
+    rqt2 = _rqstart(RQPROD2, _rqmod2, _rqthr2, "rq32") if RQ and RQS else None  # rs32: m = 16 / 32 instances
     for k, w in weights.items():
         if k == "router":
             hi = w.to(torch.bfloat16)
@@ -2414,9 +2415,9 @@ def prepare(weights):
         except Exception as error:  # the second bake can only add paths; r6's choices stand on any failure
             st["sel"] = {}
             print("PREP gx bake failed: %s" % str(error).splitlines()[-1][:200], flush=True)
-    if RQ and RQS and _rqmod[0] is not None:
+    if RQ and RQS and rqt2 is not None:
         try:
-            _rqsbake(st)
+            _rqsbake(st, rqt2)
         except Exception as error:  # can only add (layer, 16 / 32) rq paths; the incumbent stands on any failure
             for k_ in [k_ for k_ in st["rq"] if k_[1] in (16, 32)]:
                 del st["rq"][k_]
@@ -3677,6 +3678,18 @@ RQV = [  # (name, NT, ST, GS, PRB, WM, INS, FL): ST k64 slots (W 12 KB + x NT*12
     ("t16s4z", 16, 4, 1, 0, 0, 0, 2),
     ("t16s4hz", 16, 4, 1, 0, 0, 0, 3),
     ("t16s5hzi", 16, 5, 1, 0, 0, 1, 3),
+    ("t32s5hze", 32, 5, 1, 0, 0, 0, 35),
+    ("t32s5ze", 32, 5, 1, 0, 0, 0, 34),
+    ("t32s6hze", 32, 6, 1, 0, 0, 0, 35),
+    ("t32s6hz", 32, 6, 1, 0, 0, 0, 3),
+    ("t32s5hzei", 32, 5, 1, 0, 0, 1, 35),
+    ("t16s5hze", 16, 5, 1, 0, 0, 0, 35),
+    ("t16s5ze", 16, 5, 1, 0, 0, 0, 34),
+    ("t16s6hze", 16, 6, 1, 0, 0, 0, 35),
+    ("t16s6hz", 16, 6, 1, 0, 0, 0, 3),
+    ("t16s5hzei", 16, 5, 1, 0, 0, 1, 35),
+    ("h128s8e", 128, 8, 1, 0, 0, 0, 52),
+    ("s4s5hze", 128, 5, 1, 0, 0, 0, 35),
     ("h128s5", 128, 5, 1, 0, 0, 0, 20),
     ("h128s5z", 128, 5, 1, 0, 0, 0, 18),
     ("h128s8", 128, 8, 1, 0, 0, 0, 20),
@@ -3801,6 +3814,9 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
   // contiguous 6,144 B within each 12,288 B chunk); grid x = 2 NB; math WG1 exits at once; NW = math warps
   constexpr bool HALF = (FL & 16) != 0;
   constexpr int NW = HALF ? 4 : 8, CW = HALF ? 64 : 128;
+  // rs32 EARLY (FL bit 5): the W lane thread itself inits the barriers and issues the first min(ST, KCS) W chunks and x
+  // tiles before the CTA-wide __syncthreads (consumers touch the barriers only after it); the lanes resume at stage ST
+  constexpr bool EARLY = (FL & 32) != 0 && PRB == 0;
   extern __shared__ __align__(1024) uint8_t smem[];
   const uint32_t sraw = (uint32_t)__cvta_generic_to_shared(smem), sbase = (sraw + 1023u) & ~1023u;
   const uint32_t xring = sbase, wring = sbase + ST * XB, bars = wring + ST * WB;
@@ -3813,7 +3829,7 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
   // escape-list window issued before the producers start the W flood (a load issued after it waits behind ~28 MB)
   const uint32_t* el = p.esc + (size_t)((ks * p.NB + nb) * 8 + (HALF ? 4 * hh + (warp & 3) : (warp & 7))) * p.ecap;
   uint32_t ec = warp < NW ? __ldg(el + lane) : 0u;
-  if (tid == 0) {
+  if (tid == (EARLY ? 256 : 0)) {
     for (int i = 0; i < ST; i++) {
       asm volatile("mbarrier.init.shared::cta.b64 [%0], %1;\n" :: "r"(full + 8 * i), "r"(XON ? 2 : 1));
       asm volatile("mbarrier.init.shared::cta.b64 [%0], %1;\n" :: "r"(wempty + 8 * i), "r"(NW));
@@ -3821,6 +3837,23 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
     }
     asm volatile("st.shared.u32 [%0], 0;\n" :: "r"(zflag) : "memory");
     asm volatile("fence.mbarrier_init.release.cluster;\n" ::: "memory");
+    if (EARLY) {
+      const int nbw = p.walias ? nb % p.walias : nb;
+      const uint8_t* src = p.W + ((size_t)nbw * p.KC + s0) * 12288 + hh * 6144;
+      uint64_t pw = 0, px = 0;
+      if (HINT) {
+        asm volatile("createpolicy.fractional.L2::evict_first.b64 %0, 1.0;\n" : "=l"(pw));
+        asm volatile("createpolicy.fractional.L2::evict_last.b64 %0, 1.0;\n" : "=l"(px));
+      }
+      for (int s = 0; s < ST && s < KCS; s++) {
+        rq_expect(full + 8 * s, WB);  // two arrivals (count 2), as the W and x lanes would make
+        rq_expect(full + 8 * s, XB);
+        if (HINT) rq_bulkh(wring + s * WB, src + (size_t)s * 12288, WB, full + 8 * s, pw);
+        else rq_bulk(wring + s * WB, src + (size_t)s * 12288, WB, full + 8 * s);
+        if (HINT) rq_tileh(xring + s * XB, &tx, (s0 + s) * 64, 0, full + 8 * s, px);
+        else rq_tile(xring + s * XB, &tx, (s0 + s) * 64, 0, full + 8 * s);
+      }
+    }
   }
   if (tid == 320 && XON) asm volatile("prefetch.tensormap [%0];\n" :: "l"((unsigned long long)&tx) : "memory");
   __syncthreads();
@@ -3833,8 +3866,9 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
       uint64_t pol = 0;
       if (HINT) asm volatile("createpolicy.fractional.L2::evict_first.b64 %0, 1.0;\n" : "=l"(pol));
       unsigned long long tw = 0;
-      int slot = 0, r = 0;
-      for (int s = 0; s < KCS; s++) {
+      const int se = EARLY ? (KCS < ST ? KCS : ST) : 0;  // EARLY: stages 0 .. ST-1 already issued (slot 0 of round 1 next)
+      int slot = 0, r = EARLY ? 1 : 0;
+      for (int s = se; s < KCS; s++) {
         if (s >= ST) {
           const unsigned long long t0 = INS ? clock64() : 0;
           rq_wait((SELF ? full : wempty) + 8 * slot, (r & 1) ^ 1);
@@ -3851,8 +3885,9 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
       uint64_t pol = 0;
       if (HINT) asm volatile("createpolicy.fractional.L2::evict_last.b64 %0, 1.0;\n" : "=l"(pol));
       unsigned long long tw = 0;
-      int slot = 0, r = 0;
-      for (int s = 0; s < KCS; s++) {
+      const int se = EARLY ? (KCS < ST ? KCS : ST) : 0;  // EARLY: stages 0 .. ST-1 already issued (slot 0 of round 1 next)
+      int slot = 0, r = EARLY ? 1 : 0;
+      for (int s = se; s < KCS; s++) {
         if (s >= ST) {
           const unsigned long long t0 = INS ? clock64() : 0;
           rq_wait((SELF ? full : xempty) + 8 * slot, (r & 1) ^ 1);
@@ -4245,19 +4280,21 @@ def _rqsrc(vs):
 
 RQFLAGS = ["-gencode=arch=compute_90a,code=sm_90a", "-O3", "-DNDEBUG", "--expt-relaxed-constexpr"]
 _rqmod = [None, None]
+_rqmod2 = [None, None]  # rs32: the m = 16 / 32 instances, a second extension built on its own thread
 
 
-def _rqext(vs=None, verbose=False):
+def _rqext(vs=None, verbose=False, slot=None):
     vs = RQV if vs is None else vs
     src = _rqsrc(vs)
-    if _rqmod[0] is None or _rqmod[1] != src:
+    slot = _rqmod if slot is None else slot
+    if slot[0] is None or slot[1] != src:
         import os
-        tag = "rq128_%x" % (hash(src) & 0xffffffff)
+        tag = ("rq128_%x" if slot is _rqmod else "rq32_%x") % (hash(src) & 0xffffffff)
         flags = RQFLAGS + (["-Xptxas=-v"] if verbose else [])
-        _rqmod[0] = load_inline(tag + ("v" if verbose else ""), cpp_sources="int64_t rqrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t, int64_t, torch::Tensor, torch::Tensor, int64_t);",
+        slot[0] = load_inline(tag + ("v" if verbose else ""), cpp_sources="int64_t rqrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t, int64_t, torch::Tensor, torch::Tensor, int64_t);",
                                 cuda_sources=src, functions=["rqrun"], extra_cuda_cflags=flags, verbose=verbose)
-        _rqmod[1] = src
-    return _rqmod[0]
+        slot[1] = src
+    return slot[0]
 
 
 def _pack_nat(w):
@@ -4325,25 +4362,27 @@ RQ = True
 _rqthr = []
 
 
-def _rqstart():
+def _rqstart(prod=None, slot=None, thr=None, tag="rq"):
     """compile the RS128 extension in a background thread while r6's phase runs (CPU-only work; never fatal)"""
     import threading
+    prod = RQPROD if prod is None else prod
+    thr = _rqthr if thr is None else thr
 
     def build():
         try:
-            _rqext([RQV[RQI[nm]] for nm in RQPROD])
-            _rqthr.append("ok")
-            _rqthr.append(time.time() - _T0)
+            _rqext([RQV[RQI[nm]] for nm in prod], slot=slot)
+            thr.append("ok")
+            thr.append(time.time() - _T0)
         except Exception as error:
-            _rqthr.append("failed: %s" % (str(error).splitlines()[-1][:200] if str(error) else type(error).__name__))
+            thr.append("failed: %s" % (str(error).splitlines()[-1][:200] if str(error) else type(error).__name__))
     t = threading.Thread(target=build, daemon=True)
     t.start()
-    print("PREP rq thread started at %.0fs" % (time.time() - _T0), flush=True)
+    print("PREP %s thread started at %.0fs" % (tag, time.time() - _T0), flush=True)
     return t
 
 
 def _rqcall(st, p, x, out):
-    return _rqmod[0].rqrun(p["i"], p["lay"], x, out, p["esc"], p["cnt"], p["KS"], p["tab"], 0, st["rq_e"], st["rq_sink"], 0)
+    return p.get("mod", _rqmod[0]).rqrun(p["i"], p["lay"], x, out, p["esc"], p["cnt"], p["KS"], p["tab"], 0, st["rq_e"], st["rq_sink"], 0)
 
 
 def _rqval(fn, w, m, n, gen, tol):
@@ -4474,25 +4513,33 @@ def _rqbake(st, thr):
 # (st["sel"] if gx picked the shape, else r6's gv / cuBLAS choice); F1 baseline rule: one discarded warm-up timing, the
 # incumbent timed before and after the variants, the lower kept, both printed.
 RQS = True
-RQSBAKE = {
-    ("qkv_gate", 32): [("t32s5hz", 7), ("t32s4hz", 7), ("t32s5z", 7), ("t32s8hz", 7)],
-    ("qkv_gate", 16): [("t16s5hz", 7), ("t16s4hz", 7), ("t16s5z", 7), ("t16s8hz", 7)],
-    ("o", 32): [("t32s5z", 2), ("t32s5hz", 2), ("h32s12", 1), ("t32s4z", 2)],
-    ("o", 16): [("t16s5z", 2), ("t16s5hz", 2), ("h16s8", 1), ("t16s4z", 2)],
-    ("pooler", 32): [("t32s5hz", 4), ("t32s4hz", 4), ("t32s8hz", 4), ("t32s5z", 4)],
-    ("pooler", 16): [("t16s5hz", 4), ("t16s4hz", 4), ("t16s8hz", 4), ("t16s5z", 4)],
-    ("unpooler", 32): [("t32s5hz", 2), ("t32s4hz", 2), ("h32s8", 1), ("t32s5z", 2)],
-    ("unpooler", 16): [("t16s5hz", 2), ("t16s4hz", 2), ("h16s8", 1), ("t16s5z", 2)],
+RQSBAKE = {  # box lab t1/t2: ST 5 best at both NT (ST 3/4 and 8/12 slower), hints (h) -0.0..-0.5
+    ("qkv_gate", 32): [("t32s5hz", 7), ("t32s5z", 7), ("t32s4hz", 7), ("t32s5hz", 6)],
+    ("qkv_gate", 16): [("t16s5hz", 7), ("t16s5z", 7), ("t16s4hz", 7), ("t16s5hz", 6)],
+    ("o", 32): [("t32s5hz", 2), ("t32s5z", 2), ("t32s4z", 2), ("h32s12", 1)],
+    ("o", 16): [("t16s5hz", 2), ("t16s5z", 2), ("t16s4z", 2), ("h16s8", 1)],
+    ("pooler", 32): [("t32s5hz", 4), ("t32s5z", 4), ("t32s4hz", 4), ("t32s8hz", 4)],
+    ("pooler", 16): [("t16s5hz", 4), ("t16s5z", 4), ("t16s4hz", 4), ("t16s8hz", 4)],
+    ("unpooler", 32): [("t32s5hz", 2), ("t32s5z", 2), ("t32s4hz", 2), ("h32s8", 1)],
+    ("unpooler", 16): [("t16s5hz", 2), ("t16s5z", 2), ("t16s4hz", 2), ("h16s8", 1)],
 }
-RQPROD += [nm for nm in dict.fromkeys(nm for ps in RQSBAKE.values() for nm, _ in ps) if nm not in RQPROD]
+RQPROD2 = list(dict.fromkeys(nm for ps in RQSBAKE.values() for nm, _ in ps))
+_rqthr2 = []
 
 
-def _rqsbake(st):
+def _rqsbake(st, thr):
     if time.time() - _T0 > PREPARE_BUDGET_S - 30:
         print("BAKE rq32 skipped-budget %.0fs" % (time.time() - _T0), flush=True)
         return
-    names = [v[0] for v in [RQV[RQI[nm]] for nm in RQPROD]]
+    thr.join(timeout=max(1.0, PREPARE_BUDGET_S - 30 - (time.time() - _T0)))
+    if not _rqthr2 or _rqthr2[0] != "ok" or _rqmod2[0] is None:
+        print("BAKE rq32 build %s" % (_rqthr2[0] if _rqthr2 else "not finished"), flush=True)
+        return
+    print("PREP rq32 thread ready at %.0fs" % _rqthr2[1], flush=True)
+    names = RQPROD2
     dev = st["pooler_raw"].device
+    st.setdefault("rq_e", torch.empty(0, dtype=torch.int64, device=dev))
+    st.setdefault("rq_sink", torch.zeros(4, dtype=torch.int32, device=dev))
     flush = torch.empty(64 << 20, dtype=torch.float32, device=dev)
     sink = torch.empty((), dtype=torch.float32, device=dev)
     gen = torch.Generator(device=dev).manual_seed(3216)
@@ -4532,7 +4579,7 @@ def _rqsbake(st):
                     continue
                 if KS not in escs:
                     escs[KS] = _rqesc(esc6, lay.shape[0], lay.shape[1], KS, dev)[0]
-                p = {"i": names.index(nm), "lay": lay, "esc": escs[KS], "cnt": cnt, "KS": KS, "tab": tab, "n": n}
+                p = {"i": names.index(nm), "lay": lay, "esc": escs[KS], "cnt": cnt, "KS": KS, "tab": tab, "n": n, "mod": _rqmod2[0]}
                 fn = lambda xx, oo, p=p: _rqcall(st, p, xx, oo)
                 tag = "%s-k%d" % (nm, KS)
                 try:

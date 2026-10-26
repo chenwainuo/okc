@@ -118,7 +118,25 @@ def plan_t2(layers, ms):
     return v
 
 
-PLANS = {"t2": plan_t2, "r1": plan_r1, "e5": plan_e5, "ins": plan_ins, "t": plan_t, "h128": plan_h128}
+def plan_t3(layers, ms):
+    v = []
+    for ly in layers:
+        for m in ms:
+            v.append(("cublas", None, ly, m, 0, 0))
+            for nm in ("t%ds5hz", "t%ds5hze", "t%ds5ze", "t%ds6hz", "t%ds6hze", "t%ds5hzei"):
+                v.append((nm % m, nm % m, ly, m, TKS[ly], 0))
+            if ly == "qkv_gate":
+                v.append(("t%ds5hze-k6" % m, "t%ds5hze" % m, ly, m, 6, 0))
+    if "o" in layers:
+        v.append(("cublas", None, "o", 128, 0, 0))
+        v.append(("s4s5hz", "s4s5hz", "o", 128, 2, 0))
+        v.append(("s4s5hze", "s4s5hze", "o", 128, 2, 0))
+        for nm in ("h128s5", "h128s8", "h128s8e"):
+            v.append((nm + "-k1", nm, "o", 128, 1, 0))
+    return v
+
+
+PLANS = {"t3": plan_t3, "t2": plan_t2, "r1": plan_r1, "e5": plan_e5, "ins": plan_ins, "t": plan_t, "h128": plan_h128}
 
 
 class Clocks:

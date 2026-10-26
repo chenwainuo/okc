@@ -3013,6 +3013,11 @@ RQV = [  # (name, NT, ST, GS, PRB, WM, INS, FL): ST k64 slots (W 12 KB + x NT*12
     ("r8s5", 128, 5, 1, 8, 0, 0, 0),
     ("eps5", 128, 5, 1, 7, 0, 0, 0),
     ("s4s5zi", 128, 5, 1, 0, 0, 1, 2),
+    ("s4s5zp", 128, 5, 1, 0, 0, 0, 34),
+    ("s4s5hzp", 128, 5, 1, 0, 0, 0, 35),
+    ("s4s6zp", 128, 6, 1, 0, 0, 0, 34),
+    ("eps5p", 128, 5, 1, 7, 0, 0, 32),
+    ("s4s5zpi", 128, 5, 1, 0, 0, 1, 34),
     ("r8n256tp", 256, 5, 1, 8, 0, 0, 16),
     ("r8n256tpi", 256, 5, 1, 8, 0, 1, 16),
     ("s3n256tp", 256, 5, 1, 4, 0, 0, 16),
@@ -3136,7 +3141,9 @@ template <int NT> __device__ __forceinline__ void rq_wgss(float (&D)[NT / 2], ui
 template <int NT, int ST, int GS, int PRB, int WM, int INS, int FL>
 struct RqC {
   static constexpr int XB = NT * 128, WB = 12288, ND = NT / 2;
-  static constexpr int SMEM = 1024 + ST * (XB + WB) + 24 * ST + 16;
+  static constexpr bool PW = FL & 32;  // per-warp epilogue: dedicated slabs, a 16-column reduce-add per warp, no CTA barrier
+  static constexpr int ESLAB = (1024 + ST * (XB + WB) + 24 * ST + 16 + 1023) / 1024 * 1024 - 1024;  // after the ring
+  static constexpr int SMEM = PW ? 1024 + ESLAB + 8 * NT * 32 : 1024 + ST * (XB + WB) + 24 * ST + 16;
 };
 
 // Ring: ST k64 slots, slot i = x tile (XB, 1024-aligned) in the x ring + 12 KB W chunk in the W ring. ONE full barrier
@@ -3446,7 +3453,37 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
   if (INS) pc[0] = clock64() - tq0;
   const unsigned long long gtl1 = INS ? rq_gt() : 0;
   RQ_T0();
-  if (PRB == 0 || PRB == 7) {  // ---------------- epilogue: stmatrix.trans -> SW128 slab [NT tok][64 n] -> TMA reduce-add
+  if ((PRB == 0 || PRB == 7) && C::PW) {  // ---------------- per-warp epilogue: [NT tok][16 n] slab -> TMA reduce-add (box 16)
+    if (PRB == 7) {
+#pragma unroll
+      for (int i = 0; i < ND; i++) D[i] = (float)((i + tid) & 7) * 0.125f;
+    }
+    const uint32_t slab = sbase + C::ESLAB + warp * (NT * 32);  // private: no aliasing with the ring, no barrier needed
+    const int j = lane >> 3, rr = lane & 7;
+#pragma unroll
+    for (int pp = 0; pp < NT / 16; pp++) {
+      const int i0 = 2 * pp, i = i0 + (j >> 1), tok = 8 * i + rr;
+      const uint32_t a = slab + tok * 32 + (j & 1) * 16;
+      const uint32_t r0 = rq_pk(D[4 * i0], D[4 * i0 + 1]), r1 = rq_pk(D[4 * i0 + 2], D[4 * i0 + 3]);
+      const uint32_t r2 = rq_pk(D[4 * i0 + 4], D[4 * i0 + 5]), r3 = rq_pk(D[4 * i0 + 6], D[4 * i0 + 7]);
+      asm volatile("stmatrix.sync.aligned.m8n8.x4.trans.shared.b16 [%0], {%1, %2, %3, %4};\n" :: "r"(a), "r"(r0), "r"(r1), "r"(r2), "r"(r3) : "memory");
+    }
+    asm volatile("fence.proxy.async.shared::cta;\n" ::: "memory");
+    __syncwarp();
+    if (lane == 0) {
+      if (ZI) {
+        uint32_t f = 0;
+        for (int it = 0; it < (1 << 24) && !f; it++) asm volatile("ld.acquire.cta.shared.u32 %0, [%1];\n" : "=r"(f) : "r"(zflag) : "memory");
+        if (!f) asm volatile("trap;");
+        asm volatile("fence.proxy.async.global;\n" ::: "memory");
+      }
+      asm volatile("cp.reduce.async.bulk.tensor.2d.global.shared::cta.add.tile.bulk_group [%0, {%1, %2}], [%3];\n"
+                   :: "l"((unsigned long long)&to), "r"(nb * 128 + 64 * g + 16 * w), "r"(0), "r"(slab) : "memory");
+      asm volatile("cp.async.bulk.commit_group;\n" ::: "memory");
+      asm volatile("cp.async.bulk.wait_group.read 0;\n" ::: "memory");
+    }
+    RQ_T1(8);
+  } else if (PRB == 0 || PRB == 7) {  // ---------------- epilogue: stmatrix.trans -> SW128 slab [NT tok][64 n] -> TMA reduce-add
     if (PRB == 7) {
 #pragma unroll
       for (int i = 0; i < ND; i++) D[i] = (float)((i + tid) & 7) * 0.125f;
@@ -3511,7 +3548,7 @@ typedef CUresult (*RqEnc)(CUtensorMap*, CUtensorMapDataType, cuuint32_t, void*, 
                           CUtensorMapL2promotion, CUtensorMapFloatOOBfill);
 static_assert(sizeof(CUtensorMap) == sizeof(RqTmap), "CUtensorMap size");
 // 2D bf16 map: dims {inner, outer}, box {64, box_outer}, 128B swizzle; out-of-range rows read as 0 and are not written
-static int rq_map(RqTmap* tm, const void* ptr, int64_t inner, int64_t outer, int box_outer) {
+static int rq_map(RqTmap* tm, const void* ptr, int64_t inner, int64_t outer, int box_outer, int box_inner = 64) {
   static RqEnc enc = nullptr;
   if (!enc) {
     void* fn = nullptr;
@@ -3522,10 +3559,10 @@ static int rq_map(RqTmap* tm, const void* ptr, int64_t inner, int64_t outer, int
   if (((uintptr_t)ptr) % 16 || (inner * 2) % 16 || box_outer < 1 || box_outer > 256) return -21;
   cuuint64_t dims[2] = {(cuuint64_t)inner, (cuuint64_t)outer};
   cuuint64_t strides[1] = {(cuuint64_t)inner * 2};
-  cuuint32_t box[2] = {64, (cuuint32_t)box_outer};
+  cuuint32_t box[2] = {(cuuint32_t)box_inner, (cuuint32_t)box_outer};
   cuuint32_t estr[2] = {1, 1};
   return enc((CUtensorMap*)tm, CU_TENSOR_MAP_DATA_TYPE_BFLOAT16, 2, (void*)ptr, dims, strides, box, estr, CU_TENSOR_MAP_INTERLEAVE_NONE,
-             CU_TENSOR_MAP_SWIZZLE_128B, CU_TENSOR_MAP_L2_PROMOTION_L2_256B, CU_TENSOR_MAP_FLOAT_OOB_FILL_NONE) == CUDA_SUCCESS ? 0 : -22;
+             box_inner == 64 ? CU_TENSOR_MAP_SWIZZLE_128B : CU_TENSOR_MAP_SWIZZLE_NONE, CU_TENSOR_MAP_L2_PROMOTION_L2_256B, CU_TENSOR_MAP_FLOAT_OOB_FILL_NONE) == CUDA_SUCCESS ? 0 : -22;
 }
 template <int NT, int ST, int GS, int PRB, int WM, int INS, int FL>
 static int rq_go(RqP& p, torch::Tensor x, torch::Tensor out, int KS, int info) {
@@ -3540,7 +3577,7 @@ static int rq_go(RqP& p, torch::Tensor x, torch::Tensor out, int KS, int info) {
   RqTmap tx, to;
   int r = rq_map(&tx, x.data_ptr(), p.K, p.m, NT);
   if (r) return r;
-  r = rq_map(&to, out.data_ptr(), p.N, p.m, NT);
+  r = rq_map(&to, out.data_ptr(), p.N, p.m, NT, C::PW ? 16 : 64);
   if (r) return r;
   static bool once = false;
   if (!once) {
