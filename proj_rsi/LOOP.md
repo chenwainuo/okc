@@ -894,3 +894,8 @@ mx vs RS128 per-CTA terms (audits/mx-h100.md): entry → first wgmma 1.5 vs 2.0 
 ~0.60 vs ~0.44 µs per 12 KB. RS128 should borrow mx's in-chunk escape header (removes the escape-list global loads,
 likely RS128's +0.5 µs to first wgmma); mx's probes say the binding term is W-stream latency (no-A −4.3, no-B −0.6).
 rs128b (deeper W-only barrier, epilogue tail, escape header) starts once RS128's R4 commit lands.
+P4 correction (audits/p4-decode-pipe.md): the decode-slack slope was a latency-chain artefact (every op type incl.
+full-rate FFMA showed 2.2 clk/op); in the real register-A path (LDS → dec1 → wgmma) dec1 costs +0.03–0.32 µs at
+pooler m=128 on the box; PRMT merge floor 0.5 ALU ops/weight, dec1 0.875 + 0.25 IMAD; aligned-window codec +0.07;
+headroom ~2x dec1 per stage on the H100, at the edge on the H200. The "INT-pipe-bound" conclusion is withdrawn;
+RS128's 0.44 µs/stage is barrier/issue/wait structure, not decode.
