@@ -310,3 +310,18 @@ r6's structure (per-CTA row tile, K split across the CTA's own warps, in-CTA sme
 each warp streaming its own contiguous K range through a private cp.async.bulk ring and a private mbarrier — no
 producer warp, no cross-warp handshake — i.e. only the load instruction changes. Ceiling model would move from
 bytes/3.8 + 1 to bytes/4.3 + 1 (pooler 12.7 instead of 14.25), worth ≈ 0.1 ln across the m ≤ 32 loads.
+
+## Iteration 8 — pw10: m=128 latency variants + probe ladder. Check `7715c850ff89450a`: 9/9, 4386.8 µs. PARKED.
+
+Bake, pooler m=128 in-prepare: torch 28.9 | wk2 (k-split) 31.7 | w1d8 32.3 | w1d4 (=pw9) 34.6 | w1d8z 38.7 | w2c2 38.8.
+unpooler: torch 23.3 | w2c2 26.8; o: torch 11.6 | w2c2 16.5; qkv: torch 21.6 | wk2 30.1. m=256 all worse.
+Ladder (pooler m=128, 64x2): L1 W+x 25.41 | L1 no-x 20.90 | +decode 24.58 | +wgmma 30.14 | full 34.62; bare bulk
+stream of the same bytes 17.2. Four separate costs of 4–5 µs each: cluster-2 skeleton streaming W alone +3.7;
+x tiles +4.5; wgmma exposed +5.5 (not hidden despite 256 clk/stage of tensor time); epilogue +4.5. Depth 8 and the
+k-split each recover 2–3 of the 18. Analysis-only follow-up commissioned (audits/pw10-ladder.md); no build.
+
+Re-derived target math with the stream headroom (bulk 4.3 TB/s vs r6's 3.6–3.8):
+- ceiling bytes/3.8+1: m ≤ 32 + router alone → 3067; plus m=128 big four at cuBLAS−3 → 2976.
+- ceiling bytes/4.3+1: m ≤ 32 + router alone → **2879**; plus m=128 → 2794.
+So if pw12 (r6 structure + per-warp bulk ring) delivers the faster stream, the m=128 kernel is no longer required
+for 3000. Main line is now pw11 → pw12 on the r6 lineage; m=128 is the reserve.
