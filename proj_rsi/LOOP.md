@@ -325,3 +325,18 @@ Re-derived target math with the stream headroom (bulk 4.3 TB/s vs r6's 3.6–3.8
 - ceiling bytes/4.3+1: m ≤ 32 + router alone → **2879**; plus m=128 → 2794.
 So if pw12 (r6 structure + per-warp bulk ring) delivers the faster stream, the m=128 kernel is no longer required
 for 3000. Main line is now pw11 → pw12 on the r6 lineage; m=128 is the reserve.
+
+## Iteration 9 — pw11 (gvx): r6 + wide-row cross-CTA split-K. Check `824f32ce203541c4`: 9/9, 3385.7 µs. REJECTED (= r6).
+
+Score 3385.7 is r6 re-measured: not one gx path won a bake, so the kernel set that ran is r6's; the 1.2% over 3428 is
+judge drift (CI 1.405–1.448 covers 1.409). Per-shape deltas vs the incumbent run are all within ±0.6 µs except
+verify16/32 unpooler (−0.85/−1.0, cuBLAS noise).
+Bake (in-prepare, r6 vs best new): qkv m=1 14.24 vs q128a 15.26 (cluster 8) / q144b 16.19 (last-arriver); m=32 18.69
+vs q144b 20.80; pooler m=32 21.28 vs p128b 24.51 (kill rule was ≤ 19.8); unpooler m=32 21.15 vs u128a-s 21.47;
+o m=16/32 10.21/10.91 vs o64-s 10.56/11.30; router m=1 8.42 vs r12c16 10.72. Cluster variants for pooler/unpooler
+m=16 and qkv (a) were mostly declined by the occupancy guard.
+Reading: any cross-CTA split-K costs ≥ 1–2 µs on this judge even inside r6's structure (cluster DSMEM +1.0 at best,
+last-arriver +2.0), which exceeds what the x-traffic saving returns at m=32. The wide-row idea is dead in both
+lineages. The 12-bit router is slower than r6's bf16 hi/lo pair (escape handling on the lo half). o in smem: no gain.
+What remains for m ≤ 32: the stream itself (pw12, per-warp bulk ring, no split-K). For 3000, m=128/256 (pw13) is
+back to being required unless pw12 lifts the whole m ≤ 32 table by ~8%.
