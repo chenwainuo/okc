@@ -1693,8 +1693,12 @@ int64_t gkrun(int64_t inst, torch::Tensor W, torch::Tensor x, torch::Tensor out,
 # decode; bit 1: rolled K loop); H200 v15 judge: the v14 kernel (V 0) was faster at deep K, the rolled/9-op one (V 3) at m32
 _0, _1, _01 = (0,), (1,), (0, 1)
 GVC = {  # H200 v16 log: V1 (unrolled, 9-op decode) wins most shapes, V3 (rolled) only pooler m1 at 1024 threads and qkv m16
-    ("qkv_gate", 1): [((1, 8, 16, 1, 1, 0), _1), ((1, 4, 16, 2, 1, 0), _01), ((1, 4, 8, 4, 1, 0), _1)],
-    ("qkv_gate", 2): [((1, 4, 16, 2, 1, 0), _1), ((1, 4, 8, 4, 1, 2), (1, 3)), ((1, 4, 16, 2, 1, 2), _01), ((1, 4, 16, 2, 1, 2, 1), _1), ((1, 4, 8, 4, 1, 2, 1), _1)],
+    # pw28h (H100 lab, audits/p2-h100.md): short per-warp chains with many K-warps. WR = 2 row tiles per CTA (x shared by
+    # the two row-tile warps through L1, no split-K): 72 CTAs x 32 warps (KU 8, ST 1) or x 16 warps (KU 16, x in
+    # registers, ST 2); and one tile per CTA x 16 warps (KU 8, ST 1, x through L1) at 2 CTAs/SM (V bits 12-14 = minBlocks 2)
+    ("qkv_gate", 1): [((1, 8, 16, 1, 1, 0), _1), ((1, 4, 16, 2, 1, 0), _01), ((1, 4, 8, 4, 1, 0), _1), ((2, 16, 8, 1, 1, 2), _1), ((1, 16, 8, 1, 1, 2, 1), (1 | 2 << 12,))],
+    ("qkv_gate", 2): [((1, 4, 16, 2, 1, 0), _1), ((1, 4, 8, 4, 1, 2), (1, 3)), ((1, 4, 16, 2, 1, 2), _01), ((1, 4, 16, 2, 1, 2, 1), _1), ((1, 4, 8, 4, 1, 2, 1), _1),
+                      ((2, 8, 16, 1, 1, 0, 2), _1), ((2, 16, 8, 1, 1, 2), (3,)), ((1, 16, 8, 1, 1, 2, 1), (1 | 2 << 12,))],
     ("qkv_gate", 4): [((1, 8, 16, 1, 1, 2), _01), ((1, 4, 16, 2, 1, 2), _01), ((2, 4, 16, 2, 1, 2), _1), ((1, 4, 8, 4, 1, 2, 1), _01), ((1, 4, 8, 4, 1, 2), _1), ((1, 4, 16, 2, 1, 2, 1), _1)],
     ("o", 1): [((1, 8, 2, 1, 1, 0), _01), ((2, 4, 4, 1, 1, 0), _1), ((1, 4, 4, 1, 1, 0), _1)],
     ("o", 2): [((1, 8, 2, 1, 1, 0), _01), ((2, 4, 4, 1, 1, 0), _1), ((2, 4, 4, 1, 1, 2), _1), ((1, 8, 2, 1, 1, 2), _1), ((1, 4, 4, 1, 1, 2, 1), _1)],
@@ -1859,7 +1863,7 @@ GVI = list(dict.fromkeys(_gvinst() + [_gxinst(g, v, bm) for _, _, ms, g, v in GX
 # GVB. CTA = NW warps x KU units; G = 144 * 128 / (NW KU) CTAs (9 x 16 and 18 x 8: 128 CTAs, 144 units each = 1.125
 # tiles, max/mean per SM 1.03 against r6's 1.83). V bit 0: 9-op decode (r6's qkv pick); bit 4: interleaved unit order.
 # Not built (ptxas sm_90 spills): m=32 with x in registers (9 warps, 192 B) and m=32 at 18 warps (ST 1, 24 B).
-GK = True
+GK = False  # pw28h: the stream-K paths tie r6 on the H100 (audits/p2-h100.md); not built
 _GKI = 1 | 16
 GKP = [("sk9i", (1, 8), (2, 9, 16, 0, _GKI)), ("sk9c", (1, 8), (2, 9, 16, 0, 1)), ("sk9i3", (1, 8), (3, 9, 16, 0, _GKI)),
        ("sk18i", (1, 8), (2, 18, 8, 0, _GKI)), ("sk9i", (16,), (2, 9, 16, 0, _GKI)),
