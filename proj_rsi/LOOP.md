@@ -793,3 +793,6 @@ cluster (+0.9, saves nothing). Result (bf16, box in-prepare): pooler m=128 k2x 2
 tiles); pooler m=256 31.74 vs 34.11 (−2.4). Pitfalls: __float2bfloat16 on accumulators serialises register-A wgmma
 (use cvt.rn.bf16x2.f32 inline); the serial consumer keeps only ~110 clk of slack per 64-k stage on the H200 for a
 decode. Forwarded to RS128 and mx. pw24h proposed as a judge candidate (transfer test; pooler m=256 win).
+pw27h approved (critic: ordering correct, 39-case 3000-replay stress clean; fixes: rk-s16w8x dropped at m=32 — 272
+CTAs exceed 264 resident slots — and the flag wait bounded with trap). Reset chain now: pw26 → pw27h → pw29h → pw28 →
+pw30 (pw24h to follow its review). pw31 = pw27h + pw29h's router section is being merged as the scored candidate.
