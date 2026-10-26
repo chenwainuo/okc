@@ -40,10 +40,12 @@ class Inputs(TypedDict):
 BN, BK = 128, 64
 WBYTES = BN * BK * 12 // 8  # 12288 bytes per unit
 GRID = 132
-MODE = 0  # ladder: 0 full, 3 no flush, 4 flush red.add only, 5 +escapes (no counters/convert)
+MODE = 0  # ladder: 0 full, 3 no flush, 4 red.add flush only, 5 escapes only (no red.add), 6 no x tile (no flush), 7 no wgmma (no flush)
 DEDICATED_MAX_MP = 64  # MP <= this: dedicated producer warp (288 threads); above: thread 0 issues loads (256 threads)
 MPS = [8, 16, 32, 64, 128, 256]
 STAGES = {8: 12, 16: 12, 32: 12, 64: 10, 128: 7, 256: 4}
+DSTAGES = {8: 8, 16: 8, 32: 7, 64: 6, 128: 5, 256: 3}  # router (hi+lo: 24 KB of W per stage)
+ROUTER_GRID = {8: 128, 16: 128, 32: 128, 64: 128, 128: 128, 256: 128}
 
 # ----------------------------------------------------------------------------------------------------------------------
 # CUDA source
@@ -73,13 +75,13 @@ CUDA_SRC = r"""
 
 namespace tensorcore {
 
-constexpr int BN = 128, BK = 64, WBYTES = 12288;
+constexpr int BN = 128, BK = 64, WBYTES = 12288, ECAP = 64;
 template <int MP> constexpr int nthreads() { return MP <= DEDICATED_MAX_MP ? 288 : 256; }  // dedicated producer warp for small MP
 
 struct Params {
   const uint8_t* __restrict__ packed;
   float* __restrict__ ws;                 // [MP][N] fp32, zero on entry and on exit
-  __nv_bfloat16* __restrict__ out;        // [m][N]
+  void* __restrict__ out;                 // [m][N] bf16 (fp32 when DUAL)
   const __nv_bfloat16* __restrict__ x;    // [m][K]
   int* __restrict__ counters;             // [NB]
   const int* __restrict__ expected;       // [NB]
@@ -87,7 +89,7 @@ struct Params {
   const int* __restrict__ esc_idx;        // unit<<13 | n_local<<6 | k_local
   const float* __restrict__ esc_delta;
   int N, K, m, NB, KC, U, G;
-  uint32_t scale2;
+  uint32_t scale2, scale2b;   // bf16x2 exponent scales of the (hi, lo) streams
   int mode;   // 0 full, 3 no flush, 4 flush red.add only, 5 +escapes (no counters/convert)
 };
 
@@ -157,10 +159,11 @@ __device__ __forceinline__ void decode_step2(uint32_t B0, uint32_t B1, uint32_t 
   a[3] = decode_pair(B1, 0xB3A2u, Nw >> 5, scale2);
 }
 
-template <int MP, int STAGES>
+template <int MP, int STAGES, bool DUAL>
 __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_constant__ CUtensorMap xmap, Params p) {
 #if defined(__CUDA_ARCH_FEAT_SM90_ALL)
   constexpr int XBYTES = MP * 128;
+  constexpr int WB = DUAL ? 2 * WBYTES : WBYTES;   // packed bytes per unit
   constexpr int NACC = MP / 2;
   constexpr int GS = (MP >= 256) ? 2 : 4;   // k16 steps per wgmma group
   constexpr int NG = 4 / GS;                // groups per unit
@@ -170,11 +173,13 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
   extern __shared__ __align__(1024) uint8_t smem_raw[];
   uint8_t* smem = (uint8_t*)(((uintptr_t)smem_raw + 1023) & ~(uintptr_t)1023);
   uint8_t* xs = smem;                                    // STAGES x XBYTES (1024-aligned)
-  uint8_t* wsm = smem + STAGES * XBYTES;                 // STAGES x WBYTES
-  uint64_t* full = (uint64_t*)(wsm + STAGES * WBYTES);  // STAGES
+  uint8_t* wsm = smem + STAGES * XBYTES;                 // STAGES x WB
+  uint64_t* full = (uint64_t*)(wsm + STAGES * WB);      // STAGES
   uint64_t* empty = full + STAGES;                       // STAGES
-  int* flag = (int*)(empty + STAGES);
-  float* scratch = (float*)(flag + 4);                   // 2 warpgroups x 8 tokens x 68 floats
+  float* scratch = (float*)(empty + STAGES);            // 2 warpgroups x 8 tokens x 68 floats
+  int* em = (int*)(scratch + 2 * 8 * 68);               // ECAP escape indices of the current n-block
+  float* ed = (float*)(em + ECAP);                       // ECAP escape deltas
+  __nv_bfloat16* xe = (__nv_bfloat16*)(ed + ECAP);       // ECAP x MP x values of the escapes' columns
 
   const int c = blockIdx.x;
   const int unit0 = (int)(((long long)c * p.U) / p.G);
@@ -189,10 +194,10 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
   __syncthreads();
 
   auto issue_load = [&](const int u, const int st) {
-    mbar_expect_tx(&full[st], WBYTES + XBYTES);
     const int kc = u % p.KC;
-    tma_load_2d(xs + st * XBYTES, &xmap, kc * BK, 0, &full[st]);
-    tma_load_1d(wsm + st * WBYTES, p.packed + (size_t)u * WBYTES, WBYTES, &full[st]);
+    if (p.mode == 6) { mbar_expect_tx(&full[st], WB); }
+    else { mbar_expect_tx(&full[st], WB + XBYTES); tma_load_2d(xs + st * XBYTES, &xmap, kc * BK, 0, &full[st]); }
+    tma_load_1d(wsm + st * WB, p.packed + (size_t)u * WB, WB, &full[st]);
   };
   if constexpr (DEDICATED) {
     if (wgi == 2) {
@@ -230,8 +235,26 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
   int stage = 0; uint32_t round = 0;
   int prev_stage = -1;
 
-  auto flush_block = [&](int j, int ulo, int uhi) {
-    // (1) partial accumulators -> ws via red.add.v4, through a per-warpgroup smem transpose (64 n x 8 tokens per step)
+  auto flush_block = [&](int j, int ulo, int uhi, int cnt) {
+    // (1) escape fix-ups: the owning quad adds delta * x[tok][k] (prefetched into xe) into its accumulators
+    if (cnt <= ECAP) {
+      for (int e = 0; e < cnt; ++e) {
+        const int nl = (em[e] >> 6) & 127;
+        if ((nl >> 6) == wg && ((nl & 63) >> 4) == warp && (nl & 7) == (lane >> 2)) {
+          const float d = ed[e];
+          const __nv_bfloat162* xr = reinterpret_cast<const __nv_bfloat162*>(xe + e * MP) + (lane & 3);
+          if (nl & 8) {
+            #pragma unroll
+            for (int g = 0; g < MP / 8; ++g) { float2 xv = __bfloat1622float2(xr[4 * g]); acc[4 * g + 2] += d * xv.x; acc[4 * g + 3] += d * xv.y; }
+          } else {
+            #pragma unroll
+            for (int g = 0; g < MP / 8; ++g) { float2 xv = __bfloat1622float2(xr[4 * g]); acc[4 * g] += d * xv.x; acc[4 * g + 1] += d * xv.y; }
+          }
+        }
+      }
+    }
+    if (p.mode == 5) return;
+    // (2) partial accumulators -> ws via red.add.v4, through a per-warpgroup smem transpose (64 n x 8 tokens per step)
     float* sc = scratch + wg * (8 * 68);
     const int wn = warp * 16 + (lane >> 2), wtok = 2 * (lane & 3);
     const int rtok = t >> 4, rn4 = (t & 15) * 4;
@@ -249,9 +272,8 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
       dst += dstep;
       if (wg == 0) asm volatile("bar.sync 2, 128;" ::: "memory"); else asm volatile("bar.sync 3, 128;" ::: "memory");
     }
-    if (p.mode == 4) return;
-    // (2) escape fix-ups for the units of this n-block handled by this CTA
-    {
+    // (3) overflow path: too many escapes for the smem buffer -> scalar atomics
+    if (cnt > ECAP) {
       const int e0 = p.esc_off[ulo], e1 = p.esc_off[uhi];
       for (int e = e0 + (tid >> 5); e < e1; e += 8) {
         const int idx = p.esc_idx[e];                 // unit<<13 | n_local<<6 | k_local
@@ -265,35 +287,25 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
         }
       }
     }
-    if (p.mode == 5) return;
-    __threadfence();
-    asm volatile("bar.sync 1, 256;" ::: "memory");
-    if (tid == 0) {
-      int old = atomicAdd(p.counters + j, 1);
-      *flag = (old == p.expected[j] - 1) ? 1 : 0;
-    }
-    asm volatile("bar.sync 1, 256;" ::: "memory");
-    if (*flag) {
-      __threadfence();
-      // (3) last CTA for this n-block: ws -> bf16 out, and re-zero ws
-      for (int i = tid; i < p.m * 32; i += 256) {
-        const int tok = i >> 5, n4 = (i & 31) * 4;
-        float* src = p.ws + (size_t)tok * p.N + j * BN + n4;
-        float4 val = __ldcg(reinterpret_cast<const float4*>(src));
-        __nv_bfloat162 lo = __floats2bfloat162_rn(val.x, val.y);
-        __nv_bfloat162 hi = __floats2bfloat162_rn(val.z, val.w);
-        uint2 o; o.x = *reinterpret_cast<uint32_t*>(&lo); o.y = *reinterpret_cast<uint32_t*>(&hi);
-        *reinterpret_cast<uint2*>(p.out + (size_t)tok * p.N + j * BN + n4) = o;
-        __stcg(reinterpret_cast<float4*>(src), make_float4(0.f, 0.f, 0.f, 0.f));
-      }
-      if (tid == 0) p.counters[j] = 0;
-    }
-    asm volatile("bar.sync 1, 256;" ::: "memory");
   };
-
+  // escape prefetch at the start of an n-block: metadata, then the x columns (overlaps the pipeline fill)
+  auto prefetch_escapes = [&](int ulo, int uhi) -> int {
+    const int e0 = p.esc_off[ulo], cnt = p.esc_off[uhi] - e0;
+    if (cnt <= ECAP) {
+      for (int e = tid; e < cnt; e += 256) { em[e] = p.esc_idx[e0 + e]; ed[e] = p.esc_delta[e0 + e]; }
+      asm volatile("bar.sync 1, 256;" ::: "memory");
+      for (int i = tid; i < cnt * MP; i += 256) {
+        const int e = i / MP, tok = i % MP;
+        const int idx = em[e];
+        const int k = ((idx >> 13) % p.KC) * BK + (idx & 63);
+        xe[i] = tok < p.m ? p.x[(size_t)tok * p.K + k] : __float2bfloat16(0.f);
+      }
+    }
+    return cnt;
+  };
   // one group of GS k16-steps: decode into ab, issue, then wait so that <=1 group stays in flight (double-buffered A)
   // or 0 (single-buffered: the other consumer warpgroup keeps the tensor pipe busy meanwhile).
-  auto group_body = [&](const int g, const uint8_t* wp, const uint32_t xaddr, uint32_t (*ab)[4]) {
+  auto group_body = [&](const int g, const uint8_t* wp, const uint32_t xaddr, const uint32_t scale2, uint32_t (*ab)[4]) {
     uint32_t vb[2 * GS], vn[GS];
     {
       // byte words of this group's steps (16B per 2 steps) and its nibble words
@@ -309,7 +321,8 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
     }
     if constexpr (!DB) wgmma_wait<0>();
     #pragma unroll
-    for (int s = 0; s < GS; ++s) decode_step2(vb[2 * s], vb[2 * s + 1], vn[s], p.scale2, ab[s]);
+    for (int s = 0; s < GS; ++s) decode_step2(vb[2 * s], vb[2 * s + 1], vn[s], scale2, ab[s]);
+    if (p.mode == 7) { scratch[tid] = __uint_as_float(ab[0][0] ^ ab[GS - 1][3]); return; }
     wgmma_fence();
     #pragma unroll
     for (int s = 0; s < GS; ++s) wgmma_mp<MP>(acc, ab[s], make_desc_b(xaddr + (g * GS + s) * 32), 1);
@@ -318,14 +331,21 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
   };
   auto unit_body = [&](const int u, const int bufsel) {
     mbar_wait(&full[stage], round & 1);
-    const uint8_t* wp = wsm + stage * WBYTES + tid * 16;
+    const uint8_t* wp = wsm + stage * WB + tid * 16;
     const uint32_t xaddr = smem_u32(xs + stage * XBYTES);
-    if constexpr (NG == 1) {
-      if (DB && bufsel) group_body(0, wp, xaddr, a[DB ? 1 : 0]); else group_body(0, wp, xaddr, a[0]);
+    if constexpr (DUAL) {
+      // hi stream into a[0], lo stream (same B, same accumulators) into a[1]
+      #pragma unroll
+      for (int g = 0; g < NG; ++g) {
+        group_body(g, wp, xaddr, p.scale2, a[0]);
+        group_body(g, wp + WBYTES, xaddr, p.scale2b, a[DB ? 1 : 0]);
+      }
+    } else if constexpr (NG == 1) {
+      if (DB && bufsel) group_body(0, wp, xaddr, p.scale2, a[DB ? 1 : 0]); else group_body(0, wp, xaddr, p.scale2, a[0]);
     } else {
       #pragma unroll
       for (int g = 0; g < NG; ++g) {
-        if (DB && (g & 1)) group_body(g, wp, xaddr, a[DB ? 1 : 0]); else group_body(g, wp, xaddr, a[0]);
+        if (DB && (g & 1)) group_body(g, wp, xaddr, p.scale2, a[DB ? 1 : 0]); else group_body(g, wp, xaddr, p.scale2, a[0]);
       }
     }
     // the previous unit's wgmmas are complete (<=1 group pending), so its stage can be refilled
@@ -345,6 +365,7 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
     const int ulo = max(unit0, j * p.KC), uhi = min(unit1, (j + 1) * p.KC);
     #pragma unroll
     for (int i = 0; i < NACC; ++i) acc[i] = 0.f;
+    const int cnt = (p.mode == 0 || p.mode == 5) ? prefetch_escapes(ulo, uhi) : 0;
     if constexpr (NG == 1) {
       for (int u = ulo; u < uhi; u += 2) {
         unit_body(u, 0);
@@ -356,9 +377,27 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
     wgmma_wait<0>();
     if (prev_stage >= 0 && t == 0) mbar_arrive(&empty[prev_stage]);
     prev_stage = -1;
-    if (p.mode == 0 || p.mode >= 4) flush_block(j, ulo, uhi);
+    if (p.mode == 0 || p.mode == 5) asm volatile("bar.sync 1, 256;" ::: "memory");   // xe visible to all
+    if (p.mode == 0 || (p.mode >= 4 && p.mode <= 5)) flush_block(j, ulo, uhi, cnt);
   }
 #endif  // __CUDA_ARCH_FEAT_SM90_ALL
+}
+
+// ws (fp32 [m][N], contiguous) -> out (bf16, or fp32 copy), and re-zero ws
+template <bool DUAL>
+__global__ void convert_kernel(float* __restrict__ ws, void* __restrict__ out, int total4) {
+  const int i = blockIdx.x * blockDim.x + threadIdx.x;
+  if (i >= total4) return;
+  float4 val = __ldcg(reinterpret_cast<const float4*>(ws) + i);
+  if constexpr (DUAL) {
+    reinterpret_cast<float4*>(out)[i] = val;
+  } else {
+    __nv_bfloat162 lo = __floats2bfloat162_rn(val.x, val.y);
+    __nv_bfloat162 hi = __floats2bfloat162_rn(val.z, val.w);
+    uint2 o; o.x = *reinterpret_cast<uint32_t*>(&lo); o.y = *reinterpret_cast<uint32_t*>(&hi);
+    reinterpret_cast<uint2*>(out)[i] = o;
+  }
+  __stcg(reinterpret_cast<float4*>(ws) + i, make_float4(0.f, 0.f, 0.f, 0.f));
 }
 
 typedef CUresult (*EncodeTiledFn)(CUtensorMap*, CUtensorMapDataType, cuuint32_t, void*, const cuuint64_t*, const cuuint64_t*,
@@ -377,21 +416,24 @@ static EncodeTiledFn get_encode() {
   return fn;
 }
 
-template <int MP, int STAGES>
+template <int MP, int STAGES, bool DUAL>
 static void launch_mp(const CUtensorMap& map, const Params& p, size_t smem, cudaStream_t stream) {
-#if 1
   static bool attr_set = false;
   if (!attr_set) {
-    cudaFuncSetAttribute(gemm_kernel<MP, STAGES>, cudaFuncAttributeMaxDynamicSharedMemorySize, (int)smem);
+    cudaFuncSetAttribute(gemm_kernel<MP, STAGES, DUAL>, cudaFuncAttributeMaxDynamicSharedMemorySize, (int)smem);
     attr_set = true;
   }
-  gemm_kernel<MP, STAGES><<<p.G, nthreads<MP>(), smem, stream>>>(map, p);
-#endif
+  gemm_kernel<MP, STAGES, DUAL><<<p.G, nthreads<MP>(), smem, stream>>>(map, p);
+  if (p.mode == 0) {
+    const int total4 = p.m * p.N / 4;
+    convert_kernel<DUAL><<<(total4 + 255) / 256, 256, 0, stream>>>(p.ws, p.out, total4);
+  }
 }
 
 void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tensor ws, torch::Tensor out,
           torch::Tensor counters, torch::Tensor expected, torch::Tensor esc_off, torch::Tensor esc_idx,
-          torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2, int mode) {
+          torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2, int64_t scale2b,
+          int dual, int mode) {
   CUtensorMap map;
   cuuint64_t gdim[2] = {(cuuint64_t)K, (cuuint64_t)m};
   cuuint64_t gstride[1] = {(cuuint64_t)K * 2};
@@ -404,7 +446,7 @@ void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tens
   Params p;
   p.packed = packed.data_ptr<uint8_t>();
   p.ws = ws.data_ptr<float>();
-  p.out = reinterpret_cast<__nv_bfloat16*>(out.data_ptr());
+  p.out = out.data_ptr();
   p.x = reinterpret_cast<const __nv_bfloat16*>(x.data_ptr());
   p.counters = counters.data_ptr<int>();
   p.expected = expected.data_ptr<int>();
@@ -413,17 +455,30 @@ void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tens
   p.esc_delta = esc_delta.data_ptr<float>();
   p.N = N; p.K = K; p.m = m; p.NB = NB; p.KC = KC; p.U = U; p.G = G;
   p.scale2 = (uint32_t)scale2;
+  p.scale2b = (uint32_t)scale2b;
   p.mode = mode;
-  size_t smem = 1024 + (size_t)stages * (MP * 128 + WBYTES) + 2 * stages * 8 + 16 + 8 * 160 * 4;
+  size_t smem = 1024 + (size_t)stages * (MP * 128 + (dual ? 2 : 1) * WBYTES) + 2 * stages * 8 + 2 * 8 * 68 * 4 + ECAP * 8 + (size_t)ECAP * MP * 2;
   cudaStream_t stream = at::cuda::getCurrentCUDAStream();
-  switch (MP) {
-    case 8: launch_mp<8, STAGES_8>(map, p, smem, stream); break;
-    case 16: launch_mp<16, STAGES_16>(map, p, smem, stream); break;
-    case 32: launch_mp<32, STAGES_32>(map, p, smem, stream); break;
-    case 64: launch_mp<64, STAGES_64>(map, p, smem, stream); break;
-    case 128: launch_mp<128, STAGES_128>(map, p, smem, stream); break;
-    case 256: launch_mp<256, STAGES_256>(map, p, smem, stream); break;
-    default: TORCH_CHECK(false, "bad MP");
+  if (!dual) {
+    switch (MP) {
+      case 8: launch_mp<8, STAGES_8, false>(map, p, smem, stream); break;
+      case 16: launch_mp<16, STAGES_16, false>(map, p, smem, stream); break;
+      case 32: launch_mp<32, STAGES_32, false>(map, p, smem, stream); break;
+      case 64: launch_mp<64, STAGES_64, false>(map, p, smem, stream); break;
+      case 128: launch_mp<128, STAGES_128, false>(map, p, smem, stream); break;
+      case 256: launch_mp<256, STAGES_256, false>(map, p, smem, stream); break;
+      default: TORCH_CHECK(false, "bad MP");
+    }
+  } else {
+    switch (MP) {
+      case 8: launch_mp<8, DSTAGES_8, true>(map, p, smem, stream); break;
+      case 16: launch_mp<16, DSTAGES_16, true>(map, p, smem, stream); break;
+      case 32: launch_mp<32, DSTAGES_32, true>(map, p, smem, stream); break;
+      case 64: launch_mp<64, DSTAGES_64, true>(map, p, smem, stream); break;
+      case 128: launch_mp<128, DSTAGES_128, true>(map, p, smem, stream); break;
+      case 256: launch_mp<256, DSTAGES_256, true>(map, p, smem, stream); break;
+      default: TORCH_CHECK(false, "bad MP");
+    }
   }
 }
 
@@ -431,15 +486,17 @@ void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tens
 
 void tensorcore_gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tensor ws, torch::Tensor out,
                      torch::Tensor counters, torch::Tensor expected, torch::Tensor esc_off, torch::Tensor esc_idx,
-                     torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2, int mode) {
-  tensorcore::gemm(MP, stages, packed, x, ws, out, counters, expected, esc_off, esc_idx, esc_delta, N, K, m, NB, KC, U, G, scale2, mode);
+                     torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2, int64_t scale2b,
+                     int dual, int mode) {
+  tensorcore::gemm(MP, stages, packed, x, ws, out, counters, expected, esc_off, esc_idx, esc_delta, N, K, m, NB, KC, U, G, scale2, scale2b, dual, mode);
 }
 """
 
 CPP_SRC = """
 void tensorcore_gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tensor ws, torch::Tensor out,
                      torch::Tensor counters, torch::Tensor expected, torch::Tensor esc_off, torch::Tensor esc_idx,
-                     torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2, int mode);
+                     torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2, int64_t scale2b,
+                     int dual, int mode);
 """
 
 _ext = None
@@ -449,11 +506,13 @@ def _build():
     global _ext
     if _ext is None:
         src = CUDA_SRC.replace("WGMMA_FUNCS", "\n".join(_wgmma_asm(n) for n in MPS))
+        for mp, st in DSTAGES.items():
+            src = src.replace(f"DSTAGES_{mp},", f"{st},")
         for mp, st in STAGES.items():
-            src = src.replace(f"STAGES_{mp}>", f"{st}>")
+            src = src.replace(f"STAGES_{mp},", f"{st},")
         src = src.replace("DEDICATED_MAX_MP", str(DEDICATED_MAX_MP))
         _ext = load_inline(
-            name="tensorcore_gemm_v10",
+            name="tensorcore_gemm_v15",
             cpp_sources=CPP_SRC,
             cuda_sources=src,
             functions=["tensorcore_gemm"],
@@ -529,6 +588,26 @@ def pack_layer(W: torch.Tensor, G: int = GRID) -> dict:
             "base": base, "N": N, "K": K, "NB": NB, "KC": KC, "n_esc": int(esc.shape[0])}
 
 
+def pack_router(W: torch.Tensor) -> dict:
+    """fp32 W -> bf16 hi + lo pair, each 12-bit packed, interleaved per unit [hi | lo]; merged escape list."""
+    hi = W.to(torch.bfloat16)
+    lo = (W - hi.float()).to(torch.bfloat16)
+    a, b = pack_layer(hi), pack_layer(lo)
+    U = a["NB"] * a["KC"]
+    packed = torch.stack([a["packed"].view(U, WBYTES), b["packed"].view(U, WBYTES)], 1).reshape(-1).contiguous()
+    idx = torch.cat([a["esc_idx"], b["esc_idx"]])
+    delta = torch.cat([a["esc_delta"], b["esc_delta"]])
+    unit = idx >> 13
+    order = torch.argsort(unit, stable=True)
+    idx, delta, unit = idx[order].contiguous(), delta[order].contiguous(), unit[order]
+    cnt = torch.bincount(unit, minlength=U)
+    off = torch.zeros(U + 1, dtype=torch.int64, device=W.device)
+    off[1:] = torch.cumsum(cnt, 0)
+    return {"packed": packed, "esc_off": off.to(torch.int32).contiguous(), "esc_idx": idx, "esc_delta": delta,
+            "scale2": a["scale2"], "scale2b": b["scale2"], "base": (a["base"], b["base"]), "N": a["N"], "K": a["K"],
+            "NB": a["NB"], "KC": a["KC"], "n_esc": a["n_esc"] + b["n_esc"]}
+
+
 def _partition_tables(NB: int, KC: int, G: int, device) -> tuple:
     """Stream-K partition: CTA c handles units [c*U//G, (c+1)*U//G); expected[j] = #CTAs touching n-block j."""
     U = NB * KC
@@ -550,17 +629,19 @@ def prepare(weights: Weights) -> dict:
     state["router_hi_t"] = hi.t().contiguous()
     state["router_lo_t"] = lo.t().contiguous()
     state["layers"] = {}
-    for name in ["qkv_gate", "o", "pooler", "unpooler"]:
+    for name in ["qkv_gate", "o", "pooler", "unpooler", "router"]:
         W = weights[name]
-        info = pack_layer(W)
+        info = pack_router(W) if name == "router" else pack_layer(W)
         N, K = W.shape
         info["ws"] = torch.zeros(256, N, dtype=torch.float32, device=W.device)
         info["counters"] = torch.zeros(info["NB"], dtype=torch.int32, device=W.device)
         info["parts"] = {}
         for n_rows in ([N, 1024] if name == "unpooler" else [N]):
             nb = n_rows // BN
-            exp_t, U, G = _partition_tables(nb, info["KC"], GRID, W.device)
-            info["parts"][n_rows] = (exp_t, U, G, nb)
+            for mp in MPS:
+                g = ROUTER_GRID[mp] if name == "router" else GRID
+                exp_t, U, G = _partition_tables(nb, info["KC"], g, W.device)
+                info["parts"][(n_rows, mp)] = (exp_t, U, G, nb)
         state["layers"][name] = info
         print(f"PACK {name}: base={info['base']} escapes={info['n_esc']} ({info['n_esc'] / (N * K):.2e})", flush=True)
     torch.cuda.synchronize()
@@ -578,18 +659,18 @@ def kernel_fn(data: Inputs, state: dict) -> torch.Tensor:
     x = data["x"]
     cfg = data["config"]
     layer, n, m = cfg["layer"], cfg["n"], cfg["m"]
-    if layer == "router":
-        if m <= 8:
-            return torch.nn.functional.linear(x.float(), state["w"]["router"])
-        acc = torch.mm(x, state["router_hi_t"], out_dtype=torch.float32)
-        acc += torch.mm(x, state["router_lo_t"], out_dtype=torch.float32)
-        return acc
+    dual = layer == "router"
     mp = _mp_for(m)
     if mp == 0:
+        if dual:
+            acc = torch.mm(x, state["router_hi_t"], out_dtype=torch.float32)
+            acc += torch.mm(x, state["router_lo_t"], out_dtype=torch.float32)
+            return acc
         return x @ state["w"][layer][:n].T
     info = state["layers"][layer]
-    exp_t, U, G, NB = info["parts"][n]
-    out = torch.empty(m, n, dtype=torch.bfloat16, device=x.device)
-    _ext.tensorcore_gemm(mp, STAGES[mp], info["packed"], x, info["ws"], out, info["counters"], exp_t, info["esc_off"],
-                         info["esc_idx"], info["esc_delta"], n, info["K"], m, NB, info["KC"], U, G, info["scale2"], MODE)
+    exp_t, U, G, NB = info["parts"][(n, mp)]
+    out = torch.empty(m, n, dtype=torch.float32 if dual else torch.bfloat16, device=x.device)
+    _ext.tensorcore_gemm(mp, (DSTAGES if dual else STAGES)[mp], info["packed"], x, info["ws"], out, info["counters"], exp_t,
+                         info["esc_off"], info["esc_idx"], info["esc_delta"], n, info["K"], m, NB, info["KC"], U, G,
+                         info["scale2"], info.get("scale2b", 0), int(dual), MODE)
     return out
