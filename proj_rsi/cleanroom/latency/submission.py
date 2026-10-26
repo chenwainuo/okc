@@ -53,6 +53,8 @@ CUDA_SRC = r"""
 
 namespace latency_ns {
 
+constexpr int LOADER = LATENCY_LOADER;  // 0: TMA 1-D bulk per stage, 1: cp.async 16 B per thread
+
 __device__ __forceinline__ uint32_t prmt(uint32_t a, uint32_t b, uint32_t sel) {
     uint32_t r;
     asm("prmt.b32 %0, %1, %2, %3;" : "=r"(r) : "r"(a), "r"(b), "r"(sel));
@@ -105,6 +107,17 @@ __device__ __forceinline__ void tma_load_1d(void* dst, const void* src, uint32_t
 #endif
 }
 
+__device__ __forceinline__ void cp_async16(void* dst, const void* src) {
+    uint32_t d = (uint32_t)__cvta_generic_to_shared(dst);
+    asm volatile("cp.async.cg.shared.global [%0], [%1], 16;" ::"r"(d), "l"(src) : "memory");
+}
+__device__ __forceinline__ void cp_async_mbar_arrive(uint64_t* bar) {
+#ifdef LATENCY_SM90A
+    uint32_t a = (uint32_t)__cvta_generic_to_shared(bar);
+    asm volatile("cp.async.mbarrier.arrive.noinc.shared.b64 [%0];" ::"r"(a) : "memory");
+#endif
+}
+
 __device__ __forceinline__ uint4 lds128(const uint8_t* p) {
     uint4 v;
     uint32_t a = (uint32_t)__cvta_generic_to_shared(p);
@@ -149,18 +162,27 @@ latency_gemv(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restrict
     const uint8_t* src = packed + (size_t)cta * (size_t)nstages * STAGE;
 
     if (tid == 0) {
-        for (int i = 0; i < S; ++i) mbar_init(&bars[i], 1);
+        for (int i = 0; i < S; ++i) mbar_init(&bars[i], LOADER == 0 ? 1 : 256);
 #ifdef LATENCY_SM90A
         asm volatile("fence.mbarrier_init.release.cluster;" ::: "memory");
 #endif
     }
     __syncthreads();
-    if (tid == 0) {
-        for (int i = 0; i < S; ++i) {
-            mbar_expect_tx(&bars[i], STAGE);
-            tma_load_1d(smem + i * STAGE, src + (size_t)i * STAGE, STAGE, &bars[i]);
+    auto issue_stage = [&](int st) {
+        const int buf = st % S;
+        if (LOADER == 0) {
+            if (tid == 0) {
+                mbar_expect_tx(&bars[buf], STAGE);
+                tma_load_1d(smem + buf * STAGE, src + (size_t)st * STAGE, STAGE, &bars[buf]);
+            }
+        } else {
+            uint8_t* d = smem + buf * STAGE;
+            const uint8_t* g = src + (size_t)st * STAGE;
+            for (int off = tid * 16; off < STAGE; off += 4096) cp_async16(d + off, g + off);
+            cp_async_mbar_arrive(&bars[buf]);
         }
-    }
+    };
+    for (int i = 0; i < S; ++i) issue_stage(i);
 
     float acc[MT][NT][4];
 #pragma unroll
@@ -269,10 +291,7 @@ latency_gemv(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restrict
             }
         }
         __syncthreads();
-        if (tid == 0 && s + S < nstages) {
-            mbar_expect_tx(&bars[buf], STAGE);
-            tma_load_1d(smem + buf * STAGE, src + (size_t)(s + S) * STAGE, STAGE, &bars[buf]);
-        }
+        if (s + S < nstages) issue_stage(s + S);
     }
 
     // exceptions (weights outside the exponent window): acc[m][n] += x[m][k] * delta
@@ -373,17 +392,19 @@ torch::Tensor latency_gemv_run(torch::Tensor packed, torch::Tensor x, torch::Ten
 """
 
 _EXT = None
+LOADER = int(os.environ.get("LATENCY_LOADER", "1"))
 
 
 def _ext():
     global _EXT
     if _EXT is None:
         _EXT = load_inline(
-            name="latency_gemv_v2",
+            name=f"latency_gemv_v3_l{LOADER}",
             cpp_sources=[CPP_SRC],
             cuda_sources=[CUDA_SRC],
             functions=["latency_gemv_run"],
-            extra_cuda_cflags=["-O3", "-gencode=arch=compute_90a,code=sm_90a", "--use_fast_math", "-std=c++17"],
+            extra_cuda_cflags=["-O3", "-gencode=arch=compute_90a,code=sm_90a", "--use_fast_math", "-std=c++17",
+                               f"-DLATENCY_LOADER={LOADER}"],
             verbose=False,
         )
     return _EXT
