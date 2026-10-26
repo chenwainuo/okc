@@ -1209,6 +1209,30 @@ int64_t gvrun(int64_t inst, torch::Tensor W, torch::Tensor W2, torch::Tensor x, 
 int64_t gvocc(int64_t inst, torch::Tensor W, torch::Tensor W2, torch::Tensor x, torch::Tensor out, torch::Tensor esc, torch::Tensor ws, torch::Tensor cnt, int64_t T, int64_t U) {
   return gvgo(inst, W, W2, x, out, esc, ws, cnt, T, U, 1);
 }
+// pw21 PROBE l2scratch only: decode r6's 12-bit pack (dec1) of row tiles [t0, t0 + nt) into natural bf16 rows
+// [nt*16][K] (escapes not applied: a timing probe, the output feeds no path). One warp per (tile, 64-k chunk) unit:
+// row g gets (A0, A2, A4, A6) at k 16t .. 16t+7 and (A8, A10, A12, A14) at 16t+8 .., row g+8 the odd registers.
+__global__ void __launch_bounds__(256) gvdec(const uint4* W, __nv_bfloat16* out, uint32_t Tb, int KC, int t0, int nt) {
+  const int lane = threadIdx.x & 31, wi = blockIdx.x * 8 + (threadIdx.x >> 5), g = lane >> 2, t = lane & 3;
+  if (wi >= nt * KC) return;
+  const int tl = wi / KC, c = wi - tl * KC;
+  const uint4* q = W + ((size_t)(t0 + tl) * KC + c) * 96 + lane;
+  const uint4 q0 = gnc(q), q1 = gnc(q + 32), q2 = gnc(q + 64);
+  uint32_t A[16];
+  dec1(q0.x, q0.y, q2.x, Tb, 0, A); dec1(q0.z, q0.w, q2.y, Tb, 0, A + 4);
+  dec1(q1.x, q1.y, q2.z, Tb, 0, A + 8); dec1(q1.z, q1.w, q2.w, Tb, 0, A + 12);
+  const size_t K = (size_t)KC * 64;
+  uint4* r0 = (uint4*)(out + (size_t)(tl * 16 + g) * K + c * 64 + t * 16);
+  uint4* r1 = (uint4*)(out + (size_t)(tl * 16 + g + 8) * K + c * 64 + t * 16);
+  r0[0] = make_uint4(A[0], A[2], A[4], A[6]); r0[1] = make_uint4(A[8], A[10], A[12], A[14]);
+  r1[0] = make_uint4(A[1], A[3], A[5], A[7]); r1[1] = make_uint4(A[9], A[11], A[13], A[15]);
+}
+int64_t gvdecrun(torch::Tensor W, torch::Tensor out, int64_t Tb, int64_t t0, int64_t nt) {
+  const int KC = (int)W.size(1);
+  const int units = (int)nt * KC;
+  gvdec<<<(units + 7) / 8, 256, 0, at::cuda::getCurrentCUDAStream()>>>((const uint4*)W.data_ptr(), (__nv_bfloat16*)out.data_ptr(), (uint32_t)(Tb & 0xffffffff), KC, (int)t0, (int)nt);
+  return (int64_t)cudaGetLastError();
+}
 int64_t gvregs(int64_t inst, torch::Tensor W, torch::Tensor W2, torch::Tensor x, torch::Tensor out, torch::Tensor esc, torch::Tensor ws, torch::Tensor cnt, int64_t T, int64_t U) {
   return gvgo(inst, W, W2, x, out, esc, ws, cnt, T, U, 2);
 }
@@ -1399,8 +1423,8 @@ def _gvext():
     global _gvmod
     if _gvmod is None:
         cases = "\n".join("    case %d: return gvl<%s>(p, st, occ);" % (i, ",".join(map(str, c))) for i, c in enumerate(GVI))
-        _gvmod = load_inline("gv20_%x" % (hash(tuple(GVI)) & 0xffffffff), cpp_sources="int64_t gvrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t gvocc(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t gvregs(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t rrrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor);",
-                             cuda_sources=GVCU.replace("@@CASES@@", cases), functions=["gvrun", "gvocc", "gvregs", "rrrun"], extra_cuda_cflags=["-O3", "-lineinfo"], verbose=False)
+        _gvmod = load_inline("gv20_%x" % (hash(tuple(GVI)) & 0xffffffff), cpp_sources="int64_t gvrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t gvocc(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t gvregs(int64_t, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t rrrun(int64_t, torch::Tensor, torch::Tensor, torch::Tensor); int64_t gvdecrun(torch::Tensor, torch::Tensor, int64_t, int64_t, int64_t);",
+                             cuda_sources=GVCU.replace("@@CASES@@", cases), functions=["gvrun", "gvocc", "gvregs", "rrrun", "gvdecrun"], extra_cuda_cflags=["-O3", "-lineinfo"], verbose=False)
     return _gvmod
 
 
@@ -1937,6 +1961,11 @@ def prepare(weights):
         except Exception as error:  # the second bake can only add paths; r6's choices stand on any failure
             st["sel"] = {}
             print("PREP gx bake failed: %s" % str(error).splitlines()[-1][:200], flush=True)
+    if GV and GX and time.time() - _T0 < PREPARE_BUDGET_S - 20:
+        try:
+            _l2probe(st)
+        except Exception as error:
+            print("PROBE l2scratch declined %s" % str(error).splitlines()[-1][:160].replace(" ", "_"), flush=True)
     st.pop("gvc12", None)
     st.pop("gepk", None)  # pw17: unpicked codec E packs (a picked plan keeps its own pack alive)
     print("PREP done in %.0fs" % (time.time() - _T0), flush=True)
@@ -2505,6 +2534,65 @@ def _gxbake(st):
                     tb.append(_time_us(cand[0][2], x, out, flush, sink, 21))
                     tr.append(_time_us(r6, x, out, flush, sink, 21))
                 print("PROBE ecod pooler m=%d %s %.2f r6=%.2f delta=%+.2f" % (m, cand[0][1], min(tb), min(tr), min(tb) - min(tr)), flush=True)
+
+
+def _l2probe(st, R=512):
+    """PROBE l2scratch (pw21, no path): pooler m=128 as a two-stream pipeline captured in one CUDA graph. Stream A decodes
+    r6's 12-bit pack of R rows into one of two bf16 scratch chunks (R x 8192 x 2 B = 8 MB each, written just before use, so
+    L2-resident); stream B runs cuBLAS on the previous chunk (torch.mm into a [chunks, m, R] stage), then one permuted
+    copy writes out. Escapes are not applied (timing only). Lines: the pipeline end to end, plain cuBLAS (r6's own m=128
+    path), the decode chunks alone, cuBLAS on the chunks alone."""
+    dev = st["pooler_raw"].device
+    if "pooler" not in st.get("gvc12", {}):
+        print("PROBE l2scratch declined no_12-bit_pack", flush=True)
+        return
+    css, _ = st["gvc12"]["pooler"]
+    data, tab = css[1][0][0], css[1][0][1]
+    T, KC = data.shape[:2]
+    n, K = T * 16, KC * 64
+    NCH, tpc = n // R, R // 16
+    ext = _gvext()
+    flush = torch.empty(64 << 20, dtype=torch.float32, device=dev)
+    sink = torch.empty((), dtype=torch.float32, device=dev)
+    gen = torch.Generator(device=dev).manual_seed(99)
+    m = 128
+    x = torch.randn((m, K), generator=gen, device=dev).to(torch.bfloat16)
+    out = torch.empty((m, n), dtype=torch.bfloat16, device=dev)
+    buf = [torch.empty((R, K), dtype=torch.bfloat16, device=dev) for _ in range(2)]
+    stage = torch.empty((NCH, m, R), dtype=torch.bfloat16, device=dev)
+    sa, sb = torch.cuda.Stream(), torch.cuda.Stream()
+    ev_d = [torch.cuda.Event() for _ in range(NCH)]
+    ev_m = [torch.cuda.Event() for _ in range(NCH)]
+
+    def pipe(xx, oo):
+        cur = torch.cuda.current_stream()
+        sa.wait_stream(cur); sb.wait_stream(cur)
+        for i in range(NCH):
+            with torch.cuda.stream(sa):
+                if i >= 2:
+                    sa.wait_event(ev_m[i - 2])  # the chunk buffer is free once cuBLAS consumed it
+                ext.gvdecrun(data, buf[i % 2], tab, i * tpc, tpc)
+                ev_d[i].record(sa)
+            with torch.cuda.stream(sb):
+                sb.wait_event(ev_d[i])
+                torch.mm(xx, buf[i % 2].t(), out=stage[i])
+                ev_m[i].record(sb)
+        cur.wait_stream(sa); cur.wait_stream(sb)
+        oo.copy_(stage.permute(1, 0, 2).reshape(m, n))
+
+    def dec_only(xx, oo):
+        for i in range(NCH):
+            ext.gvdecrun(data, buf[i % 2], tab, i * tpc, tpc)
+
+    def mm_only(xx, oo):
+        for i in range(NCH):
+            torch.mm(xx, buf[i % 2].t(), out=stage[i])
+
+    tp = _time_us(pipe, x, out, flush, sink, 21)
+    tt = _time_us(lambda xx, oo: _r6(xx, "pooler", n, st), x, out, flush, sink, 21)
+    td = _time_us(dec_only, x, out, flush, sink, 21)
+    tm = _time_us(mm_only, x, out, flush, sink, 21)
+    print("PROBE l2scratch pooler m=128 chunks=%d %.2f torch=%.2f decode=%.2f mmchunks=%.2f" % (NCH, tp, tt, td, tm), flush=True)
 
 
 def _gxladder(st):

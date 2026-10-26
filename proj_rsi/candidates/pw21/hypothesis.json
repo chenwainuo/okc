@@ -1,0 +1,17 @@
+{
+  "id": "pw21",
+  "parent": "r6-c12",
+  "claim": "In r6 the router at m=128/256 runs as cuBLAS on the stacked [hi;lo] bf16 matrix (N=512, K=8192): only a handful of output tiles, and a separate add kernel combines the two halves. It takes 10.28 / 11.10 judge-us against a 2.2 / 2.7 us floor. pw21 runs it on r6's own gv structure. It uses plain bf16 hi + lo fragments, as r6's router does at m <= 32, accumulating hi and lo into one fp32 accumulator in one pass. Each warp keeps its W chunk in registers and loops over all 16 n8 token tiles of a 128-token block, loading each tile's x at use through L1, which the CTA's two row-tile warps share. K is split over 16 (or 8) CTAs and reduced in the same launch, by r6's cluster DSMEM epilogue or by the global last-arriver. m=256 runs as two token blocks. Expected 3.5-5 us against 10.3 / 11.1, about +2-3% on the overall score.",
+  "paths": "router m=128 and m=256 (served only at exactly those m; every other m keeps r6's dispatch, e.g. judge case unpooler m=130 -> r6 fallback): rt-c16 (8 x 16 CTAs x 128 thr, cluster 16, W ring 1, 255 regs), rt-c16s2 (W ring 2, 168 regs, 3 CTAs/SM), rt-c8 (8 x 8 CTAs x 256 thr, cluster 8), rt-g16s2 (global last-arriver, no cluster). Baked against r6's own dispatch (cuBLASLt) in the second bake; validated per the template: one-hot x8 against hi+lo bit-exact, random rows at 2e-5 (judge 1e-4), plus random rows at odd m 121 / 250. Codec E and the bulk-ring path are off, so r6's phase is unchanged. PROBE l2scratch (no path): pooler m=128 as decode-to-bf16-scratch (two 8 MB chunks) on stream A plus cuBLAS on stream B, fork/join inside the graph, against r6's cuBLAS, decode alone and cuBLAS-on-chunks alone.",
+  "target_shapes": [
+    "router m=128: <= 7 judge-us (r6 10.28)",
+    "router m=256: <= 8 (r6 11.10)"
+  ],
+  "kill_if": "router m=128 best path not ≥ 3 µs under torch in the bake",
+  "local_checks": "nvcc 12.8 sm_90a -Xptxas -v: 82 gv instances; r6's 78 are SASS-identical; the 4 new router instances have 0 spills (255 / 168 regs; the 12-bit FMT 3 variant spilled at every cap and was dropped); the gvdec probe kernel uses 28 regs. proj_rsi/tools/router_emu.py: the token-loop index chain (W offsets, x row clamp, permuted-k B fragments, hi+lo into one accumulator, split-K sum, emit bounds) is bit-exact for m 128 / 121 / 256 / 250 / 9; a natural-k pack fails as it must. The gvdec layout is checked against W, with only the escape positions differing (expected: the probe skips escapes). lint ok; cpu-check --official 9/9; the CPU mock of the bake builds every router plan.",
+  "risks": [
+    "x traffic through L1: 16 token tiles x 2 LDG.128 per unit per warp; if the L1 sharing between the two row-tile warps fails, x L2 traffic is 2x the 32 MB estimate.",
+    "Cluster 16 at 255 regs (2 CTAs/SM) may be declined by the occupancy check at m=256 (256 CTAs); rt-c16s2 / rt-g16s2 cover it.",
+    "The l2scratch probe adds about 2 s of prepare time; it prints 'declined' rather than failing on any exception."
+  ]
+}
