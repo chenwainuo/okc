@@ -504,3 +504,12 @@ Note on the score: 3324.8 with r6's kernels is 3% under r6's board 3428 and the 
 the judge drifts by that much between runs (SGLang baselines moved too: decode16 76.5 vs 74.9). The board number is
 one draw; a scored re-submission of the same kernel would land anywhere in ~3325–3430. That is noise, not progress,
 and is left to the user as a choice.
+
+## pw21 opened: router at m=128/256 on r6's gv (+ L2-scratch probe)
+
+Remaining pool with judge arithmetic: verify16/32 router at 10.3/11.1 (cuBLASLt with 4–8 CTAs on K=8192 plus a
+separate add kernel) vs a 2.2–2.7 floor; leverage 7.9/6.6 → ≈ 90–100 score-µs if a dedicated path reaches ~4 µs.
+N=256 means the x re-read factor is only 256/rows, so the big-layer L2 problem does not apply. Build: r6 base +
+router paths (12-bit hi+lo, K split across many CTAs, token tiles looped in-CTA, reduction folded into the launch).
+Probe only: decode-to-L2-scratch + chunked cuBLAS pipeline on pooler m=128. Rejected as rule violations: persisting-L2
+carve-out, persistent kernels holding weights, RNG regeneration.
