@@ -1,0 +1,41 @@
+{
+  "id": "pw11",
+  "parent": "r6-c12",
+  "claim": "r6's gv kernel is at the HBM stream at m=1 because it has no barrier between launch and the last load and no cross-CTA dependency. It loses at m>=16 because x is re-fetched once per 16-row tile: x traffic is (N/16)*m*K*2 B, 1.33x the 12-bit W bytes at m=16 and 2.67x at m=32. Fitted to r6's own kernels, L2->SM is about 7-7.5 TB/s, so W + x exceeds the HBM time at m=32. It also loses on qkv at every m: 144 CTAs on 132 SMs. pw11 keeps r6 byte-for-byte (all 78 r6 gv kernels have identical SASS; every r6 path is still baked and becomes the per-shape baseline 'r6') and adds gv geometries with 128-144 rows per CTA (x fetched once per 128 rows) and a 2/4/8-way cross-CTA K split. The split is reduced either by (a) r6's cluster DSMEM epilogue, guarded by cudaOccupancyMaxActiveClusters, or (b) a new no-cluster epilogue (V bit 2): fp32 partial with st.global.cg.v4 to a per-n-block slot, fence.acq_rel, atomicAdd counter, and the last arriver sums the others from L2 plus its own from smem, writes bf16 and resets the counter. Also: o at 64 rows with an x smem slab, and the router on the 12-bit codec for both hi and lo (6.3 MB instead of 8.4).",
+  "target_shapes": [
+    "pooler m=32 <= 14.8 judge (r6 16.94); m=16 control ~14.3 (r6 14.30)",
+    "unpooler m=16/32 <= 14.6 / 14.8 (r6 14.84 / 16.73)",
+    "qkv_gate m=1/8/16/32 <= 9.0 / 9.0 / 9.3 / 9.5 (r6 9.97 / 9.90 / 11.20 / 14.21)",
+    "o m=16/32 <= 5.0 / 5.0 (r6 5.76 / 6.62)",
+    "router m=1/8/16/32 <= 4.0 / 4.3 / 4.3 / 4.6 (r6 4.14 / 5.08 / 5.14 / 5.88)",
+    "every other shape: r6's choice, unchanged"
+  ],
+  "kill_if": "Kill the wide-row extension if neither pooler m=32 B-variant (gx-p128b, gx-p128b-s) is at least 1.5 us under the 'r6' line for pooler m=32 in the same bake. The bake is the only within-run comparison. If the a-variants win and the b-variants do not, keep the cluster path and drop (b). If the b-variants win and the a-variants are declined-occ or slower, that confirms the cluster cost seen in pw7 and pw9. If gx-p128*-s beats gx-p128* by more than 0.5 us, L1 wavefronts (not L2 bytes) are the binder, and the next step is RT=2 with a launch-bounds change.",
+  "paths": {
+    "naming": "gx-<layer letter><rows><a|b>[-s]. a = cluster DSMEM split-K (r6 epilogue); b = global last-arriver (new); -s = x in a smem slab (XS 1), else x through L1 (XS 2) or registers (XS 0, m<=8). Geometry (FMT, WR, WK, KU, S, RT, XS).",
+    "qkv_gate m=1,8": "gx-q144a, gx-q144b (1,9,1,16,8,1,0): 16 x 8 = 128 CTAs x 288 thr; gx-q128a, gx-q128b (1,8,1,16,8,1,0): 2304 = 18 x 128, so 144 CTAs x 256 thr (mma tiling allows it: 128 = 8 row tiles)",
+    "qkv_gate m=16": "gx-q144a/b, gx-q128a/b with XS 2",
+    "qkv_gate m=32": "same plus gx-q144a-s, gx-q144b-s (XS 1, 64 KB slab, ST 3)",
+    "pooler m=16": "gx-p128a/b (1,8,2,16,4,1,2): 32 x 4 = 128 CTAs x 512 thr",
+    "pooler m=32": "gx-p128a/b and gx-p128a-s/b-s (XS 1: 128 KB slab + 48 KB reduction buffer)",
+    "unpooler m=16": "gx-u128a/b (1,8,2,16,2,1,2): 64 x 2 = 128 CTAs x 512 thr",
+    "unpooler m=32": "gx-u128a/b and gx-u128a-s/b-s",
+    "o m=16,32": "gx-o64-s (1,4,4,4,1,1,1): 128 CTAs x 512 thr, no split, 64 KB slab at m=32",
+    "router m=1,8,16,32": "gx-r12c8 (3,1,8,2,8,1,0) cluster 8; gx-r12g8 same geometry, global reduction; gx-r12c16 (3,1,4,2,16,1,0) cluster 16. FMT 3 = 12-bit hi + lo, fp32 out. Validated one-hot x8 exactly against hi+lo, random rows to 2e-5 of FP64 on the fp32 weights (the template's 1e-4 judge tolerance with margin)"
+  },
+  "validation": "Template _validate on every new path for every baked m: one-hot rows x8 bit-exact (router: against bf16(w) + bf16(w - bf16(w)), the value the lossless hi/lo pack carries), random rows within 4e-3 (bf16) / 2e-5 (router) of FP64, and random rows at an odd m of the same bucket (5 / 9 / 17), because kernel_fn serves the whole bucket with the pick. Paths that fail are never selected. Cluster variants are declined when cudaOccupancyMaxActiveClusters * KS < grid. An escape-list overflow (32 per warp) declines the path. r6's own _gvok machinery and bake run unchanged before this.",
+  "compile_check": "nvcc 12.8 -arch=sm_90a -O3 -Xptxas -v on the gv block with all 115 instances (78 r6 + 37 new): 44 s locally (r6 alone 26 s). New instances: 0 spill except 6 at XS 2 / MT 4 / 512 threads (the 128-register cap), which spill 8 B stores / 120 B loads: gx-p128a/b, gx-u128a/b at m=32 and gx-q128a at m=32. The XS 1 variants of those shapes are 0 spill. Pre-existing r6 instances keep their own small spills (up to 32 B), unchanged. Registers: qkv144 106-154, router FMT 3 108-158, o64-s 87/111. The 78 r6 kernels are identical instruction for instruction to r6's build. SASS of the (b) epilogue: STG.E.128.STRONG.GPU partials -> MEMBAR.ALL.GPU -> BAR -> one ATOMG.E.ADD.STRONG.GPU -> BAR -> non-last EXIT -> MEMBAR.ALL.GPU -> LDG.E.128.STRONG.GPU of the KS-1 peers + LDS of its own -> STG.U16 -> STG RZ counter reset. No UCGABAR in (b) kernels; (a) kernels keep r6's UCGABAR + ld.shared::cluster.",
+  "offline_checks": "lint ok; cpu-check --official 9/9 (CPU prepare returns the torch math). A CPU mock of the second bake on the reference weights built every plan: no escape-list overflow for any geometry, including the router lo half (hi 299 escapes, lo 1104 overall).",
+  "changes_vs_brief": [
+    "Cluster dims stay r6's (1,1,KS) along grid z (the K-split index), not (1,KS,1): r6's escape lists, DSMEM rank math and launch already use z.",
+    "The router one-hot check compares against hi+lo, not the fp32 weight: a hi/lo BF16 pair cannot be bit-exact to fp32. This is what r6's _gvok does.",
+    "The (b) fences are fence.acq_rel.gpu, not __threadfence (fence.sc): MEMBAR.ALL.GPU instead of MEMBAR.SC.GPU.",
+    "The last arriver adds its own partial from shared memory and reads only the KS-1 peer slots from L2."
+  ],
+  "prepare_time": "r6's prepare runs first ('PREP r6 done in Ns'). The second bake skips any path once 240 s since import have passed ('skipped-budget'). It adds about 70 BAKE/PICK lines (~3 KB; r6's log was 4.4 KB).",
+  "risks": [
+    "Nothing ran on hardware. A wrong reduction shows as INVALID in the bake, not as a wrong answer.",
+    "The 128-row XS 2 variants rely on the 8 row-warps of a CTA hitting the same x lines in L1. If the warps drift, x traffic falls back toward the 16-row level, and the -s variants are the control.",
+    "The (b) workspace slots and counters are r6's preallocated st['gvws'] (64 MB) / st['gvcnt'] (r6's sm_90 paths never touch them), indexed by n-block; launches are serialized on one stream, and every counter is reset by its last arriver."
+  ]
+}
