@@ -569,16 +569,25 @@ __device__ __forceinline__ void emit(const G& p, int idx, int row0, float4 v, in
 }
 // pw27: split-K partial added into an output the caller zeroed (a memset node in the same graph); fp32 (router) or bf16
 __device__ __forceinline__ void reda(float* d, float v) { atomicAdd(d, v); }
-__device__ __forceinline__ void reda(__nv_bfloat16* d, float v) {
-  const __nv_bfloat16 h = __float2bfloat16(v);
-  asm volatile("red.global.add.noftz.bf16 [%0], %1;\n" :: "l"(d), "h"(*(const unsigned short*)&h) : "memory");
+__device__ __forceinline__ void reda2(__nv_bfloat16* d, float a, float b) {  // native packed bf16x2 reduction (no return value)
+  const __nv_bfloat162 h = __floats2bfloat162_rn(a, b);
+  asm volatile("red.global.add.noftz.bf16x2 [%0], %1;\n" :: "l"(d), "r"(*(const uint32_t*)&h) : "memory");
 }
 template <typename O>
 __device__ __forceinline__ void redemit(const G& p, int idx, int row0, float4 v, int MT) {
   const int l = idx & 31, r = idx >> 5, n = r % MT, row = row0 + (r / MT) * 16 + (l >> 2), tok = n * 8 + 2 * (l & 3);
   O* o = (O*)p.out + (size_t)tok * p.N + row;
-  reda(o, v.x); reda(o + 8, v.z);
-  if (tok + 1 < p.m) { reda(o + p.N, v.y); reda(o + p.N + 8, v.w); }
+  if constexpr (std::is_same<O, float>::value) {
+    reda(o, v.x); reda(o + 8, v.z);
+    if (tok + 1 < p.m) { reda(o + p.N, v.y); reda(o + p.N + 8, v.w); }
+  } else {  // bf16: rows (g, g+1) of lanes l, l ^ 4 (same tokens, same liveness) as one native packed bf16x2 red.add
+    const unsigned am = __activemask();
+    const float px = __shfl_xor_sync(am, v.x, 4), py = __shfl_xor_sync(am, v.y, 4), pz = __shfl_xor_sync(am, v.z, 4), pw = __shfl_xor_sync(am, v.w, 4);
+    if (((l >> 2) & 1) == 0) {  // even row g: the pair starts at an even column (4-B aligned: row0 % 16 == 0, N even)
+      reda2(o, v.x, px); reda2(o + 8, v.z, pz);
+      if (tok + 1 < p.m) { reda2(o + p.N, v.y, py); reda2(o + p.N + 8, v.w, pw); }
+    }
+  }
 }
 __device__ __forceinline__ void add4(float4& a, const float4& b) { a.x += b.x; a.y += b.y; a.z += b.z; a.w += b.w; }
 __device__ __forceinline__ bool live(int idx, int MT, int m) { return ((idx >> 5) % MT) * 8 + 2 * (idx & 3) < m; }
