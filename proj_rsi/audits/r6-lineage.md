@@ -253,3 +253,99 @@ is the geometry:
 
 So at m=32 decode and x sit on the per-chunk critical path instead of under the stream. L2 (6/SM) being slower than L3
 (4/SM) shows contention for the LSU and L1 between x loads and more warps, not ALU cost.
+
+## Router (pw17 analysis; in-prepare offset-subtracted bake lines from r6, pw14 and pw16)
+
+- **Above the stream:** rr (FP32, m=1) runs 3.2 µs, about 0.7 over 8.4 MB / 3.8 TB/s. That is one DRAM latency plus
+  launch, since all bytes are requested at t=0.
+- **gv's structure costs about 1.0 µs over rr at the same bytes.** c8 runs 4.2 at m=1 and m=8 against rr's 3.2. The
+  cost is the cluster launch, 2 cluster barriers, the DSMEM gather, the in-CTA BAR plus 8-way reduce, and a 16-deep HMMA
+  chain (about 0.27 µs, because hi and lo share one accumulator).
+- **What grows with m:**
+  - x is re-fetched by every 16-row tile: 2, 4 and 8.4 MB at m=8, 16 and 32, against 8.4 MB of W.
+  - c8 at m=32 needs 152 regs, so 1 CTA/SM. With 120 co-resident clusters of 8 against 128 CTAs it runs a second wave
+    (8.1 µs), which is why r6 switches to c16 (5.1).
+- **What does not help:** smaller K slices (r6's KU=1 geometry is 1.5–2 µs slower), interleaved hi/lo (loads are not on
+  the critical path), and the FP32 write (already direct).
+(The router variants were built as `candidates/pw17r-router-dropped/` and then dropped on the priority change; never run.)
+
+## Fixed-width 11-bit codec: what it can deliver (analysis before building)
+
+Data: Gaussian weights with the reference generator's distribution, 4096×8192, matching the judge STATS (esc8_best
+0.0136).
+
+**Window.** The best 8-exponent window is 114..121. It starts on an even exponent, so r6's own decode
+(`(C & mask) + base`, PRMT with the verbatim low byte) works unchanged with a 2-bit offset of `e>>1` plus the sign: a 3-bit
+field. Escapes are 1.35%: 0.88% below the window, 0.48% above.
+
+**Escape counts and the walk.**
+- Per warp-chunk (16×64 = 1024 weights): 13.9 on average, at most 30. Per warp list at KU=16: about 222.
+- r6's walk is warp-serial: one shfl per entry, then a 16-way predicated select of about 40 instructions. That is about
+  550 instructions per chunk against the hot loop's 60, so it is not usable.
+- Per lane-chunk (32 values): 0 escapes 65%, 1 29%, 2 6.2%, 3 0.85%, 4 or more 0.09%.
+- A SIMT per-lane fix-up (XOR a byte into the hl/hh word before the PRMT) runs once per iteration of the warp's max lane
+  count. The expected iterations are about 2.3 per chunk at about 25 instructions each, so roughly 60 per chunk: 2–2.5×
+  r6's decode.
+
+**Bits, including a decodable escape form.** An escape needs its position (5 bits within the lane-chunk) plus 8 exponent
+bits, about 14–16 bits, so 1.35% × 16 ≈ 0.22 bits per weight before list or slot overhead.
+- Per-lane inline slots: one slot covers only 94% of lane-chunks, so a second-level list fires in 86% of warp-chunks;
+  two slots cost a full bit, which is back to 12.
+- Realistic total: **11.3–11.5 bits**, a 4–6% byte cut.
+
+**Payoff.** pooler m=1 saves 0.5–0.8 µs of stream at best, with decode doubled. The kill bar (≥0.7) sits at the
+theoretical maximum. The what-if row for 11.4 bits is 3353, not the 3297 of 11.0.
+
+**Where the entropy is.** Exponent mass: 120 32%, 119 24%, 121 15%, 118 14%, 117 7%. The best 4-window covers 85.5% and
+the best 16-window 99.99%. Reaching about 10.6 needs a variable-length exponent, where a 2-bit code covers 85%.
+
+## Variable-length exponent code: per-m economics and gv integration (analysis; build waits for the decode routine)
+
+**1. Budget.** At 3.8 TB/s and 1.98 GHz each SM gets 14.5 B/clk, so one 12-bit warp-chunk (1536 B, 32 weights per
+lane) arrives every 106 clk and one ~11-bit chunk (1408 B) every 97 clk. That is 4 × 97 ≈ 390 warp-instructions of issue
+per chunk. r6's hot instructions per warp-chunk are measured from SASS, escape walk excluded, prologue and epilogue
+amortized.
+
+| shape | r6 geometry | warps/SM | r6 instr/chunk | issue use | extra instr/weight at 70% | per-warp clk/chunk | regs (cap) |
+|---|---|---|---|---|---|---|---|
+| pooler m1/8 | 2.16.8 rolled | 32 | 77 | 20% | 6.1 | 3100 | 64 (64) |
+| qkv m1/8 | 1.8.16 | 16 (2 CTAs) | 59 | 15% | 6.7 | 1550 | 106 (255) |
+| pooler m16 | 2.8.16 | 16 | 66 | 17% | 6.5 | 1550 | 128 (128) |
+| qkv m16 | 1.4.8 S4 | ~18 | 113 | 29% | 5.0 | 1750 | 96 (128) |
+| pooler m32 | 1.8.16 XS2 | 16 | 79 | 20% | 6.1 | 1550 | 128 (128) |
+| qkv m32 | 1.4.16 S2 | 16 | 94 | 24% | 5.6 | 1550 | 128 (128) |
+
+Issue is not the limit at any m. These three are:
+- **Registers.** The bit buffer, position and refill ring add about 10–16 registers. pooler m1/8 sits at its 64 cap (1024
+  threads), so it must move to r6's own 2.8.16 / 512-thread geometry (0.2 µs slower in r6's bake). Every m=16/32
+  geometry sits at 128.
+- **The serial chain.** Each lane decodes 32 symbols per chunk in sequence. At about 25–35 clk per symbol (or per pair
+  with a lookup) that is 500–1000 clk, inside the 1550–3100 budget but not by much.
+- **LSU / MIO at m=32.** The pw14 ladder put x loads at +2.5–2.8 µs there. A shared-memory lookup table adds 16 LDS
+  (2 symbols each) per lane-chunk on the same pipe.
+
+Verdict: bake VL per (layer, m). Expect picks at m ≤ 8, maybe m=16, and r6's 12-bit at m=32. Keep both packings
+resident.
+
+**2. Integration.**
+- **Stream layout.** Use per-lane streams **interleaved at 16 B** inside each warp's K range: lane l's k-th 16-B piece at
+  `(k·32 + l)·16`. The lane owns the weights it holds in A-fragment order. Addresses are computable, so no offset table
+  and no dependent first load.
+- **Padding.** Each warp-stream is padded to its longest lane: E[max of 32] ≈ mean + 2σ ≈ +10 B on about 700 B per lane
+  (about 1.4%).
+- **Loads.** Lanes drift by at most about one piece, so the warp LDG.128s stay nearly coalesced and sector-complete.
+  Prefetch addresses do not depend on the data, so a ring of D pieces per lane, refilled by a predicated
+  `LDG.128 if consumed`, keeps r6's depth.
+- **Decode table.** A 256 × 4 B table has about 3.5-way random bank conflicts. Either replicate it per bank (32 KB, lane
+  index = bank, conflict-free) or decode the 5-class code arithmetically.
+- **Unchanged parts.** Escapes drop to the 0.01% outside-window list (r6's walk is fine at that rate), and the A-fragment
+  registers come out as today, so mma and the epilogue do not change.
+
+**3. What breaks.**
+- **First chunk.** The prologue issues ring pieces at launch exactly as r6 does. The first decode waits for piece 0 only,
+  so there is no extra latency.
+- **Tail.** Lanes finish at different pieces; ring loads past a lane's end are clamped to the padded warp-stream.
+- **Bake.** Two packings (about 150 MB each), per-(layer, m) selection, and a pack-time `STATS<layer> bits=<effective incl.
+  padding> esc=<rate>` line.
+- **Validation.** One-hot ×8 exact per served m, plus odd m.
+- **Compile.** One more FMT instantiated per geometry.
