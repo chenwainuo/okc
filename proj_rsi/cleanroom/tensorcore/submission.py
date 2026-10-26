@@ -10,6 +10,7 @@ reduced with red.global.add.v4 into a workspace; the last CTA to finish an n-blo
 the workspace (so the workspace is always zero between calls)."""
 
 import math
+import os
 from typing import TypedDict
 
 import torch
@@ -39,6 +40,8 @@ class Inputs(TypedDict):
 BN, BK = 128, 64
 WBYTES = BN * BK * 12 // 8  # 12288 bytes per unit
 GRID = 132
+MODE = 0  # ladder: 0 full, 3 no flush, 4 flush red.add only, 5 +escapes (no counters/convert)
+DEDICATED_MAX_MP = 64  # MP <= this: dedicated producer warp (288 threads); above: thread 0 issues loads (256 threads)
 MPS = [8, 16, 32, 64, 128, 256]
 STAGES = {8: 12, 16: 12, 32: 12, 64: 10, 128: 7, 256: 4}
 
@@ -70,7 +73,8 @@ CUDA_SRC = r"""
 
 namespace tensorcore {
 
-constexpr int BN = 128, BK = 64, WBYTES = 12288, NTHREADS = 384;
+constexpr int BN = 128, BK = 64, WBYTES = 12288;
+template <int MP> constexpr int nthreads() { return MP <= DEDICATED_MAX_MP ? 288 : 256; }  // dedicated producer warp for small MP
 
 struct Params {
   const uint8_t* __restrict__ packed;
@@ -80,10 +84,11 @@ struct Params {
   int* __restrict__ counters;             // [NB]
   const int* __restrict__ expected;       // [NB]
   const int* __restrict__ esc_off;        // [U+1]
-  const int* __restrict__ esc_idx;        // n_local<<8 | k_local
+  const int* __restrict__ esc_idx;        // unit<<13 | n_local<<6 | k_local
   const float* __restrict__ esc_delta;
   int N, K, m, NB, KC, U, G;
   uint32_t scale2;
+  int mode;   // 0 full, 3 no flush, 4 flush red.add only, 5 +escapes (no counters/convert)
 };
 
 __device__ __forceinline__ uint32_t smem_u32(const void* p) { return (uint32_t)__cvta_generic_to_shared(p); }
@@ -145,8 +150,7 @@ __device__ __forceinline__ uint32_t decode_pair(uint32_t B, uint32_t sel, uint32
   v = __hmul2(v, s);
   return *reinterpret_cast<uint32_t*>(&v);
 }
-__device__ __forceinline__ void decode_step(const uint32_t* v, int s, uint32_t scale2, uint32_t* a) {
-  uint32_t B0 = v[2 * s], B1 = v[2 * s + 1], Nw = v[8 + s];
+__device__ __forceinline__ void decode_step2(uint32_t B0, uint32_t B1, uint32_t Nw, uint32_t scale2, uint32_t* a) {
   a[0] = decode_pair(B0, 0x9180u, Nw << 7, scale2);
   a[1] = decode_pair(B0, 0xB3A2u, Nw << 3, scale2);
   a[2] = decode_pair(B1, 0x9180u, Nw >> 1, scale2);
@@ -154,10 +158,15 @@ __device__ __forceinline__ void decode_step(const uint32_t* v, int s, uint32_t s
 }
 
 template <int MP, int STAGES>
-__global__ void __launch_bounds__(NTHREADS, 1) gemm_kernel(const __grid_constant__ CUtensorMap xmap, Params p) {
+__global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_constant__ CUtensorMap xmap, Params p) {
 #if defined(__CUDA_ARCH_FEAT_SM90_ALL)
   constexpr int XBYTES = MP * 128;
   constexpr int NACC = MP / 2;
+  constexpr int GS = (MP >= 256) ? 2 : 4;   // k16 steps per wgmma group
+  constexpr int NG = 4 / GS;                // groups per unit
+  constexpr bool DB = (MP < 256);           // double-buffered A registers (MP=256: single, the other WG covers)
+  constexpr bool DEDICATED = (MP <= DEDICATED_MAX_MP);  // dedicated producer warp (288 threads); else thread 0 of WG0 issues loads
+                                            // (256 threads: ptxas caps registers at 168 above 256 threads)
   extern __shared__ __align__(1024) uint8_t smem_raw[];
   uint8_t* smem = (uint8_t*)(((uintptr_t)smem_raw + 1023) & ~(uintptr_t)1023);
   uint8_t* xs = smem;                                    // STAGES x XBYTES (1024-aligned)
@@ -165,7 +174,7 @@ __global__ void __launch_bounds__(NTHREADS, 1) gemm_kernel(const __grid_constant
   uint64_t* full = (uint64_t*)(wsm + STAGES * WBYTES);  // STAGES
   uint64_t* empty = full + STAGES;                       // STAGES
   int* flag = (int*)(empty + STAGES);
-  float* scratch = (float*)(flag + 4);                   // 8 warps x 8 x 20 floats
+  float* scratch = (float*)(flag + 4);                   // 2 warpgroups x 8 tokens x 68 floats
 
   const int c = blockIdx.x;
   const int unit0 = (int)(((long long)c * p.U) / p.G);
@@ -179,66 +188,76 @@ __global__ void __launch_bounds__(NTHREADS, 1) gemm_kernel(const __grid_constant
   }
   __syncthreads();
 
-  if (wgi == 0) {
-    // ---------------- producer warpgroup: one elected thread issues the TMA loads ----------------
-    asm volatile("setmaxnreg.dec.sync.aligned.u32 40;");
+  auto issue_load = [&](const int u, const int st) {
+    mbar_expect_tx(&full[st], WBYTES + XBYTES);
+    const int kc = u % p.KC;
+    tma_load_2d(xs + st * XBYTES, &xmap, kc * BK, 0, &full[st]);
+    tma_load_1d(wsm + st * WBYTES, p.packed + (size_t)u * WBYTES, WBYTES, &full[st]);
+  };
+  if constexpr (DEDICATED) {
+    if (wgi == 2) {
+      // ---------------- producer warp (warp 8): one elected thread issues the TMA loads ----------------
+      if (threadIdx.x == 256) {
+        asm volatile("prefetch.tensormap [%0];" :: "l"(&xmap) : "memory");
+        int stage = 0; uint32_t round = 0;
+        for (int u = unit0; u < unit1; ++u) {
+          mbar_wait(&empty[stage], (round & 1) ^ 1);
+          issue_load(u, stage);
+          if (++stage == STAGES) { stage = 0; ++round; }
+        }
+      }
+      return;
+    }
+  }
+  int pstage = 0; uint32_t pround = 0;   // integrated producer state (thread 0 only)
+  if constexpr (!DEDICATED) {
     if (threadIdx.x == 0) {
       asm volatile("prefetch.tensormap [%0];" :: "l"(&xmap) : "memory");
-      int stage = 0; uint32_t round = 0;
-      for (int u = unit0; u < unit1; ++u) {
-        mbar_wait(&empty[stage], (round & 1) ^ 1);
-        mbar_expect_tx(&full[stage], WBYTES + XBYTES);
-        const int kc = u % p.KC;
-        tma_load_2d(xs + stage * XBYTES, &xmap, kc * BK, 0, &full[stage]);
-        tma_load_1d(wsm + stage * WBYTES, p.packed + (size_t)u * WBYTES, WBYTES, &full[stage]);
-        if (++stage == STAGES) { stage = 0; ++round; }
+      for (int i = 0; i < STAGES && unit0 + i < unit1; ++i) {
+        issue_load(unit0 + i, pstage);
+        if (++pstage == STAGES) { pstage = 0; ++pround; }
       }
     }
-    return;
   }
 
   // ---------------- consumer warpgroups ----------------
-  asm volatile("setmaxnreg.inc.sync.aligned.u32 232;");
-  const int tid = threadIdx.x - 128;        // 0..255
+  const int tid = threadIdx.x;              // 0..255
   const int wg = tid >> 7;                  // 0,1: rows wg*64..
   const int t = tid & 127;
   const int warp = t >> 5, lane = t & 31;
   float acc[NACC];
-  uint32_t v[12];
-  uint32_t a[2][4];
+  uint32_t a[DB ? 2 : 1][GS][4];
   int stage = 0; uint32_t round = 0;
   int prev_stage = -1;
-  int cur_j = -1, j_first_unit = 0;
-  bool first = true;
-  float* my_scratch = scratch + (wg * 4 + warp) * 160;
 
   auto flush_block = [&](int j, int ulo, int uhi) {
-    // (1) partial accumulators -> ws via red.add.v4, through a per-warp smem transpose
-    const int nb = j * BN + wg * 64 + warp * 16;
+    // (1) partial accumulators -> ws via red.add.v4, through a per-warpgroup smem transpose (64 n x 8 tokens per step)
+    float* sc = scratch + wg * (8 * 68);
+    const int wn = warp * 16 + (lane >> 2), wtok = 2 * (lane & 3);
+    const int rtok = t >> 4, rn4 = (t & 15) * 4;
+    float* dst = p.ws + (size_t)rtok * p.N + j * BN + wg * 64 + rn4;
+    const size_t dstep = (size_t)8 * p.N;
     #pragma unroll
     for (int g = 0; g < MP / 8; ++g) {
-      const int tok = 2 * (lane & 3), n = lane >> 2;
-      my_scratch[tok * 20 + n] = acc[4 * g];
-      my_scratch[(tok + 1) * 20 + n] = acc[4 * g + 1];
-      my_scratch[tok * 20 + n + 8] = acc[4 * g + 2];
-      my_scratch[(tok + 1) * 20 + n + 8] = acc[4 * g + 3];
-      __syncwarp();
-      const int rtok = lane >> 2, n4 = (lane & 3) * 4;
-      float4 val = *reinterpret_cast<const float4*>(my_scratch + rtok * 20 + n4);
-      float* dst = p.ws + (size_t)(8 * g + rtok) * p.N + nb + n4;
+      sc[wtok * 68 + wn] = acc[4 * g];
+      sc[(wtok + 1) * 68 + wn] = acc[4 * g + 1];
+      sc[wtok * 68 + wn + 8] = acc[4 * g + 2];
+      sc[(wtok + 1) * 68 + wn + 8] = acc[4 * g + 3];
+      if (wg == 0) asm volatile("bar.sync 2, 128;" ::: "memory"); else asm volatile("bar.sync 3, 128;" ::: "memory");
+      float4 val = *reinterpret_cast<const float4*>(sc + rtok * 68 + rn4);
       asm volatile("red.global.add.v4.f32 [%0], {%1,%2,%3,%4};" :: "l"(dst), "f"(val.x), "f"(val.y), "f"(val.z), "f"(val.w) : "memory");
-      __syncwarp();
+      dst += dstep;
+      if (wg == 0) asm volatile("bar.sync 2, 128;" ::: "memory"); else asm volatile("bar.sync 3, 128;" ::: "memory");
     }
+    if (p.mode == 4) return;
     // (2) escape fix-ups for the units of this n-block handled by this CTA
     {
       const int e0 = p.esc_off[ulo], e1 = p.esc_off[uhi];
       for (int e = e0 + (tid >> 5); e < e1; e += 8) {
-        const int idx = p.esc_idx[e];
+        const int idx = p.esc_idx[e];                 // unit<<13 | n_local<<6 | k_local
         const float delta = p.esc_delta[e];
-        // unit of this escape: find by scanning offsets (few escapes per CTA)
-        int uu = ulo;
-        while (p.esc_off[uu + 1] <= e) ++uu;
-        const int n = j * BN + (idx >> 8);
+        const int uu = idx >> 13;
+        const int n = j * BN + ((idx >> 6) & 127);
         const int k = (uu % p.KC) * BK + (idx & 63);
         for (int tok = lane; tok < p.m; tok += 32) {
           float xv = __bfloat162float(p.x[(size_t)tok * p.K + k]);
@@ -246,6 +265,7 @@ __global__ void __launch_bounds__(NTHREADS, 1) gemm_kernel(const __grid_constant
         }
       }
     }
+    if (p.mode == 5) return;
     __threadfence();
     asm volatile("bar.sync 1, 256;" ::: "memory");
     if (tid == 0) {
@@ -271,42 +291,72 @@ __global__ void __launch_bounds__(NTHREADS, 1) gemm_kernel(const __grid_constant
     asm volatile("bar.sync 1, 256;" ::: "memory");
   };
 
-  for (int u = unit0; u < unit1; ++u) {
-    const int j = u / p.KC;
-    if (j != cur_j) {
-      if (cur_j >= 0) {
-        wgmma_wait<0>();
-        if (prev_stage >= 0 && t == 0) mbar_arrive(&empty[prev_stage]);
-        prev_stage = -1;
-        flush_block(cur_j, j_first_unit, u);
+  // one group of GS k16-steps: decode into ab, issue, then wait so that <=1 group stays in flight (double-buffered A)
+  // or 0 (single-buffered: the other consumer warpgroup keeps the tensor pipe busy meanwhile).
+  auto group_body = [&](const int g, const uint8_t* wp, const uint32_t xaddr, uint32_t (*ab)[4]) {
+    uint32_t vb[2 * GS], vn[GS];
+    {
+      // byte words of this group's steps (16B per 2 steps) and its nibble words
+      if constexpr (GS == 4) {
+        uint4 q0 = *reinterpret_cast<const uint4*>(wp); uint4 q1 = *reinterpret_cast<const uint4*>(wp + 4096);
+        vb[0] = q0.x; vb[1] = q0.y; vb[2] = q0.z; vb[3] = q0.w; vb[4] = q1.x; vb[5] = q1.y; vb[6] = q1.z; vb[7] = q1.w;
+        uint4 q2 = *reinterpret_cast<const uint4*>(wp + 8192); vn[0] = q2.x; vn[1] = q2.y; vn[2] = q2.z; vn[3] = q2.w;
+      } else {
+        uint4 q0 = *reinterpret_cast<const uint4*>(wp + g * 4096);
+        vb[0] = q0.x; vb[1] = q0.y; vb[2] = q0.z; vb[3] = q0.w;
+        uint2 q2 = *reinterpret_cast<const uint2*>(wp + 8192 + g * 8); vn[0] = q2.x; vn[1] = q2.y;
       }
-      cur_j = j; j_first_unit = u; first = true;
     }
+    if constexpr (!DB) wgmma_wait<0>();
+    #pragma unroll
+    for (int s = 0; s < GS; ++s) decode_step2(vb[2 * s], vb[2 * s + 1], vn[s], p.scale2, ab[s]);
+    wgmma_fence();
+    #pragma unroll
+    for (int s = 0; s < GS; ++s) wgmma_mp<MP>(acc, ab[s], make_desc_b(xaddr + (g * GS + s) * 32), 1);
+    wgmma_commit();
+    if constexpr (DB) wgmma_wait<1>();
+  };
+  auto unit_body = [&](const int u, const int bufsel) {
     mbar_wait(&full[stage], round & 1);
     const uint8_t* wp = wsm + stage * WBYTES + tid * 16;
-    #pragma unroll
-    for (int i = 0; i < 3; ++i) {
-      uint4 q = *reinterpret_cast<const uint4*>(wp + i * 4096);
-      v[4 * i] = q.x; v[4 * i + 1] = q.y; v[4 * i + 2] = q.z; v[4 * i + 3] = q.w;
-    }
     const uint32_t xaddr = smem_u32(xs + stage * XBYTES);
-    #pragma unroll
-    for (int s = 0; s < 4; ++s) {
-      decode_step(v, s, p.scale2, a[s & 1]);
-      wgmma_fence();
-      wgmma_mp<MP>(acc, a[s & 1], make_desc_b(xaddr + s * 32), (first && s == 0) ? 0 : 1);
-      wgmma_commit();
-      wgmma_wait<1>();
-      if (s == 0 && prev_stage >= 0 && t == 0) mbar_arrive(&empty[prev_stage]);
+    if constexpr (NG == 1) {
+      if (DB && bufsel) group_body(0, wp, xaddr, a[DB ? 1 : 0]); else group_body(0, wp, xaddr, a[0]);
+    } else {
+      #pragma unroll
+      for (int g = 0; g < NG; ++g) {
+        if (DB && (g & 1)) group_body(g, wp, xaddr, a[DB ? 1 : 0]); else group_body(g, wp, xaddr, a[0]);
+      }
     }
-    first = false;
+    // the previous unit's wgmmas are complete (<=1 group pending), so its stage can be refilled
+    if (prev_stage >= 0 && t == 0) mbar_arrive(&empty[prev_stage]);
     prev_stage = stage;
     if (++stage == STAGES) { stage = 0; ++round; }
-  }
-  if (cur_j >= 0) {
+    if constexpr (!DEDICATED) {
+      const int un = u + STAGES - 1;
+      if (tid == 0 && un < unit1 && u > unit0) {
+        mbar_wait(&empty[pstage], (pround & 1) ^ 1);
+        issue_load(un, pstage);
+        if (++pstage == STAGES) { pstage = 0; ++pround; }
+      }
+    }
+  };
+  for (int j = unit0 / p.KC; j * p.KC < unit1; ++j) {
+    const int ulo = max(unit0, j * p.KC), uhi = min(unit1, (j + 1) * p.KC);
+    #pragma unroll
+    for (int i = 0; i < NACC; ++i) acc[i] = 0.f;
+    if constexpr (NG == 1) {
+      for (int u = ulo; u < uhi; u += 2) {
+        unit_body(u, 0);
+        if (u + 1 < uhi) unit_body(u + 1, 1);
+      }
+    } else {
+      for (int u = ulo; u < uhi; ++u) unit_body(u, 0);
+    }
     wgmma_wait<0>();
     if (prev_stage >= 0 && t == 0) mbar_arrive(&empty[prev_stage]);
-    flush_block(cur_j, j_first_unit, unit1);
+    prev_stage = -1;
+    if (p.mode == 0 || p.mode >= 4) flush_block(j, ulo, uhi);
   }
 #endif  // __CUDA_ARCH_FEAT_SM90_ALL
 }
@@ -335,13 +385,13 @@ static void launch_mp(const CUtensorMap& map, const Params& p, size_t smem, cuda
     cudaFuncSetAttribute(gemm_kernel<MP, STAGES>, cudaFuncAttributeMaxDynamicSharedMemorySize, (int)smem);
     attr_set = true;
   }
-  gemm_kernel<MP, STAGES><<<p.G, NTHREADS, smem, stream>>>(map, p);
+  gemm_kernel<MP, STAGES><<<p.G, nthreads<MP>(), smem, stream>>>(map, p);
 #endif
 }
 
 void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tensor ws, torch::Tensor out,
           torch::Tensor counters, torch::Tensor expected, torch::Tensor esc_off, torch::Tensor esc_idx,
-          torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2) {
+          torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2, int mode) {
   CUtensorMap map;
   cuuint64_t gdim[2] = {(cuuint64_t)K, (cuuint64_t)m};
   cuuint64_t gstride[1] = {(cuuint64_t)K * 2};
@@ -363,6 +413,7 @@ void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tens
   p.esc_delta = esc_delta.data_ptr<float>();
   p.N = N; p.K = K; p.m = m; p.NB = NB; p.KC = KC; p.U = U; p.G = G;
   p.scale2 = (uint32_t)scale2;
+  p.mode = mode;
   size_t smem = 1024 + (size_t)stages * (MP * 128 + WBYTES) + 2 * stages * 8 + 16 + 8 * 160 * 4;
   cudaStream_t stream = at::cuda::getCurrentCUDAStream();
   switch (MP) {
@@ -380,15 +431,15 @@ void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tens
 
 void tensorcore_gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tensor ws, torch::Tensor out,
                      torch::Tensor counters, torch::Tensor expected, torch::Tensor esc_off, torch::Tensor esc_idx,
-                     torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2) {
-  tensorcore::gemm(MP, stages, packed, x, ws, out, counters, expected, esc_off, esc_idx, esc_delta, N, K, m, NB, KC, U, G, scale2);
+                     torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2, int mode) {
+  tensorcore::gemm(MP, stages, packed, x, ws, out, counters, expected, esc_off, esc_idx, esc_delta, N, K, m, NB, KC, U, G, scale2, mode);
 }
 """
 
 CPP_SRC = """
 void tensorcore_gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tensor ws, torch::Tensor out,
                      torch::Tensor counters, torch::Tensor expected, torch::Tensor esc_off, torch::Tensor esc_idx,
-                     torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2);
+                     torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2, int mode);
 """
 
 _ext = None
@@ -400,13 +451,15 @@ def _build():
         src = CUDA_SRC.replace("WGMMA_FUNCS", "\n".join(_wgmma_asm(n) for n in MPS))
         for mp, st in STAGES.items():
             src = src.replace(f"STAGES_{mp}>", f"{st}>")
+        src = src.replace("DEDICATED_MAX_MP", str(DEDICATED_MAX_MP))
         _ext = load_inline(
-            name="tensorcore_gemm_v1",
+            name="tensorcore_gemm_v10",
             cpp_sources=CPP_SRC,
             cuda_sources=src,
             functions=["tensorcore_gemm"],
-            extra_cuda_cflags=["-O3", "-std=c++17", "-gencode=arch=compute_90a,code=sm_90a", "--use_fast_math"],
-            verbose=False,
+            extra_cuda_cflags=["-O3", "-std=c++17", "-gencode=arch=compute_90a,code=sm_90a", "--use_fast_math"]
+            + (["-Xptxas", "-v"] if os.environ.get("TC_PTXAS_V") else []),
+            verbose=bool(os.environ.get("TC_PTXAS_V")),
         )
     return _ext
 
@@ -464,7 +517,7 @@ def pack_layer(W: torch.Tensor, G: int = GRID) -> dict:
     order = torch.argsort(unit)
     en, ek, unit = en[order], ek[order], unit[order]
     delta = (W.float()[en, ek] - placeholder).contiguous()
-    esc_idx = ((en % BN) << 8 | (ek % BK)).to(torch.int32).contiguous()
+    esc_idx = ((unit << 13) | ((en % BN) << 6) | (ek % BK)).to(torch.int32).contiguous()
     cnt = torch.bincount(unit, minlength=NB * KC)
     esc_off = torch.zeros(NB * KC + 1, dtype=torch.int64, device=dev)
     esc_off[1:] = torch.cumsum(cnt, 0)
@@ -538,5 +591,5 @@ def kernel_fn(data: Inputs, state: dict) -> torch.Tensor:
     exp_t, U, G, NB = info["parts"][n]
     out = torch.empty(m, n, dtype=torch.bfloat16, device=x.device)
     _ext.tensorcore_gemm(mp, STAGES[mp], info["packed"], x, info["ws"], out, info["counters"], exp_t, info["esc_off"],
-                         info["esc_idx"], info["esc_delta"], n, info["K"], m, NB, info["KC"], U, G, info["scale2"])
+                         info["esc_idx"], info["esc_delta"], n, info["K"], m, NB, info["KC"], U, G, info["scale2"], MODE)
     return out
