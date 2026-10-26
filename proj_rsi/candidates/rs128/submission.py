@@ -2166,6 +2166,7 @@ def prepare(weights):
     st = {}
     if weights["qkv_gate"].device.type != "cuda":  # pw11: CPU (proj_rsi cpu-check) runs the plain torch math
         return {"cpu": True, "raw": dict(weights)}
+    rqt = _rqstart() if RQ else None  # rs128: compile overlapped with r6's phase (CPU only)
     for k, w in weights.items():
         if k == "router":
             hi = w.to(torch.bfloat16)
@@ -2178,7 +2179,6 @@ def prepare(weights):
             st[k + "_t"] = w.t().contiguous()  # [K, N] for the packed cuBLASLt layouts
         st[k + "_raw"] = w
     dev = weights["qkv_gate"].device
-    rqt = _rqstart() if RQ else None  # rs128: compile overlapped with r6's phase
     st["ws"] = torch.zeros((256 * 8192,), dtype=torch.float32, device=dev)
     st["cnt"] = torch.zeros((8 * 512,), dtype=torch.int32, device=dev)
     st["none"] = torch.empty(0, dtype=torch.bfloat16, device=dev)
@@ -2191,6 +2191,15 @@ def prepare(weights):
         _gvprep(st, torch.empty(64 << 20, dtype=torch.float32, device=dev))
     print("PREP r6 done in %.0fs" % (time.time() - _T0), flush=True)
     st["sel"] = {}
+    st["rq"] = {}  # rs128 before the gx / router phases: its gain is the larger
+    if RQ and rqt is not None:
+        try:
+            _rqbake(st, rqt)
+        except Exception as error:  # the rs128 bake can only add m = 128 / 256 paths; r6's choices stand on any failure
+            st["rq"] = {}
+            print("PREP rq bake failed: %s" % str(error).splitlines()[-1][:200], flush=True)
+        finally:
+            torch.cuda.synchronize()
     if GV and GX:
         try:
             _gxbake(st)
@@ -2207,15 +2216,6 @@ def prepare(weights):
         finally:  # critic (pw21): never leave a capture open or a side stream busy for the judge's own captures
             if torch.cuda.is_current_stream_capturing():
                 print("PROBE l2scratch capture_left_open", flush=True)
-            torch.cuda.synchronize()
-    st["rq"] = {}
-    if RQ and rqt is not None:
-        try:
-            _rqbake(st, rqt)
-        except Exception as error:  # the rs128 bake can only add m = 128 / 256 paths; r6's choices stand on any failure
-            st["rq"] = {}
-            print("PREP rq bake failed: %s" % str(error).splitlines()[-1][:200], flush=True)
-        finally:
             torch.cuda.synchronize()
     st.pop("gvc12", None)
     st.pop("gepk", None)  # pw17: unpicked codec E packs (a picked plan keeps its own pack alive)
@@ -3646,8 +3646,10 @@ def _rqesc(esc6, NB, KC, KS, dev):
 
 
 RQKS = {"pooler": 4, "unpooler": 2, "o": 2, "qkv_gate": 7}  # one-wave KS grid: N/128 x KS <= 132
-RQPROD = ["s4s5hz", "s4hz", "s4s5z", "n256s5hz", "n256s4hz", "n256s5z"]  # the extension the submission builds
-RQBAKE = {128: ["s4s5hz", "s4hz", "s4s5z"], 256: ["n256s5hz", "n256s4hz", "n256s5z"]}
+# the extension the submission builds: the box's favoured instances plus the judge's pick (s4s5z: no L2 hints won on the
+# H200 at all three m=128 shapes, job 846e25d9df09433f); <= 6 timed paths per layer
+RQPROD = ["s4s5z", "s4s5hz", "s4hz", "n256s4hz", "n256s5hz", "n256s5z"]
+RQBAKE = {128: ["s4s5z", "s4s5hz", "s4hz"], 256: ["n256s4hz", "n256s5hz", "n256s5z"]}
 RQLAYERS = ("pooler", "qkv_gate", "unpooler", "o")
 RQ = True
 _rqthr = []
@@ -3661,10 +3663,12 @@ def _rqstart():
         try:
             _rqext([RQV[RQI[nm]] for nm in RQPROD])
             _rqthr.append("ok")
+            _rqthr.append(time.time() - _T0)
         except Exception as error:
             _rqthr.append("failed: %s" % (str(error).splitlines()[-1][:200] if str(error) else type(error).__name__))
     t = threading.Thread(target=build, daemon=True)
     t.start()
+    print("PREP rq thread started at %.0fs" % (time.time() - _T0), flush=True)
     return t
 
 
@@ -3717,7 +3721,7 @@ def _rqbake(st, thr):
     if not _rqthr or _rqthr[0] != "ok" or _rqmod[0] is None:
         print("BAKE rq build %s" % (_rqthr[0] if _rqthr else "not finished"), flush=True)
         return
-    print("PREP rq extension ready at %.0fs" % (time.time() - _T0), flush=True)
+    print("PREP rq thread ready at %.0fs (bake starts at %.0fs)" % (_rqthr[1], time.time() - _T0), flush=True)
     names = [v[0] for v in [RQV[RQI[nm]] for nm in RQPROD]]
     dev = st["pooler_raw"].device
     st["rq_e"] = torch.empty(0, dtype=torch.int64, device=dev)
@@ -3744,12 +3748,18 @@ def _rqbake(st, thr):
         KS = RQKS[layer]
         esc, _ = _rqesc(esc6, lay.shape[0], lay.shape[1], KS, dev)
         cnt = torch.zeros(2 * lay.shape[0], dtype=torch.int32, device=dev)
+        # discarded warm-up: the first path timed after the pack reads ~3 us high (box: r6 31.3 vs 27.4, and an rq path
+        # 27.8 vs its 24-25), which would bias whichever path is timed first
+        _time_us(lambda xx, oo: _r6(xx, layer, n, st), xs[128], torch.empty((128, n), dtype=torch.bfloat16, device=dev), flush, sink, it=7)
         keep = False
         for m in (128, 256):
             x = xs[m]
             out = torch.empty((m, n), dtype=torch.bfloat16, device=dev)
             cands = []
             for nm in RQBAKE[m]:
+                if time.time() - _T0 > PREPARE_BUDGET_S - 30:
+                    print("BAKE %s m=%d rq:%s skipped-budget %.0fs" % (layer, m, nm, time.time() - _T0), flush=True)
+                    continue
                 p = {"i": names.index(nm), "lay": lay, "esc": esc, "cnt": cnt, "KS": KS, "tab": tab, "n": n}
                 fn = lambda xx, oo, p=p: _rqcall(st, p, xx, oo)
                 try:
@@ -3770,11 +3780,11 @@ def _rqbake(st, thr):
                 except Exception as error:
                     print("BAKE %s m=%d rq:%s ERROR %s" % (layer, m, nm, str(error).splitlines()[-1][:160]), flush=True)
                     continue
-                print("BAKE %s m=%d rq:%s %.2f (%s)" % (layer, m, nm, us, msg), flush=True)
+                print("BAKE %s m=%d rq:%s %.2f (%s) at %.0fs" % (layer, m, nm, us, msg, time.time() - _T0), flush=True)
                 cands.append((us, nm, p))
             r6b = _time_us(lambda xx, oo: _r6(xx, layer, n, st), x, out, flush, sink)  # r6 re-timed after the variants
             best = ("r6", None, min(r6a[m], r6b))
-            print("BAKE %s m=%d r6 %.2f (before pack %.2f, after variants %.2f)" % (layer, m, best[2], r6a[m], r6b), flush=True)
+            print("BAKE %s m=%d r6 %.2f (before pack %.2f, after variants %.2f) at %.0fs" % (layer, m, best[2], r6a[m], r6b, time.time() - _T0), flush=True)
             for us, nm, p in sorted(cands, key=lambda c: c[0]):
                 if us < best[2] * MARGIN:
                     best = ("rq:" + nm, p, us)
