@@ -689,3 +689,7 @@ m=128 39.9 vs torch 40.5 (judge 19.9 vs 20.3), qkv m=128 30.7 vs torch 31.0, ver
 harness); (2) big-shape kernel-side times scale ~0.7x to the judge as the HBM ratio predicts; (3) within-box
 comparisons (candidate vs r6 vs torch) are the evidence, absolute numbers are not. Queue on the box: pw26, pw27,
 pw29, pw28, pw24, pw25, pw10 (serialised by /root/gpu_lock.sh).
+Agents on the H100 (2026-10-26 ~16:30 UTC): CUTLASS bf16 config sweep at our eight (layer, m) shapes (parity hunt);
+P1 small-shape iteration (pw27h); P2 qkv balancing iteration (pw28h); P3 router m=128/256 iteration (pw29h). Each
+edits a local copy here, rsyncs to the box, and measures under the GPU lock; judge candidates stay untouched until a
+measured win is ported. The understand/design workflow for the m>=128 packed kernel runs in parallel.
