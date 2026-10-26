@@ -606,3 +606,13 @@ wgmma reads = 32 KB per stage ≈ 128 B/clk, the smem limit) or wgmma issue seri
 Program status: design (b) failed its day-1 test. Options: (a) CUTLASS sm90 warp-specialised mainloop (proven to hide
 wgmma; feasibility = header bundle size + compile time + the 12-bit transform), or stop at 3399. Seven checks since
 the m ≥ 128 branch was "closed" have confirmed the same conclusion from a different direction.
+
+## CUTLASS program opened (audits/m128-study.md, post-mortem + feasibility)
+
+pw24 post-mortem: the SS m64n64k16 wgmma reads 4 KB per 32 clk, the whole 128 B/clk smem port, and the single MMA
+warpgroup serialises fence→wgmma→commit→wait→release; the cluster pair runs at its slower CTA's pace (+9.4 µs) and
+W-only is HBM-bound so multicast saves nothing. CUTLASS 3.9.2 feasibility: 458 headers, 13.8 MB raw → 0.90 MB xz+b64
+embedded; one 128x64x64 cooperative warp-specialised instantiation compiles in 23.8 s locally (judge est. 35–45 s),
+168 regs, 0 spills, expected SASS structure. Step A = pw25: bf16 CUTLASS path for the big four at m=128/256 (parity
+test with cuBLAS + judge-side mechanics). Step B (only if A reaches parity): the 12-bit decode as the A-transform
+(8-bit + 4-bit planes, escape fixup) — the actual gain. Track closes 2026-11-04.
