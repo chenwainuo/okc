@@ -1,0 +1,16 @@
+{
+  "id": "pw16",
+  "parent": "pw14",
+  "claim": "pw14's ladder puts 2.5-2.8 us of r6's m=32 time on the x loads (pooler, qkv). r6's x loads are ld.global.nc.v4, which compile to LDG.E.128.CONSTANT: they already allocate in L1 with normal eviction, so the brief's option (a) ('allocate x in L1 instead of no_allocate') is r6's current state. Only W uses .L1::no_allocate. What is not known is whether r6 gets any L1 reuse of x: the 2 to 4 co-resident CTAs on an SM stream the same K order, and the driver chooses the L1/smem carveout. pw16 measures that on r6's own judge-picked m=16/32 geometries with zero structural change. Per shape there are four variants: x via ld.global.cg (L1 bypass: the cost of losing whatever reuse r6 has now), x with L1::evict_last (x kept against the no_allocate W stream), carveout 0 (largest L1 the kernel's smem allows), and evict_last + carveout 0. Options (b) and (c) were not built. (b) needs warps that share k: every r6 m=16/32 pick has WR=1 (warps split K), and r6's own WR=2 candidates lost by 0-1.3 us in its bake (pooler m=32 2.4.16.2: 17.3 vs 16.0). (c) is a cluster launch (about 1 us measured) for at most 1.3 us of saving.",
+  "paths": "gc-<p|u|q>-{xcg, xel, L1, xelL1} for pooler/unpooler/qkv at m=16 and m=32 (24 paths). Geometries: pooler m16 (2,8,16,1,1,0); pooler m32 (1,8,16,1,1,2); unpooler m16/m32 (1,4,16,1,1,2); qkv m16 (1,4,8,4,1,2) ST1 cluster 4; qkv m32 (1,4,16,2,1,2) ST1 cluster 2. Variant bits: V bits 15-16 = x policy, bit 17 = carveout. The -L1 variant's SASS is identical to r6's kernel, so it isolates the carveout attribute. PROBE xpol <layer> m=32 lines alternate gc-*-xcg and gc-*-xelL1 with r6 (3 x 21 replays) for pooler and qkv. Kept: pw11's gx paths (trimmed set as in pw12) and gb-q-n4 (qkv m=1/8); every other gb path and the pw14 ladder are removed.",
+  "target_shapes": [
+    "pooler m=32 >= 1.0 us under r6 in the bake (r6 judge 16.94)",
+    "unpooler m=32, qkv m=32: about 1 us; m=16 shapes about 0.5 us"
+  ],
+  "kill_if": "Kill the x-cache line if no pooler m=32 gc variant is at least 1.0 us under the 'r6' line in the same bake. Reading the result: if gc-*-xcg is no slower than r6, r6 gets no L1 reuse of x today; then if xel / L1 / xelL1 are also flat, the x cost is L1/LSU wavefronts and register depth, not L2 bytes, and the next lever is fewer x instructions per W byte (RT=2 with a register budget), not caching.",
+  "local_checks": "nvcc 12.8 -Xptxas -v: 122 kernels, 51 s locally. 24 new, all 0 spill (96-128 regs, the same as r6's twins). r6's 78 kernels and the 98 retained pw12 kernels are SASS-identical. x loads per variant in SASS: r6 / -L1 LDG.E.128.CONSTANT; -xcg LDG.E.128.STRONG.GPU; -xel LDG.E.EL.128.CONSTANT; W stays LDG.E.NA.128.CONSTANT. lint ok; cpu-check --official 9/9; the CPU mock of the bake builds every plan.",
+  "risks": [
+    "The carveout attribute is a preference; the driver may already pick max L1 for r6 (smem ≤ 18 KB per CTA), in which case -L1 equals r6.",
+    "evict_last lines that stay resident across graph replays do not matter: the judge flushes L2/L1 between replays with a large read."
+  ]
+}

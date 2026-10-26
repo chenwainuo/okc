@@ -224,3 +224,32 @@ a 13.2 µs stream, so the whole decode must overlap async wgmma.
   2.1 MB saves nothing.
   - What it adds is the decode of both halves plus the escape walk between data arrival and the HMMAs: 936 vs 512
     instructions, about 420 more on each warp's critical path.
+
+## pw14 ladder: what the m=32 excess is made of (check 066cf9bd503040cf, in-prepare µs)
+
+This corrects the pw11 post-mortem. x costs **2.5–2.8 µs**, not ≤1. The u128a-s comparison was also paying for a cluster
+reduction.
+
+| step | pooler m=1 (`1.1.1.2.16.8.1.1.0.3`) | pooler m=32 (`1.4.2.1.8.16.1.1.2.0`) | qkv m=1 (`1.1.2.1.8.16.1.1.0.1`) | qkv m=32 (`1.4.1.1.4.16.2.1.2.1`, ST 1) |
+|---|---|---|---|---|
+| L0 W only | 18.24 | 16.93 (126 regs, 2/SM) | 13.31 | 12.51 (4/SM) |
+| L1 + x | – | 19.74 (**+2.8**) | – | 15.01 (**+2.5**) |
+| L2 + decode | – | 20.51 (+0.8) | – | 18.53 (74 regs, **6/SM**) |
+| L3 + mma | 18.40 | 20.74 (+0.2) | 13.95 | 17.22 (4/SM) |
+| L4 real | 18.05 | 21.02 (+0.3 reduce + epilogue) | 14.21 | 18.56 = cuBLAS (r6's bake picked v12 this run) |
+
+**pooler.** The m=32 excess over m=1 (+3.0) is the x loads. Decode, mma and the epilogue add about 1.3 together.
+
+Caveat: m=32 L0 has all 48 W loads hoisted (126 regs). Part of L0→L1 is therefore W depth lost to x's 32 registers at
+the 128-register cap.
+
+**qkv: why decode costs more at m=32 than at m=1.** Decode instructions per W byte are the same at both m. The difference
+is the geometry:
+- **m=1** runs 8 warps × 16 chunks (full K) per CTA at 2 CTAs/SM with ST=2. ptxas hoists 3–4 chunks, so about 70–90 KB
+  are in flight per SM.
+- **m=32** runs 4 warps × 16 chunks (half of K, S=2) per CTA with **ST=1** (the forced 7th field), at 4 CTAs/SM. That
+  leaves 16 warps × 1 chunk ≈ 24 KB in flight per SM, and each warp's next W load waits for the current chunk's x loads
+  and decode.
+
+So at m=32 decode and x sit on the per-chunk critical path instead of under the stream. L2 (6/SM) being slower than L3
+(4/SM) shows contention for the LSU and L1 between x loads and more warps, not ALU cost.
