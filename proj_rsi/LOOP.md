@@ -267,3 +267,20 @@ skeleton) is skipped: its m ≤ 32 router paths would carry the same 4.6 µs and
 paths are included in pw9 anyway. Check #8 = pw9 (wgmma m=128/256 + pw8 router + STATS), job `520ad1dce4144c76`:
 kept because the wgmma compute question at m=128 is independent of the skeleton result; caveat that pw9 uses the
 cluster epilogue that lost here.
+
+## Iteration 7 — pw9: wgmma register-A m=128/256 + router + STATS. Check `520ad1dce4144c76`: 9/9, 4405.5 µs. REFINE.
+
+In-prepare bake (µs), m=128: pooler torch 30.2 | w1n128a 64x2 **34.4** | w1n128b 64x4 52.3 | w2n128a 32x4 46.1 |
+w2n128b 32x8 44.4; o torch 11.0 | w2n128a 64x2 16.3 | w1n128a 128x1 17.3; unpooler torch 23.2 | w2n128a 64x2 29.8;
+qkv torch 22.4 | w2n128a 18x4 26.7. m=256: pooler torch 34.0 | w1n256a 43.6. Router m=128: rtg128 8x32 28.0 vs
+torch 23.4 (dead); router m ≤ 32 on the pw skeleton 9–12 vs r6 4–6 (dead, as predicted).
+Reading: best = fewest consumer warps (1 warpgroup) + smallest cluster (2), still 2× the stream (34.4−5 = 29 kernel-µs
+vs 13.2 of bytes). Decode throughput per SM is the limit: 4 consumer warps × ~1100 issue slots per 64-k stage × 64
+stages ≈ 38 µs; wgmma is 4× cheaper (245 clk/stage). Two warpgroups were only tried with clusters 4/8, and each
+cluster-size step costs 10+ µs (as in pw7). Cluster launch cost is now a measured fact on this judge.
+STATS (weights are synthetic; entropy 10.46 bits/weight): best 8-code exponent window leaves 1.25–1.36% escapes
+(router lo 4.0%); 16-code window 0.01%; mantissa low bits uniform (no trailing-zero gain). An 11-bit codec would need
+~7 escapes per 512 — dense fixups, maybe 5% stream saving (0.05 ln); parked.
+Decision: refine → **pw10**: same kernel, consumer warpgroups split each stage by k16 slices (W=4 at m=128, W=2 at
+m=256) on the same 64 W rows, accumulators summed through smem at the end; cluster 2 only. Expected pooler m=128 ≈
+21 in-prepare vs torch 30.2. r6-lineage analysis for m ≤ 32 still pending.
