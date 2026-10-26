@@ -284,3 +284,18 @@ STATS (weights are synthetic; entropy 10.46 bits/weight): best 8-code exponent w
 Decision: refine → **pw10**: same kernel, consumer warpgroups split each stage by k16 slices (W=4 at m=128, W=2 at
 m=256) on the same 64 W rows, accumulators summed through smem at the end; cluster 2 only. Expected pooler m=128 ≈
 21 in-prepare vs torch 30.2. r6-lineage analysis for m ≤ 32 still pending.
+
+## r6 lineage audit (audits/r6-lineage.md) — the m ≤ 32 pivot
+
+Why r6's gv kernel sits at the stream: each warp loads W straight into registers (ld.global.nc.L1::no_allocate.v4,
+3–4 chunks in flight at launch), decodes once (9 ops per 8 weights) and feeds mma.sync as the A operand; each CTA owns
+16–32 rows and splits K across its own 4 warps, reduced through one smem round — **no cross-CTA split-K at all**, no
+atomics, no workspace, no CTA waits on another. pw's 256-row tiles forced a cross-CTA split-K, and that tail is the 4.6 µs.
+What limits r6: x is re-fetched once per row tile, so L2→SM traffic is 0.08× W at m=1, 1.33× at m=16, 2.67× at m=32;
+fitted L2→SM bandwidth ≈ 7 TB/s (qkv32 moves 103 MB in 14.1 µs). qkv m=1 is geometry: 144 CTAs on 132 SMs.
+Correction: in r6's own run only decode32 o falls to cuBLAS at m ≤ 32; all m=128/256 are cuBLASLt (GVRB=[]); the
+router does not use the 12-bit codec (streams 8.4 MB instead of 6.3).
+Extension (pw11 "gvx", built by the analyst on a copy of r6): 128–144-row CTAs with K split across KS CTAs, reduction
+either (A) cluster DSMEM or (B) global last-arriving-CTA with ~4 MB of traffic and no cluster; o with x in smem;
+router 12-bit hi+lo. Model: qkv ~8.7–9.0 (9.97–14.21 now), pooler m32 ~14.3, unpooler m16/32 ~14.3, o ~4.6, router
+~3.7–4.0 → ≈ +0.53 ln. Kill if pooler m=32 (B) is not ≥ 1.5 µs under r6's own in the same bake.
