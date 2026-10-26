@@ -832,3 +832,9 @@ unchanged (dropping the memset node: −1.0 on the H200, −0.9 on the box); spe
 stream (stage depth, tensor throughput) shrink or reverse on the H200 (the wgmma rewrite: −0.67 on the box, +0.57 on
 the H200). For the 12-bit m ≥ 128 kernels this means the byte saving is worth ~3.5 µs on the H200 (stream 14 → 10.5)
 versus ~5 on the box, while any fixed per-CTA cost they add is paid in full on both.
+P4 decode-slack curve (audits/p4-decode-slack.md; box, ops per thread per 64-k stage on the wait→issue chain):
+k2x m=128: N=0 28.1 | 16 28.5 | 32 28.8 | 48 29.1 | 64 31.3 | 96 35.6 | 128 40.5 (≈ 286 + 2.2·N clk per stage;
+~48 ops of slack on the box, none on the H200 where the stream period is ~260 clk); n128x m=256: no slack (16 ops
++4.6 µs). Ping-pong warpgroups worse at every N. Consequence: the 12-bit decode (~36–50 ops/thread/stage) cannot sit
+on the consumer's serial chain; it must be software-pipelined (decode stage s+1 after stage s's wgmma commit, before
+its wait, double-buffered A) — P4 now measures that placement; RS128 told to structure its math warps that way.
