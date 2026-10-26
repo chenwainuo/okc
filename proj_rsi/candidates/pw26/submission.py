@@ -2867,7 +2867,7 @@ int64_t cutrun(int64_t v, torch::Tensor W, torch::Tensor x, torch::Tensor out, t
                           ws.data_ptr(), (size_t)ws.numel(), at::cuda::getCurrentCUDAStream());
 }
 """
-CUTFLAGS = ["-O3", "-lineinfo", "--use_fast_math", "-gencode=arch=compute_90a,code=sm_90a", "--expt-relaxed-constexpr"]
+CUTFLAGS = ["-O3", "-lineinfo", "--use_fast_math", "-gencode=arch=compute_90a,code=sm_90a", "--expt-relaxed-constexpr", "-DNDEBUG"]  # critic (pw26): without NDEBUG CUTLASS device asserts serialise the wgmma pipeline (ptxas warning, pw25 too)
 _cutmod = None
 
 
