@@ -555,7 +555,8 @@ __device__ __forceinline__ void add4(float4& a, const float4& b) { a.x += b.x; a
 __device__ __forceinline__ bool live(int idx, int MT, int m) { return ((idx >> 5) % MT) * 8 + 2 * (idx & 3) < m; }
 
 // pw12: per-warp private bulk-copy ring for W (V bit 3). V bits 4-5: slots NS = 2 << code; bits 6-7: chunks per slot
-// CU = 1 << code. Lane 0 of each warp fills its own slots with cp.async.bulk (one copy per row tile and matrix, CU
+// CU = 1 << code; bit 8: refill without fence.proxy.async (the slot's values are consumed by the decode, in program
+// order, before the __syncwarp and the refill; CUTLASS-style release). Lane 0 of each warp fills its own slots with cp.async.bulk (one copy per row tile and matrix, CU
 // contiguous 64-k chunks) on a per-slot mbarrier; the warp waits on it, reads its fragments with ld.shared.v4 at the
 // offsets r6's ld.global.v4 used, and lane 0 refills the slot after the warp has decoded its last chunk.
 template <int FMT, int MT, int WR, int WK, int KU, int S, int RT, int XS, int V>
@@ -692,7 +693,10 @@ __global__ void __launch_bounds__(WR * WK * 32, XS == 2 && WR * WK * 32 < 512 ? 
       const int grp = u / L::CU;
       if (u % L::CU == L::CU - 1 && grp + L::NS < L::G) {
         __syncwarp();
-        if (lane == 0) { asm volatile("fence.proxy.async.shared::cta;\n" ::: "memory"); bissue(grp % L::NS, grp + L::NS); }
+        if (lane == 0) {
+          if constexpr (!(V & 256)) asm volatile("fence.proxy.async.shared::cta;\n" ::: "memory");  // V bit 8: no proxy fence
+          bissue(grp % L::NS, grp + L::NS);
+        }
       }
     }
 #pragma unroll
@@ -997,24 +1001,27 @@ GXP = []
 for _ms, _xs in (((1, 8), 0), ((16, 32), 2)):
     for _wr in (9, 8):  # 144 rows: 16 x 8 = 128 CTAs; 128 rows: 2304 = 18 x 128 -> 144 CTAs
         for _ab, _v in (("a", 1), ("b", 5)):
-            GXP.append(("gx-q%d%s" % (16 * _wr, _ab), "qkv_gate", _ms, (1, _wr, 1, 16, 8, 1, _xs), _v))
+            if _ab == "a":  # pw12 trim: q144a (cluster 8 declined on the judge, 120 < 128) and q128a dropped
+                continue
+            _ms2 = tuple(m_ for m_ in _ms if not (_wr == 8 and m_ == 32))  # pw12 trim: q128b m=32 (L1-x, MT 4)
+            if _ms2:
+                GXP.append(("gx-q%d%s" % (16 * _wr, _ab), "qkv_gate", _ms2, (1, _wr, 1, 16, 8, 1, _xs), _v))
 for _ab, _v in (("a", 1), ("b", 5)):
-    GXP.append(("gx-q144%s-s" % _ab, "qkv_gate", (32,), (1, 9, 1, 16, 8, 1, 1), _v))
-    GXP.append(("gx-p128%s" % _ab, "pooler", (16, 32), (1, 8, 2, 16, 4, 1, 2), _v))
+    if _ab == "b":  # pw12 trim: gx-q144a-s dropped (cluster 8 declined)
+        GXP.append(("gx-q144%s-s" % _ab, "qkv_gate", (32,), (1, 9, 1, 16, 8, 1, 1), _v))
+    GXP.append(("gx-p128%s" % _ab, "pooler", (16,), (1, 8, 2, 16, 4, 1, 2), _v))  # pw12 trim: m=32 L1-x (8 B spill) dropped
     GXP.append(("gx-p128%s-s" % _ab, "pooler", (32,), (1, 8, 2, 16, 4, 1, 1), _v))
-    GXP.append(("gx-u128%s" % _ab, "unpooler", (16, 32), (1, 8, 2, 16, 2, 1, 2), _v))
+    GXP.append(("gx-u128%s" % _ab, "unpooler", (16,), (1, 8, 2, 16, 2, 1, 2), _v))  # pw12 trim: m=32 L1-x dropped
     GXP.append(("gx-u128%s-s" % _ab, "unpooler", (32,), (1, 8, 2, 16, 2, 1, 1), _v))
 GXP.append(("gx-o64-s", "o", (16, 32), (1, 4, 4, 4, 1, 1, 1), 1))
-GXP.append(("gx-r12c8", "router", (1, 8, 16, 32), (3, 1, 8, 2, 8, 1, 0), 1))
-GXP.append(("gx-r12g8", "router", (1, 8, 16, 32), (3, 1, 8, 2, 8, 1, 0), 5))
-GXP.append(("gx-r12c16", "router", (1, 8, 16, 32), (3, 1, 4, 2, 16, 1, 0), 1))
+GXP.append(("gx-r12g8", "router", (1, 8, 16, 32), (3, 1, 8, 2, 8, 1, 0), 5))  # pw12 trim: r12c8 / r12c16 dropped
 
 
 # pw12: the same kernels with W through a per-warp cp.async.bulk smem ring (V bit 3; slots 4/8; chunks per slot 1/2).
 # Geometries: r6's judge-picked one per (layer, bucket) (job 23cecdef1bb54c9e), r6's 16-warp pooler alternative, and
 # pw11's wide-row global-reduction geometries. An 8th geo field forces r6's register x-ring depth ST.
-def _bv(v, ns, cu=1):
-    return v | 8 | ({2: 0, 4: 1, 8: 2, 16: 3}[ns] << 4) | ({1: 0, 2: 1, 4: 2}[cu] << 6)
+def _bv(v, ns, cu=1, fence=False):
+    return v | 8 | ({2: 0, 4: 1, 8: 2, 16: 3}[ns] << 4) | ({1: 0, 2: 1, 4: 2}[cu] << 6) | (0 if fence else 256)
 
 
 GB = True
@@ -1040,6 +1047,8 @@ for _nm, _ly, _ms, _g, _v, _vars in (
         ("r12g8", "router", (1, 8, 16, 32), (3, 1, 8, 2, 8, 1, 0), 5, ((4, 1),))):
     for _ns, _cu in _vars if GB else ():
         GXP.append(("gb-%s-n%d%s" % (_nm, _ns, "c%d" % _cu if _cu > 1 else ""), _ly, _ms, _g, _bv(_v, _ns, _cu)))
+        if _ly == "pooler" and 1 in _ms and _cu == 1:  # the fenced refill, pooler m=1 only: BAKE shows the fence cost
+            GXP.append(("gb-%s-n%d-f" % (_nm, _ns), _ly, (1,), _g, _bv(_v, _ns, _cu, True)))
 
 
 def _gxinst(geo7, v, bm):
@@ -1744,7 +1753,7 @@ def _gxbake(st):
         print("PICK %s m=%d %s %.2f" % (layer, m, best[0], best[2]), flush=True)
         if layer == "pooler" and m == 1:  # PROBE: best bulk-ring path per slot count vs r6, alternated (the stream gain)
             for ns in (4, 8):
-                cand = sorted((v_[0], k[2], v_[1]) for k, v_ in res_all.items() if k[:2] == ("pooler", 1) and k[2].startswith("gb-") and ("-n%d" % ns) in k[2])
+                cand = sorted((v_[0], k[2], v_[1]) for k, v_ in res_all.items() if k[:2] == ("pooler", 1) and k[2].startswith("gb-") and ("-n%d" % ns) in k[2] and not k[2].endswith("-f"))
                 if not cand or time.time() - _T0 > PREPARE_BUDGET_S:
                     continue
                 tb, tr = [], []

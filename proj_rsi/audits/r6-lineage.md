@@ -188,3 +188,39 @@ Two adjustments are needed:
 The rest stays as r6 has it: W register-direct with no smem ring, x via 2D TMA per CTA, and the split across
 K by ≤2 using a DSMEM cluster with small partials. Compute at pooler m128 is 8.6 GFLOP ≈ 11 µs at ~800 TF, against
 a 13.2 µs stream, so the whole decode must overlap async wgmma.
+
+## Post-mortem of pw11 (check 824f32ce203541c4: no gx path won; in-prepare µs from its log)
+
+**1. Which assumption failed**
+
+- **The cluster designs were mostly never measured.** Every 1-CTA/SM cluster variant with KS=4 or 8 was `declined-occ 120<128`.
+  This H200 co-schedules only 120 CTAs in clusters of 4 or 8 (my audit's risk 1). The cluster variants that did run are
+  q128a (2 CTAs/SM) and u128a (KS=2).
+- **The last-arriver tail is the 2 µs.** Same geometry, b vs a:
+  - q128 at m=1: 17.34 vs 15.26 (+2.1), with only 0.6 MB of partials.
+  - u128 at m=32: +1.2 (x via L1) and +4.1 (x in smem); at m=16: +0.2.
+
+  The pw11 SASS shows the dependent chain: partial `STG.STRONG` → `MEMBAR.ALL.GPU` (waits for L2 to acknowledge) → BAR →
+  `ATOMG` (result needed) → BAR → `MEMBAR` → `LDG.STRONG` of the peers → STG. That is 3 dependent L2 round trips plus 2
+  CTA barriers.
+  - In a one-wave grid where every CTA finishes together, nothing hides that chain.
+  - Counter contention is not the cause (≤8 arrivals per counter), and neither is traffic.
+  - The +4.1 at m=32 with x in smem is larger than this chain explains; I cannot attribute it without a probe.
+- **The fitted 7 TB/s L2→SM limit is wrong.** unpooler m=32 u128a-s cuts x L2 traffic about 4×, to 16.8 MB, and removes the
+  L1-wavefront term, yet only ties r6 (21.47 vs 21.15) while paying a KS=2 cluster reduction worth ≤1 µs.
+  So x traffic costs r6 at most about 1 µs at m=32, not the 2.5 µs the model said. What makes r6's m=32 slower than its m=1
+  is still unattributed.
+- **Per-warp split:** secondary. qkv144 at 1 CTA/SM has 9 warps × ST=2 ≈ 27 KB in flight per SM, against r6's 43–87 KB.
+  The p128/u128 variants match r6's in-flight bytes. The XS=2 / MT=4 variants also spill 8 B (about 120 B of LDL).
+
+**2. The 12-bit router**
+
+- **Not the escape rate.** The codec's 3-bit offset indexes the upper 7 exponent bits, so its window spans 16 binades (the
+  0.05% case). The judge log shows 1063 lo escapes out of 2.1 M weights, about 1 per warp, and no list overflowed.
+- **Not the N=256 geometry.** r12c8 has exactly r6's router geometry (cluster 8, 128 CTAs) and is still +1.6 at m=8
+  (11.14 vs 9.57).
+- **The cause is decode on the critical path.** With KU=2, each warp's whole W slice is requested at launch, so the kernel is
+  one round trip plus drain. It is latency-bound (r6's 8.4 MB in about 4.3 kernel-µs against a 2.2 µs stream), so cutting
+  2.1 MB saves nothing.
+  - What it adds is the decode of both halves plus the escape walk between data arrival and the HMMAs: 936 vs 512
+    instructions, about 420 more on each warp's critical path.

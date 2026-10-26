@@ -28,5 +28,6 @@
     "The 4.15-4.4 TB/s probe was a bulk stream with 64-160 KB rings per CTA. Here the per-SM ring is 48-192 KB, split into 8-32 independent per-warp rings of 1.5-3 KB slots. If many small copies stream worse than a few 16-40 KB stages, gb-p16w-n4c2 (3 KB slots) and the n8 variants show it.",
     "Compile time grew from 44 to 63 s locally. The six pw11 L1-x m=32 variants that spill 8 B are still in. They can be dropped (about 5 s) if pw11's check shows their -s twins win.",
     "Prepare: about 130 BAKE/PICK/PROBE lines (~5.5 KB; total log ~10 KB, under the 14 KB budget). The second bake skips paths after 240 s from import."
-  ]
+  ],
+  "revision": "Critic round: refills no longer issue fence.proxy.async (V bit 8, default for every gb path; the slot's values are consumed by the decode before __syncwarp and the refill, as in CUTLASS). The refill SASS is now WARPSYNC -> SYNCS.ARRIVE.TRANS64 (expect_tx) -> UBLKCP with no MEMBAR. The fenced form is kept only as gb-p-n4-f, gb-p16w-n4-f and gb-p16w-n8-f (pooler m=1) so BAKE shows the fence cost (MEMBAR.ALL.CTA + FENCE.VIEW.ASYNC.S per refill); PROBE ignores -f. fence.mbarrier_init stays in the prologue. Trimmed from pw11: q144a, q144a-s, q128a, r12c8, r12c16 and the m=32 L1-x variants gx-p128a/b, gx-u128a/b, gx-q128b. 137 kernels, 0 new spills, local compile 55 s; r6's 78 kernels unchanged."
 }
