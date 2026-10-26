@@ -865,3 +865,17 @@ the next scored run.
 Critic: diff is the two GVC lines only; 116 pw31 kernels identical; new MT1 instances 64 regs/0 spills; 65/65 box
 checks; box bake picks the new qkv geometries at m=1/8/16 (−0.1/−0.5/−1.1 in-prepare). Expected judge effect ≈ 15–25
 score-µs on 3337.1 plus the draw.
+
+## RS128 R2 (box, pooler m=128): full kernel 21.86 kernel-µs / 23.94 in-prepare vs cuBLAS 26.58 / r6 tuned 27.10 — first packed-weight kernel under tuned cuBLASLt at m=128
+
+Ladder (kernel-µs): S1 W+x 19.14 | S3 +wgmma (depth 5) 20.70 | full (depth 5, L2 hints, in-kernel zeroing) 21.86.
+Worked: escape lists at a fixed stride loaded before the W flood (loop start 1.8 → 0.5 µs); one merged full barrier
+per slot with k64 rounds (k128 worse here); in-kernel zeroing with the counter wait in an idle producer warp (−0.5
+vs memset); ring depth 5 instead of 8 (−0.9: evens the HBM share so the slowest CTAs finish sooner); L2 hints
+(evict-first W, evict-last x: −1.2). Did not work: decoding the next stage under the current wgmma (+0.4–0.5; INT-
+bound, as P4 found); wait_group 0. Fixed terms per CTA: entry → first wgmma 2.0 µs; last W issue → loop end 2.6;
+epilogue 1.5 (0.8 of it waiting for the TMA reduce-add to read its slab; the 4 MB of bf16 partials cost ~1.2).
+Per stage: ~55 INT warp-instr per warp (36 decode) ≈ 220 INT clk per sub-partition vs 512 tensor clk; real flow
+~0.44 µs/stage (760 clk) — above the plan's 650 bar and the H200's ~0.375 HBM period, so the H200 would be SM-bound
+at ≈ 17 kernel-µs vs cuBLAS ~19.3 (still a win if the fixed terms hold). 256-row/4-warpgroup fallback does not fit
+the register file. R3/R4 (r6 bake on the pw23 base, all layers, lint/cpu-check) in progress → judge check.
