@@ -1,0 +1,45 @@
+{
+  "id": "pw10",
+  "parent": "pw9",
+  "claim": "pw9's wgmma path lost to cuBLAS at m=128/256, but the SASS shows only about 125 hot instructions per stage per warp (3 LDS, 16 PRMT, 4 HGMMA), so the decode is not the limit. The bake numbers give about 570 cycles of fixed latency per stage plus the MMA time: pooler m=128 is about 830 clk per stage and m=256 about 1090; the difference is the extra MMA time. Deferring each slot's release until wgmma.wait_group (required, because wgmma reads x asynchronously) leaves about 2 of the 4 ring stages in flight. Hypothesis: the pipeline is latency-bound, not throughput-bound. pw10 measures that directly with a PROBE ladder, and tests it alongside three alternatives in one check: ring depth 8 (5 at m=256), a wait_group(0)-per-stage control, BN 128 with clusters <= 2 (half the x L2 traffic), and a 2-warpgroup intra-CTA k-split (twice the decode width).",
+  "target_shapes": [
+    "pooler m=128: in-prepare <= 25 vs torch 30.2 (pw9 best 34.4)",
+    "unpooler m=128 <= 21 (torch 23.2), qkv m=128 <= 18 (22.4), o m=128 <= 10 (11.0)",
+    "m=256: pooler <= 30 (torch 34.0), unpooler / qkv / o below torch"
+  ],
+  "kill_if": "If the PROBE ladder shows L1 (stream + handshake only, no decode, no wgmma) already within 3 µs of L4 (full path), the latency is in the TMA/mbarrier skeleton itself (as for m<=32), and the wgmma family stops. If L1 is near the 17 µs stream but L3 (+wgmma) jumps, the MMA/stage interaction is the cost, and the depth-8 and k-split lines show which fix works. Kill the family if no variant beats torch on pooler and unpooler m=128.",
+  "probe_plan": {
+    "where": "prepare(), after STATS and before the bake-off, <= 10 s. Pooler m=128 on the w1d4 kernel (= pw9 w1n128: BN 64, one consumer warpgroup, ring 4, KS 2 = 64 x 2 = 128 CTAs; probes launch without clusters because they skip the epilogue). 'PROBE ladder <name> <grid> <us>', timed like the bake-off.",
+    "lines": {
+      "L1 wait+release": "Producer streams x tiles (TMA) and W chunks (bulk) exactly as the path does; consumers only wait on the full barrier and release the slot immediately. Prediction: about 18-20, near the bulk-stream probe (17.2) plus the x L2 traffic.",
+      "L1 no-x": "As L1 with x tiles skipped (expect_tx = W bytes only). L1 minus this isolates the x re-read cost (128 MB from L2 for pooler at BN 64). Prediction: 17-18.",
+      "L2 +decode": "L1 plus the 3 LDS + decode + escape walk per stage. Prediction: L1 + about 1 (decode is about 125 issue slots per stage per warp).",
+      "L3 +wgmma": "L2 plus the wgmma batches with the deferred release (no epilogue). If release-after-wait_group starves the ring, this is where the time jumps. Prediction: about 29 (pw9's full time minus the epilogue).",
+      "L4 full": "The w1d4 path with the cluster epilogue. Expected about 34 (pw9 w1n128a 34.4); L4 - L3 is the epilogue."
+    }
+  },
+  "variants": {
+    "m128": "pw-w1d4 (pw9 w1n128, ring 4, mode a; within-run reference), pw-w1d8 (ring 8, 177 KB, 1 CTA/SM), pw-w1d8z (ring 8, wait_group(0) + release every stage: no MMA/decode overlap, every slot freed as early as possible), pw-w2c2 (BN 128, 2 consumer warpgroups on separate rows, ring 6, KS <= 2: pooler 32 x 2 = 64 CTAs, o / unpooler 64 x 2, qkv 18 x 2), pw-wk2 (BN 64, 2 consumer warpgroups on the same 64 rows splitting every stage by k16 steps {0,1} / {2,3}, ring 8, KS <= 2). Five per (layer, m).",
+    "m256": "pw-v1d4 (pw9 w1n256), pw-v1d5 (ring 5, 191 KB), pw-v1d5z (ring 5, wait_group(0) per stage), pw-v2c2 (BN 128, ring 5, 221 KB), pw-vk2 (k-split, ring 5). Five per (layer, m).",
+    "ks_rule": "mode a (w1d4 / v1d4, = pw9): the largest KS in {1, 2, 4, 8} with NB*KS <= 132; mode c2 (all others): the largest KS in {1, 2} with NB*KS <= 132. No cluster of 4 or 8 is generated."
+  },
+  "kspl_design": "KSW = 2: the warpgroups kg = 0, 1 share BN = 64 rows; warp = kg*4 + tile. Each loads its 16 B low-byte block (a + 512 kg) and the stage's code words (kg ? z,w : x,y), decodes its two k16 steps into A[0..7] and issues two wgmma with descriptor offset 4 kg (+2). Branch-free on purpose: a first version branched on kg around the wgmma, and ptxas reported C7520 ('wgmma serialized due to compiler-inserted WG.AR in divergent path'). Escapes: each warp's list holds all entries of its tile (_pw_esc with WTOK = 2), applied with register offset 8 kg (pw_fix3), so entries of the other warpgroup's steps match nothing. Epilogue: warpgroup 0 stages its D in fragment order, warpgroup 1 adds its D after a consumer barrier, then the pw9 cluster epilogue. Empty barriers count all 8 consumer warps; each warpgroup's own wait_group covers its own wgmmas before it releases.",
+  "sass_per_stage_per_warp": {
+    "method": "cuobjdump: instructions between consecutive WARPGROUP.ARRIVE inside the main loop; 'hot' excludes the escape-hit body (16 SEL, its ISETPs, the list LDG)",
+    "pw9 w1n128": "161 window / 129 hot: 3 LDS, 16 PRMT, 4 HGMMA",
+    "pw10 w1d4 / w1d8": "157 / 125 (same body; the lane/Tb pinning saves 4)",
+    "pw10 w1d8z": "176 / 144 (adds the per-stage wait_group(0))",
+    "pw10 w2c2": "155 / 123",
+    "pw10 wk2": "114 / 96: 2 LDS, 8 PRMT, 2 HGMMA per warp (the stage's decode spread over 8 warps)",
+    "m256 v1d5 / vk2": "159 / 127 and 114 / 96",
+    "brief_estimate": "The brief's ~1100 instructions per stage per warp was about 10x high: one warp decodes one 16 x 64 unit (1024 weights) per stage, not 16."
+  },
+  "register_budget_ptxas": "nvcc 12.8 sm_90a, all 0 spill, 0 stack (a first version indexed A with a runtime k-group offset and had 128-144 B stack frames; fixed): w1d4 138, w1d8 138, w1d8z 106, w2c2 168 (setmaxnreg), wk2 168 (setmaxnreg), v1d4 203, v1d5 202, v1d5z 173, v2c2 168 (setmaxnreg), vk2 168 (setmaxnreg); probes pL1 28, pL1x 22, pL2 43, pL3 138. No LDL/STL in any wgmma kernel, no ptxas C7519/C7520 messages. Pipelining in SASS: w1d8 and wk2 run ARRIVE -> HGMMA batch -> DEPBAR.LE gsb0 0x1 -> release; w1d8z runs DEPBAR 0x0 per stage.",
+  "kernel_count": "33: 15 pwc (m<=32 and router m<=32, SASS identical to pw9), 10 wgmma path kernels, 4 wgmma probe kernels, 4 small pw6 probe kernels (kept in the source but no longer called). pw9's router wgmma (wr) and pw8's rg128 / pw-rtg128 are dropped. Local -cubin about 9 s (pw9 6 s); judge compile was 36 s for pw9.",
+  "verification_done_offline": "emu_pw10.py (scratchpad), the pw9 emulator generalized to the KSW warp mapping: per-warpgroup low-byte block and code-word selection, the escape register offset, and the summed k-split partials in staging. w1d8 (KS 2), w1d8z (odd m=121, KS 1), w2c2, wk2 (KS 2; and odd m=97, KS 1), vk2 (m=256), v2c2 (m=200) are bit-exact on one-hot rows and fp64-exact on random rows; the descriptor/swizzle address check passes. The release protocol is pw9's (630 simulated schedules, including 8 consumer warps); the wait_group(0) control releases each slot only after its own MMAs complete. Lint ok; cpu-check --official 9/9; full CUDA_SRC compiles with -std=c++20 against the torch mock with no warnings.",
+  "risks": [
+    "Ring depth 8 at m=128 uses 177 KB of smem and the BN 128 m=256 variant 221 KB: 1 CTA/SM. Pooler w2c2 gives only 64 CTAs (kept for the x-traffic signal, as instructed).",
+    "If the PROBE ladder places the cost in L1 (the TMA/mbarrier skeleton), no kernel-side change here can fix it; that is the same finding as for m<=32.",
+    "The k-split doubles the consumer warps (384 threads); each warpgroup's partial is summed through smem at the end (about 32 KB at m=128, 64 KB at m=256)."
+  ]
+}
