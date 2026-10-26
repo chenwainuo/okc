@@ -555,3 +555,10 @@ Router post-mortem (audits/router.md): rsk2's 7.5 µs ≈ 1 first-data latency +
 0.5 uncovered last stage + ~1 of red.global.add.v2 partials; 16 B adds + cluster-2 pre-reduction ≈ −0.8 µs at m=128,
 below the 1.5 µs bar; m=256 needs ≤ 9.5 kernel-µs against a measured 13.5 and is not winnable without a wgmma rewrite.
 Router line closed after pw23's +1.7 µs at m=128.
+
+## Scored submission of pw23: job `17f4484b97644673` — 9/9, **3399.3 µs**, 1.4211× (CI 1.400–1.442). New incumbent.
+
+Board moved from 3428.0 (r6-c12) to 3399.3: −0.8%, of which ~13 µs is the router kernel at m=128 and the rest is the
+draw. Per-load vs the pw23 check run: decode1 37.58 (37.33), decode16 50.52 (50.78), decode32 61.38 (60.70), verify1
+38.55 (39.09), verify16 71.66 (70.52) — this scored draw sat ~0.6% worse than the check. Leaderboard at the time:
+#1 1.637× (≈ 2951 µs), #2–#8 at 1.547–1.570× (≈ 3077–3122 µs); we are at 1.421×.
