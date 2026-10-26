@@ -838,3 +838,13 @@ k2x m=128: N=0 28.1 | 16 28.5 | 32 28.8 | 48 29.1 | 64 31.3 | 96 35.6 | 128 40.5
 +4.6 µs). Ping-pong warpgroups worse at every N. Consequence: the 12-bit decode (~36–50 ops/thread/stage) cannot sit
 on the consumer's serial chain; it must be software-pipelined (decode stage s+1 after stage s's wgmma commit, before
 its wait, double-buffered A) — P4 now measures that placement; RS128 told to structure its math warps that way.
+
+## Clean-room rewrite (user: "121 is not good enough; find more kernel alpha; rewrite from scratch without looking at the current implementation")
+
+Workflow 'cleanroom-kernels' (ultracode): four independent designer-implementers, each from a different school
+(bandwidth/encoding, latency/launch structure, Hopper tensor-core pipeline, contrarian), given only the problem spec
+(TASK.md, reference.py, baseline.py), the hardware/judge facts, the weight statistics and the incumbent's per-shape
+judge numbers as the bar — explicitly forbidden to read candidates/, audits/, LOOP.md or each other's work; each
+builds and measures its own submission on the H100 in proj_rsi/cleanroom/<school>/. Then a verifier re-measures all
+of them with pw31 in one session (audits/cleanroom-measure.md), three judges score mechanisms, and a synthesiser writes
+audits/cleanroom-plan.md (what to port into the pw31 lineage, what could be a candidate itself).
