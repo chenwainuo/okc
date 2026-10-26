@@ -931,3 +931,7 @@ Box bake (F1 baseline rule): pooler m=128 27.36 → 24.48, qkv 18.72 → 17.12, 
 narrow m=256 picks at pooler (30.24 → 29.50) and qkv (21.41 → 21.12) that may flip on the judge; o and unpooler
 m=256 stay r6. 65/65 box checks; diff vs pw33 purely additive. If the H200 keeps ~1.5–2 µs on the three m=128 shapes
 the expected effect is ≈ 40–50 score-µs (verify16 leverage 7.9). rs128's own check still runs first at the reset.
+pw34 scored run 5a39372456514f20: 3361.2 = pw33 within drift (board keeps 3332.1) — the RS128 phase was skipped on
+the judge ("BAKE rq skipped-budget 160s": r6 119 s + rw 39 s exceeded the rq guard at budget−100 = 140 s; the box's
+r6 phase is only 35 s so it never showed). Guard moved to budget−45 in pw34 and rs128; pw34 resubmitted scored; the
+RS128 author is reordering prepare (rq bake before the rw build, compile thread from the top, ≤ 6 timed rq paths).
