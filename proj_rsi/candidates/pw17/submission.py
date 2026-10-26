@@ -582,8 +582,9 @@ __device__ __forceinline__ bool live(int idx, int MT, int m) { return ((idx >> 5
 struct CeBuf { uint32_t lo, hi, V, pb; };
 __device__ __forceinline__ uint32_t ce_lds(uint32_t a) { uint32_t v; asm volatile("ld.shared.u32 %0, [%1];" : "=r"(v) : "r"(a)); return v; }
 __device__ __forceinline__ uint32_t ce_prmt(uint32_t a, uint32_t b, uint32_t s) { uint32_t d; asm("prmt.b32 %0, %1, %2, %3;" : "=r"(d) : "r"(a), "r"(b), "r"(s)); return d; }
-__device__ __forceinline__ uint32_t ce_sel(uint32_t e, uint32_t d) {  // (e & ~0x807f807f) | (d & 0x807f807f)
-  uint32_t r; asm("lop3.b32 %0, %1, %2, %3, 0xe4;" : "=r"(r) : "r"(e), "r"(0x807f807fu), "r"(d)); return r;
+__device__ __forceinline__ uint32_t ce_sel(uint32_t e, uint32_t d) {  // (e & ~0x807f807f) | (d & 0x807f807f) = b ? c : a = 0xb8
+  // (pw17 fix: the study's 0xe4 is c ? a : b, i.e. d ? e : mask)
+  uint32_t r; asm("lop3.b32 %0, %1, %2, %3, 0xb8;" : "=r"(r) : "r"(e), "r"(0x807f807fu), "r"(d)); return r;
 }
 // once per step (8 weights): branch-free; the LDS always reads inside the lane's ring (a stale word is masked to 0)
 template <int ED>
@@ -755,11 +756,6 @@ __global__ void __launch_bounds__(WR * WK * 32, ((V >> 12) & 7) ? ((V >> 12) & 7
   auto step = [&](const int u, const int s) {
     uint32_t A[RT][NA][16], B[MT][8];
     uint4 xd[XS == 2 ? MT : 1][2];
-    if constexpr (CE) {  // pw17: one ring issue + commit per unit, then pieces up to (pb >> 4) + 1 have landed
-      ce_issue<L::CED>(ciss, ceb.pb, cP, cgs, crl, lane);
-      asm volatile("cp.async.commit_group;\n" ::: "memory");
-      asm volatile("cp.async.wait_group %0;\n" :: "n"(L::CED - 2) : "memory");
-    }
     if (XS == 2 && LX) {
 #pragma unroll
       for (int n = 0; n < MT; n++) { xd[n][0] = gxp<(V >> 15) & 3>(xp[n] + u * 64); xd[n][1] = gxp<(V >> 15) & 3>(xp[n] + u * 64 + 8); }
@@ -782,7 +778,10 @@ __global__ void __launch_bounds__(WR * WK * 32, ((V >> 12) & 7) ? ((V >> 12) & 7
         if constexpr (!LDEC) {  // ladder L0/L1: consume the W words with a cheap XOR, no decode
 #pragma unroll
           for (int i = 0; i < NL; i++) sk ^= q[i].x ^ q[i].y ^ q[i].z ^ q[i].w;
-        } else if constexpr (CE) {
+        } else if constexpr (CE) {  // pw17: one ring issue + commit per unit (u, j), then pieces up to (pb >> 4) + 1 have landed
+          ce_issue<L::CED>(ciss, ceb.pb, cP, cgs, crl, lane);
+          asm volatile("cp.async.commit_group;\n" ::: "memory");
+          asm volatile("cp.async.wait_group %0;\n" :: "n"(L::CED - 2) : "memory");
           ce_unit<L::CED, ((V >> 20) & 1) ? 7 : 2>(ceb, clut, crl, q[0], q[1], A[j][h]);
         } else if (C12) {
           const uint32_t T0 = h ? p.U0 : p.T0, T1 = h ? p.U1 : p.T1;

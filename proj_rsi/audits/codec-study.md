@@ -74,7 +74,7 @@ Notes on the table:
 e   = lut[lo & 0xff]                        // LOP3 + LEA + LDS
 lo  = shf.r.wrap(lo, hi, e); hi = shf.r.wrap(hi, 0, e)   // wrap uses e & 31 = length
 V  -= e                                      // IADD3 per 2 pairs; garbage lands at bit 7+ only
-A   = lop3(e, 0x807f807f, prmt(plane, 0, 0x1100 | 0x3322), 0xe4)   // PRMT + LOP3: sign|mant7 dup -> bits 0-6, 15
+A   = lop3(e, 0x807f807f, prmt(plane, 0, 0x1100 | 0x3322), 0xb8)   // (0xe4 in v1 was wrong)  PRMT + LOP3: sign|mant7 dup -> bits 0-6, 15
 ```
 
 **Per step (8 weights), refill.**

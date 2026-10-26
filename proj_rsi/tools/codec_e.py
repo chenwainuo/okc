@@ -381,8 +381,8 @@ CODEC_E_CUH = r"""
 struct CeBuf { uint32_t lo, hi, V, pb; };
 __device__ __forceinline__ uint32_t ce_lds(uint32_t a) { uint32_t v; asm volatile("ld.shared.u32 %0, [%1];" : "=r"(v) : "r"(a)); return v; }
 __device__ __forceinline__ uint32_t ce_prmt(uint32_t a, uint32_t b, uint32_t s) { uint32_t d; asm("prmt.b32 %0, %1, %2, %3;" : "=r"(d) : "r"(a), "r"(b), "r"(s)); return d; }
-__device__ __forceinline__ uint32_t ce_sel(uint32_t e, uint32_t d) {  // (e & ~0x807f807f) | (d & 0x807f807f)
-  uint32_t r; asm("lop3.b32 %0, %1, %2, %3, 0xe4;" : "=r"(r) : "r"(e), "r"(0x807f807fu), "r"(d)); return r;
+__device__ __forceinline__ uint32_t ce_sel(uint32_t e, uint32_t d) {  // (e & ~0x807f807f) | (d & 0x807f807f): immLut b ? c : a = 0xb8
+  uint32_t r; asm("lop3.b32 %0, %1, %2, %3, 0xb8;" : "=r"(r) : "r"(e), "r"(0x807f807fu), "r"(d)); return r;
 }
 // once per step (8 weights): branch-free; the LDS always reads inside the lane's ring (a stale word is masked to 0)
 template <int ED>

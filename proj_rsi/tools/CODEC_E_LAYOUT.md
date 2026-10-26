@@ -25,7 +25,7 @@ A unit is (tile t, chunk c). In each unit, lane l owns 32 weights in 16 A regist
 - Bits 7–14: exponent of the low half (v even).
 - Bits 23–30: exponent of the high half (v odd).
 - Bits 15–22 and 31: 0.
-- The A register is `lop3(e, 0x807f807f, prmt(Lword, 0, i&1 ? 0x3322 : 0x1100), 0xe4)`. That takes bits 0–6 and bit 15 (and the same in the high half) from the duplicated plane bytes, and the rest from e.
+- The A register is `lop3(e, 0x807f807f, prmt(Lword, 0, i&1 ? 0x3322 : 0x1100), 0xb8)` (immLut `b ? c : a`; v1 said 0xe4, which is `c ? a : b` and wrong). That takes bits 0–6 and bit 15 (and the same in the high half) from the duplicated plane bytes, and the rest from e.
 
 ### 1c. Code stream
 - **Symbols.** One prefix code per A register (pair symbol), at most 8 bits, read LSB first.
