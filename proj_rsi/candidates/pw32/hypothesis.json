@@ -1,0 +1,16 @@
+{
+  "id": "pw32",
+  "parent": "pw23",
+  "claim": "pw23 (r6 + router, untouched) plus pw24h's single-consumer 128-k-slot bf16 pipeline ('bh': BLOCK_K 128 slots, one merged full/empty barrier pair per slot, try_wait, no cluster, stmatrix.trans epilogue) in its own sm_90a extension. On the H100 it reaches parity with plain cuBLAS (torch.mm) at m=128 and beats it at pooler m=256 (n128x 31.74 vs 34.11). The judge bake is the transfer test on the H200, where the stream period is ~0.7x and the consumer-service-time fix should matter more (audits/p4-h100.md).",
+  "paths": "k2x (64x64, BLOCK_K 128, 7 slots, SS) at m=128 for pooler/qkv_gate/unpooler/o; rsk2x (same, register-A) at m=128 for pooler/qkv_gate; n128x (64x128, BLOCK_K 64, 9 slots, SS) at m=128 for pooler/unpooler/o and at m=256 for pooler. Each is validated (one-hot x8 bit-exact, random rows at m and odd m 121 / 250) and picked by the 1% rule against the current dispatch (r6's tuned cuBLASLt); served only at m exactly 128 / 256. One PROBE pair: k2x vs torch.mm on pooler m=128, alternated. Guards: __CUDA_ARCH_FEAT_SM90_ALL (a plain sm_90 pass compiles to a stub), CUDART_VERSION driver entry-point fallback, K % (64*KS) / N % 64 / dtype / contiguity entry checks, build-failure fallback, phase gated at PREPARE_BUDGET_S - 100.",
+  "target_shapes": [
+    "pooler m=256: n128x at least 1.0 us under cuBLAS",
+    "pooler / qkv_gate m=128: k2x or rsk2x picked over r6"
+  ],
+  "kill_if": "pooler m=256 n128x not >= 1.0 us under cuBLAS in the judge bake",
+  "local_checks": "lint ok (advisory sm_90a note only: bh carries -gencode=arch=compute_90a,code=sm_90a); cpu-check --official 9/9; box /root/bench.sh pw32 --official: 65/65 CHECK ok, PREP bh compiled in 34s, PREP done in 69s; ptxas 0 spills, no C7514 (k2x 58 regs, rsk2x 154, n128x 90). Box bake vs r6 (tuned cuBLASLt): pooler 128 r6 27.10 | k2x 28.42 | rsk2x 28.38 | n128x 30.53; qkv 128 r6 19.49 | k2x 20.13; unpooler 128 r6 27.04 | n128x 28.61; o 128 r6 11.04 | n128x 11.10; pooler 256 r6 29.70 | n128x 32.16. PROBE k2x 28.13 vs torch.mm 28.74. No bh path was picked on the H100: r6's tuned cuBLASLt beats plain torch.mm by 1.6-4 us, and pw24h's m=256 'win' was measured against torch.mm only.",
+  "risks": [
+    "On the H100 the kill line fails against r6 (n128x 32.16 vs 29.70): pw32 picks nothing there and equals pw23. Only an H200-specific gain (shorter stream period) would change the pick.",
+    "Extra prepare time ~45 s (compile 34 s on the box) on top of pw23's phase; gated at PREPARE_BUDGET_S - 100."
+  ]
+}
