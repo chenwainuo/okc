@@ -376,3 +376,15 @@ confounded across steps). Occupancy matters (1 CTA/SM costs +4). Max recoverable
 ≈ 1.3 at m=16 → ≈ 0.2 ln → ~3310. Next: pw16 = one x-traffic experiment (L1-allocating x loads so co-resident CTAs
 share lines / smem x slab / cluster-2 multicast without split-K) on r6's own geometry. m=128: pw15 (token tiling,
 no split-K) is the last check on that branch.
+
+## Iteration 13 — pw15: token-tiled no-split-K m=128/256. Check `ce1163b9280c47a2`: 9/9, 4423.1 µs. REJECTED; m ≥ 128 CLOSED.
+
+Pooler m=128 in-prepare: torch 30.46 | q2 (ping-pong) 37.50 | q1a 43.74 | q1b 44.48 | q1c 50.91 | pw10's wk2 31.46.
+m=256 far worse (56–93). Ladder (q1b, 2 CTAs/SM): W+x 26.30 | +decode 32.96 (+6.7) | +wgmma 43.26 (+10.3) | full
+44.26 (+1.0: the epilogue is finally cheap). Without split-K each CTA decodes its 64 rows over the full K, and with
+one consumer warpgroup per CTA the decode is no longer hidden; the wgmma step is worse still. cuBLAS's structure does
+not transfer to a decode-bearing kernel at one warpgroup per CTA.
+Tally for m ≥ 128: pw3-tm, pw9, pw10, pw13, pw15 — best ever 31.5 vs cuBLAS 29.4–30.5 (pw10 wk2). Closed.
+Consequence (ceiling at r6's calibration): m ≤ 32 + router alone reach 3067 at best, ~3300 realistically. 3000 is not
+reachable from the current evidence without an m=128 kernel that beats cuBLAS by ~5 µs per big shape, and no design
+tried here has come within 2 µs of it.
