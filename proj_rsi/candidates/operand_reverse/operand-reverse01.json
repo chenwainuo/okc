@@ -1,0 +1,238 @@
+{
+  "source_sha256": "ca92a4fb0d3a488768c4531ba315e8d0327b0a4c4a994147b12c61a929ae85f8",
+  "baseline_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "attrs": {
+    "regs": 168,
+    "local": 0,
+    "smem": 103600,
+    "max_dynamic_before": 49152,
+    "occupancy_after_optin": 1,
+    "max_dynamic_after": 103600,
+    "initial_CTA_pool": 64512,
+    "requested_role_pool": 63488
+  },
+  "checks": [
+    {
+      "all4096_onehot_columns": "EXACT",
+      "random_FP64": "PASS",
+      "detail": "ok 1.7e-03"
+    },
+    {
+      "official_input_dist": "normal",
+      "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+    },
+    {
+      "official_input_dist": "outliers",
+      "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+    },
+    {
+      "fixed_pointer_replay": "original",
+      "status": "PASS"
+    },
+    {
+      "fixed_pointer_replay": "zero",
+      "status": "PASS"
+    },
+    {
+      "fixed_pointer_replay": "fresh_outliers",
+      "status": "PASS"
+    }
+  ],
+  "baseline_checks": [
+    {
+      "all4096_onehot_columns": "EXACT",
+      "random_FP64": "PASS",
+      "detail": "ok 2.4e-03"
+    },
+    {
+      "official_input_dist": "normal",
+      "result": "relative L2 error 2.558e-03 (worst row 2.975e-03); 17 probe rows exact to 0.0e+00"
+    },
+    {
+      "official_input_dist": "outliers",
+      "result": "relative L2 error 2.836e-03 (worst row 3.009e-03); 16 probe rows exact to 0.0e+00"
+    }
+  ],
+  "baseline_callable_oracle": "relative L2 error 2.686e-03 (worst row 2.986e-03); 12 probe rows exact to 0.0e+00",
+  "actual_timed_graph_checks": [
+    {
+      "graph": "baseline",
+      "input": "original",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.686e-03 (worst row 2.986e-03); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "candidate",
+      "input": "original",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "baseline",
+      "input": "zero",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "all output elements exactly zero"
+    },
+    {
+      "graph": "candidate",
+      "input": "zero",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "all output elements exactly zero"
+    },
+    {
+      "graph": "baseline",
+      "input": "fresh_normal",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.671e-03 (worst row 2.983e-03); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "candidate",
+      "input": "fresh_normal",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "baseline",
+      "input": "fresh_outliers",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.833e-03 (worst row 2.971e-03); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "candidate",
+      "input": "fresh_outliers",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "baseline",
+      "input": "all_probes",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "candidate",
+      "input": "all_probes",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    }
+  ],
+  "baseline_pick": {
+    "kind": "rq",
+    "variant": "s4s5hz",
+    "KS": 2
+  },
+  "F1_baseline_before_us": 24.224000051617622,
+  "F1_baseline_after_us": 24.12799932062626,
+  "F1_candidate_us": 47.648001462221146,
+  "F1_gain_us": -23.520002141594887,
+  "paired_graph": [
+    {
+      "baseline": 23.615999147295952,
+      "candidate": 47.807998955249786
+    },
+    {
+      "candidate": 48.09600114822388,
+      "baseline": 24.480000138282776
+    },
+    {
+      "baseline": 24.25600029528141,
+      "candidate": 47.61600121855736
+    },
+    {
+      "candidate": 47.93599992990494,
+      "baseline": 24.639999493956566
+    },
+    {
+      "baseline": 24.12799932062626,
+      "candidate": 47.45600000023842
+    },
+    {
+      "candidate": 47.42399975657463,
+      "baseline": 23.840000852942467
+    },
+    {
+      "baseline": 24.25600029528141,
+      "candidate": 47.775998711586
+    },
+    {
+      "candidate": 47.648001462221146,
+      "baseline": 24.288000538945198
+    },
+    {
+      "baseline": 24.288000538945198,
+      "candidate": 48.06400090456009
+    },
+    {
+      "candidate": 47.87199944257736,
+      "baseline": 25.248000398278236
+    },
+    {
+      "baseline": 24.224000051617622,
+      "candidate": 47.839999198913574
+    },
+    {
+      "candidate": 47.775998711586,
+      "baseline": 24.4159996509552
+    },
+    {
+      "baseline": 25.248000398278236,
+      "candidate": 47.648001462221146
+    },
+    {
+      "candidate": 47.93599992990494,
+      "baseline": 24.54400062561035
+    },
+    {
+      "baseline": 24.383999407291412,
+      "candidate": 48.00000041723251
+    },
+    {
+      "candidate": 47.74399846792221,
+      "baseline": 23.93599972128868
+    },
+    {
+      "baseline": 24.09599907696247,
+      "candidate": 48.00000041723251
+    },
+    {
+      "candidate": 47.488000243902206,
+      "baseline": 24.383999407291412
+    },
+    {
+      "baseline": 24.288000538945198,
+      "candidate": 48.128001391887665
+    },
+    {
+      "candidate": 47.61600121855736,
+      "baseline": 24.09599907696247
+    },
+    {
+      "baseline": 25.34399926662445,
+      "candidate": 47.58400097489357
+    }
+  ],
+  "paired_graph_median_gain_us": -23.51999841630459,
+  "baseline_profile": [
+    {
+      "name": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
+      "duration_ns": 21472
+    }
+  ],
+  "candidate_profile": [
+    {
+      "name": "void rq<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+      "duration_ns": 45090
+    }
+  ],
+  "status": "CLOSE_POLICY_NO_SWEEP"
+}

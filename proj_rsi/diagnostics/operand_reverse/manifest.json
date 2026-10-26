@@ -1,0 +1,47 @@
+{
+  "purpose": "COUNTER_DIAGNOSTICS_ONLY_NO_BENCHMARK_SPEED_CLAIM",
+  "source_sha256": "ca92a4fb0d3a488768c4531ba315e8d0327b0a4c4a994147b12c61a929ae85f8",
+  "driver_sha256": "89f76f0bd49d9a3ac9a30804476a3488f97f71f351351b6b79a9bae953ad7709",
+  "first_baseline": "s4s5z/FL2, differsoriginalbenchmarkFL3",
+  "final_PC_baseline": "s4s5hz/FL3, separatefreshprofile; do notmixreports",
+  "files": {
+    "operand-reverse01-ncu-driver.json": "70241b3cb81527769fa0eb17796e4a43d527a12bb8bd08eada6bcdb620e1cf91",
+    "operand-reverse01-ncu.ncu-rep": "61a148ceae4be699d2ea5d634d4b51d1a13f4f91ad1965f46bab2c2e71419ae4",
+    "operand-reverse01-ncu.raw.csv": "1dc954fd57dd68c7911333ef712fcf29d961af6e7758adabad0e27adeb775408",
+    "operand-reverse01-ncu.source.csv": "2db4f88564506894a054d1373fdd339db7fb5cc6ec8d9375c17fc4528f73a54d",
+    "operand-reverse01-ncu-pc-driver.json": "23ba6dd80090ad5bee2c04bc07bf368412f3e4b23dd89c9d9ff1d2ff8eab55e2",
+    "operand-reverse01-ncu-pc.ncu-rep": "1e1e28d4f654cae9335cbe4f9272fddf1a3cf2f6b3bb99f7a961d569d7013951",
+    "operand-reverse01-ncu-pc.raw.csv": "cd3e90d46208b6c7e27ef939ae8e65028e66be9206fe8794189a3d47744c6cc8",
+    "operand-reverse01-ncu-pc.source.csv": "349e8145313ea1271da6857b25c915af977400e38be057f1a45fc992e47111d1",
+    "operand-reverse01-ncu-pc.session.txt": "c998d4ba421bb9dcaa41b103cb208721dfbb137155ec55c3646d8eff006a7225",
+    "SourceCounters.section": "5307d8bb457909afbf3757d2f1964fbc458aa55a729c97284332cb245177c189"
+  },
+  "PC_sampling": {
+    "status": "VALID_QUALITATIVE_ASSOCIATION_NO_LATENCY_DECOMPOSITION",
+    "interval_cycles": 2048,
+    "sampling_aggregation_passes": 2,
+    "replay_passes_per_kernel": 5,
+    "dropped_bytes": 0,
+    "candidate": {
+      "all_samples": 4844,
+      "math": 3173,
+      "producer": 1532,
+      "setup": 139,
+      "math_transpose": 2388,
+      "math_Bfull_wait": 2,
+      "producer_Wfull_wait": 153,
+      "producer_Bempty_wait": 80,
+      "producer_publish_fence_barrier": 273
+    },
+    "baseline": {
+      "all_samples": 2405,
+      "math": 2039,
+      "producer": 256,
+      "setup": 110,
+      "math_combined_W_X_full_wait": 974,
+      "producer_Xempty": 119,
+      "producer_Wempty": 110
+    },
+    "conclusion": "Candidate Xdelivery/transpose exposure supported; pure producerBpublicationstarvation unsupported. Baseline fullingressdependencyislarge; cannot splitWvsX orconvertPCresidencytocausedmicroseconds."
+  }
+}

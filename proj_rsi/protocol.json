@@ -132,7 +132,7 @@
     "judge_overhead": "yours_us is roughly kernel GPU time + 1.0-1.5 us after the judge subtracts about 4 us of replay cost; the practical floor for a tiny shape is about 2.5 us yours."
   },
   "runtime_authority": {
-    "updated_utc": "2026-10-26T21:35:18.883171+00:00",
+    "updated_utc": "2026-10-26T23:02:20.349772+00:00",
     "head": "Codex /root",
     "models": "Useavailableinheritedmodel; rolemodelstringsbelowarehistoricalClaudehandoverpreferences, notavailable-runtimeclaims.",
     "concurrent_agent_cap_including_head": 4,
@@ -140,6 +140,24 @@
     "queue": "proj_rsi/queue.json",
     "ledger": "results/proj-rsi/ledger.json",
     "handover": "handover_folder/12-codex-takeover.json",
-    "override": "Latestuserconfirms3msgoal. Reviewed65/65pw36usedoneexpiringscoredslotwith0checks;9/9officialtests+timingcomplete. Noautomaticpromotionorrepeat. Midnightwaitercancelled."
+    "override": "Latestuserconfirms3msgoal. Reviewed65/65pw36usedoneexpiringscoredslotwith0checks;9/9officialtests+timingcomplete. Noautomaticpromotionorrepeat. Midnightwaitercancelled.",
+    "latest_user_override": "Diagnose and iterate failed implementations. Closed labels in historical documents refer to tested versions unless supported family-wide evidence says otherwise."
+  },
+  "iteration_policy": {
+    "authority": "User correction2026-10-26: failures expected; diagnose and reiterate rather than discard after one attempt. Supersedes historical one-run family-close/no-retry wording.",
+    "cycle": [
+      "profile actual incumbent and current version",
+      "measure complete valid outputs",
+      "state one causal hypothesis and predicted observations",
+      "implement one evidence-driven change",
+      "test precision/correctness/graph/lifetime",
+      "validate source and measurements independently",
+      "compare incumbent + previous version + new version",
+      "retain evidence and iterate next bottleneck"
+    ],
+    "threshold_scope": "Speed thresholds gate integration/promotion; missing them classifies a VERSION, not an entire family. Correctness/setup failures invalidate timings and require diagnosis before a valid rerun.",
+    "retain": "Never delete unsuccessful implementations/results; preserve source hashes and predecessor comparisons.",
+    "queue": "Rank next marginal ROI and information value, including fixes and experiments on existing families. Park only with explicit remaining-ROI evidence/resource reason and reopening criteria.",
+    "validity": "No timing/harness gaming, precision weakening, changing live source, or cherry-picked benchmark claims. Bounded job deadlines still apply."
   }
 }

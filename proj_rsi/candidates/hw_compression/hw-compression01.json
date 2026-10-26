@@ -1,0 +1,500 @@
+{
+  "baseline_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "policy": "immutable_selected_RQ_weight_VMM_GENERIC",
+  "capabilities": {
+    "device": 0,
+    "vmm_supported": 1,
+    "generic_compression_supported": 1
+  },
+  "allocator_ABI": {
+    "CUDA_VERSION": 12080,
+    "CUmemAllocationProp_size": 32,
+    "COMP_NONE": 0,
+    "COMP_GENERIC": 1
+  },
+  "allocator_backend": "native",
+  "torch_version": "2.8.0+cu128",
+  "torch_CUDA": "12.8",
+  "targets": [
+    {
+      "layer": "pooler",
+      "variant_index": 1,
+      "KS": 4,
+      "n": 4096,
+      "ordinary_pointer_properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      },
+      "fallback": "original frozen pw36 kernel_fn state retained",
+      "allocations": {
+        "generic": {
+          "bytes": 50331648,
+          "mapped_bytes": 50331648,
+          "granularity": 2097152,
+          "requested_compression": 1,
+          "actual_compression": 1,
+          "device": 0,
+          "ptr": 12918456320,
+          "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+        },
+        "vmm_none": {
+          "bytes": 50331648,
+          "mapped_bytes": 50331648,
+          "granularity": 2097152,
+          "requested_compression": 0,
+          "actual_compression": 0,
+          "device": 0,
+          "ptr": 12985565184,
+          "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+        }
+      },
+      "full_byte_roundtrip": {
+        "status": "EXACT",
+        "sha256": "ede1975ef05672ae0cd45bfa9c121b8f3ffe3fc0fe61df003b6eb04c10e471ab",
+        "bytes": 50331648
+      },
+      "validation": {
+        "ordinary": [
+          {
+            "all_K_onehot": "EXACT",
+            "K": 8192,
+            "FP64_oracle": "ok 3.2e-03"
+          },
+          {
+            "dist": "normal",
+            "oracle": "relative L2 error 3.430e-03 (worst row 3.684e-03); 20 probe rows exact to 0.0e+00",
+            "input_immutable": true
+          },
+          {
+            "dist": "outliers",
+            "oracle": "relative L2 error 3.524e-03 (worst row 3.699e-03); 21 probe rows exact to 0.0e+00",
+            "input_immutable": true
+          }
+        ],
+        "generic": [
+          {
+            "all_K_onehot": "EXACT",
+            "K": 8192,
+            "FP64_oracle": "ok 3.2e-03"
+          },
+          {
+            "dist": "normal",
+            "oracle": "relative L2 error 3.431e-03 (worst row 3.690e-03); 20 probe rows exact to 0.0e+00",
+            "input_immutable": true
+          },
+          {
+            "dist": "outliers",
+            "oracle": "relative L2 error 3.525e-03 (worst row 3.678e-03); 21 probe rows exact to 0.0e+00",
+            "input_immutable": true
+          }
+        ],
+        "vmm_none": [
+          {
+            "all_K_onehot": "EXACT",
+            "K": 8192,
+            "FP64_oracle": "ok 3.2e-03"
+          },
+          {
+            "dist": "normal",
+            "oracle": "relative L2 error 3.419e-03 (worst row 3.687e-03); 20 probe rows exact to 0.0e+00",
+            "input_immutable": true
+          },
+          {
+            "dist": "outliers",
+            "oracle": "relative L2 error 3.509e-03 (worst row 3.693e-03); 21 probe rows exact to 0.0e+00",
+            "input_immutable": true
+          }
+        ]
+      },
+      "timing": {
+        "ordinary_before_us": 24.288000538945198,
+        "ordinary_after_us": 24.351999163627625,
+        "conservative_ordinary_us": 24.288000538945198,
+        "generic_F1_us": 24.480000138282776,
+        "vmm_none_F1_us": 24.351999163627625,
+        "F1_gain_us": -0.19199959933757782,
+        "control_F1_gain_us": -0.12800097465515137,
+        "F1_samples": {
+          "ordinary_before": [
+            24.288000538945198,
+            25.312000885605812,
+            24.288000538945198,
+            24.191999807953835,
+            25.280000641942024,
+            24.70399998128414,
+            24.512000381946564,
+            25.407999753952026,
+            24.159999564290047,
+            23.93599972128868,
+            25.66399984061718,
+            24.70399998128414,
+            24.288000538945198,
+            24.12799932062626,
+            24.191999807953835,
+            24.288000538945198,
+            24.09599907696247,
+            24.288000538945198,
+            24.09599907696247,
+            24.320000782608986,
+            24.288000538945198
+          ],
+          "generic": [
+            24.09599907696247,
+            24.480000138282776,
+            24.54400062561035,
+            25.407999753952026,
+            23.93599972128868,
+            24.288000538945198,
+            25.21600015461445,
+            23.871999233961105,
+            24.639999493956566,
+            25.536000728607178,
+            24.064000695943832,
+            24.224000051617622,
+            25.855999439954758,
+            25.50400048494339,
+            24.639999493956566,
+            24.351999163627625,
+            24.159999564290047,
+            24.671999737620354,
+            24.320000782608986,
+            24.064000695943832,
+            25.536000728607178
+          ],
+          "vmm_none": [
+            24.12799932062626,
+            23.93599972128868,
+            25.82399919629097,
+            23.903999477624893,
+            24.383999407291412,
+            24.191999807953835,
+            23.93599972128868,
+            24.4159996509552,
+            24.191999807953835,
+            24.351999163627625,
+            25.50400048494339,
+            24.447999894618988,
+            24.351999163627625,
+            24.4159996509552,
+            24.288000538945198,
+            24.512000381946564,
+            24.159999564290047,
+            24.512000381946564,
+            24.57600086927414,
+            24.480000138282776,
+            23.93599972128868
+          ],
+          "ordinary_after": [
+            25.407999753952026,
+            24.351999163627625,
+            24.25600029528141,
+            25.087999179959297,
+            24.351999163627625,
+            24.12799932062626,
+            24.064000695943832,
+            24.191999807953835,
+            25.439999997615814,
+            24.383999407291412,
+            24.320000782608986,
+            25.66399984061718,
+            25.02400055527687,
+            23.711999878287315,
+            25.312000885605812,
+            24.224000051617622,
+            24.032000452280045,
+            24.09599907696247,
+            23.903999477624893,
+            24.4159996509552,
+            24.512000381946564
+          ]
+        },
+        "paired_median_gain_us": -0.22399984300136566,
+        "paired_median_control_gain_us": 0.03200024366378784,
+        "paired_wins": 7,
+        "pairs": [
+          {
+            "ordinary_us": 24.159999564290047,
+            "generic_us": 23.96799996495247,
+            "vmm_none_us": 25.312000885605812,
+            "ordinary_gain_us": 0.19199959933757782,
+            "vmm_none_gain_us": 1.3440009206533432
+          },
+          {
+            "ordinary_us": 24.57600086927414,
+            "generic_us": 25.760000571608543,
+            "vmm_none_us": 24.064000695943832,
+            "ordinary_gain_us": -1.183999702334404,
+            "vmm_none_gain_us": -1.695999875664711
+          },
+          {
+            "ordinary_us": 24.86399933695793,
+            "generic_us": 25.248000398278236,
+            "vmm_none_us": 24.351999163627625,
+            "ordinary_gain_us": -0.38400106132030487,
+            "vmm_none_gain_us": -0.8960012346506119
+          },
+          {
+            "ordinary_us": 24.288000538945198,
+            "generic_us": 24.09599907696247,
+            "vmm_none_us": 24.351999163627625,
+            "ordinary_gain_us": 0.19200146198272705,
+            "vmm_none_gain_us": 0.2560000866651535
+          },
+          {
+            "ordinary_us": 23.96799996495247,
+            "generic_us": 24.383999407291412,
+            "vmm_none_us": 25.50400048494339,
+            "ordinary_gain_us": -0.4159994423389435,
+            "vmm_none_gain_us": 1.1200010776519775
+          },
+          {
+            "ordinary_us": 24.351999163627625,
+            "generic_us": 24.12799932062626,
+            "vmm_none_us": 24.70399998128414,
+            "ordinary_gain_us": 0.22399984300136566,
+            "vmm_none_gain_us": 0.5760006606578827
+          },
+          {
+            "ordinary_us": 23.93599972128868,
+            "generic_us": 24.351999163627625,
+            "vmm_none_us": 25.312000885605812,
+            "ordinary_gain_us": -0.4159994423389435,
+            "vmm_none_gain_us": 0.9600017219781876
+          },
+          {
+            "ordinary_us": 24.383999407291412,
+            "generic_us": 24.54400062561035,
+            "vmm_none_us": 24.224000051617622,
+            "ordinary_gain_us": -0.1600012183189392,
+            "vmm_none_gain_us": -0.3200005739927292
+          },
+          {
+            "ordinary_us": 25.696000084280968,
+            "generic_us": 24.383999407291412,
+            "vmm_none_us": 24.288000538945198,
+            "ordinary_gain_us": 1.3120006769895554,
+            "vmm_none_gain_us": -0.0959988683462143
+          },
+          {
+            "ordinary_us": 23.93599972128868,
+            "generic_us": 23.903999477624893,
+            "vmm_none_us": 24.09599907696247,
+            "ordinary_gain_us": 0.03200024366378784,
+            "vmm_none_gain_us": 0.19199959933757782
+          },
+          {
+            "ordinary_us": 25.37599951028824,
+            "generic_us": 24.351999163627625,
+            "vmm_none_us": 24.25600029528141,
+            "ordinary_gain_us": 1.024000346660614,
+            "vmm_none_gain_us": -0.0959988683462143
+          },
+          {
+            "ordinary_us": 24.320000782608986,
+            "generic_us": 24.351999163627625,
+            "vmm_none_us": 24.607999250292778,
+            "ordinary_gain_us": -0.03199838101863861,
+            "vmm_none_gain_us": 0.2560000866651535
+          },
+          {
+            "ordinary_us": 24.480000138282776,
+            "generic_us": 25.312000885605812,
+            "vmm_none_us": 23.96799996495247,
+            "ordinary_gain_us": -0.8320007473230362,
+            "vmm_none_gain_us": -1.3440009206533432
+          },
+          {
+            "ordinary_us": 24.288000538945198,
+            "generic_us": 24.288000538945198,
+            "vmm_none_us": 24.320000782608986,
+            "ordinary_gain_us": 0.0,
+            "vmm_none_gain_us": 0.03200024366378784
+          },
+          {
+            "ordinary_us": 24.992000311613083,
+            "generic_us": 23.96799996495247,
+            "vmm_none_us": 24.320000782608986,
+            "ordinary_gain_us": 1.024000346660614,
+            "vmm_none_gain_us": 0.35200081765651703
+          },
+          {
+            "ordinary_us": 24.25600029528141,
+            "generic_us": 24.480000138282776,
+            "vmm_none_us": 23.679999634623528,
+            "ordinary_gain_us": -0.22399984300136566,
+            "vmm_none_gain_us": -0.8000005036592484
+          },
+          {
+            "ordinary_us": 23.840000852942467,
+            "generic_us": 24.480000138282776,
+            "vmm_none_us": 24.064000695943832,
+            "ordinary_gain_us": -0.6399992853403091,
+            "vmm_none_gain_us": -0.4159994423389435
+          },
+          {
+            "ordinary_us": 24.12799932062626,
+            "generic_us": 24.351999163627625,
+            "vmm_none_us": 24.447999894618988,
+            "ordinary_gain_us": -0.22399984300136566,
+            "vmm_none_gain_us": 0.09600073099136353
+          },
+          {
+            "ordinary_us": 23.903999477624893,
+            "generic_us": 24.639999493956566,
+            "vmm_none_us": 24.224000051617622,
+            "ordinary_gain_us": -0.7360000163316727,
+            "vmm_none_gain_us": -0.4159994423389435
+          },
+          {
+            "ordinary_us": 24.032000452280045,
+            "generic_us": 24.288000538945198,
+            "vmm_none_us": 24.191999807953835,
+            "ordinary_gain_us": -0.2560000866651535,
+            "vmm_none_gain_us": -0.09600073099136353
+          },
+          {
+            "ordinary_us": 24.032000452280045,
+            "generic_us": 24.480000138282776,
+            "vmm_none_us": 25.119999423623085,
+            "ordinary_gain_us": -0.4479996860027313,
+            "vmm_none_gain_us": 0.6399992853403091
+          }
+        ],
+        "survives": false
+      },
+      "actual_timed_graph_mutations": [
+        {
+          "allocation": "ordinary",
+          "input": "original",
+          "oracle": "relative L2 error 3.347e-03 (worst row 3.677e-03); 14 probe rows exact to 0.0e+00",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "generic",
+          "input": "original",
+          "oracle": "relative L2 error 3.359e-03 (worst row 3.701e-03); 14 probe rows exact to 0.0e+00",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "vmm_none",
+          "input": "original",
+          "oracle": "relative L2 error 3.352e-03 (worst row 3.680e-03); 14 probe rows exact to 0.0e+00",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "ordinary",
+          "input": "zero",
+          "oracle": "all output elements exactly zero",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "generic",
+          "input": "zero",
+          "oracle": "all output elements exactly zero",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "vmm_none",
+          "input": "zero",
+          "oracle": "all output elements exactly zero",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "ordinary",
+          "input": "fresh_normal",
+          "oracle": "relative L2 error 3.383e-03 (worst row 3.726e-03); 18 probe rows exact to 0.0e+00",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "generic",
+          "input": "fresh_normal",
+          "oracle": "relative L2 error 3.382e-03 (worst row 3.748e-03); 18 probe rows exact to 0.0e+00",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "vmm_none",
+          "input": "fresh_normal",
+          "oracle": "relative L2 error 3.377e-03 (worst row 3.675e-03); 18 probe rows exact to 0.0e+00",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "ordinary",
+          "input": "fresh_outliers",
+          "oracle": "relative L2 error 3.529e-03 (worst row 3.738e-03); 14 probe rows exact to 0.0e+00",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "generic",
+          "input": "fresh_outliers",
+          "oracle": "relative L2 error 3.525e-03 (worst row 3.756e-03); 14 probe rows exact to 0.0e+00",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "vmm_none",
+          "input": "fresh_outliers",
+          "oracle": "relative L2 error 3.530e-03 (worst row 3.725e-03); 14 probe rows exact to 0.0e+00",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "ordinary",
+          "input": "all_probes",
+          "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "generic",
+          "input": "all_probes",
+          "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        },
+        {
+          "allocation": "vmm_none",
+          "input": "all_probes",
+          "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00",
+          "NaN_poison_overwritten": true,
+          "input_immutable": true
+        }
+      ],
+      "profile": {
+        "ordinary": [
+          {
+            "name": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
+            "duration_ns": 22527
+          }
+        ],
+        "generic": [
+          {
+            "name": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
+            "duration_ns": 21856
+          }
+        ],
+        "vmm_none": [
+          {
+            "name": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
+            "duration_ns": 21857
+          }
+        ]
+      },
+      "post_timing_weight_immutability": "EXACT_ALL_THREE",
+      "status": "INVALID_CLEANUP_FAILURE",
+      "cleanup_error": "cannot close: external tensor/alias references remain; destroy graph owners and state copies first"
+    }
+  ],
+  "CPU_preflight": "PASS",
+  "status": "INVALID_CLEANUP_FAILURE"
+}

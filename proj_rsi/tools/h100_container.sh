@@ -4,7 +4,11 @@
 set -euo pipefail
 touch /tmp/gpu.lock
 container=${PROJ_GPU_CONTAINER:-okc-proj-$$}
-exec docker run --rm --init --name "$container" --gpus all --ipc=host --shm-size=8g \
+profile_options=()
+# The driver restricts performance counters to CAP_SYS_ADMIN. Opt in only for a
+# named, bounded Nsight diagnostic; leave the driver policy and ordinary jobs alone.
+if [[ ${PROJ_GPU_PROFILE:-0} == 1 ]]; then profile_options+=(--cap-add SYS_ADMIN); fi
+exec docker run --rm --init --name "$container" "${profile_options[@]}" --gpus all --ipc=host --shm-size=8g \
   --label okc.scheduler=container-flock \
   -v /root/okc:/okc -v /root/okc_cache:/root/.cache \
   -v /tmp/gpu.lock:/gpu.lock -w /okc \

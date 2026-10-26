@@ -1,0 +1,768 @@
+{
+  "status": "CLOSE_NO_NATIVE_ALLOCATION_WIN",
+  "policy": "unpooler128_native_BF16_allocation_only",
+  "parent_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "source_sha256": {
+    "lab.py": "0a4db150debff8dfd09d13d33fe97896a27ba39a272e1b7f00b71f7a803c8047",
+    "preflight.py": "a4fdd6a72d8f4010806b821d7a0ac99ad5fab71d0918cc8f986cfaf7e222389f",
+    "README.md": "c204f0e3ece6994485112e920c297790e2e66cbd53d186b321a58e1489571b2f"
+  },
+  "cleanup": {
+    "counts_live": [
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 2
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 2
+      }
+    ],
+    "counts_after_alias_drop": [
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      }
+    ],
+    "counts_after_close": [
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      },
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      }
+    ],
+    "status": "CHECKED_CLOSE_PASS"
+  },
+  "population": "cuMemcpyDtoDAsync_then_stream_synchronize",
+  "effective_hardware_compression": "UNMEASURED",
+  "fixed_helper": {
+    "directory": "/okc/proj_rsi/candidates/hw_compression_owner",
+    "manifest_sha256": "8f32b91ee4146b2c9534360897d5953850f57b370c1ae653b5b04d325d80c781",
+    "sha256": {
+      "owner_cpu.cpp": "37bd530c08e466e73d17603e1e6c8f05dff614c4b12c15a0827317f3a6461400",
+      "cpu_probe.py": "1e3ab03f85d7a49b8c51c9ebf51dd3ff5fd338c02dfbe453461721d24659714b",
+      "cpu-torch213.json": "fff605fe7fc0a327e8d38b093ed19d090dd73417a712c26a7e3b12692088bb06",
+      "cpu-torch28-initial.json": "ae0f7ed6244fd3c50b995238f49d50ba420796b1d737305efeeec93ae6f050c3",
+      "cpu-torch28-locals.json": "e488ec9b8aff7fd62192ee031934a6aa8941bf528e9ad13d89446cb5ca641df0",
+      "allocator.cpp": "7f2dea1ecdcbff20efd1daad1a4250f775bbf9cfb8b9a76a16f257c1268140f8",
+      "adapter.py": "d76e63471c772aa69b0b76b2360ba4dde50f376e1cd33a88de575ff1e3e25362",
+      "build_helper.py": "b2953f722c7f392361aba08f0efc77f34eff21fbab5da6e74838db3477577f01",
+      "helper-build.json": "2e4d38fe9d0f76122f42de32be0632087439aade3d7cea490b0f879b26426cf7",
+      "README.md": "c445d020159ef76bea4fb2aed87b6a7eea4c5538a646b86803c318b0b75d629d",
+      "gpu_lifetime.py": "5e0dc4534b201fb9eb048fd4b2441bd10d5dff2cec2c689e02e9043a73422dac"
+    },
+    "ABI": {
+      "CUDA_VERSION": 12080,
+      "CUmemAllocationProp_size": 32,
+      "COMP_NONE": 0,
+      "COMP_GENERIC": 1
+    }
+  },
+  "runtime": {
+    "torch": "2.8.0+cu128",
+    "CUDA": "12.8",
+    "cublas_wheel": "12.8.4.1",
+    "lt_link_flags": [
+      "-L/opt/conda/lib/python3.11/site-packages/nvidia/cublas/lib",
+      "-l:libcublasLt.so.12",
+      "-Wl,-rpath,/opt/conda/lib/python3.11/site-packages/nvidia/cublas/lib"
+    ],
+    "capabilities": {
+      "device": 0,
+      "vmm_supported": 1,
+      "generic_compression_supported": 1
+    }
+  },
+  "selected_lt": {
+    "code": 200014,
+    "layout": 2,
+    "key": "unpooler_t",
+    "cfg": [
+      66,
+      18,
+      1,
+      0,
+      0,
+      4,
+      35,
+      0,
+      2
+    ],
+    "source_shape": [
+      4096,
+      8192
+    ],
+    "source_stride": [
+      8192,
+      1
+    ],
+    "source_pointer": 127600190029824,
+    "extension_sha256": "5acd39f2d6491f6d200422d9f9b7339f07d6142fb5c8499eadb024a7f400efb7"
+  },
+  "incumbent_rq_pick": {
+    "i": 1,
+    "KS": 2,
+    "n": 8192
+  },
+  "ordinary_pointer_properties": {
+    "retain_result": 1,
+    "compression": null,
+    "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+  },
+  "source_bytes": {
+    "bytes": 67108864,
+    "sha256": "09d1920b4f42bd5ec1fbaa26f2ac936d688a81574c605b5ec474f0ee42168120"
+  },
+  "allocations": [
+    {
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 1,
+        "actual_compression": 1,
+        "device": 0,
+        "ptr": 12918456320,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 1,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    },
+    {
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 0,
+        "actual_compression": 0,
+        "device": 0,
+        "ptr": 12985565184,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 0,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    }
+  ],
+  "eager_validation": {
+    "ordinary_lt": [
+      {
+        "all_K_onehot": "EXACT",
+        "K": 4096,
+        "FP64_oracle": "ok 1.7e-03"
+      },
+      {
+        "distribution": "normal",
+        "oracle": "relative L2 error 1.486e-04 (worst row 2.744e-04); 16 probe rows exact to 0.0e+00",
+        "input_immutable": true
+      },
+      {
+        "distribution": "outliers",
+        "oracle": "relative L2 error 1.548e-04 (worst row 3.407e-04); 20 probe rows exact to 0.0e+00",
+        "input_immutable": true
+      }
+    ],
+    "generic_lt": [
+      {
+        "all_K_onehot": "EXACT",
+        "K": 4096,
+        "FP64_oracle": "ok 1.7e-03"
+      },
+      {
+        "distribution": "normal",
+        "oracle": "relative L2 error 1.486e-04 (worst row 2.744e-04); 16 probe rows exact to 0.0e+00",
+        "input_immutable": true
+      },
+      {
+        "distribution": "outliers",
+        "oracle": "relative L2 error 1.548e-04 (worst row 3.407e-04); 20 probe rows exact to 0.0e+00",
+        "input_immutable": true
+      }
+    ],
+    "none_lt": [
+      {
+        "all_K_onehot": "EXACT",
+        "K": 4096,
+        "FP64_oracle": "ok 1.7e-03"
+      },
+      {
+        "distribution": "normal",
+        "oracle": "relative L2 error 1.486e-04 (worst row 2.744e-04); 16 probe rows exact to 0.0e+00",
+        "input_immutable": true
+      },
+      {
+        "distribution": "outliers",
+        "oracle": "relative L2 error 1.548e-04 (worst row 3.407e-04); 20 probe rows exact to 0.0e+00",
+        "input_immutable": true
+      }
+    ],
+    "incumbent": [
+      {
+        "all_K_onehot": "EXACT",
+        "K": 4096,
+        "FP64_oracle": "ok 2.4e-03"
+      },
+      {
+        "distribution": "normal",
+        "oracle": "relative L2 error 2.691e-03 (worst row 2.999e-03); 16 probe rows exact to 0.0e+00",
+        "input_immutable": true
+      },
+      {
+        "distribution": "outliers",
+        "oracle": "relative L2 error 2.827e-03 (worst row 2.975e-03); 20 probe rows exact to 0.0e+00",
+        "input_immutable": true
+      }
+    ]
+  },
+  "timing": {
+    "F1_medians_us": {
+      "ordinary_before": 26.528000831604004,
+      "ordinary_after": 26.528000831604004,
+      "incumbent_before": 24.064000695943832,
+      "incumbent_after": 24.09599907696247,
+      "generic": 26.623999699950218,
+      "none": 26.559999212622643,
+      "ordinary": 26.528000831604004,
+      "incumbent": 24.064000695943832
+    },
+    "F1_samples_us": {
+      "ordinary_before": [
+        26.59199945628643,
+        26.655999943614006,
+        26.59199945628643,
+        26.528000831604004,
+        26.528000831604004,
+        26.496000587940216,
+        27.615999802947044,
+        26.43200010061264,
+        26.528000831604004,
+        27.936000376939774,
+        26.528000831604004,
+        26.464000344276428,
+        26.399999856948853,
+        26.75200067460537,
+        26.496000587940216,
+        26.528000831604004,
+        27.807999402284622,
+        26.59199945628643,
+        26.43200010061264,
+        27.904000133275986,
+        26.335999369621277
+      ],
+      "ordinary_after": [
+        26.528000831604004,
+        27.68000029027462,
+        26.655999943614006,
+        26.335999369621277,
+        27.68000029027462,
+        26.72000043094158,
+        26.847999542951584,
+        26.240000501275063,
+        26.399999856948853,
+        26.496000587940216,
+        26.559999212622643,
+        26.623999699950218,
+        26.399999856948853,
+        26.496000587940216,
+        27.615999802947044,
+        26.43200010061264,
+        26.496000587940216,
+        27.35999971628189,
+        26.464000344276428,
+        26.335999369621277,
+        26.559999212622643
+      ],
+      "incumbent_before": [
+        23.744000121951103,
+        24.480000138282776,
+        23.80800060927868,
+        24.064000695943832,
+        24.86399933695793,
+        23.871999233961105,
+        23.96799996495247,
+        25.02400055527687,
+        24.032000452280045,
+        23.80800060927868,
+        25.728000327944756,
+        24.191999807953835,
+        24.191999807953835,
+        25.02400055527687,
+        24.191999807953835,
+        24.064000695943832,
+        25.696000084280968,
+        23.552000522613525,
+        24.191999807953835,
+        23.679999634623528,
+        24.000000208616257
+      ],
+      "incumbent_after": [
+        24.09599907696247,
+        24.992000311613083,
+        23.77600036561489,
+        23.871999233961105,
+        25.21600015461445,
+        23.711999878287315,
+        24.351999163627625,
+        25.536000728607178,
+        23.80800060927868,
+        23.679999634623528,
+        25.50400048494339,
+        23.96799996495247,
+        23.840000852942467,
+        25.151999667286873,
+        24.4159996509552,
+        23.711999878287315,
+        24.927999824285507,
+        23.871999233961105,
+        24.25600029528141,
+        25.02400055527687,
+        23.840000852942467
+      ],
+      "generic": [
+        26.72000043094158,
+        26.944000273942947,
+        26.496000587940216,
+        26.623999699950218,
+        26.27200074493885,
+        26.496000587940216,
+        26.784000918269157,
+        26.30399912595749,
+        27.583999559283257,
+        26.59199945628643,
+        26.655999943614006,
+        27.68000029027462,
+        26.559999212622643,
+        26.559999212622643,
+        27.615999802947044,
+        26.688000187277794,
+        26.623999699950218,
+        26.496000587940216,
+        26.43200010061264,
+        26.559999212622643,
+        26.655999943614006
+      ],
+      "none": [
+        27.936000376939774,
+        26.528000831604004,
+        26.30399912595749,
+        27.83999964594841,
+        26.59199945628643,
+        26.75200067460537,
+        28.16000021994114,
+        26.240000501275063,
+        26.688000187277794,
+        27.712000533938408,
+        26.655999943614006,
+        26.559999212622643,
+        26.559999212622643,
+        26.528000831604004,
+        26.43200010061264,
+        26.335999369621277,
+        26.399999856948853,
+        26.399999856948853,
+        26.559999212622643,
+        27.871999889612198,
+        26.559999212622643
+      ]
+    },
+    "F1_gain_us": {
+      "ordinary_lt": -0.0959988683462143,
+      "none_lt": -0.06400048732757568,
+      "incumbent": -2.559999004006386
+    },
+    "paired_median_gain_us": {
+      "ordinary_lt": 0.09600073099136353,
+      "none_lt": 0.09600073099136353,
+      "incumbent": -2.6239994913339615
+    },
+    "paired_samples_us": [
+      {
+        "ordinary_lt": 27.615999802947044,
+        "generic_lt": 26.944000273942947,
+        "none_lt": 26.75200067460537,
+        "incumbent": 24.064000695943832
+      },
+      {
+        "ordinary_lt": 27.904000133275986,
+        "generic_lt": 26.976000517606735,
+        "none_lt": 26.464000344276428,
+        "incumbent": 24.09599907696247
+      },
+      {
+        "ordinary_lt": 28.00000086426735,
+        "generic_lt": 26.784000918269157,
+        "none_lt": 26.367999613285065,
+        "incumbent": 24.09599907696247
+      },
+      {
+        "ordinary_lt": 27.775999158620834,
+        "generic_lt": 26.655999943614006,
+        "none_lt": 26.784000918269157,
+        "incumbent": 24.25600029528141
+      },
+      {
+        "ordinary_lt": 26.655999943614006,
+        "generic_lt": 26.559999212622643,
+        "none_lt": 26.944000273942947,
+        "incumbent": 24.73600022494793
+      },
+      {
+        "ordinary_lt": 26.43200010061264,
+        "generic_lt": 26.559999212622643,
+        "none_lt": 26.815999299287796,
+        "incumbent": 23.93599972128868
+      },
+      {
+        "ordinary_lt": 26.655999943614006,
+        "generic_lt": 26.75200067460537,
+        "none_lt": 26.87999978661537,
+        "incumbent": 24.800000712275505
+      },
+      {
+        "ordinary_lt": 26.623999699950218,
+        "generic_lt": 26.399999856948853,
+        "none_lt": 26.496000587940216,
+        "incumbent": 25.02400055527687
+      },
+      {
+        "ordinary_lt": 27.712000533938408,
+        "generic_lt": 26.399999856948853,
+        "none_lt": 26.655999943614006,
+        "incumbent": 24.960000067949295
+      },
+      {
+        "ordinary_lt": 26.623999699950218,
+        "generic_lt": 26.72000043094158,
+        "none_lt": 26.623999699950218,
+        "incumbent": 23.840000852942467
+      },
+      {
+        "ordinary_lt": 26.30399912595749,
+        "generic_lt": 26.815999299287796,
+        "none_lt": 26.496000587940216,
+        "incumbent": 24.224000051617622
+      },
+      {
+        "ordinary_lt": 27.68000029027462,
+        "generic_lt": 26.59199945628643,
+        "none_lt": 26.655999943614006,
+        "incumbent": 24.191999807953835
+      },
+      {
+        "ordinary_lt": 26.43200010061264,
+        "generic_lt": 26.399999856948853,
+        "none_lt": 26.688000187277794,
+        "incumbent": 24.000000208616257
+      },
+      {
+        "ordinary_lt": 26.30399912595749,
+        "generic_lt": 26.623999699950218,
+        "none_lt": 28.031999245285988,
+        "incumbent": 24.224000051617622
+      },
+      {
+        "ordinary_lt": 26.59199945628643,
+        "generic_lt": 27.904000133275986,
+        "none_lt": 28.16000021994114,
+        "incumbent": 24.447999894618988
+      },
+      {
+        "ordinary_lt": 26.27200074493885,
+        "generic_lt": 27.871999889612198,
+        "none_lt": 26.784000918269157,
+        "incumbent": 24.000000208616257
+      },
+      {
+        "ordinary_lt": 26.367999613285065,
+        "generic_lt": 26.559999212622643,
+        "none_lt": 27.583999559283257,
+        "incumbent": 23.679999634623528
+      },
+      {
+        "ordinary_lt": 26.91200003027916,
+        "generic_lt": 26.559999212622643,
+        "none_lt": 26.655999943614006,
+        "incumbent": 23.77600036561489
+      },
+      {
+        "ordinary_lt": 26.72000043094158,
+        "generic_lt": 26.399999856948853,
+        "none_lt": 26.30399912595749,
+        "incumbent": 23.77600036561489
+      },
+      {
+        "ordinary_lt": 26.623999699950218,
+        "generic_lt": 26.399999856948853,
+        "none_lt": 26.655999943614006,
+        "incumbent": 23.840000852942467
+      },
+      {
+        "ordinary_lt": 26.75200067460537,
+        "generic_lt": 27.775999158620834,
+        "none_lt": 26.655999943614006,
+        "incumbent": 23.903999477624893
+      }
+    ],
+    "provisional_gain_gate": false
+  },
+  "actual_timed_graph_checks": [
+    {
+      "case": "ordinary_lt",
+      "mutation": "original",
+      "oracle": "relative L2 error 1.386e-04 (worst row 2.899e-04); 14 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "generic_lt",
+      "mutation": "original",
+      "oracle": "relative L2 error 1.386e-04 (worst row 2.899e-04); 14 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "none_lt",
+      "mutation": "original",
+      "oracle": "relative L2 error 1.386e-04 (worst row 2.899e-04); 14 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "incumbent",
+      "mutation": "original",
+      "oracle": "relative L2 error 2.761e-03 (worst row 2.973e-03); 14 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "ordinary_lt",
+      "mutation": "zero",
+      "oracle": "all elements exactly zero",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "generic_lt",
+      "mutation": "zero",
+      "oracle": "all elements exactly zero",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "none_lt",
+      "mutation": "zero",
+      "oracle": "all elements exactly zero",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "incumbent",
+      "mutation": "zero",
+      "oracle": "all elements exactly zero",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "ordinary_lt",
+      "mutation": "fresh_normal",
+      "oracle": "relative L2 error 1.474e-04 (worst row 2.984e-04); 16 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "generic_lt",
+      "mutation": "fresh_normal",
+      "oracle": "relative L2 error 1.474e-04 (worst row 2.984e-04); 16 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "none_lt",
+      "mutation": "fresh_normal",
+      "oracle": "relative L2 error 1.474e-04 (worst row 2.984e-04); 16 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "incumbent",
+      "mutation": "fresh_normal",
+      "oracle": "relative L2 error 2.712e-03 (worst row 3.002e-03); 16 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "ordinary_lt",
+      "mutation": "fresh_outliers",
+      "oracle": "relative L2 error 1.345e-04 (worst row 2.676e-04); 21 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "generic_lt",
+      "mutation": "fresh_outliers",
+      "oracle": "relative L2 error 1.345e-04 (worst row 2.676e-04); 21 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "none_lt",
+      "mutation": "fresh_outliers",
+      "oracle": "relative L2 error 1.345e-04 (worst row 2.676e-04); 21 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "incumbent",
+      "mutation": "fresh_outliers",
+      "oracle": "relative L2 error 2.817e-03 (worst row 2.984e-03); 21 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "ordinary_lt",
+      "mutation": "all_probes",
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "generic_lt",
+      "mutation": "all_probes",
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "none_lt",
+      "mutation": "all_probes",
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "incumbent",
+      "mutation": "all_probes",
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true
+    }
+  ],
+  "fresh_output_checks": [
+    {
+      "case": "ordinary_lt",
+      "oracle": "relative L2 error 1.386e-04 (worst row 2.899e-04); 14 probe rows exact to 0.0e+00",
+      "fresh_output": true
+    },
+    {
+      "case": "generic_lt",
+      "oracle": "relative L2 error 1.386e-04 (worst row 2.899e-04); 14 probe rows exact to 0.0e+00",
+      "fresh_output": true
+    },
+    {
+      "case": "none_lt",
+      "oracle": "relative L2 error 1.386e-04 (worst row 2.899e-04); 14 probe rows exact to 0.0e+00",
+      "fresh_output": true
+    },
+    {
+      "case": "incumbent",
+      "oracle": "relative L2 error 2.761e-03 (worst row 2.973e-03); 14 probe rows exact to 0.0e+00",
+      "fresh_output": true
+    }
+  ],
+  "profiles": {
+    "ordinary_lt": [
+      {
+        "name": "nvjet_tst_128x64_64x8_1x1_v_bz_coopB_NNN",
+        "grid": [
+          1,
+          128,
+          1
+        ],
+        "block": [
+          384,
+          1,
+          1
+        ],
+        "duration_us": 31.648,
+        "registers": 168,
+        "shared_bytes": 213268
+      }
+    ],
+    "generic_lt": [
+      {
+        "name": "nvjet_tst_128x64_64x8_1x1_v_bz_coopB_NNN",
+        "grid": [
+          1,
+          128,
+          1
+        ],
+        "block": [
+          384,
+          1,
+          1
+        ],
+        "duration_us": 25.633,
+        "registers": 168,
+        "shared_bytes": 213268
+      }
+    ],
+    "none_lt": [
+      {
+        "name": "nvjet_tst_128x64_64x8_1x1_v_bz_coopB_NNN",
+        "grid": [
+          1,
+          128,
+          1
+        ],
+        "block": [
+          384,
+          1,
+          1
+        ],
+        "duration_us": 25.185,
+        "registers": 168,
+        "shared_bytes": 213268
+      }
+    ],
+    "incumbent": [
+      {
+        "name": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
+        "grid": [
+          64,
+          2,
+          1
+        ],
+        "block": [
+          384,
+          1,
+          1
+        ],
+        "duration_us": 22.08,
+        "registers": 168,
+        "shared_bytes": 144520
+      }
+    ]
+  },
+  "incumbent_RQ_counters": "ZERO",
+  "post_timing_storage": "EXACT_ALL_ALLOCATIONS"
+}

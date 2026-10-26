@@ -1,5 +1,5 @@
 {
-  "written_at_utc": "2026-10-26T21:45:09.409688+00:00",
+  "written_at_utc": "2026-10-26T23:29:49.458452+00:00",
   "supervisor": "Codex /root",
   "scope": "Continue Claude muse_bf16_proj RSI work from session notes + handover_folder; preserve prior work.",
   "objectives": {
@@ -78,7 +78,8 @@
     ],
     "lock_runtime_test": "same inode1807; C exited at monotonic15871561587989 before D entered15871581462511; external nonblocking lock probe failed while benchmark held lock.",
     "bounded_trial_source": "proj_rsi/tools/h100_trial.sh (hostdeadline+exactnamedcontainercleanup; innerjobGPUlockremainsinsidecontainer)",
-    "deadline_runtime_test": "CPU-onlyhostlockheldthroughouter25s; queuednamedcontainer timedout124 andwasabsentafter25.145s; lockreleased; noCUDAprocesswaslaunched."
+    "deadline_runtime_test": "CPU-onlyhostlockheldthroughouter25s; queuednamedcontainer timedout124 andwasabsentafter25.145s; lockreleased; noCUDAprocesswaslaunched.",
+    "profiling": "PROJ_GPU_PROFILE=1 opts nameddiagnosticcontainerintoSYS_ADMINforadmin-onlyNVIDIAcounters; normalrunshave noaddedcapability. --clock-control none, driverpolicynotchanged; sourceexecmode755mustpreserveoninstall."
   },
   "inherited_invalid_runs": {
     "stalled": "tensorcore_ladder9 qkv rows completed; stalled before router16 for >24min. Container a28b13f4ee6b stopped; original partial log retained.",
@@ -114,9 +115,9 @@
     "closed": "m256 rq, old codecs and other closed designs remain closed unless materially new evidence."
   },
   "agents": {
-    "proj_integration": "operand_reverse kernelcorrected64/216/resourceproofpass; finalfrozenlabpendingreview",
-    "proj_evidence": "independentoperand_reverse architecture/CPU/devicePASS; finalactualtimedgraphlabgatespending",
-    "proj_tracks": "rq_footerCPU NO-GO; nowaligned_epilogue narrowGVportCPUROIfeasibility",
+    "proj_integration": "hw_compression_counters fixedLtphysicaltrafficdiagnostic",
+    "proj_evidence": "independentversionsmemory+HWcounterdiagnostic/v3validator",
+    "proj_tracks": "operand_reverse_v3 hybridcoalescedloader4wayiteration",
     "root": "supervisor,physicalGPUexecutor,judge/quota,score/ROI/integration"
   },
   "continuation_rules": [
@@ -162,13 +163,14 @@
       "gate": "3WG384threads static<=168regs/0spill/noC75; fullCPUlayoutproof beforeGPU"
     }
   ],
-  "next_action": "Reviewfreezeoperand_reversecompleteoutputlab thenoneboundedGPUtrialifGO; alignedGVrebaseCPUfeasibilityparallel; noGPUcurrentlyrunning. Bestofficial3200.615.",
+  "next_action": "Review/runfocusedV1V2memorycounterdriver; freeze/reviewV3then4waybenchmark; HWcomptrafficdiagnosticparallel. Allfailedversionsretained; bestofficial3200.615.",
   "latest_user_directive": {
     "requested_minimum_agents": 5,
     "platform_concurrent_agent_cap_including_head": 4,
     "operating_policy": "Useall4actualslots; continuousimplementer/reviewer/parallelkernelworkwithdisjointownership; rotatecompletedassignments. NevercountGPUjobsorpretend5agents.",
     "optimization": "Aggressivecreativekernelswithinlossless/precision/correctness/challengerules; no tokenbudgetcap requested.",
-    "latest_user_authorizes_agents_up_to": 8
+    "latest_user_authorizes_agents_up_to": 8,
+    "iteration": "Failuresexpected; diagnoseanditerateversions, notautomaticfamilyrejection. Thisexplicitlyoverrideshistoricalno-retry/closefamilywording."
   },
   "official_scored_job": {
     "job": "e22a4b9d693d4902",
@@ -197,5 +199,108 @@
     "all_correctness_checks_pass": true,
     "container_and_process_gone": true,
     "raw_local": "results/proj-rsi/takeover/20261026/router-small01.json"
+  },
+  "operand_reverse_trial": {
+    "pid": 355459,
+    "container": "okc-proj-operand-reverse01",
+    "status": "terminal_CLOSED_ALL_CORRECT_BUT_21/21_SLOWER",
+    "F1_gain_us": -23.520002141594887,
+    "paired_graph_gain_us": -23.51999841630459,
+    "terminal": "2026-10-26T21:49:17Z",
+    "process_and_container_gone": true,
+    "source_sha256": "ca92a4fb0d3a488768c4531ba315e8d0327b0a4c4a994147b12c61a929ae85f8"
+  },
+  "ncu_diagnostics": {
+    "first_setup": "INVALIDBEFOREDOCKER/env126: runnerexecbit664. Correctedlocal/remotemode755, noGPUmeasurementfirstattempt. Sourcecontentunchanged.",
+    "valid_first": {
+      "container": "okc-proj-operand-reverse-ncu02",
+      "guard_pid": 357831,
+      "and_list_parent": 357830,
+      "terminal": "2026-10-26T22:01:21Z exit0",
+      "section_count": 7,
+      "roles": 2,
+      "passes_per_role": 18,
+      "report_sha256": "61a148ceae4be699d2ea5d634d4b51d1a13f4f91ad1965f46bab2c2e71419ae4",
+      "review": "proj_rsi/audits/operand-reverse-ncu-preflight.md",
+      "limitation": "FreshbaselineFL2notoriginalFL3; source/softwarecountsnotHWcountercounts; nodirectoriginaltimingdecomposition."
+    },
+    "final_PC": {
+      "id": "operand_reverse_final_PC_diagnostic",
+      "status": "VALID_TERMINAL_REVIEW_COMPLETE",
+      "run": "operand-reverse01-ncu-pc",
+      "pid": 360871,
+      "container": "okc-proj-operand-reverse-ncu-pc01",
+      "source": "ca92a4fb0d3a488768c4531ba315e8d0327b0a4c4a994147b12c61a929ae85f8",
+      "driver": "89f76f0bd49d9a3ac9a30804476a3488f97f71f351351b6b79a9bae953ad7709",
+      "terminal": "2026-10-26T22:21:12Z TRIAL_EXIT0/driveroraclesPASS/2kernels5passes",
+      "baseline": "freshFL3/s4s5hz, differs firstNCUFL2; reportseparate",
+      "gate": "ExplicitPCstallcolumns/#Samples; perrole>=200/leadingphase>=30, nooverflow/dropissues; otherwiseINCONCLUSIVEandSTOP; nomoreprofiles",
+      "archive": "results/proj-rsi/takeover/20261026",
+      "process_and_container_gone": true,
+      "report_sha256": "1e1e28d4f654cae9335cbe4f9272fddf1a3cf2f6b3bb99f7a961d569d7013951",
+      "archive_published": "proj_rsi/diagnostics/operand_reverse",
+      "rule": "No more GPU profiling for this closed source."
+    },
+    "rule": "Countersdiagnosticonly. SourceCountersfinalcaptureonly; insufficient=>STOPinconclusive. No3rdprofile."
+  },
+  "hw_compression_trial": {
+    "status": "terminal_INVALID_CLEANUP_FAILURE",
+    "pid": 362824,
+    "container": "okc-proj-hw-compression01",
+    "manifest_sha256": "d2b0bfa79f19315497efe4dcebdff6e827773ed6bbf8e7caae98a9700f5b4713",
+    "inner_s": 300,
+    "outer_s": 360,
+    "remote_log": "/root/okc/logs/hw-compression01.host.log",
+    "review": "proj_evidenceGO; realTorch2.8DriverVMM/TMA/cleanup/runtimeperformanceallpending",
+    "terminal": "2026-10-26T22:36:28Z exit1",
+    "process_and_container_gone": true,
+    "unpooler": "UNRUN",
+    "archive": "proj_rsi/candidates/hw_compression/hw-compression01.json"
+  },
+  "owner_lifetime_trial": {
+    "status": "terminal_LIFETIME_GATE_PASS_NO_PERFORMANCE_CLAIM",
+    "pid": 365178,
+    "container": "okc-proj-hw-owner-lifetime01",
+    "driver_sha256": "5e0dc4534b201fb9eb048fd4b2441bd10d5dff2cec2c689e02e9043a73422dac",
+    "inner_s": 180,
+    "outer_s": 240,
+    "remote_log": "/root/okc/logs/hw-owner-lifetime01.host.log",
+    "terminal": "2026-10-26T23:01:55Z exit0",
+    "traces": 22,
+    "oracles": 8,
+    "all_regions_closed": true,
+    "process_and_container_gone": true,
+    "result": "proj_rsi/candidates/hw_compression_owner/hw-owner-lifetime01.json"
+  },
+  "native_trial": {
+    "pid": 366192,
+    "container": "okc-proj-hw-native01",
+    "terminal": "2026-10-26T23:07:54Z exit0",
+    "status": "VALID_NO_GAIN_FAMILY_ACTIVE",
+    "source_sha256": "0a4db150debff8dfd09d13d33fe97896a27ba39a272e1b7f00b71f7a803c8047",
+    "result": "proj_rsi/candidates/hw_native/hw-native01.json",
+    "cleanup": "bothRegion0",
+    "process_and_container_gone": true
+  },
+  "reverse_v2_trial": {
+    "pid": 366966,
+    "container": "okc-proj-operand-reverse-v201",
+    "terminal": "2026-10-26T23:11:13Z exit0",
+    "status": "VALID_REGRESSION_V3_ACTIVE",
+    "source_sha256": "97664bdee7593d46e0493b9599062c37af150262d597002a722016f060548faf",
+    "result": "proj_rsi/candidates/operand_reverse_v2/operand-reverse-v201.json",
+    "process_and_container_gone": true
+  },
+  "reverse_versions_counter_trial": {
+    "status": "TERMINAL_EXPORT_ANALYSIS_PENDING",
+    "pid": 369783,
+    "container": "okc-proj-reverse-v1-v2-ncu01",
+    "driver_sha256": "ce6d3407101b191bae27150f6670691d0440185dc1586df483ee7fde67b09493",
+    "inner_s": 180,
+    "outer_s": 240,
+    "review": "proj_rsi/audits/operand-reverse-versions-ncu-preflight.md",
+    "terminal": "2026-10-26T23:27:50Z exit0",
+    "passes_per_kernel": 32,
+    "process_and_container_gone": true
   }
 }

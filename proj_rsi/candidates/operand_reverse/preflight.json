@@ -1,0 +1,55 @@
+{
+  "status": "CPU_DEVICE_PROOF_ONLY_GPU_UNRUN",
+  "X": {
+    "exact_BF16_values": 524288,
+    "coalesced_LDG128_per_thread_stage": 4,
+    "SHFL_per_thread_stage": 32,
+    "SELP_per_thread_stage": 32
+  },
+  "W": {
+    "exact_BF16_values": 524288,
+    "escapes": 491209,
+    "cap": 61504,
+    "shared_B_SW128_bijection": true,
+    "escape_lists_span32entry_windows": true,
+    "escape_control_flow": "Bit proof reconstructs CSR entries; unchanged inherited rq_fix supplies reload semantics, GPU runtime pending"
+  },
+  "output": {
+    "all8192_D_scalars_observed": true,
+    "single128x64_slab_bijection": true
+  },
+  "lifetime": "PASS sequential XQ4/A2/W6/B8 tag consistency; not an asynchronous barrier interleaving simulation",
+  "source_sha256": "ca92a4fb0d3a488768c4531ba315e8d0327b0a4c4a994147b12c61a929ae85f8",
+  "device_sha256": "59f3b775d28410c23616a749ad58661112f9c6a1a959fec05333068ca9f3800a",
+  "CTA_register_pool": {
+    "initial_static": 64512,
+    "producer64_math216": 63488,
+    "spare": 1024
+  },
+  "shared_bytes": 103600,
+  "geometry": {
+    "m": 128,
+    "n": 8192,
+    "k": 4096,
+    "channel_tile": 64,
+    "CTAs": 128,
+    "threads": 384,
+    "KS": 1
+  },
+  "ptxas": "ptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_Z2rqILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_' for 'sm_90a'\nptxas info    : Function properties for _Z2rqILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 168 registers, used 4 barriers\nptxas info    : Compile time = 54.868 ms\n",
+  "SASS": {
+    "HGMMA": 16,
+    "WARPGROUP_ARRIVE": 4,
+    "UTMASTG": 1,
+    "UBLKCP_W": 7,
+    "UTMALDG_X": 0,
+    "SHFL": 130
+  },
+  "SASS_sha256": "48b2bfc1f13f372f89a888e2f950f678e0c71a4f868ff8c17295d928fa91aec6",
+  "files": {
+    "prototype.py": "06f25053a58de30b7ed95419d40fcf9352f33ab8d99298eaa605a87d39a3d7e2",
+    "kernel_body.cuh": "35a1eed6386452f7d88ef4dc74d8f2a1274af94d04cda6b6cbdf9d5965d917d9",
+    "preflight.py": "7b0cea16fbe218b5ace43cdcc702456909fe2cfaffa05c3ab2f1017e8187c879"
+  },
+  "evidence_label_update": "Post-proof terminology correction only; source/device/CPU mapping operations and captured compile unchanged"
+}

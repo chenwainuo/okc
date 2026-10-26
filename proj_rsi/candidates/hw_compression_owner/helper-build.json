@@ -1,0 +1,41 @@
+{
+  "status": "CPU_BUILD_IMPORT_NORMALIZED_SOURCE_PASS",
+  "CUDA_API_calls": 0,
+  "baseline_v1_unchanged": true,
+  "only_changes": [
+    "close drops owner Tensor before Region guard",
+    "counts diagnostic"
+  ],
+  "abi": {
+    "CUDA_VERSION": 12080,
+    "CUmemAllocationProp_size": 32,
+    "COMP_NONE": 0,
+    "COMP_GENERIC": 1
+  },
+  "source_sha256": "7f2dea1ecdcbff20efd1daad1a4250f775bbf9cfb8b9a76a16f257c1268140f8",
+  "build_directory": "/tmp/okc-owner-helper-cpu-oz1_aai8",
+  "build_command": [
+    "g++",
+    "-shared",
+    "-fPIC",
+    "-O2",
+    "-std=c++17",
+    "-DTORCH_EXTENSION_NAME=okc_owner_fixed_build",
+    "-D_GLIBCXX_USE_CXX11_ABI=1",
+    "-I/home/ubuntu/.local/lib/python3.10/site-packages/torch/include",
+    "-I/home/ubuntu/.local/lib/python3.10/site-packages/torch/include/torch/csrc/api/include",
+    "-I/usr/include/python3.10",
+    "-I/usr/local/cuda/include",
+    "/home/ubuntu/okc/proj_rsi/candidates/hw_compression_owner/allocator.cpp",
+    "-L/home/ubuntu/.local/lib/python3.10/site-packages/torch/lib",
+    "-Wl,-rpath,/home/ubuntu/.local/lib/python3.10/site-packages/torch/lib",
+    "-ltorch_python",
+    "-ltorch",
+    "-ltorch_cpu",
+    "-lc10",
+    "-ldl",
+    "-o",
+    "/tmp/okc-owner-helper-cpu-oz1_aai8/okc_owner_fixed_build.cpython-310-x86_64-linux-gnu.so"
+  ],
+  "torch": "2.13.0+cpu"
+}

@@ -1,0 +1,85 @@
+{
+  "status": "CPU_ROUTING_BITS_CASE_ALIAS_DROP_PASS_GPU_UNRUN",
+  "torch_cpu": "2.13.0+cpu",
+  "no_CUDA_or_helper_API": true,
+  "layout_checks": [
+    {
+      "layout": 0,
+      "key": "unpooler_raw",
+      "shape": [
+        8192,
+        4096
+      ],
+      "stride": [
+        4096,
+        1
+      ]
+    },
+    {
+      "layout": 1,
+      "key": "unpooler_raw",
+      "shape": [
+        8192,
+        4096
+      ],
+      "stride": [
+        4096,
+        1
+      ]
+    },
+    {
+      "layout": 2,
+      "key": "unpooler_t",
+      "shape": [
+        4096,
+        8192
+      ],
+      "stride": [
+        8192,
+        1
+      ]
+    },
+    {
+      "layout": 3,
+      "key": "unpooler_t",
+      "shape": [
+        4096,
+        8192
+      ],
+      "stride": [
+        8192,
+        1
+      ]
+    }
+  ],
+  "bit_checks": [
+    {
+      "source": "raw",
+      "all_BF16_patterns": 65536,
+      "dtype_reinterpretation": "EXACT",
+      "pointer_alias": true,
+      "case_reference_drop": "PASS_NOT_VMM_OWNERSHIP_PROOF"
+    },
+    {
+      "source": "prepared_transpose",
+      "all_BF16_patterns": 65536,
+      "dtype_reinterpretation": "EXACT",
+      "pointer_alias": true,
+      "case_reference_drop": "PASS_NOT_VMM_OWNERSHIP_PROOF"
+    }
+  ],
+  "profile_identity_mismatch_guard": "PASS",
+  "reject_invalid_v1_helper": "PASS",
+  "helper_runtime_ownership": "HW_OWNER_LIFETIME01_PASS_AND_INDEPENDENT_TERMINAL_GO",
+  "helper_binding": {
+    "directory": "hw_compression_owner",
+    "manifest_sha256": "8f32b91ee4146b2c9534360897d5953850f57b370c1ae653b5b04d325d80c781",
+    "allocator_sha256": "7f2dea1ecdcbff20efd1daad1a4250f775bbf9cfb8b9a76a16f257c1268140f8",
+    "lifetime_gate": "hw-owner-lifetime01_PASS_INDEPENDENT_TERMINAL_GO"
+  },
+  "sha256": {
+    "lab.py": "0a4db150debff8dfd09d13d33fe97896a27ba39a272e1b7f00b71f7a803c8047",
+    "preflight.py": "a4fdd6a72d8f4010806b821d7a0ac99ad5fab71d0918cc8f986cfaf7e222389f",
+    "README.md": "c204f0e3ece6994485112e920c297790e2e66cbd53d186b321a58e1489571b2f"
+  }
+}

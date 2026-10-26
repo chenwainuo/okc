@@ -1,0 +1,541 @@
+{
+  "state": "CPU_ONLY_OWNERSHIP_FORENSICS",
+  "torch": "2.8.0+cu128",
+  "CUDA_calls": 0,
+  "source_sha256": "37bd530c08e466e73d17603e1e6c8f05dff614c4b12c15a0827317f3a6461400",
+  "build_directory": "/tmp/okc-owner-cpu-prujoxho",
+  "build_command": [
+    "g++",
+    "-shared",
+    "-fPIC",
+    "-O2",
+    "-std=c++17",
+    "-DTORCH_EXTENSION_NAME=okc_owner_cpu",
+    "-D_GLIBCXX_USE_CXX11_ABI=1",
+    "-I/opt/conda/lib/python3.11/site-packages/torch/include",
+    "-I/opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include",
+    "-I/opt/conda/include/python3.11",
+    "/okc/proj_rsi/candidates/hw_compression_owner/owner_cpu.cpp",
+    "-L/opt/conda/lib/python3.11/site-packages/torch/lib",
+    "-Wl,-rpath,/opt/conda/lib/python3.11/site-packages/torch/lib",
+    "-ltorch_python",
+    "-ltorch",
+    "-ltorch_cpu",
+    "-lc10",
+    "-o",
+    "/tmp/okc-owner-cpu-prujoxho/okc_owner_cpu.cpython-311-x86_64-linux-gnu.so"
+  ],
+  "observations": [
+    {
+      "stage": "fresh_no_getter",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 0,
+        "TensorImpl_owners": 1,
+        "Storage_direct_owners": 1,
+        "Storage_with_explicit_copy_owners": 2
+      }
+    },
+    {
+      "stage": "fresh_v1_close",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 1
+      }
+    },
+    {
+      "stage": "getter_live",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 1,
+        "TensorImpl_owners": 2,
+        "Storage_direct_owners": 1,
+        "Storage_with_explicit_copy_owners": 2
+      },
+      "Python_referrer_TYPES": []
+    },
+    {
+      "stage": "live_same_impl_negative_control",
+      "result": "v1 guard rejected TensorImpl or Storage aliases",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 1,
+        "TensorImpl_owners": 2,
+        "Storage_direct_owners": 1,
+        "Storage_with_explicit_copy_owners": 2
+      }
+    },
+    {
+      "stage": "getter_deleted",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 1,
+        "TensorImpl_owners": 1,
+        "Storage_direct_owners": 1,
+        "Storage_with_explicit_copy_owners": 2
+      }
+    },
+    {
+      "stage": "getter_weakref",
+      "wrapper_alive": true
+    },
+    {
+      "stage": "getter_deleted_v1_close",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 2
+      }
+    },
+    {
+      "stage": "view_only_live",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 2,
+        "TensorImpl_owners": 2,
+        "Storage_direct_owners": 2,
+        "Storage_with_explicit_copy_owners": 3
+      },
+      "Python_referrer_TYPES": []
+    },
+    {
+      "stage": "live_view_negative_control",
+      "result": "v1 guard rejected TensorImpl or Storage aliases",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 2,
+        "TensorImpl_owners": 2,
+        "Storage_direct_owners": 2,
+        "Storage_with_explicit_copy_owners": 3
+      }
+    },
+    {
+      "stage": "view_deleted",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 2,
+        "TensorImpl_owners": 1,
+        "Storage_direct_owners": 1,
+        "Storage_with_explicit_copy_owners": 2
+      }
+    },
+    {
+      "stage": "view_deleted_v1_close",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 3
+      }
+    },
+    {
+      "stage": "state_cp_callback_live",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 3,
+        "TensorImpl_owners": 2,
+        "Storage_direct_owners": 1,
+        "Storage_with_explicit_copy_owners": 2
+      },
+      "Python_referrer_TYPES": [
+        "dict"
+      ]
+    },
+    {
+      "stage": "state_cp_callback_dropped",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 3,
+        "TensorImpl_owners": 1,
+        "Storage_direct_owners": 1,
+        "Storage_with_explicit_copy_owners": 2
+      }
+    },
+    {
+      "stage": "state_cleanup_v1_close",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 4
+      }
+    },
+    {
+      "stage": "fix_cached_wrapper_only",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 4
+      }
+    },
+    {
+      "stage": "fix_live_same_impl",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 4,
+        "TensorImpl_owners": 2,
+        "Storage_direct_owners": 1,
+        "Storage_with_explicit_copy_owners": 2
+      },
+      "Python_referrer_TYPES": []
+    },
+    {
+      "stage": "fix_reject_live_same_impl",
+      "result": "storage-owner guard rejected remaining external Tensor/Storage alias",
+      "counts": {
+        "defined": false,
+        "Region_owners": 2,
+        "released_total": 4
+      }
+    },
+    {
+      "stage": "fix_deleted_same_impl",
+      "counts": {
+        "defined": false,
+        "Region_owners": 1,
+        "released_total": 4
+      }
+    },
+    {
+      "stage": "fix_close_after_same_impl",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 5
+      }
+    },
+    {
+      "stage": "fix_idempotent_after_same_impl",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 5
+      }
+    },
+    {
+      "stage": "fix_live_view",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 5,
+        "TensorImpl_owners": 2,
+        "Storage_direct_owners": 2,
+        "Storage_with_explicit_copy_owners": 3
+      },
+      "Python_referrer_TYPES": []
+    },
+    {
+      "stage": "fix_reject_live_view",
+      "result": "storage-owner guard rejected remaining external Tensor/Storage alias",
+      "counts": {
+        "defined": false,
+        "Region_owners": 2,
+        "released_total": 5
+      }
+    },
+    {
+      "stage": "fix_deleted_view",
+      "counts": {
+        "defined": false,
+        "Region_owners": 1,
+        "released_total": 5
+      }
+    },
+    {
+      "stage": "fix_close_after_view",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 6
+      }
+    },
+    {
+      "stage": "fix_idempotent_after_view",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 6
+      }
+    },
+    {
+      "stage": "fix_live_dtype_view",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 6,
+        "TensorImpl_owners": 1,
+        "Storage_direct_owners": 2,
+        "Storage_with_explicit_copy_owners": 3
+      },
+      "Python_referrer_TYPES": []
+    },
+    {
+      "stage": "fix_reject_live_dtype_view",
+      "result": "storage-owner guard rejected remaining external Tensor/Storage alias",
+      "counts": {
+        "defined": false,
+        "Region_owners": 2,
+        "released_total": 6
+      }
+    },
+    {
+      "stage": "fix_deleted_dtype_view",
+      "counts": {
+        "defined": false,
+        "Region_owners": 1,
+        "released_total": 6
+      }
+    },
+    {
+      "stage": "fix_close_after_dtype_view",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 7
+      }
+    },
+    {
+      "stage": "fix_idempotent_after_dtype_view",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 7
+      }
+    },
+    {
+      "stage": "fix_live_Storage",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 7,
+        "TensorImpl_owners": 1,
+        "Storage_direct_owners": 2,
+        "Storage_with_explicit_copy_owners": 3
+      },
+      "Python_referrer_TYPES": []
+    },
+    {
+      "stage": "fix_reject_live_Storage",
+      "result": "storage-owner guard rejected remaining external Tensor/Storage alias",
+      "counts": {
+        "defined": false,
+        "Region_owners": 2,
+        "released_total": 7
+      }
+    },
+    {
+      "stage": "fix_deleted_Storage",
+      "counts": {
+        "defined": false,
+        "Region_owners": 1,
+        "released_total": 7
+      }
+    },
+    {
+      "stage": "fix_close_after_Storage",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 8
+      }
+    },
+    {
+      "stage": "fix_idempotent_after_Storage",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 8
+      }
+    },
+    {
+      "stage": "fix_live_detached_view",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 8,
+        "TensorImpl_owners": 1,
+        "Storage_direct_owners": 2,
+        "Storage_with_explicit_copy_owners": 3
+      },
+      "Python_referrer_TYPES": []
+    },
+    {
+      "stage": "fix_reject_live_detached_view",
+      "result": "storage-owner guard rejected remaining external Tensor/Storage alias",
+      "counts": {
+        "defined": false,
+        "Region_owners": 2,
+        "released_total": 8
+      }
+    },
+    {
+      "stage": "fix_deleted_detached_view",
+      "counts": {
+        "defined": false,
+        "Region_owners": 1,
+        "released_total": 8
+      }
+    },
+    {
+      "stage": "fix_close_after_detached_view",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 9
+      }
+    },
+    {
+      "stage": "fix_idempotent_after_detached_view",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 9
+      }
+    },
+    {
+      "stage": "fix_live_state_dict",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 9,
+        "TensorImpl_owners": 2,
+        "Storage_direct_owners": 1,
+        "Storage_with_explicit_copy_owners": 2
+      },
+      "Python_referrer_TYPES": []
+    },
+    {
+      "stage": "fix_reject_live_state_dict",
+      "result": "storage-owner guard rejected remaining external Tensor/Storage alias",
+      "counts": {
+        "defined": false,
+        "Region_owners": 2,
+        "released_total": 9
+      }
+    },
+    {
+      "stage": "fix_deleted_state_dict",
+      "counts": {
+        "defined": false,
+        "Region_owners": 1,
+        "released_total": 9
+      }
+    },
+    {
+      "stage": "fix_close_after_state_dict",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 10
+      }
+    },
+    {
+      "stage": "fix_idempotent_after_state_dict",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 10
+      }
+    },
+    {
+      "stage": "fix_live_callback_default",
+      "counts": {
+        "defined": true,
+        "Region_owners": 2,
+        "released_total": 10,
+        "TensorImpl_owners": 2,
+        "Storage_direct_owners": 1,
+        "Storage_with_explicit_copy_owners": 2
+      },
+      "Python_referrer_TYPES": []
+    },
+    {
+      "stage": "fix_reject_live_callback_default",
+      "result": "storage-owner guard rejected remaining external Tensor/Storage alias",
+      "counts": {
+        "defined": false,
+        "Region_owners": 2,
+        "released_total": 10
+      }
+    },
+    {
+      "stage": "fix_deleted_callback_default",
+      "counts": {
+        "defined": false,
+        "Region_owners": 1,
+        "released_total": 10
+      }
+    },
+    {
+      "stage": "fix_close_after_callback_default",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 11
+      }
+    },
+    {
+      "stage": "fix_idempotent_after_callback_default",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 11
+      }
+    },
+    {
+      "stage": "fix_getter_deleted_wrapper",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 12
+      }
+    },
+    {
+      "stage": "fix_graph_python_callback_live",
+      "result": "storage-owner guard rejected remaining external Tensor/Storage alias",
+      "counts": {
+        "defined": false,
+        "Region_owners": 2,
+        "released_total": 12
+      }
+    },
+    {
+      "stage": "fix_graph_model_reset",
+      "result": "CLOSED",
+      "counts": {
+        "defined": false,
+        "Region_owners": 0,
+        "released_total": 13
+      }
+    }
+  ]
+}

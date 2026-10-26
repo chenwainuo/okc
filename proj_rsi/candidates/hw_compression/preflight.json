@@ -1,0 +1,44 @@
+{
+  "state": "CPU_FULL_HOST_BUILD_IMPORT_PASS_GPU_UNRUN",
+  "torch_cpu": "2.13.0+cpu",
+  "abi": {
+    "CUDA_VERSION": 12080,
+    "CUmemAllocationProp_size": 32,
+    "COMP_NONE": 0,
+    "COMP_GENERIC": 1
+  },
+  "baseline_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "build_command": [
+    "g++",
+    "-shared",
+    "-fPIC",
+    "-O2",
+    "-std=c++17",
+    "-DTORCH_EXTENSION_NAME=okc_hwcomp_preflight",
+    "-D_GLIBCXX_USE_CXX11_ABI=1",
+    "-I/home/ubuntu/.local/lib/python3.10/site-packages/torch/include",
+    "-I/home/ubuntu/.local/lib/python3.10/site-packages/torch/include/torch/csrc/api/include",
+    "-I/usr/include/python3.10",
+    "-I/usr/local/cuda/include",
+    "/home/ubuntu/okc/proj_rsi/candidates/hw_compression/allocator.cpp",
+    "-L/home/ubuntu/.local/lib/python3.10/site-packages/torch/lib",
+    "-Wl,-rpath,/home/ubuntu/.local/lib/python3.10/site-packages/torch/lib",
+    "-ltorch_python",
+    "-ltorch",
+    "-ltorch_cpu",
+    "-lc10",
+    "-ldl",
+    "-o",
+    "/tmp/okc-hwcomp-cpu-hoya3gqg/okc_hwcomp_preflight.cpython-310-x86_64-linux-gnu.so"
+  ],
+  "build_directory": "/tmp/okc-hwcomp-cpu-hoya3gqg",
+  "no_CUDA_API_invoked": true,
+  "CPU_pointer_rejected_before_Driver": true,
+  "sha256": {
+    "README.md": "7c8b3e5384d800ca32c0c074840cf7551fae2b3865e1b08b0d7b144e8203300f",
+    "adapter.py": "fff0379c21cb8467d73143a9014f26847cd41818da3802daba2376a2ac2acf00",
+    "allocator.cpp": "dc75f7b5524d7e6840a3565c127138073d8f7e51b3e607a57bfd14e90a93b2e2",
+    "lab.py": "a17a4ae1699a1c46284f19a7378861660db6e09ae0f67c0c3d9eb9ea1c2693af",
+    "preflight.py": "75b3c38efbc7cd5bc33a267b1e6262b6bcfba5c0984e18240ec163ec669f0c00"
+  }
+}

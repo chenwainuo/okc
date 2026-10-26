@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-10-26T21:45:09.409688+00:00",
+  "updated_at_utc": "2026-10-26T23:29:49.458452+00:00",
   "goal_official_score_us_below": 3000,
   "incumbent": {
     "job": "fb548b5dc6f04696",
@@ -8,7 +8,7 @@
     "score_us": 3200.6150084373335,
     "tests": "9/9"
   },
-  "policy": "Rank by expected useful evidence per engineering/GPU cost; projected savings are conditional scenarios, never measured speedups. Do not sum overlapping shapes/mechanisms or mix H100 events with H200 score. Close failed fixed policies; reopen only for materially new evidence.",
+  "policy": "Failures are expected. Preserve versions and measurements; use profiling to pick one change, compare against predecessor and actual incumbent, then iterate. Thresholds gate promotion rather than automatically closing a family. Park only with explicit marginal-ROI evidence. Historical closed_this_takeover records are per-version results, not a family blacklist.",
   "scoring": {
     "formula": "4830.8 / exp(mean(log(SGLang_load_sum / candidate_load_sum)))",
     "load_sums_us": {
@@ -38,44 +38,90 @@
     "check_quota_left": 0,
     "scored_quota_left": 1,
     "reset_utc": "2026-10-27T00:00:00Z",
-    "gpu_status": "idle; priortrialterminal; nextkernelCPU/resourcegatesbeforeGPU"
+    "gpu_status": "Idle0MiBafterv1v2capture; V3CPUcompile/review; HWcounterreview"
   },
   "ranked_open": [
     {
       "rank": 1,
-      "id": "m128_operand_reverse_first",
-      "owner": "proj_integration",
-      "status": "CORRECTED_RESOURCE_AND_LAYOUT_PASS_LAB_REVIEW_PENDING",
-      "mechanism": "Xregister-A,decodedWshared-B reusedby2mathWGs; m128unpoolerKS1plainstore firststrongtarget; m256conditional",
-      "evidence": "Incumbent largeBF16 layers17.28/24.84/24.69us; no newkernel yet",
-      "conditional_scenario": {
-        "score_us": 3142.6012092030633,
-        "saving_us": 58.01379923427021,
-        "cuts_us": {
-          "verify 32/qkv_gate": 3.0,
-          "verify 32/pooler": 3.0,
-          "verify 32/unpooler": 3.0
-        }
-      },
-      "risk": "Registerbudgets arithmetic isnotlaunchproof; currentproposal3WGs mayexceedstaticregisterallocation; Xtranspose32SHFL+32SELP per64tokenK64set; resident/ingressfirstfalsifierrequired",
-      "next_gate": "Concrete measured bottleneck+source novelty+board leverage+bounded kill bar before implementation/GPU",
-      "resource_gate": "384threads static168/0spill/noC75; originalprod64/math224exceededinitial64512CTA pool andwasNO-GO; corrected64/216requests63488<=64512,independentcompilepass",
-      "first_target": "unpoolerM128N8192K4096,KS1,64channels/allM128,plainTMAoutput",
-      "review": "proj_rsi/audits/operand-reverse-architecture-preflight.md; finalfrozenlabmustoraclemutatepoisonBOTHactualtimedgraphs"
+      "id": "operand_reverse_v3",
+      "family": "operand_reverse",
+      "owner": "proj_tracks",
+      "status": "PAIRLANE_MAP_PROOF_PASS_IMPLEMENTATION_IN_PROGRESS",
+      "evidence": "V2correctbut57usvs47usv1; scalarloaderrequestedsectors128touches/64unique, v1coalesced64/64. RemovedSHFLaloneinsufficient.",
+      "hypothesis": "8Bcoalescedloads+pairlane2x2demux:8LDG+16SHFL16SEL vs v1 4LDG+32SHFL32SEL; matchesv1 sectorfootprint and4ahead rawQ4/A2; no_allocatefixed",
+      "next": "Compile/resource/lifetimeproofandindependentreview; 4wayinc/v1/v2/v3completemeasure; compareprogressandresidualgap, iterate."
     },
     {
       "rank": 2,
-      "id": "aligned_epilogue",
-      "owner": "proj_tracks",
-      "status": "CPU_SOURCE_NOVELTY_AND_INSTRUCTION_ROI_ASSESSMENT",
-      "mechanism": "Narrowportofpower2weightrebase+onceFP32epiloguerestoreintoGV7opLOP3decoder; m16pooler/unpooleractualpaths only",
-      "prior_work": "Contrarianalreadyimplementspower2rebasing+epiloguerecoverywith4ops/pairdecoder; wholepolicyclosed. P4alignedwindowrungtimingonly; perdecodeHMUL2rebaseclosed. ClaimonlynarrowdirectGVimplementationifnovel+crediblegain.",
-      "gate": "Credible>=.3us F1+graph beforeprototype; removes2IMADbutnoALUops; couldbeNO-GO",
-      "risk": "FP32power2homogeneity,underflow/overflow,exactBF16weightencoding/probes,allfinalaccumscale; no per-inputCPUbranches",
-      "GPU_work": "NONE"
+      "id": "reverse_v1_v2_memory_diagnostic",
+      "owner": "root",
+      "status": "TERMINAL_EXPORT_ANALYSIS_PENDING",
+      "purpose": "QuantifyactualL1/L2sectorrequests/cachehit/LSUpressurev1v2; counteronly,nooptimizationorofficialclaim",
+      "driver": "proj_rsi/tools/operand_reverse_versions_ncu.py",
+      "driver_sha256": "ce6d3407101b191bae27150f6670691d0440185dc1586df483ee7fde67b09493",
+      "pid": 369783,
+      "container": "okc-proj-reverse-v1-v2-ncu01",
+      "deadline": "inner180s/outer240s",
+      "review": "proj_rsi/audits/operand-reverse-versions-ncu-preflight.md",
+      "terminal": "2026-10-26T23:27:50Z exit0",
+      "passes_per_kernel": 32,
+      "process_and_container_gone": true
+    },
+    {
+      "rank": 3,
+      "id": "hw_compression_counters",
+      "family": "hw_compression",
+      "owner": "proj_integration",
+      "status": "FROZEN_INDEPENDENT_REVIEW",
+      "purpose": "PhysicalDRAMreadcomparisonGENERICvsVMMNONE withsamefixednativeLtconfig; determinewhetherallocationactuallychangestraffic underexistingD2Dpopulation",
+      "metadata": "H100CC90 lrc__ilc_input_sectors/output_sectors/compressible metrics verified; eventdirectionneedsprimarysemanticqualification",
+      "next": "Independentreviewonefixedtwo-nodecounterdriver; nopopulationsweep orratiofromeligibilityflag.",
+      "manifest_sha256": "e4f66b6d321a08c8c28eec6c2cb171ee1d731e4f499a2c2f9b2a8a7bc4562596"
     }
   ],
   "closed_this_takeover": [
+    {
+      "id": "hw_compression_packed01",
+      "decision": "INVALID_CLEANUP_FAILURE_NO_PERFORMANCE_ADMISSION",
+      "terminal": "2026-10-26T22:36:28Z exit1",
+      "evidence": "proj_rsi/candidates/hw_compression/hw-compression01.json",
+      "kernel_correctness": "Pooler3allocations8192basis/15graphchecks/bytes/sameshaderpass; unpoolerUNRUN",
+      "allocation": "RequestedandgrantedGENERIC1/NONE0; ordinaryUNKNOWN, noeffectivecompressionratiomeasured",
+      "diagnostic_only_gains_us": {
+        "F1": -0.19199959933757782,
+        "paired": -0.22399984300136566,
+        "NONE_F1": -0.12800097465515137,
+        "NONE_paired": 0.03200024366378784
+      },
+      "next": "No unchangedpackedtimingrerun; CPUownershipfix+conditionalnativeBF16routeonlyafterreview"
+    },
+    {
+      "id": "token_cluster_W_multicast",
+      "decision": "NO_GO_SOURCE_FEASIBILITY",
+      "GPU_work": "NONE",
+      "reason": "DuplicatedWprocessingincreasedsharedtraffic;residentperiodaccounting/closepriornegativeprecedentnotcredible>=.5us vsactualLt/rq; no universalclustertaxclaim",
+      "evidence": "proj_rsi/audits/token-cluster-feasibility.md"
+    },
+    {
+      "id": "aligned_epilogue",
+      "decision": "NO_GO_NARROWED_GV_ISSUE_ROI",
+      "GPU_work": "NONE",
+      "reason": "7ALUdecodeopsandW/Xbytesunchanged; removesonly2VIADD, epiloguescaleaddswork andoverflowconditions; no>=.3uscrediblecriticalpathbenefit",
+      "evidence": "proj_rsi/candidates/aligned_epilogue/README.md"
+    },
+    {
+      "id": "operand_reverse",
+      "decision": "CLOSE_POLICY_NO_SWEEP",
+      "terminal": "2026-10-26T21:49:17Z exit0",
+      "gain_us": {
+        "F1": -23.520002141594887,
+        "paired_graph": -23.51999841630459
+      },
+      "slower_pairs": "21/21",
+      "correctness": "Both4096onehot+officialnormal/outlier+10actualtimedgraphpoison/fresh/zero/probe/immutabilityPASS",
+      "evidence": "proj_rsi/candidates/operand_reverse/operand-reverse01.json",
+      "postmortem": "Actualrqshareddatatraffic288MiBequal;Xrequestedbytes2x; firstNCU valid2kernels shows4.194MfixedXtransposeSHFL/SEL57.65%ofSOFTWAREinstincrease; notunique stallcause. Noport."
+    },
     {
       "id": "rq_footer",
       "decision": "NO_GO_CPU_SOURCE_FEASIBILITY",
@@ -188,6 +234,46 @@
       },
       "prepare_seconds": 163,
       "all_fast_path_phases_ran": true
+    }
+  ],
+  "pending_evidence_review": [],
+  "validated_diagnostics": [
+    {
+      "id": "operand_reverse_final_PC",
+      "archive": "proj_rsi/diagnostics/operand_reverse",
+      "status": "VALID_REVIEW_COMPLETE",
+      "conclusion": "MathXtranspose/deliveryexposure,notBpublicationstarvation; originalbaselinecombinedfullW+Xingresswaitlarge. Nosourceportorprofilerepeat."
+    }
+  ],
+  "family_status": {
+    "operand_reverse": "ACTIVEv3afterv2regressionwithnewloaderhypothesis",
+    "hw_compression": "ACTIVEtrafficdiagnosisafternativevalidnogain; ownershipfixedproven",
+    "other_historical_failures": "Retained,lowerpriority; re-evaluatewithspecificprofilehypothesisratherthanblindlyrepeat."
+  },
+  "measured_versions": [
+    {
+      "id": "operand_reverse_v2",
+      "status": "VALID_REGRESSION_ITERATE_LOADER",
+      "result": "proj_rsi/candidates/operand_reverse_v2/operand-reverse-v201.json",
+      "v2_F1_us": 57.023998,
+      "v1_F1_us": 47.231998,
+      "incumbent_F1_us": 24.224,
+      "paired_gain_vs_v1_us": -9.567998,
+      "paired_gain_vs_incumbent_us": -33.151999,
+      "wins": "0/21vsboth",
+      "next": "V3hybridloadermemorydeliveryhypothesis; v1v2preserved."
+    },
+    {
+      "id": "hw_native01",
+      "status": "VALID_NO_GAIN_ITERATE_DIAGNOSIS",
+      "result": "proj_rsi/candidates/hw_native/hw-native01.json",
+      "generic_F1_us": 26.6239997,
+      "incumbent_F1_us": 24.0640007,
+      "ordinaryLt_F1_us": 26.5280008,
+      "noneLt_F1_us": 26.5599992,
+      "cleanup": "CHECKED_CLOSE_PASS_Region0_both",
+      "effective_compression": "UNMEASURED",
+      "next": "Trafficcountersbeforefurtherallocation/populationhypotheses"
     }
   ]
 }

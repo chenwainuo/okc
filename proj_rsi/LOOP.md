@@ -1169,3 +1169,93 @@ isnotlaunchproof; require384threadstatic<=168regs,nospill/C75,fullCPUlayoutproof
 beforeGPU. m256followupconditional;3m256layersaloneevenatpublishedSOLdon'treach
 3ms. RQpreparedfooterCPUcost/eligibilitytriagealsoactive; failedruntimeproducer
 patchremainsclosed. All4actualagentslotsusedincludinghead; hardcapnot8.
+
+
+### 21:49–22:22UTC — operand reverse closed; counter diagnosis; hardwareallocation lead
+
+Frozenoperand_reverse sourceca92a4fb passedallCPU/realhost/resource/GPUoracles,
+includingboth4096basiscolumnsand10actualtimedgraphfresh/zero/probe/poisonchecks.
+F1baseline24.128→candidate47.648us; pairedmedianloss23.520us,21/21lose.
+CLOSE,noport. Dynamicpool64/224bugwasfixedBEFORElaunchto64/216≤64512initial.
+Actualcomparisoncorrectsdesignmodel: oldrq72KiB×32stages/new36KiB×64=288MiB
+nominalsharedtrafficEACHover128CTAs; oldpw19comparison60→36didnotestablish
+savingvsactualincumbent. Xrequestedbytestwice+fixedtransposeworkareadded.
+
+NCU2025.1.1availableinsideimage. Firstlauncherfailedenv126BEFOREDockerbecause
+rsynccopiedrunner664; fixedtrackedexecbit755, retainedinvalidsetuplog. Valid
+ncun02captured2roles/18passesusing7sections, samefrozendriver89f76f0b andsource.
+Oraclesimmediatelyafterprofiledgraphspass;firstactualbaselineFL2s4s5z differs
+originalFL3s4s5hz. Countertimeisdiagnostic, notbenchmark. Hardwareinst3.8467M→
+11.6461M, tensor35.65→19.12%. CPUsourceexportexactsoftwaretotals4.4103M→
+11.6854M; sourcefixedXtransposeSHFL+SEL4.194304M=57.65%ofsoftwareincrease.
+Thesecounterfamiliesarenotinterchangeable; InstructionsExecutedignorespredicates
+anddoesnotmeasurereadbytes/stallcycles. Morepollloopinstructioncountsarenotcause.
+
+ONEfinalSourceCounters-onlycapturepc01, root360871, terminal22:21:12UTCexit0,
+2roles/5passeseach;allraw/source/session/driver/reportfilesarchived. SourceCSVhas
+actualPCstallreasonsand#Samples. Independentcoarsesufficiencypreregistered:
+math/producereach>=200allstate,leadingexposedphase>=30,otherwiseSTOPinconclusive;
+nomoresamplinginterval/pass/flags/sourceprofiling. BaselinefreshFL3; don'tmixreports.
+
+AlignedGVepiloguescalerebaseNO-GO: only2VIADDremoved,7ALUops/W-Xbytesunchanged;
+CPUoverflowcounterexamplesmeanbitbijectionaloneisnotFP32homogeneityproof.
+TokenclusterWmulticastNO-GO: duplicatedWprocessing/residentperiod/priornegative
+precedentdonotsupportcompletegraphgain. Noprototypes/GPUforthesetwoanalyses.
+
+Newsource/APIlead: H100actualgeneric_compression_supported=1. CUDA VMMGENERIC
+weightallocationopt-in/query+bitexactclonecouldhardwarecompressimmutableweights
+withoutnewdecodeinstructions. Capability/opt-inarenotmeasuredcompressibility;
+packed12bitentropyheadroomissmall. CPUhelper/actualRQpathlabandindependent
+lifetime/API/ROIreviewpending. OneboundedpilotonlyifGO. Bestofficialunchanged.
+
+
+### User correction: iterate failed versions, do not discard families
+
+Rootmadeone-run stop rules too terminal. User explicitly wants failures diagnosed
+and iterated. HistoricalCLOSE labels classify the testedversion; allsources/data
+remain. Actualnumeric/graph/lifetime validity and boundedjobs still gate measurement;
+speedbarsgatepromotion ratherthan terminateallworkonafamily. NextmarginalROI,
+causalhypothesis, predecessorcomparison andindependentreview guideeachiteration.
+
+Reversev2 appliesnewPCevidence:directnative-Au32Xloads replacesv4+SHFL/SEL,
+keepsWpipeline/geometry/plainstore. CPUmap+A4retirementproofPASS; firstcompile
+162regs/384threads,0spills/local/C75, noUSETMAXREG orSHFL.BFLY. Three-waylab
+willcompareactualincumbent/v1/v2andreportprogressversusv1evenifincumbentstillwins.
+
+HWownershipexact2.8CPUcheckruledout2.13cached-wrapper-onlycause. Aconcrete
+Pythonlocals()snapshotbugthenreproducedonactual3.11/2.8: `if cp in locals:del cp`
+retainslastclonedp-dictionary; unconditionalcp=Nonecontrolreleases. Region-owner
+closealsohasrealaliasnegativecontrols; neverrelaxTensorcountsblindly. Root365178
+runsoneNON-TIMINGactualCase/graph/profilelifetimegatebeforefutureallocationtests.
+No fullpackedtimingrerun; nativeBF16existingLtstorageisthenextrepresentationtest.
+
+
+### 23:01:55UTC — ownership iteration passes actual GPU lifetime gate
+
+CPU2.8 getter-onlyv1closepasses, rulingout2.13wrappercountasactualcause. Exact
+locals()patternthenreproducesREALlast-NONEdictaliason2.8: fixedguardrejectswhile
+Region2; replacingconditionallocalssnapshotwithinitializedcp=Noneallowsrelease.
+Non-timingGPUgate365178runsactualfrozenCase/graph/profilewithcorrectedhelper7f2:
+22traces/8oracles,realTensor/view/Storagenegativecontrols andcleanRegion0both.
+Exit0,noretained-resourcewarning/Traceback;nodeprocess/containergone/GPU0MiB.
+IndependentcriticadmitsfixedhelperforseparatenativeBF16Ltallocationpilot.
+Thisisacorrectnessiteration,notabenchmarkwin; originalpackedtrialstaysinvalid.
+
+
+### 23:07–23:28UTC — retained regressions drive the next iteration
+
+NativeBF16GENERIC/NONE/ordinaryLt trial is fully valid, cleanupRegion0both, but
+no speedgain: F1GEN26.624/ordinary26.528/NONE26.560/actualRQ24.064us. Effective
+compression remains UNMEASURED. Next question is physical traffic under the same
+fixedLt/D2D population, rather than inferring storage behavior from latency.
+
+ReverseV2 also fullyvalid but slower: F1v257.024/v147.232/actual24.224us;
+paired0/21winsvsboth. KeepV1/V2. Coalesced8Bpair-laneV3 is being implemented,
+with exact SASS verification after a compiler-lowering duplication was caught.
+
+One bounded v1/v2 memory diagnostic369783 terminated23:27:50UTCexit0,2kernels,
+32passes each, immediate selected-output task oracles/Ximmutable/counter0pass,
+no lingeringprocess/container/GPUallocation. Export review pending. Driverce6d
+does not post-snapshot W/pack/escape bytes; frozen sources are read-only there.
+Counter durations are diagnostic, not performance evidence. Both versions and
+all failed measurements remain available for predecessor comparisons.
