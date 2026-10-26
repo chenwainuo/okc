@@ -885,3 +885,8 @@ no-decode 0; stages s4/s6/s9 = 36.8/27.5/25.3). Escapes: XOR-patched from a 64 B
 math warpgroups (+3.5 with one); memset node cost 1.5–2 (in-kernel zeroing built); CUTLASS's TMA epilogue needed a
 one-lane fix for reduce-add. Decision: mx is not packaged (RS128 is at −3.2 on the same shape); its author writes
 the comparative lessons and then takes RS128's deferred refinements (deeper W-only barrier, epilogue tail) in rs128b.
+
+## Scored pw33: job `8eeaca43bf43467f` — **3332.1 µs**, 1.4498× (CI 1.428–1.472). New incumbent (3337.1 → 3332.1).
+
+qkv vs the pw31 run: m=1 −0.72, m=8 −0.52, m=32 −0.16, m=16 +0.15 (the box's −1.1 at m=16 did not transfer; the
+judge's bake picked by its own numbers). Net ≈ 5 µs of score; the small-shape + router gains of pw31 hold.
