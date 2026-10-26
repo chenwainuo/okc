@@ -351,3 +351,16 @@ probe. In the same units r6 pooler m=1 (17.8 in-prepare) is within ~0.6 µs of t
 delivery is not a limiter at m ≤ 8; r6's register loads already saturate HBM. The m ≤ 32 pool is therefore only the
 m=16/32 excess (pooler/unpooler ~2.7, qkv ~3.5–5.8, o ~1–2 µs over m=1), whose cause pw14's ladder measures.
 Ceiling model restated with bw = 3.8 (r6-calibrated): m ≤ 32 + router alone → 3067; so m=128/256 (pw13) is required.
+
+## Iteration 11 — pw13: two-ring m=128 kernel + no-cluster epilogue + multicast. Check `79ca764ed3ca465c`: 9/9, 4395.5 µs. REJECTED; m=128 branch CLOSED.
+
+Pooler m=128 in-prepare: torch 29.44 | h1 42.05 | hk2 39.36 | hmc 44.61 | pw10's wk2 31.90 / w1d8 32.74. Same order
+on every layer and at m=256. Ladder on h1: W-only 19.23 (bare stream 17.2) | W+x 25.31 | +decode 25.38 | +wgmma
+33.86 | full 42.08. Versus pw10's ladder: the deep W ring recovered 1.7 of the 3.7; the x ring released after
+wait_group made the wgmma step worse (+8.5 vs +5.5); the no-cluster last-arriver epilogue is +8.2 vs the cluster-2
+DSMEM epilogue's +4.5 (consistent with pw11's finding that the last-arriver chain costs ≥ 2 µs on a one-wave grid, and
+here the partial is 1 MB per CTA). Multicast lost further.
+Five checks (pw3-tm, pw9, pw10, pw13 + ladder) never beat cuBLAS at m ≥ 128; the best is 2.5 µs behind on pooler and
+10 behind on qkv. The in-house wgmma pipeline is closed. Ceiling arithmetic without m ≥ 128 gains: m ≤ 32 + router at
+ceiling → 3067; realistic (pw14 explains and recovers half of the m=16/32 excess) → ~3300. 3000 therefore needs a
+different m=128 approach (CUTLASS-grade mixed-input pipeline, or none) — decision recorded for the user.
