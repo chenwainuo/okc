@@ -701,3 +701,10 @@ cluster-2 (x multicast) config is the best of the four at pooler/unpooler. The w
 pw23's and pw26's harness tables agree within noise (pooler m=128 39.5–39.9 vs torch 40.5), confirming the box's
 replay overhead (~9 µs) and repeatability. First harness runs of pw27/pw28/pw29/pw24 failed on a probe bug (fixed,
 re-queued).
+H100 local results (in-prepare µs on the box; empty graph 3.46): pw27 — 8 MB read floor 6.72 (bulk) / 6.78 (264+
+CTAs x 16 B), +fp32 atomics +1.5, +cluster-8 +1.6; r6 router 7.26/8.74/8.83/9.50 at m=1/8/16/32 (m=1 is 0.5 over
+the pure read), rk atomic variants picked at m=8/16/32 by 0.3–0.6 µs, unpooler/o r6 unbeaten (7.4/8.8 vs 8.0–10.7).
+pw28 — balancing ties r6 at m ≤ 16 (delta 0.00) and loses at m=32 (+1.7): the 144-tile tail hypothesis is refuted on
+hardware; P2 now runs a composition ladder. pw29 — only pw23's rp paths appear (rwk variants absent: investigating);
+m=256 cuBLASLt 14.88 beats rv64k32 18.08. The harness's REPLAY_OVERHEAD (11 µs, idle-GPU) is not the in-prepare
+replay cost (3.46): small-shape comparisons use in-prepare BAKE/PROBE numbers only.
