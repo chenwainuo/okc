@@ -904,3 +904,9 @@ RS128 R3/R4 done (commit afe782e): box bake picks rs128 at pooler/qkv/unpooler m
 background compile thread during r6's bake is the suspect), r6 kept for o and all m=256 (0 spills at 128 accumulators);
 65/65 box checks; harness verify16 pooler 26.98 vs torch 29.74. Critic review running; rs128 is re-armed to submit
 FIRST at the 00:00 UTC reset once approved.
+rs128 critic (audits/rs128-critic.md): APPROVED for a check after F1 — the bake's r6 baseline is inflated ~4 µs when
+r6 is timed right after the big pack/unpack work (pooler 31.7 vs 27.5–27.7 re-timed; unpooler 30.7 vs 27.0); true
+box gains −3.9 (pooler), −3.0 (unpooler), −2.1 (qkv) at m=128. Caveat for every box bake: time the baseline after the
+candidate's variants (or before heavy prepare work) and keep the lower number. Epilogue, zeroing, escapes, build all
+correct (168 regs, 0 spills incl. m=256); keep the background compile. Fix in progress; rs128 submits first at the
+reset once the marker is written.
