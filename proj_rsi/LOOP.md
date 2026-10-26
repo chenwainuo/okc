@@ -778,3 +778,18 @@ in 6.7 (3.3 GPU-side) at ≥ 2 CTAs/SM. A no-reduction whole-row router (rr2) lo
 judge gain ≈ −0.3/−0.5/−1.3 µs at router m=8/16/32 (latency, not bandwidth) ≈ 20–25 score-µs. pw27h proposed;
 critic review next (flag ordering/forward progress). Box fix: bench.sh now holds the lock for the whole run again —
 prepare() times while it compiles, so an unlocked warm step perturbed other agents' timings.
+
+## P4 result: the wgmma-overlap mechanism found and fixed (audits/p4-h100.md)
+
+With clock64 stamps on the box: without the cluster the +wgmma rung is +4.2 µs (W+x 27.36 → 31.49), and it is the
+single consumer warpgroup's SERIAL per-stage bookkeeping (two barrier waits + wake-ups, fence, 4 wgmma, commit, wait,
+2–3 release arrives ≈ 230 clk) against a ~371 clk stream period per 64-k stage — it adds nearly 1:1 to the period;
+on the H200 the period is 0.7x, hence +11 there. Smem traffic is not it (full stream + an independent wgmma loop costs
+nothing); a 240-clk spin per stage costs +6.5. Not helping: wait_group depth 1/2/3, commit per k16, early release,
+polling. Fix: fewer sync rounds per byte — 128-k slots (7 x 32 KB), one full barrier per slot shared by both producer
+lanes, one empty barrier, blocking try_wait, one wgmma.fence per slot, wait_group 1 then release the previous slot, no
+cluster (+0.9, saves nothing). Result (bf16, box in-prepare): pooler m=128 k2x 28.58 vs cuBLAS 28.90 (ladder 25.60 |
+26.78 | 27.84 | 28.58); qkv m=128 20.67 vs 20.54; unpooler m=128 28.70 vs 28.26 and o 11.10 vs 11.36 (64x128
+tiles); pooler m=256 31.74 vs 34.11 (−2.4). Pitfalls: __float2bfloat16 on accumulators serialises register-A wgmma
+(use cvt.rn.bf16x2.f32 inline); the serial consumer keeps only ~110 clk of slack per 64-k stage on the H200 for a
+decode. Forwarded to RS128 and mx. pw24h proposed as a judge candidate (transfer test; pooler m=256 win).
