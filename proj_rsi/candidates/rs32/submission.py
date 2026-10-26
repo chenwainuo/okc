@@ -4513,15 +4513,17 @@ def _rqbake(st, thr):
 # (st["sel"] if gx picked the shape, else r6's gv / cuBLAS choice); F1 baseline rule: one discarded warm-up timing, the
 # incumbent timed before and after the variants, the lower kept, both printed.
 RQS = True
-RQSBAKE = {  # box lab t1/t2: ST 5 best at both NT (ST 3/4 and 8/12 slower), hints (h) -0.0..-0.5
-    ("qkv_gate", 32): [("t32s5hz", 7), ("t32s5z", 7), ("t32s4hz", 7), ("t32s5hz", 6)],
-    ("qkv_gate", 16): [("t16s5hz", 7), ("t16s5z", 7), ("t16s4hz", 7), ("t16s5hz", 6)],
-    ("o", 32): [("t32s5hz", 2), ("t32s5z", 2), ("t32s4z", 2), ("h32s12", 1)],
-    ("o", 16): [("t16s5hz", 2), ("t16s5z", 2), ("t16s4z", 2), ("h16s8", 1)],
-    ("pooler", 32): [("t32s5hz", 4), ("t32s5z", 4), ("t32s4hz", 4), ("t32s8hz", 4)],
-    ("pooler", 16): [("t16s5hz", 4), ("t16s5z", 4), ("t16s4hz", 4), ("t16s8hz", 4)],
-    ("unpooler", 32): [("t32s5hz", 2), ("t32s5z", 2), ("t32s4hz", 2), ("h32s8", 1)],
-    ("unpooler", 16): [("t16s5hz", 2), ("t16s5z", 2), ("t16s4hz", 2), ("h16s8", 1)],
+RQSBAKE = {  # box lab t1-t3: ST 5-6 best at both NT (3/4 and 8/12 slower); hints (h) and EARLY (e) -0.2..-0.3; qkv KS 6
+    # (108 CTAs) -0.1..-0.3 vs KS 7; o: HALF (64 rows, KS 1, EARLY) only helps at m = 128 (h128s8e 8.54 vs cuBLAS 8.90)
+    ("qkv_gate", 32): [("t32s5hze", 6), ("t32s5hze", 7), ("t32s5hz", 6), ("t32s6hze", 6)],
+    ("qkv_gate", 16): [("t16s5hze", 6), ("t16s5ze", 6), ("t16s5hze", 7), ("t16s5ze", 7)],
+    ("o", 32): [("t32s5hze", 2), ("t32s6hze", 2), ("t32s5ze", 2)],
+    ("o", 16): [("t16s5hze", 2), ("t16s6hze", 2), ("t16s5ze", 2)],
+    ("o", 128): [("h128s8e", 1), ("h128s5", 1)],
+    ("pooler", 32): [("t32s5hze", 4), ("t32s6hze", 4), ("t32s5hz", 4)],
+    ("pooler", 16): [("t16s5hze", 4), ("t16s6hze", 4), ("t16s5hz", 4)],
+    ("unpooler", 32): [("t32s5hze", 2), ("t32s6hze", 2), ("t32s6hz", 2)],
+    ("unpooler", 16): [("t16s5hze", 2), ("t16s6hze", 2), ("t16s5hz", 2)],
 }
 RQPROD2 = list(dict.fromkeys(nm for ps in RQSBAKE.values() for nm, _ in ps))
 _rqthr2 = []
@@ -4559,14 +4561,17 @@ def _rqsbake(st, thr):
         lay, tab, esc6 = pk
         escs = {}
         cnt = torch.zeros(4 * lay.shape[0], dtype=torch.int32, device=dev)
-        for m in (32, 16):
+        for m in (32, 16, 128):
             ps = RQSBAKE.get((layer, m), [])
             if not ps:
                 continue
             x = torch.randn((m, K), generator=gen, device=dev).to(torch.bfloat16)
             out = torch.empty((m, n), dtype=torch.bfloat16, device=dev)
             sp = st["sel"].get((layer, _bk(m)))
-            if sp is not None and sp[4] == n:
+            rp0 = st["rq"].get((layer, m))  # m = 128: an rq pick of the m=128 phase is the incumbent
+            if rp0 is not None:
+                inc, iname = (lambda xx, oo, rp0=rp0: _rqcall(st, rp0, xx, oo)), "rq128"
+            elif sp is not None and sp[4] == n:
                 inc, iname = (lambda xx, oo, sp=sp: _gvcall(st, sp, xx, oo)), "sel"
             else:
                 inc, iname = (lambda xx, oo: _r6(xx, layer, n, st)), "r6"
