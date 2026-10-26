@@ -812,3 +812,9 @@ Critic approved the merge (diff3 byte-exact, both fixes present, 65/65 box check
 effect from the box deltas (in-prepare): router m=128 −2.1, router m=8/16/32 −1.0/−1.0/−1.2, unpooler m=8 −0.3 →
 roughly 35–45 score-µs (≈ 1–1.3%) plus the draw. Reset chain unchanged (its pw27h/pw29h checks become confirmatory).
 P4 asked for a decode-slack curve in the k2x pipeline (instructions per thread per stage a single consumer absorbs).
+RS128 R1 (box, pooler m=128, CUPTI kernel-µs, cold L2): bare W stream 18.05 | W+x 18.98 | S0 handshake 18.21 | S1
+19.52 | S2 +decode 20.72 (1.3 of it a late loop start: escape-list loads after the W flood) | S3 +wgmma 21.47 (k64
+rounds) / 22.32 (k128) | S4 full 23.2–24.0 + 1.3 zero-fill; in-prepare 26.98 vs torch 28.61 (r6 tuned 27.10). One-hot
+exact, rel L2 3.0e-3 at KS=4, checker passes. L2-resident period 731–757 clk per stage (decode ~190, issue ~175, data
+waits 140–180, x release ~65; x slots pinned three rounds). R2 targets ≤ 21.5 kernel-µs: hoist escape loads,
+in-kernel zeroing (pw29h pattern), decouple the x ring, overlap decode with wgmma issue/wait.
