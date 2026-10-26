@@ -105,6 +105,13 @@ def check_source(source: str, path: str = "<submission>") -> dict:
             findings.append({"severity": "warning", "rule": "sm_90a",
                              "detail": "several load_inline builds: confirm the one holding wgmma/setmaxnreg/multicast gets the sm_90a flags"})
 
+    # pw25 lesson: the judge rejects uploads larger than 1,000,000 bytes before any check is consumed.
+    size = len(source.encode("utf-8"))
+    if size > 1_000_000:
+        findings.append({"severity": "error", "rule": "size", "detail": f"{size} bytes > 1,000,000 upload limit"})
+    elif size > 950_000:
+        findings.append({"severity": "warning", "rule": "size", "detail": f"{size} bytes, within 5% of the 1,000,000 limit"})
+
     errors = [item for item in findings if item["severity"] == "error"]
     return {"path": path, "ok": not errors, "findings": findings}
 
