@@ -853,3 +853,9 @@ every placement (critical path, pipelined, 4 chains): the decode is bound by INT
 INT32 on Hopper), a single dependent chain is far worse, and the single-consumer 64x64 stage (~286 clk bookkeeping)
 already exceeds the H200's ~260 clk period. So: 128-row (two-math-warpgroup) stages are required to amortise the
 bookkeeping and spread INT work (RS128's geometry), and the decode must be minimal in INT instructions per weight.
+P2 result (audits/p2-h100.md): qkv's gap is not the tail — ladder at m=1 (144 CTAs, box kernel-µs): plain 28.3 MB
+read 10.43 | W loads 10.69 | +x 11.10 | +decode 11.55 | +mma 11.97 | full 12.35; cutting to 132 CTAs saves only the
+bytes. Win: half the chunks per warp, twice the warps — m=1 11.81 vs r6 12.42 (−0.6), m=8 −0.5, m=16 12.24 vs 13.65
+(−1.4), m=32 tie (x re-read + decode add 4.1 over W-only; short-chain layouts spill). Stream-K balancing ties
+everywhere and is dropped. Estimated judge gain ≈ 22 score-µs. pw33 = pw31 + these GVC entries is being merged for
+the next scored run.
