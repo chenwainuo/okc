@@ -299,3 +299,14 @@ Extension (pw11 "gvx", built by the analyst on a copy of r6): 128–144-row CTAs
 either (A) cluster DSMEM or (B) global last-arriving-CTA with ~4 MB of traffic and no cluster; o with x in smem;
 router 12-bit hi+lo. Model: qkv ~8.7–9.0 (9.97–14.21 now), pooler m32 ~14.3, unpooler m16/32 ~14.3, o ~4.6, router
 ~3.7–4.0 → ≈ +0.53 ln. Kill if pooler m=32 (B) is not ≥ 1.5 µs under r6's own in the same bake.
+
+## Note for pw12 (after pw11's result): the stream itself has ~15% headroom over r6
+
+Judge device is an H200 (PREP log), HBM3e. From the pw9 probes (in-prepare minus the 4.9 µs empty launch): bulk TMA
+ring ≥ 64K streams 47–50 MB in 11.4–12.0 µs = **4.15–4.4 TB/s**; the register ring D=8 takes 14.0 µs = 3.55 TB/s; r6
+pooler m=1 at 13.95 judge-µs = 3.6 TB/s. So r6's register loads leave ~2 µs per 50 MB shape on the table, and the pw
+lineage captured the faster stream but lost 4.6 µs to its producer/consumer skeleton. Candidate design for pw12:
+r6's structure (per-CTA row tile, K split across the CTA's own warps, in-CTA smem reduction, no cross-CTA split) with
+each warp streaming its own contiguous K range through a private cp.async.bulk ring and a private mbarrier — no
+producer warp, no cross-warp handshake — i.e. only the load instruction changes. Ceiling model would move from
+bytes/3.8 + 1 to bytes/4.3 + 1 (pooler 12.7 instead of 14.25), worth ≈ 0.1 ln across the m ≤ 32 loads.
