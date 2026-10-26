@@ -54,3 +54,25 @@ The halfway-to-SOL arithmetic does not need a codec. A bf16 GEMM at 4.0–4.2 TB
 | 3–4 | Add the 12-bit decode. Bake bf16 and 12-bit on all four layers at m=128/256. |
 | 5–6 | Add (b2) if delivery still binds; otherwise tune stages. |
 | 7–9 | Harden and run the final scored check. (a) only if (b) is still below 9 TB/s on day 4. |
+
+## pw24 post-mortem (check 715ddc0765664971): day-1 kill rule hit
+
+Ladder bg12c, pooler m=128, in-prepare: W-only 22.4 (3.6 TB/s net) | W+x 25.6 | +wgmma 36.5 | full 38.2. cuBLAS 24.2; bg12 28.9.
+
+**(i) Why the +10.9 wgmma rung is not hidden.** The stage period goes from 334 clk at W+x to 502 at L3 ((in-prepare − 4 µs) × 1.98 GHz / 128 stages).
+- Tensor time is only 4 × 32 = 128 clk, but SS m64n64k16 reads A 2 KB + B 2 KB per 32 clk, which by itself is 128 B/clk: the whole smem port.
+- Per stage that is 16 KB of wgmma reads plus 16 KB of TMA writes, so ≥ 256 clk at 100% port efficiency.
+- On top of that, the single MMA warpgroup serialises fence → 4 wgmma → commit → wait_group(1) → release, so the next stage's reads queue behind the previous group's.
+- Mechanism I believe: smem-port saturation by narrow-N SS wgmma, with one wgmma group in flight.
+- Experiment that proves it: the same ladder with m64n128k16, i.e. 64 W rows × 128 tokens per CTA (64 CTAs, no multicast). That gives 24 KB of reads per 2× the FLOPs. If L3 − L2 per FLOP halves, the port is the limit.
+
+**(ii) Why the cluster costs +9.4 (bg12c vs bg12).** A multicast W slot can be refilled only when both CTAs have released it, and each CTA's W full barrier needs the peer's half. The pair therefore runs at the slower CTA's pace, and any skew compounds over 128 stages. The saved L2 reads do not matter because W-only is HBM-bound, not L2-bound. Experiment: W-only rung for bg12 vs bg12c.
+
+## CUTLASS feasibility (local prototype, CUTLASS v3.9.2)
+
+- **Instantiation.** sm90 CollectiveBuilder, TileShape 128×64×64, ClusterShape 1×1×1, KernelScheduleAuto.
+  - The builder resolves to KernelTmaWarpSpecializedCooperative with a 9-stage MainloopSm90TmaGmmaWarpSpecialized and MMA_64x64x16 SS.
+  - Swap-AB: A = W row-major, B = x column-major, D column-major, which is out[tok][n].
+- **Bundle.** 458 headers, 13.8 MB raw; tar + gzip + base64 is 2.0 MB, tar + xz + base64 is 0.90 MB. It compiles from the extracted bundle alone.
+- **Compile (nvcc 12.8, -O3 -arch=sm_90a, 48-core host).** 23.8 s with host code (as load_inline would build it), 10.0 s for the cubin only. Judge estimate 35–45 s per instantiation.
+- **Kernel.** 168 regs, 0 spills. SASS: USETMAXREG (register rebalancing between warp roles), UTMALDG.3D, 8 HGMMA.64x64x16 SS, WARPGROUP.ARRIVE/DEPBAR, remote-free mbarrier arrives. That is the expected warp-specialised producer/consumer structure.
