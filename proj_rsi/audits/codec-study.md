@@ -139,3 +139,19 @@ A   = lop3(e, 0x807f807f, prmt(plane, 0, 0x1100 | 0x3322), 0xb8)   // (0xe4 in v
 
   Lanes advance in lockstep, so v2's 64-B lane stride puts them on the same banks; the spec's "2–3-way" was wrong. This fits d8 (36.3) > single (29.4) > rep (26.2).
 - **v3.** Code lengths come from ALU ops, so no LDS sits on the chain. The ring is rotated `[slot][lane]` and refill words are prefetched.
+
+## Closing: instruction budget of the pw18 pooler m=1 E path (check b15f30a832ab4169)
+
+Lane-instructions per unit (1,024 weights, 32 per lane), K1 single LUT, from SASS (total 256):
+
+| Part | Instr / unit | Per weight |
+|---|---|---|
+| Length chain: LOP3 `lo&7`, PRMT, 2 SHF, V update | 72 | 2.25 |
+| Value lookups: LOP3 `lo&0xff`, address, LDS | 48 | 1.50 |
+| Plane merge and select: PRMT dup, LOP3 | 32 | 1.00 |
+| Ring, refill and prefetch: 4 refills and 4 issues with predicates and addresses | ≈ 60 | 1.9 |
+| Rest of r6's 49: 2 plane + 2 x LDG, 4 HMMA, escape test, loop (its 36-op decode is gone) | ≈ 13 | 0.4 |
+| Address and move overhead | ≈ 31 | 1.0 |
+
+- **Floor for a per-symbol variable-length decode on this register layout.** Each pair needs at least a length (1–2 ops), a 2-op 64-bit shift, a value lookup (address + LDS) and a 2-op merge into the A register. That is about 7 per pair, plus about 0.5 per weight for refills: **≈ 4 lane-instr/weight**. r6 spends 1.5.
+- **Could a bit-plane-transposed layout with warp-wide integer ops reach ≤ 2 lane-instr/weight? No.** The mma A fragments must still be assembled per lane, 2 weights per register. r6 already spends 1.1/weight doing that from fixed-width fields. An entropy code adds per-symbol boundary resolution (≥ 1 op/weight) that transposition cannot remove, because the boundaries depend on the data.
