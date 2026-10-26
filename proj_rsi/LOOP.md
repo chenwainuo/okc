@@ -364,3 +364,15 @@ Five checks (pw3-tm, pw9, pw10, pw13 + ladder) never beat cuBLAS at m ≥ 128; t
 10 behind on qkv. The in-house wgmma pipeline is closed. Ceiling arithmetic without m ≥ 128 gains: m ≤ 32 + router at
 ceiling → 3067; realistic (pw14 explains and recovers half of the m=16/32 excess) → ~3300. 3000 therefore needs a
 different m=128 approach (CUTLASS-grade mixed-input pipeline, or none) — decision recorded for the user.
+
+## Iteration 12 — pw14: probe ladder on r6's gv. Check `066cf9bd503040cf`: passed, 1.417× (= r6). REFINE → pw16.
+
+In-prepare (regs / CTAs per SM): pooler m=1 L0 18.24 (2) | L3 18.40 | L4 18.05 — flat, at the stream.
+pooler m=32: L0 16.93 (126 regs, 2) | +x 19.74 | +decode 20.51 | +mma 20.74 | full 21.02; cap255 (1/SM) 25.09;
+cap64 45.89 (spills); bulk-ring L0 18.05. qkv m=1: L0 13.31 | L3 13.95 | L4 14.21. qkv m=32: L0 12.51 (4/SM) | +x
+15.01 | +decode 18.53 (74 regs, 6/SM) | +mma 17.22 (4/SM) | cap255 17.66 | full 18.56. gvbulk n4 17.86 vs r6 17.89.
+Reading: the m=32 excess is the x loads (2.5–2.8 µs on both layers) plus decode/compute on qkv (2–3 µs, occupancy-
+confounded across steps). Occupancy matters (1 CTA/SM costs +4). Max recoverable ≈ 2.5 µs per big shape at m=32 and
+≈ 1.3 at m=16 → ≈ 0.2 ln → ~3310. Next: pw16 = one x-traffic experiment (L1-allocating x loads so co-resident CTAs
+share lines / smem x slab / cluster-2 multicast without split-K) on r6's own geometry. m=128: pw15 (token tiling,
+no split-K) is the last check on that branch.
