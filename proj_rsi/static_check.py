@@ -94,6 +94,17 @@ def check_source(source: str, path: str = "<submission>") -> dict:
                         "detail": "kernel_fn prints; printing a tensor syncs",
                     })
 
+    # pw24 lesson: wgmma / setmaxnreg / multicast only assemble for sm_90a; a load_inline build without a
+    # compute_90a gencode flag fails on the judge and takes the whole submission down.
+    arch_only = ("wgmma.", "setmaxnreg", ".multicast::cluster")
+    if any(token in source for token in arch_only):
+        if "compute_90a" not in source:
+            findings.append({"severity": "error", "rule": "sm_90a",
+                             "detail": "uses wgmma/setmaxnreg/multicast but no build passes -gencode=arch=compute_90a,code=sm_90a"})
+        elif source.count("load_inline(") > 1:
+            findings.append({"severity": "warning", "rule": "sm_90a",
+                             "detail": "several load_inline builds: confirm the one holding wgmma/setmaxnreg/multicast gets the sm_90a flags"})
+
     errors = [item for item in findings if item["severity"] == "error"]
     return {"path": path, "ok": not errors, "findings": findings}
 
