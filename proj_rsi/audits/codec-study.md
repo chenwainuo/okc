@@ -124,3 +124,23 @@ A   = lop3(e, 0x807f807f, prmt(plane, 0, 0x1100 | 0x3322), 0xb8)   // (0xe4 in v
 
 - The D and E probes also carry r6's low-byte loads and their address math (about 0.3 lane-instructions per weight).
 - `kD`, `kD2` and `kDL` were compiled with a 0x3fc mask and an 8-bit limit. The limit-7 D in the table changes only constants, not instruction count.
+
+## pw17 post-mortem (check 9f6de54218a447d5): why E ran at 1.45–2.1× the stream
+
+- **Measured.** ge-p512r took 26.24 µs in-prepare. The in-prepare offset is about 4.3 µs (r6 runs 18.30 in-prepare against 13.95 in the judge profile). That leaves about 21.9 kernel-µs; less about 1.5 µs of start and epilogue, 20.4 µs at 1.98 GHz is **≈ 2,500 clk per unit per warp** (16 units, 16 warps/SM). The stream needs ≈ 1,560 clk.
+- **Chain estimate.** Each unit runs 16 dependent pair lookups, each about 3 ALU (≈ 13 clk) plus one LDS, and 4 refill LDS on the same chain. At a nominal 30-clk LDS that is ≈ 800 clk.
+- **What closes the gap.** Matching 2,500 clk needs about 110 clk per chained LDS. Unpooler n=1024 runs 4 warps/SM, so there is no contention, yet it still implies ≈ 65 clk.
+- **Bank conflicts explain the excess.** These are wavefronts per warp from a replay of the real pooler pack:
+
+  | LDS | Wavefronts |
+  |---|---|
+  | v2 ring refill, ED 4 | **12.0** |
+  | v2 ring refill, ED 8 | **22.0** |
+  | Single LUT | 3.7 |
+  | Replicated LUT | 1.0 |
+  | `[slot][lane]` ring | 3.8 |
+  | `[slot][lane]` ring + per-lane word rotation | 2.2 |
+
+  Lanes advance in near-lockstep, so v2's 64-B lane stride puts them on the same banks. The layout spec's "2–3-way" was wrong.
+- **This fits the ordering.** d8 (36.3) is slower than single (29.4), which is slower than rep (26.2), although d8 has more bytes in flight.
+- **v3 removes both.** Code lengths come from ALU ops, so no LDS sits on the bit-position chain. The ring moves to `[slot][lane]` with word rotation, and refill words are prefetched.
