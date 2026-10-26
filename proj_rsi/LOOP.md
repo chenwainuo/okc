@@ -769,3 +769,12 @@ stream-bound (HBM ≈ 2.1 TB/s): x L2→SM re-reads (128 MB at 64-row tiles) bin
 128x64 single-WG 38 (64 CTAs), escape prologue 60 µs (serialised gathers; to be replaced by an epilogue correction).
 Next for mx: A-only/B-only probes, then the 128-row cooperative tile with split-K to 128 CTAs and a TMA reduce-add
 epilogue (= RS128's geometry).
+P1 result (audits/p1-h100.md; box in-prepare, alternated with r6): router m=1 rr6 6.91 vs 7.20 (−0.3); m=8
+rk-s16w8z 7.5 vs 8.7 (−1.15); m=16 rk-s8z 7.7–7.9 vs 8.8–9.0 (−1.1); m=32 rk-s8z 7.9–8.1 vs 9.2–9.4 (−1.3);
+unpooler m=8 uk-s4z 7.0 vs 7.3–7.6 (−0.3 to −0.5); o stays r6. Mechanism: the reduction's whole cost is zeroing the
+output — memset node +1.5, cluster reduce +1.8, PDL zero kernel +1.2; "flag zeroing" (the tile's first split-K CTA
+zeroes and raises a flag, others acquire-wait once) costs ~0.8 with no memset node and no cluster. Read floor: 8 MB
+in 6.7 (3.3 GPU-side) at ≥ 2 CTAs/SM. A no-reduction whole-row router (rr2) lost (7.33 vs 5.18 GPU-side). Expected
+judge gain ≈ −0.3/−0.5/−1.3 µs at router m=8/16/32 (latency, not bandwidth) ≈ 20–25 score-µs. pw27h proposed;
+critic review next (flag ordering/forward progress). Box fix: bench.sh now holds the lock for the whole run again —
+prepare() times while it compiles, so an unlocked warm step perturbed other agents' timings.
