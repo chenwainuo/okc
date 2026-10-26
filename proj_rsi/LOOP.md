@@ -733,3 +733,10 @@ epilogue has no C input. Compile 17–31 s per instantiation. Consequences: (1) 
 judge candidate (confirms transfer to the H200; little score by itself except pooler m=256 −5.5%); (2) the gain must
 come from the 12-bit two-plane A operand inside this pipeline — agent 'mx' is building it (M1 packer/merge, M2
 two-plane collective, M3 timing, M4 judge-shaped candidate).
+P3 result (audits/p3-h100.md; box in-prepare µs, read-flushed): router m=128 **rw64k32s8z 11.74** | rw64k32s8
+12.61 | incumbent rp64k32s4 13.28 | cuBLASLt 16.19; m=256 cuBLASLt 15.01 | rw64k32r3x2z 15.14 (tie, 2 CTAs/SM).
+Wins: dropping the memset node (each K-split CTA zeroes its slice of the output and bumps a per-tile counter checked
+before the final adds; −1.4 µs, mostly the graph node); 2 CTAs/SM at m=256. Losers: cluster-2 pre-reduction (+1.4),
+red reordering (0), 512-wide K slices (24+), 256-token CTAs. H200 estimate −1.0 to −1.5 µs at m=128. Harness lesson:
+a write flush (zero_) leaves L2 dirty and changes m=256 rankings; h100_bench now read-flushes like the judge.
+pw29h proposed; critic review next; it replaces pw29 in the reset queue if approved.

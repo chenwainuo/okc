@@ -57,8 +57,10 @@ def time_graph(fn, flush, reps=20):
     with torch.cuda.graph(g):
         fn()
     times = []
+    sink = torch.zeros(1, dtype=torch.float32, device="cuda")
+    fview = flush.view(torch.float32)
     for _ in range(reps):
-        flush.zero_()
+        torch.sum(fview, 0, out=sink)  # READ flush, as the judge does (a write flush leaves L2 dirty and changes rankings)
         torch.cuda.synchronize()
         a, b = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
         a.record()
