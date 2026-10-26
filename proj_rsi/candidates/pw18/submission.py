@@ -13,12 +13,14 @@ either through cluster DSMEM (path suffix a, r6's own S > 1 epilogue) or through
 choice in a second bake (BAKE / PICK lines); kernel_fn takes the pw11 pick when it exists, else r6's dispatch.
 pw12: the same gv kernel with W streamed through a private per-warp cp.async.bulk smem ring (V bit 3, paths gb-*);
 decode, mma, escapes, reduction and epilogue unchanged. PROBE gvbulk lines compare it with r6 on pooler m=1.
-pw17: r6 unchanged (its 12-bit paths, bake and dispatch are byte- and SASS-identical) plus codec E paths (gv FMT 4, "ge-*"):
-the exponent is a pair-Huffman code (<= 8 bits per A register, 256-entry LUT in smem, single or lane-replicated) streamed
-per lane through a cp.async ring, the sign|mantissa byte plane is r6's low-byte plane; ~10.8-11.1 bits/weight against 12
-(proj_rsi/tools/CODEC_E_LAYOUT.md). Each pack is proven bit-exact by the reference unpacker before any E kernel runs, each
-path is validated like every second-bake path and timed against r6's pick (BAKE / PICK); PROBE ecod lines time the best E
-path against r6 on pooler m=1 and m=16, alternated."""
+pw18 (= pw17 with codec E v3): r6 unchanged (its 12-bit paths, bake and dispatch are SASS-identical) plus codec E paths
+(gv FMT 4, "ge-*"). The code length is fixed by a code's first 3 bits (LOP3 + PRMT on an 8-byte table), so the per-lane
+bit-position chain has no memory access. The exponent pair value comes from a 256-entry smem LUT (single or lane-replicated)
+off the chain. There are 1, 2 or 4 independent substreams per lane, and refill words come through a conflict-free
+[substream][slot][lane] 4 B cp.async ring and are prefetched. 11.07 / 11.17 / 11.32 bits/weight (K 1 / 2 / 4) against 12
+(proj_rsi/tools/CODEC_E_LAYOUT.md v3). Each pack is proven bit-exact by the reference unpacker before any E kernel runs. Each
+path is validated like every second-bake path and timed against r6's pick (BAKE / PICK). PROBE ecod lines time the best E path
+against r6 on pooler m=1 and m=16, alternated."""
 from typing import TypedDict
 import time
 import torch
