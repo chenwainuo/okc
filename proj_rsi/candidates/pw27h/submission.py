@@ -1600,6 +1600,7 @@ int64_t rrrun(int64_t inst, torch::Tensor W, torch::Tensor x, torch::Tensor out)
     case 4: if (m > 1) return -1; rr<1, 1, 256><<<N, 256, 0, st>>>(w, xp, o, m, N, K); break;
     case 5: if (m > 1) return -1; rr<1, 2, 256><<<N / 2, 256, 0, st>>>(w, xp, o, m, N, K); break;
     case 6: if (m > 1) return -1; rr<1, 1, 1024><<<N, 1024, 0, st>>>(w, xp, o, m, N, K); break;
+    case 7: if (m > 1) return -1; rr<1, 2, 1024><<<N / 2, 1024, 0, st>>>(w, xp, o, m, N, K); break;
     default: return -2;
   }
   const cudaError_t r = cudaGetLastError();
@@ -1780,19 +1781,13 @@ GXP += GEP
 _RD = 1 << 26
 _ZF, _PZ, _XZ = 1 << 27, 1 << 28, 1 << 29
 GRD = []
-for _nm, _g, _ms, _vs in (("rk-s8", (2, 1, 8, 2, 8, 1, 0, 2), (1, 8, 16, 32), "zx"),         # 16 x 8 = 128 CTAs x 256 thr
-                          ("rk-s16", (2, 1, 4, 2, 16, 1, 0, 2), (8, 16, 32), "zx"),            # 256 CTAs x 128 thr
-                          ("rk-s16w8", (2, 1, 8, 1, 16, 1, 0, 1), (8, 16, 32), "zx"),         # 256 CTAs x 256 thr, one chunk per warp
-                          ("rk-s32", (2, 1, 4, 1, 32, 1, 0, 1), (8, 16), "zx"),                # 512 CTAs x 128 thr
-                          ("rk2-s16", (2, 2, 4, 2, 16, 1, 0, 2), (8, 16, 32), "zx"),           # 32-row CTAs: 8 x 16 = 128 CTAs x 256 thr
-                          ("rk2-s32", (2, 2, 4, 1, 32, 1, 0, 1), (8, 16, 32), "zx"),           # 256 CTAs x 256 thr
-                          ("rk2-s16w2", (2, 2, 2, 4, 16, 1, 0, 4), (8, 16, 32), "zx")):        # 128 CTAs x 128 thr, 4 chunks per warp
+for _nm, _g, _ms, _vs in (("rk-s8", (2, 1, 8, 2, 8, 1, 0, 2), (8, 16, 32), "z"),           # 16 x 8 = 128 CTAs x 256 thr
+                          ("rk-s16w8", (2, 1, 8, 1, 16, 1, 0, 1), (8, 16, 32), "zx"),     # 256 CTAs x 256 thr, one chunk per warp
+                          ("rk-s32", (2, 1, 4, 1, 32, 1, 0, 1), (8, 16), "x")):           # 512 CTAs x 128 thr
     for _c in _vs:
         GRD.append((_nm + _c, "router", _ms, _g, {"z": _ZF, "x": _XZ, "p": _PZ}[_c]))  # P1 self-zeroing variants
 for _nm, _ly, _g, _vs in (("uk-s4", "unpooler", (1, 1, 8, 2, 4, 1, 0, 2), "zx"),    # n=1024: 64 x 4 = 256 CTAs x 256 thr
-                          ("uk-s2w16", "unpooler", (1, 1, 16, 2, 2, 1, 0, 2), "zx"),  # 128 CTAs x 512 thr
-                          ("uk-s8", "unpooler", (1, 1, 8, 1, 8, 1, 0, 1), "zx"),      # 512 CTAs x 256 thr, one chunk per warp
-                          ("uk-s4w4", "unpooler", (1, 1, 4, 4, 4, 1, 0, 4), "zx")):   # 256 CTAs x 128 thr
+                          ("uk-s4w4", "unpooler", (1, 1, 4, 4, 4, 1, 0, 4), "x")):    # 256 CTAs x 128 thr
     for _c in _vs:
         GRD.append((_nm + _c, _ly, (1, 8), _g, 1 | {"z": _ZF, "x": _XZ}[_c]))
 GXP += GRD
@@ -1940,7 +1935,7 @@ _FL = [None, None]
 def _gvok(st, plan, exact, w, mr):
     """exact on every one-hot column, close on random rows"""
     ext, n, K = _gvext(), exact.shape[0], exact.shape[1]
-    mm = (1 if plan[0] < 1002 else 8) if plan[0] >= 1000 else 8 * GVI[plan[0]][1]
+    mm = (8 if plan[0] in (1002, 1003) else 1) if plan[0] >= 1000 else 8 * GVI[plan[0]][1]
     dt = exact.dtype
     eye = torch.eye(K, dtype=torch.bfloat16, device=w.device).view(K // mm, mm, K)
     got = torch.empty((K // mm, mm, n), dtype=dt, device=w.device)
@@ -1956,7 +1951,7 @@ def _gvok(st, plan, exact, w, mr):
     return bool(torch.isfinite(out).all()) and float((out.double() - ref).norm() / ref.norm()) < (2e-5 if dt == torch.float32 else 4e-3)
 
 
-RRB = {1: (0, 1, 4, 5, 6), 8: (2, 3)}  # P1: rr2/rr3 (no cross-CTA reduction) re-measured at m=8 on the H100; fp32 router kernels per bucket (m8 rr: 7.7-14.9 us on the H200, v12 4.7)
+RRB = {1: (0, 6, 7)}  # P1: rr2/rr3 (no cross-CTA reduction) re-measured at m=8 on the H100; fp32 router kernels per bucket (m8 rr: 7.7-14.9 us on the H200, v12 4.7)
 
 
 def _name(i):
@@ -2050,6 +2045,13 @@ def _gvprep(st, flush):
             print("  " + " ".join("%s:%.2f" % (r[2], r[3] * 1e3) for r in res), flush=True)
             if best[1] is not None:
                 st["gv"][(layer, bm)] = best[1]
+            if P1ALT and hl and bm == 1 and best[1] is not None and best[1][0] >= 1001:  # P1: the rr pick vs r6's rr0, alternated
+                p0 = next((p_ for p_ in cands if p_[0] == 1000), None)
+                if p0 is not None:
+                    ta, tb = [], []
+                    for _ in range(3):
+                        ta.append(_tm(lambda: _gvcall(st, best[1], x, out), flush, 21)); tb.append(_tm(lambda: _gvcall(st, p0, x, out), flush, 21))
+                    print("PROBE p1alt router m=1 %s %.2f rr0=%.2f delta=%+.2f" % (_name(best[1][0]), min(ta) * 1e3, min(tb) * 1e3, (min(ta) - min(tb)) * 1e3), flush=True)
 
 _mod = None
 # host-only (g++): the judge's nvcc crashes on these STL containers under -std=c++20
@@ -2957,6 +2959,12 @@ def _gxbake(st):
         if best[1] is not None:
             st["sel"][(layer, m)] = best[1]
         print("PICK %s m=%d %s %.2f" % (layer, m, best[0], best[2]), flush=True)
+        if P1ALT and best[1] is not None and layer in ("router", "unpooler") and m <= 32 and time.time() - _T0 < PREPARE_BUDGET_S - 30:
+            fb = lambda xx, oo, plan=best[1]: _gvcall(st, plan, xx, oo)
+            tb, tr = [], []
+            for _ in range(3):  # P1: the pick vs r6, alternated (the bake's 15-replay medians drift ~0.3 us between runs)
+                tb.append(_time_us(fb, x, out, flush, sink, 21)); tr.append(_time_us(r6, x, out, flush, sink, 21))
+            print("PROBE p1alt %s m=%d %s %.2f r6=%.2f delta=%+.2f" % (layer, m, best[0], min(tb), min(tr), min(tb) - min(tr)), flush=True)
         if layer == "pooler" and m in (1, 16):  # PROBE ecod: the best codec E path vs r6, alternated (pw17 kill test)
             cand = sorted((v_[0], k[2], v_[1]) for k, v_ in res_all.items() if k[:2] == (layer, m) and k[2].startswith("ge-"))
             if not cand:
@@ -2983,6 +2991,7 @@ RSP = [("rs64k32", 0, True, (128, 256)), ("rp64k32s4", 5, True, (128,)), ("rp64k
        ("rv64k32", 9, True, (256,)), ("rv64k64x2", 10, True, (256,)), ("rv64k32sc", 11, False, (256,))]
 
 
+P1ALT = True
 PR27 = False  # P1: the rd8 ladder was read on the H100 (audits/p1-h100.md)
 
 
