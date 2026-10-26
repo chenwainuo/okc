@@ -3052,6 +3052,15 @@ __device__ __forceinline__ void rt_tile(uint32_t dst, const RtMap* tm, int k, in
   asm volatile("cp.async.bulk.tensor.2d.shared::cluster.global.mbarrier::complete_tx::bytes [%0], [%1, {%2, %3}], [%4];\n"
                :: "r"(dst), "l"((unsigned long long)tm), "r"(k), "r"(row), "r"(bar) : "memory");
 }
+__device__ __forceinline__ void rt_tile_mc(uint32_t dst, const RtMap* tm, int k, int row, uint32_t bar, uint16_t mask) {
+  asm volatile("cp.async.bulk.tensor.2d.shared::cluster.global.mbarrier::complete_tx::bytes.multicast::cluster [%0], [%1, {%2, %3}], [%4], %5;\n"
+               :: "r"(dst), "l"((unsigned long long)tm), "r"(k), "r"(row), "r"(bar), "h"(mask) : "memory");
+}
+__device__ __forceinline__ void rt_rarrive(uint32_t bar, uint32_t rank) {  // arrive on the same mbarrier in CTA `rank`
+  uint32_t r;
+  asm volatile("mapa.shared::cluster.u32 %0, %1, %2;\n" : "=r"(r) : "r"(bar), "r"(rank));
+  asm volatile("mbarrier.arrive.release.cluster.shared::cluster.b64 _, [%0];\n" :: "r"(r) : "memory");
+}
 __device__ __forceinline__ void rt_cbar() { asm volatile("bar.sync 1, 128;\n" ::: "memory"); }  // consumer warpgroup only
 template <int KR, int NBUF, int TOKS, int WN, int MINB, int MODE>
 __global__ void __launch_bounds__((MODE & 4) ? 192 : 160, MINB) rtk(const __grid_constant__ RtMap tx, const __grid_constant__ RtMap th,
@@ -3064,6 +3073,8 @@ __global__ void __launch_bounds__((MODE & 4) ? 192 : 160, MINB) rtk(const __grid
   constexpr int NSLOT = NBUF < NSTG ? NBUF : NSTG;
   static_assert(KR % 64 == 0 && TOKS % WN == 0 && TOKS * SP * 4 <= NSLOT * SB && SB % 1024 == 0, "rtk");
   constexpr bool ST = (MODE & 16) != 0;
+  constexpr bool MC = (MODE & 32) != 0;  // cluster of the 4 n-tiles: each CTA multicasts a quarter of the x box to all 4
+  static_assert(!MC || TOKS % 32 == 0, "mc");
   extern __shared__ uint8_t rw_smem[];
   const uint32_t raw = (uint32_t)__cvta_generic_to_shared(rw_smem), base = (raw + 1023u) & ~1023u;
   const uint32_t bars = base + NSLOT * SB;  // full[NSLOT], empty[NSLOT]
@@ -3071,11 +3082,16 @@ __global__ void __launch_bounds__((MODE & 4) ? 192 : 160, MINB) rtk(const __grid
   const int n0 = blockIdx.x * 64, k0 = blockIdx.y * KR, t0 = blockIdx.z * TOKS, tid = threadIdx.x;
   unsigned long long ts[8] = {0, 0, 0, 0, 0, 0, 0, 0};
   if (ST && tid == 0) ts[0] = rw_gt();
+  if ((MODE & 64) && tid == 128) {  // MODE 64: fetch the three tensor maps before the barrier setup
+    asm volatile("prefetch.tensormap [%0];\n" :: "l"((unsigned long long)&tx) : "memory");
+    asm volatile("prefetch.tensormap [%0];\n" :: "l"((unsigned long long)&th) : "memory");
+    asm volatile("prefetch.tensormap [%0];\n" :: "l"((unsigned long long)&tl) : "memory");
+  }
   if (tid == 0) {
-    for (int i = 0; i < NSLOT; i++) { rt_mbinit(bars + 8 * i, 1); rt_mbinit(bars + 8 * (NSLOT + i), 4); }
+    for (int i = 0; i < NSLOT; i++) { rt_mbinit(bars + 8 * i, 1); rt_mbinit(bars + 8 * (NSLOT + i), MC ? 16 : 4); }
     asm volatile("fence.mbarrier_init.release.cluster;\n" ::: "memory");
   }
-  __syncthreads();
+  if constexpr (MC) rw_csync(); else __syncthreads();  // MC: every CTA's barriers exist before any multicast / remote arrive
   const int rows = min(TOKS, m - t0);
   if (tid >= 160) {  // MODE 4: the zeroing warp (off the consumers' critical path): zero 1/G of the tile, arrive with
     int* ctr = cnt + (slot * 64 + blockIdx.x + gridDim.x * blockIdx.z) * 2;  // release, poll the call's G arrivals,
@@ -3103,7 +3119,13 @@ __global__ void __launch_bounds__((MODE & 4) ? 192 : 160, MINB) rtk(const __grid
         if (s >= NSLOT) rt_mbwait(bars + 8 * (NSLOT + sl), (uint32_t)((s / NSLOT - 1) & 1));
         const uint32_t fb = bars + 8 * sl, dst = base + sl * SB;
         rt_mbexpect(fb, (uint32_t)SB);
-        rt_tile(dst, &tx, k0 + 64 * s, t0, fb);
+        if constexpr (MC) {
+          uint32_t rk;
+          asm volatile("mov.u32 %0, %%cluster_ctarank;\n" : "=r"(rk));
+          rt_tile_mc(dst + rk * (TOKS / 4) * 128, &tx, k0 + 64 * s, t0 + (int)rk * (TOKS / 4), fb, (uint16_t)0xF);
+        } else {
+          rt_tile(dst, &tx, k0 + 64 * s, t0, fb);
+        }
         rt_tile(dst + TOKS * 128, &th, k0 + 64 * s, n0, fb);
         rt_tile(dst + (TOKS + 64) * 128, &tl, k0 + 64 * s, n0, fb);
       }
@@ -3137,7 +3159,14 @@ __global__ void __launch_bounds__((MODE & 4) ? 192 : 160, MINB) rtk(const __grid
     if (s >= 1) {
       asm volatile("wgmma.wait_group.sync.aligned 1;\n" ::: "memory");  // stage s - 1 retired in this warp
       rw_keep<NA>(d);
-      if ((tid & 31) == 0 && s - 1 + NSLOT < NSTG) rt_mbarrive(bars + 8 * (NSLOT + (s - 1) % NSLOT));
+      if ((tid & 31) == 0 && s - 1 + NSLOT < NSTG) {
+        if constexpr (MC) {
+#pragma unroll
+          for (uint32_t q = 0; q < 4; q++) rt_rarrive(bars + 8 * (NSLOT + (s - 1) % NSLOT), q);
+        } else {
+          rt_mbarrive(bars + 8 * (NSLOT + (s - 1) % NSLOT));
+        }
+      }
       asm volatile("wgmma.fence.sync.aligned;\n" ::: "memory");
     }
   }
@@ -3201,20 +3230,63 @@ static int rt_go(const __nv_bfloat16* x, const __nv_bfloat16* hi, const __nv_bfl
   if (N % 64 || K % KR || m < 1 || (N / 64) * ((m + TOKS - 1) / TOKS) > 64) return -4;
   auto kern = rtk<KR, NBUF, TOKS, WN, MINB, MODE>;
   static bool once = false;
+  static int slots = 0;  // co-resident CTAs (self-zeroing waits across the K splits of a tile: never launch a 2-wave grid)
   if (!once) {
     if (cudaFuncSetAttribute(kern, cudaFuncAttributeMaxDynamicSharedMemorySize, SM) != cudaSuccess) { cudaGetLastError(); return -6; }
+    int per = 0, dev = 0, sms = 0;
+    if (cudaOccupancyMaxActiveBlocksPerMultiprocessor(&per, kern, (MODE & 4) ? 192 : 160, SM) != cudaSuccess) { cudaGetLastError(); return -7; }
+    cudaGetDevice(&dev);
+    cudaDeviceGetAttribute(&sms, cudaDevAttrMultiProcessorCount, dev);
+    slots = per * sms;
     once = true;
   }
+  if ((MODE & 4) && (MODE & 32)) return -31;  // multicast clusters + self-zeroing: co-residency not guaranteed
+  if ((MODE & 4) && (N / 64) * (K / KR) * ((m + TOKS - 1) / TOKS) > slots) return -30;
+  constexpr bool MC = (MODE & 32) != 0;
   RtMap tx, th, tl;
-  int r = rt_map(tx, x, m, K, TOKS);
+  int r = rt_map(tx, x, m, K, MC ? TOKS / 4 : TOKS);
   if (!r) r = rt_map(th, hi, N, K, 64);
   if (!r) r = rt_map(tl, lo, N, K, 64);
   if (r) return r;
-  kern<<<dim3(N / 64, K / KR, (m + TOKS - 1) / TOKS), (MODE & 4) ? 192 : 160, SM, st>>>(tx, th, tl, out, m, N, K, cnt, slot);
+  if (MC && N / 64 != 4) return -4;
+  cudaLaunchConfig_t cfg = {};
+  cfg.gridDim = dim3(N / 64, K / KR, (m + TOKS - 1) / TOKS);
+  cfg.blockDim = dim3((MODE & 4) ? 192 : 160, 1, 1);
+  cfg.dynamicSmemBytes = SM;
+  cfg.stream = st;
+  cudaLaunchAttribute at[1];
+  at[0].id = cudaLaunchAttributeClusterDimension;
+  at[0].val.clusterDim.x = 4; at[0].val.clusterDim.y = 1; at[0].val.clusterDim.z = 1;
+  cfg.attrs = at;
+  cfg.numAttrs = MC ? 1 : 0;
+  if (cudaLaunchKernelEx(&cfg, kern, tx, th, tl, out, m, N, K, cnt, slot) != cudaSuccess) return (int)cudaGetLastError();
   return (int)cudaGetLastError();
+}
+template <int KR, int NBUF, int TOKS, int WN, int MINB, int MODE>
+static int rt_occ(int m, int N, int K) {  // co-resident clusters of 4 (MODE 32) or CTAs per SM
+  constexpr int NSTG = KR / 64, NSLOT = NBUF < NSTG ? NBUF : NSTG, SM = NSLOT * (TOKS + 128) * 128 + 1024 + 16 * NSLOT;
+  auto kern = rtk<KR, NBUF, TOKS, WN, MINB, MODE>;
+  if (cudaFuncSetAttribute(kern, cudaFuncAttributeMaxDynamicSharedMemorySize, SM) != cudaSuccess) { cudaGetLastError(); return -6; }
+  const int nt = (MODE & 4) ? 192 : 160;
+  int n = -1;
+  if (!(MODE & 32)) {
+    if (cudaOccupancyMaxActiveBlocksPerMultiprocessor(&n, kern, nt, SM) != cudaSuccess) { cudaGetLastError(); return -7; }
+    return n;
+  }
+  cudaLaunchConfig_t cfg = {};
+  cfg.gridDim = dim3(N / 64, K / KR, (m + TOKS - 1) / TOKS);
+  cfg.blockDim = dim3(nt, 1, 1);
+  cfg.dynamicSmemBytes = SM;
+  cudaLaunchAttribute at[1];
+  at[0].id = cudaLaunchAttributeClusterDimension;
+  at[0].val.clusterDim.x = 4; at[0].val.clusterDim.y = 1; at[0].val.clusterDim.z = 1;
+  cfg.attrs = at; cfg.numAttrs = 1;
+  if (cudaOccupancyMaxActiveClusters(&n, kern, &cfg) != cudaSuccess) { cudaGetLastError(); return -8; }
+  return n;
 }
 int64_t rwocc(int64_t v, int64_t m, int64_t N, int64_t K) {
   switch (v) {
+@@RTOCC@@
 @@RWOCC@@
   }
   return -2;
@@ -3253,7 +3325,10 @@ RWST = (101, 104, 107, 103, 108, 113, 130)  # MODE 16 (globaltimer stamps) insta
 RWV.update({v + 20000: RWV[v][:6] + (RWV[v][6] | 16, RWV[v][7]) for v in RWST})
 # pw29m rtk variants: (KR, NBUF, TOKS, WN, MINB, MODE)
 RTV = {200: (512, 6, 128, 128, 1, 4), 201: (256, 3, 128, 128, 2, 4), 202: (256, 4, 256, 128, 1, 4), 203: (512, 4, 256, 128, 1, 4),
-       204: (1024, 6, 128, 128, 1, 4), 206: (512, 6, 128, 128, 1, 0), 210: (256, 4, 128, 128, 1, 4), 211: (256, 3, 128, 128, 2, 4)}
+       204: (1024, 6, 128, 128, 1, 4), 206: (512, 6, 128, 128, 1, 0), 210: (256, 4, 128, 128, 1, 4), 211: (256, 3, 128, 128, 2, 4),
+       230: (512, 6, 128, 128, 1, 32), 231: (256, 3, 128, 128, 2, 32), 232: (256, 4, 128, 128, 1, 32),
+       240: (512, 6, 128, 128, 1, 68), 241: (256, 3, 128, 128, 2, 68), 242: (256, 4, 128, 128, 1, 68)}
+# 220-223 (multicast + self-zeroing) deadlock when not every cluster is co-resident (the zeroing wait spans clusters): not built
 RTV.update({v + 20000: c[:5] + (c[5] | 16,) for v, c in list(RTV.items())})
 RWLAD = True  # pw29h ladder instances: variant + 1000 * MODE (1 = loads only, 2 = no reds, 3 = loads only, no reds)
 if RWLAD:
@@ -3278,7 +3353,7 @@ def _rwsrc():
     rtc = "\n".join("    case %d: return rt_go<%s>(xp, h, l, o, m, N, K, c, %d, st);" % (v, ", ".join(map(str, c)), 64 + i) for i, (v, c) in enumerate(sorted(RTV.items())) if v in ruse)
     cases = "\n".join("    case %d: return rw_go<%s>(xp, h, l, o, m, N, K, c, %d, st);" % (v, ", ".join(map(str, c)), i) for i, (v, c) in enumerate(sorted(RWV.items())) if v in use)
     occ = "\n".join("    case %d: return rw_occ<%s>(m, N, K);" % (v, ", ".join(map(str, c))) for v, c in sorted(use.items()))
-    return RWCU.replace("@@WG@@", _rwwg(128) + _rwwg(256)).replace("@@RWCASES@@", cases).replace("@@RWOCC@@", occ).replace("@@RTCASES@@", rtc)
+    return RWCU.replace("@@WG@@", _rwwg(128) + _rwwg(256)).replace("@@RWCASES@@", cases).replace("@@RWOCC@@", occ).replace("@@RTCASES@@", rtc).replace("@@RTOCC@@", "\n".join("    case %d: return rt_occ<%s>(m, N, K);" % (v, ", ".join(map(str, c))) for v, c in sorted(ruse.items())))
 
 
 _rwmod = []
@@ -3329,6 +3404,8 @@ RSPALL = [("rs64k32", 0, True, (128, 256)), ("rp64k32s4", 5, True, (128,)), ("rp
        ("rt64k16b6z", 200, False, (128, 256)), ("rt64k32b3x2z", 201, False, (128, 256)), ("rtv64k32b4z", 202, False, (256,)),
        ("rtv64k16b4z", 203, False, (256,)), ("rt64k8b6z", 204, False, (128, 256)), ("rt64k16b6", 206, True, (128, 256)),
        ("rt64k32b4z", 210, False, (128, 256)), ("rt64k32b3x2bz", 211, False, (128,)),
+       ("rt64k16b6m", 230, True, (128, 256)), ("rt64k32b3x2m", 231, True, (128, 256)), ("rt64k32b4m", 232, True, (128,)),
+       ("rt64k16b6zp", 240, False, (128, 256)), ("rt64k32b3x2zp", 241, False, (128, 256)), ("rt64k32b4zp", 242, False, (128,)),
        ("rwv64k32s8h2z", 130, False, (256,)), ("rwv64k32s8h2c2", 131, True, (256,)), ("rwv64k64s4x2z", 136, False, (256,))]
 
 # pw29h shipped bake set (H100 rbench, judge-like read flush): pw23's rp64k32s4 as the in-run incumbent, pw29's

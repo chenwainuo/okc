@@ -944,3 +944,29 @@ times vs the pw33 run: qkv m=128 12.79 (−2.21), pooler 18.16 (−2.07), pooler
 18.98 (+0.08), o +0.42 (noise). Prepare: r6 105 s, rw 34 s, rq ready at 140 s, bake inside budget after the
 guard fix. Lesson: the H200 kept ~2.7 µs of the box's ~2.9 at m=128 — a stream-bytes gain (50 vs 67 MB) transfers
 better than overlap gains, as the transfer rule predicts.
+
+## 18:30 UTC — where the remaining score-µs are (judge run 846e25d9, pw34)
+
+Score = 62 × geomean over the six loads of the load's five-layer sum, so a µs saved in load L is worth
+score/(6 × L's sum): decode1 15.8, verify1 14.8, decode16 11.1, decode32 9.2, verify16 8.2, verify32 6.3 score-µs.
+Judge-measured minus CUPTI kernel time per shape (the non-kernel gap) is −0.7 … +0.5 for our single-node gv/rq
+paths but +2.0 … +2.5 on the cuBLAS-served qkv m=32 (splitK + reduce kernels), o m=32 and o m=128, and +1.0 … +1.5
+on the multi-node router m=128/256 paths. The gv kernel's own cost jumps +2.3 … +4.4 µs from m=16 to m=32 (issue
+bound at four token groups), which is why the judge's bake left qkv/o m=32 on cuBLAS (13.38 vs 13.92; 5.79 vs 6.37).
+Pools and owners: m=256 compute-bound redesign (RS128 author; floor 17.4 at pooler, cuBLAS at ~70% of peak);
+router m=128/256 one-node kernel (P3, pw29m); rq at NT=32/16 for qkv/o (+ pooler/unpooler if the rate allows) and a
+short-K decomposition for o (new track rs32, expected ≈ −45 score-µs at the current rq rate); latency school loader
+fix for the m ≤ 32 shapes (new track; its kernel is correct and its 1-D bulk loader is the only defect; decode1 and
+verify1 carry the highest leverage); RS128 stage anatomy (P4, rs128p). pw34 @ 49b22d8 (prepare reorder, warm-up
+discard, ≤ 6 rq paths) goes out scored now: the five remaining scored slots expire at the reset and a fair bake may
+flip unpooler m=128 (rq 22.59 vs r6 22.75, picked r6) and the s4s5hz paths that were timed first and read high.
+
+## Scored pw34 @ 49b22d8: job `15514e8241db4d09` — 3295.5 µs, 1.4659× (board keeps 3293.9; same within drift)
+
+The prepare reorder worked on the judge: every rq bake ran at 121 s with consistent baselines (pooler r6 before pack
+23.68 / after variants 23.65 — the F1 inflation is gone). Picks: pooler and qkv m=128 → rq:s4s5hz (23.01 vs s4s5z
+23.10; 16.99 vs 17.02 — a tie, so the "first path read high" effect was box-only), unpooler m=128 r6 22.69 vs rq
+22.66 (tie, r6 kept), o m=128 r6 by 2.1, every m=256 n256 variant 3 µs behind r6 (30.9 vs 28.0 pooler) — the
+compute-bound m=256 redesign stands as the only route there. Per-shape judge drift this run vs 846e25d9 is ±0.6
+(router m=1 +0.58, pooler m=128 +0.45, o m=256 +0.43): single-run deltas under ~0.6 µs are noise. Four scored
+slots left today, nothing new to spend them on; the rs128-only reset check is cancelled (redundant, file mid-edit).

@@ -2996,6 +2996,21 @@ RQV = [  # (name, NT, ST, GS, PRB, WM, INS, FL): ST k64 slots (W 12 KB + x NT*12
     ("n256s5hz", 256, 5, 1, 0, 0, 0, 3),
     ("n256s4hz", 256, 4, 1, 0, 0, 0, 3),
     ("n256s5z", 256, 5, 1, 0, 0, 0, 2),
+    ("r8n256", 256, 5, 1, 8, 0, 0, 0),
+    ("s3n256", 256, 5, 1, 4, 0, 0, 0),
+    ("s3n256s4", 256, 4, 1, 4, 0, 0, 0),
+    ("s1n256", 256, 5, 1, 2, 0, 0, 0),
+    ("s3n256i", 256, 5, 1, 4, 0, 1, 0),
+    ("s3n256m1", 256, 5, 1, 4, 1, 0, 0),
+    ("n256s5m1z", 256, 5, 1, 0, 1, 0, 2),
+    ("n256s5m1hz", 256, 5, 1, 0, 1, 0, 3),
+    ("s3n256m1i", 256, 5, 1, 4, 1, 1, 0),
+    ("r8n256i", 256, 5, 1, 8, 0, 1, 0),
+    ("r8n256tp", 256, 5, 1, 8, 0, 0, 16),
+    ("r8n256tpi", 256, 5, 1, 8, 0, 1, 16),
+    ("s3n256tp", 256, 5, 1, 4, 0, 0, 16),
+    ("n256s5tpz", 256, 5, 1, 0, 0, 0, 18),
+    ("n256s5tpm1z", 256, 5, 1, 0, 1, 0, 18),
     ("s3s7", 128, 7, 1, 4, 0, 0, 0),
     ("s3h", 128, 8, 1, 4, 0, 0, 1),
     ("s3m2h", 128, 8, 1, 4, 2, 0, 1),
@@ -3130,6 +3145,7 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
   using C = RqC<NT, ST, GS, PRB, WM, INS, FL>;
   constexpr int XB = C::XB, WB = C::WB, ND = C::ND;
   constexpr bool HINT = FL & 1, ZI = (FL & 2) && PRB == 0;  // ZI: in-kernel zeroing of out (no memset node)
+  constexpr bool TP = (FL & 16) && NT == 256;               // TP: m = 256 as two m64n128k16 passes per k16 step
   constexpr bool RES = PRB == 8 || PRB == 10;                           // resident: no TMA, no barriers
   constexpr bool XON = PRB != 1 && PRB != 5 && PRB != 7 && !RES;       // x streamed
   constexpr bool WON = PRB != 7 && !RES;                               // W streamed
@@ -3318,7 +3334,14 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
       const int s = GS * G + j;
       const uint64_t d = xd0 + (uint64_t)(((RES ? 0 : s % ST) * XB) >> 4);
 #pragma unroll
-      for (int q = 0; q < 4; q++) rq_wgmma<NT>(D, A[j] + 4 * q, d + 2 * q, (s | q) != 0);
+      for (int q = 0; q < 4; q++) {
+        if (TP) {  // two 128-token passes over the same decoded A: tokens 0-127 -> D[0..63], 128-255 -> D[64..127]
+          rq_wgmma<128>(*reinterpret_cast<float(*)[64]>(&D[0]), A[j] + 4 * q, d + 2 * q, (s | q) != 0);
+          rq_wgmma<128>(*reinterpret_cast<float(*)[64]>(&D[ND / 2]), A[j] + 4 * q, d + 1024 + 2 * q, (s | q) != 0);
+        } else {
+          rq_wgmma<NT>(D, A[j] + 4 * q, d + 2 * q, (s | q) != 0);
+        }
+      }
     }
     asm volatile("wgmma.commit_group.sync.aligned;\n" ::: "memory");
     rq_facc<ND>(D);
@@ -3461,7 +3484,10 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
       for (int i = 0; i < 5; i++) p.prof[cta * 32 + 26 + i] = ce[i];
     }
   } else {
-    if (sink == 0x9e3779b9u || D[0] == 1.2345f) p.sink[0] = sink;
+    float dsum = 0.f;  // every accumulator live: otherwise ptxas drops wgmmas whose results are unused (TP probes)
+#pragma unroll
+    for (int i = 0; i < ND; i++) dsum += D[i];
+    if (sink == 0x9e3779b9u || dsum == 1.2345f) p.sink[0] = sink;
   }
   if (INS && w == 0 && lane == 0) {
 #pragma unroll

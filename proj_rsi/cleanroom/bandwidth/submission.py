@@ -35,6 +35,8 @@ CUDA_SRC = r"""
 #include <cooperative_groups.h>
 #include <cstdint>
 #include <set>
+#include <map>
+#include <cstdio>
 #include <tuple>
 #include <utility>
 namespace cg = cooperative_groups;
@@ -118,12 +120,13 @@ __device__ __forceinline__ float fix_esc_hilo(float v, float xv, const Esc& e) {
 template <int NT, int MT, bool ROUTER, int D>
 __global__ void __launch_bounds__(256, 1) k_small(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restrict__ x,
                                                   void* __restrict__ out, const int* __restrict__ esc_off,
-                                                  const Esc* __restrict__ esc, int m, int K, int N, uint32_t base2, int S) {
+                                                  const Esc* __restrict__ esc, int m, int K, int N, uint32_t base2, int S, int diag) {
 #ifndef BW_STUB
     extern __shared__ __align__(16) uint8_t smem[];
     constexpr int BN = 8 * NT, SMB = 4 * NT, EB = 2 * NT, LOB = ROUTER ? 8 * NT : 0;
     constexpr int STEP = 32 * (SMB + EB + LOB), ROWS = 16 * MT, XB = ROWS * 32, STAGE = STEP + XB;
-    static_assert(ROWS * BN * 4 <= D * STAGE, "redbuf fits in ring");
+    const bool no_x = diag & 1, no_mma = diag & 2, no_epi = diag & 4, no_clu = diag & 8;
+    static_assert(9 * ROWS * BN * 4 <= 8 * D * STAGE, "warp partials + P fit in the ring");
     const int tid = threadIdx.x, w = tid >> 5, lane = tid & 31, g = lane >> 2, q = lane & 3;
     const int r = blockIdx.x % S, nb = blockIdx.x / S;
     const int KS = K >> 4;
@@ -132,7 +135,7 @@ __global__ void __launch_bounds__(256, 1) k_small(const uint8_t* __restrict__ pa
     const int nsteps = s1 - s0;
     const uint8_t* src = packed + ((size_t)nb * KS + s0) * STEP;
     uint8_t* ring = smem + w * (D * STAGE);
-    float* P = reinterpret_cast<float*>(smem + 8 * D * STAGE);   // [ROWS][BN]
+    float* P = reinterpret_cast<float*>(smem) + 8 * ROWS * BN;   // [ROWS][BN], aliases the dead ring
 
     float acc[MT][NT][4];
 #pragma unroll
@@ -148,6 +151,7 @@ __global__ void __launch_bounds__(256, 1) k_small(const uint8_t* __restrict__ pa
         copy_bytes<SMB>(st + lane * SMB, gs + lane * SMB);
         copy_bytes<EB>(st + 32 * SMB + lane * EB, gs + 32 * SMB + lane * EB);
         if (ROUTER) copy_bytes<(LOB ? LOB : 16)>(st + 32 * (SMB + EB) + lane * LOB, gs + 32 * (SMB + EB) + lane * LOB);
+        if (no_x) return;
 #pragma unroll
         for (int i = 0; i < MT; ++i) {
             int row = 16 * i + (lane >> 1), chunk = lane & 1;
@@ -163,6 +167,7 @@ __global__ void __launch_bounds__(256, 1) k_small(const uint8_t* __restrict__ pa
         cp_wait<D - 2>();
         __syncwarp();
         const uint8_t* st = ring + (s % D) * STAGE;
+        if (no_mma) { acc[0][0][0] += __uint_as_float(*reinterpret_cast<const uint32_t*>(st + lane * SMB)); __syncwarp(); if (s + D - 1 < nsteps) issue(s + D - 1); cp_commit(); continue; }
         uint32_t a[MT][4];
 #pragma unroll
         for (int mt = 0; mt < MT; ++mt) {
@@ -192,6 +197,11 @@ __global__ void __launch_bounds__(256, 1) k_small(const uint8_t* __restrict__ pa
     }
     cp_wait<0>();
     __syncthreads();
+    if (no_epi) {
+        if (w == 0) { if (lane < 8) reinterpret_cast<__nv_bfloat16*>(out)[(size_t)nb * BN + r * 8 + lane] = __float2bfloat16_rn(acc[0][0][0]); }
+        if (S > 1) cg::this_cluster().sync();
+        return;
+    }
     // per-warp partials -> P
     float* red = reinterpret_cast<float*>(smem) + w * (ROWS * BN);
 #pragma unroll
@@ -216,7 +226,7 @@ __global__ void __launch_bounds__(256, 1) k_small(const uint8_t* __restrict__ pa
         int c = c0 + idx % ncols, row = idx / ncols;
         if (row >= m) continue;
         float v = 0.f;
-        if (S > 1) {
+        if (S > 1 && !no_clu) {
             for (int rr = 0; rr < S; ++rr) v += cluster.map_shared_rank(P, rr)[row * BN + c];
         } else v = P[row * BN + c];
         int n = nb * BN + c;
@@ -386,9 +396,10 @@ __global__ void __launch_bounds__(256, 1) k_big(const uint8_t* __restrict__ pack
     const int ci = gi * S + r;
     const int s0 = (int)(((long long)ci * KS) / (S * G)), s1 = (int)(((long long)(ci + 1) * KS) / (S * G));
     const int nsteps = s1 - s0;
+    static_assert(D * STAGE >= ROWS * BN * 4, "partial tile aliases the ring");
     uint8_t* ring = smem;
     uint8_t* btile = smem + D * STAGE;                             // [2][NBT][NB2][8][32] uint2
-    float* P = reinterpret_cast<float*>(smem + D * STAGE + 2 * NBT * BT);   // [ROWS][BN]
+    float* P = reinterpret_cast<float*>(smem);                     // [ROWS][BN], aliases the (dead) ring
 
     auto issue = [&](int s) {
         uint8_t* st = ring + (s % D) * STAGE;
@@ -526,39 +537,49 @@ __global__ void __launch_bounds__(256, 1) k_big(const uint8_t* __restrict__ pack
 // ---------------------------------------------------------------------------------------------
 template <typename... Args>
 static void launch(void (*kern)(Args...), int grid, int smem, int S, cudaStream_t stream, Args... args) {
-    static std::set<std::pair<void*, int>> configured;
-    auto key = std::make_pair((void*)kern, smem);
-    if (!configured.count(key)) {
+    static std::map<void*, int> max_smem;
+    static std::set<std::tuple<void*, int, int, int>> seen;
+    if (max_smem[(void*)kern] < smem) {
         cudaFuncSetAttribute(kern, cudaFuncAttributeMaxDynamicSharedMemorySize, smem);
-        if (S > 8) cudaFuncSetAttribute(kern, cudaFuncAttributeNonPortableClusterSizeAllowed, 1);
-        configured.insert(key);
+        max_smem[(void*)kern] = smem;
     }
+    if (S > 8) cudaFuncSetAttribute(kern, cudaFuncAttributeNonPortableClusterSizeAllowed, 1);
     cudaLaunchConfig_t cfg = {};
     cfg.gridDim = dim3(grid); cfg.blockDim = dim3(256); cfg.dynamicSmemBytes = smem; cfg.stream = stream;
     cudaLaunchAttribute attr[1];
     attr[0].id = cudaLaunchAttributeClusterDimension;
     attr[0].val.clusterDim.x = S; attr[0].val.clusterDim.y = 1; attr[0].val.clusterDim.z = 1;
     cfg.attrs = attr; cfg.numAttrs = (S > 1) ? 1 : 0;
+    auto key = std::make_tuple((void*)kern, smem, S, grid);
+    if (!seen.count(key)) {
+        seen.insert(key);
+        int nclu = -1, nblk = -1;
+        cudaOccupancyMaxActiveClusters(&nclu, kern, &cfg);
+        cudaOccupancyMaxActiveBlocksPerMultiprocessor(&nblk, kern, 256, smem);
+        cudaGetLastError();
+        printf("CFG grid=%d S=%d smem=%d blocks/SM=%d maxActiveClusters=%d resident=%d waves=%.2f\n", grid, S, smem, nblk, nclu,
+               nclu * S, (double)grid / (double)(nclu > 0 ? nclu * S : 1));
+    }
     cudaError_t err = cudaLaunchKernelEx(&cfg, kern, args...);
     TORCH_CHECK(err == cudaSuccess, "launch failed: ", cudaGetErrorString(err));
 }
 
 void small_launch(torch::Tensor packed, torch::Tensor x, torch::Tensor out, torch::Tensor esc_off, torch::Tensor esc,
-                  int64_t m, int64_t K, int64_t N, int64_t base2, int64_t S, int64_t MT, bool router, int64_t D) {
+                  int64_t m, int64_t K, int64_t N, int64_t base2, int64_t S, int64_t MT, bool router, int64_t D, int64_t diag) {
     auto stream = at::cuda::getCurrentCUDAStream();
     const int NT = 8, BN = 64;
     int NBLK = (int)N / BN;
     int grid = NBLK * (int)S;
     auto args = std::make_tuple((const uint8_t*)packed.data_ptr(), (const __nv_bfloat16*)x.data_ptr(), (void*)out.data_ptr(),
-                                (const int*)esc_off.data_ptr(), (const Esc*)esc.data_ptr(), (int)m, (int)K, (int)N, (uint32_t)base2, (int)S);
+                                (const int*)esc_off.data_ptr(), (const Esc*)esc.data_ptr(), (int)m, (int)K, (int)N, (uint32_t)base2, (int)S, (int)diag);
 #define SMALL_CASE(MT_, R_, D_)                                                                                   \
     if (MT == MT_ && router == R_ && D == D_) {                                                                   \
         constexpr int STEP = 32 * (4 * NT + 2 * NT + (R_ ? 8 * NT : 0)), STAGE = STEP + 16 * MT_ * 32;           \
-        int smem = 8 * D_ * STAGE + 16 * MT_ * BN * 4;                                                           \
+        int smem = 8 * D_ * STAGE;                                                                               \
         std::apply([&](auto... a) { launch(k_small<NT, MT_, R_, D_>, grid, smem, (int)S, stream.stream(), a...); }, args); \
         return;                                                                                                  \
     }
-    SMALL_CASE(1, false, 4) SMALL_CASE(2, false, 4) SMALL_CASE(1, false, 6) SMALL_CASE(2, false, 6)
+    SMALL_CASE(1, false, 4) SMALL_CASE(2, false, 4) SMALL_CASE(1, false, 6) SMALL_CASE(2, false, 6) SMALL_CASE(1, false, 8) SMALL_CASE(2, false, 8)
     SMALL_CASE(1, true, 4) SMALL_CASE(2, true, 4)
     TORCH_CHECK(false, "no small config");
 }
@@ -595,12 +616,12 @@ void big_launch(torch::Tensor packed, torch::Tensor x, torch::Tensor out, torch:
     if (MT == MT_ && NB2 == NB2_ && router == R_ && D == D_) {                                                   \
         constexpr int STEP = 32 * (32 + 16 + (R_ ? 64 : 0)), STAGE = NB2_ * STEP + 16 * MT_ * 32;                \
         constexpr int BT = NB2_ * 8 * 32 * 8, NBT = R_ ? 2 : 1;                                                  \
-        int smem = D_ * STAGE + 2 * NBT * BT + 16 * MT_ * 64 * NB2_ * 4;                                         \
+        int smem = D_ * STAGE + 2 * NBT * BT;                                                                    \
         std::apply([&](auto... a) { launch(k_big<MT_, NB2_, R_, D_>, grid, smem, (int)S, stream.stream(), a...); }, args); \
         return;                                                                                                  \
     }
-    BIG_CASE(4, 2, false, 4) BIG_CASE(8, 2, false, 4) BIG_CASE(16, 2, false, 4)
-    BIG_CASE(8, 1, true, 4) BIG_CASE(16, 1, true, 4)
+    BIG_CASE(4, 2, false, 12) BIG_CASE(8, 2, false, 12) BIG_CASE(16, 2, false, 12)
+    BIG_CASE(8, 1, true, 12) BIG_CASE(16, 1, true, 12)
     TORCH_CHECK(false, "no big config");
 }
 """
@@ -608,7 +629,7 @@ void big_launch(torch::Tensor packed, torch::Tensor x, torch::Tensor out, torch:
 CPP_SRC = r"""
 #include <torch/extension.h>
 void small_launch(torch::Tensor packed, torch::Tensor x, torch::Tensor out, torch::Tensor esc_off, torch::Tensor esc,
-                  int64_t m, int64_t K, int64_t N, int64_t base2, int64_t S, int64_t MT, bool router, int64_t D);
+                  int64_t m, int64_t K, int64_t N, int64_t base2, int64_t S, int64_t MT, bool router, int64_t D, int64_t diag);
 void rfma_launch(torch::Tensor packed, torch::Tensor x, torch::Tensor out, torch::Tensor esc_off, torch::Tensor esc,
                  int64_t m, int64_t K, int64_t N, int64_t base2, int64_t S, int64_t D);
 void big_launch(torch::Tensor packed, torch::Tensor x, torch::Tensor out, torch::Tensor esc_off, torch::Tensor esc,
@@ -623,7 +644,7 @@ def _ext():
     global _EXT
     if _EXT is None:
         _EXT = load_inline(
-            name="bandwidth_proj_v1",
+            name="bandwidth_proj_v3",
             cpp_sources=CPP_SRC,
             cuda_sources=CUDA_SRC,
             functions=["small_launch", "rfma_launch", "big_launch"],
@@ -700,19 +721,20 @@ def _pack_layer(w: torch.Tensor):
 # ------------------------------------------------------------------------------------------------
 def _small_cfg(layer, m, N, K):
     nblk = N // BN
-    S = {36: 7, 128: 2, 64: 4, 16: 8, 4: 8}.get(nblk, 1)
+    S = {36: 3, 128: 1, 64: 2, 16: 8, 4: 16}.get(nblk, 1)
     return {"S": S, "D": 4}
 
 
 def _big_cfg(layer, m, N, K, router):
     if router:
-        return {"S": 8, "G": 4, "NB2": 1, "D": 4}
+        return {"S": 2, "G": 8 if m <= 128 else 16, "NB2": 1, "D": 12}
     nblk = N // 128
-    S = {18: 7, 32: 4, 64: 2}.get(nblk, 1)
-    return {"S": S, "G": 1, "NB2": 2, "D": 4}
+    S, G = {18: (2, 3), 32: (2, 2), 64: (2, 1)}.get(nblk, (1, 1))
+    return {"S": S, "G": G, "NB2": 2, "D": BIG_D}
 
 
 SMALL_D = int(os.environ.get("BW_SMALL_D", "4"))
+BIG_D = int(os.environ.get("BW_BIG_D", "12"))
 
 
 def prepare(weights):
@@ -722,7 +744,8 @@ def prepare(weights):
         state[name] = _pack_layer(w.contiguous())
         # fp32 scratch for the big kernel's outer split-K (zero-free protocol: ticket counters only)
         N = w.shape[0]
-        state[name]["scratch"] = torch.zeros(4 * 256 * N, dtype=torch.float32, device=w.device)
+        gmax = 16 if name == "router" else 4
+        state[name]["scratch"] = torch.zeros(gmax * 256 * N, dtype=torch.float32, device=w.device)
         state[name]["counters"] = torch.zeros(1024, dtype=torch.int32, device=w.device)
     # router hi/lo fallback for unoptimised m
     r = weights["router"]
@@ -753,7 +776,7 @@ def kernel_fn(data, state):
             return out
         if m <= 32:
             out = torch.empty((m, N), dtype=torch.float32, device=x.device)
-            ext.small_launch(L["packed"], x, out, L["esc_off"], L["esc"], m, K, N, L["base2"], 8, 2, True, 4)
+            ext.small_launch(L["packed"], x, out, L["esc_off"], L["esc"], m, K, N, L["base2"], 8, 2, True, 4, 0)
             return out
         if m in (128, 256) or (64 < m <= 256):
             MT = 8 if m <= 128 else 16
@@ -768,7 +791,7 @@ def kernel_fn(data, state):
     if m <= 32:
         out = torch.empty((m, N), dtype=torch.bfloat16, device=x.device)
         c = _small_cfg(layer, m, N, K)
-        ext.small_launch(L["packed"], x, out, L["esc_off"], L["esc"], m, K, N, L["base2"], c["S"], 1 if m <= 16 else 2, False, SMALL_D)
+        ext.small_launch(L["packed"], x, out, L["esc_off"], L["esc"], m, K, N, L["base2"], c["S"], 1 if m <= 16 else 2, False, SMALL_D, 0)
         return out
     if m <= 256:
         MT = 4 if m <= 64 else (8 if m <= 128 else 16)

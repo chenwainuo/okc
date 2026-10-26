@@ -1,0 +1,36 @@
+{
+  "reviewer": "measurement_audit",
+  "decision": "PASS_NEW_EXPLICIT_POSTMASK_ADAPTER_SMOKE",
+  "plan_sha256": "ead370128e496cea701841db600f9ef889d37ef2a2da954e9bd60c404be8ee40",
+  "artifact_sha256": {
+    "probe.py": "04fad3259e56646c8b817fd10e2c8315c5e2750abdab188db423a2723008dce0",
+    "teardown.py": "b7de95d8301dd9d6b768de855bb81dfdeafde4ab598424e4355168aca0facc14",
+    "cpu-test.json": "020b4027115c2e07736ec42af77c518e01da5ab17b441d2769b03421d4cec8f7",
+    "test_fingerprint_cpu.py": "250897f67c67b7e1737ac18e03b3500ce5aad5a11fd2b5efc5d8354ef116ed36",
+    "root-command.sh": "e4cdfd4ca124e19fae4da36f303e1faa0671d08b52ee38d2af6cc5cdcd9d5072"
+  },
+  "contract_evidence": {
+    "path": "docs/deepgemm-padding-contract.json",
+    "sha256": "146a38f84999487050830e47d82caf1d7ea85a7cab2f3f746edb9c3586138689"
+  },
+  "critical_blockers": [],
+  "checks": [
+    "Pinned scheduler and SM90 BF16 source text hashes independently matched v2 runtime headers: negative group index clamps to0, BF16 path lacks per-row validity check; raw invalid padding has no zero promise.",
+    "V3 adds actual GPUcopy to separate masked_d plus masked_fill_ before global scaling. Mask overwrites NaNs safely; raw output retained. New adapter semantics, not retrospective v2 pass.",
+    "Original CPU FP64 actual-BF16 oracle unchanged; all valid raw rows exact, masked and scaled outputs exact across every row including empty. Empty raw-valid comparison explicitly records zero rows and is not presented as nonempty proof.",
+    "Same two modes and eager/graph valid-padding-empty-restored sequence; live indices drive mask within graph; immutable input checks preserved. Raw-padding diagnostics eager-only outside capture.",
+    "Reviewer ran four CPU tests including actual AST-extracted invoke with NaN padding, raw preservation, mask before scale and scalar fingerprint regression: all pass.",
+    "Final artifact/contract hashes match; v1/v2 unchanged. Wrapper delta only v3 identities/paths; fresh cache and output, matching300slease>=285remaining,240+15+25s bounded lifecycle."
+  ],
+  "conditions": [
+    "One new root-leased attempt; no automatic retries.",
+    "Require16 complete ordered checks, runtime/probe hashes, client0 and terminal container/launcher absent/GPUempty; unknown retains lease.",
+    "Future measurements must include explicit GPUcopy/postmask/global and any routing/zeroing; no hidden adapter overhead."
+  ],
+  "limits": [
+    "Tests only N128,K128/256 dyadic normal and tiny weights, not broad FP4/scale or K4096/MoE precision equivalence.",
+    "No backend capture or tiny numerical pass established until actual results.",
+    "No performance/serving/promotion approval; v2 remains failed under its original contract.",
+    "No GPU or remote calls by reviewer."
+  ]
+}

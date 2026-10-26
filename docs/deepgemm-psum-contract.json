@@ -1,0 +1,116 @@
+{
+  "schema": "deepgemm-psum-feasibility/v1",
+  "scope": "CPU-only pinned-source inspection; no GPU test, candidate change, performance claim or run authorization",
+  "status": "device_scheduler_feasible; host_api_architecture_admission_unverified",
+  "conclusion": "GPU cumulative end metadata can bound persistent scheduled work to local aligned expert rows, independently of static A/D allocation capacity. Installed BF16 API acceptance on SM90 is not proven by generic scheduler support; verify host guards before implementation.",
+  "image": "lmsysorg/sglang@sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
+  "source_evidence": {
+    "installed_capture": "results/rsi/deepgemm-padding-source.json",
+    "capture_sha256": "35db204edfacd41aceb07542e994c7f22877cc1234aa2fe1970d49de4a3c3741",
+    "headers": {
+      "include/deep_gemm/scheduler/gemm.cuh": "6ba5035b07452199b7bc979e9aefb143d91911b0d17a123b7da5eeef39486121",
+      "include/deep_gemm/impls/sm90_bf16_gemm.cuh": "3f12ad05796d7b8451604ff12e0a45ad1d9725a313919557bcdd9aa11c50e285"
+    },
+    "local_sources": {
+      "serving/sglang/python/sglang/kernels/ops/moe/triton_pad_expert_counts.py": "4f4d3e06c0f13f04aac83c4386f1de3aaf4790aae1832b25f8a5925506d9c93d",
+      "serving/sglang/python/sglang/kernels/ops/moe/ep_moe_kernels.py": "600114a8792def007c6b4ea8dfbfc7f2bd2c6912c868e0c7384ef3a1d5791ed9",
+      "serving/sglang/python/sglang/srt/layers/moe/moe_runner/deep_gemm.py": "2173ffda1b18bd058857eadac16cc4be92deca658cfca623943d9ed79e2bc431",
+      "serving/sglang/python/sglang/srt/layers/deep_gemm_wrapper/entrypoint.py": "428fb5252c4b956f8ca8ede3770e2f9771993893926e2288311364d68c7687c0"
+    }
+  },
+  "device_contract": {
+    "metadata": "Device int32 vector [num_groups], one physical valid end offset per expert. Not per-row expert IDs and not ordinary cumulative valid counts. Host binding shape/dtype constraints still require verification.",
+    "recurrence": "start[0]=0; end[g]=start[g]+valid_count[g]; start[g+1]=align(end[g],BLOCK_M). Nonnegative counts; end[g]>=start[g], end[g]<=allocation capacity; aligned capacity must cover full scheduled final tile.",
+    "examples": [
+      {
+        "valid_counts": [
+          3,
+          0,
+          129,
+          0
+        ],
+        "block_m": 128,
+        "ends": [
+          3,
+          128,
+          257,
+          384
+        ],
+        "scheduled_m_blocks": 3
+      },
+      {
+        "valid_counts": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "block_m": 128,
+        "ends": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "scheduled_m_blocks": 0
+      },
+      {
+        "valid_counts": [
+          128,
+          128,
+          0,
+          1
+        ],
+        "block_m": 128,
+        "ends": [
+          128,
+          256,
+          256,
+          257
+        ],
+        "scheduled_m_blocks": 3
+      }
+    ],
+    "scheduling": "gemm.cuh:108-111 initializes first end;216-236 traverses GPU ends, skips groups with zero blocks, terminates after num_groups. Work tiles=sum_g ceil(valid_count[g]/BLOCK_M)*ceil(N/BLOCK_N), not ceil(capacity/BLOCK_M)*ceil(N/BLOCK_N). Each resident CTA has persistent task iteration. No host count read appears in device scheduler.",
+    "empty": "All-zero ends produce no work; output remains untouched, not guaranteed zero. Explicit consumer validity/masking remains mandatory.",
+    "precision": "Metadata changes schedule only. Raw valid BF16 result, cast-before-global-scale order, unchanged weights and independent reference gates remain required.",
+    "padding": "Last partial tile still executes full SM90 BF16 tile; raw padded values unspecified. Psum eliminates excess capacity tiles, not all alignment waste.",
+    "guards": "Actual chosen BLOCK_M must match physical expert start spacing; metadata with negative values or overlapping/unrounded ends can underflow unsigned arithmetic. Never pass m_indices [-1,...] as psum."
+  },
+  "sm90_limit": {
+    "kernel": "sm90_bf16_gemm.cuh:136 instantiates Scheduler with default kEnsureZeroPadding=true. Kernel template lacks ensure-zero-padding parameter and calls no is_computation_valid.",
+    "ensure_zero_padding_false": "Not demonstrated on SM90. Scheduler:187-193 effective-M optimization is explicitly swap-A/B and psum only, uses UMMA steps; presence does not prove Hopper host dispatch supports requested flag.",
+    "expected_m_for_psum_layout": "Python default None forwarded unchanged to compiled binding; semantics/SM90 restrictions absent in captured host source. Do not assume it bounds work or equals true routing count."
+  },
+  "sglang_integration": {
+    "existing_api": "entrypoint.py:162-170 calls BF16 contiguous with only a,b,d,m_indices; existing BF16 wrapper does not expose psum flags.",
+    "gpu_counts": "fused_moe_dispatch_index produces valid_tokens_per_expert on GPU. ep_scatter_1 computes starts from cumulative padded counts on GPU and produces per-row m_indices plus src2dst. A separate GPU end vector is feasible without CPU .item()/tolist().",
+    "tail": "triton_pad_expert_counts.py rounds counts then adds all_tokens-sum(padded) to final expert. Cumulative padded ends therefore include static tail and defeat desired work reduction. Its comment that DeepGEMM skips -1 rows is false for this exact SM90 BF16 implementation.",
+    "candidate_end_construction": "If actual BLOCK_M matches existing scatter physical spacing, GPU ends=expert_start_loc+valid_tokens_per_expert excludes final slack. Added slack affects final expert length, not its start. Verify empty experts and actual block spacing before use.",
+    "alignment_caveat": "Query alignment128 is not by itself proof selected BLOCK_M128. If selected BLOCK_M64, existing128-aligned scatter starts may differ from scheduler align(previous_end,64). Need host config guarantee or construct scatter at verified selected alignment; do not guess.",
+    "deepep_v2": "Existing ep_scatter_from_psum/fill_m_indices_from_psum demonstrate GPU cumulative metadata consumers, but current BF16 runner converts to full m_indices; not evidence direct backend psum admission."
+  },
+  "roi": {
+    "engineering_prior": "With topk8 and EP8 roughly uniform routing, allocation based on global M*8 may greatly exceed local useful assignments ~M. Eliminating tail can recover roughly8x GEMM work at large M before expert alignment overhead, not8x end-to-end speedup.",
+    "qualification": "Routing skew,32 local expert padding, fixed launch, scatter, conversion, other operators and memory capacity change actual ratio. Baseline timing and v3 backend smoke do not measure psum benefit."
+  },
+  "next_decision": "Public API exists, host architecture admission remains blocker. Root may authorize separately reviewed minimal runtime query; no full adapter or backend rewrite yet. Keep existing v3 immutable.",
+  "host_api_inspection": {
+    "method": "Authorized read-only CPU Docker, pinned image, --pull=never --cpus=1 --network=none NVIDIA_VISIBLE_DEVICES=void. Read text only; no deep_gemm/torch import, compile or GPU access.",
+    "python_file": "/opt/sglang/lib/python3.12/site-packages/deep_gemm/__init__.py",
+    "sha256": "16ceded415051d5a5adfb3cce00eacc455d04a729b80a76428b96b3f9968018e",
+    "lines_265_266": [
+      "    def m_grouped_bf16_gemm_nt_contiguous(a, b, d, grouped_layout, compiled_dims='nk', use_psum_layout=False, ensure_zero_padding=True, expected_m_for_psum_layout=None):",
+      "        _C.m_grouped_bf16_gemm_nt_contiguous(a, b, d, grouped_layout, compiled_dims, use_psum_layout, ensure_zero_padding, expected_m_for_psum_layout)"
+    ],
+    "binding_source": "Installed package include/deep_gemm has73 files, no api paths and no textual use_psum_layout/ensure_zero_padding/expected_m_for_psum_layout mentions. No C++ host API definition recovered in bounded search. _C.so contains implementation; no reverse engineering attempted.",
+    "verified": "Public Python BF16 NT wrapper accepts all three flags and forwards them unchanged. No Python architecture guard.",
+    "unknown": "Compiled binding admission on SM90, metadata tensor checks, expected_m semantics, chosen BLOCK_M and ensure_zero_padding=False support."
+  },
+  "smallest_future_runtime_query": {
+    "status": "Suggestion only; requires separate root authorization/review/serialized lease, not an execution plan.",
+    "configuration": "Reuse independently passed normal dyadic BF16 small fixture,2 groups,N=K=128, fixed static A/D capacity. Query use_psum_layout=True,ensure_zero_padding=False,expected_m_for_psum_layout=None first; capture exact exception if host rejects. Do not silently fallback or claim failure is arithmetic.",
+    "mapping": "Start with both groups exactly128 valid rows (ends[128,256]) to remove uncertain partial alignment; then separate empty second group ends[128,128], all empty[0,0], restored[128,256] graph mutations. Later partial rows require verified actual BLOCK_M.",
+    "evidence": "If admitted, strict raw valid oracle + masked final oracle, actual kernel/dependency identity and runtime work evidence required. Correct output alone does not prove tail tiles skipped. Tiny-weight semantics already tested by v3 but not transferable automatically to a changed dispatch specialization."
+  }
+}

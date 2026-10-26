@@ -1,0 +1,172 @@
+{
+  "reviewer": "measurement_audit",
+  "status": "PASS_BACKEND_PLUS_EXPLICIT_ADAPTER_SMOKE",
+  "case_count": 16,
+  "scope": "Pinned DeepGEMM grouped BF16 backend plus captured GPUcopy/postmask-before-global adapter; two aligned groups, actualA[256,128],B[2,128,128],D[256,128] onH200",
+  "checks": {
+    "exact_ordered_cases": [
+      [
+        "normal",
+        "eager",
+        "valid"
+      ],
+      [
+        "normal",
+        "eager",
+        "padding"
+      ],
+      [
+        "normal",
+        "eager",
+        "empty"
+      ],
+      [
+        "normal",
+        "eager",
+        "valid"
+      ],
+      [
+        "normal",
+        "graph",
+        "valid"
+      ],
+      [
+        "normal",
+        "graph",
+        "padding"
+      ],
+      [
+        "normal",
+        "graph",
+        "empty"
+      ],
+      [
+        "normal",
+        "graph",
+        "valid"
+      ],
+      [
+        "tiny_marlin_like",
+        "eager",
+        "valid"
+      ],
+      [
+        "tiny_marlin_like",
+        "eager",
+        "padding"
+      ],
+      [
+        "tiny_marlin_like",
+        "eager",
+        "empty"
+      ],
+      [
+        "tiny_marlin_like",
+        "eager",
+        "valid"
+      ],
+      [
+        "tiny_marlin_like",
+        "graph",
+        "valid"
+      ],
+      [
+        "tiny_marlin_like",
+        "graph",
+        "padding"
+      ],
+      [
+        "tiny_marlin_like",
+        "graph",
+        "empty"
+      ],
+      [
+        "tiny_marlin_like",
+        "graph",
+        "valid"
+      ]
+    ],
+    "normal_and_tiny": "Both normal and2^-119 BF16 weights with compensating2^119 global pass CPUFP64-derived reference on actualBF16 operands.",
+    "raw_valid": "All valid raw rows exact; empty case rawvalid compares0rows, supported only by strict maskedallrows/scaledallrows checks.",
+    "graph": "Live GPUmetadata valid-padding-empty-restored passes both modes; reviewed fingerprint assertions before oracle/warmup/capture did not fail.",
+    "padding_diagnostics": "Normal eager padding16384/16384 rawinvalid values nonzero,maxabs9; empty32768/32768 nonzero. Explicit postmask produced exact zeros, confirming rawpadding cannot be treated as alreadyzero.",
+    "source": "Probe and all preregistered hashes match; scheduler/SM90 header hashes match investigated sourcecontract.",
+    "runtime": {
+      "torch": "2.14.1+cu130",
+      "cuda": "13.0",
+      "GPU": "NVIDIA H200",
+      "capability": [
+        9,
+        0
+      ]
+    },
+    "selected_export": {
+      "name": "m_grouped_bf16_gemm_nt_contiguous",
+      "module": "deep_gemm",
+      "doc": "None"
+    },
+    "cache_artifacts": {
+      "/cache/deep_gemm/cache/sm90_m_grouped_bf16_gemm_contiguous.9bee92ae0b5e606b167d953f5dfc2194/kernel.cubin": "9f87def3c7240ce37fe446a52e98dd5b57294bed852936c2a3311557fe053fd4",
+      "/cache/deep_gemm/cache/sm90_m_grouped_bf16_gemm_contiguous.9bee92ae0b5e606b167d953f5dfc2194/kernel.cu": "fc8234bfe0d286fb8dea8ee4e900cb6804a5c2f9873975d164f76b84623b1cc0"
+    }
+  },
+  "interpretation": [
+    "Backend executes and captures on H200 for this small fixture; explicit masking establishes requested consumer-visible padding semantics.",
+    "SM90-named cubin/source artifacts recorded; artifact existence alone is not independent proof of execution of every file.",
+    "No K4096/fullMoE numerical equivalence, arbitrary scales/routes, or performance/serving result established.",
+    "Copy,mask,zeroing and globalmultiply are real adapter work and must remain inside any future measured path."
+  ],
+  "history": "v1 harness failure and v2 original padding-contract failure remain unchanged and failed; v3 is a separately reviewed adapter revision.",
+  "next_gate": "Separate source-reviewed integration and realistic precision validation before any MoE timing; no automatic next execution or promotion approval.",
+  "terminal": {
+    "experiment": "DEEPGEMM-BF16-SMOKE-v3",
+    "executor": "root",
+    "started_at": 1792897218.0988278,
+    "deadline_unix": 1792897518.0988278,
+    "reserved_usd": 0.4166666666666667,
+    "purpose": "reviewed explicitpostmask16case backend/graph correctness smoke no performance",
+    "status": "complete",
+    "elapsed_seconds": 30.45733880996704,
+    "terminal_proof": {
+      "status": "terminal",
+      "container": "okc-deepgemm-smoke-04895b4b2af1",
+      "container_absent": true,
+      "client_exit_code": 0,
+      "observations": [
+        {
+          "argv": [
+            "docker",
+            "rm",
+            "-f",
+            "okc-deepgemm-smoke-04895b4b2af1"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "Error response from daemon: No such container: okc-deepgemm-smoke-04895b4b2af1\n"
+        },
+        {
+          "argv": [
+            "docker",
+            "inspect",
+            "okc-deepgemm-smoke-04895b4b2af1"
+          ],
+          "returncode": 1,
+          "stdout": "[]\n",
+          "stderr": "error: no such object: okc-deepgemm-smoke-04895b4b2af1\n"
+        }
+      ],
+      "root_instruction": "Close lease only if terminal proof passes; termination_unknown leaves canonical lease active and blocks further GPU work pending root reconciliation.",
+      "launcher_absent": true,
+      "gpu_compute_pids": []
+    },
+    "accounted_usd": 0.04230185945828756
+  },
+  "promotion_eligible": false,
+  "reviewer_GPU_calls": false,
+  "evidence_sha256": {
+    "results/rsi/deepgemm-bf16-smoke-v3/smoke.json": "5ac536d250140acab4e52d944a7324edfa7805cccc8e29e082f0bf9d0426213b",
+    "results/rsi/deepgemm-bf16-smoke-v3/run.log": "d7af07fe89fad78eca678606f0f6d601ae78f50c9012dcbd1e823e75810d240f",
+    "results/rsi/deepgemm-bf16-smoke-v3/host-terminal.json": "784ff7124eda6a7a6987faa6bb59b2d681c114a594e826240a927b7f4445d041",
+    "results/rsi/probes/deepgemm-bf16-smoke-v3-lease.json": "fa8c4fcb9094e85c544f6c87ad74359eba3456b50c9749e91ddbe1388b6d0a09"
+  }
+}

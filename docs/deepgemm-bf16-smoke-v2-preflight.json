@@ -1,0 +1,42 @@
+{
+  "reviewer": "measurement_audit",
+  "decision": "PASS_MINIMAL_BACKEND_CORRECTNESS_SMOKE",
+  "scope": "Existing pinned-image DeepGEMM BF16 grouped export on SM90; availability, small dyadic numerical behavior and graph replay only",
+  "plan_sha256": "4a0b0d11f9e008118837126b206318967dcdaa7d6c7bcbe487277bca4e57e28d",
+  "artifact_sha256": {
+    "probe.py": "4c63246523a78b78a42ffc9de701fbfae445ab5f2e54764f964f2659cb96d6ca",
+    "teardown.py": "b7de95d8301dd9d6b768de855bb81dfdeafde4ab598424e4355168aca0facc14",
+    "cpu-test.json": "29d3253a1fec1ac99e7b75c7a61f6f5192d7168e9507def2ed661146165c4d1c",
+    "test_fingerprint_cpu.py": "491d7775f79b9f59115b27ffbde830885ae50c7bd3b9c7b17cc408ffff4b1fb2",
+    "root-command.sh": "1514c0d8dc9e05581b0ca3a282dae7f2058803a4d5d7bd888231174eb4f6271e"
+  },
+  "critical_blockers": [],
+  "checks": {
+    "oracle": "CPU FP64 consumes actual rounded BF16 inputs; dyadic signed values and K128/256 preserve exact sum oracle, raw result rounded BF16 before global scaling. Normal and2^-119 weights with2^119 compensation checked separately; nonzero oracle assertion prevents vacuous tiny pass.",
+    "metadata": "Queries M/K alignment, bounded2groups; group0/group1 full aligned segments; padding replaces whole segments with-1. This tests support for desired negative sentinel rather than assuming it.",
+    "graph": "GPU indices updated in-place across valid/padding/empty/restored; d.zero_ is real graph work; graph references live until graph destruction before weights replaced.",
+    "immutability": "A,B,metadata,global fingerprints checked after calls before comparisons; warmup/capture checks included.",
+    "provenance": "Pinned image direct backend import, module/export/runtime/headers/sharedlibs/cache hashes recorded; fresh privatecache refuses existing directory. No local candidate or MoE dispatch substituted.",
+    "wrapper": "All final hashes match. Root matching canonical300s lease with>=285remaining, cooperativehostflock/idle,readonlyprobe,no network,no overwrite,240+15+25=280s bounded lifecycle; cleanup unknown exits42."
+  },
+  "acceptance": [
+    "Root verifies plan and artifact hashes remotely before launch.",
+    "smoke.json complete, case_count16, exact2modes\u00d72phases\u00d74ordered states and both raw/scaled exact checks; selected expected export and SM90 runtime.",
+    "Clientexit0 and terminal container absent, launcher absent,GPUempty before lease release. Unknown retains lease.",
+    "Import/export/compiler/alignment/capture or precision failure is retained as failure evidence; no retry or silent replacement."
+  ],
+  "limits": [
+    "Small N128 K128/256 fixtures do not establish K4096/fullMoE/Marlin-rounding equivalence, arbitrary scale distribution or prefill performance.",
+    "Captured zeroing guarantees padded outputs; does not prove backend itself zeroes them.",
+    "Recorded cache artifacts may include unexecuted files; existence is not execution proof.",
+    "No GPU or remote job by reviewer."
+  ],
+  "next_gate": "Only if smoke passes, separate source-reviewed integration/precision plan; no automatic MoE or performance admission.",
+  "revision_review": {
+    "delta": "Only probe payload-byte expression adds reshape(-1) before uint8 view; dtype/shape hash preserved. Wrapper changes only experiment/source/output/cache v1->v2.",
+    "v1_unchanged": true,
+    "CPU_regression": "Reviewer independently ran unittest discover:3tests pass including actual AST-extracted function scalar/noncontiguous/empty, byte-equivalence, mutation/shape sensitivity and original failure reproduction.",
+    "failure_history": "reports/2026-10-25-deepgemm-smoke-v1.json",
+    "admission": "One new bounded v2 attempt, not retrospective retry/replacement of v1 evidence."
+  }
+}

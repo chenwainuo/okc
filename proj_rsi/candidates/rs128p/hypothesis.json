@@ -1,0 +1,18 @@
+{
+  "id": "rs128",
+  "parent": "pw23",
+  "claim": "At m=128 the incumbent serves pooler/unpooler/qkv/o with tuned cuBLASLt (bf16, 67 MB at pooler). RS128 streams the lossless 12-bit pack (50.3 MB) into a swap-AB register-A wgmma kernel: 128 W rows x 128 tokens per CTA, two math warpgroups decoding in registers, x via 2D TMA SW128, merged full barrier per slot (W bulk lane + x TMA lane), ring depth 5, L2 hints (W evict-first, x evict-last), K split 4/2/7/2 on a one-wave grid, TMA bf16 reduce-add epilogue into an output the kernel zeroes itself. On the H100 box (pooler m=128): kernel 21.86 us vs cuBLAS 26.58 (CUPTI), in-prepare 23.94 vs r6's tuned cuBLASLt ~27.1, i.e. about -3 us. The H200 is expected to be SM-bound (~0.44 us per k64 stage vs a ~0.375 us HBM period), so the judge gain should be smaller: >= -1.5 us at pooler m=128.",
+  "paths": "pooler / qkv_gate / unpooler / o at m = 128: rq:s4s5hz (ST 5, hints, in-kernel zeroing), rq:s4hz (ST 8), rq:s4s5z (no hints); m = 256 (NT 256, 128 accumulators, 0 spills): rq:n256s5hz, rq:n256s4hz, rq:n256s5z. Each path is validated in prepare (one-hot x8 rows bit-exact over every K column, random rows normal and 1%-outlier within 4e-3 (KS 4) to 8e-3 (KS 7), counters left at zero) and picked only when it beats r6's own path for that (layer, m) by MARGIN 0.99 in the same bake (BAKE / PICK lines). Served only at m exactly 128 / 256; everything else, and any shape whose bake declines, is pw23 unchanged.",
+  "target_shapes": [
+    "pooler m=128: under r6 in the judge bake by >= 1.5 us",
+    "unpooler / qkv_gate / o m=128 and the m=256 shapes: picked only where they beat r6 in the bake"
+  ],
+  "kill_if": "pooler m=128 not under r6 in the judge bake (PICK pooler m=128 r6)",
+  "local_checks": "nvcc 12.8 -gencode arch=compute_90a,code=sm_90a -O3 -DNDEBUG --expt-relaxed-constexpr -Xptxas -v: every rq instance 0 spills, no C7510/C7513/C7515 serialisation; SASS of rq<128,5,1,0,0,0,3>: HGMMA.64x128x16 register-A, one WARPGROUP.ARRIVE / DEPBAR.LE 1 per stage, UBLKCP + UTMALDG producers, 8 STSM.MT88 + one UTMAREDG.2D.ADD epilogue; ~55 INT warp-instructions per warp per k64 stage (decode 36). CPU: blocked pack round-trips bit-exactly through an independent unpacker, and an emulation of the kernel's escape walk over the fixed-stride lists restores every escape. Box lab (proj_rsi/candidates/rs128/lab.py, logs /root/okc/logs/rs128/): ladder F12 18.05 | S1 19.14 | S3 20.70 | full 21.86 kernel-us; every full variant one-hot exact, rel L2 3.0e-3, task checker ok (normal + outliers). Harness: /root/bench.sh rs128 ... --official. lint ok; cpu-check --official 9/9.",
+  "risks": [
+    "H200 transfer: the SM-side period (~760 clk/stage with the barrier flow) is above the H200's HBM period, so the box's -3 us may shrink to ~-1 to -2 us or vanish.",
+    "In-kernel zeroing relies on all KS CTAs of a row block being co-resident (one wave, 126-128 CTAs on 132 SMs, 1 CTA/SM); the spin is bounded, so a non-co-resident launch gives a wrong answer that the bake's validation rejects rather than a hang.",
+    "Prepare time: the rq extension compiles in a background thread during r6's phase; the bake is skipped if prepare passes budget-100 s.",
+    "bf16 split-K reduce-add accumulation: rel L2 3e-3 at KS 4 and up to ~4-5e-3 at KS 7 (qkv) against the judge's 1e-2."
+  ]
+}

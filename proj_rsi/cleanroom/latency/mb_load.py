@@ -49,13 +49,14 @@ __global__ void __launch_bounds__(256, 1) k_tma(const uint8_t* __restrict__ src,
         asm volatile("fence.mbarrier_init.release.cluster;" ::: "memory");
     }
     __syncthreads();
-    if (tid == 0) {
-        for (int i = 0; i < depth && i < nst; ++i) {
-            mbar_expect_tx(&bars[i], copy);
-            const int piece = copy / split;
-            for (int j = 0; j < split; ++j)
-                tma_load_1d(smem + i * copy + j * piece, base + (size_t)i * copy + j * piece, piece, &bars[i]);
-        }
+    const int piece = copy / split;
+    const bool issuer = (tid & 31) == 0 && (tid >> 5) < split;   // copies of a stage come from `split` warps
+    if (tid == 0) for (int i = 0; i < depth && i < nst; ++i) mbar_expect_tx(&bars[i], copy);
+    __syncthreads();
+    if (issuer) {
+        const int j = tid >> 5;
+        for (int i = 0; i < depth && i < nst; ++i)
+            tma_load_1d(smem + i * copy + j * piece, base + (size_t)i * copy + j * piece, piece, &bars[i]);
     }
     uint32_t acc = 0;
     for (int s = 0; s < nst; ++s) {
@@ -63,11 +64,12 @@ __global__ void __launch_bounds__(256, 1) k_tma(const uint8_t* __restrict__ src,
         mbar_wait(&bars[buf], (s / depth) & 1);
         acc ^= reinterpret_cast<const uint32_t*>(smem + buf * copy)[tid];
         __syncthreads();
-        if (tid == 0 && s + depth < nst) {
-            mbar_expect_tx(&bars[buf], copy);
-            const int piece = copy / split;
-            for (int j = 0; j < split; ++j)
+        if (s + depth < nst) {
+            if (tid == 0) mbar_expect_tx(&bars[buf], copy);
+            if (issuer) {
+                const int j = tid >> 5;
                 tma_load_1d(smem + buf * copy + j * piece, base + (size_t)(s + depth) * copy + j * piece, piece, &bars[buf]);
+            }
         }
     }
     if (acc == 0x12345678u) out[blockIdx.x] = acc;
@@ -131,6 +133,7 @@ void run_tma(torch::Tensor src, torch::Tensor out, int64_t n_cta, int64_t bytes_
 void run_ld(torch::Tensor src, torch::Tensor out, int64_t n_cta, int64_t bytes_per_cta, int64_t unroll) {
     auto s = at::cuda::getCurrentCUDAStream();
     if (unroll == 4) k_ld<4><<<n_cta, 256, 0, s>>>(src.data_ptr<uint8_t>(), out.data_ptr<uint32_t>(), bytes_per_cta);
+    else if (unroll == 32) k_ld<32><<<n_cta, 256, 0, s>>>(src.data_ptr<uint8_t>(), out.data_ptr<uint32_t>(), bytes_per_cta);
     else if (unroll == 8) k_ld<8><<<n_cta, 256, 0, s>>>(src.data_ptr<uint8_t>(), out.data_ptr<uint32_t>(), bytes_per_cta);
     else k_ld<16><<<n_cta, 256, 0, s>>>(src.data_ptr<uint8_t>(), out.data_ptr<uint32_t>(), bytes_per_cta);
 }
@@ -185,40 +188,72 @@ def time_graph(fn, flush, reps=15):
     return statistics.median(times)
 
 
+def time_cupti(fn, flush, reps=15):
+    """Median kernel-only duration (CUPTI) of fn's kernels, graph-replayed after an L2 flush."""
+    from torch.profiler import ProfilerActivity, profile
+    s = torch.cuda.Stream()
+    s.wait_stream(torch.cuda.current_stream())
+    with torch.cuda.stream(s):
+        for _ in range(2):
+            fn()
+    torch.cuda.current_stream().wait_stream(s)
+    torch.cuda.synchronize()
+    g = torch.cuda.CUDAGraph()
+    with torch.cuda.graph(g):
+        fn()
+    sink = torch.zeros((), dtype=torch.float32, device="cuda")
+    fview = flush.view(torch.float32)
+    with profile(activities=[ProfilerActivity.CUDA]) as prof:
+        for _ in range(reps):
+            torch.sum(fview, 0, out=sink)
+            torch.cuda.synchronize()
+            g.replay()
+            torch.cuda.synchronize()
+    d = [ev.time_range.elapsed_us() for ev in prof.events()
+         if ev.device_type.name == "CUDA" and ev.name.startswith(("k_", "void k_"))]
+    return statistics.median(d) if d else float("nan")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--reps", type=int, default=15)
     ap.add_argument("--ctas", default="128")
+    ap.add_argument("--kb", default="48,96,216,384")
+    ap.add_argument("--compile-only", action="store_true")
     args = ap.parse_args()
     ext = load_inline(name="latency_mb_load", cpp_sources=[CPP], cuda_sources=[SRC],
                       functions=["run_tma", "run_ld", "run_cpa"],
                       extra_cuda_cflags=["-O3", "-gencode=arch=compute_90a,code=sm_90a", "-std=c++17"])
+    if args.compile_only:
+        print("compiled")
+        return
     src = torch.empty(128 << 20, dtype=torch.uint8, device="cuda")
     out = torch.zeros(1024, dtype=torch.int32, device="cuda").view(torch.uint32) if hasattr(torch, "uint32") else torch.zeros(1024, dtype=torch.int32, device="cuda")
     flush = torch.empty(256 << 20, dtype=torch.uint8, device="cuda")
     tiny = torch.zeros(32, device="cuda")
     ovh = time_graph(lambda: tiny.add_(1.0), flush, args.reps)
-    print(f"REPLAY_OVERHEAD {ovh:.2f} us")
+    print(f"REPLAY_OVERHEAD {ovh:.2f} us   (rows below: CUPTI kernel-only time; GB/s per SM = bytes_per_cta / t)")
     for n_cta in [int(v) for v in args.ctas.split(",")]:
-        for kb in (48, 96, 384):
+        for kb in [int(v) for v in args.kb.split(",")]:
             bpc = kb * 1024
             total_mb = n_cta * bpc / 1e6
             rows = []
-            for copy_kb, depth, split in ((3, 16, 1), (6, 8, 1), (12, 4, 1), (24, 4, 1), (48, 2, 1), (24, 4, 4), (48, 2, 8), (12, 8, 1)):
+            for copy_kb, depth, split in ((3, 16, 1), (6, 8, 1), (12, 4, 1), (24, 4, 1), (48, 2, 1), (24, 4, 4), (48, 2, 8), (12, 8, 1),
+                                          (6, 16, 1), (12, 8, 4), (24, 6, 8), (8, 12, 8)):
                 if copy_kb * 1024 > bpc or (bpc % (copy_kb * 1024)):
                     continue
-                t = time_graph(lambda: ext.run_tma(src, out, n_cta, bpc, copy_kb * 1024, depth, split), flush, args.reps)
+                t = time_cupti(lambda: ext.run_tma(src, out, n_cta, bpc, copy_kb * 1024, depth, split), flush, args.reps)
                 rows.append((f"tma copy={copy_kb}K depth={depth} split={split}", t))
-            for unroll in (4, 8, 16):
-                t = time_graph(lambda: ext.run_ld(src, out, n_cta, bpc, unroll), flush, args.reps)
+            for unroll in (4, 8, 16, 32):
+                t = time_cupti(lambda: ext.run_ld(src, out, n_cta, bpc, unroll), flush, args.reps)
                 rows.append((f"ld unroll={unroll}", t))
             for depth, chunk in ((4, 2), (8, 2), (4, 4), (8, 1)):
                 if bpc % (4096 * chunk):
                     continue
-                t = time_graph(lambda: ext.run_cpa(src, out, n_cta, bpc, depth, chunk), flush, args.reps)
+                t = time_cupti(lambda: ext.run_cpa(src, out, n_cta, bpc, depth, chunk), flush, args.reps)
                 rows.append((f"cpa depth={depth} stage={4 * chunk}K", t))
             for name, t in rows:
-                print(f"ctas={n_cta} {kb:4d}KB/cta ({total_mb:6.1f} MB) {name:32s} {t:7.2f} us  {t - ovh:6.2f} net  {total_mb / max(t - ovh, 0.01) / 1e3:.2f} TB/s", flush=True)
+                print(f"ctas={n_cta} {kb:4d}KB/cta ({total_mb:6.1f} MB) {name:32s} {t:7.2f} us  {total_mb / t:.2f} TB/s  {bpc / t / 1e3:5.1f} GB/s/SM", flush=True)
 
 
 if __name__ == "__main__":

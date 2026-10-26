@@ -1,0 +1,33 @@
+{
+  "reviewer": "measurement_audit",
+  "decision": "PASS_MINIMAL_BACKEND_CORRECTNESS_SMOKE",
+  "scope": "Existing pinned-image DeepGEMM BF16 grouped export on SM90; availability, small dyadic numerical behavior and graph replay only",
+  "plan_sha256": "14dca6174eb23733ba6565050a9de713a71d8af4890618bfc37d8db93fc88a5b",
+  "artifact_sha256": {
+    "probe.py": "59af73624ff599c973d277c16a4fcf882c27144e241cbd113702f6590d4e7f59",
+    "teardown.py": "b7de95d8301dd9d6b768de855bb81dfdeafde4ab598424e4355168aca0facc14",
+    "root-command.sh": "015b4a13be52d3d659313fd27e5de7a213583ea057562c856ca023dc8fcc0e4b"
+  },
+  "critical_blockers": [],
+  "checks": {
+    "oracle": "CPU FP64 consumes actual rounded BF16 inputs; dyadic signed values and K128/256 preserve exact sum oracle, raw result rounded BF16 before global scaling. Normal and2^-119 weights with2^119 compensation checked separately; nonzero oracle assertion prevents vacuous tiny pass.",
+    "metadata": "Queries M/K alignment, bounded2groups; group0/group1 full aligned segments; padding replaces whole segments with-1. This tests support for desired negative sentinel rather than assuming it.",
+    "graph": "GPU indices updated in-place across valid/padding/empty/restored; d.zero_ is real graph work; graph references live until graph destruction before weights replaced.",
+    "immutability": "A,B,metadata,global fingerprints checked after calls before comparisons; warmup/capture checks included.",
+    "provenance": "Pinned image direct backend import, module/export/runtime/headers/sharedlibs/cache hashes recorded; fresh privatecache refuses existing directory. No local candidate or MoE dispatch substituted.",
+    "wrapper": "All final hashes match. Root matching canonical300s lease with>=285remaining, cooperativehostflock/idle,readonlyprobe,no network,no overwrite,240+15+25=280s bounded lifecycle; cleanup unknown exits42."
+  },
+  "acceptance": [
+    "Root verifies plan and artifact hashes remotely before launch.",
+    "smoke.json complete, case_count16, exact2modes\u00d72phases\u00d74ordered states and both raw/scaled exact checks; selected expected export and SM90 runtime.",
+    "Clientexit0 and terminal container absent, launcher absent,GPUempty before lease release. Unknown retains lease.",
+    "Import/export/compiler/alignment/capture or precision failure is retained as failure evidence; no retry or silent replacement."
+  ],
+  "limits": [
+    "Small N128 K128/256 fixtures do not establish K4096/fullMoE/Marlin-rounding equivalence, arbitrary scale distribution or prefill performance.",
+    "Captured zeroing guarantees padded outputs; does not prove backend itself zeroes them.",
+    "Recorded cache artifacts may include unexecuted files; existence is not execution proof.",
+    "No GPU or remote job by reviewer."
+  ],
+  "next_gate": "Only if smoke passes, separate source-reviewed integration/precision plan; no automatic MoE or performance admission."
+}

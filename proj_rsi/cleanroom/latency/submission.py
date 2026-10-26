@@ -362,7 +362,280 @@ void launch(const torch::Tensor& packed, const torch::Tensor& x, torch::Tensor& 
         reinterpret_cast<const Exc*>(exc.data_ptr()), exc_off.data_ptr<int>(), m, K, N, nstages, S, lut[0], lut[1], lut[2], lut[3]);
 }
 
+// ---------------------------------------------------------------------------------------------------------
+// LOADER 2: warp-private cp.async rings. Warp w owns k64 block w of every stage: its weight planes, its
+// x slice (m rows x 64 k, 16 B chunks, swizzled) and its exception list all arrive through its own ring of
+// S slots, completion by cp.async.wait_group, refill right after the warp's own use. No CTA barrier and no
+// global load on the critical path until the epilogue.
+template <int N> __device__ __forceinline__ void cp_wait() { asm volatile("cp.async.wait_group %0;" ::"n"(N) : "memory"); }
+__device__ __forceinline__ void cp_wait_rt(int n) {
+    switch (n) {
+        case 0: cp_wait<0>(); break;  case 1: cp_wait<1>(); break;  case 2: cp_wait<2>(); break;
+        case 3: cp_wait<3>(); break;  case 4: cp_wait<4>(); break;  case 5: cp_wait<5>(); break;
+        case 6: cp_wait<6>(); break;  case 7: cp_wait<7>(); break;  case 8: cp_wait<8>(); break;
+        case 9: cp_wait<9>(); break;  case 10: cp_wait<10>(); break; case 11: cp_wait<11>(); break;
+        case 12: cp_wait<12>(); break; case 13: cp_wait<13>(); break; case 14: cp_wait<14>(); break;
+        default: cp_wait<15>(); break;
+    }
+}
+__device__ __forceinline__ void cp_commit() { asm volatile("cp.async.commit_group;" ::: "memory"); }
+__device__ __forceinline__ uint32_t lds32(const uint8_t* p) {
+    uint32_t v, a = (uint32_t)__cvta_generic_to_shared(p);
+    asm volatile("ld.shared.b32 %0, [%1];" : "=r"(v) : "r"(a));
+    return v;
+}
+__device__ __forceinline__ uint32_t lds16(const uint8_t* p) {
+    unsigned short v; uint32_t a = (uint32_t)__cvta_generic_to_shared(p);
+    asm volatile("ld.shared.u16 %0, [%1];" : "=h"(v) : "r"(a));
+    return v;
+}
+
+template <int NB, int MT, int MODE>
+__global__ void __launch_bounds__(256, 1)
+latency_gemv_w(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restrict__ x, void* __restrict__ out,
+               const uint8_t* __restrict__ excw, int ecap, int ksplit, int dbg,
+               int m, int K, int N, int nstages, int S, uint32_t lut_lo, uint32_t lut_hi, uint32_t lut2_lo, uint32_t lut2_hi)
+{
+    constexpr bool DUAL = MODE == 2;
+    constexpr int NPL = DUAL ? 2 : 1;
+    constexpr int NT = (NB + 7) / 8;
+    constexpr int WB = NB * 96 * NPL;          // weight bytes of one warp's k64 block
+    constexpr int STAGE = 8 * WB;
+    constexpr int WCH = WB / 16;
+    extern __shared__ __align__(128) uint8_t smem[];
+
+    const int tid = threadIdx.x, warp = tid >> 5, lane = tid & 31, g = lane >> 2, c = lane & 3;
+    const int cta = blockIdx.x;                    // = n_tile * ksplit + kq; a cluster = the ksplit CTAs of one n_tile
+    const int ntile = cta / ksplit, kq = cta - ntile * ksplit;
+    const int nst = nstages / ksplit, st0 = kq * nst;
+    const int XB = m * 128;
+    const int SLOT = (WB + XB + 127) & ~127;
+    const int EB = ecap * 8;
+    uint8_t* eslot = smem + warp * EB;
+    uint8_t* ring = smem + 8 * EB + warp * S * SLOT;
+    const uint8_t* src = packed + ((size_t)ntile * (size_t)nstages + st0) * STAGE;
+    const uint8_t* xb = reinterpret_cast<const uint8_t*>(x);
+
+    // exception list of this (cta, warp): rides in the first group
+    {
+        const uint8_t* es = excw + (size_t)(cta * 8 + warp) * EB;
+        for (int i = lane; i < EB / 16; i += 32) cp_async16(eslot + i * 16, es + i * 16);
+    }
+    auto issue = [&](int st) {
+        if (st < nst) {
+            uint8_t* d = ring + (st % S) * SLOT;
+            const uint8_t* gs = src + (size_t)st * STAGE;
+#pragma unroll 4
+            for (int i = lane; i < WCH; i += 32) {
+                const int pl = NPL == 1 ? 0 : i / (NB * 6);
+                const int r = i - pl * (NB * 6);
+                const uint8_t* gp = gs + pl * (8 * NB * 96) +
+                    (r < NB * 4 ? warp * (NB * 64) + r * 16 : 8 * NB * 64 + warp * (NB * 32) + (r - NB * 4) * 16);
+                cp_async16(d + i * 16, gp);
+            }
+            const int k0 = (st0 + st) * 512 + warp * 64;
+            if (!(dbg & 1)) for (int i = lane; i < m * 8; i += 32) {
+                const int r = i >> 3, ch = i & 7;
+                cp_async16(d + WB + r * 128 + ((ch ^ ((r & 1) << 2)) << 4), xb + ((size_t)r * K + k0 + ch * 8) * 2);
+            }
+        }
+        cp_commit();
+    };
+    for (int i = 0; i < S; ++i) issue(i);
+
+    float acc[MT][NT][4];
+#pragma unroll
+    for (int a = 0; a < MT; ++a)
+#pragma unroll
+        for (int t = 0; t < NT; ++t)
+#pragma unroll
+            for (int i = 0; i < 4; ++i) acc[a][t][i] = 0.f;
+
+    int ep = 0;
+    for (int s = 0; s < nst; ++s) {
+        cp_wait_rt(S - 1);
+        __syncwarp();
+        const uint8_t* base = ring + (s % S) * SLOT;
+        const uint8_t* xs = base + WB;
+        uint32_t xc[MT][2][2][4];
+#pragma unroll
+        for (int a = 0; a < MT; ++a)
+#pragma unroll
+            for (int h = 0; h < 2; ++h)
+#pragma unroll
+                for (int rr = 0; rr < 2; ++rr) {
+                    const int row = g + 8 * rr + 16 * a;
+                    if (row < m && !(dbg & 1)) {
+                        const uint4 v = lds128(xs + row * 128 + (((h * 4 + c) ^ ((row & 1) << 2)) << 4));
+                        xc[a][h][rr][0] = v.x; xc[a][h][rr][1] = v.y; xc[a][h][rr][2] = v.z; xc[a][h][rr][3] = v.w;
+                    } else {
+                        xc[a][h][rr][0] = xc[a][h][rr][1] = xc[a][h][rr][2] = xc[a][h][rr][3] = 0u;
+                    }
+                }
+        if (dbg & 2) {
+            acc[0][0][0] += __uint_as_float(lds32(base + lane * 4) & 0x3fffffffu);
+        } else
+#pragma unroll
+        for (int t = 0; t < NT; ++t) {
+            const int n = t * 8 + g;
+            const bool has = (NB % 8 == 0) || (n < NB);
+            uint32_t bf[2][2][2];
+#pragma unroll
+            for (int pl = 0; pl < NPL; ++pl) {
+                uint4 L = make_uint4(0u, 0u, 0u, 0u);
+                uint2 H = make_uint2(0u, 0u);
+                const uint8_t* pb = base + pl * (NB * 96);
+                const uint32_t l0 = pl ? lut2_lo : lut_lo, l1 = pl ? lut2_hi : lut_hi;
+                if (has) {
+                    L = lds128(pb + n * 64 + c * 16);
+                    H = lds64(pb + NB * 64 + n * 32 + c * 8);
+                }
+                decode4(L.x, H.x, l0, l1, bf[0][0][0], bf[0][0][1]);
+                decode4(L.y, H.x >> 16, l0, l1, bf[0][1][0], bf[0][1][1]);
+                decode4(L.z, H.y, l0, l1, bf[1][0][0], bf[1][0][1]);
+                decode4(L.w, H.y >> 16, l0, l1, bf[1][1][0], bf[1][1][1]);
+#pragma unroll
+                for (int h = 0; h < 2; ++h)
+#pragma unroll
+                    for (int f = 0; f < 2; ++f)
+#pragma unroll
+                        for (int a = 0; a < MT; ++a) {
+                            uint32_t A[4] = {xc[a][h][0][2 * f], xc[a][h][1][2 * f], xc[a][h][0][2 * f + 1], xc[a][h][1][2 * f + 1]};
+                            mma_bf16(acc[a][t], A, bf[h][f][0], bf[h][f][1]);
+                        }
+            }
+        }
+        // exceptions of this (stage, block), x from the slot
+        while (ep < ecap && !(dbg & 4)) {
+            const uint32_t nk = lds32(eslot + ep * 8);
+            const int k = (int)(nk >> 16);
+            if ((k >> 9) != st0 + s) break;
+            const float delta = __uint_as_float(lds32(eslot + ep * 8 + 4));
+            ++ep;
+            const int nl = nk & 0xFFFF, kl = k & 63;
+            const int t = nl >> 3, col = nl & 7, cc = col >> 1, j = col & 1;
+            if (cc == c) {
+#pragma unroll
+                for (int a = 0; a < MT; ++a) {
+                    const int r0 = g + 16 * a, r1 = r0 + 8;
+                    const float x0 = r0 < m ? __uint_as_float(lds16(xs + r0 * 128 + ((((kl >> 3) ^ ((r0 & 1) << 2))) << 4) + (kl & 7) * 2) << 16) : 0.f;
+                    const float x1 = r1 < m ? __uint_as_float(lds16(xs + r1 * 128 + ((((kl >> 3) ^ ((r1 & 1) << 2))) << 4) + (kl & 7) * 2) << 16) : 0.f;
+#pragma unroll
+                    for (int tt = 0; tt < NT; ++tt)
+                        if (tt == t) {
+                            if (j == 0) { acc[a][tt][0] += x0 * delta; acc[a][tt][2] += x1 * delta; }
+                            else        { acc[a][tt][1] += x0 * delta; acc[a][tt][3] += x1 * delta; }
+                        }
+                }
+            }
+        }
+        __syncwarp();
+        issue(s + S);
+    }
+    cp_wait<0>();
+
+    __syncthreads();
+    float* red = reinterpret_cast<float*>(smem);
+    constexpr int RROWS = MT * 16, RCOLS = NT * 8;
+#pragma unroll
+    for (int a = 0; a < MT; ++a)
+#pragma unroll
+        for (int t = 0; t < NT; ++t) {
+            const int r0 = g + 16 * a, col = t * 8 + 2 * c;
+            float* p = red + (size_t)warp * RROWS * RCOLS;
+            *reinterpret_cast<float2*>(p + r0 * RCOLS + col) = make_float2(acc[a][t][0], acc[a][t][1]);
+            *reinterpret_cast<float2*>(p + (r0 + 8) * RCOLS + col) = make_float2(acc[a][t][2], acc[a][t][3]);
+        }
+    __syncthreads();
+    const int total = m * NB;
+    if (ksplit == 1) {
+        for (int idx = tid; idx < total; idx += 256) {
+            const int row = idx / NB, col = idx - row * NB;
+            float sum = 0.f;
+#pragma unroll
+            for (int w = 0; w < 8; ++w) sum += red[(size_t)w * RROWS * RCOLS + row * RCOLS + col];
+            const size_t o = (size_t)row * N + (size_t)ntile * NB + col;
+            if (DUAL) reinterpret_cast<float*>(out)[o] = sum;
+            else reinterpret_cast<__nv_bfloat16*>(out)[o] = __float2bfloat16(sum);
+        }
+        return;
+    }
+    // split-K: reduce the 8 warps into red2 [m][NB], then rank kq sums its share of red2 over the cluster (DSMEM)
+    float* red2 = red + 8 * RROWS * RCOLS;
+    for (int idx = tid; idx < total; idx += 256) {
+        const int row = idx / NB, col = idx - row * NB;
+        float sum = 0.f;
+#pragma unroll
+        for (int w = 0; w < 8; ++w) sum += red[(size_t)w * RROWS * RCOLS + row * RCOLS + col];
+        red2[idx] = sum;
+    }
+#ifdef LATENCY_SM90A
+    asm volatile("barrier.cluster.arrive.release.aligned;\nbarrier.cluster.wait.acquire.aligned;" ::: "memory");
+    const uint32_t r2 = (uint32_t)__cvta_generic_to_shared(red2);
+    for (int idx = kq * 256 + tid; idx < total; idx += 256 * ksplit) {
+        float sum = 0.f;
+        for (int r = 0; r < ksplit; ++r) {
+            uint32_t ra; float v;
+            asm volatile("mapa.shared::cluster.u32 %0, %1, %2;" : "=r"(ra) : "r"(r2 + idx * 4), "r"(r));
+            asm volatile("ld.shared::cluster.f32 %0, [%1];" : "=f"(v) : "r"(ra) : "memory");
+            sum += v;
+        }
+        const int row = idx / NB, col = idx - row * NB;
+        const size_t o = (size_t)row * N + (size_t)ntile * NB + col;
+        if (DUAL) reinterpret_cast<float*>(out)[o] = sum;
+        else reinterpret_cast<__nv_bfloat16*>(out)[o] = __float2bfloat16(sum);
+    }
+    asm volatile("barrier.cluster.arrive.release.aligned;\nbarrier.cluster.wait.acquire.aligned;" ::: "memory");
+#endif
+}
+
+template <int NB, int MT, int MODE>
+void launch_w(const torch::Tensor& packed, const torch::Tensor& x, torch::Tensor& out, const torch::Tensor& excw,
+              int ecap, int ksplit, int dbg, int m, int K, int N, int nstages, int S, const uint32_t* lut, int smem_bytes) {
+    auto kfn = latency_gemv_w<NB, MT, MODE>;
+    static bool configured = false;
+    if (!configured) {
+        cudaFuncSetAttribute(kfn, cudaFuncAttributeMaxDynamicSharedMemorySize, 227 * 1024);
+        cudaFuncSetAttribute(kfn, cudaFuncAttributeNonPortableClusterSizeAllowed, 1);
+        configured = true;
+    }
+    const int n_cta = N / NB * ksplit;
+    cudaLaunchConfig_t cfg = {};
+    cfg.gridDim = dim3(n_cta);
+    cfg.blockDim = dim3(256);
+    cfg.dynamicSmemBytes = smem_bytes;
+    cfg.stream = at::cuda::getCurrentCUDAStream();
+    cudaLaunchAttribute attr[1];
+    attr[0].id = cudaLaunchAttributeClusterDimension;
+    attr[0].val.clusterDim.x = ksplit; attr[0].val.clusterDim.y = 1; attr[0].val.clusterDim.z = 1;
+    cfg.attrs = attr;
+    cfg.numAttrs = ksplit > 1 ? 1 : 0;
+    cudaLaunchKernelEx(&cfg, kfn, packed.data_ptr<uint8_t>(), reinterpret_cast<const __nv_bfloat16*>(x.data_ptr()),
+                       out.data_ptr(), excw.data_ptr<uint8_t>(), ecap, ksplit, dbg, m, K, N, nstages, S,
+                       lut[0], lut[1], lut[2], lut[3]);
+}
+
 }  // namespace latency_ns
+
+torch::Tensor latency_gemv_w_run(torch::Tensor packed, torch::Tensor x, torch::Tensor excw, int64_t ecap,
+                                 int64_t ksplit, int64_t NB, int64_t N, int64_t nstages, int64_t S, int64_t lut0, int64_t lut1,
+                                 int64_t lut2, int64_t lut3, int64_t smem_bytes, int64_t mode, int64_t dbg) {
+    using namespace latency_ns;
+    const int m = x.size(0), K = x.size(1);
+    auto out = torch::empty({m, N}, x.options().dtype(mode ? torch::kFloat32 : torch::kBFloat16));
+    const int MT = m > 16 ? 2 : 1;
+    uint32_t lut[4] = {(uint32_t)lut0, (uint32_t)lut1, (uint32_t)lut2, (uint32_t)lut3};
+#define W_CASE(nb, md)                                                                                         \
+    if (NB == nb && mode == md) {                                                                              \
+        if (MT == 1) launch_w<nb, 1, md>(packed, x, out, excw, ecap, ksplit, dbg, m, K, N, nstages, S, lut, smem_bytes);    \
+        else launch_w<nb, 2, md>(packed, x, out, excw, ecap, ksplit, dbg, m, K, N, nstages, S, lut, smem_bytes);            \
+        return out;                                                                                            \
+    }
+    W_CASE(8, 0) W_CASE(16, 0) W_CASE(18, 0) W_CASE(32, 0) W_CASE(36, 0) W_CASE(64, 0) W_CASE(72, 0)
+    W_CASE(2, 2) W_CASE(4, 2) W_CASE(8, 2) W_CASE(16, 2)
+#undef W_CASE
+    TORCH_CHECK(false, "unsupported NB/mode");
+}
 
 torch::Tensor latency_gemv_run(torch::Tensor packed, torch::Tensor x, torch::Tensor exc, torch::Tensor exc_off,
                                int64_t NB, int64_t N, int64_t nstages, int64_t S, int64_t lut0, int64_t lut1,
@@ -389,20 +662,23 @@ CPP_SRC = r"""
 torch::Tensor latency_gemv_run(torch::Tensor packed, torch::Tensor x, torch::Tensor exc, torch::Tensor exc_off,
                                int64_t NB, int64_t N, int64_t nstages, int64_t S, int64_t lut0, int64_t lut1,
                                int64_t lut2, int64_t lut3, int64_t smem_bytes, int64_t mode);
+torch::Tensor latency_gemv_w_run(torch::Tensor packed, torch::Tensor x, torch::Tensor excw, int64_t ecap,
+                                 int64_t ksplit, int64_t NB, int64_t N, int64_t nstages, int64_t S, int64_t lut0, int64_t lut1,
+                                 int64_t lut2, int64_t lut3, int64_t smem_bytes, int64_t mode, int64_t dbg);
 """
 
 _EXT = None
-LOADER = int(os.environ.get("LATENCY_LOADER", "1"))
+LOADER = int(os.environ.get("LATENCY_LOADER", "2"))
 
 
 def _ext():
     global _EXT
     if _EXT is None:
         _EXT = load_inline(
-            name=f"latency_gemv_v3_l{LOADER}",
+            name=f"latency_gemv_v6_l{LOADER}",
             cpp_sources=[CPP_SRC],
             cuda_sources=[CUDA_SRC],
-            functions=["latency_gemv_run"],
+            functions=["latency_gemv_run", "latency_gemv_w_run"],
             extra_cuda_cflags=["-O3", "-gencode=arch=compute_90a,code=sm_90a", "--use_fast_math", "-std=c++17",
                                f"-DLATENCY_LOADER={LOADER}"],
             verbose=False,
@@ -464,6 +740,31 @@ def _exception_table(n_cta, NB, parts, device):
     return exc, exc_off, int(ns.numel())
 
 
+def _warp_exception_table(n_cta, NB, parts, device, ksplit=1, KS=1):
+    """Per (cta, warp) exception lists, padded to a common even capacity, sorted by k; entry = (n_local | k << 16, delta).
+    Warp w of a CTA owns k64 block w of every 512-wide stage. Padding entries carry k = 0xFFFF (stage 127, never hit)."""
+    ns = torch.cat([p[0] for p in parts])
+    ks = torch.cat([p[1] for p in parts])
+    ds = torch.cat([p[2] for p in parts])
+    n_cta = n_cta * ksplit
+    kq = (ks // 512) // (KS // ksplit) if ksplit > 1 else torch.zeros_like(ks)
+    key = ((ns // NB) * ksplit + kq) * 8 + (ks % 512) // 64
+    order = torch.argsort(key * 65536 + ks, stable=True)
+    ns, ks, ds, key = ns[order], ks[order], ds[order], key[order]
+    counts = torch.bincount(key, minlength=n_cta * 8)
+    cap = max(2, int(counts.max()) if ns.numel() else 2)
+    cap += cap & 1
+    start = torch.zeros(n_cta * 8 + 1, dtype=torch.int64, device=device)
+    start[1:] = torch.cumsum(counts, 0)
+    rank = torch.arange(ns.numel(), device=device) - start[key]
+    tab = torch.zeros((n_cta * 8 * cap, 2), dtype=torch.int32, device=device)
+    tab[:, 0] = -65536  # 0xFFFF0000: k = 0xFFFF
+    pos = key * cap + rank
+    tab[pos, 0] = ((ns % NB) | (ks << 16)).to(torch.int64).sub(torch.where(ks >= 32768, 1 << 32, 0)).to(torch.int32)
+    tab[pos, 1] = ds.view(torch.int32)
+    return tab.view(torch.uint8).reshape(-1).contiguous(), cap
+
+
 def _meta(packed, exc, exc_off, NB, N, K, lut, mode, n_exc, hb, rowb):
     KS = K // 512
     stage = 8 * NB * rowb
@@ -480,7 +781,10 @@ def pack_bf16(W: torch.Tensor, NB: int):
     assert N % NB == 0 and K % 512 == 0, (N, K, NB)
     planes, exc_part, lut, hb = _encode_planes(W, NB)
     exc, exc_off, n_exc = _exception_table(N // NB, NB, [exc_part], W.device)
-    return _meta(planes.contiguous(), exc, exc_off, NB, N, K, lut, 0, n_exc, hb, 96)
+    meta = _meta(planes.contiguous(), exc, exc_off, NB, N, K, lut, 0, n_exc, hb, 96)
+    meta["excw"], meta["ecap"] = _warp_exception_table(N // NB, NB, [exc_part], W.device)
+    meta["exc_parts"] = [exc_part]
+    return meta
 
 
 def pack_dual(W32: torch.Tensor, NB: int):
@@ -493,7 +797,10 @@ def pack_dual(W32: torch.Tensor, NB: int):
     p_lo, e_lo, lut_lo, hb_lo = _encode_planes(lo, NB)
     exc, exc_off, n_exc = _exception_table(N // NB, NB, [e_hi, e_lo], W32.device)
     packed = torch.cat([p_hi, p_lo], dim=2).contiguous()
-    return _meta(packed, exc, exc_off, NB, N, K, list(lut_hi) + list(lut_lo), 2, n_exc, (hb_hi, hb_lo), 192)
+    meta = _meta(packed, exc, exc_off, NB, N, K, list(lut_hi) + list(lut_lo), 2, n_exc, (hb_hi, hb_lo), 192)
+    meta["excw"], meta["ecap"] = _warp_exception_table(N // NB, NB, [e_hi, e_lo], W32.device)
+    meta["exc_parts"] = [e_hi, e_lo]
+    return meta
 
 
 def pack_f32(W: torch.Tensor, NB: int):
@@ -512,25 +819,87 @@ NB_OF = {"qkv_gate": 18, "o": 64, "pooler": 32, "unpooler": 64, "unpooler_slice"
 ROUTER_MODE = 2  # 1: fp32 weights split in-kernel; 2: 12-bit packed bf16 hi + lo planes
 MAX_M = 32
 
+# LOADER 2 plan: per layer, (max m, NB, ksplit) in increasing m. ksplit > 1 = a cluster of ksplit CTAs splitting K
+# for one n-tile (cuts the per-SM x stream by ksplit), reduced once through DSMEM.
+PLAN = {
+    "qkv_gate": [(32, 18, 1)],
+    "o": [(32, 64, 1)],
+    "pooler": [(32, 32, 1)],
+    "unpooler": [(32, 64, 1)],
+    "unpooler_slice": [(32, 8, 1)],
+    "router": [(32, 2, 1)],
+}
+
+
+def _parse_plan(spec):
+    # "qkv_gate=8:18x1,32:72x4;router=32:16x8"
+    for part in filter(None, spec.split(";")):
+        layer, rest = part.split("=")
+        ent = []
+        for e in rest.split(","):
+            mm, cfg = e.split(":")
+            nb, ks = cfg.split("x")
+            ent.append((int(mm), int(nb), int(ks)))
+        PLAN[layer] = sorted(ent)
+
+
+_parse_plan(os.environ.get("LATENCY_PLAN", ""))
+
+
+def _src_weight(weights, key):
+    return weights["unpooler"][:1024] if key == "unpooler_slice" else weights[key]
+
 
 def prepare(weights: Weights):
     ext = _ext()
-    state = {"ext": ext, "orig": {k: v.contiguous() for k, v in weights.items()}}
-    for layer in ("qkv_gate", "o", "pooler", "unpooler"):
-        state[layer] = pack_bf16(weights[layer], NB_OF[layer])
-    state["unpooler_slice"] = pack_bf16(weights["unpooler"][:1024], NB_OF["unpooler_slice"])
-    state["router"] = (pack_dual if ROUTER_MODE == 2 else pack_f32)(weights["router"], NB_OF["router"])
+    state = {"ext": ext, "orig": {k: v.contiguous() for k, v in weights.items()}, "packs": {}}
+    for key, plan in PLAN.items():
+        for _, nb, ks in plan:
+            if (key, nb) not in state["packs"]:
+                fn = pack_dual if key == "router" else pack_bf16
+                state["packs"][(key, nb)] = fn(_src_weight(weights, key), nb)
+            p = state["packs"][(key, nb)]
+            if ks not in p.setdefault("excw_ks", {}):
+                p["excw_ks"][ks] = _warp_exception_table(p["N"] // nb, nb, p["exc_parts"], p["packed"].device, ks, p["nstages"])
+    for key in NB_OF:
+        state[key] = state["packs"].get((key, NB_OF[key])) or (pack_dual if key == "router" else pack_bf16)(_src_weight(weights, key), NB_OF[key])
     router = weights["router"]
     hi = router.to(torch.bfloat16)
     lo = (router - hi.float()).to(torch.bfloat16)
     state["router_hi_t"] = hi.t().contiguous()
     state["router_lo_t"] = lo.t().contiguous()
-    for layer in ("qkv_gate", "o", "pooler", "unpooler", "unpooler_slice", "router"):
-        print(f"PACK {layer}: hb={state[layer]['hb']} exceptions={state[layer]['n_exc']} S={state[layer]['S']} NB={state[layer]['NB']}")
+    for (key, nb), p in state["packs"].items():
+        print(f"PACK {key} NB={nb}: hb={p['hb']} exceptions={p['n_exc']} ecap={ {k: v[1] for k, v in p['excw_ks'].items()} }")
+    print(f"PLAN {PLAN}")
     return state
 
 
+W_SMEM = 200 * 1024   # LOADER 2 smem budget (ring + exception lists); the epilogue reduction reuses it
+W_SMAX = int(os.environ.get("LATENCY_SMAX", "16"))
+DBG = int(os.environ.get("LATENCY_DBG", "0"))  # timing experiments only: 1 no x, 2 no math, 4 no exceptions
+
+
+def _w_geometry(p, m, ks, ecap):
+    wb = p["NB"] * 96 * (2 if p["mode"] == 2 else 1)
+    slot = (wb + m * 128 + 127) // 128 * 128
+    eb = 8 * ecap * 8
+    S = max(1, min(p["nstages"] // ks, W_SMAX, (W_SMEM - eb) // (8 * slot)))
+    mt = 2 if m > 16 else 1
+    red = 8 * (16 * mt) * ((p["NB"] + 7) // 8 * 8) * 4 + (m * p["NB"] * 4 if ks > 1 else 0)
+    return S, max(eb + 8 * S * slot, red)
+
+
 def _run(state, key, x):
+    m = x.shape[0]
+    if LOADER == 2:
+        for mm, nb, ks in PLAN[key]:
+            if m <= mm:
+                break
+        p = state["packs"][(key, nb)]
+        excw, ecap = p["excw_ks"][ks]
+        S, smem = _w_geometry(p, m, ks, ecap)
+        return state["ext"].latency_gemv_w_run(p["packed"], x, excw, ecap, ks, nb, p["N"], p["nstages"], S,
+                                                p["lut"][0], p["lut"][1], p["lut"][2], p["lut"][3], smem, p["mode"], DBG)
     p = state[key]
     return state["ext"].latency_gemv_run(p["packed"], x, p["exc"], p["exc_off"], p["NB"], p["N"], p["nstages"],
                                           p["S"], p["lut"][0], p["lut"][1], p["lut"][2], p["lut"][3], p["smem"], p["mode"])

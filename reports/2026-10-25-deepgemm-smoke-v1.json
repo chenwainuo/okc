@@ -1,0 +1,60 @@
+{
+  "reviewer": "measurement_audit",
+  "status": "failed_harness_before_backend_invocation",
+  "case_count": 0,
+  "error": "RuntimeError('self.dim() cannot be 0 to view BFloat16 as Byte (different element sizes)')",
+  "traceback": "Traceback (most recent call last):\n  File \"/probe/probe.py\", line 77, in <module>\n    indices.copy_(cases[state]);before=fp((a,b,indices,global_gpu));invoke();verify(state,'eager',before)\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/probe/probe.py\", line 12, in fp\n    h.update(str((t.dtype,tuple(t.shape))).encode());h.update(t.detach().contiguous().cpu().view(torch.uint8).numpy().tobytes())\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: self.dim() cannot be 0 to view BFloat16 as Byte (different element sizes)\n",
+  "finding": "fp() attempts scalar BF16.view(uint8); dtype size-changing view rejects dimension0. First eager before-fingerprint fails before invoke() reaches DeepGEMM. This is harness failure missed by initial static review, not backend failure.",
+  "observations": "DeepGEMM import/export lookup and alignment query succeeded; SM90 runtime detected. No tested backend numerical/capture result. GPU tensor allocation/copies occurred; do not claim no CUDA activity.",
+  "backend_calls": "Zero by reviewed source/trace control flow; not an independent GPU trace.",
+  "terminal": {
+    "experiment": "DEEPGEMM-BF16-SMOKE-v1",
+    "executor": "root",
+    "started_at": 1792896695.6483464,
+    "deadline_unix": 1792896995.6483464,
+    "reserved_usd": 0.4166666666666667,
+    "purpose": "reviewed16case backend capability/graph correctness smoke no performance",
+    "status": "failed_harness_scalar_fingerprint_before_backend_call",
+    "elapsed_seconds": 29.706323385238647,
+    "terminal_proof": {
+      "status": "terminal",
+      "container": "okc-deepgemm-smoke-77be2cf234e3",
+      "container_absent": true,
+      "client_exit_code": 1,
+      "observations": [
+        {
+          "argv": [
+            "docker",
+            "rm",
+            "-f",
+            "okc-deepgemm-smoke-77be2cf234e3"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "Error response from daemon: No such container: okc-deepgemm-smoke-77be2cf234e3\n"
+        },
+        {
+          "argv": [
+            "docker",
+            "inspect",
+            "okc-deepgemm-smoke-77be2cf234e3"
+          ],
+          "returncode": 1,
+          "stdout": "[]\n",
+          "stderr": "error: no such object: okc-deepgemm-smoke-77be2cf234e3\n"
+        }
+      ],
+      "root_instruction": "Close lease only if terminal proof passes; termination_unknown leaves canonical lease active and blocks further GPU work pending root reconciliation.",
+      "launcher_absent": true,
+      "gpu_compute_pids": []
+    },
+    "accounted_usd": 0.04125878247949812
+  },
+  "next_gate": "Preserve v1 unchanged. New v2 revision may fix fingerprint with reshape(-1) before byteview, add CPU scalar/vector/noncontiguous regression verification, new plan/cache/output and independent review before another lease.",
+  "promotion_eligible": false,
+  "evidence_sha256": {
+    "results/rsi/deepgemm-bf16-smoke-v1/smoke.json": "a7f2ad1a32f7d785354e3de4cfa98e654591f7272bc2cdc463775a42d54df064",
+    "results/rsi/deepgemm-bf16-smoke-v1/run.log": "1f8d2a7dee10a861406bd2452b7122462c68df29e0326587647c9899669b3560",
+    "results/rsi/probes/deepgemm-bf16-smoke-v1-lease.json": "ff3e72526449187e83e527c6fcafe9b544f41673525f3dcdf0016efe6df0a593"
+  }
+}

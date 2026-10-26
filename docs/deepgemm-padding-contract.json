@@ -1,0 +1,110 @@
+{
+  "status": "source_contract_resolved; v2 remains failed; no v3 run authorized or executed by researcher",
+  "conclusion": "The smoke incorrectly required raw SM90 BF16 grouped GEMM padding rows to remain zero after a preclear. Exact pinned implementation computes/stores padding; consumer must discard/mask invalid rows. This failure does not establish a backend defect.",
+  "scope": "Only exact pinnedDeepGEMM SM90 BF16 m_grouped_bf16_gemm_nt_contiguous path; not a universal claim about all GEMM/backends.",
+  "image": "lmsysorg/sglang@sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
+  "observed": {
+    "report": "results/rsi/deepgemm-bf16-smoke-v2/smoke.json",
+    "report_sha256": "c0851cb799e27640d71defe866a36ae92cf4b843814eb103ce59409a57ae7163",
+    "normal_valid_eager": "exact BF16 and cast-then-global pass, one recordedcase",
+    "padding_failure": "16384/32768 mismatches against zero, greatest absolute9.0; root identified secondgroup",
+    "remaining_coverage": "tinyweights, empty andgraph cases neverreached; cannotclaim theirsupport",
+    "terminal": "rootverifiedfailedclient/containerabsent/GPUempty; evidencepreserved"
+  },
+  "source_evidence": [
+    {
+      "source_capture": "results/rsi/deepgemm-padding-source.json",
+      "file": "include/deep_gemm/scheduler/gemm.cuh",
+      "sha256": "6ba5035b07452199b7bc979e9aefb143d91911b0d17a123b7da5eeef39486121",
+      "lines": [
+        162,
+        163,
+        164
+      ],
+      "finding": "MGroupedContiguous get_global_idx uses max(0,grouped_layout[m_block_idx*BLOCK_M]) for groupedweightoffset. A tilewhosefirstrowis-1 therefore selects group0."
+    },
+    {
+      "source_capture": "results/rsi/deepgemm-padding-source.json",
+      "file": "include/deep_gemm/scheduler/gemm.cuh",
+      "lines": [
+        322,
+        326
+      ],
+      "finding": "is_computation_valid can test eachrow metadata>=0, but presence ofhelper doesnot implyeverykernel callsit."
+    },
+    {
+      "source_capture": "results/rsi/deepgemm-padding-source.json",
+      "file": "include/deep_gemm/impls/sm90_bf16_gemm.cuh",
+      "sha256": "3f12ad05796d7b8451604ff12e0a45ad1d9725a313919557bcdd9aa11c50e285",
+      "lines": [
+        158,
+        225,
+        370,
+        387
+      ],
+      "finding": "Zero calls to is_computation_valid. Scheduledtiles execute and wholeblocks TMAstore; no perrowinvalid-output predicate. Wholeall-1 tile computes withgroup0, overwriting prezeroedD. Trailingpaddinginsideavalidexpert tile maycompute withthatexpert, notalwaysgroup0."
+    },
+    {
+      "file": "serving/sglang/python/sglang/kernels/ops/moe/ep_moe_kernels.py",
+      "lines": [
+        1045,
+        1049
+      ],
+      "finding": "ep_scatter metadata deliberately marks padding -1; these are consumer-validity markers, notproofbackendzero-output."
+    },
+    {
+      "file": "serving/sglang/python/sglang/srt/layers/moe/moe_runner/deep_gemm.py",
+      "lines": [
+        1103,
+        1108,
+        1129,
+        1135
+      ],
+      "finding": "BF16 compactinput allocated empty; adjacentFP8 commentexplicitly statesalignmentpaddingoutputs discardedby post_reorder. These paths donotrequire paddedGEMM rowszero."
+    },
+    {
+      "file": "serving/sglang/python/sglang/kernels/ops/moe/ep_moe_kernels.py",
+      "lines": [
+        935,
+        945,
+        1554,
+        1556
+      ],
+      "finding": "post_reorder_deepgemm initializeszeroaccumulator andloads onlysrc2dst>=0. Dispatchmarks nonlocal/padding mappings-1, preventinginvalidrows fromcontributing."
+    }
+  ],
+  "provenance_verification": {
+    "capture_sha256": "35db204edfacd41aceb07542e994c7f22877cc1234aa2fe1970d49de4a3c3741",
+    "captured_header_text_SHA_verified": true,
+    "captured_header_SHA_matches_v2_runtime_header_SHA": true,
+    "local_SGLang_SHA_matches_baseline_v2_manifest": {
+      "serving/sglang/python/sglang/srt/layers/moe/moe_runner/deep_gemm.py": "2173ffda1b18bd058857eadac16cc4be92deca658cfca623943d9ed79e2bc431",
+      "serving/sglang/python/sglang/kernels/ops/moe/ep_moe_kernels.py": "600114a8792def007c6b4ea8dfbfc7f2bd2c6912c868e0c7384ef3a1d5791ed9"
+    }
+  },
+  "correct_contract": {
+    "raw_valid_rows": "Same strict independentCPUFP64-ofactualBF16 reference, exactBF16 output. Neverrelax tolerance orreplaceoracle withbackendoutput.",
+    "raw_invalid_rows": "Not requiredzero/unchanged. Record outsidegraph only; do notfeed themintoexpert norm/routeraggregation. Forallinvalidtiles expert0 computationexplainscurrentbehavior.",
+    "consumer_output": "Explicit GPU masked_fill_(m_indices[:,None]<0,0) AFTERbackend andBEFOREprocessedglobalscale; exactzero everyinvalidrow, samecast-then-BF16global forvalidrows.",
+    "metadata": "Preservequeriedalignment andgroupcontiguouslayout. Rootfixturewholealignedgroup mutations arelegal; noassertionarbitraryinterleaving supported."
+  },
+  "proposed_v3_review_contract": {
+    "authorization": "Proposal only in thisdoc; newcode/artifact/review required before any run. Preservev1/v2 reports andfailedstatuses.",
+    "adapter_delta": [
+      "Keep d.zero_ and originalbackendcall",
+      "Add d.masked_fill_((indices<0).unsqueeze(1),0) onGPU",
+      "Then torch.mul(d,global_gpu,out=scaled) asbefore; neverzero bymultiplication becauseNaN*0 isNaN"
+    ],
+    "eager_validation": [
+      "Afterrawbackend: fingerprintinputs, exactrawvalidrow check againstunchangedCPUoracle; recordrawinvalid count/nonfinite/maxabs outsidecapture",
+      "AfterGPUmask+scale: exactmaskedD andscaled allrows reference includingzero invalidrows"
+    ],
+    "graph_validation": [
+      "Capture backend+mask+global together; eachreplay consumes liveGPUmetadata",
+      "valid->padding->empty->valid, normal andtinyweights",
+      "Rawvalid oracle unchanged; maskedfinal allrows strict; no hostdiagnostics insidecapture"
+    ],
+    "scope": "Same16case smallbackend smoke. This establishes newexplicitconsumeradapter behavior, notretroactivev2pass orfullMoE/performance.",
+    "future_measurement": "Mask anditscost mustremain includedin alltimings ofadapter; cannotbenchmark nakedGEMMthenclaimmaskedservinggain."
+  }
+}

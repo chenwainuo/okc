@@ -75,7 +75,35 @@ def plan_ins(layers, ms):
     return v
 
 
-PLANS = {"r1": plan_r1, "e5": plan_e5, "ins": plan_ins}
+def plan_m256(layers, ms):
+    """m = 256: resident SM-side rate (r8, KS 4 vs KS 1 slope), ladder S1 / S3 / full, cuBLAS"""
+    v = []
+    for ly in layers:
+        v.append(("cublas", None, ly, 256, 0, 0))
+        for nm in ("s1n256", "s3n256", "s3n256m1", "n256s4hz", "n256s5z", "n256s5m1z", "n256s5m1hz"):
+            v.append((nm, nm, ly, 256, S.RQKS[ly], 0))
+        v.append(("s3n256m1i", "s3n256m1i", ly, 256, S.RQKS[ly], 0))
+    return v
+
+
+def plan_m256b(layers, ms):
+    """m = 256 resident tensor-side rate: n256 vs two-pass n128 x2 (clk per k64 round from the stamps, and the KS 4 vs
+    KS 1 slope), m = 128 r8 for reference"""
+    v = []
+    for ly in layers:
+        for nm in ("r8n256i", "r8n256tpi"):
+            v.append((nm, nm, ly, 256, S.RQKS[ly], 0))
+        for ks in (S.RQKS[ly], 1):
+            for nm in ("r8n256", "r8n256tp"):
+                v.append(("%s-ks%d" % (nm, ks), nm, ly, 256, ks, 0))
+            v.append(("r8-ks%d" % ks, "r8", ly, 128, ks, 0))
+        v.append(("cublas", None, ly, 256, 0, 0))
+        for nm in ("s1n256", "s3n256", "s3n256tp", "n256s5z", "n256s5tpz", "n256s5tpm1z", "n256s5m1z"):
+            v.append((nm, nm, ly, 256, S.RQKS[ly], 0))
+    return v
+
+
+PLANS = {"m256b": plan_m256b, "m256": plan_m256, "r1": plan_r1, "e5": plan_e5, "ins": plan_ins}
 
 
 class Clocks:
