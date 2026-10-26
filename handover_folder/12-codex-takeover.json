@@ -1,10 +1,10 @@
 {
-  "written_at_utc": "2026-10-26T20:38:07.218026+00:00",
+  "written_at_utc": "2026-10-26T21:20:35.166263+00:00",
   "supervisor": "Codex /root",
   "scope": "Continue Claude muse_bf16_proj RSI work from session notes + handover_folder; preserve prior work.",
   "objectives": {
-    "projection": "official board <3000 us; not yet achieved",
-    "earlier_thread_goal": "3x frozen MoE benchmark remains separate and unproven; projection result is not evidence for that goal"
+    "projection": "User reconfirmed2026-10-26: official board <3000us (3ms); notyetachieved",
+    "earlier_thread_goal": "Earlier3xMoEobjective is historical; userexplicitlyclarifiedcurrentgoalstill3ms. Do notclaimoldobjectiveachieved."
   },
   "verified_incumbent": {
     "candidate": "proj_rsi/candidates/rs32/submission.py",
@@ -21,7 +21,7 @@
     "source": "proj_rsi/candidates/pw36/submission.py",
     "sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
     "composition": "pw35 router + rs32 m16/m32 paths over common pw34 base; kernels match parents",
-    "status": "reviewed, official check pending reset; no promotion",
+    "status": "OFFICIAL_COMPLETE_9/9_NO_PROMOTION",
     "evidence": [
       "proj_rsi/audits/pw36-takeover.md",
       "proj_rsi/audits/takeover-evidence.json"
@@ -34,13 +34,22 @@
       "prepare_pw36_s": 46,
       "both_rq32_and_rtk_selected": true,
       "caveats": "Fixed order and differing replay overhead; H100 timings are not official H200 board scores."
-    }
+    },
+    "job": "e22a4b9d693d4902",
+    "score_us": 3212.415452073451,
+    "speedup": 1.503790550155013,
+    "speedup_ci": [
+      1.4812336919026878,
+      1.526347408407338
+    ],
+    "prepare_seconds": 163,
+    "all_fast_path_phases_ran": true
   },
   "quota_verified": {
     "checks_left": 0,
-    "scored_left": 2,
+    "scored_left": 1,
     "reset_utc": "2026-10-27T00:00:00Z",
-    "action": "One check of frozen pw36 at reset, then read judge result before any scored promotion"
+    "action": "0checks/1scored untilreset; pw36officialcomplete, no unchangedsource rerun."
   },
   "official_check_waiter": {
     "script": "results/proj-rsi/takeover/20261026/wait-pw36-check.py",
@@ -49,7 +58,8 @@
     "candidate_sha_guard": true,
     "deadline_waiting_quota_utc": "2026-10-27T00:20:00Z",
     "launch": "setsid -f env PYTHONPATH=/home/ubuntu/okc python3 <script> < /dev/null > <log> 2>&1",
-    "liveness": "Recheck actual PID; a state file alone is not proof. One attempt only; no retries."
+    "liveness": "Verified774007waiting_reset/nochildren and terminated before scoredsubmission; statefile records cancellation. Do not rearm unchangedpw36.",
+    "status": "CANCELLED_SUPERSEDED"
   },
   "infrastructure": {
     "h100": "root@107.170.6.60",
@@ -102,10 +112,10 @@
     "closed": "m256 rq, old codecs and other closed designs remain closed unless materially new evidence."
   },
   "agents": {
-    "proj_integration": "pw36 integration validation/source ownership",
-    "proj_evidence": "independent evidence/critic, no GPU launches",
-    "proj_tracks": "P4 + streamK harvest and targeted follow-up",
-    "latency_resume": "clean-room latency implementation; forbidden from reading candidates/audits/LOOP"
+    "proj_integration": "m256 materiallynew mechanism feasibility; completedo_direct_w+lt_graph nowclosed",
+    "proj_evidence": "independent runtime audit o_direct_w/lt_graph, nextsmallroutercritic",
+    "proj_tracks": "router_small diagonal tensor folding m8+adaptive losslesscodec prototype",
+    "root": "supervisor,physicalGPUexecutor,judge/quota,score/ROI/integration"
   },
   "continuation_rules": [
     "Read live ledger/LOOP and actual process/job state before dispatch.",
@@ -129,9 +139,37 @@
     },
     {
       "directory": "proj_rsi/candidates/o_direct_w/",
-      "state": "conditional_source_feasibility_in_progress_no_GPU",
-      "hypothesis": "Resume handover05 short-K o: check prior direct-register work, then consider fixeddepth4 register W prefetch with RS32HALF full-K/plain-store andX-onlyTMA; m32/128; no duplicate/parameter sweep; >=.5usgraph+F1 killbar."
+      "state": "CLOSED_SLOWER_BOTH_SHAPES",
+      "result": "m32F1-2.240/paired-2.208; m128F1-4.064/paired-3.936gainus; numericallypass. Noport/sweep"
+    },
+    {
+      "directory": "proj_rsi/candidates/lt_graph/",
+      "state": "CLOSED_SLOWER",
+      "result": "m32F1/paired-.864gainus; numericallypass, noport/sweep"
+    },
+    {
+      "directory": "proj_rsi/candidates/router_small/",
+      "state": "CPU_PROTOTYPE_IMPLEMENTATION",
+      "hypothesis": "One fullK2expert/CTA tensorfold m8 nointerCTAhandshake; preflightbeforeGPU"
     }
   ],
-  "next_action": "Official CHECK of frozenpw36 atreset viaactualwaiter; inspectH200PREP/BAKE/PICK/result beforepromotion. Furtherkernelwork needsnewfalsifiablehypothesis distinctfromclosedtracks."
+  "next_action": "Reviewindependentpw36officialaudit; router_smallCPU/devicepreflight thenoneGPUtrialifGO; m256novelmechanismfeasibility. Rankedqueue proj_rsi/queue.json. Beststillrs32/3200.615.",
+  "latest_user_directive": {
+    "requested_minimum_agents": 5,
+    "platform_concurrent_agent_cap_including_head": 4,
+    "operating_policy": "Useall4actualslots; continuousimplementer/reviewer/parallelkernelworkwithdisjointownership; rotatecompletedassignments. NevercountGPUjobsorpretend5agents.",
+    "optimization": "Aggressivecreativekernelswithinlossless/precision/correctness/challengerules; no tokenbudgetcap requested.",
+    "latest_user_authorizes_agents_up_to": 8
+  },
+  "official_scored_job": {
+    "job": "e22a4b9d693d4902",
+    "candidate": "pw36",
+    "status": "terminal_ok_9/9",
+    "wait_session": "completed",
+    "report": "results/proj-rsi/takeover/20261026/pw36-scored-report.txt",
+    "source_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+    "reason": "Latest user authorizes aggressive continuation; two scoredslots expire tonight; scoredrun performs same official tests and timing ascheck. Reviewed mergedpaths passed65/65H100. Supersedes resetcheckfirstplan; no duplicate.",
+    "score_us": 3212.415452073451,
+    "result_archived": true
+  }
 }

@@ -1081,3 +1081,64 @@ are preserved in the candidate directories and audits.
 No new official score from these tests. Best remains judged rs32/3200.615us; pw36
 is frozen and its detached source-hash-guarded CHECK waiter remains the next
 official action at2026-10-27T00:00UTC.
+
+
+### 21:14–21:17 UTC — two new mechanisms screened; official pw36 advanced
+
+Latest user explicitly reconfirms <3000us and authorizes aggressive continuation,
+parallel agents up to8. Runtime hardcap remains4 totalincludinghead; all4 slots used.
+`proj_rsi/queue.json` is the current ranked evidence/ROI queue. Projections use the
+actual six SGLang/load sums from rs32, not62*geomean(ours) or cross-run min-picking.
+
+Frozen pw36 has independentreview+exclusive65/65H100 evidence. Checks exhausted;
+2scoredslots expire tonight. Root intentionally superseded the resetcheck-first
+plan: verified waiter774007 was still waiting_reset/nochildren, terminated it,
+then submitted exactly ONE scored official run `e22a4b9d693d4902`. Scoredrun uses
+same officialtests+timing ascheck. Read official result and PREP/BAKE/PICK before
+promotion; do not rearm midnightcheck or resubmit unchanged source. Currentquota
+0checks/1scored. Source SHA remains2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf.
+
+`o_direct_w`: materially new Q4 packed-W registerprefetch/X-onlyTMA/fullK/plainstore
+kernel passed independentCPU/layout/SASSpreflight and real Torchextensionbuild.
+One bounded exclusive trial ended21:14:50UTC exit0. Bothshapes232regs/0local;
+all1024onehotcolumns,normal/outlierFP64+task and retainedoriginal/zero/freshoutlier
+replays pass. Gains vsfreshfrozenpw36 actualpickeddispatch:
+m32F1=-2.240us,pairedgraph=-2.208; m128F1=-4.064,paired=-3.936. Negative means
+slower. CLOSE fixedpolicy; noport/sweep/officialslot. ActualPID351735 andnamed
+container terminated, GPU0MiB confirmed. Raw results/proj-rsi/takeover/20261026/.
+
+`lt_graph`: sourceaudit establishes tunerALREADYuses coldL2 CUDAgraph replay;
+no eager/graphfix. Old o profiles haveONEkernel, so apparent2usgap doesnot prove
+extranodes or clusteroverhead. Real coveragehole:m<128 onlylayout0. One fixedo32
+layout2 firstlegalheuristic/splitK1 policy passed CPU/independentreview/API/GPU
+numerical/replaychecks. Trial ended21:16:33UTC exit0. F1/medianpairedgain both
+-.864us against actualpreparedgvbaseline; close withoutsweep. CandidateNvjetNNT
+andbaselinegv eachoneprofilekernel; CUPTI durations are diagnostics, notadmitted
+graphlatency evidence. ActualPID352695/containerterminated, GPU0MiB confirmed.
+
+Neither policy survives, so currentlabs' finite-only actualtimedbaseline caveat
+cannotproduce a promotion. Future survivors must verify actualtimed baseline and
+candidategraphs againsttaskoracle onoriginal/zero/freshoutlier inputs. Distinct
+retainedprototypegraphs alreadypassed those checks here.
+
+Parallelnext: router_small m8 oneprototype (tensorfold/fullK/128CTAs/2experts,
+intraCTA-onlyreduction,adaptive lossless12/16bitwindows), and m256 materiallynew
+sourcefeasibility. Independentcritic owns runtimeclosure before nextpreflight.
+Officialbest still rs32/3200.615us until pw36 returns; <3000 notachieved.
+
+
+### Official pw36 terminal — e22a4b9d693d4902
+
+9/9PASS,30timings+30profiles,3212.415452us,1.50379055x,
+CI[1.48123369,1.52634741]. PREP163s: rq32+router phasesallrun,
+no skippedbudget; withinrunrouterbake r6→rtk14.02→11.84(m128),
+15.55→13.31(m256). Crossrunrouterofficialus9.40→7.78/10.98→9.27
+versusrs32, butothersmallloads shiftup, net3212.4vs3200.6(overlappingCI).
+DecisionREFINE: preserve verifiedmergeasdevelopmentbase; rs32staysincumbent;
+no rerunofunchangedsource. Originalresetwaiter iscancelled, notpending.
+
+Root alsofixedCLI`wait --candidate <directory>`: canonicalizeviaexisting
+candidate_file beforelocatingprofiles/archiving. The oldCLIlooked oneparenttoo
+highandcouldoverwriteanactualjobwithanemptyfallbacksummary. Verifiedbyreading
+thiscompletedjob throughdirectoryform:9/9,6loads,all30timingsretained; noGPU
+rerun/submission. Actualnormalizedprofile+log/reportarchived.

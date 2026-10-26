@@ -1,0 +1,52 @@
+{
+  "status": "CPU_PROOF_AND_DEVICE_COMPILE_ONLY_GPU_UNRUN",
+  "bits": {
+    "BF16_values_exact": 131072,
+    "escapes": 122691,
+    "escape_cap": 15392,
+    "includes_zero_sign_subnormal_inf_nan_bits": true,
+    "escape_window_reload_required": true
+  },
+  "schedule": "PASS Q4/static slots, A2 wait_group1 lifetimes, X8 release-before-refill",
+  "geometry": {
+    "NT": [
+      32,
+      128
+    ],
+    "channel_tile": 64,
+    "KS": 1,
+    "Q_depth": 4,
+    "X_slots": 8,
+    "threads": 256,
+    "CTAs": 128
+  },
+  "source_sha256": "2f571e925469ea90476aa1ec87d72d86997d460876a7250603113c1653d3feb1",
+  "device_sha256": "8466df061cca77cb7fc378a20771ddff679712e708da804d6f86c36037314aa0",
+  "parent_rs32_sha256": "a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad",
+  "ptxas": "ptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_Z2rqILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_' for 'sm_90a'\nptxas info    : Function properties for _Z2rqILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 232 registers, used 3 barriers\nptxas info    : Compile time = 97.808 ms\nptxas info    : Compiling entry function '_Z2rqILi32ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_' for 'sm_90a'\nptxas info    : Function properties for _Z2rqILi32ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 232 registers, used 3 barriers\nptxas info    : Compile time = 42.628 ms\n",
+  "SASS": {
+    "128": {
+      "HGMMA": 16,
+      "WARPGROUP_ARRIVE": 4,
+      "LDG128": 24,
+      "LDS128": 0,
+      "UBLKCP_W": 0,
+      "UTMALDG_X": 16,
+      "UTMASTG_OUT": 1
+    },
+    "32": {
+      "HGMMA": 16,
+      "WARPGROUP_ARRIVE": 4,
+      "LDG128": 24,
+      "LDS128": 0,
+      "UBLKCP_W": 0,
+      "UTMALDG_X": 16,
+      "UTMASTG_OUT": 1
+    }
+  },
+  "files": {
+    "prototype.py": "b97af657bbfbcfebc0ba75ba1feaa310dae94128890ac304e02cca03755be534",
+    "kernel_body.cuh": "fe3daab6e0eb479099d64cb4827d572ec35842481d0e25dd709c27ae090ef7d3",
+    "preflight.py": "ff35711f4b91976797e0f6eb9080b8470694a11c1520da18fb038cbd3e99904b"
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "updated_at_utc": "2026-10-26T21:20:35.166263+00:00",
+  "goal_official_score_us_below": 3000,
+  "incumbent": {
+    "job": "fb548b5dc6f04696",
+    "candidate": "rs32",
+    "score_us": 3200.6150084373335,
+    "tests": "9/9"
+  },
+  "policy": "Rank by expected useful evidence per engineering/GPU cost; projected savings are conditional scenarios, never measured speedups. Do not sum overlapping shapes/mechanisms or mix H100 events with H200 score. Close failed fixed policies; reopen only for materially new evidence.",
+  "scoring": {
+    "formula": "4830.8 / exp(mean(log(SGLang_load_sum / candidate_load_sum)))",
+    "load_sums_us": {
+      "decode 1": 35.29127231727883,
+      "decode 16": 48.29218982397611,
+      "decode 32": 52.13945970918543,
+      "verify 1": 37.48533252968096,
+      "verify 16": 67.51141831598414,
+      "verify 32": 86.58484871917094
+    },
+    "score_us_per_1us_shape_cut": {
+      "decode 1": 15.115233872664376,
+      "decode 16": 11.046006335266979,
+      "decode 32": 10.230942892674047,
+      "verify 1": 14.23052161314509,
+      "verify 16": 7.901416501766164,
+      "verify 32": 6.160845028091462
+    }
+  },
+  "resources": {
+    "concurrent_agent_cap_including_head": 4,
+    "latest_user_authorizes_agents_up_to": 8,
+    "use_all_available_slots": true,
+    "iteration_gpu": "H100@107.170.6.60",
+    "gpu_serialization": "flock held inside named bounded container",
+    "official_gpu": "H200 judge",
+    "check_quota_left": 0,
+    "scored_quota_left": 1,
+    "reset_utc": "2026-10-27T00:00:00Z"
+  },
+  "ranked_open": [
+    {
+      "rank": 1,
+      "id": "router_small_m8",
+      "owner": "proj_tracks",
+      "status": "CPU_LAYOUT_AND_DEVICE_RESOURCE_PREFLIGHT",
+      "mechanism": "128CTAs x2experts fullK; diagonal tensor folding; adaptive lossless12/16bit windows; intraCTA-only reduction; removes interCTA handshake",
+      "evidence": "New source feasibility, no GPU speed claim; previously shipped FMT2 loads8MiB",
+      "conditional_scenarios": [
+        {
+          "score_us": 3193.459877517722,
+          "saving_us": 7.155130919611565,
+          "cuts_us": {
+            "verify 1/router": 0.5
+          }
+        },
+        {
+          "score_us": 3186.22367956463,
+          "saving_us": 14.391328872703525,
+          "cuts_us": {
+            "verify 1/router": 1.0
+          }
+        }
+      ],
+      "risk": "1024threads x64register cap; tensor-useful-work25%; Xtraffic16MiB; codecwidefallback; may lose decode/issue latency",
+      "kill_bar": "Reject spills/>64regs; independentcritic; exacthi+loFP32/fullKonehot+FP64+actualtimedgraphfresh/zero/outlier; >=.5us BOTHF1 and pairedgraph vsactualfrozenpw36pick",
+      "next": "One fixedm8 policy only; generalize tootherm only after measured win"
+    },
+    {
+      "rank": 2,
+      "id": "m256_next_mechanism",
+      "owner": "proj_integration",
+      "status": "ARCHITECTURE_SOURCE_FEASIBILITY_ONLY",
+      "mechanism": "One materially novel full-output design informed by real profiles; currentrq splitK/tail policies closed",
+      "evidence": "Incumbent largeBF16 layers17.28/24.84/24.69us; no newkernel yet",
+      "conditional_scenario": {
+        "score_us": 3142.6012092030633,
+        "saving_us": 58.01379923427021,
+        "cuts_us": {
+          "verify 32/qkv_gate": 3.0,
+          "verify 32/pooler": 3.0,
+          "verify 32/unpooler": 3.0
+        }
+      },
+      "risk": "3us perlayer is a target scenario, not expectation; portprobe inconclusive; no broad sweep or abandonedplan revival",
+      "next_gate": "Concrete measured bottleneck+source novelty+board leverage+bounded kill bar before implementation/GPU"
+    }
+  ],
+  "closed_this_takeover": [
+    {
+      "id": "o_direct_w",
+      "decision": "CLOSE_FIXED_POLICY_NO_SWEEP",
+      "runtime": "o-direct-w01 terminal2026-10-26T21:14:50Z exit0",
+      "m32_gain_us": {
+        "F1": -2.2399993613362312,
+        "paired_graph": -2.208000048995018
+      },
+      "m128_gain_us": {
+        "F1": -4.064000211656094,
+        "paired_graph": -3.936000168323517
+      },
+      "correctness": "All1024onehots eachshape, normal/outlierFP64/task, original/zero/freshoutlier retainedgraphs PASS",
+      "evidence": "results/proj-rsi/takeover/20261026/o-direct-w01.json"
+    },
+    {
+      "id": "lt_graph",
+      "decision": "CLOSE_POLICY_NO_SWEEP",
+      "runtime": "lt-graph01 terminal2026-10-26T21:16:33Z exit0",
+      "gain_us": {
+        "F1": -0.8640000596642494,
+        "paired_graph": -0.8640000596642494
+      },
+      "correctness": "All1024onehots,FP64,original/zero/freshoutlier PASS",
+      "evidence": "results/proj-rsi/takeover/20261026/lt-graph01.json"
+    },
+    {
+      "id": "rtk_early",
+      "decision": "CLOSE_GAIN_BAR_FAILED",
+      "evidence": "proj_rsi/candidates/rtk_early/RESULTS.md"
+    },
+    {
+      "id": "rs256full_port02",
+      "decision": "CLOSE_INCONCLUSIVE_HARDWARE_MODEL",
+      "reason": "Producercoverage.77344<.95; no fullkernel/sweep/universal bound"
+    },
+    {
+      "id": "P4_runtime_patch_table",
+      "decision": "CLOSE_SLOWER"
+    },
+    {
+      "id": "RS128_streamK132",
+      "decision": "CLOSE_SLOWER_ALL4LAYERS"
+    },
+    {
+      "id": "cleanroom_4schools",
+      "decision": "CLOSE_UNCHANGED_POLICIES_NO_SHAPE_MEETS_GAIN_BAR"
+    }
+  ],
+  "hold": [
+    {
+      "id": "prepared_static_patch_footer",
+      "reason": "CPUproofonly; ideal extrafooter transportcost.11-.19us, not gain. Noescapegraphupperreference.672-.800us but CUPTI.223-.384; netgain uncertain andlowpriority. Require one concrete prototype clearing.3usbar; no sweep.",
+      "evidence": "proj_rsi/candidates/rs128p/PREPARED_PATCH_BRIEF.md"
+    }
+  ],
+  "verified_bases": [
+    {
+      "rank": 1,
+      "id": "pw36",
+      "owner": "root",
+      "status": "OFFICIAL_COMPLETE_NO_INCUMBENT_PROMOTION",
+      "job": "e22a4b9d693d4902",
+      "source_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+      "mechanism": "Merge two disjoint measured parent improvements, rq32+one-node router128/256",
+      "evidence": "Independent merge review; fresh exclusive65/65cases for all3parents/merge; sourcefrozen",
+      "conditional_scenario": {
+        "score_us": 3172.101735919163,
+        "saving_us": 28.513272518170652,
+        "cuts_us": {
+          "verify 16/router": 1.9,
+          "verify 32/router": 2.15
+        }
+      },
+      "next_gate": "Official9/9+30timings; PREP rq32/router selected and no skipped-budget; actual within-run bake; no automatic incumbent promotion inside CI",
+      "duplicate_prevention": "Midnight check waiter774007 terminated while waiting_reset with no child; do not rearm or resubmit unchanged file",
+      "official_summary": {
+        "error": null,
+        "passed": true,
+        "score_us": 3212.415452073451,
+        "speedup": 1.503790550155013,
+        "speedup_ci": [
+          1.4812336919026878,
+          1.526347408407338
+        ],
+        "status": "ok",
+        "tests": 9,
+        "tests_passed": 9
+      },
+      "prepare_seconds": 163,
+      "all_fast_path_phases_ran": true
+    }
+  ]
+}
