@@ -1,0 +1,614 @@
+{
+  "schema_version": 1,
+  "author": "/root/proj_evidence",
+  "reviewed_at_utc": "2026-10-26T19:36:25.018306+00:00",
+  "scope": "Independent takeover reconciliation for muse_bf16_proj; read-only external actions, no submission/ledger mutation/GPU launch/kill",
+  "current_best_board": {
+    "read_at_utc": "2026-10-26T19:33 UTC approximately",
+    "you": {
+      "rank": 81,
+      "team": "chenwainuo",
+      "speedup": 1.5093,
+      "first": false,
+      "ahead": 80,
+      "to_first": 1.0844
+    },
+    "matching_row": {
+      "attempts": 9,
+      "job": "fb548b5dc6f04696",
+      "rank": 81,
+      "speedup": 1.5093,
+      "submitted_at": 1793041772.265739,
+      "team": "chenwainuo",
+      "value": 3200.6150084373335
+    },
+    "top10_cut_us": 3107.765281416104,
+    "source_snapshot_sha256": "1210670a6850061dcea62a68484b13aafad1cfba777771ba54573197d9cf8820",
+    "recommendation": "Set ledger best-board incumbent to rs32 job fb548b5dc6f04696. This is a confirmed scored-board result, independent of cross-run attribution uncertainty.",
+    "ledger_resolution": {
+      "incumbent": {
+        "candidate": "proj_rsi/candidates/rs32/submission.py",
+        "ci": [
+          1.4866948969045823,
+          1.5319749445260415
+        ],
+        "job": "fb548b5dc6f04696",
+        "on_board": true,
+        "score_us": 3200.6150084373335,
+        "set_at": "2026-10-26T19:33:27Z",
+        "speedup": 1.509334920715312
+      },
+      "rs32_experiment_state": "promoted",
+      "observed_after_root_update": true
+    }
+  },
+  "jobs": {
+    "pw35": {
+      "job": "5d880cd0aa504209",
+      "summary": {
+        "error": null,
+        "passed": true,
+        "score_us": 3278.638454788286,
+        "speedup": 1.4734165009700477,
+        "speedup_ci": [
+          1.451315253455497,
+          1.4955177484845983
+        ],
+        "status": "ok",
+        "tests": 9,
+        "tests_passed": 9
+      },
+      "score_recomputed_from_30_shapes": 3278.6384547882853,
+      "six_load_sums_us": {
+        "decode 1": 35.08775377773403,
+        "decode 16": 49.70718625839968,
+        "decode 32": 60.42782154633373,
+        "verify 1": 37.69247832148952,
+        "verify 16": 65.35790184366404,
+        "verify 32": 83.76670769639304
+      },
+      "30_shape_pass": true,
+      "per_shape_runs": [
+        60
+      ],
+      "profile_count": 30,
+      "prepare_done_seconds": 159,
+      "skipped_lines": [],
+      "selected_paths": [
+        "PICK pooler m=128 rq:s4s5hz 22.69",
+        "PICK pooler m=256 r6 27.90",
+        "PICK qkv_gate m=128 rq:s4s5z 16.80",
+        "PICK qkv_gate m=256 r6 21.38",
+        "PICK unpooler m=128 rq:s4s5hz 22.59",
+        "PICK unpooler m=256 r6 27.87",
+        "PICK o m=128 r6 10.98",
+        "PICK o m=256 r6 12.74",
+        "PICK unpooler m=1 uk-s4x 8.38",
+        "PICK unpooler m=8 r6 8.51",
+        "PICK router m=8 rk-s16w8x 8.67",
+        "PICK router m=16 rk-s16w8x 8.90",
+        "PICK router m=32 rk-s8z 9.41",
+        "PICK router m=128 rt64k32b3x2z 11.68",
+        "PICK router m=256 rt64k32b3x2z 13.12"
+      ],
+      "source_current": {
+        "path": "proj_rsi/candidates/pw35/submission.py",
+        "sha256": "7069218da32202825be1aada89d951cb78c57c166b4f177195c055bbb33632e8"
+      },
+      "evidence": [
+        {
+          "path": "results/proj-rsi/jobs/5d880cd0aa504209.json",
+          "sha256": "1ae7afb4b149996e71138e793ee75e77cacf379a88748b18d591b66a4163e4f1"
+        },
+        {
+          "path": "results/proj-rsi/jobs/5d880cd0aa504209.log",
+          "sha256": "cceb6d5bb235107265554cd69c0e20ef8ca876f0199b552f1550f20d753ffaba"
+        },
+        {
+          "path": "results/proj-rsi/jobs/5d880cd0aa504209.txt",
+          "sha256": "704ec533740a05ea5c17c2035d5a1b18c9752d129f24d288b489826627c63ce0"
+        }
+      ]
+    },
+    "rs32": {
+      "job": "fb548b5dc6f04696",
+      "summary": {
+        "error": null,
+        "passed": true,
+        "score_us": 3200.6150084373335,
+        "speedup": 1.509334920715312,
+        "speedup_ci": [
+          1.4866948969045823,
+          1.5319749445260415
+        ],
+        "status": "ok",
+        "tests": 9,
+        "tests_passed": 9
+      },
+      "score_recomputed_from_30_shapes": 3200.6150084373335,
+      "six_load_sums_us": {
+        "decode 1": 35.29127231727883,
+        "decode 16": 48.29218982397611,
+        "decode 32": 52.13945970918543,
+        "verify 1": 37.48533252968096,
+        "verify 16": 67.51141831598414,
+        "verify 32": 86.58484871917094
+      },
+      "30_shape_pass": true,
+      "per_shape_runs": [
+        60
+      ],
+      "profile_count": 30,
+      "prepare_done_seconds": 142,
+      "skipped_lines": [],
+      "selected_paths": [
+        "PICK pooler m=128 rq:s4s5z 22.94",
+        "PICK pooler m=256 r6 28.29",
+        "PICK qkv_gate m=128 rq:s4s5hz 16.86",
+        "PICK qkv_gate m=256 r6 21.60",
+        "PICK unpooler m=128 r6 22.82",
+        "PICK unpooler m=256 r6 28.16",
+        "PICK o m=128 r6 11.23",
+        "PICK o m=256 r6 12.80",
+        "PICK unpooler m=1 uk-s4x 8.45",
+        "PICK unpooler m=8 uk-s4x 8.51",
+        "PICK router m=8 rk-s16w8z 8.80",
+        "PICK router m=16 rk-s16w8x 8.90",
+        "PICK router m=32 rk-s16w8z 9.25",
+        "PICK pooler m=32 rq:t32s5hze-k4 19.39",
+        "PICK pooler m=16 r6 18.24",
+        "PICK qkv_gate m=32 rq:t32s5hze-k7 14.05",
+        "PICK qkv_gate m=16 rq:t16s5hze-k7 14.05",
+        "PICK unpooler m=32 rq:t32s5hze-k2 19.17",
+        "PICK unpooler m=16 r6 18.82",
+        "PICK o m=32 rq:t32s6hze-k2 10.50",
+        "PICK o m=16 r6 9.66",
+        "PICK o m=128 r6 11.17",
+        "PICK router m=128 rw64k32s8z 13.22",
+        "PICK router m=256 r6 15.33"
+      ],
+      "source_current": {
+        "path": "proj_rsi/candidates/rs32/submission.py",
+        "sha256": "a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad"
+      },
+      "evidence": [
+        {
+          "path": "results/proj-rsi/jobs/fb548b5dc6f04696.json",
+          "sha256": "f3a8e1c1339cbaf764d0f9024b7d4c9273dc73c15788f425c8c16e6b7a037fd7"
+        },
+        {
+          "path": "results/proj-rsi/jobs/fb548b5dc6f04696.log",
+          "sha256": "dc74ae050555498984c5dde1f7474dbb5f70789822a72c1e679b2cdaab00a9ef"
+        },
+        {
+          "path": "results/proj-rsi/jobs/fb548b5dc6f04696.txt",
+          "sha256": "4df4af056cb8aee36d1f89cd94c284751f01c466b4ea74f4037f0a422fe47303"
+        }
+      ]
+    }
+  },
+  "comparison": {
+    "score_reduction_vs_recorded_pw35_us": 78.02344635095233,
+    "latency_fraction_needed_for_under3000": 0.06268014363129593,
+    "speedup_factor_needed_for_3000": 1.0668716694791112,
+    "crossrun_limit": "Point scores and per-shape comparisons across separate judge runs do not establish paired causal effects. Judge CIs overlap slightly; board best result itself is authoritative. Use same-run bake numbers to justify kernel mechanisms.",
+    "withinrun_rs32_clear_wins": [
+      {
+        "layer": "qkv_gate",
+        "m": 32,
+        "incumbent_us": 17.95,
+        "candidate_us": 14.05,
+        "path": "rq:t32s5hze-k7"
+      },
+      {
+        "layer": "pooler",
+        "m": 32,
+        "incumbent_us": 21.02,
+        "candidate_us": 19.39,
+        "path": "rq:t32s5hze-k4"
+      },
+      {
+        "layer": "unpooler",
+        "m": 32,
+        "incumbent_us": 20.96,
+        "candidate_us": 19.17,
+        "path": "rq:t32s5hze-k2"
+      },
+      {
+        "layer": "o",
+        "m": 32,
+        "incumbent_us": 10.94,
+        "candidate_us": 10.5,
+        "path": "rq:t32s6hze-k2"
+      },
+      {
+        "layer": "qkv_gate",
+        "m": 16,
+        "incumbent_us": 14.56,
+        "candidate_us": 14.05,
+        "path": "rq:t16s5hze-k7"
+      }
+    ],
+    "withinrun_pw35_router_wins": [
+      {
+        "m": 128,
+        "incumbent_path": "rw64k32s8z",
+        "incumbent_us": 12.93,
+        "candidate_path": "rt64k32b3x2z",
+        "candidate_us": 11.68
+      },
+      {
+        "m": 256,
+        "incumbent_path": "r6 F1 minimum",
+        "incumbent_us": 15.14,
+        "candidate_path": "rt64k32b3x2z",
+        "candidate_us": 13.12
+      }
+    ],
+    "router_only_pw36_projection": {
+      "before_us": 3200.6150084373335,
+      "after_us": 3174.224268623716,
+      "before": 1.509334920715312,
+      "after": 1.521883645006137,
+      "warning": "Cross-run planning projection only. Neither paired performance nor final pw36 score proof."
+    },
+    "score_formula_correction": "Official score =4830.8 / geomean_6(SGLang_load_sum/ours_load_sum). 62*geomean(ours) is approximate because measured SGLang load sums change: rs32 gives3215.80888 by approximate formula, actual3200.61501."
+  },
+  "pw36_independent_checks": {
+    "current_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+    "file_bytes": 272704,
+    "lint": "PASS with expected multiple-load_inline sm_90a warning; actual CUDA architecture flags still require source/build review",
+    "cpu_official": "PASS9/9",
+    "limit": "CPU fallback tests do not validate CUDA fast paths; full GPU official checks and uncontended same-run comparison still required. Integration agent owns detailed source review.",
+    "registered_experiment_at_19_33": false,
+    "admission": "Root must register experiment before submitting; quota checks0/scored2 at19:31, reset00:00UTC.",
+    "AST_structural_merge_review": {
+      "result": "consistent with additive parent regions",
+      "no_parent_top_level_function_or_string_definition_missing": true,
+      "common_GVCU_unchanged": true,
+      "RQCU_and_helpers_exactly_rs32": true,
+      "RWCU_and_helpers_exactly_pw35": true,
+      "kernel_fn_identical_to_both": true,
+      "remaining_changed_prepare": "Integration-specific ordering/phase timestamps. Independent source author audit and actual uncontendedGPU prepare remain necessary.",
+      "comparison": "AST for Python definitions, exact raw string bytes for embedded CUDA; comments/formatting ignored for Python AST."
+    }
+  },
+  "h100_observations": [
+    {
+      "at_utc": "2026-10-26T19:32:03Z",
+      "container": "a28b13f4ee6b",
+      "process": 312199,
+      "command": "tensorcore tools/ladder.py qkv_gate,router 16,128,256 3,8,4,5,0 10",
+      "GPU_used_MiB": 1694,
+      "GPU_utilization_pct": 100,
+      "last_log_mtime_utc": "2026-10-26T19:08:05.339227975Z",
+      "last_log_progress": "qkv m16/128/256 complete; no router row",
+      "outer_timeout_seconds": 3600,
+      "status": "Live ~24min with unchanged log; strong router-kernel hang suspicion, not termination proof. Parent informed."
+    },
+    {
+      "at_utc": "2026-10-26T19:35 approximately",
+      "containers": [
+        {
+          "id": "bc2b7a1adae3",
+          "name": "angry_gauss",
+          "command": "bash /okc/logs/pw36/run3.sh",
+          "GPU_process": 338912
+        },
+        {
+          "id": "a6d1bb4ebb30",
+          "name": "gallant_vaughan",
+          "command": "rs128p lab anat followed by PT official bench",
+          "GPU_process": 338792
+        }
+      ],
+      "both_GPU_exposed": true,
+      "only_visible_flock_owner": "334430 pw36/run3",
+      "status": "Concurrent CUDA contexts and GPU-exposed active jobs: exclusivity not proven for run3/PT measurements. Parent notified urgently. Exact per-kernel overlap not established."
+    }
+  ],
+  "queue_snapshot_before_hang_resolution": [
+    {
+      "pid": 311438,
+      "track": "rs128 stream-K",
+      "state": "queued",
+      "log": "/root/okc/logs/rs128/sk1.log"
+    },
+    {
+      "pid": 313704,
+      "track": "bandwidth batch5",
+      "state": "queued"
+    },
+    {
+      "pid": 316870,
+      "track": "latency batch",
+      "state": "queued"
+    },
+    {
+      "pid": 318363,
+      "track": "P4 patch table",
+      "state": "queued"
+    },
+    {
+      "pid": 325298,
+      "track": "tensorcore cmp8",
+      "state": "queued"
+    },
+    {
+      "pid": 334430,
+      "track": "pw36 compare parents/composite",
+      "state": "queued"
+    }
+  ],
+  "priority": [
+    {
+      "rank": 0,
+      "task": "Reconcile live containers and terminate confirmed hung/orphaned GPU work before trusting timing. Inspect Docker children independently of flock/timeout handles."
+    },
+    {
+      "rank": 1,
+      "task": "Record rs32 confirmed rank81/3200.615 board incumbent and preserve submitted candidate source (current rs32 hash matches fbf6371 commit).",
+      "direct_speedup": "Already measured; no new slot needed."
+    },
+    {
+      "rank": 2,
+      "task": "Complete pw36 three-way merge review, uncontended 65-case GPU validation and same-run pw35/rs32/pw36 timing. Then choose judge submission under available quota and root policy.",
+      "ROI": "Combines proven disjoint small-m and router mechanisms; router-only planning projection3174.224us, not guarantee."
+    },
+    {
+      "rank": 3,
+      "task": "P4 escape patch table and RS128 stream-K existing queued experiments: read their terminal logs and enforce >=0.3us same-run bar; do not duplicate jobs."
+    },
+    {
+      "rank": 4,
+      "task": "Latency loader microbenchmark then integrated small-shape performance: only port if per-shape bake wins; highest score leverage on decode1/verify1."
+    },
+    {
+      "rank": 5,
+      "task": "Finish cleanroom school verification/synthesis from actual existing results; retain independent-school reading boundaries for implementers."
+    }
+  ],
+  "closed_tracks": "Retain handover_folder/10-closed-tracks.md; no blind repeat of variable codecs, dedicated-decode SS WGMMA, rq m256, deeperWring, cluster4/router sharing, soaks or known dead-end sweeps.",
+  "unknowns": [
+    "Exact uploaded source digest not included in archived job JSON; current source hashes recorded and rs32 current hash matches fbf6371 commit.",
+    "Fresh uncontended pw36 GPU results and prepare budget not yet available to reviewer.",
+    "Live job/container state may have changed after each timestamp; snapshots are not current handles."
+  ],
+  "protected_scope": "This projection-board progress does not establish the prior MoE-serving 3x goal.",
+  "repair_review": {
+    "reviewed_at_utc": "2026-10-26T19:43:57.174370+00:00",
+    "files": [
+      {
+        "path": "proj_rsi/tools/h100_container.sh",
+        "sha256": "2d2c361c2844e9475b1d88c7f0d7faa7734c85f9760872d120a9ec024e5035cc"
+      },
+      {
+        "path": "proj_rsi/tools/h100_gpu_lock.sh",
+        "sha256": "eee7afa36fa5ce4196c63a901005cc48a87bdecc655fdd45b499f225647ee6e2"
+      }
+    ],
+    "static_decision": "Appropriate cooperative serialization repair: bound host /tmp/gpu.lock inode locked from inside named container before command execution. Closing SSH/Docker CLI cannot prematurely release a host-wrapper-only lock while daemon-owned CUDA children continue.",
+    "requirements": [
+      "Do not unlink/recreate lockfile while contenders exist; touch preserves inode.",
+      "Treat actual named container/CUDA process lifetime as authority on cancellation. Wrapper does not itself enforce finite execution deadline.",
+      "Multiple waiting GPU-exposed containers can be valid; count actual CUDA processes/command state rather than Docker container count alone.",
+      "Host/other launchers bypassing this wrapper remain outside cooperative enforcement."
+    ],
+    "runtime_evidence_status": "Root reports external nonblocking lock rejection while fresh GPU owner active; independently observed installed script equality and fresh container terminal. Initial coarse CPU A/B timestamp test remains inconclusive until ordered monotonic retest.",
+    "coarse_test_caveat": "A_ENTER and B_ENTER equal coarse timestamp is not proof of overlap or serialization; require observed A_ENTER before B launch and B_ENTER >= A_EXIT using monotonic_ns.",
+    "bash_syntax": "PASS"
+  },
+  "fresh_pw36_comparison": {
+    "status": "Complete observational H100 comparison, judge check still pending",
+    "host": "root@107.170.6.60",
+    "source_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+    "remote_log": "/root/okc/logs/pw36/takeover-r1.log",
+    "time_order": [
+      "pw35 19:37:46->19:38:35UTC",
+      "rs32 19:38:35->19:39:28UTC",
+      "pw36 19:39:28->19:40:21UTC"
+    ],
+    "terminal_marker": "BENCH_DONE",
+    "independently_observed_terminal_at_utc": "2026-10-26T19:40:30UTC, docker ps empty",
+    "root_ownership_observation": "Root reports single compute PID throughout sampled checks and external flock -n returns1 while active; reviewer did not independently sample every timing interval.",
+    "results": {
+      "pw35": {
+        "json_sha256": "e387b3cfbb3e5195f44f7af22ecb26b5ae57f0023193b94727ba4ea93642f095",
+        "log_sha256": "02fad928274b24e997bca23aab75b1c68c3552fa204d195956d840645b1160c5",
+        "check_count": 65,
+        "all_checks_ok": true,
+        "phase_lines": [
+          "PREP rq thread started at 0s",
+          "PREP r6 done in 33s",
+          "PREP rq thread ready at 36s (bake starts at 36s)",
+          "PREP rw compiled in 0s (at 42s)",
+          "PREP done in 43s"
+        ],
+        "skipped_lines": [],
+        "picked_paths": [
+          "PICK pooler m=128 rq:s4s5hz 23.62",
+          "PICK pooler m=256 r6 29.25",
+          "PICK qkv_gate m=128 rq:s4s5hz 17.22",
+          "PICK qkv_gate m=256 rq:n256s4hz 21.15",
+          "PICK unpooler m=128 rq:s4s5hz 23.94",
+          "PICK unpooler m=256 r6 27.71",
+          "PICK o m=128 r6 10.56",
+          "PICK o m=256 r6 11.55",
+          "PICK unpooler m=1 uk-s4x 7.17",
+          "PICK unpooler m=8 uk-s4w4x 7.10",
+          "PICK router m=8 rk-s16w8z 7.62",
+          "PICK router m=16 rk-s16w8z 7.81",
+          "PICK router m=32 rk-s16w8z 8.16",
+          "PICK router m=128 rt64k32b3x2z 10.56",
+          "PICK router m=256 rt64k16b6z 12.83"
+        ],
+        "probes": {
+          "replay_overhead_us": 11.536000296473503,
+          "read6mb_us": 50.016000866889954
+        },
+        "target_shapes_us": {
+          "qkv_gate/m16": 17.376000061631203,
+          "qkv_gate/m32": 20.78399993479252,
+          "pooler/m32": 26.30399912595749,
+          "unpooler/m32": 26.768000796437263,
+          "o/m32": 12.896000407636166,
+          "router/m128": 13.631999958306551,
+          "router/m256": 15.792000107467175,
+          "pooler/m128": 26.367999613285065
+        }
+      },
+      "rs32": {
+        "json_sha256": "de253032266e82a1bf8a9d31e737129a4871249f5aa0a7ad9cd59834cff01b7d",
+        "log_sha256": "d5c45bcf64a2fff8a0309ac63d8295de25349cff2145c2bae3413b6e80c376ca",
+        "check_count": 65,
+        "all_checks_ok": true,
+        "phase_lines": [
+          "PREP rq thread started at 0s",
+          "PREP rq32 thread started at 0s",
+          "PREP r6 done in 34s",
+          "PREP rq thread ready at 37s (bake starts at 37s)",
+          "PREP rq32 thread ready at 38s",
+          "PREP rq32 bake starts at 43s",
+          "PREP rw compiled in 0s",
+          "PREP done in 46s"
+        ],
+        "skipped_lines": [],
+        "picked_paths": [
+          "PICK pooler m=128 rq:s4s5hz 24.10",
+          "PICK pooler m=256 r6 29.57",
+          "PICK qkv_gate m=128 rq:s4s5hz 17.38",
+          "PICK qkv_gate m=256 rq:n256s4hz 21.22",
+          "PICK unpooler m=128 rq:s4s5hz 24.45",
+          "PICK unpooler m=256 r6 27.90",
+          "PICK o m=128 r6 10.82",
+          "PICK o m=256 r6 11.62",
+          "PICK unpooler m=1 uk-s4x 7.07",
+          "PICK unpooler m=8 r6 7.42",
+          "PICK router m=8 rk-s16w8z 7.78",
+          "PICK router m=16 rk-s16w8z 7.81",
+          "PICK router m=32 rk-s8z 8.35",
+          "PICK pooler m=32 rq:t32s5hz-k4 21.98",
+          "PICK pooler m=16 r6 21.38",
+          "PICK qkv_gate m=32 rq:t32s6hze-k6 14.91",
+          "PICK qkv_gate m=16 r6 14.75",
+          "PICK unpooler m=32 rq:t32s5hze-k2 21.92",
+          "PICK unpooler m=16 r6 21.76",
+          "PICK o m=32 r6 9.76",
+          "PICK o m=16 r6 8.93",
+          "PICK o m=128 rq:h128s8e-k1 10.98",
+          "PICK router m=128 rw64k32s8z 11.65",
+          "PICK router m=256 rw64k32r3x2z 14.88"
+        ],
+        "probes": {
+          "replay_overhead_us": 13.599999714642763,
+          "read6mb_us": 51.11999996006489
+        },
+        "target_shapes_us": {
+          "qkv_gate/m16": 17.93600060045719,
+          "qkv_gate/m32": 18.079999834299088,
+          "pooler/m32": 25.03999974578619,
+          "unpooler/m32": 24.687999859452248,
+          "o/m32": 13.760000001639128,
+          "router/m128": 14.527999795973301,
+          "router/m256": 18.160000443458557,
+          "pooler/m128": 27.823999524116516
+        }
+      },
+      "pw36": {
+        "json_sha256": "b43758aa2e307ebaaf8f958920ba88050156806634349e1cd873b4eecf2e55a6",
+        "log_sha256": "e5a6a7f5792f65cc56178850a7bd695ac631310779681f04a10afa2a6334c090",
+        "check_count": 65,
+        "all_checks_ok": true,
+        "phase_lines": [
+          "PREP rq thread started at 0s",
+          "PREP rq32 thread started at 0s",
+          "PREP r6 done in 34s",
+          "PREP rq thread ready at 37s (bake starts at 37s)",
+          "PREP phase rq done at 39s",
+          "PREP phase gx done at 43s",
+          "PREP rq32 thread ready at 37s",
+          "PREP rq32 bake starts at 43s",
+          "PREP phase rq32 done at 46s",
+          "PREP rw compiled in 0s (at 46s)",
+          "PREP phase router done at 46s",
+          "PREP done in 46s"
+        ],
+        "skipped_lines": [],
+        "picked_paths": [
+          "PICK pooler m=128 rq:s4s5hz 23.62",
+          "PICK pooler m=256 r6 29.41",
+          "PICK qkv_gate m=128 rq:s4s5hz 16.90",
+          "PICK qkv_gate m=256 rq:n256s4hz 20.99",
+          "PICK unpooler m=128 rq:s4s5hz 24.13",
+          "PICK unpooler m=256 r6 27.74",
+          "PICK o m=128 r6 10.59",
+          "PICK o m=256 r6 11.62",
+          "PICK unpooler m=1 uk-s4z 7.26",
+          "PICK unpooler m=8 uk-s4x 7.14",
+          "PICK router m=8 rk-s16w8z 7.52",
+          "PICK router m=16 rk-s16w8z 7.97",
+          "PICK router m=32 rk-s8z 8.10",
+          "PICK pooler m=32 rq:t32s5hze-k4 21.63",
+          "PICK pooler m=16 r6 21.38",
+          "PICK qkv_gate m=32 rq:t32s5hze-k6 14.85",
+          "PICK qkv_gate m=16 r6 14.72",
+          "PICK unpooler m=32 rq:t32s5hze-k2 21.50",
+          "PICK unpooler m=16 r6 21.79",
+          "PICK o m=32 rq:t32s6hze-k2 9.60",
+          "PICK o m=16 r6 8.80",
+          "PICK o m=128 rq:h128s8e-k1 10.66",
+          "PICK router m=128 rt64k32b4z 10.46",
+          "PICK router m=256 rt64k32b3x2z 12.77"
+        ],
+        "probes": {
+          "replay_overhead_us": 12.144000269472599,
+          "read6mb_us": 50.07999949157238
+        },
+        "target_shapes_us": {
+          "qkv_gate/m16": 17.760000191628933,
+          "qkv_gate/m32": 18.000000156462193,
+          "pooler/m32": 24.86399933695793,
+          "unpooler/m32": 24.70399998128414,
+          "o/m32": 13.279999606311321,
+          "router/m128": 14.08000010997057,
+          "router/m256": 15.839999541640282,
+          "pooler/m128": 26.768000796437263
+        }
+      }
+    },
+    "limit": "Fixed-order same-session comparison with changing replay overhead (11.536/13.600/12.144us). Not a balanced paired candidate comparison, and not official H200 board evidence.",
+    "conclusion": "All three candidates pass65officialGPUcases; pw36 selects inherited rq32 and rtk paths with no skipped phase. Targeted gains versus appropriate parent largely carry locally; offsets/drift prevent claiming precise aggregate win or judge score. Independent source/lint/CPU evidence plus completed GPU checks justify an official check of the frozen file at reset."
+  },
+  "rerun_recommendations": [
+    {
+      "rank": 0,
+      "track": "pw36",
+      "action": "Use fresh completed GPU verification; register/root-independent review and queue official check at00:00UTC. Do not spend duplicate H100 run unless source changes or new concern."
+    },
+    {
+      "rank": 1,
+      "track": "P4 producer escape patch",
+      "action": "Rerun inherited pt-lab then official targeted bench under new in-container lock because previous PT evidence overlapped GPU work. Keep>=0.3us in-prepare kill bar; compare shipped rq and patch variant in same session."
+    },
+    {
+      "rank": 2,
+      "track": "latency loader",
+      "action": "Read prior b6 result first; rerun only interrupted/contended b7 microbenchmark under lock, then integrated path if loader reaches preregistered>=23GB/s/SM bar. Highest small-load score leverage."
+    },
+    {
+      "rank": 3,
+      "track": "RS128 stream-K",
+      "action": "Rerun queued sk plan if no uncontended terminal result survives. Preserve>=0.3us bar; no m256 rq reopening."
+    },
+    {
+      "rank": 4,
+      "track": "cleanroom verifier",
+      "action": "Collect uncontended school finals into one bounded same-session verification against current rs32/pw36; do not resume all old exploratory batches."
+    },
+    {
+      "rank": 5,
+      "track": "tensorcore ladder9/cmp8",
+      "action": "Do not rerun hung router ladder unchanged. Diagnose source termination/co-residency/counter issue first; a prior live hang is a correctness/control failure, not a timing result."
+    }
+  ]
+}

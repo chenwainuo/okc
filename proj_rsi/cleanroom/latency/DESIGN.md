@@ -77,3 +77,29 @@ The compute side is fine (m=32 costs only +2-4 us over m=1 with 8 warps on mma.s
    with 2-3 k64 blocks in flight per warp, no smem at all for the weights.
 4. Then the m=32 L2 question (x traffic = 2m/(1.5 NB) of the weight traffic): NB=64 variants or x via smem.
 5. Run --official, then the full harness table, then tune S / NB per layer on a quiet box.
+
+## Fixed-cost follow-up (2026-10-26)
+
+The existing loader/instruction-overlap work reached LOADER 3, a ninth producer warp issuing CTA-wide
+TMA stages while eight consumers load x with cp.async. The current dirty CUDA experiment adds a dry
+consumer iteration before the producer begins, to fetch consumer code before the weight stream.
+That experiment remains available as `LATENCY_DBG=0`.
+
+Own remote b7 profiles show the dry iteration losing to `LATENCY_DBG=512` (dry iteration disabled):
+qkv m1 28.08 -> 26.98 us, qkv m32 37.94 -> 35.86 us; o m1 12.22 -> 10.40 us,
+o m32 17.44 -> 14.74 us; router m1 26.53 -> 25.50 us, router m32 30.80 -> 29.54 us.
+These old runs do not establish quiet-box performance or H200 transfer. They support one minimal,
+falsifiable change: use the existing no-dry-iteration path by default (`DBG=512`). Packed weights,
+arithmetic, CTA geometry and fallback dispatch are unchanged.
+
+`fixedcost.py` prepares once outside measurement, runs the exact official nine cases on both paths,
+then captures both paths in one process and alternates their order after a read-only L2 flush.
+It reports paired graph ratios and CUPTI GEMV durations separately. Its tiny-kernel graph estimate
+is reported as context; raw paired graph times determine the comparison. The profiler's ~0.7 us
+Memset in b6/b7 also encloses the flush reduction, so it is not evidence of an extra GEMV graph node.
+
+Local validation: py_compile, AST lint and git diff --check pass. `cpu_check.py` passes the official
+nine cases using real Python dispatch and a CPU model of the extension; it verifies bitwise BF16
+plane reconstruction for qkv, pooler, sliced unpooler and router hi/lo. BF16 probes are exact; router
+L2 is 2.50-2.52e-6. This model does not validate CUDA indexing, synchronization, graphs or performance.
+The root scheduler owns the bounded b8 GPU run; no GPU operation was launched by this follow-up.

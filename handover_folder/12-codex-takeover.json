@@ -1,0 +1,129 @@
+{
+  "written_at_utc": "2026-10-26T20:08:21.929234+00:00",
+  "supervisor": "Codex /root",
+  "scope": "Continue Claude muse_bf16_proj RSI work from session notes + handover_folder; preserve prior work.",
+  "objectives": {
+    "projection": "official board <3000 us; not yet achieved",
+    "earlier_thread_goal": "3x frozen MoE benchmark remains separate and unproven; projection result is not evidence for that goal"
+  },
+  "verified_incumbent": {
+    "candidate": "proj_rsi/candidates/rs32/submission.py",
+    "job": "fb548b5dc6f04696",
+    "score_us": 3200.6150084373335,
+    "speedup": 1.509334920715312,
+    "tests": "9/9",
+    "board_rank_at_takeover": 81,
+    "previous_pw35_score_us": 3278.638454788286,
+    "ledger_updated": true,
+    "board_positions_provisional": true
+  },
+  "pw36": {
+    "source": "proj_rsi/candidates/pw36/submission.py",
+    "sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+    "composition": "pw35 router + rs32 m16/m32 paths over common pw34 base; kernels match parents",
+    "status": "reviewed, official check pending reset; no promotion",
+    "evidence": [
+      "proj_rsi/audits/pw36-takeover.md",
+      "proj_rsi/audits/takeover-evidence.json"
+    ],
+    "exclusive_gpu_run": {
+      "host": "107.170.6.60",
+      "log": "/root/okc/logs/pw36/takeover-r1.log",
+      "terminal": "BENCH_DONE 2026-10-26T19:40:21Z",
+      "all_three_candidates_gpu_cases": "65/65 each",
+      "prepare_pw36_s": 46,
+      "both_rq32_and_rtk_selected": true,
+      "caveats": "Fixed order and differing replay overhead; H100 timings are not official H200 board scores."
+    }
+  },
+  "quota_verified": {
+    "checks_left": 0,
+    "scored_left": 2,
+    "reset_utc": "2026-10-27T00:00:00Z",
+    "action": "One check of frozen pw36 at reset, then read judge result before any scored promotion"
+  },
+  "official_check_waiter": {
+    "script": "results/proj-rsi/takeover/20261026/wait-pw36-check.py",
+    "state": "results/proj-rsi/takeover/20261026/pw36-waiter.json",
+    "pid": 774007,
+    "candidate_sha_guard": true,
+    "deadline_waiting_quota_utc": "2026-10-27T00:20:00Z",
+    "launch": "setsid -f env PYTHONPATH=/home/ubuntu/okc python3 <script> < /dev/null > <log> 2>&1",
+    "liveness": "Recheck actual PID; a state file alone is not proof. One attempt only; no retries."
+  },
+  "infrastructure": {
+    "h100": "root@107.170.6.60",
+    "cli": "/home/ubuntu/.okc/bin/okc",
+    "proj_cli": "env PATH=/home/ubuntu/.okc/bin:$PATH python3 -m proj_rsi ...",
+    "runner": "/root/okc_run.sh",
+    "runner_source": "proj_rsi/tools/h100_container.sh",
+    "compatibility_lock_entrypoint": "/root/gpu_lock.sh (now passthrough)",
+    "gpu_lock": "/tmp/gpu.lock bind-mounted /gpu.lock; flock inside container, not around docker client",
+    "rules": [
+      "Never unlink the lock file.",
+      "Use named containers and bounded callers; container termination is authoritative.",
+      "Do not add an outer host flock around the same lock; that deadlocks the container.",
+      "Keep the soak stopped.",
+      "No competing GPU work."
+    ],
+    "lock_runtime_test": "same inode1807; C exited at monotonic15871561587989 before D entered15871581462511; external nonblocking lock probe failed while benchmark held lock."
+  },
+  "inherited_invalid_runs": {
+    "stalled": "tensorcore_ladder9 qkv rows completed; stalled before router16 for >24min. Container a28b13f4ee6b stopped; original partial log retained.",
+    "overlap": "Old outer locks died while Docker containers survived. P4 and pw36 containers overlapped; stopped and marked invalid for timing. Fresh pw36 and P4 runs replaced them.",
+    "artifacts": "results/proj-rsi/takeover/20261026/"
+  },
+  "tracks": {
+    "P4_runtime_producer_patch_table": "Rejected clean run: pooler23.968->25.728us,qkv17.056->18.720us. No port. Prepared static-footer idea has small conditional ROI and remains CPU-only/lowerpriority.",
+    "RS128_streamK": "Fresh takeover-sk02 rejected onall4layers: regressions1.760\u20132.656us. PRB4rows lackoutputepilogue/validation andarenotshipworthy. See audits/rs128-takeover-sk02.md.",
+    "latency": "DBG512 improvesowncontrol~5%, butfullschoollosesall30timings to pw36. Graph45/45+GPU65/65pass; no port/promotion.",
+    "cleanroom_verifier": {
+      "status": "terminal_VERIFIER_DONE_2026-10-26T20:00:20Z",
+      "host": "107.170.6.60",
+      "pid": 345107,
+      "container": "okc-proj-cleanroom-takeover-v1",
+      "log": "/root/okc/logs/takeover-cleanroom-host.log",
+      "order": [
+        "pw36",
+        "bandwidth",
+        "contrarian",
+        "latency",
+        "tensorcore",
+        "pw36_after"
+      ],
+      "deadline_seconds": 1800,
+      "tc": "MODE0only;diagnosticsdeadlockidentified;noTC_MAX_Moverride",
+      "latency_environment": "LOADER3,WLAYOUT1,SMAX16,DBGdefault512;researchconfig explicitlyrecorded",
+      "acceptance": "65okCHECKs +30finite rows+JSON; harness exit0 alone is insufficient. Latency replay45/45 also required.",
+      "result": "All6harnesses65/65+30finite rows; latency45/45 replay. No schoolbeatsbothpw36brackets by>=.3us; unchangedschoolpoliciesrejected.",
+      "report": "proj_rsi/audits/cleanroom-measure.md",
+      "raw_archive": "results/proj-rsi/takeover/20261026/cleanroom/"
+    },
+    "closed": "m256 rq, old codecs and other closed designs remain closed unless materially new evidence."
+  },
+  "agents": {
+    "proj_integration": "pw36 integration validation/source ownership",
+    "proj_evidence": "independent evidence/critic, no GPU launches",
+    "proj_tracks": "P4 + streamK harvest and targeted follow-up",
+    "latency_resume": "clean-room latency implementation; forbidden from reading candidates/audits/LOOP"
+  },
+  "continuation_rules": [
+    "Read live ledger/LOOP and actual process/job state before dispatch.",
+    "Preserve uncommitted Claude changes; commit only owned work.",
+    "Within-run bakes are evidence; cross-run drift is not causal proof.",
+    "Every candidate path must have correctness fallback and prepare budget guard.",
+    "Final official check must confirm PREP/BAKE/PICK and no skipped fast paths."
+  ],
+  "next_implementation": [
+    {
+      "owner": "proj_integration",
+      "directory": "proj_rsi/candidates/rs256full/",
+      "hypothesis": "Conditional full-K/no-split-reduction m256 geometry with mergedK256 slots; firstcheckclosedwork/resource/roofline beforecode; >=1us poolerbar; noGPUyet"
+    },
+    {
+      "owner": "proj_tracks",
+      "directory": "proj_rsi/candidates/rtk_early/",
+      "hypothesis": "Oneavoidablerouterfirst-TMA/startup dependency versusshippedrtk; >=.5us bar; noGPUyet"
+    }
+  ]
+}

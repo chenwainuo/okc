@@ -689,12 +689,9 @@ latency_gemv_t(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
 #ifdef LATENCY_SM90A
         asm volatile("fence.mbarrier_init.release.cluster;" ::: "memory");
 #endif
-        // the first S stages go out before anyone waits
-        for (int st = 0; st < S && st < nst; ++st) {
-            mbar_expect_tx(&fullb[st], STAGE);
-            tma_load_1d(ring + st * SLOT, src + (size_t)st * STAGE, STAGE, &fullb[st]);
-        }
     }
+    const bool warm = !(dbg & 512);   // run one dry iteration of the consumer loop before the stream starts, so
+                                      // its code is fetched while HBM is idle (a code miss behind the stream costs us)
     auto issue_x = [&](int st) {
         if (st < nst) {
             uint8_t* d = ring + (st % S) * SLOT + STAGE + warp * XW;
@@ -724,21 +721,30 @@ latency_gemv_t(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
             for (int i = 0; i < 4; ++i) acc[a][t][i] = 0.f;
 
     if (warp == 8) {
-        if (lane == 0)
+        if (warm) asm volatile("bar.sync 1, 288;" ::: "memory");
+        if (lane == 0) {
+            for (int st = 0; st < S && st < nst; ++st) {
+                mbar_expect_tx(&fullb[st], STAGE);
+                tma_load_1d(ring + st * SLOT, src + (size_t)st * STAGE, STAGE, &fullb[st]);
+            }
             for (int st = S; st < nst; ++st) {
                 const int slot = st % S;
                 mbar_wait(&emptyb[slot], (uint32_t)(((st / S) - 1) & 1));
                 mbar_expect_tx(&fullb[slot], STAGE);
                 tma_load_1d(ring + slot * SLOT, src + (size_t)st * STAGE, STAGE, &fullb[slot]);
             }
+        }
     } else {
         int ep = 0;
-        for (int s = 0; s < nst; ++s) {
-            const int slot = s % S;
+        bool wexc = false;
+        for (int s = warm ? -1 : 0; s < nst; ++s) {
+            const int slot = s < 0 ? 0 : s % S;
             const uint8_t* base = ring + slot * SLOT;
             const uint8_t* xs = base + STAGE + warp * XW;
-            cp_wait_rt(S - 1);
-            mbar_wait(&fullb[slot], (uint32_t)((s / S) & 1));
+            if (s >= 0) {
+                cp_wait_rt(S - 1);
+                mbar_wait(&fullb[slot], (uint32_t)((s / S) & 1));
+            }
             __syncwarp();
             if (s == 0) stamp(dbg, cta, warp, lane, 2);
             if (s == nst / 2) stamp(dbg, cta, warp, lane, 3);
@@ -790,12 +796,20 @@ latency_gemv_t(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
                             }
                 }
             }
-            while (ep < ecap && !(dbg & 4)) {
-                const uint32_t nk = lds32(eslot + ep * 8);
+            while (!(dbg & 4)) {
+                uint32_t nk;
+                float delta;
+                if (s < 0) {             // dry run: one zero-weight exception so this code is fetched too
+                    if (wexc) break;
+                    wexc = true; nk = 0; delta = 0.f;
+                } else {
+                    if (ep >= ecap) break;
+                    nk = lds32(eslot + ep * 8);
+                    if ((int)(nk >> 25) != st0 + s) break;
+                    delta = __uint_as_float(lds32(eslot + ep * 8 + 4));
+                    ++ep;
+                }
                 const int k = (int)(nk >> 16);
-                if ((k >> 9) != st0 + s) break;
-                const float delta = __uint_as_float(lds32(eslot + ep * 8 + 4));
-                ++ep;
                 const int nl = nk & 0xFFFF, kl = k & 63;
                 const int t = nl >> 3, col = nl & 7, cc = col >> 1, j = col & 1;
                 if (cc == c) {
@@ -814,6 +828,16 @@ latency_gemv_t(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
                 }
             }
             __syncwarp();
+            if (s < 0) {
+#pragma unroll
+                for (int a = 0; a < MT; ++a)
+#pragma unroll
+                    for (int t = 0; t < NT; ++t)
+#pragma unroll
+                        for (int i = 0; i < 4; ++i) acc[a][t][i] = 0.f;
+                asm volatile("bar.arrive 1, 288;" ::: "memory");
+                continue;
+            }
             if (lane == 0) mbar_arrive(&emptyb[slot]);
             issue_x(s + S);
         }
@@ -973,7 +997,7 @@ def _ext():
     global _EXT
     if _EXT is None:
         _EXT = load_inline(
-            name=f"latency_gemv_v11_l{min(LOADER, 2)}",
+            name=f"latency_gemv_v12_l{min(LOADER, 2)}",
             cpp_sources=[CPP_SRC],
             cuda_sources=[CUDA_SRC],
             functions=["latency_gemv_run", "latency_gemv_w_run", "latency_stamps"],
@@ -1176,7 +1200,7 @@ def prepare(weights: Weights):
 
 W_SMEM = 200 * 1024   # LOADER 2 smem budget (ring + exception lists); the epilogue reduction reuses it
 W_SMAX = int(os.environ.get("LATENCY_SMAX", "16"))
-DBG = int(os.environ.get("LATENCY_DBG", "0"))  # timing experiments only: 1 no x, 2 no math, 4 no exceptions
+DBG = int(os.environ.get("LATENCY_DBG", "512"))  # 512: skip the measured-costly dry run; 0 retains the A/B control
 
 
 def _w_geometry(p, m, ks, ecap):

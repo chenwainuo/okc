@@ -999,3 +999,64 @@ wgmma.fence waits on the list-walking warp (issue 92 → 188 clk); all other per
 escape patch table (expected −0.4…−0.6 box, more on the H200). pw35 (= pw34 + rtk router; box −2.4 at router m=256, −0.5 at
 m=128, 65/65) scored run launched 19:08 UTC → results/proj-rsi/jobs/pw35.scored.txt. Open agents: RS128 author (stream-K grid,
 x multicast), P4 (patch table), rs32, latency loader, clean-room workflow (3 schools + verifier/judges).
+
+## Scored pw35: job `5d880cd0aa504209` — **3278.6 µs**, 1.4734× (CI 1.451–1.496). New incumbent (3293.9 → 3278.6, rank 111)
+
+Router m=128 9.42 → 7.49 (−1.93; one rtk node, kernel 6.0 µs) and m=256 11.33 → 9.18 (−2.15; kernel 8.0) within the run —
+more than the box's −0.5/−2.4 predicted at m=128, exactly as the transfer rule says for fixed-term removals (the old paths were
+2–3 graph nodes). Everything else within drift. rs32 (pw34 + rq NT=32 at qkv/pooler/unpooler m=32; box −3.0/−2.0/−2.1 on
+decode32) is on the judge as scored job fb548b5dc6f04696 (submitted 19:09; report results/proj-rsi/jobs/rs32.scored.txt).
+Lesson: `propose` an experiment before its first check, or the ledger attach raises after okc already accepted the job
+(both of today's last submissions went through; ids recovered with `okc jobs`). Next merge: pw36 = pw35 + rs32's small-m
+section (both are pw34 @ 49b22d8 + one additive section), box-validated vs both in one run, check at the reset, then scored.
+Handover for the next session: handover_folder/ (README + 01…11).
+
+
+## 2026-10-26 Codex takeover — source/evidence reconciled, queue repaired
+
+Read Claude's session memory and all handover tracks. Recovered completed scored rs32 job
+`fb548b5dc6f04696`: **3200.615 µs, 1.5093349×, 9/9**, live board rank81; ledger
+incumbent was stale at pw35/3278.638 and is now reconciled. Cross-run differences are not
+causal estimates; rs32's within-run bakes establish its m32 improvements.
+
+Inherited TC ladder9 had stopped logging before router16 for >24min while consuming GPU.
+Its diagnostic MODE3 omits counters that the converter CTAs wait for: stop this diagnostic.
+After cleanup, inherited Docker containers outlived outer flocks and overlapped P4/pw36;
+those timing attempts were retained and invalidated. Lock ownership now lives inside the
+container, via tools/h100_container.sh; do not wrap it in an outer flock on the same inode.
+An ordered monotonic test and a nonblocking contention probe verify serialization.
+
+Fresh exclusive pw35/rs32/pw36 comparison ended19:40:21UTC, all65/65 GPU checks per
+candidate. pw36 retains the parent rq32 and rtk picks, PREP46s, no skipped phase. Source
+SHA256 `2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf` is frozen,
+reviewed and registered. A detached source-hash-guarded waiter PID774007 will submit one
+CHECK at2026-10-27T00:00UTC (deadline waiting for quota00:20); 0checks/2scored remain
+today. Read official PREP/BAKE/PICK and result before any scored promotion.
+
+P4 producer patch table failed the clean >=0.3us gain bar: pooler+1.760us, qkv+1.664us;
+first-WGMMA startup+~1.5us outweighs steady-stage savings. Close it; no port/slot. Fresh
+RS128 stream-K132 also regresses all4layers (+1.760–2.656us); PRB4 timing-only rows
+are not valid outputs or shipworthy paths. Audits preserve evidence.
+
+A clean-room latency agent removed the harmful dry consumer iteration (DBGdefault512).
+Pairedb8 improves its OWN control by1.04971× graph/1.06947× kernel, all15shapes and48
+checks pass. No incumbent/official speed claim. Verifier now runs pw36,bandwidth,contrarian,
+latency,tensorcore,pw36_after under one lock; latency requires45actualgraph-state checks
+first, allschools require65okCHECKs+30finite timings+JSON. TC servingMODE0only.
+
+Takeover state and handles: handover_folder/12-codex-takeover.json.
+
+### Clean-room verifier terminal 20:00:20 UTC
+
+All six harnesses (pw36, bandwidth, contrarian, latency, tensorcore MODE0, pw36_after)
+passed65/65 checks and produced30 finite timings; latency retained-output replay45/45
+also passed. No school shape beats BOTH parent brackets by>=0.3us. Overall school
+latency ratios vs initial parent: bandwidth1.343,contrarian1.224,latency1.561,tensorcore1.301
+(lower is better). Contrarian's apparent o32 initial win disappears against closing
+parent and was a torch fallback. No ports. Full table: audits/cleanroom-measure.md.
+
+Stop unchanged school policies and failed P4/stream-K variants. New bounded source
+feasibility tasks (no GPU yet): full-K/no-global-split-tail m256 design, and one concrete
+rtk first-TMA/startup dependency. Both must differ materially from closed tests and
+pass explicit gain bars before consuming more GPU time. Frozen pw36 remains the
+next official check; any new kernel must remain separate.

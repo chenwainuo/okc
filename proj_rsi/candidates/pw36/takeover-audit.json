@@ -1,0 +1,1028 @@
+{
+  "status": "ready_for_official_check_GPU65_pass_no_judge_performance_approval",
+  "reviewer": "proj_integration",
+  "hashes": {
+    "pw35": "7069218da32202825be1aada89d951cb78c57c166b4f177195c055bbb33632e8",
+    "rs32": "a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad",
+    "pw36": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+    "base": "958ad2a0197fe1f2bb57206494d9020cdc299b55f8c139a32befc7d76d4c547e"
+  },
+  "ast_node_count": 176,
+  "unmatched_parent_AST_nodes": [
+    "prepare#1"
+  ],
+  "kernel_identity": {
+    "RQCU": "rs32 exact AST string value",
+    "RWCU": "pw35 exact AST string value",
+    "kernel_fn": "both parents exact AST",
+    "remaining_top_level_nodes": "each occurrence matches pw35 or rs32"
+  },
+  "validation": {
+    "lint_ok": true,
+    "lint_warning": "multiple load_inline builds; RQFLAGS and RWFLAGS explicitly sm_90a",
+    "official_CPU_cases": 9,
+    "official_CPU_passed": 9,
+    "CPU_scope": "Tests CPU fallback only; does not validate CUDA kernels/bakes"
+  },
+  "pending": [
+    "Official checker at reset with exact sourcehash; check judge PREP/BAKE/PICK for both rq32 and rtk, including no skips",
+    "Independent judge result and promotion decision remain root responsibility"
+  ],
+  "prepare_gate_seconds": {
+    "budget": 240,
+    "rq_admission": 195,
+    "rq_pervariant": 210,
+    "rq32_admission_and_pervariant": 210,
+    "router_outer_admission": 220,
+    "router_extension_compile_admission": 180,
+    "router_pervariant": 240
+  },
+  "claims": {
+    "performance_gain_measured_for_pw36": false,
+    "judge_score": "unknown",
+    "source_changes_by_takeover_agent": false
+  },
+  "exclusive_H100_takeover_run": {
+    "tag": "takeover-r1",
+    "driver_log": "BEGIN pw35 2026-10-26T19:37:46Z\nEND pw35 2026-10-26T19:38:35Z\nBEGIN rs32 2026-10-26T19:38:35Z\nEND rs32 2026-10-26T19:39:28Z\nBEGIN pw36 2026-10-26T19:39:28Z\nEND pw36 2026-10-26T19:40:21Z\nBENCH_DONE\n",
+    "source_identity_verified": true,
+    "runtime_ownership": "Root reports container-owned shared bindlock. Earlier run3 contaminated/aborted and excluded. This reviewer inspected completed logs and no running container; has no independent continuous ownership trace.",
+    "candidates": {
+      "pw35": {
+        "json_path": "/root/okc/logs/pw36/takeover-r1-pw35.json",
+        "log_path": "/root/okc/logs/pw36/takeover-r1-pw35.log",
+        "json_sha256": "e387b3cfbb3e5195f44f7af22ecb26b5ae57f0023193b94727ba4ea93642f095",
+        "log_sha256": "02fad928274b24e997bca23aab75b1c68c3552fa204d195956d840645b1160c5",
+        "submission_sha256": "7069218da32202825be1aada89d951cb78c57c166b4f177195c055bbb33632e8",
+        "official_GPU_checks": 65,
+        "all_checks_pass": true,
+        "exact_case_coverage": true,
+        "errors_or_skipped": [],
+        "prepare_and_pick_lines": [
+          "PREP rq thread started at 0s",
+          "PREP r6 done in 33s",
+          "PREP rq thread ready at 36s (bake starts at 36s)",
+          "PICK pooler m=128 rq:s4s5hz 23.62",
+          "PICK pooler m=256 r6 29.25",
+          "PICK qkv_gate m=128 rq:s4s5hz 17.22",
+          "PICK qkv_gate m=256 rq:n256s4hz 21.15",
+          "PICK unpooler m=128 rq:s4s5hz 23.94",
+          "PICK unpooler m=256 r6 27.71",
+          "PICK o m=128 r6 10.56",
+          "PICK o m=256 r6 11.55",
+          "PICK unpooler m=1 uk-s4x 7.17",
+          "PICK unpooler m=8 uk-s4w4x 7.10",
+          "PICK router m=8 rk-s16w8z 7.62",
+          "PICK router m=16 rk-s16w8z 7.81",
+          "PICK router m=32 rk-s16w8z 8.16",
+          "PREP rw compiled in 0s (at 42s)",
+          "PICK router m=128 rt64k32b3x2z 10.56",
+          "PICK router m=256 rt64k16b6z 12.83",
+          "PREP done in 43s",
+          "PREPARE 42.5s"
+        ],
+        "probe_overheads": {
+          "replay_overhead_us": 11.536000296473503,
+          "read6mb_us": 50.016000866889954
+        },
+        "timings": [
+          {
+            "load": "decode1",
+            "layer": "qkv_gate",
+            "m": 1,
+            "yours_us": 16.912000253796577,
+            "torch_us": 21.967999637126923,
+            "sol_us": 11.274545671641791
+          },
+          {
+            "load": "decode1",
+            "layer": "o",
+            "m": 1,
+            "yours_us": 12.272000312805176,
+            "torch_us": 13.199999928474426,
+            "sol_us": 5.013626268656716
+          },
+          {
+            "load": "decode1",
+            "layer": "pooler",
+            "m": 1,
+            "yours_us": 24.272000417113304,
+            "torch_us": 31.695999205112457,
+            "sol_us": 20.039832835820896
+          },
+          {
+            "load": "decode1",
+            "layer": "unpooler",
+            "m": 1,
+            "yours_us": 12.575999833643436,
+            "torch_us": 12.816000264137983,
+            "sol_us": 2.5071188059701495
+          },
+          {
+            "load": "decode1",
+            "layer": "router",
+            "m": 1,
+            "yours_us": 11.66400033980608,
+            "torch_us": 21.136000752449036,
+            "sol_us": 2.5092585074626865
+          },
+          {
+            "load": "decode16",
+            "layer": "qkv_gate",
+            "m": 16,
+            "yours_us": 17.376000061631203,
+            "torch_us": 22.495999932289124,
+            "sol_us": 11.368539701492537
+          },
+          {
+            "load": "decode16",
+            "layer": "o",
+            "m": 16,
+            "yours_us": 13.439999893307686,
+            "torch_us": 13.088000006973743,
+            "sol_us": 5.096157611940298
+          },
+          {
+            "load": "decode16",
+            "layer": "pooler",
+            "m": 16,
+            "yours_us": 24.191999807953835,
+            "torch_us": 32.22399950027466,
+            "sol_us": 20.14987462686567
+          },
+          {
+            "load": "decode16",
+            "layer": "unpooler",
+            "m": 16,
+            "yours_us": 24.639999493956566,
+            "torch_us": 29.039999470114708,
+            "sol_us": 20.14987462686567
+          },
+          {
+            "load": "decode16",
+            "layer": "router",
+            "m": 16,
+            "yours_us": 11.93600008264184,
+            "torch_us": 21.776000037789345,
+            "sol_us": 2.587204776119403
+          },
+          {
+            "load": "decode32",
+            "layer": "qkv_gate",
+            "m": 32,
+            "yours_us": 20.78399993479252,
+            "torch_us": 22.87999913096428,
+            "sol_us": 11.4688
+          },
+          {
+            "load": "decode32",
+            "layer": "o",
+            "m": 32,
+            "yours_us": 12.896000407636166,
+            "torch_us": 13.311999849975109,
+            "sol_us": 5.18419104477612
+          },
+          {
+            "load": "decode32",
+            "layer": "pooler",
+            "m": 32,
+            "yours_us": 26.30399912595749,
+            "torch_us": 31.615998595952988,
+            "sol_us": 20.267252537313436
+          },
+          {
+            "load": "decode32",
+            "layer": "unpooler",
+            "m": 32,
+            "yours_us": 26.768000796437263,
+            "torch_us": 29.167999513447285,
+            "sol_us": 20.267252537313436
+          },
+          {
+            "load": "decode32",
+            "layer": "router",
+            "m": 32,
+            "yours_us": 12.048000004142523,
+            "torch_us": 21.983999758958817,
+            "sol_us": 2.6703474626865673
+          },
+          {
+            "load": "verify1",
+            "layer": "qkv_gate",
+            "m": 8,
+            "yours_us": 17.02400017529726,
+            "torch_us": 22.175999358296394,
+            "sol_us": 11.318409552238807
+          },
+          {
+            "load": "verify1",
+            "layer": "o",
+            "m": 8,
+            "yours_us": 12.335999868810177,
+            "torch_us": 14.495999552309513,
+            "sol_us": 5.052140895522387
+          },
+          {
+            "load": "verify1",
+            "layer": "pooler",
+            "m": 8,
+            "yours_us": 25.02400055527687,
+            "torch_us": 31.695999205112457,
+            "sol_us": 20.09118567164179
+          },
+          {
+            "load": "verify1",
+            "layer": "unpooler",
+            "m": 8,
+            "yours_us": 12.368000112473965,
+            "torch_us": 13.167999684810638,
+            "sol_us": 2.5285158208955223
+          },
+          {
+            "load": "verify1",
+            "layer": "router",
+            "m": 8,
+            "yours_us": 12.752000242471695,
+            "torch_us": 21.663999184966087,
+            "sol_us": 2.5456334328358206
+          },
+          {
+            "load": "verify16",
+            "layer": "qkv_gate",
+            "m": 128,
+            "yours_us": 20.255999639630318,
+            "torch_us": 21.91999927163124,
+            "sol_us": 12.070361791044776
+          },
+          {
+            "load": "verify16",
+            "layer": "o",
+            "m": 128,
+            "yours_us": 13.60000018030405,
+            "torch_us": 13.520000036805868,
+            "sol_us": 5.712391641791045
+          },
+          {
+            "load": "verify16",
+            "layer": "pooler",
+            "m": 128,
+            "yours_us": 26.367999613285065,
+            "torch_us": 30.079999938607216,
+            "sol_us": 20.97152
+          },
+          {
+            "load": "verify16",
+            "layer": "unpooler",
+            "m": 128,
+            "yours_us": 26.52799990028143,
+            "torch_us": 29.071999713778496,
+            "sol_us": 20.97152
+          },
+          {
+            "load": "verify16",
+            "layer": "router",
+            "m": 128,
+            "yours_us": 13.631999958306551,
+            "torch_us": 22.71999977529049,
+            "sol_us": 3.169203582089552
+          },
+          {
+            "load": "verify32",
+            "layer": "qkv_gate",
+            "m": 256,
+            "yours_us": 23.919999599456787,
+            "torch_us": 26.22400037944317,
+            "sol_us": 12.872444179104477
+          },
+          {
+            "load": "verify32",
+            "layer": "o",
+            "m": 256,
+            "yours_us": 14.479999896138906,
+            "torch_us": 14.543999917805195,
+            "sol_us": 6.4166591044776125
+          },
+          {
+            "load": "verify32",
+            "layer": "pooler",
+            "m": 256,
+            "yours_us": 31.9839995354414,
+            "torch_us": 39.39199820160866,
+            "sol_us": 21.910543283582086
+          },
+          {
+            "load": "verify32",
+            "layer": "unpooler",
+            "m": 256,
+            "yours_us": 30.62400035560131,
+            "torch_us": 30.912000685930252,
+            "sol_us": 21.910543283582086
+          },
+          {
+            "load": "verify32",
+            "layer": "router",
+            "m": 256,
+            "yours_us": 15.792000107467175,
+            "torch_us": 29.472000896930695,
+            "sol_us": 3.834345074626866
+          }
+        ]
+      },
+      "rs32": {
+        "json_path": "/root/okc/logs/pw36/takeover-r1-rs32.json",
+        "log_path": "/root/okc/logs/pw36/takeover-r1-rs32.log",
+        "json_sha256": "de253032266e82a1bf8a9d31e737129a4871249f5aa0a7ad9cd59834cff01b7d",
+        "log_sha256": "d5c45bcf64a2fff8a0309ac63d8295de25349cff2145c2bae3413b6e80c376ca",
+        "submission_sha256": "a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad",
+        "official_GPU_checks": 65,
+        "all_checks_pass": true,
+        "exact_case_coverage": true,
+        "errors_or_skipped": [],
+        "prepare_and_pick_lines": [
+          "PREP rq thread started at 0s",
+          "PREP rq32 thread started at 0s",
+          "PREP r6 done in 34s",
+          "PREP rq thread ready at 37s (bake starts at 37s)",
+          "PICK pooler m=128 rq:s4s5hz 24.10",
+          "PICK pooler m=256 r6 29.57",
+          "PICK qkv_gate m=128 rq:s4s5hz 17.38",
+          "PICK qkv_gate m=256 rq:n256s4hz 21.22",
+          "PICK unpooler m=128 rq:s4s5hz 24.45",
+          "PICK unpooler m=256 r6 27.90",
+          "PICK o m=128 r6 10.82",
+          "PICK o m=256 r6 11.62",
+          "PICK unpooler m=1 uk-s4x 7.07",
+          "PICK unpooler m=8 r6 7.42",
+          "PICK router m=8 rk-s16w8z 7.78",
+          "PICK router m=16 rk-s16w8z 7.81",
+          "PICK router m=32 rk-s8z 8.35",
+          "PREP rq32 thread ready at 38s",
+          "PREP rq32 bake starts at 43s",
+          "PICK pooler m=32 rq:t32s5hz-k4 21.98",
+          "PICK pooler m=16 r6 21.38",
+          "PICK qkv_gate m=32 rq:t32s6hze-k6 14.91",
+          "PICK qkv_gate m=16 r6 14.75",
+          "PICK unpooler m=32 rq:t32s5hze-k2 21.92",
+          "PICK unpooler m=16 r6 21.76",
+          "PICK o m=32 r6 9.76",
+          "PICK o m=16 r6 8.93",
+          "PICK o m=128 rq:h128s8e-k1 10.98",
+          "PREP rw compiled in 0s",
+          "PICK router m=128 rw64k32s8z 11.65",
+          "PICK router m=256 rw64k32r3x2z 14.88",
+          "PREP done in 46s",
+          "PREPARE 45.5s"
+        ],
+        "probe_overheads": {
+          "replay_overhead_us": 13.599999714642763,
+          "read6mb_us": 51.11999996006489
+        },
+        "timings": [
+          {
+            "load": "decode1",
+            "layer": "qkv_gate",
+            "m": 1,
+            "yours_us": 17.456000670790672,
+            "torch_us": 22.5600004196167,
+            "sol_us": 11.274545671641791
+          },
+          {
+            "load": "decode1",
+            "layer": "o",
+            "m": 1,
+            "yours_us": 13.87199992313981,
+            "torch_us": 14.32000007480383,
+            "sol_us": 5.013626268656716
+          },
+          {
+            "load": "decode1",
+            "layer": "pooler",
+            "m": 1,
+            "yours_us": 24.447999894618988,
+            "torch_us": 32.048000022768974,
+            "sol_us": 20.039832835820896
+          },
+          {
+            "load": "decode1",
+            "layer": "unpooler",
+            "m": 1,
+            "yours_us": 12.463999912142754,
+            "torch_us": 13.807999901473522,
+            "sol_us": 2.5071188059701495
+          },
+          {
+            "load": "decode1",
+            "layer": "router",
+            "m": 1,
+            "yours_us": 12.159999925643206,
+            "torch_us": 21.455999463796616,
+            "sol_us": 2.5092585074626865
+          },
+          {
+            "load": "decode16",
+            "layer": "qkv_gate",
+            "m": 16,
+            "yours_us": 17.93600060045719,
+            "torch_us": 22.76800014078617,
+            "sol_us": 11.368539701492537
+          },
+          {
+            "load": "decode16",
+            "layer": "o",
+            "m": 16,
+            "yours_us": 12.815999798476696,
+            "torch_us": 13.760000001639128,
+            "sol_us": 5.096157611940298
+          },
+          {
+            "load": "decode16",
+            "layer": "pooler",
+            "m": 16,
+            "yours_us": 24.671999737620354,
+            "torch_us": 32.59199857711792,
+            "sol_us": 20.14987462686567
+          },
+          {
+            "load": "decode16",
+            "layer": "unpooler",
+            "m": 16,
+            "yours_us": 25.008000433444977,
+            "torch_us": 29.47199996560812,
+            "sol_us": 20.14987462686567
+          },
+          {
+            "load": "decode16",
+            "layer": "router",
+            "m": 16,
+            "yours_us": 12.62399973347783,
+            "torch_us": 22.175999358296394,
+            "sol_us": 2.587204776119403
+          },
+          {
+            "load": "decode32",
+            "layer": "qkv_gate",
+            "m": 32,
+            "yours_us": 18.079999834299088,
+            "torch_us": 23.1520002707839,
+            "sol_us": 11.4688
+          },
+          {
+            "load": "decode32",
+            "layer": "o",
+            "m": 32,
+            "yours_us": 13.760000001639128,
+            "torch_us": 13.743999879807234,
+            "sol_us": 5.18419104477612
+          },
+          {
+            "load": "decode32",
+            "layer": "pooler",
+            "m": 32,
+            "yours_us": 25.03999974578619,
+            "torch_us": 32.016001641750336,
+            "sol_us": 20.267252537313436
+          },
+          {
+            "load": "decode32",
+            "layer": "unpooler",
+            "m": 32,
+            "yours_us": 24.687999859452248,
+            "torch_us": 29.759999364614487,
+            "sol_us": 20.267252537313436
+          },
+          {
+            "load": "decode32",
+            "layer": "router",
+            "m": 32,
+            "yours_us": 12.335999868810177,
+            "torch_us": 22.47999981045723,
+            "sol_us": 2.6703474626865673
+          },
+          {
+            "load": "verify1",
+            "layer": "qkv_gate",
+            "m": 8,
+            "yours_us": 17.376000061631203,
+            "torch_us": 22.703999653458595,
+            "sol_us": 11.318409552238807
+          },
+          {
+            "load": "verify1",
+            "layer": "o",
+            "m": 8,
+            "yours_us": 12.97600008547306,
+            "torch_us": 13.743999879807234,
+            "sol_us": 5.052140895522387
+          },
+          {
+            "load": "verify1",
+            "layer": "pooler",
+            "m": 8,
+            "yours_us": 24.480000138282776,
+            "torch_us": 31.936001032590866,
+            "sol_us": 20.09118567164179
+          },
+          {
+            "load": "verify1",
+            "layer": "unpooler",
+            "m": 8,
+            "yours_us": 12.575999833643436,
+            "torch_us": 13.887999579310417,
+            "sol_us": 2.5285158208955223
+          },
+          {
+            "load": "verify1",
+            "layer": "router",
+            "m": 8,
+            "yours_us": 12.527999933809042,
+            "torch_us": 21.967999637126923,
+            "sol_us": 2.5456334328358206
+          },
+          {
+            "load": "verify16",
+            "layer": "qkv_gate",
+            "m": 128,
+            "yours_us": 20.655999891459942,
+            "torch_us": 22.23999984562397,
+            "sol_us": 12.070361791044776
+          },
+          {
+            "load": "verify16",
+            "layer": "o",
+            "m": 128,
+            "yours_us": 13.887999579310417,
+            "torch_us": 13.935999944806099,
+            "sol_us": 5.712391641791045
+          },
+          {
+            "load": "verify16",
+            "layer": "pooler",
+            "m": 128,
+            "yours_us": 27.823999524116516,
+            "torch_us": 31.055999919772148,
+            "sol_us": 20.97152
+          },
+          {
+            "load": "verify16",
+            "layer": "unpooler",
+            "m": 128,
+            "yours_us": 28.12799997627735,
+            "torch_us": 30.447999946773052,
+            "sol_us": 20.97152
+          },
+          {
+            "load": "verify16",
+            "layer": "router",
+            "m": 128,
+            "yours_us": 14.527999795973301,
+            "torch_us": 23.168000392615795,
+            "sol_us": 3.169203582089552
+          },
+          {
+            "load": "verify32",
+            "layer": "qkv_gate",
+            "m": 256,
+            "yours_us": 23.951999843120575,
+            "torch_us": 26.655999943614006,
+            "sol_us": 12.872444179104477
+          },
+          {
+            "load": "verify32",
+            "layer": "o",
+            "m": 256,
+            "yours_us": 15.039999969303608,
+            "torch_us": 15.00799972563982,
+            "sol_us": 6.4166591044776125
+          },
+          {
+            "load": "verify32",
+            "layer": "pooler",
+            "m": 256,
+            "yours_us": 32.495999708771706,
+            "torch_us": 34.591998904943466,
+            "sol_us": 21.910543283582086
+          },
+          {
+            "load": "verify32",
+            "layer": "unpooler",
+            "m": 256,
+            "yours_us": 30.81599995493889,
+            "torch_us": 31.247999519109726,
+            "sol_us": 21.910543283582086
+          },
+          {
+            "load": "verify32",
+            "layer": "router",
+            "m": 256,
+            "yours_us": 18.160000443458557,
+            "torch_us": 29.7279991209507,
+            "sol_us": 3.834345074626866
+          }
+        ]
+      },
+      "pw36": {
+        "json_path": "/root/okc/logs/pw36/takeover-r1-pw36.json",
+        "log_path": "/root/okc/logs/pw36/takeover-r1-pw36.log",
+        "json_sha256": "b43758aa2e307ebaaf8f958920ba88050156806634349e1cd873b4eecf2e55a6",
+        "log_sha256": "e5a6a7f5792f65cc56178850a7bd695ac631310779681f04a10afa2a6334c090",
+        "submission_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+        "official_GPU_checks": 65,
+        "all_checks_pass": true,
+        "exact_case_coverage": true,
+        "errors_or_skipped": [],
+        "prepare_and_pick_lines": [
+          "PREP rq thread started at 0s",
+          "PREP rq32 thread started at 0s",
+          "PREP r6 done in 34s",
+          "PREP rq thread ready at 37s (bake starts at 37s)",
+          "PICK pooler m=128 rq:s4s5hz 23.62",
+          "PICK pooler m=256 r6 29.41",
+          "PICK qkv_gate m=128 rq:s4s5hz 16.90",
+          "PICK qkv_gate m=256 rq:n256s4hz 20.99",
+          "PICK unpooler m=128 rq:s4s5hz 24.13",
+          "PICK unpooler m=256 r6 27.74",
+          "PICK o m=128 r6 10.59",
+          "PICK o m=256 r6 11.62",
+          "PREP phase rq done at 39s",
+          "PICK unpooler m=1 uk-s4z 7.26",
+          "PICK unpooler m=8 uk-s4x 7.14",
+          "PICK router m=8 rk-s16w8z 7.52",
+          "PICK router m=16 rk-s16w8z 7.97",
+          "PICK router m=32 rk-s8z 8.10",
+          "PREP phase gx done at 43s",
+          "PREP rq32 thread ready at 37s",
+          "PREP rq32 bake starts at 43s",
+          "PICK pooler m=32 rq:t32s5hze-k4 21.63",
+          "PICK pooler m=16 r6 21.38",
+          "PICK qkv_gate m=32 rq:t32s5hze-k6 14.85",
+          "PICK qkv_gate m=16 r6 14.72",
+          "PICK unpooler m=32 rq:t32s5hze-k2 21.50",
+          "PICK unpooler m=16 r6 21.79",
+          "PICK o m=32 rq:t32s6hze-k2 9.60",
+          "PICK o m=16 r6 8.80",
+          "PICK o m=128 rq:h128s8e-k1 10.66",
+          "PREP phase rq32 done at 46s",
+          "PREP rw compiled in 0s (at 46s)",
+          "PICK router m=128 rt64k32b4z 10.46",
+          "PICK router m=256 rt64k32b3x2z 12.77",
+          "PREP phase router done at 46s",
+          "PREP done in 46s",
+          "PREPARE 46.0s"
+        ],
+        "probe_overheads": {
+          "replay_overhead_us": 12.144000269472599,
+          "read6mb_us": 50.07999949157238
+        },
+        "timings": [
+          {
+            "load": "decode1",
+            "layer": "qkv_gate",
+            "m": 1,
+            "yours_us": 17.216000705957413,
+            "torch_us": 22.84800074994564,
+            "sol_us": 11.274545671641791
+          },
+          {
+            "load": "decode1",
+            "layer": "o",
+            "m": 1,
+            "yours_us": 12.624000199139118,
+            "torch_us": 13.440000358968973,
+            "sol_us": 5.013626268656716
+          },
+          {
+            "load": "decode1",
+            "layer": "pooler",
+            "m": 1,
+            "yours_us": 24.54400062561035,
+            "torch_us": 31.968001276254654,
+            "sol_us": 20.039832835820896
+          },
+          {
+            "load": "decode1",
+            "layer": "unpooler",
+            "m": 1,
+            "yours_us": 12.335999868810177,
+            "torch_us": 13.551999814808369,
+            "sol_us": 2.5071188059701495
+          },
+          {
+            "load": "decode1",
+            "layer": "router",
+            "m": 1,
+            "yours_us": 12.192000169306993,
+            "torch_us": 21.536000072956085,
+            "sol_us": 2.5092585074626865
+          },
+          {
+            "load": "decode16",
+            "layer": "qkv_gate",
+            "m": 16,
+            "yours_us": 17.760000191628933,
+            "torch_us": 22.703999653458595,
+            "sol_us": 11.368539701492537
+          },
+          {
+            "load": "decode16",
+            "layer": "o",
+            "m": 16,
+            "yours_us": 12.655999977141619,
+            "torch_us": 13.69599997997284,
+            "sol_us": 5.096157611940298
+          },
+          {
+            "load": "decode16",
+            "layer": "pooler",
+            "m": 16,
+            "yours_us": 24.3520000949502,
+            "torch_us": 31.90400078892708,
+            "sol_us": 20.14987462686567
+          },
+          {
+            "load": "decode16",
+            "layer": "unpooler",
+            "m": 16,
+            "yours_us": 24.89599958062172,
+            "torch_us": 29.80799973011017,
+            "sol_us": 20.14987462686567
+          },
+          {
+            "load": "decode16",
+            "layer": "router",
+            "m": 16,
+            "yours_us": 12.271999847143888,
+            "torch_us": 21.935999393463135,
+            "sol_us": 2.587204776119403
+          },
+          {
+            "load": "decode32",
+            "layer": "qkv_gate",
+            "m": 32,
+            "yours_us": 18.000000156462193,
+            "torch_us": 22.95999974012375,
+            "sol_us": 11.4688
+          },
+          {
+            "load": "decode32",
+            "layer": "o",
+            "m": 32,
+            "yours_us": 13.279999606311321,
+            "torch_us": 13.504000380635262,
+            "sol_us": 5.18419104477612
+          },
+          {
+            "load": "decode32",
+            "layer": "pooler",
+            "m": 32,
+            "yours_us": 24.86399933695793,
+            "torch_us": 32.00000151991844,
+            "sol_us": 20.267252537313436
+          },
+          {
+            "load": "decode32",
+            "layer": "unpooler",
+            "m": 32,
+            "yours_us": 24.70399998128414,
+            "torch_us": 29.759999364614487,
+            "sol_us": 20.267252537313436
+          },
+          {
+            "load": "decode32",
+            "layer": "router",
+            "m": 32,
+            "yours_us": 12.655999977141619,
+            "torch_us": 22.223999723792076,
+            "sol_us": 2.6703474626865673
+          },
+          {
+            "load": "verify1",
+            "layer": "qkv_gate",
+            "m": 8,
+            "yours_us": 17.184000462293625,
+            "torch_us": 22.400000132620335,
+            "sol_us": 11.318409552238807
+          },
+          {
+            "load": "verify1",
+            "layer": "o",
+            "m": 8,
+            "yours_us": 12.703999876976013,
+            "torch_us": 13.42400023713708,
+            "sol_us": 5.052140895522387
+          },
+          {
+            "load": "verify1",
+            "layer": "pooler",
+            "m": 8,
+            "yours_us": 24.368000216782093,
+            "torch_us": 31.599998474121094,
+            "sol_us": 20.09118567164179
+          },
+          {
+            "load": "verify1",
+            "layer": "unpooler",
+            "m": 8,
+            "yours_us": 12.256000190973282,
+            "torch_us": 13.75999953597784,
+            "sol_us": 2.5285158208955223
+          },
+          {
+            "load": "verify1",
+            "layer": "router",
+            "m": 8,
+            "yours_us": 12.192000169306993,
+            "torch_us": 21.776000037789345,
+            "sol_us": 2.5456334328358206
+          },
+          {
+            "load": "verify16",
+            "layer": "qkv_gate",
+            "m": 128,
+            "yours_us": 19.999999552965164,
+            "torch_us": 22.288000211119652,
+            "sol_us": 12.070361791044776
+          },
+          {
+            "load": "verify16",
+            "layer": "o",
+            "m": 128,
+            "yours_us": 14.063999988138676,
+            "torch_us": 14.08000010997057,
+            "sol_us": 5.712391641791045
+          },
+          {
+            "load": "verify16",
+            "layer": "pooler",
+            "m": 128,
+            "yours_us": 26.768000796437263,
+            "torch_us": 30.592000111937523,
+            "sol_us": 20.97152
+          },
+          {
+            "load": "verify16",
+            "layer": "unpooler",
+            "m": 128,
+            "yours_us": 27.39199995994568,
+            "torch_us": 29.504000209271908,
+            "sol_us": 20.97152
+          },
+          {
+            "load": "verify16",
+            "layer": "router",
+            "m": 128,
+            "yours_us": 14.08000010997057,
+            "torch_us": 23.296000435948372,
+            "sol_us": 3.169203582089552
+          },
+          {
+            "load": "verify32",
+            "layer": "qkv_gate",
+            "m": 256,
+            "yours_us": 23.93599972128868,
+            "torch_us": 26.655999943614006,
+            "sol_us": 12.872444179104477
+          },
+          {
+            "load": "verify32",
+            "layer": "o",
+            "m": 256,
+            "yours_us": 14.76799976080656,
+            "torch_us": 15.359999611973763,
+            "sol_us": 6.4166591044776125
+          },
+          {
+            "load": "verify32",
+            "layer": "pooler",
+            "m": 256,
+            "yours_us": 32.255999743938446,
+            "torch_us": 33.48799981176853,
+            "sol_us": 21.910543283582086
+          },
+          {
+            "load": "verify32",
+            "layer": "unpooler",
+            "m": 256,
+            "yours_us": 30.943999998271465,
+            "torch_us": 31.15200065076351,
+            "sol_us": 21.910543283582086
+          },
+          {
+            "load": "verify32",
+            "layer": "router",
+            "m": 256,
+            "yours_us": 15.839999541640282,
+            "torch_us": 29.664000496268272,
+            "sol_us": 3.834345074626866
+          }
+        ]
+      }
+    },
+    "target_table": [
+      {
+        "layer": "qkv_gate",
+        "m": 32,
+        "pw35": 20.78399993479252,
+        "rs32": 18.079999834299088,
+        "pw36": 18.000000156462193,
+        "pw36_minus_pw35_us": -2.783999778330326,
+        "pw36_minus_rs32_us": -0.07999967783689499
+      },
+      {
+        "layer": "pooler",
+        "m": 32,
+        "pw35": 26.30399912595749,
+        "rs32": 25.03999974578619,
+        "pw36": 24.86399933695793,
+        "pw36_minus_pw35_us": -1.4399997889995575,
+        "pw36_minus_rs32_us": -0.17600040882825851
+      },
+      {
+        "layer": "unpooler",
+        "m": 32,
+        "pw35": 26.768000796437263,
+        "rs32": 24.687999859452248,
+        "pw36": 24.70399998128414,
+        "pw36_minus_pw35_us": -2.064000815153122,
+        "pw36_minus_rs32_us": 0.01600012183189392
+      },
+      {
+        "layer": "o",
+        "m": 32,
+        "pw35": 12.896000407636166,
+        "rs32": 13.760000001639128,
+        "pw36": 13.279999606311321,
+        "pw36_minus_pw35_us": 0.38399919867515564,
+        "pw36_minus_rs32_us": -0.4800003953278065
+      },
+      {
+        "layer": "router",
+        "m": 128,
+        "pw35": 13.631999958306551,
+        "rs32": 14.527999795973301,
+        "pw36": 14.08000010997057,
+        "pw36_minus_pw35_us": 0.44800015166401863,
+        "pw36_minus_rs32_us": -0.4479996860027313
+      },
+      {
+        "layer": "router",
+        "m": 256,
+        "pw35": 15.792000107467175,
+        "rs32": 18.160000443458557,
+        "pw36": 15.839999541640282,
+        "pw36_minus_pw35_us": 0.04799943417310715,
+        "pw36_minus_rs32_us": -2.3200009018182755
+      },
+      {
+        "layer": "unpooler",
+        "m": 128,
+        "pw35": 26.52799990028143,
+        "rs32": 28.12799997627735,
+        "pw36": 27.39199995994568,
+        "pw36_minus_pw35_us": 0.8640000596642494,
+        "pw36_minus_rs32_us": -0.7360000163316727
+      }
+    ],
+    "pw36_target_bake_lines": [
+      "BAKE pooler m=32 rq:t32s5hze-k4 21.63 (ok 3.2e-03) at 43s",
+      "BAKE pooler m=32 rq:t32s6hze-k4 21.92 (ok 3.1e-03) at 43s",
+      "BAKE pooler m=32 rq:t32s5hz-k4 21.66 (ok 3.1e-03) at 43s",
+      "BAKE pooler m=32 r6 23.26 (before variants 23.42, after variants 23.26) at 43s",
+      "PICK pooler m=32 rq:t32s5hze-k4 21.63",
+      "BAKE qkv_gate m=32 rq:t32s5hze-k6 14.85 (ok 3.6e-03) at 44s",
+      "BAKE qkv_gate m=32 rq:t32s5hze-k7 15.07 (ok 3.8e-03) at 44s",
+      "BAKE qkv_gate m=32 rq:t32s5hz-k6 15.01 (ok 3.6e-03) at 44s",
+      "BAKE qkv_gate m=32 rq:t32s6hze-k6 14.98 (ok 3.7e-03) at 44s",
+      "BAKE qkv_gate m=32 r6 18.08 (before variants 18.08, after variants 18.14) at 44s",
+      "PICK qkv_gate m=32 rq:t32s5hze-k6 14.85",
+      "BAKE unpooler m=32 rq:t32s5hze-k2 21.50 (ok 2.4e-03) at 45s",
+      "BAKE unpooler m=32 rq:t32s6hze-k2 21.76 (ok 2.4e-03) at 45s",
+      "BAKE unpooler m=32 rq:t32s6hz-k2 21.95 (ok 2.5e-03) at 45s",
+      "BAKE unpooler m=32 r6 23.10 (before variants 23.52, after variants 23.10) at 45s",
+      "PICK unpooler m=32 rq:t32s5hze-k2 21.50",
+      "BAKE o m=32 rq:t32s5hze-k2 9.63 (ok 2.4e-03) at 45s",
+      "BAKE o m=32 rq:t32s6hze-k2 9.60 (ok 2.4e-03) at 45s",
+      "BAKE o m=32 rq:t32s5ze-k2 9.63 (ok 2.4e-03) at 45s",
+      "BAKE o m=32 r6 9.73 (before variants 9.76, after variants 9.73) at 45s",
+      "PICK o m=32 rq:t32s6hze-k2 9.60",
+      "BAKE router m=128 r6 16.29",
+      "BAKE router m=128 rw64k32s8z 11.46",
+      "BAKE router m=128 rt64k32b3x2z 10.66",
+      "BAKE router m=128 rt64k32b4z 10.46",
+      "BAKE router m=128 rt64k32b3x2bz 10.53",
+      "BAKE router m=128 r6 F1 pre 16.22 post 16.00 base 16.00",
+      "PICK router m=128 rt64k32b4z 10.46",
+      "BAKE router m=256 r6 14.75",
+      "BAKE router m=256 rw64k32r3x2z 14.69",
+      "BAKE router m=256 rt64k16b6z 13.12",
+      "BAKE router m=256 rt64k32b3x2z 12.77",
+      "BAKE router m=256 r6 F1 pre 15.10 post 14.78 base 14.75",
+      "PICK router m=256 rt64k32b3x2z 12.77"
+    ],
+    "limitations": [
+      "Fixed sequential order pw35,rs32,pw36; raw sample arrays and CIs unavailable in summary JSON.",
+      "Empty graph replay overhead varies11.536/13.600/12.144us; no retrospective overhead subtraction.",
+      "pw36 unpooler128 is+0.864us vs pw35 in this run; source inherited from rs32 and no causal regression established from this fixed-order sample.",
+      "These H100 numbers cannot establish H200 board score; judge within-run bake and official score remain required."
+    ]
+  }
+}

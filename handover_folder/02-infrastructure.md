@@ -1,5 +1,7 @@
 # 02 — Infrastructure
 
+> **Takeover correction (2026-10-26):** `/root/okc_run.sh` now bind-mounts the shared `/tmp/gpu.lock` at `/gpu.lock` and acquires it **inside** the named container. `/root/gpu_lock.sh` is a compatibility passthrough. Do not add a host flock around the same lock. Never unlink the lock file. Use bounded named jobs and verify actual container termination. The old outer lock let Docker jobs survive their clients and overlap. `--prepare-only` also executes GPU work and must use this lock. Source: `proj_rsi/tools/h100_container.sh`.
+
 ## The judge (okc)
 - `okc` CLI is installed locally; the loop wraps it: `python3 -m proj_rsi {status,lint,cpu-check,result,board,check,wait,propose,review,decide,incumbent,quota}` (code in `proj_rsi/__main__.py`, `runner.py`, `ledger.py`, `score.py`, `okc_result.py`, `static_check.py`, `correctness.py`).
 - A check: `python3 -m proj_rsi check proj_rsi/candidates/<cand> --experiment <cand> --against <job>` (lint → quota guard → `okc check` with --no-wait → wait → archive to `results/proj-rsi/jobs/<job>.{json,log,txt}` → ledger). Add `--scored` for a scored submission (counts on the board). `--reserve N` keeps N checks back.

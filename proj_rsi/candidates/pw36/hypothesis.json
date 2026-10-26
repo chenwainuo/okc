@@ -1,0 +1,17 @@
+{
+ "id": "pw36",
+ "parent": "pw35 (5d880cd0aa504209, 3278.6) + rs32 (fbf6371, fb548b5dc6f04696, 3200.6); common base pw34 (49b22d8)",
+ "claim": "Clean three-way merge of the two additive sections over pw34 @ 49b22d8: pw35's rtk one-node router (router m=128/256) and rs32's small-m rq (NT=32/16 instances in a second extension compiled on its own thread, HALF 64-row mode, EARLY loads, post-gx bake against the true incumbent pick with the F1 rule and warm-up discard; dispatch by exact m). The sections touch disjoint shapes, so the judge gains add: pw35's router -1.9/-2.2 at m=128/256 and rs32's decode32 qkv/o/pooler/unpooler -4.45/-0.80/-1.10/-1.69 (+ qkv m=16 -1.2) -> expected ~3185-3200 judge-us.",
+ "paths": "Prepare order: rq + rq32 compile threads at the top, r6 phase, rq bake (m=128/256), gx, rq32 bake (m=16/32, <=4 paths per (layer, m), budget-30 guard), router build + bake (_rsbake, budget-20 gate) last; each phase prints 'PREP phase <name> done at Ns'. No kernel code changed.",
+ "target_shapes": [
+  "router m=128/256: same picks as pw35 (rt64k32b3x2z on the judge)",
+  "qkv/pooler/unpooler/o m=32 (+qkv m=16): same picks as rs32 (rq t32s5hze / t16s5hze)",
+  "every other shape within drift of the better parent"
+ ],
+ "kill_if": "router paths skipped-budget on the judge, or any decode32 / router shape worse than the better parent by more than ~0.6 judge-us",
+ "risks": [
+  "Judge prepare length: r6 105-120 s + rq/gx/rq32 + router build ~37 s -> ~150-185 s; the router gate is budget-20 (220 s), so a slow judge r6 phase still fits but with less margin than either parent.",
+  "Self-zeroing state is disjoint: rq32 paths use their own per-layer cnt tensors (allocated in _rqsbake), the rtk router its rw_cnt/rs_cnt; no shared workspace between the two sections, so no cross-section reset ordering.",
+  "Two extra extensions (rq32 + rw/rt) on top of rq: GPU memory and compile threads concurrently with r6 tuning."
+ ]
+}
