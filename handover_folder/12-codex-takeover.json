@@ -1,5 +1,5 @@
 {
-  "written_at_utc": "2026-10-26T20:08:21.929234+00:00",
+  "written_at_utc": "2026-10-26T20:38:07.218026+00:00",
   "supervisor": "Codex /root",
   "scope": "Continue Claude muse_bf16_proj RSI work from session notes + handover_folder; preserve prior work.",
   "objectives": {
@@ -116,14 +116,17 @@
   ],
   "next_implementation": [
     {
-      "owner": "proj_integration",
-      "directory": "proj_rsi/candidates/rs256full/",
-      "hypothesis": "Conditional full-K/no-split-reduction m256 geometry with mergedK256 slots; firstcheckclosedwork/resource/roofline beforecode; >=1us poolerbar; noGPUyet"
+      "directory": "proj_rsi/candidates/rtk_early/",
+      "state": "CLOSED_GAIN_BAR_FAILED",
+      "result": "m128 graph+.480us/F1+.544us; m256 graph+.096us/F1+.192us; allcorrectnesspasses; noport/retry",
+      "evidence": "proj_rsi/candidates/rtk_early/RESULTS.md"
     },
     {
-      "owner": "proj_tracks",
-      "directory": "proj_rsi/candidates/rtk_early/",
-      "hypothesis": "Oneavoidablerouterfirst-TMA/startup dependency versusshippedrtk; >=.5us bar; noGPUyet"
+      "directory": "proj_rsi/candidates/rs256full/",
+      "state": "CLOSED_VALID_SYNTHETIC_INCONCLUSIVE_PORT_MODEL",
+      "result": "v1hostinitinvalid; v2fixedoptin andpassed27syntheticchecks. Producercoverage.77344<.95; resident1303.68cycles>1200; nofullmatmul/sweep/physicalbound claim",
+      "evidence": "proj_rsi/candidates/rs256full/port02.json"
     }
-  ]
+  ],
+  "next_action": "Official CHECK of frozenpw36 atreset viaactualwaiter; inspectH200PREP/BAKE/PICK/result beforepromotion. Furtherkernelwork needsnewfalsifiablehypothesis distinctfromclosedtracks."
 }

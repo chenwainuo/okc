@@ -1,0 +1,64 @@
+{
+  "run": "rs256-port01",
+  "status": "CLOSED_RUNTIME_PREFLIGHT_INVALID_NO_PROBE_KERNELS",
+  "source_sha256": "cc46c06739966806e4bd86ca078824e6d768068e8bac9426937b0f2b5fbf1774",
+  "remote_source_sha256_matches": true,
+  "root_pid": 348717,
+  "container": "okc-proj-rs256-port01",
+  "command": "timeout 30s /tmp/rs256full-port-probe 128 9",
+  "build": {
+    "status": "PASS",
+    "all_modes": {
+      "registers": 168,
+      "stack_bytes": 0,
+      "spill_store_bytes": 0,
+      "spill_load_bytes": 0
+    },
+    "warnings_C75": false
+  },
+  "runtime": {
+    "gpu": "NVIDIA H100 80GB HBM3",
+    "sms": 132,
+    "mode": 1,
+    "local_bytes": 0,
+    "requested_dynamic_shared_bytes": 164928,
+    "reported_ctas_per_sm": 0,
+    "sample_count": 0,
+    "result_count": 0,
+    "probe_kernel_launches": 0,
+    "numeric_gate": "NOT_RUN",
+    "snapshot_gate": "NOT_RUN",
+    "writes_gate": "NOT_RUN",
+    "overlap_gate": "NOT_RUN"
+  },
+  "diagnosis": {
+    "type": "HARNESS_ATTRIBUTE_INITIALIZATION_ORDER",
+    "observed": "info<1>() rejects zero occupancy before the launch loop.",
+    "source_path": "proj_rsi/candidates/rs256full/port_probe.cu",
+    "call_order": "main line280 info<1>() -> info cudaOccupancyMaxActiveBlocksPerMultiprocessor(SMEM164928); cudaFuncSetAttribute(MaxDynamicSharedMemorySize,SMEM) exists only in launch(), reached from main line290 after info.",
+    "certainty": "Source-proven ordering defect; default maxDynamicSharedSizeBytes was not logged, so exact runtime attribute value is inferred rather than measured.",
+    "implication": "Zero occupancy is invalid evidence for geometry or register fit because opt-in dynamic shared-memory was not configured before query.",
+    "expected_exit_code_from_source": 3,
+    "exit_code_directly_observed": false
+  },
+  "decision": "Close this run without retry, source fix, extra geometry, full-matmul implementation, or performance inference.",
+  "model_status": "UNRESOLVED: aggregate1536 versus separate896 cycle assumptions untested.",
+  "runtime_ownership_terminal_observation": "read-only ps rootPID348717 absent; docker ps empty",
+  "evidence": {
+    "/root/okc/logs/rs256-port01.log": {
+      "sha256": "32e5a29fb9fc5b98da0dd4c86808bfe0be18f594a13132550be73ad0a92e17d1",
+      "bytes": 224,
+      "text": "REJECT spills or occupancy\nGEOMETRY gpu=NVIDIA H100 80GB HBM3 sms=132 ctas=128 threads=384 token_tile=64 channel_tile=128 merged_k=256 stages=2 iters=128 reps=9\nATTR mode=1 regs=168 local=0 dynamic_smem=164928 ctas_per_sm=0\n"
+    },
+    "/root/okc/logs/rs256-port01-build.log": {
+      "sha256": "6e3095d22b9cbf8414f53dd873b925929540be495aca2e129902269967a50584",
+      "bytes": 1049,
+      "text": "ptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_Z5probeILi3EEvPKhPfPhP5Stampij9TensorMap' for 'sm_90a'\nptxas info    : Function properties for _Z5probeILi3EEvPKhPfPhP5Stampij9TensorMap\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 168 registers, used 2 barriers\nptxas info    : Compile time = 87.766 ms\nptxas info    : Compiling entry function '_Z5probeILi2EEvPKhPfPhP5Stampij9TensorMap' for 'sm_90a'\nptxas info    : Function properties for _Z5probeILi2EEvPKhPfPhP5Stampij9TensorMap\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 168 registers, used 2 barriers\nptxas info    : Compile time = 21.776 ms\nptxas info    : Compiling entry function '_Z5probeILi1EEvPKhPfPhP5Stampij9TensorMap' for 'sm_90a'\nptxas info    : Function properties for _Z5probeILi1EEvPKhPfPhP5Stampij9TensorMap\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 168 registers, used 2 barriers\nptxas info    : Compile time = 72.452 ms\n"
+    },
+    "/root/okc/logs/rs256-port01-host.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "text": ""
+    }
+  }
+}

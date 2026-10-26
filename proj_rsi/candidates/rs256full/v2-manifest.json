@@ -1,0 +1,150 @@
+{
+  "status": "HOST_SETUP_FIX_ONLY_CPU_AND_SASS_PASS_GPU_UNRUN",
+  "port01_status": "INVALID_OCCUPANCY_QUERY_BEFORE_DYNAMIC_SHARED_OPTIN_NO_PROBE_KERNELS",
+  "source_delta": "host info() sets/prints dynamic shared opt-in before occupancy query; build-comment names updated",
+  "normalized_device_source_identical": true,
+  "normalized_SASS_all_three_kernels_identical": true,
+  "runtime_attribute_values": "UNMEASURED_NO_GPU_LAUNCH",
+  "nvcc": "Build cuda_12.8.r12.8/compiler.35583870_0",
+  "CPU_proof": {
+    "status": "CPU_PROOF_PASS_GPU_UNRUN_PORT_MODEL_UNRESOLVED",
+    "source_sha256": "fe55f19ba18d6e213ec038f4d068a771aa6190766b5aa72926fe95966ffe2ade",
+    "geometry": {
+      "channels": 128,
+      "tokens": 64,
+      "merged_k": 256,
+      "math_warpgroups": 2,
+      "stages": 2,
+      "ctas": 128,
+      "dynamic_shared_bytes_including_alignment": 164928,
+      "A_double_buffer_regs_per_math_thread": 128,
+      "accumulator_regs_per_math_thread": 32,
+      "producer_register_allocation": 40,
+      "consumer_register_allocation": 232
+    },
+    "bytes_per_CTA_round": {
+      "TMA_write": 81920,
+      "LDS_packed_W": 49152,
+      "WGMMA_B_read": 65536,
+      "read_total": 114688,
+      "aggregate": 196608
+    },
+    "conditional_cycle_floors": {
+      "tensor": 1024,
+      "aggregate_128B_read_write": 1536,
+      "separate_128B_read_write": 896
+    },
+    "checks": {
+      "all_49152_W_bytes_read_once": true,
+      "all_32768_X_bytes_SW128_bijective": true,
+      "all_16384_register_pairs_decode_to_exact_bf16_ones": true,
+      "disjoint_resident_and_producer_80KiB_slots": true
+    },
+    "runtime_checks": [
+      "all 1048576 f32 accumulators == 256*iters (all zero in producer-only)",
+      "128 full 80KiB producer snapshots == source byte-for-byte",
+      "writes==iters, progress==iters (producer-only progress==0)",
+      "exactly128 distinct SM IDs; runtime occupancy==1; localSizeBytes==0"
+    ],
+    "limit": "synthetic all-ones pack: no escape walk, full matmul, input-probe correction, fallback, or speedup claim"
+  },
+  "port01_build": {
+    "source_sha256": "cc46c06739966806e4bd86ca078824e6d768068e8bac9426937b0f2b5fbf1774",
+    "ptxas": "ptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_Z5probeILi3EEvPKhPfPhP5Stampij9TensorMap' for 'sm_90a'\nptxas info    : Function properties for _Z5probeILi3EEvPKhPfPhP5Stampij9TensorMap\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 168 registers, used 2 barriers\nptxas info    : Compile time = 79.433 ms\nptxas info    : Compiling entry function '_Z5probeILi2EEvPKhPfPhP5Stampij9TensorMap' for 'sm_90a'\nptxas info    : Function properties for _Z5probeILi2EEvPKhPfPhP5Stampij9TensorMap\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 168 registers, used 2 barriers\nptxas info    : Compile time = 19.810 ms\nptxas info    : Compiling entry function '_Z5probeILi1EEvPKhPfPhP5Stampij9TensorMap' for 'sm_90a'\nptxas info    : Function properties for _Z5probeILi1EEvPKhPfPhP5Stampij9TensorMap\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 168 registers, used 2 barriers\nptxas info    : Compile time = 65.546 ms\n",
+    "sass": {
+      "3": {
+        "name": "_Z5probeILi3EEvPKhPfPhP5Stampij9TensorMap",
+        "instructions": 992,
+        "normalized_instruction_sha256": "a516ac7de53f43eecdadac4cbb4aa9f4c30c9806fa9f064707afaf89392393a3",
+        "HGMMA": 32,
+        "LDS128": 36,
+        "UTMALDG": 4,
+        "UBLKCP": 2,
+        "WARPGROUP_ARRIVE": 2
+      },
+      "2": {
+        "name": "_Z5probeILi2EEvPKhPfPhP5Stampij9TensorMap",
+        "instructions": 600,
+        "normalized_instruction_sha256": "302c58cb81acaf973b16835927e5a7f43f1a59c519b7016dd77c35b5e4e29216",
+        "HGMMA": 0,
+        "LDS128": 0,
+        "UTMALDG": 20,
+        "UBLKCP": 6,
+        "WARPGROUP_ARRIVE": 0
+      },
+      "1": {
+        "name": "_Z5probeILi1EEvPKhPfPhP5Stampij9TensorMap",
+        "instructions": 760,
+        "normalized_instruction_sha256": "70263293747dc6e2759e4d216de35b96c091b1d99faef9ed850ae79022eb50fe",
+        "HGMMA": 32,
+        "LDS128": 36,
+        "UTMALDG": 0,
+        "UBLKCP": 1,
+        "WARPGROUP_ARRIVE": 2
+      }
+    },
+    "compile_command": [
+      "/usr/local/cuda/bin/nvcc",
+      "-arch=sm_90a",
+      "-O3",
+      "-std=c++17",
+      "-Xptxas=-v",
+      "/home/ubuntu/okc/proj_rsi/candidates/rs256full/port_probe.cu",
+      "-o",
+      "<temporary-binary>"
+    ]
+  },
+  "v2_build": {
+    "source_sha256": "fe55f19ba18d6e213ec038f4d068a771aa6190766b5aa72926fe95966ffe2ade",
+    "ptxas": "ptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_Z5probeILi3EEvPKhPfPhP5Stampij9TensorMap' for 'sm_90a'\nptxas info    : Function properties for _Z5probeILi3EEvPKhPfPhP5Stampij9TensorMap\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 168 registers, used 2 barriers\nptxas info    : Compile time = 80.069 ms\nptxas info    : Compiling entry function '_Z5probeILi2EEvPKhPfPhP5Stampij9TensorMap' for 'sm_90a'\nptxas info    : Function properties for _Z5probeILi2EEvPKhPfPhP5Stampij9TensorMap\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 168 registers, used 2 barriers\nptxas info    : Compile time = 19.816 ms\nptxas info    : Compiling entry function '_Z5probeILi1EEvPKhPfPhP5Stampij9TensorMap' for 'sm_90a'\nptxas info    : Function properties for _Z5probeILi1EEvPKhPfPhP5Stampij9TensorMap\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 168 registers, used 2 barriers\nptxas info    : Compile time = 65.443 ms\n",
+    "sass": {
+      "3": {
+        "name": "_Z5probeILi3EEvPKhPfPhP5Stampij9TensorMap",
+        "instructions": 992,
+        "normalized_instruction_sha256": "a516ac7de53f43eecdadac4cbb4aa9f4c30c9806fa9f064707afaf89392393a3",
+        "HGMMA": 32,
+        "LDS128": 36,
+        "UTMALDG": 4,
+        "UBLKCP": 2,
+        "WARPGROUP_ARRIVE": 2
+      },
+      "2": {
+        "name": "_Z5probeILi2EEvPKhPfPhP5Stampij9TensorMap",
+        "instructions": 600,
+        "normalized_instruction_sha256": "302c58cb81acaf973b16835927e5a7f43f1a59c519b7016dd77c35b5e4e29216",
+        "HGMMA": 0,
+        "LDS128": 0,
+        "UTMALDG": 20,
+        "UBLKCP": 6,
+        "WARPGROUP_ARRIVE": 0
+      },
+      "1": {
+        "name": "_Z5probeILi1EEvPKhPfPhP5Stampij9TensorMap",
+        "instructions": 760,
+        "normalized_instruction_sha256": "70263293747dc6e2759e4d216de35b96c091b1d99faef9ed850ae79022eb50fe",
+        "HGMMA": 32,
+        "LDS128": 36,
+        "UTMALDG": 0,
+        "UBLKCP": 1,
+        "WARPGROUP_ARRIVE": 2
+      }
+    },
+    "compile_command": [
+      "/usr/local/cuda/bin/nvcc",
+      "-arch=sm_90a",
+      "-O3",
+      "-std=c++17",
+      "-Xptxas=-v",
+      "/home/ubuntu/okc/proj_rsi/candidates/rs256full/port_probe_v2.cu",
+      "-o",
+      "<temporary-binary>"
+    ]
+  },
+  "files": {
+    "port_probe.cu": "cc46c06739966806e4bd86ca078824e6d768068e8bac9426937b0f2b5fbf1774",
+    "port_probe_v2.cu": "fe55f19ba18d6e213ec038f4d068a771aa6190766b5aa72926fe95966ffe2ade",
+    "preflight.py": "86832e7feafe4c497347edd6b63d1ed5e3cccf60b9ef14f7063303db9bb466bb",
+    "preflight_v2.py": "6b1b114e65c8f7424ad642c762994a8d8f8bddef8d41b361826239ffdc31a5fc",
+    "port01.json": "047268cd857a286dd30db21ff781e307d160db08694e4354aaa602212bbd10da"
+  }
+}

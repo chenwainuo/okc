@@ -1060,3 +1060,24 @@ feasibility tasks (no GPU yet): full-K/no-global-split-tail m256 design, and one
 rtk first-TMA/startup dependency. Both must differ materially from closed tests and
 pass explicit gain bars before consuming more GPU time. Frozen pw36 remains the
 next official check; any new kernel must remain separate.
+
+### Follow-through after verifier: router stage0 and shared-port probe
+
+`rtk_early` changes only first-stage producer queue priority. CPU/index/convergence
+proof and all GPU checks pass, including actual timed-graph changed-X/output-poison
+validation. The one bounded run FAILS its >=0.5us graph+prepare gain bar: m128
++0.480us graph/+0.544us F1 loss, m256 +0.096/+0.192 loss. Stage0 advanced but
+later loads stalled longer. Close it: no port, judge slot or delay/depth tuning.
+
+`rs256full` is a hardware-model diagnostic, not a new matmul. Initial run rejected
+occupancy before launch because host setup queried before shared-memory opt-in;
+preserved INVALID. Host-only v2 sets49152->164928 before query, occupancy1,
+unchanged device/SASS. All27 synthetic samples and bytes pass, but intended
+concurrent producer supply is only0.77344 (<0.95) and resident1303.68cycles exceeds
+the1200 gate. Port sharing INCONCLUSIVE; stop without full-kernel implementation
+or universal bandwidth/latency claims. Source/evidence and independent reviews
+are preserved in the candidate directories and audits.
+
+No new official score from these tests. Best remains judged rs32/3200.615us; pw36
+is frozen and its detached source-hash-guarded CHECK waiter remains the next
+official action at2026-10-27T00:00UTC.
