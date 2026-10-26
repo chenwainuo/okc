@@ -2198,7 +2198,7 @@ def prepare(weights):
             for b_ in (128, 256):
                 st["sel"].pop(("router", b_), None)
             print("PREP rs bake failed: %s" % str(error).splitlines()[-1][:200], flush=True)
-    if GV and GX and time.time() - _T0 < PREPARE_BUDGET_S - 60:
+    if GV and GX and time.time() - _T0 < PREPARE_BUDGET_S - 100:  # critic (pw25): a 90 s judge compile cannot be interrupted; keep r6 serving within 300 s
         try:
             _cutbake(st)
         except Exception as error:  # can only add CUTLASS paths; r6's choices stand on any failure
