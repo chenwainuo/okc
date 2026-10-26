@@ -663,3 +663,6 @@ pw27 (track P1) ready and approved: PROBE rd8 read-floor ladder (8 MB; 128–105
 m ≤ 8 packed bf16x2 reds; no cluster launch). Accuracy simulated 3.2e-3 relative L2 at a 4-way bf16 split vs the 1%
 rule; one-hot exact. Queue order at the 00:00 UTC reset: pw26 (CUTLASS sweep), pw27 (P1), then pw28 (P2) and pw29
 (P3) as they clear the critic.
+Reset queue (all approved, waiters chained): pw26 (CUTLASS 64x64 sweep, NDEBUG) → pw27 (P1 small-shape floor ladder
++ atomic-reduce gv paths) → pw29 (P3 router wgmma split-K) → pw28 (P2 qkv stream-K balancing, sentinel handoff).
+Each is measured against the pw25 run (04dc0a41413f45f3, r6 + router = the current incumbent's kernels).
