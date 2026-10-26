@@ -2833,6 +2833,9 @@ def _rsbake(st):
         if best[1] is not None:
             st["sel"][("router", m)] = best[1]
         print("PICK router m=%d %s %.2f" % (m, best[0], best[2]), flush=True)
+    # critic (pw23): the self-cleaning workspace/counters are shared by every RED-2 path; a declined or failed path
+    # may have left them dirty, so restore the all-zero invariant before any picked path serves the judge.
+    st["rs_ws"].zero_(); st["rs_cnt"].zero_(); torch.cuda.synchronize()
 
 
 def _gxladder(st):
