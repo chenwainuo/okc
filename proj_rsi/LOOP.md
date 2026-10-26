@@ -796,3 +796,8 @@ decode. Forwarded to RS128 and mx. pw24h proposed as a judge candidate (transfer
 pw27h approved (critic: ordering correct, 39-case 3000-replay stress clean; fixes: rk-s16w8x dropped at m=32 — 272
 CTAs exceed 264 resident slots — and the flag wait bounded with trap). Reset chain now: pw26 → pw27h → pw29h → pw28 →
 pw30 (pw24h to follow its review). pw31 = pw27h + pw29h's router section is being merged as the scored candidate.
+pw31 (= pw27h + pw29h over pw23) built: 65/65 official checks on the box, every merged path wins its own bake
+(router m=128 rw64k32s8z 11.55 vs 13.63; router m=8/16/32 −1.0/−1.0/−1.2; unpooler m=8 −0.26; m=256 tie); critic
+diff-review running, then a SCORED submission (scored quota is separate from checks). A soak job now keeps the GPU
+loaded between agent bursts (proj_rsi/tools/soak.py: pw31 vs pw23 alternated in short locked bursts; running table in
+/root/okc/logs/soak_pw31_vs_pw23.md).
