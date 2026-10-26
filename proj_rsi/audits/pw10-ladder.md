@@ -111,3 +111,11 @@ Ladder on h1, with pw10 in brackets: W-only 19.2 (20.9) | W+x 25.3 (25.4) | +dec
 - **Expected if it worked.** Bound by the 12-bit stream (13.2 µs) plus CUTLASS-level overhead: about 21–24 in-prepare against torch 29.4, and only with a no-split tiling.
 
 **Recommendation: no-go.** Main risk: compile time plus the forked collective for a non-power-of-two element. Payoff: about 0.15–0.2 ln across verify16 and verify32. If the m=128 line is revisited, test token tiling without split-K (64×64-style tiles, 2 CTAs/SM) on the existing pw9 pipeline first: one check, no new dependencies.
+
+## Closing note (pw15, check `ce1163b9280c47a2`): the m ≥ 128 branch is closed
+
+Final tally, pooler m=128 in-prepare: the best packed-weight wgmma path was pw10's wk2 at 31.5 µs, against cuBLAS at 29.4–30.5 in the same runs. Over pw9, pw10, pw13 and pw15, no variant beat cuBLAS at m=128 or m=256.
+
+Every variant left a stage of the pipeline serialized behind another. One consumer warpgroup decodes and issues its wgmma while one producer lane feeds a ring whose slots stay pinned until the MMA retires. Whichever cost was removed (epilogue, split-K, x traffic), the next one (decode at full K, then wgmma) became exposed by about the same amount.
+
+The structural change a future attempt must make first: decouple the decode from the MMA warpgroup. Dedicated decode warps would write bf16 A tiles to shared memory for an SS-wgmma consumer, CUTLASS's mixed-input "transform" warpgroup pattern. Then the W stream, the decode and the tensor core each run at their own rate, instead of one warpgroup paying all three per stage.
