@@ -920,3 +920,7 @@ yields −0.13–0.16 by issuing the first half-slab early; bake noise ±0.3–0
 closed: −1.0/−0.6/tie/+2.4 at m=128, loses at m=256; its reusable pieces (in-chunk escape header, self-cleaning
 zeroing, one-lane reduce-add store) are documented in audits/mx-h100.md. The r6 inflation after heavy pack work
 appeared again (31.74/30.43) — the F1 baseline rule applies to every box bake.
+New tracks while waiting for the reset: P4 instruments RS128's stage with clock64 stamps in rs128p (goal ≤ 650 clk
+per stage: precomputed descriptors, batched releases, blocking waits, escape-walk placement); P3 makes a bounded
+attempt at router m=256 (55 score-µs pool; fewer longer-lived CTAs, fixed terms instrumented, F1 baseline rule) in
+pw29m. pw34 (= pw33 + rs128's m=128 paths) is being prepared as the scored follow-up to rs128's check.
