@@ -859,3 +859,9 @@ bytes. Win: half the chunks per warp, twice the warps — m=1 11.81 vs r6 12.42 
 (−1.4), m=32 tie (x re-read + decode add 4.1 over W-only; short-chain layouts spill). Stream-K balancing ties
 everywhere and is dropped. Estimated judge gain ≈ 22 score-µs. pw33 = pw31 + these GVC entries is being merged for
 the next scored run.
+
+## Scored submission of pw33 (= pw31 + qkv shorter-chain geometries): job `8eeaca43bf43467f`
+
+Critic: diff is the two GVC lines only; 116 pw31 kernels identical; new MT1 instances 64 regs/0 spills; 65/65 box
+checks; box bake picks the new qkv geometries at m=1/8/16 (−0.1/−0.5/−1.1 in-prepare). Expected judge effect ≈ 15–25
+score-µs on 3337.1 plus the draw.
