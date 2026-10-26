@@ -562,3 +562,13 @@ Board moved from 3428.0 (r6-c12) to 3399.3: −0.8%, of which ~13 µs is the rou
 draw. Per-load vs the pw23 check run: decode1 37.58 (37.33), decode16 50.52 (50.78), decode32 61.38 (60.70), verify1
 38.55 (39.09), verify16 71.66 (70.52) — this scored draw sat ~0.6% worse than the check. Leaderboard at the time:
 #1 1.637× (≈ 2951 µs), #2–#8 at 1.547–1.570× (≈ 3077–3122 µs); we are at 1.421×.
+
+## Calibration against the judge's own speed-of-light (scored run 17f4484b97644673) and the board
+
+All 30 shapes at the judge's SOL → 2376; only m ≥ 128 at SOL → 2875; the big four at m ≥ 128 at SOL → 3022; m ≥ 128
+halfway to SOL → 3159. Largest gaps (judge µs over SOL): router m=256 8.5, qkv m=256 7.7, qkv m=128 7.5, router m=128
+7.0, pooler/unpooler m=256 6.9/6.5, qkv m=32 6.4, pooler m=128 5.2. Board: #1 1.637× (≈ 2951), #2–#8 1.547–1.570×
+(≈ 3077–3122), us #108 at 1.421×. Seven teams near 3100 is consistent with a competent packed-weight GEMM at
+m=128/256 roughly halfway to SOL (pooler m=128 ≈ 17 judge-µs vs cuBLAS 20.3), i.e. exactly the kernel six of our
+designs failed to build (best ≈ 27 judge-µs). Public write-ups found (ozgureyilmaz, lee101, PostTrainLLM) are all at
+≤ 1.15× and say nothing about the top tier. Kernel track closes 2026-11-04 23:59 PT.
