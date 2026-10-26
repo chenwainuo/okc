@@ -1070,7 +1070,8 @@ __global__ void __launch_bounds__(WR * WK * 32, ((V >> 12) & 7) ? ((V >> 12) & 7
   if constexpr (((V >> 27) & 1) != 0 || XZ) {  // acquire-poll the tile's zero flag (H100 probe: 0.35 us under volatile + fence)
     if (threadIdx.x == 0) {
       const int* fl = p.cnt + 2 * (bz * GX + bx) + 1, tgt = tk / S + 1;
-      while (true) { int v_; asm volatile("ld.acquire.gpu.global.u32 %0, [%1];\n" : "=r"(v_) : "l"(fl) : "memory"); if (v_ >= tgt) break; }
+      unsigned spins_ = 0;  // critic (pw27h): bounded wait; a stuck zeroer aborts visibly instead of hanging to the timeout
+      while (true) { int v_; asm volatile("ld.acquire.gpu.global.u32 %0, [%1];\n" : "=r"(v_) : "l"(fl) : "memory"); if (v_ >= tgt) break; if (++spins_ > (1u << 24)) asm volatile("trap;"); }
     }
   }
 #if defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 900
@@ -1782,7 +1783,8 @@ _RD = 1 << 26
 _ZF, _PZ, _XZ = 1 << 27, 1 << 28, 1 << 29
 GRD = []
 for _nm, _g, _ms, _vs in (("rk-s8", (2, 1, 8, 2, 8, 1, 0, 2), (8, 16, 32), "z"),           # 16 x 8 = 128 CTAs x 256 thr
-                          ("rk-s16w8", (2, 1, 8, 1, 16, 1, 0, 1), (8, 16, 32), "zx"),     # 256 CTAs x 256 thr, one chunk per warp
+                          ("rk-s16w8", (2, 1, 8, 1, 16, 1, 0, 1), (8, 16, 32), "z"),      # 256 CTAs x 256 thr, one chunk per warp
+                          ("rk-s16w8", (2, 1, 8, 1, 16, 1, 0, 1), (8, 16), "x"),          # critic (pw27h): the x variant at m=32 is 272 CTAs > 264 resident slots
                           ("rk-s32", (2, 1, 4, 1, 32, 1, 0, 1), (8, 16), "x")):           # 512 CTAs x 128 thr
     for _c in _vs:
         GRD.append((_nm + _c, "router", _ms, _g, {"z": _ZF, "x": _XZ, "p": _PZ}[_c]))  # P1 self-zeroing variants
