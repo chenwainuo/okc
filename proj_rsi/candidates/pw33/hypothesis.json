@@ -1,0 +1,18 @@
+{
+ "id": "pw33",
+ "parent": "pw31",
+ "claim": "qkv_gate's m <= 16 excess over the stream is the per-warp slot-recycle chain (H100 ladder, audits/p2-h100.md: W-only 10.69 vs bare 28 MB read 10.43; + x 0.41, + decode 0.45, + mma 0.42, + epilogue 0.38 at m=1), not the 144-tile tail or W depth. Geometries with half the chunks per warp and twice the K-warps (KU 8, ST 1) shorten that chain: on the H100 (CUPTI, same run vs r6) m=1 -0.61, m=8 -0.54, m=16 -1.41 (WR 2 x WK 8, x in registers). Expected on the judge: qkv m=1/8/16 -0.4/-0.4/-0.9 judge-us.",
+ "paths": "qkv_gate GVC entries added to r6's own gv bake (picked per run by _gvprep against r6's geometries and v12): MT 1 (m=1, 8): (2,16,8,1,1,2) V1 = gv<1,1,1,2,16,8,1,1,2,1> (72 CTAs x 1024 thr) and (1,16,8,1,1,2,ST 1) V1|minBlocks 2 = gv<1,1,1,1,16,8,1,1,2,8193> (144 CTAs x 512 thr, 2/SM); MT 2 (m=16): (2,8,16,1,1,0,ST 2) V1 = gv<1,2,2,2,8,16,1,1,0,1>, (2,16,8,1,1,2) V3, (1,16,8,1,1,2,ST 1) V1|minBlocks 2. Everything else byte-identical to pw31; no stream-K (gvk) paths.",
+ "target_shapes": [
+  "qkv_gate m=1: -0.4 judge-us vs pw31",
+  "qkv_gate m=8: -0.4 judge-us vs pw31",
+  "qkv_gate m=16: -0.9 judge-us vs pw31"
+ ],
+ "kill_if": "any official check fails",
+ "local_checks": "diff vs pw31: the two qkv_gate GVC lines only; lint ok (expected multi-build sm_90a warning); cpu-check --official 9/9; H100 box /root/bench.sh pw33 --official (logs/pw33.log): 65/65 CHECK ok, PREPARE 91.9 s; r6's gv bake picks the new entries: m=1 gv<1,1,1,2,16,8,1,1,2,1> 10.53 vs r6 geometry 10.62 (-0.09; pw28h run -0.22; CUPTI lab -0.42..-0.61), m=8 gv<1,1,1,1,16,8,1,1,2,8193> 10.50 vs 11.04 (-0.54), m=16 gv<1,2,2,2,8,16,1,1,0,1> 10.94 vs 12.06 (-1.12); m=32 unchanged (r6).",
+ "risks": [
+  "m=1: the in-prepare delta is small and run-dependent (-0.09 / -0.22 in two box bakes) although the CUPTI kernel delta is -0.4..-0.6; expect m=1 between a tie and -0.4.",
+  "The 72-CTA WR 2 geometries need ~65 GB/s per SM on the H200 (39 here); the 144-CTA 16-warp entry is the fallback and the bake decides.",
+  "Five more gv instances: about +10 s of compile in prepare."
+ ]
+}
