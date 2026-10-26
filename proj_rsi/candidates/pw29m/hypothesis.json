@@ -1,0 +1,17 @@
+{
+ "id": "pw29h",
+ "parent": "pw29",
+ "claim": "pw29 plus (1) the rw build fix: torch appends compute_90/sm_90 unless TORCH_CUDA_ARCH_LIST is set, and ptxas rejects wgmma there (pw29's box run: 'PREP rw build failed'); _rwext sets TORCH_CUDA_ARCH_LIST=9.0a for the build and the kernel/wgmma helpers are guarded by __CUDA_ARCH_FEAT_SM90_ALL (plain sm_90 pass = __trap stub); (2) self-zeroing rwk (MODE 4): no memset node (the graph's memset->kernel edge cost ~1.4 us on the H100); each of the G K-split CTAs zeroes 1/G of its output tile right after issuing its loads, arrives on a monotonic per-tile counter with atom.add.release, and thread 0 polls ld.acquire for the call's G arrivals while the last wgmmas run; (3) a 2-CTA/SM ring geometry (KR 256, 3 x 32 KB slots, TOKS 128) giving 256 one-wave CTAs at m=256.",
+ "paths": "router m=128: rp64k32s4 (pw23 incumbent), rw64k32s8, rw64k32s4z, rw64k32s8z, rw64k32r3x2(z). router m=256: rw64k32r3x2, rw64k32r3x2z, rwv64k64s4x2, vs r6 cuBLASLt.",
+ "target_shapes": [
+  "router m=128: rw64k32s8z ~1.9 box-us under rp64k32s4 (H100 rbench, read flush)",
+  "router m=256: rw64k32r3x2z at parity to -0.3 box-us vs cuBLAS"
+ ],
+ "kill_if": "router m=128 best new (rw) path not >= 1.5 us under pw23's rp64k32s4 in the same bake",
+ "local_checks": "nvcc 12.8 with the file's RWFLAGS (-O3 -lineinfo -gencode=arch=compute_90a,code=sm_90a -DNDEBUG) -Xptxas -v on the generated source (torch binding swapped for a plain-pointer entry point; device code identical): 9 rwk instances, 0 spills, no 'serialized' warning, no injected warpgroup.arrive; regs 90 (TOKS 128), 140 (TOKS 128 ring), 154 (TOKS 256), 255 (TOKS 256 ring). SASS: HGMMA.64x128x16 / 64x256x16 with both operands gdesc, zero-init folded into the first HGMMA (RZ, !UPT), one DEPBAR.LE + FENCE.VIEW.ASYNC.S + BAR.SYNC per stage, one WARPGROUP.DEPBAR at the end, REDG.E.ADD.F32x4. proj_rsi/tools/rw_emu.py (new) emulates the cp.async staging, descriptor decode (PTX format, SW128 address XOR), ring slot reuse with cp.async landing at issue and at retire, PTX D fragments, the staging epilogue and the v4 reductions: bit-exact one-hot and 3.7e-8 random for all 9 variants at m 128/121/200 (TOKS 128) and 256/250/300 (TOKS 256, partial second blocks), raw smem base 0 and 400; negative controls caught (unswizzled writes, SBO 512, ring wait one group short). GVCU / CUDA strings unchanged from pw23 (r6's 78 gv instances and rsk / rsk2 identical). lint ok (expected multi-build sm_90a warning); cpu-check --official 9/9; CPU mock of _rsbake runs and dispatches every variant (0, 5-11, 100-103, 110-114).",
+ "risks": [
+  "Compile time: one more load_inline build (9 wgmma instances, ~8 s of nvcc locally without torch headers; est. 30-50 s on the judge) on top of pw23's ~105 s prepare; the build is skipped if fewer than 60 s of budget remain.",
+  "Self-zeroing assumes the G arrivals of one call to a tile are contiguous (calls stream-ordered, never two router calls of the same variant concurrently on different streams) and that the grid is one co-resident wave (only such grids are shipped: 128 CTAs at 1/SM, 256 at 2/SM).",
+  "Per-tile counters (st['rw_cnt'], 8192 int32) are monotonic; int32 wraps after ~67M calls of one variant."
+ ]
+}
