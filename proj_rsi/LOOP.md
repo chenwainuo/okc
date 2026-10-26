@@ -721,3 +721,15 @@ cuBLAS's whole GEMM on this box (2.88 TB/s(−4) of 3.35 peak), x tiles cost onl
 the wgmma rung costs +8.1 on both machines: the overlap failure is reproducible locally. Track P4 opened: an agent
 runs a variant ladder on pw24h (groups in flight, commit granularity, ping-pong / 128x64 two-warpgroup tiles,
 register-A, release placement, smem-port test) to find and fix the mechanism.
+
+## H100: CUTLASS bf16 sweep (233 configs) — parity reached on the box
+
+audits/cutlass_sweep.md: within 1.5% of the best torch path on 6 of 8 shapes (ratios 0.945–1.036 incl. ~13 µs of
+replay overhead on both sides): qkv m=128 0.979 (ws_64x64x64_c1x2_sA_nosmem), o m=128 0.993 (…c1x2_s7_tma), pooler
+m=128 0.984 (…c1x2_sA_tma), pooler m=256 0.945 (non-swapped ns_ws_64x128x64_c1x1_sA_tma), o/unpooler m=256 1.01
+(ws_128x128x64_c1x2_sA_tma), unpooler m=128 1.032, qkv m=256 1.036 (ns 64x96). Basic warp-specialised beats
+ping-pong/cooperative; a 1x2 cluster helps in swap-AB; stream-K never wins; ping-pong no longer spills once the
+epilogue has no C input. Compile 17–31 s per instantiation. Consequences: (1) pw30 = the four parity configs as a
+judge candidate (confirms transfer to the H200; little score by itself except pooler m=256 −5.5%); (2) the gain must
+come from the 12-bit two-plane A operand inside this pipeline — agent 'mx' is building it (M1 packer/merge, M2
+two-plane collective, M3 timing, M4 judge-shaped candidate).
