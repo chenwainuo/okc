@@ -248,3 +248,22 @@ Dead ends, not to be revisited: register-ring W loads (≤3.3 TB/s); red.global 
 finalize epilogue; x-stationary smem at m=128; mma.sync at m≥128 (issue-bound); full entropy coding (decode rate).
 Kill criteria: pw7 — decode32 sum not below 52 ⇒ the skeleton design is wrong, go register-direct (gv lineage);
 pw9 — pooler m=128 not below 17 ⇒ wgmma pipeline not overlapping, read ptxas serialization and stage release.
+
+## Iteration 6 — pw7: carveout probes + cluster split-K + SASS edits. Check `ce07e92197154629`: 9/9, 4721.3 µs. REJECTED.
+
+- Carveout tax: **disproven**. Empty 132×256 launch 5.02 / 4.90 / 4.90 µs at 0 / 64K / 200K smem (x2 CTAs 6.59).
+- Bare bulk stream of 50 MB, in-prepare: 17.2 µs (ring ≥ 64K); register ring D=8: 19.1. Flush method irrelevant.
+- Cluster DSMEM epilogue (c) vs global (g): pooler m=1 28.8 vs 21.8, m=32 36.0 vs 26.2 — **c is 5–10 µs slower**;
+  qkv ≈ equal; unpooler b8t1c 11.0 vs 11.3. RT=2 slower everywhere (+3–4 µs).
+- Judge: pw-b16t1g pooler m=1 17.86 vs r6 13.95; everything else fell to cuBLAS in the bake. decode32 sum 77 (kill
+  criterion was 52).
+- The decisive comparison: pw skeleton 21.8 in-prepare vs bare stream 17.2 vs r6 ≈ 18 (judge 13.95 + ~4 offset).
+  The TMA-ring + mbarrier + split-K-finalize skeleton has been 4.6 µs over the stream in every variant pw3–pw7.
+  The pw4/pw5 attribution to the "finalize read-back" was wrong in kind: removing it via cluster reduction cost more.
+
+Decision: **kill the pw skeleton for m ≤ 32**. Pivot to r6's register-direct lineage (zero smem, at the ceiling at
+m=1) extended to m=16/32 and qkv/o/router — analysis commissioned (audits/r6-lineage.md). pw8 (router on the pw7
+skeleton) is skipped: its m ≤ 32 router paths would carry the same 4.6 µs and r6's router is at 4.1–5.9. Its router
+paths are included in pw9 anyway. Check #8 = pw9 (wgmma m=128/256 + pw8 router + STATS), job `520ad1dce4144c76`:
+kept because the wgmma compute question at m=128 is independent of the skeleton result; caveat that pw9 uses the
+cluster epilogue that lost here.
