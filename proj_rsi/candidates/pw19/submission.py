@@ -1137,9 +1137,10 @@ __global__ void __launch_bounds__(PwT<NWG, NT, WST, XST, AST, PRB, MINB>::NTH, M
 }
 
 template <int NWG, int NT, int WST, int XST, int AST, int PRB, int MINB>
-static int pw_tlaunch(const PwP& p, const PwTmap& tm, int KS, cudaStream_t st) {
+static int pw_tlaunch(const PwP& p, const PwTmap& tm, int KS, cudaStream_t st, int query = 0) {
   using G = PwT<NWG, NT, WST, XST, AST, PRB, MINB>;
   static_assert(G::RTB % G::NWD == 0, "row tiles per decode warp");
+  static_assert(XST >= 2 && AST >= 2, "x and A rings need >= 2 slots (the MMA warps hold one slot until wait_group(1))");
   if (p.m < 1 || p.m > NT || p.N % G::BN || p.RTBW != G::RTB || p.NBW * G::BN < p.N || p.of) return -4;
   if (p.K % 64 || p.KCW * 64 != p.K || p.kx * 64 != p.K || KS < 1 || KS > 8 || KS > p.KCW) return -5;
   if (KS <= G::RTB ? (G::RTB % KS) : (KS % G::RTB || G::TT % (KS / G::RTB))) return -6;
@@ -1152,6 +1153,9 @@ static int pw_tlaunch(const PwP& p, const PwTmap& tm, int KS, cudaStream_t st) {
   if (!attr) {
     const cudaError_t e = cudaFuncSetAttribute(k, cudaFuncAttributeMaxDynamicSharedMemorySize, G::SMEM);
     if (e != cudaSuccess) { cudaGetLastError(); return (int)e; }
+    if (MINB > 1 && cudaFuncSetAttribute(k, cudaFuncAttributePreferredSharedMemoryCarveout, (int)cudaSharedmemCarveoutMaxShared) != cudaSuccess) {
+      cudaGetLastError(); return -11;
+    }
     attr = 1;
   }
   cudaLaunchConfig_t cfg = {};
@@ -1160,6 +1164,12 @@ static int pw_tlaunch(const PwP& p, const PwTmap& tm, int KS, cudaStream_t st) {
   at[0].id = cudaLaunchAttributeClusterDimension;
   at[0].val.clusterDim.x = 1; at[0].val.clusterDim.y = KS; at[0].val.clusterDim.z = 1;
   cfg.attrs = at; cfg.numAttrs = (KS > 1 && PRB == 0) ? 1 : 0;  // probes have no epilogue: no cluster
+  if (query) {  // occupancy report for the PW log line: clusters * 16 + CTAs per SM (clusters = 0 without a cluster)
+    int nc = 0, bps = 0;
+    if (KS > 1 && PRB == 0 && cudaOccupancyMaxActiveClusters(&nc, k, &cfg) != cudaSuccess) { cudaGetLastError(); nc = 0; }
+    if (cudaOccupancyMaxActiveBlocksPerMultiprocessor(&bps, k, G::NTH, G::SMEM) != cudaSuccess) { cudaGetLastError(); bps = 0; }
+    return nc * 16 + (bps < 15 ? bps : 15);
+  }
   if (KS > 1 && PRB == 0) {
     static int ck_key[8] = {0}, ck_ok[8] = {0};
     int ok = -1;
@@ -1181,6 +1191,13 @@ static int pw_tlaunch(const PwP& p, const PwTmap& tm, int KS, cudaStream_t st) {
 int pw_dispatch(int inst, const PwP& p, int NG, int KS, cudaStream_t st) {
   switch (inst) {
 @@BCASES@@
+  }
+  return -2;
+}
+int pw_tquery(int inst, const PwP& p, int KS) {
+  PwTmap tm = {};
+  switch (inst) {
+@@TQCASES@@
   }
   return -2;
 }
@@ -1318,7 +1335,8 @@ KERNELS_SRC = _KERNELS_TEMPLATE.replace("@@BCASES@@", "\n".join(
     "    case %d: return pw_launch<%s>(p, NG, KS, st);" % (i, ",".join(map(str, PW_INSTS[i][2]))) for i in PW_BIDX)).replace(
     "@@WCASES@@", "\n".join("    case %d: return pw_wlaunch<%s>(p, tm, KS, st);" % (i, ",".join(map(str, PW_INSTS[i][2]))) for i in PW_WIDX)
     + "\n" + "\n".join("    case %d: return pw_tlaunch<%s>(p, tm, KS, st);" % (i, ",".join(map(str, PW_INSTS[i][2]))) for i in PW_TIDX)).replace(
-    "@@WGMMA@@", _wgmma_src(128) + _wgmma_src(256)).replace("@@WGSS@@", _wgss_src(128) + _wgss_src(256))
+    "@@WGMMA@@", _wgmma_src(128) + _wgmma_src(256)).replace("@@WGSS@@", _wgss_src(128) + _wgss_src(256)).replace(
+    "@@TQCASES@@", "\n".join("    case %d: return pw_tlaunch<%s>(p, tm, KS, 0, 1);" % (i, ",".join(map(str, PW_INSTS[i][2]))) for i in PW_TIDX))
 
 GLUE_SRC = r"""
 #include <torch/extension.h>
@@ -1387,6 +1405,15 @@ int64_t pw_run_tma(int64_t inst, torch::Tensor W, torch::Tensor x, torch::Tensor
   return (int64_t)pw_wdispatch((int)inst, p, tm, (int)KS, at::cuda::getCurrentCUDAStream());
 }
 
+int pw_tquery(int inst, const PwP& p, int KS);
+int64_t pw_tocc(int64_t inst, torch::Tensor W, torch::Tensor x, torch::Tensor out, torch::Tensor ws, torch::Tensor cnt,
+                torch::Tensor esc, torch::Tensor eoff, int64_t KS, int64_t Tb) {
+  PwP p;
+  const int r = pw_fill(p, W, x, out, ws, cnt, esc, eoff, 16, 1, Tb);
+  if (r) return r;
+  return (int64_t)pw_tquery((int)inst, p, (int)KS);
+}
+
 int64_t pw_pure(torch::Tensor buf, int64_t per, int64_t SZ, int64_t ST, int64_t grid, torch::Tensor sink) {
   if (sink.numel() < grid || per * grid > buf.numel() * buf.element_size()) return -10;
   return (int64_t)pw_pure_launch(buf.data_ptr(), (long long)per, (int)SZ, (int)ST, (int)grid, (uint32_t*)sink.data_ptr(), at::cuda::getCurrentCUDAStream());
@@ -1409,10 +1436,12 @@ CPP_SRC = ("int64_t pw_run(int64_t inst, torch::Tensor W, torch::Tensor x, torch
            "torch::Tensor esc, torch::Tensor eoff, int64_t NG, int64_t KS, int64_t xrow, int64_t st, int64_t Tb, int64_t flags, int64_t stb, int64_t xtok, int64_t Tb2);\n"
            "int64_t pw_run_tma(int64_t inst, torch::Tensor W, torch::Tensor x, torch::Tensor out, torch::Tensor ws, torch::Tensor cnt, "
            "torch::Tensor esc, torch::Tensor eoff, int64_t KS, int64_t box_rows, int64_t Tb, int64_t Tb2);\n"
+           "int64_t pw_tocc(int64_t inst, torch::Tensor W, torch::Tensor x, torch::Tensor out, torch::Tensor ws, torch::Tensor cnt, "
+           "torch::Tensor esc, torch::Tensor eoff, int64_t KS, int64_t Tb);\n"
            "int64_t pw_pure(torch::Tensor buf, int64_t per, int64_t SZ, int64_t ST, int64_t grid, torch::Tensor sink);\n"
            "int64_t pw_carve(int64_t kind, torch::Tensor buf, int64_t per, int64_t grid, int64_t smem, torch::Tensor sink);\n"
            "int64_t pw_empty(torch::Tensor sink, int64_t grid);")
-FUNCTIONS = ["pw_run", "pw_run_tma", "pw_pure", "pw_carve", "pw_empty"]
+FUNCTIONS = ["pw_run", "pw_run_tma", "pw_tocc", "pw_pure", "pw_carve", "pw_empty"]
 
 
 def _ext():
@@ -1872,11 +1901,11 @@ for _w, _mode in (("w1d8", "c2"), ("wk2", "c2"), ("v1d5", "c2"), ("vk2", "c2")):
 
 
 # ---------------------------------------------------------------- pw19 "tw" paths (kind "t")
-def _pw_tks(NB, KC, RTB, TT, mode):
+def _pw_tws(NB, KC, RTB, TT, mode):
     """tw split-K (clusters (1, KS, 1)): KS in {1, 2, 4, 8} whose rank rectangles tile the n-block; mode "c2" / "c4": the
-    largest KS <= 2 / 4 with NB*KS <= 132 (one wave at 1 CTA/SM); "x2": the largest KS <= 8 with NB*KS <= 264 (2/SM)"""
+    largest KS <= 2 / 4 with NB*KS <= 132 (one wave at 1 CTA/SM); "x2": the largest KS <= 4 with NB*KS <= 264 (2/SM)"""
     ok = [k for k in (1, 2, 4, 8) if k <= KC and (RTB % k == 0 if k <= RTB else (k % RTB == 0 and TT % (k // RTB) == 0))]
-    cap, T = {"c2": (2, 132), "c4": (4, 132), "x2": (8, 264)}[mode]
+    cap, T = {"c2": (2, 132), "c4": (4, 132), "x2": (4, 264)}[mode]
     return max([k for k in ok if k <= cap and NB * k <= T] or [1])
 
 
@@ -1893,7 +1922,7 @@ def _pw_trunner(state, layer, m, idx, mode):
     KC, NB = K // 64, n // BN
     if n % BN:
         return None
-    KS = _pw_tks(NB, KC, RTB, TT, mode)
+    KS = _pw_tws(NB, KC, RTB, TT, mode)
     lay = _pw_layout(state, layer, RTB, nat=True)
     if lay is None:
         return None
@@ -1908,7 +1937,19 @@ def _pw_trunner(state, layer, m, idx, mode):
 
     def run(x, out):
         return ext.pw_run_tma(idx, lay, x, out, dws, dcnt, esc, eoff, KS, NT, tb, tb)
-    return run, "%dx%d" % (NB, KS)
+    desc = "%dx%d" % (NB, KS)
+    if cfg[6] > 1:  # MINB 2 (tw64x2): occupancy from the runtime, with the max-shared carveout set; decline at 1 CTA/SM
+        xq = torch.empty((m, K), dtype=torch.bfloat16, device=raw.device)
+        oq = torch.empty((m, n), dtype=torch.bfloat16, device=raw.device)
+        q = int(ext.pw_tocc(idx, lay, xq, oq, dws, dcnt, esc, eoff, KS, tb))
+        if q < 0:
+            _log("PW %s %s m=%d %s occupancy query failed (%d)" % (name, layer, m, desc, q))
+            return None
+        desc += " clusters=%d ctas/sm=%d" % (q >> 4, q & 15)
+        if (q & 15) < 2:
+            _log("PW %s %s m=%d %s: 1 CTA/SM, declined" % (name, layer, m, desc))
+            return None
+    return run, desc
 
 
 def _pw_tpath(pname, iname, mode, layers):
@@ -1937,7 +1978,7 @@ def _pw_tpath(pname, iname, mode, layers):
     path(pname, serves)(build)
 
 
-for _t, _i, _mode in (("tw64", "t64", "c2"), ("tw64x2", "t64x2", "x2"), ("tw128", "t128", "c4"),
+for _t, _i, _mode in (("tw64", "t64", "c2"), ("tw64x2", "t64x2", "x2"), ("tw128", "t128", "c4"), ("tw128c2", "t128", "c2"),
                       ("tv64", "v64", "c2")):  # BN 128 at m=256 is out: 416 threads cap at 128 regs, 128 accumulators
     _pw_tpath("pw-" + _t, _i, _mode, PW_LAYERS)
 for _t in (1, 4):  # router: cluster (KS 8 auto) and global (KS 16 / 32) epilogues

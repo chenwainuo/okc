@@ -379,6 +379,7 @@ def main():
     ok &= run(S, "t64x2", 128, 512, 97, 8)         # KS 8 > RTB: tile x token-range rectangles, odd m
     ok &= run(S, "t128", 128, 512, 128, 4)         # BN 128: two MMA warpgroups, decode warps own tiles dw, dw + 4
     ok &= run(S, "t128", 128, 256, 101, 2)
+    ok &= run(S, "t128", 256, 512, 128, 2)         # tw128c2: BN 128 at cluster 2 (pooler 32x2 shape class)
     ok &= run(S, "v64", 64, 512, 256, 2)           # m = 256
     ok &= run(S, "v64", 64, 256, 200, 1)
     neg1 = not run(S, "t64", 64, 256, 128, 1, perm_pack=True)
