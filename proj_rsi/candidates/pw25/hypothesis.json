@@ -1,0 +1,17 @@
+{
+  "id": "pw25",
+  "parent": "pw23",
+  "claim": "Step A of the CUTLASS line. Before a codec can win at m=128/256 we need bf16 parity with cuBLAS, which six hand-written pipelines missed (pw24: 28.9 vs 24.2). pw25 = pw23 (r6 + router, unchanged) plus CUTLASS 3.9.2's sm90 warp-specialised bf16 GEMM, swap-AB so out is [tok][n], weights still bf16. Three instantiations are in one sm_90a extension: 128x64x64 cooperative with persistent tiles; the same with CUTLASS's stream-K scheduler (pooler m=128 has only 64 tiles of 128x64, so stream-K splits K to fill the 132 SMs, with CUTLASS's own fixup reduction); and 128x64x64 with cluster 2x1, so the x tile is multicast to the two W-row tiles of a pair.",
+  "paths": "qkv_gate / o / pooler / unpooler at m=128 and m=256 (exact m only): cut128, cutsk, cut128c2, baked against r6 (cuBLASLt) after the router bake. Validation: one-hot x8 bit-exact and random rows (tolerance) as the template, random rows also at odd m 121 / 250. PROBE cuthbm: W-bytes HBM TB/s of the best instantiation on pooler m=128, computed as bytes / (in-prepare - 4.9 us).",
+  "target_shapes": [
+    "pooler m=128: within 1.0 us of torch (24.2 in pw24's bake), better if stream-K fills the SMs"
+  ],
+  "kill_if": "pooler m=128 best CUTLASS path not within 1.0 µs of torch in the bake",
+  "mechanics": "The minimal header set (458 CUTLASS / CuTe headers from nvcc -M of the kernel TU, plus LICENSE.txt, BSD-3) is embedded as tar.xz + base64 (898 KB; the file is 1.07 MB). At prepare it is extracted with tarfile into a private tempfile.mkdtemp dir, and load_inline builds 'cut25_*' with extra_include_paths and CUTFLAGS = -O3 -lineinfo --use_fast_math -gencode=arch=compute_90a,code=sm_90a --expt-relaxed-constexpr. There is no network and no subprocess beyond load_inline. The kernel TU has no torch headers; the 10-line glue is in cpp_sources. A failed build prints 'PREP cut build failed: <reason>' and r6 + router stand; the bake starts only if prepare has 60 s left, and each path checks the 240 s budget.",
+  "local_checks": "Extract from the embedded string, then nvcc with the file's own CUTFLAGS + -std=c++17 + the extracted include paths, exactly as prepare does: rc 0, 0 errors, 30.0 s wall for the kernel TU on the 48-core host. The torch glue adds the usual load_inline cpp step; it cannot be compiled here because local torch is CPU-only and lacks the CUDA headers. Judge estimate 45-60 s for the extension. All 3 kernels at 168 regs with 0 spills; the 64x64 ping-pong config spilled 36 B and was replaced by stream-K. Swap-AB layout checked on the CPU with CUTLASS's own make_cute_packed_stride: A(3,5) = W[3][5], B(7,5) = x[7][5], D(3,7) = out[7][3]. r6's gv extension and the router kernels are unchanged. lint ok; cpu-check --official 9/9. Prepare estimate: r6 117 s + router bake 6 + cut build 45-60 + cut bake ~15 = 185-200 s.",
+  "risks": [
+    "The judge's compile could exceed the estimate (torch headers in the glue step, slower host); the 60 s guard skips the bake, and per-path budget checks leave r6 in place.",
+    "A 1.07 MB submission file: no size rule found in TASK.md / AGENTS.md, but it is untested on the judge.",
+    "CUTLASS's initialize() runs per call (host-side TMA descriptors and workspace setup, captured into the graph like the other TMA paths); stream-K may add a workspace memset node."
+  ]
+}
