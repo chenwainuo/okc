@@ -1966,6 +1966,10 @@ def prepare(weights):
             _l2probe(st)
         except Exception as error:
             print("PROBE l2scratch declined %s" % str(error).splitlines()[-1][:160].replace(" ", "_"), flush=True)
+        finally:  # critic (pw21): never leave a capture open or a side stream busy for the judge's own captures
+            if torch.cuda.is_current_stream_capturing():
+                print("PROBE l2scratch capture_left_open", flush=True)
+            torch.cuda.synchronize()
     st.pop("gvc12", None)
     st.pop("gepk", None)  # pw17: unpicked codec E packs (a picked plan keeps its own pack alive)
     print("PREP done in %.0fs" % (time.time() - _T0), flush=True)
