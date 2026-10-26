@@ -848,3 +848,8 @@ judge numbers as the bar — explicitly forbidden to read candidates/, audits/, 
 builds and measures its own submission on the H100 in proj_rsi/cleanroom/<school>/. Then a verifier re-measures all
 of them with pw31 in one session (audits/cleanroom-measure.md), three judges score mechanisms, and a synthesiser writes
 audits/cleanroom-plan.md (what to port into the pw31 lineage, what could be a candidate itself).
+P4 decode-slack, part 2: software pipelining does not help — past ~16 ops the slope is ~2.1 clk per op per stage in
+every placement (critical path, pipelined, 4 chains): the decode is bound by INT-pipe issue throughput (half-rate
+INT32 on Hopper), a single dependent chain is far worse, and the single-consumer 64x64 stage (~286 clk bookkeeping)
+already exceeds the H200's ~260 clk period. So: 128-row (two-math-warpgroup) stages are required to amortise the
+bookkeeping and spread INT work (RS128's geometry), and the decode must be minimal in INT instructions per weight.
