@@ -88,3 +88,26 @@ Check `7715c850ff89450a`. All figures are in-prepare µs (graph replay ≈ 5 µs
 - **Probe for step 1:** the L1 no-x rung with the separate W ring should land at about 17.5 (the bare stream).
 - **Step 3:** reintroduces a cluster, but for the producer only (TMA multicast); the epilogue stays cluster-free.
 - **If steps 1 and 2 land as estimated:** pooler m=128 beats torch (≈ 25 vs 28.9) and unpooler likely follows (torch 23.3, w2c2 already 26.8). o (K=1024, only 16 stages) stays dominated by fixed cost, and qkv by its 36-n-block grid.
+
+## pw13 post-mortem (check `79ca764ed3ca465c`) and the CUTLASS option
+
+Ladder on h1, with pw10 in brackets: W-only 19.2 (20.9) | W+x 25.3 (25.4) | +decode 25.4 (24.6) | +wgmma 33.9 (30.1) | full 42.1 (34.6).
+
+**1. Why each fix regressed.**
+
+- **W ring (−1.7 of 3.7).** Bytes in flight were the right cause, but not the only one. The remaining ~2 µs over the bare stream is 128 CTAs on 132 SMs, KS=2 halving each CTA's stream (384 KB), and the ramp/tail per CTA.
+- **wgmma step (+8.5 vs +5.5).** Yes: 4 x slots, each freed only after `wait_group<1>`, leave at most 2 x stages in flight. Worse, the single producer lane uses a merged in-order schedule. Whenever it blocks on an x empty slot (held by a slow MMA), it also stops issuing W, so the MMA latency leaks into the HBM stream (head-of-line blocking). The right experiment was:
+  - one producer lane per ring, so W never waits on x;
+  - a deeper x ring (6–8 × 16 KB).
+  
+  A single ring with an early W release is not possible: a slot holds both.
+- **Epilogue (+8.2 vs +4.5).** In a one-wave grid every CTA reaches the epilogue together. Each CTA's tail is a dependent chain: store 32 KB of partial, fence (waits for L2 acknowledgement), atomic, then on the last CTA a 32 KB L2 read, the add, the transpose and the store. That is several serialized L2 round trips with nothing behind them. pw11 measured ≥ 2 µs for that chain at a tiny partial; at 1 MB per n-block pair it costs more. cuBLAS avoids it for pooler: 64×64 tiles over tokens and rows, 2 CTAs/SM, enough tiles without split-K. It re-reads W from L2 instead of reducing partials. The lesson: at m=128, split-K tails cost 4–8 µs in every variant. Tiling the tokens (wgmma N=64, two token tiles) is the cuBLAS structure we never tried.
+
+**2. CUTLASS sm90 mixed-input (example 55) on the judge.**
+
+- **Headers.** The minimal set (CuTe plus the cutlass gemm/collective/kernel/epilogue/arch/numeric headers that example 55 pulls in) is about 4–6 MB of source. xz plus base64 brings that to about 1–1.5 MB embedded in submission.py, written to a temp include directory in prepare and passed via `-I`. That is mechanically possible; whether a 1.5 MB submission passes the judge's checks is unknown.
+- **Compile.** 30–90 s per collective instantiation on top of our ~45 s. That leaves room for two or three configurations under the 240 s guard.
+- **Codec fit.** This is the blocker. The mixed-input collective converts a narrow A type through `NumericArrayConverter` with scale/zero modes. A 12-bit element is not a CuTe sub-byte type (4/8 bit), and the escape fixup needs a per-warp side table walked inside the mainloop. Both mean forking the ~1500-line collective, i.e. our own kernel on CUTLASS's skeleton, with new layouts to validate offline.
+- **Expected if it worked.** Bound by the 12-bit stream (13.2 µs) plus CUTLASS-level overhead: about 21–24 in-prepare against torch 29.4, and only with a no-split tiling.
+
+**Recommendation: no-go.** Main risk: compile time plus the forked collective for a non-power-of-two element. Payoff: about 0.15–0.2 ln across verify16 and verify32. If the m=128 line is revisited, test token tiling without split-K (64×64-style tiles, 2 CTAs/SM) on the existing pw9 pipeline first: one check, no new dependencies.
