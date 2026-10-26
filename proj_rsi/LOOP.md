@@ -616,3 +616,10 @@ embedded; one 128x64x64 cooperative warp-specialised instantiation compiles in 2
 168 regs, 0 spills, expected SASS structure. Step A = pw25: bf16 CUTLASS path for the big four at m=128/256 (parity
 test with cuBLAS + judge-side mechanics). Step B (only if A reaches parity): the 12-bit decode as the A-transform
 (8-bit + 4-bit planes, escape fixup) — the actual gain. Track closes 2026-11-04.
+
+## pw25 (CUTLASS bf16 path): upload rejected at 1,074,299 bytes (limit 1,000,000; lint rule added), shrunk to 816,800 with identical SASS, check `04dc0a41413f45f3` submitted.
+
+Step-B plan (audits/cutlass-mixed-input.md): stock mixed-input collective compiles at 168 regs / 0 spills on uint8 and
+uint4 A planes (36.8 s for both); route (i) = forked collective with two TMA streams (8-bit low byte + 4-bit sign/
+exponent-offset plane) merged in the convert step with r6's dec1 arithmetic, escapes (0.01%) by a 1–1.5 µs post-GEMM
+fixup kernel; expected pooler m=128 ≈ 16.5 judge-µs vs cuBLAS 20.3; ~5 days; gated on pw25 reaching cuBLAS parity.
