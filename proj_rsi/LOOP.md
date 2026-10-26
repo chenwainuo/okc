@@ -340,3 +340,14 @@ last-arriver +2.0), which exceeds what the x-traffic saving returns at m=32. The
 lineages. The 12-bit router is slower than r6's bf16 hi/lo pair (escape handling on the lo half). o in smem: no gain.
 What remains for m ≤ 32: the stream itself (pw12, per-warp bulk ring, no split-K). For 3000, m=128/256 (pw13) is
 back to being required unless pw12 lifts the whole m ≤ 32 table by ~8%.
+
+## Iteration 10 — pw12: r6 + per-warp cp.async.bulk W ring. Check `f1e6a18689484451`: 9/9, 3374.4 µs. REJECTED (= r6).
+
+No gb path won a bake. In-prepare: pooler m=1 r6 17.79 | gb-p16w-n4 18.11 | -n4-f 18.14 (proxy fence costs nothing)
+| -n8 19.01 | gb-p-n4 19.58; pooler m=32 r6 21.06 | gb-p-n4 21.86 | gb-p-n8 29.66 (1 CTA/SM); qkv m=1 r6 14.05 |
+gb-q-n4 14.11; unpooler m=32 r6 20.83 | gb-u-n4 22.18; o m=1 r6 9.50 | gb-o-n4 9.79.
+Correction to the pw12 lead: the "4.3 vs 3.6 TB/s" headroom compared a judge-µs figure for r6 with an in-prepare
+probe. In the same units r6 pooler m=1 (17.8 in-prepare) is within ~0.6 µs of the bare bulk stream (16.3–17.2). W
+delivery is not a limiter at m ≤ 8; r6's register loads already saturate HBM. The m ≤ 32 pool is therefore only the
+m=16/32 excess (pooler/unpooler ~2.7, qkv ~3.5–5.8, o ~1–2 µs over m=1), whose cause pw14's ladder measures.
+Ceiling model restated with bw = 3.8 (r6-calibrated): m ≤ 32 + router alone → 3067; so m=128/256 (pw13) is required.
