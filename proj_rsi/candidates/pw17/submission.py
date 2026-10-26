@@ -735,8 +735,20 @@ __global__ void __launch_bounds__(WR * WK * 32, ((V >> 12) & 7) ? ((V >> 12) & 7
     for (int k = 0; k < L::CED - 1; k++) { ce_issue<L::CED>(ciss, ceb.pb, cP, cgs, crl, lane); asm volatile("cp.async.commit_group;\n" ::: "memory"); }
     const uint32_t* gl = (const uint32_t*)(((uint64_t)p.T1 << 32) | p.T0);
     uint32_t* sl = (uint32_t*)(smem + L::SLAB + L::REDB + (cs0 - cs00));
-    if constexpr (((V >> 20) & 1) != 0) { for (int i = threadIdx.x; i < 8192; i += NT) sl[i] = __ldg(gl + (i >> 5)); }
-    else { for (int i = threadIdx.x; i < 256; i += NT) sl[i] = __ldg(gl + i); }
+    constexpr int NE = (256 + NT - 1) / NT;  // LUT entries per thread: all loads in flight at once, then the stores
+    uint32_t lv[NE];
+#pragma unroll
+    for (int k = 0; k < NE; k++) lv[k] = threadIdx.x + k * NT < 256 ? __ldg(gl + threadIdx.x + k * NT) : 0u;
+#pragma unroll
+    for (int k = 0; k < NE; k++) {
+      const int x = threadIdx.x + k * NT;
+      if (x < 256) {
+        if constexpr (((V >> 20) & 1) != 0) {  // entry x for lane l at word 32 x + l: 8 x 16 B per entry
+#pragma unroll
+          for (int q = 0; q < 8; q++) ((uint4*)(sl + x * 32))[q] = make_uint4(lv[k], lv[k], lv[k], lv[k]);
+        } else sl[x] = lv[k];
+      }
+    }
     __syncthreads();
   }
   const uint32_t sb = (uint32_t)__cvta_generic_to_shared(smem);
