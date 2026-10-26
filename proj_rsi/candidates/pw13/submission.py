@@ -891,7 +891,7 @@ __device__ __forceinline__ void pw_tile_mc(uint32_t dst, const PwTmap* tm, int k
 __device__ __forceinline__ void pw_mbarrive_remote(uint32_t local_bar, uint32_t rank) {  // arrive on the peer CTA's barrier
   uint32_t ra;
   asm volatile("mapa.shared::cluster.u32 %0, %1, %2;\n" : "=r"(ra) : "r"(local_bar), "r"(rank));
-  asm volatile("mbarrier.arrive.release.cluster.shared::cluster.b64 _, [%0];\n" :: "r"(ra) : "memory");
+  asm volatile("mbarrier.arrive.shared::cluster.b64 _, [%0];\n" :: "r"(ra) : "memory");  // plain arrive, as CUTLASS ClusterBarrier::arrive(cta_id); the x bytes were already consumed under wait_group
 }
 
 template <int NWG, int NT, int XST, int WST, int CPW, int KSW, int MC, int PRB>
