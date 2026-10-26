@@ -46,24 +46,41 @@ A unit is (tile t, chunk c). In each unit, lane l owns 32 weights in 16 A regist
 - The alphabet size is chosen per matrix so the escape rate is ≤ 0.04% of weights (about 6 per 16-unit warp, against the cap of 32).
 - `pack_e` returns None if any list overflows, like `_gvesc`.
 
-## 2. Decode state per lane
+## 2. Decode state per lane (CODEC_E_CUH, v2 — ring layout changed from v1)
 
 | Register | Meaning |
 |---|---|
 | `lo, hi` | 64-bit bit buffer; the next code is at bit 0 of lo |
-| `V` | Valid bits in the buffer, modulo 128. Bits 7 and up carry garbage from `V -= e`. Test with `(V & 0x60) == 0`. |
-| `ptr` | Words consumed from the lane's stream: the next word is word `ptr & 3` of piece `ptr >> 2` |
+| `V` | Valid bits, modulo 128. Bits 7 and up hold garbage from `V -= e`. Only `V & 0x60` (refill test) and `V & 31` (insert position) are read. |
+| `pb` | 4 × words consumed from the lane stream. The current piece is `pb >> 4`. |
+| `iss` | Pieces issued into the ring |
+| `rl` | Lane ring base: `ring + lane * ED * 16`. The ring is aligned to ED·16 and ED is a power of 2. |
 
-**Refill.** Once per step (4 pairs = 8 weights): if `(V & 0x60) == 0`, then `w = word(ptr++)`, `lo |= w << V`, `hi |= shf.l.wrap(0, w, V)`, `V += 32`. A step never consumes more than 32 bits.
+**Ring (changed in v2).** Each lane's ED slots are now contiguous, so one LOP3 builds the address: `rl | (pb & (16*ED - 1))`. v1 used `[slot][lane]`. Bank conflicts look random-like in both layouts, about 2–3-way.
 
-**Pieces.** A lane needs at most 1 new piece per unit. During unit u it may read pieces up to index u+1. The ring holds pieces in smem as `[slot][lane]`, 16 B each. That puts conflicts at about 2-way, because only lanes ≡ mod 8 that read the same word collide. Pieces are filled by predicated `cp.async` 16 B, at most one issue per lane per unit, while `iss < P && iss < (ptr >> 2) + D`. One commit_group per unit. The analyst sets D and the wait depth from r6's loads-in-flight depth.
+**Per unit:**
+1. `ce_issue<ED>`: at most one predicated `cp.async.cg` 16 B, issued while `iss < P && iss < (pb >> 4) + ED`.
+2. `cp.async.commit_group`.
+3. `cp.async.wait_group(ED-2)`, after a prologue of ED-1 issue+commit pairs.
+4. `ce_unit<ED>`: 4 steps, each a branch-free refill followed by 4 pairs.
 
-The exact device code and its SASS count are in `CODEC_E_CUH`, documented in its header comment.
+**Protocol check.** The reference unpacker replays this protocol and asserts that every refill reads a landed piece that has not been overwritten. It passes for ED = 4 on every test geometry.
 
-## 3. Cost warnings (measured by `pack_e` STATS)
+**SASS.** Probe with ED = 4, nvcc 12.8, sm_90a. It uses 32 registers with 0 spills. Per unit it executes 194 lane-instructions, excluding HMMA, plane LDG and loop overhead: **6.06 per weight**.
 
-**Q1.** Padding every lane to the longest lane, in whole 16 B pieces, costs `maxpad` bits. Expect about 0.2–0.3 bits/weight at KU = 16 and RT = 1. At KU = 2–4 (the o layer) it is about 0.6–1 bit/weight, which wipes out most of E's gain. Options:
-- 4 B interleave granularity: about 4× less rounding waste.
-- Segments spanning all KC chunks of a tile row, with per-lane bit starts.
+## 3. Measured (selftest, 1M weights each, bit-exact incl. negative control)
 
-The STATS line reports `maxpad` so this can be decided per layer.
+| Case | Geometry (WR, WK, KU, S, RT) | Code bits | Pad bits/w | Total incl. tables, list, offsets |
+|---|---|---|---|---|
+| Gaussian K = 8192 (pooler phase) | 2, 8, 16, 1, 1 | 10.82 | 0.18 | 11.07 |
+| Gaussian K = 8192 | 2, 4, 16, 2, 2 | 10.82 | 0.13 | 10.99 |
+| Gaussian K = 1024 (o phase) | 1, 8, 2, 1, 1 | 10.81 | **1.19** | **12.52** |
+| Gaussian K = 1024 | 2, 4, 4, 1, 1 | 10.81 | 0.53 | 11.61 |
+| Gaussian K = 3072 | 1, 4, 8, 1, 1 | 10.86 | 0.26 | 11.26 |
+
+- The pack for a 50 MB pooler-sized layer takes 0.55 s on CPU (48 threads), and is faster on GPU.
+- The per-warp escape list costs a fixed 32 × 32 bits per warp, which is 0.06 bits/weight at 16 units per warp.
+
+**Q1 (decide before building o and unpooler_s).** Padding to the longest lane in 16 B pieces dominates at small KU. Codec E loses to r6 at KU = 2, and is only marginal at KU = 4. Two options:
+- Use E only on layers or geometries with KU·RT ≥ 8.
+- Change the interleave granularity to 4 B. Lane l's k-th word would sit at `(soff + k*32 + l)*4`, with the ring filled by 4 B cp.async. That needs more issue instructions.
