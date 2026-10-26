@@ -61,3 +61,24 @@ This is pw19's SS design. pw19/pw24 measured smem-port saturation (+7 to +11 µs
 - One pitfall: a non-dependent epilogue alias trips a host-gcc bug in the builder. All aliases must depend on template parameters.
 
 **Next milestone:** the forked two-plane collective, 0 spills, plus a CPU emulation of its fragment order.
+
+## pw25 result (check 04dc0a41413f45f3): stock CUTLASS bf16 is about 2× off cuBLAS on pooler m=128
+
+**(1) Why.** 128×64 tiles on swap-AB pooler (M 4096 × N 128) give only 64 tiles, so the persistent grid streams W from 64 of 132 SMs (cut128 46.0, about 2× cuBLAS's 23.8). Stream-K (37.9) fills the SMs but pays a fixup reduction. Cluster 2×1 (47.8) keeps 64 tiles. nvjet's pick (64×64, 13 stages, cluster 1×2) gives 128 CTAs streaming W, with W shared between the two token tiles. Sweep, with expected in-prepare µs on pooler m=128:
+
+| # | Config | Expected |
+|---|---|---|
+| a | 64×64×64 ping-pong, 13 fixed stages, cluster 1×1 | 25–28 |
+| b | a + cluster 1×2 (the two token tiles of a W tile; W multicast), nvjet's shape | 24–27 |
+| c | 64×64×64 basic warp-specialised (one consumer warpgroup), 7 stages, 2 CTAs/SM | 24–28 |
+| d | 64×64×128, ping-pong, 6 stages (fewer, larger TMA boxes) | 25–29 |
+| e | Non-swapped (M = tokens 128, N = W rows) 64×64 ping-pong, row-major out | Same tile count as a; the control |
+
+Ping-pong spilled 36 B at 64×64 with auto stages. With fixed stages it must be re-checked before baking.
+
+**(2) Compile budget.** 3 instantiations took 52 s on the judge, about 10 s fixed plus about 14 s each. r6 (118 s) + router (6 s) + 4 instantiations (about 66 s) + a bake of 8 shapes × 4 paths (about 30 s) ≈ 220 s, inside the 240 s guard. Four per check is safe and five is tight, so two checks of four cover a–e.
+
+**(3) Odds (honest).**
+- A CUTLASS bf16 config within 10% of cuBLAS: about 50% at m=128, about 40% at m=256 (nvjet's m=256 tiles are compute-tuned).
+- Given that, the two-plane mixed-input fork beats cuBLAS by ≥ 3 µs on pooler by 2026-11-04: about 20–25%. The byte cut is worth −5 µs ideal; the RS conversion and the escape correction eat 1.5–2 µs, and the fork is 5 days of work.
+- Overall about 10–12%.
