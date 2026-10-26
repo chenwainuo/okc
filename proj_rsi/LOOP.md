@@ -801,3 +801,7 @@ pw31 (= pw27h + pw29h over pw23) built: 65/65 official checks on the box, every 
 diff-review running, then a SCORED submission (scored quota is separate from checks). A soak job now keeps the GPU
 loaded between agent bursts (proj_rsi/tools/soak.py: pw31 vs pw23 alternated in short locked bursts; running table in
 /root/okc/logs/soak_pw31_vs_pw23.md).
+pw32 (k2x/n128x ported onto pw23): on the box the bake picks nothing — r6's tuned cuBLASLt beats the bf16 128-k-slot
+pipeline by 0.1–2.5 µs (pooler m=128 27.10 vs 28.38; pooler m=256 29.70 vs 32.16); P4's "parity" was vs torch.mm,
+which the tuned path beats by 1.6–4 µs. Not submitted. Correct targets for the 12-bit kernels (box in-prepare, r6):
+pooler m=128 27.10, qkv 19.49, unpooler 27.04, o 11.04, pooler m=256 29.70.
