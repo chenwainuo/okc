@@ -1,6 +1,6 @@
 # Frozen reverse v1/v2 counter diagnostic
 
-`decision=GO_ONE_BOUNDED_COUNTER_RUN; performance_admission=NONE; GPU=UNRUN; candidate_sources=UNCHANGED; result_claims=EXPORT_REVIEW_REQUIRED`
+`decision=VALID_COMPLETED_TWO_VERSION_COUNTER_DIAGNOSTIC; performance_admission=NONE; GPU=TERMINAL_EXIT0; candidate_sources=UNCHANGED; phase_causality=UNRESOLVED`
 
 Independent reviewer read the complete root-owned driver and frozen candidate/helper sources. No source edit, GPU launch, remote job or optimization by reviewer. This diagnostic compares the two exact versions already measured unprofiled; it does not run baseline selection or certify v3.
 
@@ -39,3 +39,39 @@ Known static trade: v2 replaces4vector128bit X loads plus32SHFL/32SEL per thread
 This report can test aggregate **request/sector/cache/throughput** differences on the exact two kernels. For example: more L1 load requests/sectors with similar L2/DRAM transfer supports local reuse combined with extra frontend work; increased downstream transfers is consistent with ineffective reuse/locality. These remain kernel-wide observations: inherited producer escape loads and TMA traffic are also present, changed issue timing can change their hits, and no PC/source sampling section is requested. A throughput percentage is normalized to that unit/cycle convention, not a cross-unit additive byte count. Raw requests/sectors/bytes and elapsed/active definitions must be retained. No aggregate counter directly proves which PC/role caused the delay, physical compression behavior, a universal memory ceiling, or a speedup for v3.
 
 Require fresh importable nonempty report with exactly two correct demangled kernel identities (`rq<128,8,1,0,0,0,20>` then `rq_v2<128,8,1,0,0,0,20>`), grid128/block384/regs168vs162/shared103600; both immediate driver oracles and counter/input checks; actual successful profiler/export exit; finite collected relevant memory/request/cache/scheduler metrics. Preserve missing/unsupported metrics as unavailable, never zero. Driver status`COUNTER_DRIVER_COMPLETE_EXPORT_REVIEW_REQUIRED` alone is insufficient. Root's actual guard/container must terminate and no resource leak/error remain. Counter ambiguity is an explicit learning result; any new implementation requires its own proof and unprofiled same-run incumbent comparison.
+
+## Independent actual export review: valid and informative, no causal time partition
+
+Guard369783/container`okc-proj-reverse-v1-v2-ncu01`,2026-10-26T23:27:34Z..23:27:50Z, exit0,32passes per selected kernel. Reviewer independently confirmed guard/container absent by read-only SSH. Source/driver hashes unchanged, both immediate profiled-output poison/task/input oracles pass with12exact probe rows, both counter0 assertions executed before the logged per-version PASS. Report imports to wide CSV933columns plus units row/exactly2data rows, with expected kernel/config/grid128×1×1/block384×1×1/registers168and162. Dynamic shared103600+static0+driver1024=total104624B/block for both. Planned103600 is the dynamic field, not total including driver reservation.
+
+Archive`results/proj-rsi/takeover/20261026/reverse-v1-v2/`:
+
+|file|bytes|SHA256|
+|---|---:|---|
+|reverse-v1-v2-ncu01.ncu-rep|264961|645e05e9b881f33a32c20f330ab100e8e32307fa72c27536591bcbe7e7f5615c|
+|reverse-v1-v2-ncu01-raw.csv|67934|05257785c07758fbb9c4854670b0b0b40dace63e62dad6794bccdc74ef898751|
+|reverse-v1-v2-ncu01-driver.json|945|b278cbd479d2d1490af27b8707ed05c0a1fc5d5f4cf5e939dec91536377438e6|
+|reverse-v1-v2-ncu01.host.log|941|587cc617eb177935b8d1c7d20a0d6ce54fbaa504f7a9b69551ca7a8c2fbbdc0f|
+
+Relevant physical/request/cache/scheduler values are finite and units checked. Host warns six CTC receive/transmit metrics unavailable; these are not used in this diagnosis and must not be called zero. The unmodified-clock warning limits timing interpretation rather than invalidating counters. No missing relevant memory metric or wrong role/kernel was substituted.
+
+|kernel-wide measurement|v1 vector nc/no_allocate|v2 scalar ca|
+|---|---:|---:|
+|LSUglobal-load requests|262656|1049088|
+|LSUglobal-load L1sectors|4196352|8390656|
+|L1lookup-hit sectors|0|4194304|
+|L1lookup-miss sectors|4196352|4196352|
+|global-load L1hit%|0|49.99|
+|global-load output wavefronts|524800|2102495|
+|L2total requested sectors|6404010|6535628|
+|DRAMread bytes|52152320|51472896|
+|DRAMwrite bytes|2434560|2362880|
+|issue-active% of sustained-active|30.03|25.93|
+|eligible warps/active cycle|0.39|0.33|
+|LGstall /issue-active ratio|0.34|0.23|
+|MIOstall /issue-active ratio|0.96|0.09|
+|long-scoreboard /issue-active ratio|2.87|5.70|
+
+Independent arithmetic: requests increase exactly786432, matching the extra scalar-X load model. Sectors increase exactly4194304; **all extra sectors appear as L1hits, with misses identical**. Thus the half-sector reuse occurs in L1 under ca. DRAMreads fall679424B/about1.30%, not2×; this report does not support increased HBM traffic as the explanation for v2's regression. L1request/output-wavefront demand rises greatly even though upstream misses do not. That supports recovering efficient frontend delivery as a useful next design question, without proving that one queue/port caused the time loss.
+
+Do not rename request growth a measured LG-throttle bottleneck: aggregate LG ratio actually falls0.34→0.23, while long-scoreboard rises2.87→5.70 and issue/eligible activity falls. Those per-issue-active ratios are not per-phase percentages, PC samples, independent observations or causal microseconds; reduced MIO can coexist with other longer waits. Producer polling/shared counters can also vary despite unchanged algorithmic W/shared payload, so aggregate wavefront changes are not a new source-byte accounting. Profiling durations46.112/59.872us remain isolated diagnostic observations, not replacements for unprofiled paired57.024vs47.232us evidence. Cache qualifier/staging/register differences remain confounded. V3's separately reviewed8B/no_allocate/pair-lane loader addresses request/conversion tradeoffs; only its own four-way unprofiled result can establish progress or an incumbent win. No official/full-submission claim follows from this diagnostic.

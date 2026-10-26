@@ -1,6 +1,7 @@
 # muse_bf16_proj loop — head log
 
 Current head: Codex /root; four concurrent agents including head (hard runtime cap). One candidate directory per implementer; independent critic.
+Current iteration authority: [ITERATION.md](ITERATION.md). User expects failures to be diagnosed and iterated. Historical family-wide CLOSE/NO_RETRY wording below is superseded; performance bars gate promotion of versions.
 Goal: official board under3000us. Verifiedbest rs32/job`fb548b5dc6f04696`,3200.615us. Latestpw36/job`e22a4b9d693d4902`9/9,3212.415us; no promotion. Currentqueue:`proj_rsi/queue.json`; resumestate:`handover_folder/12-codex-takeover.json`.
 Exactscore=4830.8/geomean(SGLang_load_sum/ours_load_sum) fromsamejob;62*geomean(ours) elsewhereinhistoryisapproximate, nottheofficialarithmetic. Historicalmodelroles/boardvaluesbelowarechronologicalevidence, notcurrentstate.
 Tools: `python3 -m proj_rsi {board,check,wait,result,status,lint,cpu-check,quota}`. Protocol: `proj_rsi/protocol.json`.
@@ -1259,3 +1260,26 @@ no lingeringprocess/container/GPUallocation. Export review pending. Driverce6d
 does not post-snapshot W/pack/escape bytes; frozen sources are read-only there.
 Counter durations are diagnostic, not performance evidence. Both versions and
 all failed measurements remain available for predecessor comparisons.
+
+
+### 23:31–23:38UTC — diagnostic results and a fourth causal iteration
+
+HWfixedLt two-nodecountercapture370830 validexit0/3passes/node. ReadGEN68174080B
+vsNONE68174592B: only512Bdifference(.000751%); writesGEN+40192B, total+39680B.
+ILCboth65549in/out,0compressible; achievedcompressionunknown(noinformativeeligible
+denominator), notwhole-Wratio. Sameconfig/shader/fulloracles/graphchecks/bytes/
+Region0pass. Shared213268dynamic+0static+1024driver=214292, notastatic-kerneldelta.
+No usefultrafficreductiondemonstratedforthisfixedpair. NextCPUcausebriefassesses
+known-compressiblepositivecontrolwithunchangedD2D/shader; familyremainsactive.
+
+V1/V2 memoryexportvalid: requests262656→1049088, sectors4196352→8390656;
+extra4194304sectorsareL1hits, misscountsidentical,DRAM52.152→51.473MB. Request
+amplificationisevident;LGqueuecausalityisnotproved(LGnormalizedratiofalls),
+longscoreboardratioincreases. SixCTCfieldsunavailablearepreserved, notzeros.
+
+V3fourway371832 terminal23:36:47exit0/all20realgraphchecksand4fulloraclesPASS.
+F1v355.072/v256.640/v147.360/inc24.032us; pairedgain+2.176vsV2,-7.520vsV1,
+-30.368vsinc;20/21winsV2,0/21V1/inc. V3progressvsV2islearning, notanincumbent
+winorofficialspeedup. NextV4isolatesrepeatedruntimeKaddressworkbyfixed4096stride
+specialization/hoist, allV3dataflow/cache/geometryunchanged; CPU/SASSreviewbeforeGPU.
+Officialbeststillrs32/jobfb548b5dc6f04696/3200.615us;3msnotachieved.

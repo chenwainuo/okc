@@ -1,0 +1,633 @@
+{
+  "status": "V3_PROGRESS_DIAGNOSE_NEXT_LIMIT",
+  "parent_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "candidate_source_sha256": {
+    "v1": "ca92a4fb0d3a488768c4531ba315e8d0327b0a4c4a994147b12c61a929ae85f8",
+    "v2": "97664bdee7593d46e0493b9599062c37af150262d597002a722016f060548faf",
+    "v3": "3f90a6c77eeec6494c21019828ef01f93c0451f0d64e567f78a9ce0349abc2b9"
+  },
+  "loader_policy": "8B nc/no_allocate coalesced X plus pairlane2x2demux; inherited rawQ4/A2 four-ahead",
+  "attrs": {
+    "v1": {
+      "regs": 168,
+      "local": 0,
+      "smem": 103600,
+      "max_dynamic_before": 49152,
+      "occupancy_after_optin": 1,
+      "max_dynamic_after": 103600,
+      "register_mode": "64/216 dynamic frozen v1"
+    },
+    "v2": {
+      "regs": 162,
+      "local": 0,
+      "smem": 103600,
+      "max_dynamic_before": 49152,
+      "occupancy_after_optin": 1,
+      "max_dynamic_after": 103600,
+      "register_mode": "uniform static"
+    },
+    "v3": {
+      "regs": 152,
+      "local": 0,
+      "smem": 103600,
+      "max_dynamic_before": 49152,
+      "occupancy_after_optin": 1,
+      "max_dynamic_after": 103600,
+      "register_mode": "uniform static"
+    }
+  },
+  "validation": {
+    "v1": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 1.7e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "fixed_pointer_replay": "original",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "zero",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "fresh_outliers",
+        "status": "PASS"
+      }
+    ],
+    "v2": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 1.7e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "fixed_pointer_replay": "original",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "zero",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "fresh_outliers",
+        "status": "PASS"
+      }
+    ],
+    "v3": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 1.7e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "fixed_pointer_replay": "original",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "zero",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "fresh_outliers",
+        "status": "PASS"
+      }
+    ],
+    "incumbent": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 2.4e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 2.558e-03 (worst row 2.975e-03); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 2.836e-03 (worst row 3.009e-03); 16 probe rows exact to 0.0e+00"
+      }
+    ]
+  },
+  "incumbent_pick": {
+    "kind": "rq",
+    "variant": "s4s5hz",
+    "KS": 2
+  },
+  "timing": {
+    "F1_medians_us": {
+      "incumbent_before": 24.032000452280045,
+      "v1_before": 47.359999269247055,
+      "v2_before": 56.671999394893646,
+      "v3": 55.07199838757515,
+      "v2_after": 56.63999915122986,
+      "v1_after": 47.359999269247055,
+      "incumbent_after": 24.159999564290047
+    },
+    "F1_samples_us": {
+      "incumbent_before": [
+        24.12799932062626,
+        24.032000452280045,
+        23.93599972128868,
+        23.903999477624893,
+        24.447999894618988,
+        23.93599972128868,
+        23.96799996495247,
+        24.064000695943832,
+        23.871999233961105,
+        25.18399991095066,
+        24.57600086927414,
+        24.09599907696247,
+        25.02400055527687,
+        24.25600029528141,
+        24.12799932062626,
+        23.871999233961105,
+        23.744000121951103,
+        23.93599972128868,
+        24.000000208616257,
+        23.871999233961105,
+        24.4159996509552
+      ],
+      "v1_before": [
+        47.61600121855736,
+        47.839999198913574,
+        47.58400097489357,
+        47.231998294591904,
+        47.26399853825569,
+        47.359999269247055,
+        47.74399846792221,
+        47.29599878191948,
+        47.231998294591904,
+        47.61600121855736,
+        47.58400097489357,
+        47.807998955249786,
+        47.58400097489357,
+        47.231998294591904,
+        47.231998294591904,
+        48.06400090456009,
+        47.16800153255463,
+        47.10400104522705,
+        47.29599878191948,
+        47.359999269247055,
+        47.10400104522705
+      ],
+      "v2_before": [
+        56.671999394893646,
+        56.41600117087364,
+        56.60799890756607,
+        56.32000043988228,
+        56.51199817657471,
+        56.703999638557434,
+        56.73599988222122,
+        56.60799890756607,
+        56.76800012588501,
+        56.992001831531525,
+        57.0559985935688,
+        56.832000613212585,
+        56.543998420238495,
+        56.352000683546066,
+        56.832000613212585,
+        56.32000043988228,
+        56.671999394893646,
+        56.57599866390228,
+        56.2559999525547,
+        57.18399956822395,
+        56.73599988222122
+      ],
+      "v3": [
+        55.743999779224396,
+        55.26399984955788,
+        53.98400127887726,
+        55.00800162553787,
+        57.08799883723259,
+        55.87200075387955,
+        53.888000547885895,
+        55.424001067876816,
+        56.44800141453743,
+        54.048001766204834,
+        55.16799911856651,
+        55.07199838757515,
+        53.727999329566956,
+        56.12799897789955,
+        54.23999950289726,
+        53.79199981689453,
+        53.408000618219376,
+        56.223999708890915,
+        55.36000058054924,
+        54.23999950289726,
+        53.18399891257286
+      ],
+      "v2_after": [
+        56.671999394893646,
+        56.48000165820122,
+        56.543998420238495,
+        57.24800005555153,
+        56.384000927209854,
+        57.08799883723259,
+        56.352000683546066,
+        56.73599988222122,
+        56.28800019621849,
+        56.44800141453743,
+        56.671999394893646,
+        56.76800012588501,
+        56.352000683546066,
+        56.832000613212585,
+        56.543998420238495,
+        56.703999638557434,
+        56.543998420238495,
+        56.41600117087364,
+        56.992001831531525,
+        56.63999915122986,
+        57.18399956822395
+      ],
+      "v1_after": [
+        46.65600135922432,
+        47.29599878191948,
+        47.200001776218414,
+        47.231998294591904,
+        47.26399853825569,
+        47.648001462221146,
+        47.359999269247055,
+        47.74399846792221,
+        47.39199951291084,
+        47.55200073122978,
+        47.42399975657463,
+        47.13600128889084,
+        47.520000487565994,
+        47.58400097489357,
+        47.359999269247055,
+        47.488000243902206,
+        47.32799902558327,
+        47.13600128889084,
+        47.71199822425842,
+        47.16800153255463,
+        47.55200073122978
+      ],
+      "incumbent_after": [
+        23.679999634623528,
+        23.96799996495247,
+        25.280000641942024,
+        23.840000852942467,
+        24.191999807953835,
+        23.840000852942467,
+        24.12799932062626,
+        23.80800060927868,
+        24.768000468611717,
+        23.80800060927868,
+        24.224000051617622,
+        24.224000051617622,
+        24.25600029528141,
+        23.96799996495247,
+        24.25600029528141,
+        24.000000208616257,
+        24.12799932062626,
+        24.288000538945198,
+        24.159999564290047,
+        24.159999564290047,
+        24.4159996509552
+      ]
+    },
+    "F1_v3_gain_us": {
+      "incumbent": -31.039997935295105,
+      "v1": -7.7119991183280945,
+      "v2": 1.5680007636547089
+    },
+    "paired_graph_us": [
+      {
+        "incumbent": 24.57600086927414,
+        "v1": 47.87199944257736,
+        "v2": 56.96000158786774,
+        "v3": 57.72799998521805
+      },
+      {
+        "v1": 47.68000170588493,
+        "v2": 56.76800012588501,
+        "v3": 55.87200075387955,
+        "incumbent": 23.903999477624893
+      },
+      {
+        "v2": 56.51199817657471,
+        "v3": 53.92000079154968,
+        "incumbent": 23.552000522613525,
+        "v1": 48.128001391887665
+      },
+      {
+        "v3": 56.86400085687637,
+        "incumbent": 24.89599958062172,
+        "v1": 47.93599992990494,
+        "v2": 57.312000542879105
+      },
+      {
+        "v3": 56.063998490571976,
+        "v2": 56.992001831531525,
+        "v1": 48.0320006608963,
+        "incumbent": 24.25600029528141
+      },
+      {
+        "v2": 58.78400057554245,
+        "v1": 48.928000032901764,
+        "incumbent": 25.119999423623085,
+        "v3": 56.60799890756607
+      },
+      {
+        "v1": 47.71199822425842,
+        "incumbent": 23.903999477624893,
+        "v3": 55.135998874902725,
+        "v2": 57.440001517534256
+      },
+      {
+        "incumbent": 23.615999147295952,
+        "v3": 57.72799998521805,
+        "v2": 57.760000228881836,
+        "v1": 47.839999198913574
+      },
+      {
+        "incumbent": 24.191999807953835,
+        "v1": 47.61600121855736,
+        "v2": 56.63999915122986,
+        "v3": 55.67999929189682
+      },
+      {
+        "v1": 47.90399968624115,
+        "v2": 56.57599866390228,
+        "v3": 55.424001067876816,
+        "incumbent": 25.280000641942024
+      },
+      {
+        "v2": 56.73599988222122,
+        "v3": 53.568001836538315,
+        "incumbent": 24.4159996509552,
+        "v1": 47.87199944257736
+      },
+      {
+        "v3": 56.2559999525547,
+        "incumbent": 23.840000852942467,
+        "v1": 47.68000170588493,
+        "v2": 57.0559985935688
+      },
+      {
+        "v3": 56.60799890756607,
+        "v2": 56.86400085687637,
+        "v1": 47.71199822425842,
+        "incumbent": 23.871999233961105
+      },
+      {
+        "v2": 57.023998349905014,
+        "v1": 47.68000170588493,
+        "incumbent": 25.407999753952026,
+        "v3": 55.26399984955788
+      },
+      {
+        "v1": 48.06400090456009,
+        "incumbent": 24.4159996509552,
+        "v3": 53.79199981689453,
+        "v2": 56.832000613212585
+      },
+      {
+        "incumbent": 23.48800003528595,
+        "v3": 53.3440001308918,
+        "v2": 56.48000165820122,
+        "v1": 47.71199822425842
+      },
+      {
+        "incumbent": 23.96799996495247,
+        "v1": 47.16800153255463,
+        "v2": 56.86400085687637,
+        "v3": 51.90400034189224
+      },
+      {
+        "v1": 48.0320006608963,
+        "v2": 57.312000542879105,
+        "v3": 52.12799832224846,
+        "incumbent": 24.480000138282776
+      },
+      {
+        "v2": 56.832000613212585,
+        "v3": 52.73599922657013,
+        "incumbent": 24.57600086927414,
+        "v1": 47.42399975657463
+      },
+      {
+        "v3": 52.83199995756149,
+        "incumbent": 24.992000311613083,
+        "v1": 47.39199951291084,
+        "v2": 56.48000165820122
+      },
+      {
+        "v3": 52.06400156021118,
+        "v2": 56.60799890756607,
+        "v1": 47.488000243902206,
+        "incumbent": 23.64799939095974
+      }
+    ],
+    "paired_v3_median_gain_us": {
+      "incumbent": -30.368000268936157,
+      "v1": -7.520001381635666,
+      "v2": 2.1760016679763794
+    },
+    "paired_v3_wins": {
+      "incumbent": 0,
+      "v1": 0,
+      "v2": 20
+    }
+  },
+  "actual_timed_graph_checks": [
+    {
+      "graph": "incumbent",
+      "input": "original",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.686e-03 (worst row 2.986e-03); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v1",
+      "input": "original",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v2",
+      "input": "original",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v3",
+      "input": "original",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "incumbent",
+      "input": "zero",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "v1",
+      "input": "zero",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "v2",
+      "input": "zero",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "v3",
+      "input": "zero",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "incumbent",
+      "input": "fresh_normal",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.671e-03 (worst row 2.983e-03); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v1",
+      "input": "fresh_normal",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v2",
+      "input": "fresh_normal",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v3",
+      "input": "fresh_normal",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "incumbent",
+      "input": "fresh_outliers",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.833e-03 (worst row 2.971e-03); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v1",
+      "input": "fresh_outliers",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v2",
+      "input": "fresh_outliers",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v3",
+      "input": "fresh_outliers",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "incumbent",
+      "input": "all_probes",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v1",
+      "input": "all_probes",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v2",
+      "input": "all_probes",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v3",
+      "input": "all_probes",
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    }
+  ],
+  "profile": {
+    "incumbent": [
+      {
+        "name": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 20992
+      }
+    ],
+    "v1": [
+      {
+        "name": "void rq<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 44834
+      }
+    ],
+    "v2": [
+      {
+        "name": "void rq_v2<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 54049
+      }
+    ],
+    "v3": [
+      {
+        "name": "void rq_v3<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 50017
+      }
+    ]
+  },
+  "weights_inputs_counters": "UNCHANGED_OR_RESET",
+  "versions_improved_both_methods": [
+    "v2"
+  ],
+  "next_measurement_question": "If remaining gap: use pending v1/v2 memory counters and measured V3 delta to rank8B load issue/demux versus W-producer/shared-B; no automatic variant or family closure.",
+  "graph_cleanup": "RESET_ALL_FOUR"
+}

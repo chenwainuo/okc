@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-10-26T23:29:49.458452+00:00",
+  "updated_at_utc": "2026-10-26T23:39:16.961288+00:00",
   "goal_official_score_us_below": 3000,
   "incumbent": {
     "job": "fb548b5dc6f04696",
@@ -38,24 +38,52 @@
     "check_quota_left": 0,
     "scored_quota_left": 1,
     "reset_utc": "2026-10-27T00:00:00Z",
-    "gpu_status": "Idle0MiBafterv1v2capture; V3CPUcompile/review; HWcounterreview"
+    "gpu_status": "Idle0MiBafterV3; V4CPUimplementation/HWcausebrief/independentreviewparallel"
   },
   "ranked_open": [
     {
       "rank": 1,
-      "id": "operand_reverse_v3",
+      "id": "operand_reverse_v4",
       "family": "operand_reverse",
       "owner": "proj_tracks",
-      "status": "PAIRLANE_MAP_PROOF_PASS_IMPLEMENTATION_IN_PROGRESS",
-      "evidence": "V2correctbut57usvs47usv1; scalarloaderrequestedsectors128touches/64unique, v1coalesced64/64. RemovedSHFLaloneinsufficient.",
-      "hypothesis": "8Bcoalescedloads+pairlane2x2demux:8LDG+16SHFL16SEL vs v1 4LDG+32SHFL32SEL; matchesv1 sectorfootprint and4ahead rawQ4/A2; no_allocatefixed",
-      "next": "Compile/resource/lifetimeproofandindependentreview; 4wayinc/v1/v2/v3completemeasure; compareprogressandresidualgap, iterate."
+      "status": "CPU_IMPLEMENTATION",
+      "hypothesis": "EnforcedK4096permitsbounded32bitoffsetandhoistedrow/stageaddress; removepervectorruntimeKwideaddresswork whilepreservingV3loader/demux/pipeline/geometry",
+      "predicted_observations": "ActualSASSfewerrepeatedIMAD.WIDE/LEA.HI aroundsame8LDG; valid4wayinc/V1/V3/V4latencytest",
+      "next": "Fullmap/overflow/lifetime/sourceproof, compile/SASS andindependentreview; thenoneboundedvalidcomparison",
+      "forecast": {
+        "attainable_gain": "UNKNOWN; notclaimedcriticalpathuntiltest",
+        "information_value": "Separateaddressgenerationcostfrom8Bload/demuxpolicy",
+        "conditional_official_score_gain": "UNMEASURED; no localincumbentwin yet"
+      }
     },
     {
       "rank": 2,
+      "id": "operand_reverse_v3",
+      "family": "operand_reverse",
+      "owner": "proj_tracks",
+      "status": "VALID_PROGRESS_VS_V2_REGRESSION_VS_V1_AND_INCUMBENT",
+      "evidence": "V2correctbut57usvs47usv1; scalarloaderrequestedsectors128touches/64unique, v1coalesced64/64. RemovedSHFLaloneinsufficient.",
+      "hypothesis": "8Bcoalescedloads+pairlane2x2demux:8LDG+16SHFL16SEL vs v1 4LDG+32SHFL32SEL; matchesv1 sectorfootprint and4ahead rawQ4/A2; no_allocatefixed",
+      "next": "V4addressspecialization/hoist; V3sourceandresultsretained",
+      "source_sha256": "3f90a6c77eeec6494c21019828ef01f93c0451f0d64e567f78a9ce0349abc2b9",
+      "manifest_sha256": "dc460284e95b930e98a214264f66a139dffa8bbe69ee0fbbc2a1af9fddd3db66",
+      "forecast": {
+        "speedup": "UNMEASURED; need <24.224us priorlocalincumbent towin, <47.232us toprogressv1",
+        "information_value": "Testcoalesced8Bfront-end/demuxtradeoffafterv2failedscalarroute",
+        "conditional_score_value": "UnknownuntilofficialH200dispatchwin; localrqcomparator differsofficialLt"
+      },
+      "pid": 371832,
+      "container": "okc-proj-operand-reverse-v301",
+      "inner_s": 240,
+      "outer_s": 300,
+      "review": "proj_rsi/audits/operand-reverse-v3-preflight.md",
+      "terminal": "2026-10-26T23:36:47Z exit0"
+    },
+    {
+      "rank": 3,
       "id": "reverse_v1_v2_memory_diagnostic",
       "owner": "root",
-      "status": "TERMINAL_EXPORT_ANALYSIS_PENDING",
+      "status": "VALID_ANALYSIS_COMPLETE",
       "purpose": "QuantifyactualL1/L2sectorrequests/cachehit/LSUpressurev1v2; counteronly,nooptimizationorofficialclaim",
       "driver": "proj_rsi/tools/operand_reverse_versions_ncu.py",
       "driver_sha256": "ce6d3407101b191bae27150f6670691d0440185dc1586df483ee7fde67b09493",
@@ -65,18 +93,29 @@
       "review": "proj_rsi/audits/operand-reverse-versions-ncu-preflight.md",
       "terminal": "2026-10-26T23:27:50Z exit0",
       "passes_per_kernel": 32,
-      "process_and_container_gone": true
+      "process_and_container_gone": true,
+      "analysis": "proj_rsi/audits/operand-reverse-v1-v2-memory-roi.md"
     },
     {
-      "rank": 3,
+      "rank": 4,
       "id": "hw_compression_counters",
       "family": "hw_compression",
       "owner": "proj_integration",
-      "status": "FROZEN_INDEPENDENT_REVIEW",
+      "status": "VALID_NEGLIGIBLE_TRAFFIC_REDUCTION_DIAGNOSE_CAUSE",
       "purpose": "PhysicalDRAMreadcomparisonGENERICvsVMMNONE withsamefixednativeLtconfig; determinewhetherallocationactuallychangestraffic underexistingD2Dpopulation",
       "metadata": "H100CC90 lrc__ilc_input_sectors/output_sectors/compressible metrics verified; eventdirectionneedsprimarysemanticqualification",
       "next": "Independentreviewonefixedtwo-nodecounterdriver; nopopulationsweep orratiofromeligibilityflag.",
-      "manifest_sha256": "e4f66b6d321a08c8c28eec6c2cb171ee1d731e4f499a2c2f9b2a8a7bc4562596"
+      "manifest_sha256": "e4f66b6d321a08c8c28eec6c2cb171ee1d731e4f499a2c2f9b2a8a7bc4562596",
+      "pid": 370830,
+      "container": "okc-proj-hw-native-counters01",
+      "inner_s": 180,
+      "outer_s": 240,
+      "review": "proj_rsi/audits/hw-compression-counters-preflight.md",
+      "ordering": "ExecutedwhileV3freeze/reviewCPUinprogress; nodeexclusive; nofunctionaldependencyonV3",
+      "terminal": "2026-10-26T23:31:19Z exit0",
+      "passes_per_kernel": 3,
+      "process_and_container_gone": true,
+      "analysis": "proj_rsi/audits/hw-compression-counters-preflight.md"
     }
   ],
   "closed_this_takeover": [
@@ -274,6 +313,18 @@
       "cleanup": "CHECKED_CLOSE_PASS_Region0_both",
       "effective_compression": "UNMEASURED",
       "next": "Trafficcountersbeforefurtherallocation/populationhypotheses"
+    },
+    {
+      "id": "operand_reverse_v3",
+      "status": "VALID_PROGRESS_VS_V2_REGRESSION_VS_V1_AND_INCUMBENT",
+      "F1_us": 55.07199838757515,
+      "paired_gain_us": {
+        "v2": 2.1760016679763794,
+        "v1": -7.520001381635666,
+        "incumbent": -30.368000268936157
+      },
+      "result": "proj_rsi/candidates/operand_reverse_v3/operand-reverse-v301.json",
+      "next": "V4addressworkcausaltest"
     }
   ]
 }

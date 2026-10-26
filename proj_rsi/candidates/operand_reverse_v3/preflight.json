@@ -1,0 +1,410 @@
+{
+  "status": "CPU_DEVICE_PROOF_ONLY_GPU_UNRUN",
+  "X": {
+    "exact_symbolic_BF16_indices": 524288,
+    "all65536_BF16_patterns": true,
+    "uint2_LDG_per_thread_stage": 8,
+    "SHFL_per_thread_stage": 16,
+    "SEL_per_thread_stage": 16,
+    "cache_policy": "ld.global.nc.L1::no_allocate.v2.u32 (same as v1)",
+    "every_vector8B_aligned": true,
+    "warp_stage_32B_sector_touches": 64,
+    "warp_stage_unique32B_sectors": 64,
+    "v1_same_sectors": true,
+    "v2_sector_touches": 128,
+    "total32B_sector_touches": 32768,
+    "total_unique32B_sectors": 32768
+  },
+  "W": {
+    "exact_BF16_values": 524288,
+    "escapes": 491209,
+    "cap": 61504,
+    "escape_lists_span32entry_windows": true,
+    "escape_control_flow": "Bit proof reconstructs CSR entries; unchanged inherited rq_fix supplies reload semantics, GPU runtime pending",
+    "shared_B_SW128_bijection": true
+  },
+  "output": {
+    "all8192_D_scalars_observed": true,
+    "single128x64_slab_bijection": true
+  },
+  "lifetime": {
+    "status": "PASS_V1_RAW_Q4_SEPARATE_A2_LIFETIME",
+    "prefetch_ahead": 4,
+    "current_raw_refill": "s+4 only after demux/current WGMMA commit; separate A still pinned",
+    "A_reuse": "A(s) last read pinned after wait_group1 in round(s+1), before its next write(s+2)",
+    "final": "wait_group0 then pin both A then releaseB63",
+    "negative_without_retirement_caught": 62,
+    "events": [
+      {
+        "issue": 1,
+        "A_retired": 0,
+        "raw_refill": 5
+      },
+      {
+        "issue": 2,
+        "A_retired": 1,
+        "raw_refill": 6
+      },
+      {
+        "issue": 3,
+        "A_retired": 2,
+        "raw_refill": 7
+      },
+      {
+        "issue": 4,
+        "A_retired": 3,
+        "raw_refill": 8
+      },
+      {
+        "issue": 5,
+        "A_retired": 4,
+        "raw_refill": 9
+      },
+      {
+        "issue": 6,
+        "A_retired": 5,
+        "raw_refill": 10
+      },
+      {
+        "issue": 7,
+        "A_retired": 6,
+        "raw_refill": 11
+      },
+      {
+        "issue": 8,
+        "A_retired": 7,
+        "raw_refill": 12
+      },
+      {
+        "issue": 9,
+        "A_retired": 8,
+        "raw_refill": 13
+      },
+      {
+        "issue": 10,
+        "A_retired": 9,
+        "raw_refill": 14
+      },
+      {
+        "issue": 11,
+        "A_retired": 10,
+        "raw_refill": 15
+      },
+      {
+        "issue": 12,
+        "A_retired": 11,
+        "raw_refill": 16
+      },
+      {
+        "issue": 13,
+        "A_retired": 12,
+        "raw_refill": 17
+      },
+      {
+        "issue": 14,
+        "A_retired": 13,
+        "raw_refill": 18
+      },
+      {
+        "issue": 15,
+        "A_retired": 14,
+        "raw_refill": 19
+      },
+      {
+        "issue": 16,
+        "A_retired": 15,
+        "raw_refill": 20
+      },
+      {
+        "issue": 17,
+        "A_retired": 16,
+        "raw_refill": 21
+      },
+      {
+        "issue": 18,
+        "A_retired": 17,
+        "raw_refill": 22
+      },
+      {
+        "issue": 19,
+        "A_retired": 18,
+        "raw_refill": 23
+      },
+      {
+        "issue": 20,
+        "A_retired": 19,
+        "raw_refill": 24
+      },
+      {
+        "issue": 21,
+        "A_retired": 20,
+        "raw_refill": 25
+      },
+      {
+        "issue": 22,
+        "A_retired": 21,
+        "raw_refill": 26
+      },
+      {
+        "issue": 23,
+        "A_retired": 22,
+        "raw_refill": 27
+      },
+      {
+        "issue": 24,
+        "A_retired": 23,
+        "raw_refill": 28
+      },
+      {
+        "issue": 25,
+        "A_retired": 24,
+        "raw_refill": 29
+      },
+      {
+        "issue": 26,
+        "A_retired": 25,
+        "raw_refill": 30
+      },
+      {
+        "issue": 27,
+        "A_retired": 26,
+        "raw_refill": 31
+      },
+      {
+        "issue": 28,
+        "A_retired": 27,
+        "raw_refill": 32
+      },
+      {
+        "issue": 29,
+        "A_retired": 28,
+        "raw_refill": 33
+      },
+      {
+        "issue": 30,
+        "A_retired": 29,
+        "raw_refill": 34
+      },
+      {
+        "issue": 31,
+        "A_retired": 30,
+        "raw_refill": 35
+      },
+      {
+        "issue": 32,
+        "A_retired": 31,
+        "raw_refill": 36
+      },
+      {
+        "issue": 33,
+        "A_retired": 32,
+        "raw_refill": 37
+      },
+      {
+        "issue": 34,
+        "A_retired": 33,
+        "raw_refill": 38
+      },
+      {
+        "issue": 35,
+        "A_retired": 34,
+        "raw_refill": 39
+      },
+      {
+        "issue": 36,
+        "A_retired": 35,
+        "raw_refill": 40
+      },
+      {
+        "issue": 37,
+        "A_retired": 36,
+        "raw_refill": 41
+      },
+      {
+        "issue": 38,
+        "A_retired": 37,
+        "raw_refill": 42
+      },
+      {
+        "issue": 39,
+        "A_retired": 38,
+        "raw_refill": 43
+      },
+      {
+        "issue": 40,
+        "A_retired": 39,
+        "raw_refill": 44
+      },
+      {
+        "issue": 41,
+        "A_retired": 40,
+        "raw_refill": 45
+      },
+      {
+        "issue": 42,
+        "A_retired": 41,
+        "raw_refill": 46
+      },
+      {
+        "issue": 43,
+        "A_retired": 42,
+        "raw_refill": 47
+      },
+      {
+        "issue": 44,
+        "A_retired": 43,
+        "raw_refill": 48
+      },
+      {
+        "issue": 45,
+        "A_retired": 44,
+        "raw_refill": 49
+      },
+      {
+        "issue": 46,
+        "A_retired": 45,
+        "raw_refill": 50
+      },
+      {
+        "issue": 47,
+        "A_retired": 46,
+        "raw_refill": 51
+      },
+      {
+        "issue": 48,
+        "A_retired": 47,
+        "raw_refill": 52
+      },
+      {
+        "issue": 49,
+        "A_retired": 48,
+        "raw_refill": 53
+      },
+      {
+        "issue": 50,
+        "A_retired": 49,
+        "raw_refill": 54
+      },
+      {
+        "issue": 51,
+        "A_retired": 50,
+        "raw_refill": 55
+      },
+      {
+        "issue": 52,
+        "A_retired": 51,
+        "raw_refill": 56
+      },
+      {
+        "issue": 53,
+        "A_retired": 52,
+        "raw_refill": 57
+      },
+      {
+        "issue": 54,
+        "A_retired": 53,
+        "raw_refill": 58
+      },
+      {
+        "issue": 55,
+        "A_retired": 54,
+        "raw_refill": 59
+      },
+      {
+        "issue": 56,
+        "A_retired": 55,
+        "raw_refill": 60
+      },
+      {
+        "issue": 57,
+        "A_retired": 56,
+        "raw_refill": 61
+      },
+      {
+        "issue": 58,
+        "A_retired": 57,
+        "raw_refill": 62
+      },
+      {
+        "issue": 59,
+        "A_retired": 58,
+        "raw_refill": 63
+      },
+      {
+        "issue": 60,
+        "A_retired": 59,
+        "raw_refill": null
+      },
+      {
+        "issue": 61,
+        "A_retired": 60,
+        "raw_refill": null
+      },
+      {
+        "issue": 62,
+        "A_retired": 61,
+        "raw_refill": null
+      },
+      {
+        "issue": 63,
+        "A_retired": 62,
+        "raw_refill": null
+      }
+    ],
+    "limits": "W6/B8 protocol inherited byte-identically except removed dynamic allocation; not an arbitrary interleaving GPU simulation"
+  },
+  "producer_output_source_identity": "UNCHANGED_EXCEPT_REMOVED_DYNAMIC_REGISTER_DECLARATION",
+  "source_sha256": "3f90a6c77eeec6494c21019828ef01f93c0451f0d64e567f78a9ce0349abc2b9",
+  "device_sha256": "9895edb59a5924f56afb1147d1f5de36f393f1ee25d4bc3add4d6f9eb56df0f2",
+  "CTA_register_pool": {
+    "mode": "UNIFORM_STATIC_NO_SETMAXNREG",
+    "dynamic_role_requests": 0,
+    "actual_static_regs": 152,
+    "pool": 58368,
+    "pool_limit": 65536
+  },
+  "shared_bytes": 103600,
+  "geometry": {
+    "m": 128,
+    "n": 8192,
+    "k": 4096,
+    "channel_tile": 64,
+    "CTAs": 128,
+    "threads": 384,
+    "KS": 1
+  },
+  "ptxas": "ptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_Z5rq_v3ILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_' for 'sm_90a'\nptxas info    : Function properties for _Z5rq_v3ILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 152 registers, used 4 barriers\nptxas info    : Compile time = 60.246 ms\n",
+  "SASS": {
+    "HGMMA": 16,
+    "WARPGROUP_ARRIVE": 4,
+    "UTMASTG": 1,
+    "UBLKCP_W": 7,
+    "UTMALDG_X": 0,
+    "SHFL": 100,
+    "LDG_mnemonics": {
+      "LDG.E.CONSTANT": 2,
+      "LDG.E.NA.64.CONSTANT": 64
+    },
+    "BFLY_CFG": {
+      "fixed_mask_main_path": 64,
+      "outlined_collective_alternatives": 32,
+      "demux_BRA_DIV": [
+        [
+          5456,
+          19088
+        ],
+        [
+          7664,
+          20720
+        ]
+      ],
+      "dynamic_execution": "UNMEASURED; static alternatives are not additive executed work"
+    }
+  },
+  "SASS_sha256": "271912eee132a509abd568b8e35c5e71eb91307907467e58a51d353ed703d831",
+  "files": {
+    "prototype.py": "515c8d9e83eb06c70586133b77c6a32df0e04cf348d9fc9e86656856afeca225",
+    "kernel_body.cuh": "c5cf2f4887bb85198f7c3dbc2387c75bdc6b9ed42b75b3848a3cae68ed455376",
+    "preflight.py": "0d457bb84af48f8b32b6a6188c4d7239b311954ac6286e2fa75f6fa3ff5f2f9a"
+  }
+}

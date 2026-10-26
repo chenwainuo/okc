@@ -1,0 +1,76 @@
+Chip gh100
+--------------------------------------------------------------------------- --------------- --------------- ----------------------------------------------------------------------
+Metric Name                                                                 Metric Type     Metric Unit     Metric Description                                                    
+--------------------------------------------------------------------------- --------------- --------------- ----------------------------------------------------------------------
+launch__barrier_count                                                       Counter                         Number of barriers in the kernel launch.                              
+launch__block_dim_x                                                         Counter         block           Maximum number of threads for the kernel launch in X dimension.       
+launch__block_dim_y                                                         Counter         block           Maximum number of threads for the kernel launch in Y dimension.       
+launch__block_dim_z                                                         Counter         block           Maximum number of threads for the kernel launch in Z dimension.       
+launch__block_size                                                          Counter                         Maximum total number of threads per block for the kernel launch.      
+launch__cluster_dim_x                                                       Counter                         Number of clusters for the kernel launch in X dimension.              
+launch__cluster_dim_y                                                       Counter                         Number of clusters for the kernel launch in Y dimension.              
+launch__cluster_dim_z                                                       Counter                         Number of clusters for the kernel launch in Z dimension.              
+launch__cluster_max_active                                                  Counter         cluster         Maximum number of clusters that can co-exist on the target device.    
+                                                                                                            The runtime environment may affect how the hardware schedules the     
+                                                                                                            clusters, so the calculated occupancy is not guaranteed to be         
+                                                                                                            achievable.                                                           
+launch__cluster_max_potential_size                                          Counter         block           Largest valid cluster size for the kernel function and launch         
+                                                                                                            configuration.                                                        
+launch__cluster_scheduling_policy                                           Counter                         Cluster scheduling policy.                                            
+launch__context_id                                                          Counter                         CUDA context id for the kernel launch (id of the primary context if   
+                                                                                                            launch was on a green context).                                       
+launch__device_id                                                           Counter                         CUDA device id for the kernel launch.                                 
+launch__func_cache_config                                                   Counter                         On devices where the L1 cache and shared memory use the same hardware 
+                                                                                                            resources, this is the preferred cache configuration for the CUDA     
+                                                                                                            function. The runtime will use the requested configuration if         
+                                                                                                            possible, but it is free to choose a different configuration if       
+                                                                                                            required.                                                             
+launch__function_pcs                                                        Counter                         Kernel function entry PCs.                                            
+launch__graph_contains_device_launch                                        Counter                         Set to 1 if any node in the profiled graph can launch a CUDA device   
+                                                                                                            graph.                                                                
+launch__graph_is_device_launchable                                          Counter                         Set to 1 if the profiled graph was device-launchable.                 
+launch__green_context_id                                                    Counter                         CUDA context id of the green context for the kernel launch (if        
+                                                                                                            applicable).                                                          
+launch__grid_dim_x                                                          Counter                         Maximum number of blocks for the kernel launch in X dimension.        
+launch__grid_dim_y                                                          Counter                         Maximum number of blocks for the kernel launch in Y dimension.        
+launch__grid_dim_z                                                          Counter                         Maximum number of blocks for the kernel launch in Z dimension.        
+launch__grid_size                                                           Counter                         Maximum total number of blocks for the kernel launch.                 
+launch__kernel_name                                                         Counter                         Name of the kernel in the kernel launch.                              
+launch__occupancy_cluster_gpu_pct                                           Throughput      %               Overall GPU occupancy due to clusters.                                
+launch__occupancy_cluster_pct                                               Throughput      %               The ratio of active blocks to the max possible active blocks due to   
+                                                                                                            clusters.                                                             
+launch__occupancy_limit_barriers                                            Counter         block           Occupancy limit due to the number of used barriers.                   
+launch__occupancy_limit_blocks                                              Counter         block           Occupancy limit due to maximum number of blocks managable per SM.     
+launch__occupancy_limit_registers                                           Counter         block           Occupancy limit due to register usage.                                
+launch__occupancy_limit_shared_mem                                          Counter         block           Occupancy limit due to shared memory usage.                           
+launch__occupancy_limit_warps                                               Counter         block           Occupancy limit due to block size.                                    
+launch__occupancy_per_barrier_count                                         Counter                         Number of active warps for given barrier count.                       
+launch__occupancy_per_block_size                                            Counter                         Number of active warps for given block size.                          
+launch__occupancy_per_cluster_size                                          Counter                         Number of active clusters for given cluster size.                     
+launch__occupancy_per_register_count                                        Counter                         Number of active warps for given register count.                      
+launch__occupancy_per_shared_mem_size                                       Counter                         Number of active warps for given shared memory size.                  
+launch__registers_per_thread                                                Ratio           register/thread Number of registers allocated per thread.                             
+launch__registers_per_thread_allocated                                      Ratio           register/thread Number of registers allocated per thread.                             
+launch__shared_mem_config_size                                              Counter         byte            Shared memory size configured for the kernel launch. The size depends 
+                                                                                                            on the static, dynamic, and driver shared memory requirements as      
+                                                                                                            well as the specified or platform-determined configuration size.      
+launch__shared_mem_per_block                                                Ratio           byte/block      Shared memory size per block.                                         
+launch__shared_mem_per_block_allocated                                      Ratio           byte/block      Allocated shared memory size per block.                               
+launch__shared_mem_per_block_driver                                         Ratio           byte/block      Shared memory size per block, allocated for the CUDA driver.          
+launch__shared_mem_per_block_dynamic                                        Ratio           byte/block      Dynamic shared memory size per block, allocated for the kernel.       
+launch__shared_mem_per_block_static                                         Ratio           byte/block      Static shared memory size per block, allocated for the kernel.        
+launch__sm_count                                                            Counter         SM              Number of SMs utilized in the launch.                                 
+launch__stack_size                                                          Counter                         Stack size during the launch.                                         
+launch__stream_id                                                           Counter                         CUDA stream id for the kernel launch.                                 
+launch__sub_launch_name                                                     Counter                         Name of each sub-launch for range-like results.                       
+launch__thread_count                                                        Counter         thread          Total number of threads across all blocks for the kernel launch.      
+launch__tpc_count                                                           Counter                         Number of TPCs utilized in the launch.                                
+launch__tpc_enabled                                                         Counter                         Comma-separated list of the IDs of the enabled TPCs.                  
+launch__uses_cdp                                                            Counter                         Set to 1 if any function object in the launched workload can use CUDA 
+                                                                                                            dynamic parallelism.                                                  
+launch__uses_green_context                                                  Counter                         Set to 1 if launch was on a green context.                            
+launch__uses_vgpu                                                           Counter                         Set to 1 if launch was on a vGPU device.                              
+launch__waves_per_multiprocessor                                            Counter                         Number of waves per SM. Partial waves can lead to tail effects where  
+                                                                                                            some SMs become idle while others still have pending work to          
+                                                                                                            complete.                                                             
+
