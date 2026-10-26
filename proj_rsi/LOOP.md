@@ -477,3 +477,19 @@ rings; BN=64 (and BN=128 variant), cluster-2 DSMEM split-K, 1 vs 2 CTAs/SM, prob
 cycles of smem traffic — tight; 2 CTAs/SM or BN=128 is where a 3–4 µs win would have to come from. Expected: 27–29
 in-prepare vs cuBLAS 29.4 at 1 CTA/SM. Kill: pooler m=128 not ≥ 1.0 µs under torch. Payoff if it wins by 3 µs on the
 four big layers at m=128 and m=256: ≈ 0.2 ln (~3320 alone); necessary but not sufficient for 3000.
+
+## Iteration 17 — pw19: transform-warpgroup m ≥ 128 kernel (user request). Check `09e3c6f672a24c71`: 9/9, 4430.5 µs. REJECTED.
+
+Pooler m=128 in-prepare: torch 29.54 | pw10 wk2 31.30 | tw64 43.74 | tw64x2 (2 CTAs/SM, confirmed by the occupancy
+log, cluster 4) 55.01 | tw128 (cluster 4) 60.61 | tw128c2 (64 CTAs) 55.07; o: torch 11.4 | wk2 16.7 | tw64x2 18.7;
+unpooler: torch 23.6 | wk2 30.7 | tw64x2 35.1; qkv: torch 21.1 | wk2 30.1 | tw64x2 32.7; m=256 tv64 54 vs vk2 41.
+Ladder (tw64 vs pw10 w1d4): W-only 19.9 vs 20.9 | W+x **30.4 vs 25.4** | +decode 32.5 vs 24.6 | +wgmma **39.5 vs 30.1**
+| full 43.8 vs 34.6. The decode is now hidden (+2 µs, in separate warps) — the structural claim from the closing note
+held for the decode — but two other costs grew: x delivery lost 5 µs (3–4 x slots of 16 KB = fewer bytes in flight
+than pw10's 8-stage single ring; aggregate L2→SM 5.9 TB/s vs cuBLAS's 10.6 with a 13-stage pipeline) and SS wgmma
+added +7 µs (≈ 60 KB of smem traffic per stage with the bf16 A tile written and read back, against a 420-cycle stage).
+Cluster-4 and 64-CTA variants were far worse again.
+Conclusion: on this judge the m ≥ 128 problem is L2→SM delivery (bytes in flight, x re-read volume) and smem bandwidth,
+not decode placement. Six designs; the best remains pw10's register-A wk2 at 31.3 vs cuBLAS 29.5. Closed. The only
+untried lever consistent with the data is cuBLAS-like pipeline depth (≥ 12 stages of W+x in flight per SM) with
+register-A wgmma and 64-token tiles, and the ring-depth trend in pw10 (4→8 stages: −1.9 µs) suggests ≤ 1–2 µs more.
