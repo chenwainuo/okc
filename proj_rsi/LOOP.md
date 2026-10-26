@@ -551,3 +551,7 @@ rsk2 7.5 µs + memset 0.9; floor for 16 MB ≈ 3, so ~4 µs remain at m=128 (sus
 end of a one-wave grid, 4 MB of partials; first-stage latency), and m=256 needs the kernel under ~8 µs to beat cuBLAS.
 pw23 is r6 plus a strictly better router at m=128 and is the first candidate that dominates r6 within a run → scored
 submission (10 slots unused). Expected board: today's r6 drift band (3365–3390) minus ~13 µs.
+Router post-mortem (audits/router.md): rsk2's 7.5 µs ≈ 1 first-data latency + 2.5 load (x re-read by the 4 tiles) +
+0.5 uncovered last stage + ~1 of red.global.add.v2 partials; 16 B adds + cluster-2 pre-reduction ≈ −0.8 µs at m=128,
+below the 1.5 µs bar; m=256 needs ≤ 9.5 kernel-µs against a measured 13.5 and is not winnable without a wgmma rewrite.
+Router line closed after pw23's +1.7 µs at m=128.
