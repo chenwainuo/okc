@@ -644,3 +644,17 @@ pw26 ready (approved): four 64x64 basic warp-specialised configs (ping-pong spil
 also indicts pw25: without -DNDEBUG, CUTLASS's device asserts stay in the main loop and ptxas reports the wgmma
 pipeline serialised in every instantiation — part of pw25's 2x loss may be that, not the config. Fixed in pw26.
 Not submitted: awaiting the user's decision; quota resets 00:00 UTC.
+
+## Drawing board v2 (user: "3399 is still not good enough")
+
+Ranking every shape by (gap to the judge's SOL) x leverage on the scored table, top 16 (score-µs): verify16 qkv
+59, decode32 qkv 59, verify32 router 56, verify16 router 55, verify32 qkv 51, verify1 router 46, verify32 pooler 45,
+verify32 unpooler 43, verify1 unpooler 42, verify16 pooler 41, decode32 router 41, decode1 unpooler 41, decode1
+router 39, decode16 router 39, verify16 unpooler 36, verify32 o 34. Two pools we never attacked:
+- **Small shapes** (router m ≤ 32, unpooler/o m ≤ 8): 6–12 MB reads at 4.4–6.3 judge-µs vs SOL 1.75–1.86, at 15x
+  leverage ≈ 150–200 score-µs. Our "3.4 µs floor" was pw2's bulk probe, never a latency-optimised design. Track P1.
+- **qkv at m ≤ 32**: 144 row tiles on 132 SMs → a 12-tile second wave; balancing without a general split-K
+  (stream-K-style straddled tiles with a tiny last-arriver) ≈ 1.3–2 µs per shape ≈ 77 score-µs. Track P2.
+- Router m=128/256 wgmma rewrite ≈ 90 score-µs (P3, after P1). CUTLASS sweep pw26 (ready) at the reset; mixed-input
+  fork if parity (P4).
+Sum of P1–P3 at realistic capture ≈ 250–300 score-µs → ~3100–3150 without beating cuBLAS at m ≥ 128.
