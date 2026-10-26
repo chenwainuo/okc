@@ -640,3 +640,7 @@ of 64x64x64 ping-pong (13 fixed stages), + 1x2 cluster W multicast (nvjet's shap
 64x64x128, and a non-swapped control, expected 24–29 in-prepare vs cuBLAS 23.8; four instantiations per check fit
 the budget (~220 s). Implementer's odds: bf16 within 10% of cuBLAS ≈ 50% (m=128) / 40% (m=256); mixed-input fork
 beating cuBLAS by ≥ 3 µs by 2026-11-04 ≈ 20–25%; overall ≈ 10–12%. Decision left to the user; loop paused.
+pw26 ready (approved): four 64x64 basic warp-specialised configs (ping-pong spills in 3.9.2). Critic finding that
+also indicts pw25: without -DNDEBUG, CUTLASS's device asserts stay in the main loop and ptxas reports the wgmma
+pipeline serialised in every instantiation — part of pw25's 2x loss may be that, not the config. Fixed in pw26.
+Not submitted: awaiting the user's decision; quota resets 00:00 UTC.
