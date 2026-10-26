@@ -1,0 +1,17 @@
+{
+  "id": "pw24",
+  "parent": "pw23",
+  "claim": "The ~1.55x teams are consistent with an m=128/256 GEMM halfway to SOL, and a plain bf16 kernel at 4.0-4.2 TB/s would be there without any codec. pw24 = pw23 (r6 + router) plus 'bg', a bf16 GEMM with cuBLAS's geometry: a CTA owns 64 W rows x 64 tokens over the full K, with no split-K and no reduction. It runs swap-AB wgmma m64n64k16 with both operands TMA'd into smem (128B swizzle); SS was chosen because with no decode, register-A would only add ldmatrix traffic. Two producer lanes in separate warps (W ring, x ring) each wait only on their own empties; with 12 + 12 stages, 192 KB are in flight per SM. Clusters (2,1,1) over the two token tiles multicast every W tile (each CTA issues one 32-row half), so W leaves L2 once; a no-cluster variant prices the cluster. bf16 is stored from the accumulators through a 64 x 64 smem tile as 16-B rows. Day 1 of the m128-study program: tests whether our pipelines can reach cuBLAS-grade L2->SM delivery with no decode in the way.",
+  "paths": "qkv_gate / o / pooler / unpooler at m=128 and m=256: bg12c (12 stages per ring, cluster 2, W multicast, 1 CTA/SM), bg12 (no cluster), bg6c / bg6 (6 stages, 98 KB, 2 CTAs/SM). Grid: m/64 token tiles x N/64 n-blocks (pooler m=128: 2 x 64 = 128 CTAs). Baked against r6 (cuBLASLt) after the router bake; validation one-hot x8 bit-exact and random rows as the template, random rows also at odd m 121 / 250 (odd m are served by r6's dispatch). PROBE ladder on bg12c pooler m=128: L1 W-only, L1 W+x, L3 +wgmma, L4 full, plus PROBE bghbm (W-only HBM TB/s, raw and minus 4 us of replay).",
+  "target_shapes": [
+    "pooler m=128: <= 18 judge-us (cuBLAS 20.3)",
+    "unpooler/qkv m=128, all m=256: under cuBLAS"
+  ],
+  "kill_if": "pooler m=128 W+x ladder rung > 20 µs in-prepare, or the full path not ≥ 1.5 µs under torch",
+  "local_checks": "nvcc 12.8 sm_90a -Xptxas -v: 7 bg instances, 58 regs (probes 19-58), 0 spills, no wgmma-serialization warning; r6's 78 gv instances are SASS-identical; the router kernels are unchanged. SASS bg12c: 5 UTMALDG.2D.MULTICAST + 5 UTMALDG.2D, HGMMA.64x64x16 with descriptors, SYNCS.ARRIVE.TRANS64.RED (remote empty arrive), UCGABAR cluster barriers; bg12: UTMALDG.2D only. proj_rsi/tools/bg_emu.py: the data path (two 32-row W boxes per slot, x box with zero rows, SS descriptors, D -> smem tile -> row stores) is bit-exact against bf16(x @ W^T) at m 128 / 121 / 256 / 250, cluster and not, one-hot exact. The protocol sim (two producers, two rings, multicast halves, remote empties) is clean on 800 schedules each, and catches early_release 186/200, no_remote 200/200 and local_count 200/200. lint ok; cpu-check --official 9/9; a CPU mock of the bake builds and dispatches every plan.",
+  "risks": [
+    "Our pipelines peaked at 7-8.7 TB/s L2->SM; if bg12 W+x lands at pw19/pw13 levels (25-30 in-prepare), the delivery gap is structural rather than decode.",
+    "The cluster-2 launch: pw9/pw10 attributed several us to clusters; bg12 (no cluster) prices it directly.",
+    "The epilogue's st.shared.u16 transposition has bank conflicts (64 rows x 2 B stride); it is about 8 KB per CTA, small."
+  ]
+}
