@@ -40,8 +40,9 @@ class Inputs(TypedDict):
 BN, BK = 128, 64
 WBYTES = BN * BK * 12 // 8  # 12288 bytes per unit
 GRID = 132
+CLUSTER = int(os.environ.get("TC_CLUSTER", "2"))  # CTAs per cluster for the DSMEM pre-reduction of split-K partials (1 = off)
 MODE = 0  # ladder: 0 full, 3 no flush, 4 red.add flush only, 5 escapes only (no red.add), 6 no x tile (no flush), 7 no wgmma (no flush)
-DEDICATED_MAX_MP = 64  # MP <= this: dedicated producer warp (288 threads); above: thread 0 issues loads (256 threads)
+DEDICATED_MAX_MP = 32  # MP <= this: dedicated producer warp (288 threads); above: thread 0 issues loads (256 threads)
 MPS = [8, 16, 32, 64, 128, 256]
 STAGES = {8: 12, 16: 12, 32: 12, 64: 10, 128: 7, 256: 4}
 DSTAGES = {8: 8, 16: 8, 32: 7, 64: 6, 128: 5, 256: 3}  # router (hi+lo: 24 KB of W per stage)
@@ -88,7 +89,7 @@ struct Params {
   const int* __restrict__ esc_off;        // [U+1]
   const int* __restrict__ esc_idx;        // unit<<13 | n_local<<6 | k_local
   const float* __restrict__ esc_delta;
-  int N, K, m, NB, KC, U, G;
+  int N, K, m, NB, KC, U, G, cl;   // cl: cluster size (1 or 2) for the DSMEM pre-reduction of split-K partials
   uint32_t scale2, scale2b;   // bf16x2 exponent scales of the (hi, lo) streams
   int mode;   // 0 full, 3 no flush, 4 flush red.add only, 5 +escapes (no counters/convert)
 };
@@ -117,6 +118,27 @@ __device__ __forceinline__ void tma_load_1d(void* dst, const void* src, uint32_t
 __device__ __forceinline__ void tma_load_2d(void* dst, const CUtensorMap* map, int c0, int c1, uint64_t* bar) {
   asm volatile("cp.async.bulk.tensor.2d.shared::cluster.global.mbarrier::complete_tx::bytes [%0], [%1, {%2, %3}], [%4];"
                :: "r"(smem_u32(dst)), "l"(map), "r"(c0), "r"(c1), "r"(smem_u32(bar)) : "memory");
+}
+__device__ __forceinline__ uint32_t mapa_cluster(uint32_t addr, int rank) {
+  uint32_t r; asm volatile("mapa.shared::cluster.u32 %0, %1, %2;" : "=r"(r) : "r"(addr), "r"(rank)); return r;
+}
+__device__ __forceinline__ void st_cluster_v4(uint32_t raddr, float a, float b, float c, float d) {
+  asm volatile("st.shared::cluster.v4.f32 [%0], {%1,%2,%3,%4};" :: "r"(raddr), "f"(a), "f"(b), "f"(c), "f"(d) : "memory");
+}
+__device__ __forceinline__ uint32_t ld_cluster_acquire(uint32_t raddr) {
+  uint32_t v; asm volatile("ld.acquire.cluster.shared::cluster.u32 %0, [%1];" : "=r"(v) : "r"(raddr) : "memory"); return v;
+}
+__device__ __forceinline__ void mbar_arrive_remote(uint32_t raddr) {
+  asm volatile("mbarrier.arrive.release.cluster.shared::cluster.b64 _, [%0];" :: "r"(raddr) : "memory");
+}
+__device__ __forceinline__ void mbar_wait_cluster(uint64_t* bar, uint32_t parity) {
+  uint32_t addr = smem_u32(bar);
+  asm volatile("{\n.reg .pred p;\nLAB_WAIT:\n"
+               "mbarrier.try_wait.parity.acquire.cluster.shared::cta.b64 p, [%0], %1;\n"
+               "@p bra DONE;\nbra LAB_WAIT;\nDONE:\n}" :: "r"(addr), "r"(parity) : "memory");
+}
+__device__ __forceinline__ void cluster_sync_all() {
+  asm volatile("barrier.cluster.arrive.release.aligned;\nbarrier.cluster.wait.acquire.aligned;" ::: "memory");
 }
 __device__ __forceinline__ void wgmma_fence() { asm volatile("wgmma.fence.sync.aligned;" ::: "memory"); }
 __device__ __forceinline__ void wgmma_commit() { asm volatile("wgmma.commit_group.sync.aligned;" ::: "memory"); }
@@ -180,18 +202,32 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
   int* em = (int*)(scratch + 2 * 8 * 68);               // ECAP escape indices of the current n-block
   float* ed = (float*)(em + ECAP);                       // ECAP escape deltas
   __nv_bfloat16* xe = (__nv_bfloat16*)(ed + ECAP);       // ECAP x MP x values of the escapes' columns
+  uint64_t* slots_bar = (uint64_t*)(xe + ECAP * MP);     // cluster followers arrive here after writing their slot
+  int* ready = (int*)(slots_bar + 1);                    // leader: pipeline smem free for slots
 
   const int c = blockIdx.x;
-  const int unit0 = (int)(((long long)c * p.U) / p.G);
-  const int unit1 = (int)(((long long)(c + 1) * p.U) / p.G);
+  auto ustart = [&](int cc) { return (int)(((long long)cc * p.U) / p.G); };
+  const int unit0 = ustart(c), unit1 = ustart(c + 1);
+  const int crank = c % p.cl, cbase = c - crank;
+  // cluster members holding a partial of n-block j: ranks [lead, lead+nmem)
+  auto members = [&](int j, int& lead, int& nmem) {
+    lead = -1; nmem = 0;
+    for (int r = 0; r < p.cl; ++r) {
+      if (ustart(cbase + r) < (j + 1) * p.KC && ustart(cbase + r + 1) > j * p.KC) { if (lead < 0) lead = r; ++nmem; }
+    }
+  };
   const int wgi = threadIdx.x >> 7;
 
   if (threadIdx.x == 0) {
     for (int s = 0; s < STAGES; ++s) { mbar_init(&full[s], 1); mbar_init(&empty[s], 2); }
+    int lead, nmem; members((unit1 - 1) / p.KC, lead, nmem);
+    mbar_init(slots_bar, (lead == crank && nmem > 1) ? nmem - 1 : 1);
+    *ready = 0;
     asm volatile("fence.mbarrier_init.release.cluster;" ::: "memory");
     asm volatile("fence.proxy.async.shared::cta;" ::: "memory");
   }
   __syncthreads();
+  if (p.cl > 1) cluster_sync_all();
 
   auto issue_load = [&](const int u, const int st) {
     const int kc = u % p.KC;
@@ -254,6 +290,37 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
       }
     }
     if (p.mode == 5) return;
+    // (1b) cluster pre-reduction: followers push their fragment-layout tile into the leader's (idle) pipeline smem
+    if (p.cl > 1) {
+      int lead, nmem; members(j, lead, nmem);
+      if (nmem > 1) {
+        const uint32_t sbase = smem_u32(smem);
+        if (crank != lead) {
+          const uint32_t rflag = mapa_cluster(smem_u32(ready), lead);
+          while (ld_cluster_acquire(rflag) == 0) { }
+          uint32_t slot = mapa_cluster(sbase + (uint32_t)((crank - lead - 1) * 256 * NACC * 4 + tid * 16), lead);
+          #pragma unroll
+          for (int q = 0; q < NACC / 4; ++q) { st_cluster_v4(slot, acc[4 * q], acc[4 * q + 1], acc[4 * q + 2], acc[4 * q + 3]); slot += 256 * 16; }
+          asm volatile("bar.sync 1, 256;" ::: "memory");
+          if (tid == 0) mbar_arrive_remote(mapa_cluster(smem_u32(slots_bar), lead));
+          return;
+        }
+        // leader: this is its last n-block, so the pipeline buffers are free
+        asm volatile("bar.sync 1, 256;" ::: "memory");
+        if (tid == 0) asm volatile("st.release.cluster.shared::cta.u32 [%0], %1;" :: "r"(smem_u32(ready)), "r"(1) : "memory");
+        mbar_wait_cluster(slots_bar, 0);
+        for (int f = 0; f < nmem - 1; ++f) {
+          uint32_t sl = smem_u32(smem + f * 256 * NACC * 4) + tid * 16;
+          #pragma unroll
+          for (int q = 0; q < NACC / 4; ++q) {
+            float4 v;
+            asm volatile("ld.shared.v4.f32 {%0,%1,%2,%3}, [%4];" : "=f"(v.x), "=f"(v.y), "=f"(v.z), "=f"(v.w) : "r"(sl) : "memory");
+            acc[4 * q] += v.x; acc[4 * q + 1] += v.y; acc[4 * q + 2] += v.z; acc[4 * q + 3] += v.w;
+            sl += 256 * 16;
+          }
+        }
+      }
+    }
     // (2) partial accumulators -> ws via red.add.v4, through a per-warpgroup smem transpose (64 n x 8 tokens per step)
     float* sc = scratch + wg * (8 * 68);
     const int wn = warp * 16 + (lane >> 2), wtok = 2 * (lane & 3);
@@ -423,7 +490,17 @@ static void launch_mp(const CUtensorMap& map, const Params& p, size_t smem, cuda
     cudaFuncSetAttribute(gemm_kernel<MP, STAGES, DUAL>, cudaFuncAttributeMaxDynamicSharedMemorySize, (int)smem);
     attr_set = true;
   }
-  gemm_kernel<MP, STAGES, DUAL><<<p.G, nthreads<MP>(), smem, stream>>>(map, p);
+  if (p.cl > 1) {
+    cudaLaunchConfig_t cfg = {};
+    cfg.gridDim = dim3(p.G); cfg.blockDim = dim3(nthreads<MP>()); cfg.dynamicSmemBytes = smem; cfg.stream = stream;
+    cudaLaunchAttribute attr[1];
+    attr[0].id = cudaLaunchAttributeClusterDimension; attr[0].val.clusterDim.x = p.cl; attr[0].val.clusterDim.y = 1; attr[0].val.clusterDim.z = 1;
+    cfg.attrs = attr; cfg.numAttrs = 1;
+    cudaError_t e = cudaLaunchKernelEx(&cfg, gemm_kernel<MP, STAGES, DUAL>, map, p);
+    TORCH_CHECK(e == cudaSuccess, "cluster launch failed: ", cudaGetErrorString(e));
+  } else {
+    gemm_kernel<MP, STAGES, DUAL><<<p.G, nthreads<MP>(), smem, stream>>>(map, p);
+  }
   if (p.mode == 0) {
     const int total4 = p.m * p.N / 4;
     convert_kernel<DUAL><<<(total4 + 255) / 256, 256, 0, stream>>>(p.ws, p.out, total4);
@@ -432,7 +509,7 @@ static void launch_mp(const CUtensorMap& map, const Params& p, size_t smem, cuda
 
 void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tensor ws, torch::Tensor out,
           torch::Tensor counters, torch::Tensor expected, torch::Tensor esc_off, torch::Tensor esc_idx,
-          torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2, int64_t scale2b,
+          torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int cl, int64_t scale2, int64_t scale2b,
           int dual, int mode) {
   CUtensorMap map;
   cuuint64_t gdim[2] = {(cuuint64_t)K, (cuuint64_t)m};
@@ -453,11 +530,12 @@ void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tens
   p.esc_off = esc_off.data_ptr<int>();
   p.esc_idx = esc_idx.data_ptr<int>();
   p.esc_delta = esc_delta.data_ptr<float>();
-  p.N = N; p.K = K; p.m = m; p.NB = NB; p.KC = KC; p.U = U; p.G = G;
+  p.N = N; p.K = K; p.m = m; p.NB = NB; p.KC = KC; p.U = U; p.G = G; p.cl = cl;
   p.scale2 = (uint32_t)scale2;
   p.scale2b = (uint32_t)scale2b;
   p.mode = mode;
-  size_t smem = 1024 + (size_t)stages * (MP * 128 + (dual ? 2 : 1) * WBYTES) + 2 * stages * 8 + 2 * 8 * 68 * 4 + ECAP * 8 + (size_t)ECAP * MP * 2;
+  size_t smem = 1024 + (size_t)stages * (MP * 128 + (dual ? 2 : 1) * WBYTES) + 2 * stages * 8 + 2 * 8 * 68 * 4 + ECAP * 8 + (size_t)ECAP * MP * 2 + 16;
+  TORCH_CHECK(cl == 1 || (size_t)(cl - 1) * 256 * (MP / 2) * 4 <= (size_t)stages * (MP * 128 + (dual ? 2 : 1) * WBYTES), "slot region too small");
   cudaStream_t stream = at::cuda::getCurrentCUDAStream();
   if (!dual) {
     switch (MP) {
@@ -486,16 +564,16 @@ void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tens
 
 void tensorcore_gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tensor ws, torch::Tensor out,
                      torch::Tensor counters, torch::Tensor expected, torch::Tensor esc_off, torch::Tensor esc_idx,
-                     torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2, int64_t scale2b,
+                     torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int cl, int64_t scale2, int64_t scale2b,
                      int dual, int mode) {
-  tensorcore::gemm(MP, stages, packed, x, ws, out, counters, expected, esc_off, esc_idx, esc_delta, N, K, m, NB, KC, U, G, scale2, scale2b, dual, mode);
+  tensorcore::gemm(MP, stages, packed, x, ws, out, counters, expected, esc_off, esc_idx, esc_delta, N, K, m, NB, KC, U, G, cl, scale2, scale2b, dual, mode);
 }
 """
 
 CPP_SRC = """
 void tensorcore_gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tensor ws, torch::Tensor out,
                      torch::Tensor counters, torch::Tensor expected, torch::Tensor esc_off, torch::Tensor esc_idx,
-                     torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int64_t scale2, int64_t scale2b,
+                     torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int cl, int64_t scale2, int64_t scale2b,
                      int dual, int mode);
 """
 
@@ -512,7 +590,7 @@ def _build():
             src = src.replace(f"STAGES_{mp},", f"{st},")
         src = src.replace("DEDICATED_MAX_MP", str(DEDICATED_MAX_MP))
         _ext = load_inline(
-            name="tensorcore_gemm_v15",
+            name="tensorcore_gemm_v19",
             cpp_sources=CPP_SRC,
             cuda_sources=src,
             functions=["tensorcore_gemm"],
@@ -672,5 +750,5 @@ def kernel_fn(data: Inputs, state: dict) -> torch.Tensor:
     out = torch.empty(m, n, dtype=torch.float32 if dual else torch.bfloat16, device=x.device)
     _ext.tensorcore_gemm(mp, (DSTAGES if dual else STAGES)[mp], info["packed"], x, info["ws"], out, info["counters"], exp_t,
                          info["esc_off"], info["esc_idx"], info["esc_delta"], n, info["K"], m, NB, info["KC"], U, G,
-                         info["scale2"], info.get("scale2b", 0), int(dual), MODE)
+                         CLUSTER, info["scale2"], info.get("scale2b", 0), int(dual), MODE)
     return out
