@@ -1,6 +1,6 @@
-# Codec E: layout spec for pw17
+# Codec E: layout spec (v3, pw18)
 
-Status: v1. Codec side by the implementer; the gv integration belongs to the analyst. Open questions are marked **Q**.
+Status: v3 (pw18). v2 was pw17's layout; the v3 changes are in 1b, 1c and 2. Older status line: v1. Codec side by the implementer; the gv integration belongs to the analyst. Open questions are marked **Q**.
 
 **Code:** `proj_rsi/tools/codec_e.py`
 - `pack_e(fr, geo)`: the packer.
@@ -17,27 +17,33 @@ A unit is (tile t, chunk c). In each unit, lane l owns 32 weights in 16 A regist
 - This is r6's c12 low-byte pieces p0 and p1, unchanged in shape and order. Piece 0 holds steps 0–1 and piece 1 holds steps 2–3, 16 B per lane each. Load them exactly as r6 loads `q[0]` and `q[1]`.
 - The byte content changes: byte = `sign << 7 | mantissa7`. The exponent LSB is gone from the plane.
 - r6's third piece (the nibble plane, `q[2]`) is dropped. NL goes from 3 to 2.
-- The plane word for register r is word `2*j + (i >> 1)` of the lane's 8 words: `q[j >> 1]`, component `(j & 1) * 2 + (i >> 1)`. The byte pair is selected by `i & 1`.
+- The plane word for register r is word `2*j + (i >> 1)` of the lane's 8 words### 1b. Code and decode tables: `lut uint32 [258]` per matrix
+- **Code (v3).** One prefix code per A register (pair symbol), at most 8 bits, read LSB first, in which **the first 3 bits
+  of every code determine its length**: codes of length <= 3, plus "buckets" (one 3-bit prefix each) holding 2^(L-3) codes
+  of length L. The lengths are DP-optimal under that constraint (`_prefix_code`). On the reference weights this costs
+  +0.03 bits/weight against an unconstrained length-limited Huffman; a 4-bit prefix would cost 0 but needs about 3 more ops per pair.
+- `lut[x]` for every 8-bit peek x (value lookup, off the bit-position chain):
+  - Bits 0–4: code length (informational; the kernel does not use it). Bits 5–6: 0.
+  - Bits 7–14: exponent of the low half (v even). Bits 23–30: exponent of the high half (v odd).
+- `lut[256..257]`: the 8-byte length table, byte w = length of every code whose first 3 bits are w. The kernel computes
+  `len = prmt(lut[256], lut[257], lo & 7)`. The upper bytes of len are garbage, which is harmless because shifts use len & 31 and V's
+  garbage sits above bit 7.
+- The A register is `lop3(e, 0x807f807f, prmt(Lword, 0, i&1 ? 0x3322 : 0x1100), 0xb8)` (immLut `b ? c : a`; v1 said
+  0xe4, which is `c ? a : b` and wrong).
 
-### 1b. Decode table: `lut uint32 [256]` (1 KB) per matrix
-- `lut[x]` for every 8-bit peek x.
-- Bits 0–4: code length (1..8). Bits 5–6: 0.
-- Bits 7–14: exponent of the low half (v even).
-- Bits 23–30: exponent of the high half (v odd).
-- Bits 15–22 and 31: 0.
-- The A register is `lop3(e, 0x807f807f, prmt(Lword, 0, i&1 ? 0x3322 : 0x1100), 0xb8)` (immLut `b ? c : a`; v1 said 0xe4, which is `c ? a : b` and wrong). That takes bits 0–6 and bit 15 (and the same in the high half) from the duplicated plane bytes, and the rest from e.
+### 1c. Code stream (v3)
+- **Substreams.** K = 1, 2 or 4 independent substreams per lane. Substream s holds steps j in [s·4/K, (s+1)·4/K) of every
+  unit, so each has its own bit buffer and the K decode chains interleave.
+- **Order** inside a substream: `for u in 0..KU-1: for jt in 0..RT-1: for its steps j: for i in 0..3`.
+- **Words.** Bit b of a substream's lane stream sits in its 32-bit word `b >> 5`, at bit `b & 31`.
+- **Segment** (one warp's range, id `gw` as in r6's `_gvesc`): K regions of P·32 words. Word q of lane l of
+  substream s is at word `soff[gw] + (s·P + q)·32 + l`. Each warp load is 128 contiguous bytes, padded to a word.
+  P is the longest lane-substream in the segment, in words.
+- **Buffers:** `stream uint32`; `soff uint32 [NSEG + 1]` in words; `P = (soff[gw+1] - soff[gw]) / (32 K)`.
+- 16 B pieces with per-lane word rotation are still supported by the packer (`_wpp`), but are not used: they pad
+  ILP 1/2 to 0.16/0.55 bits/weight against 0.12/0.22 with 4 B pieces.
 
-### 1c. Code stream
-- **Symbols.** One prefix code per A register (pair symbol), at most 8 bits, read LSB first.
-- **Lane stream order** within a warp segment: `for u in 0..KU-1: for jt in 0..RT-1: for r in 0..15`. This is r6's walk order (`step(u)` runs j over RT), with registers in A order.
-- **Words.** The lane stream is a bit string. Bit b sits in 32-bit word `b >> 5`, at bit `b & 31` (little-endian). Words are grouped in 16 B pieces: piece k = words 4k..4k+3.
-- **Segment.** A segment is one warp's range in r6's geometry `(WR, WK, KU, S, RT, XS)`: RT tiles × KU chunks. Its id `gw` is r6's `_gvesc` id:
-  `gw = ((c // (WK*KU)) * GX + t // (WR*RT)) * NW + ((c // KU) % WK) * WR + (t // RT) % WR`, with `GX = T / (WR*RT)` and `NW = WR*WK`.
-- **Interleave.** Inside a segment, lane l's k-th piece sits at 16 B index `soff[gw] + k*32 + l`. Every lane is padded to `P[gw]` pieces, the longest lane in the segment. Padding bits are 0.
-- **Buffers:**
-  - `stream uint32 [total_pieces * 4]`: the code stream, 16 B aligned.
-  - `soff uint32 [n_segments + 1]`: segment starts in 16 B units. `P[gw] = (soff[gw+1] - soff[gw]) / 32`.
-- The stream depends on (KU, RT) and on the segment numbering, so `pack_e` is called once per candidate geometry, the same way `_gvesc` is.
+ numbering, so `pack_e` is called once per candidate geometry, the same way `_gvesc` is.
 
 ### 1d. Escapes: r6's `_gvesc` structure, 32 int32 entries per warp, -1 padded
 - Entry: `(seq << 20) | (lane << 15) | (r << 11) | (half << 10) | (h << 9) | x`, where `seq = (c % KU) * RT + t % RT`, sorted by `(gw, seq)`.
@@ -46,27 +52,36 @@ A unit is (tile t, chunk c). In each unit, lane l owns 32 weights in 16 A regist
 - The alphabet size is chosen per matrix so the escape rate is ≤ 0.04% of weights (about 6 per 16-unit warp, against the cap of 32).
 - `pack_e` returns None if any list overflows, like `_gvesc`.
 
-## 2. Decode state per lane (CODEC_E_CUH, v2 — ring layout changed from v1)
+## 2. Decode state per lane and substream (CODEC_E_CUH v3)
 
 | Register | Meaning |
 |---|---|
 | `lo, hi` | 64-bit bit buffer; the next code is at bit 0 of lo |
-| `V` | Valid bits, modulo 128. Bits 7 and up hold garbage from `V -= e`. Only `V & 0x60` (refill test) and `V & 31` (insert position) are read. |
-| `pb` | 4 × words consumed from the lane stream. The current piece is `pb >> 4`. |
-| `iss` | Pieces issued into the ring |
-| `rl` | Lane ring base: `ring + lane * ED * 16`. The ring is aligned to ED·16 and ED is a power of 2. |
+| `V` | Valid bits mod 128. Bits 8 and up hold garbage from `V -= len`. Only `V & 0x60` (refill test) and `V & 31` (insert position) are read. |
+| `pb` | Bytes taken from the substream's lane stream (word `pb >> 2`) |
+| `iss` | Words issued into the ring |
+| `nw` | Prefetched refill word |
 
-**Ring (changed in v2).** Each lane's ED slots are now contiguous, so one LOP3 builds the address: `rl | (pb & (16*ED - 1))`. v1 used `[slot][lane]`. Bank conflicts look random-like in both layouts, about 2–3-way.
+**Ring (v3).** Per warp and substream, the ring has ES = 16/K word slots × 32 lanes, laid out `[s][slot][lane]` (128 B per
+slot). Word q goes to slot q % ES at `rl | ((pb << 5) & ((ES-1) << 7))`. Every lane reads its own bank, so the ring is
+conflict-free; v2's lane-contiguous ring cost 12–22 wavefronts per refill (codec-study post-mortem). The total is
+64 B per lane, as in v2 ED 4.
 
 **Per unit:**
-1. `ce_issue<ED>`: at most one predicated `cp.async.cg` 16 B, issued while `iss < P && iss < (pb >> 4) + ED`.
-2. `cp.async.commit_group`.
-3. `cp.async.wait_group(ED-2)`, after a prologue of ED-1 issue+commit pairs.
-4. `ce_unit<ED>`: 4 steps, each a branch-free refill followed by 4 pairs.
+1. For each substream, NI = 4/K predicated 4 B `cp.async.ca` while `iss < P && iss < (pb >> 2) + ES`.
+2. One `commit_group`.
+3. `wait_group 2`. The prologue issues 3 rounds.
+4. `ce_unit`: for each of its 4/K steps, every substream refills (branch-free; the first step's word is read after the wait,
+   later steps use the word prefetched right after the previous refill) and then decodes 4 pairs. Per pair:
+   `len = PRMT(t0, t1, lo & 7)`, `lo, hi = funnel-shift by len`, `V -= len`, `e = lut[lo & 0xff]`, `A = LOP3(e, plane)`.
+   The bit-position chain is LOP3 → PRMT → SHF.R.W, with no memory access.
 
-**Protocol check.** The reference unpacker replays this protocol and asserts that every refill reads a landed piece that has not been overwritten. It passes for ED = 4 on every test geometry.
+**Protocol check.** `unpack_e` replays the per-substream protocol and asserts that every word the decode uses is landed and
+not overwritten. `proj_rsi/tools/codec_e_emu.py` emulates the pw18 kernel instruction by instruction, with early and late
+landing. It catches immLut 0xe4 and a `wait_group 4`.
 
-**SASS.** Probe with ED = 4, nvcc 12.8, sm_90a. It uses 32 registers with 0 spills. Per unit it executes 194 lane-instructions, excluding HMMA, plane LDG and loop overhead: **6.06 per weight**.
+**SASS** (nvcc 12.8, sm_90a, pw18 pooler m=1 2.8.16). Per unit (1,024 weights, 32 per lane), for K1 single / K1 replicated /
+K2 replicated / K4 replicated: 256 / 272 / 279 / 286 instructions. 0 spills.
 
 ## 3. Measured (selftest, 1M weights each, bit-exact incl. negative control)
 
