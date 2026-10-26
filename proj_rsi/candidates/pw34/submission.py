@@ -4322,10 +4322,10 @@ def _rqbake(st, thr):
     """RS128 bake: per (layer, m in 128 / 256) time r6's own path and each RS128 variant (graph replays from a cold L2,
     the judge's method), pick a variant only if it validates and beats r6 by MARGIN; kernel_fn serves picks at m exactly"""
     st["rq"] = {}
-    if time.time() - _T0 > PREPARE_BUDGET_S - 100:
+    if time.time() - _T0 > PREPARE_BUDGET_S - 45:
         print("BAKE rq skipped-budget %.0fs" % (time.time() - _T0), flush=True)
         return
-    thr.join(timeout=max(1.0, PREPARE_BUDGET_S - 100 - (time.time() - _T0)))
+    thr.join(timeout=max(1.0, PREPARE_BUDGET_S - 45 - (time.time() - _T0)))
     if not _rqthr or _rqthr[0] != "ok" or _rqmod[0] is None:
         print("BAKE rq build %s" % (_rqthr[0] if _rqthr else "not finished"), flush=True)
         return
