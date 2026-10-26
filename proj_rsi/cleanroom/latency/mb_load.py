@@ -125,6 +125,44 @@ __global__ void __launch_bounds__(256, 1) k_cpa(const uint8_t* __restrict__ src,
     if (acc == 0x12345678u) out[blockIdx.x] = acc;
 }
 
+// ---- warp-private cp.async rings (the kernel's LOADER 2 shape): warp w streams its own contiguous
+// bytes_per_cta/8 region in pieces of `piece` bytes, `depth` pieces in flight, completion by wait_group.
+template <int N> __device__ __forceinline__ void cpw() { asm volatile("cp.async.wait_group %0;" ::"n"(N) : "memory"); }
+__device__ __forceinline__ void cpw_rt(int n) {
+    switch (n) { case 0: cpw<0>(); break; case 1: cpw<1>(); break; case 2: cpw<2>(); break; case 3: cpw<3>(); break;
+                 case 5: cpw<5>(); break; case 7: cpw<7>(); break; case 11: cpw<11>(); break; default: cpw<15>(); break; }
+}
+__global__ void __launch_bounds__(256, 1) k_wcp(const uint8_t* __restrict__ src, uint32_t* __restrict__ out,
+                                                 int bytes_per_cta, int piece, int depth) {
+    extern __shared__ __align__(128) uint8_t smem[];
+    const int tid = threadIdx.x, warp = tid >> 5, lane = tid & 31;
+    const int wbytes = bytes_per_cta / 8, nst = wbytes / piece;
+    const uint8_t* base = src + (size_t)blockIdx.x * bytes_per_cta + (size_t)warp * wbytes;
+    uint8_t* ring = smem + warp * depth * piece;
+    auto issue = [&](int st) {
+        if (st < nst)
+            for (int i = lane; i < piece / 16; i += 32) {
+                uint32_t d = (uint32_t)__cvta_generic_to_shared(ring + (st % depth) * piece + i * 16);
+                asm volatile("cp.async.cg.shared.global [%0], [%1], 16;" ::"r"(d), "l"(base + (size_t)st * piece + i * 16) : "memory");
+            }
+        asm volatile("cp.async.commit_group;" ::: "memory");
+    };
+    for (int i = 0; i < depth; ++i) issue(i);
+    uint32_t acc = 0;
+    for (int s = 0; s < nst; ++s) {
+        cpw_rt(depth - 1);
+        __syncwarp();
+        acc ^= reinterpret_cast<const uint32_t*>(ring + (s % depth) * piece)[lane];
+        __syncwarp();
+        issue(s + depth);
+    }
+    if (acc == 0x12345678u) out[blockIdx.x] = acc;
+}
+void run_wcp(torch::Tensor src, torch::Tensor out, int64_t n_cta, int64_t bytes_per_cta, int64_t piece, int64_t depth) {
+    static bool conf = false;
+    if (!conf) { cudaFuncSetAttribute(k_wcp, cudaFuncAttributeMaxDynamicSharedMemorySize, 200 * 1024); conf = true; }
+    k_wcp<<<n_cta, 256, piece * depth * 8, at::cuda::getCurrentCUDAStream()>>>(src.data_ptr<uint8_t>(), out.data_ptr<uint32_t>(), bytes_per_cta, piece, depth);
+}
 void run_tma(torch::Tensor src, torch::Tensor out, int64_t n_cta, int64_t bytes_per_cta, int64_t copy, int64_t depth, int64_t split) {
     static bool conf = false;
     if (!conf) { cudaFuncSetAttribute(k_tma, cudaFuncAttributeMaxDynamicSharedMemorySize, 200 * 1024); conf = true; }
@@ -159,6 +197,7 @@ CPP = r"""
 void run_tma(torch::Tensor src, torch::Tensor out, int64_t n_cta, int64_t bytes_per_cta, int64_t copy, int64_t depth, int64_t split);
 void run_ld(torch::Tensor src, torch::Tensor out, int64_t n_cta, int64_t bytes_per_cta, int64_t unroll);
 void run_cpa(torch::Tensor src, torch::Tensor out, int64_t n_cta, int64_t bytes_per_cta, int64_t depth, int64_t chunk);
+void run_wcp(torch::Tensor src, torch::Tensor out, int64_t n_cta, int64_t bytes_per_cta, int64_t piece, int64_t depth);
 """
 
 
@@ -221,8 +260,8 @@ def main():
     ap.add_argument("--kb", default="48,96,216,384")
     ap.add_argument("--compile-only", action="store_true")
     args = ap.parse_args()
-    ext = load_inline(name="latency_mb_load", cpp_sources=[CPP], cuda_sources=[SRC],
-                      functions=["run_tma", "run_ld", "run_cpa"],
+    ext = load_inline(name="latency_mb_load2", cpp_sources=[CPP], cuda_sources=[SRC],
+                      functions=["run_tma", "run_ld", "run_cpa", "run_wcp"],
                       extra_cuda_cflags=["-O3", "-gencode=arch=compute_90a,code=sm_90a", "-std=c++17"])
     if args.compile_only:
         print("compiled")
@@ -252,6 +291,11 @@ def main():
                     continue
                 t = time_cupti(lambda: ext.run_cpa(src, out, n_cta, bpc, depth, chunk), flush, args.reps)
                 rows.append((f"cpa depth={depth} stage={4 * chunk}K", t))
+            for piece, depth in ((384, 16), (1536, 8), (1728, 12), (3072, 8), (6144, 4), (6144, 2)):
+                if (bpc // 8) % piece or piece * depth * 8 > 200 * 1024:
+                    continue
+                t = time_cupti(lambda: ext.run_wcp(src, out, n_cta, bpc, piece, depth), flush, args.reps)
+                rows.append((f"wcp piece={piece} depth={depth}", t))
             for name, t in rows:
                 print(f"ctas={n_cta} {kb:4d}KB/cta ({total_mb:6.1f} MB) {name:32s} {t:7.2f} us  {total_mb / t:.2f} TB/s  {bpc / t / 1e3:5.1f} GB/s/SM", flush=True)
 

@@ -970,3 +970,21 @@ The prepare reorder worked on the judge: every rq bake ran at 121 s with consist
 compute-bound m=256 redesign stands as the only route there. Per-shape judge drift this run vs 846e25d9 is ±0.6
 (router m=1 +0.58, pooler m=128 +0.45, o m=256 +0.43): single-run deltas under ~0.6 µs are noise. Four scored
 slots left today, nothing new to spend them on; the rs128-only reset check is cancelled (redundant, file mid-edit).
+
+## 19:10 UTC — m=256 closed for the rq design; P3's router passes its kill rule; pw35 in build
+
+RS128 author (box, corrected build after ptxas had dropped unread wgmmas in the probes): the resident tensor rate at
+NT=256 is 1027–1033 clk per k64 round against the 1024 floor for both n256 and the two-pass n128×2 (100% of peak),
+but the full kernel is 25.6 kernel-µs with x from HBM and no epilogue vs 22.2 resident, and the epilogue adds ~2.4
+(8 MB of bf16 partials through the reduce-add). In-prepare at m=256: pooler r6 28.58 vs best rq 29.31, qkv 20.77 vs
+20.80, unpooler 27.26 vs 29.86, o 11.30 vs 15.04; early x release ≤ −0.4; 168 regs, 0 spills. Decision: rs128 stays
+m=128-only; m=256 needs a design without a synchronized split-K tail and with cheaper operand delivery, not more
+tuning of rq. The author now decomposes m=128 (resident / W stream / + x / + epilogue) on pooler and qkv, the largest
+tractable pool (W stream at 2.7 TB/s on the judge vs ~3.4 achievable: ≈ −11 µs across pooler/qkv/unpooler, −90
+score-µs), while P4 keeps the per-stage bookkeeping side in rs128p.
+P3 (pw29m, audits/p3-m256.md): the old rwk router lost because its threads stalled 3.7–11 µs issuing cp.asyncs; the
+new rtk (one TMA-issuing warp, a math warpgroup, a zeroing warp, no memset node) runs router m=256 at 12.42 vs r6
+14.85 in-prepare (−2.43 against a −1.0 bar) and m=128 at 10.34 vs rw64k32s8z 11.49; first MMA at 2.2 µs from kernel
+start is the biggest remaining fixed term; cluster-of-4 x sharing failed (two waves, self-zeroing deadlock — grids
+that cannot co-reside are now refused). All 11 official router checks pass. Ship: pw35 = pw34 @ 49b22d8 + the rtk
+router section, box-validated against pw34 in one run, targeted at a scored slot before the 00:00 UTC reset.

@@ -1,0 +1,16 @@
+{
+ "id": "pw35",
+ "parent": "pw34 (49b22d8)",
+ "claim": "pw34 plus pw29m's rtk router: a warp-specialised TMA split-K wgmma kernel (producer warp issuing x/hi/lo 128B-swizzled boxes into a full/empty mbarrier ring, consumer warpgroup with hi+lo wgmmas into one fp32 accumulator, a zeroing warp that zeroes 1/G of the output tile and hands off through a monotonic per-tile counter, so no memset node; 16-B v4 reds). H100: router m=256 rt64k16b6z 12.42 vs r6 14.85 in-prepare (F1 baseline), m=128 rt64k32b4z 10.34 vs rw64k32s8z 11.49. Stamps: cp.async issue (3.7-11 us) was rwk's critical path; TMA first MMA at 2.2 us.",
+ "paths": "router m=128: rw64k32s8z (judge's current pick), rt64k32b4z, rt64k32b3x2bz, rt64k32b3x2z; m=256: rw64k32r3x2z, rt64k16b6z, rt64k32b3x2z; all against r6 with the F1 baseline (r6 before the rw build and after the variants, lower wins). Router build stays in _rsbake after the rq bake and gx, behind pw34's budget guards (6 instances).",
+ "target_shapes": [
+  "router m=256: -1 to -2 judge-us vs r6 (15.68 in-prepare on the H200)",
+  "router m=128: <= rw64k32s8z (13.12 on the H200)"
+ ],
+ "kill_if": "router m=256 r6 kept on the judge and m=128 not under rw64k32s8z",
+ "risks": [
+  "Self-zeroing needs stream-ordered calls and a co-resident grid: rt_go declines (-30) any self-zeroing grid larger than occupancy x SMs.",
+  "x tensor map encoded per call (baked into the graph like a pointer); x must be 16-B aligned (cloned otherwise).",
+  "rw build time on the judge (6 instances, sm_90a, TORCH_CUDA_ARCH_LIST=9.0a) on top of pw34's prepare."
+ ]
+}

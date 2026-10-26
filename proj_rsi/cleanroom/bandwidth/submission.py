@@ -148,9 +148,8 @@ __global__ void __launch_bounds__(256, 1) k_small(const uint8_t* __restrict__ pa
     auto issue = [&](int s) {
         uint8_t* st = ring + (s % D) * STAGE;
         const uint8_t* gs = src + (size_t)s * STEP;
-        copy_bytes<SMB>(st + lane * SMB, gs + lane * SMB);
-        copy_bytes<EB>(st + 32 * SMB + lane * EB, gs + 32 * SMB + lane * EB);
-        if (ROUTER) copy_bytes<(LOB ? LOB : 16)>(st + 32 * (SMB + EB) + lane * LOB, gs + 32 * (SMB + EB) + lane * LOB);
+#pragma unroll
+        for (int c = lane; c < STEP / 16; c += 32) cp_async16(st + c * 16, gs + c * 16, 16);
         if (no_x) return;
 #pragma unroll
         for (int i = 0; i < MT; ++i) {
@@ -167,26 +166,26 @@ __global__ void __launch_bounds__(256, 1) k_small(const uint8_t* __restrict__ pa
         cp_wait<D - 2>();
         __syncwarp();
         const uint8_t* st = ring + (s % D) * STAGE;
-        if (no_mma) { acc[0][0][0] += __uint_as_float(*reinterpret_cast<const uint32_t*>(st + lane * SMB)); __syncwarp(); if (s + D - 1 < nsteps) issue(s + D - 1); cp_commit(); continue; }
+        if (no_mma) { acc[0][0][0] += __uint_as_float(*reinterpret_cast<const uint32_t*>(st + lane * 4)); __syncwarp(); if (s + D - 1 < nsteps) issue(s + D - 1); cp_commit(); continue; }
         uint32_t a[MT][4];
 #pragma unroll
         for (int mt = 0; mt < MT; ++mt) {
             int row = 16 * mt + (lane & 15), chunk = (lane >> 4) ^ ((lane >> 2) & 1);
             ldmatrix_x4(a[mt], st + STEP + row * 32 + (chunk << 4));
         }
-        const uint32_t* smw = reinterpret_cast<const uint32_t*>(st + lane * SMB);
-        const uint32_t* ew = reinterpret_cast<const uint32_t*>(st + 32 * SMB + lane * EB);
-        const uint32_t* low = reinterpret_cast<const uint32_t*>(st + 32 * (SMB + EB) + lane * LOB);
+        const uint32_t* smw = reinterpret_cast<const uint32_t*>(st) + lane;
+        const uint32_t* ew = reinterpret_cast<const uint32_t*>(st + 32 * SMB) + lane;
+        const uint32_t* low = reinterpret_cast<const uint32_t*>(st + 32 * (SMB + EB)) + lane;
 #pragma unroll
         for (int j = 0; j < NT; ++j) {
-            uint32_t sw = smw[j], e = ew[j >> 1];
+            uint32_t sw = smw[j * 32], e = ew[(j >> 1) * 32];
             uint32_t ex0 = (j & 1) ? dec_ex<2>(e) : dec_ex<0>(e);
             uint32_t ex1 = (j & 1) ? dec_ex<3>(e) : dec_ex<1>(e);
             uint32_t b0 = dec_pair<false>(sw, ex0, base2), b1 = dec_pair<true>(sw, ex1, base2);
 #pragma unroll
             for (int mt = 0; mt < MT; ++mt) mma16816(acc[mt][j], a[mt], b0, b1);
             if (ROUTER) {
-                uint32_t l0 = lo_pair(b0, low[2 * j]), l1 = lo_pair(b1, low[2 * j + 1]);
+                uint32_t l0 = lo_pair(b0, low[(2 * j) * 32]), l1 = lo_pair(b1, low[(2 * j + 1) * 32]);
 #pragma unroll
                 for (int mt = 0; mt < MT; ++mt) mma16816(acc[mt][j], a[mt], l0, l1);
             }
@@ -222,16 +221,23 @@ __global__ void __launch_bounds__(256, 1) k_small(const uint8_t* __restrict__ pa
     cg::cluster_group cluster = cg::this_cluster();
     if (S > 1) cluster.sync(); else __syncthreads();
     const int c0 = (r * BN) / S, c1 = ((r + 1) * BN) / S, ncols = c1 - c0;
-    for (int idx = tid; idx < ROWS * ncols; idx += 256) {
-        int c = c0 + idx % ncols, row = idx / ncols;
-        if (row >= m) continue;
-        float v = 0.f;
+    __shared__ int eo_s[BN + 1];
+    if (tid <= ncols) eo_s[tid] = __ldg(esc_off + nb * BN + c0 + tid);
+    __syncthreads();
+    const int nrows = m < ROWS ? m : ROWS;
+    for (int idx = tid; idx < nrows * ncols; idx += 256) {
+        int cl = idx % ncols, row = idx / ncols, c = c0 + cl;
+        float v;
         if (S > 1 && !no_clu) {
-            for (int rr = 0; rr < S; ++rr) v += cluster.map_shared_rank(P, rr)[row * BN + c];
+            float vs[16];
+#pragma unroll
+            for (int rr = 0; rr < 16; ++rr) vs[rr] = (rr < S) ? cluster.map_shared_rank(P, rr)[row * BN + c] : 0.f;
+            v = 0.f;
+#pragma unroll
+            for (int rr = 0; rr < 16; ++rr) v += vs[rr];
         } else v = P[row * BN + c];
         int n = nb * BN + c;
-        int e0 = __ldg(esc_off + n), e1 = __ldg(esc_off + n + 1);
-        for (int e = e0; e < e1; ++e) {
+        for (int e = eo_s[cl]; e < eo_s[cl + 1]; ++e) {
             Esc E = esc[e];
             float xv = bf16_to_f(x + (size_t)row * K + E.k);
             v = ROUTER ? fix_esc_hilo(v, xv, E) : fix_esc_bf16(v, xv, E);
@@ -269,16 +275,20 @@ __global__ void __launch_bounds__(256, 1) k_rfma(const uint8_t* __restrict__ pac
     auto issue = [&](int s) {
         uint8_t* st = ring + (s % D) * STAGE;
         const uint8_t* gs = src + (size_t)s * STEP;
-        copy_bytes<SMB>(st + lane * SMB, gs + lane * SMB);
-        copy_bytes<EB>(st + 32 * SMB + lane * EB, gs + 32 * SMB + lane * EB);
-        copy_bytes<LOB>(st + 32 * (SMB + EB) + lane * LOB, gs + 32 * (SMB + EB) + lane * LOB);
+#pragma unroll
+        for (int c = lane; c < STEP / 16; c += 32) cp_async16(st + c * 16, gs + c * 16, 16);
     };
 #pragma unroll 1
     for (int s = 0; s < D - 1; ++s) { if (s < nsteps) issue(s); cp_commit(); }
     // stage x (rows >= m zero)
-    for (int idx = tid; idx < ROWS * KC; idx += 256) {
-        int row = idx / KC, kk = idx % KC;
-        xs[idx] = row < m ? __bfloat162float(x[(size_t)row * K + cs0 * 16 + kk]) : 0.f;
+    for (int idx = tid; idx < ROWS * (KC / 8); idx += 256) {
+        int row = idx / (KC / 8), k8 = (idx % (KC / 8)) * 8;
+        uint4 raw = make_uint4(0, 0, 0, 0);
+        if (row < m) raw = __ldg(reinterpret_cast<const uint4*>(x + (size_t)row * K + cs0 * 16 + k8));
+        float4 lo = make_float4(__uint_as_float(raw.x << 16), __uint_as_float(raw.x & 0xFFFF0000u), __uint_as_float(raw.y << 16), __uint_as_float(raw.y & 0xFFFF0000u));
+        float4 hi = make_float4(__uint_as_float(raw.z << 16), __uint_as_float(raw.z & 0xFFFF0000u), __uint_as_float(raw.w << 16), __uint_as_float(raw.w & 0xFFFF0000u));
+        *reinterpret_cast<float4*>(xs + row * KC + k8) = lo;
+        *reinterpret_cast<float4*>(xs + row * KC + k8 + 4) = hi;
     }
     __syncthreads();
     float acc[ROWS][NT];
@@ -290,10 +300,11 @@ __global__ void __launch_bounds__(256, 1) k_rfma(const uint8_t* __restrict__ pac
 #pragma unroll 1
     for (int s = 0; s < nsteps; ++s) {
         cp_wait<D - 2>();
+        __syncwarp();
         const uint8_t* st = ring + (s % D) * STAGE;
-        const uint32_t* smw = reinterpret_cast<const uint32_t*>(st + lane * SMB);
-        const uint32_t* ew = reinterpret_cast<const uint32_t*>(st + 32 * SMB + lane * EB);
-        const uint32_t* low = reinterpret_cast<const uint32_t*>(st + 32 * (SMB + EB) + lane * LOB);
+        const uint32_t* smw = reinterpret_cast<const uint32_t*>(st) + lane;
+        const uint32_t* ew = reinterpret_cast<const uint32_t*>(st + 32 * SMB) + lane;
+        const uint32_t* low = reinterpret_cast<const uint32_t*>(st + 32 * (SMB + EB)) + lane;
         float xv[ROWS][4];
 #pragma unroll
         for (int row = 0; row < ROWS; ++row) {
@@ -303,11 +314,11 @@ __global__ void __launch_bounds__(256, 1) k_rfma(const uint8_t* __restrict__ pac
         }
 #pragma unroll
         for (int j = 0; j < NT; ++j) {
-            uint32_t sw = smw[j], e = ew[j >> 1];
+            uint32_t sw = smw[j * 32], e = ew[(j >> 1) * 32];
             uint32_t ex0 = (j & 1) ? dec_ex<2>(e) : dec_ex<0>(e);
             uint32_t ex1 = (j & 1) ? dec_ex<3>(e) : dec_ex<1>(e);
             uint32_t b0 = dec_pair<false>(sw, ex0, base2), b1 = dec_pair<true>(sw, ex1, base2);
-            uint32_t l01 = low[2 * j], l89 = low[2 * j + 1];
+            uint32_t l01 = low[(2 * j) * 32], l89 = low[(2 * j + 1) * 32];
             float wv[4];
             wv[0] = __uint_as_float((b0 << 16) | (l01 & 0xFFFFu));
             wv[1] = __uint_as_float((b0 & 0xFFFF0000u) | (l01 >> 16));
@@ -351,16 +362,23 @@ __global__ void __launch_bounds__(256, 1) k_rfma(const uint8_t* __restrict__ pac
     cg::cluster_group cluster = cg::this_cluster();
     if (S > 1) cluster.sync(); else __syncthreads();
     const int c0 = (r * BN) / S, c1 = ((r + 1) * BN) / S, ncols = c1 - c0;
-    for (int idx = tid; idx < ROWS * ncols; idx += 256) {
-        int c = c0 + idx % ncols, row = idx / ncols;
-        if (row >= m) continue;
-        float v = 0.f;
+    __shared__ int eo_s[BN + 1];
+    if (tid <= ncols) eo_s[tid] = __ldg(esc_off + nb * BN + c0 + tid);
+    __syncthreads();
+    const int nrows = m < ROWS ? m : ROWS;
+    for (int idx = tid; idx < nrows * ncols; idx += 256) {
+        int cl = idx % ncols, row = idx / ncols, c = c0 + cl;
+        float v;
         if (S > 1) {
-            for (int rr = 0; rr < S; ++rr) v += cluster.map_shared_rank(P, rr)[row * BN + c];
+            float vs[16];
+#pragma unroll
+            for (int rr = 0; rr < 16; ++rr) vs[rr] = (rr < S) ? cluster.map_shared_rank(P, rr)[row * BN + c] : 0.f;
+            v = 0.f;
+#pragma unroll
+            for (int rr = 0; rr < 16; ++rr) v += vs[rr];
         } else v = P[row * BN + c];
         int n = nb * BN + c;
-        int e0 = __ldg(esc_off + n), e1 = __ldg(esc_off + n + 1);
-        for (int e = e0; e < e1; ++e) {
+        for (int e = eo_s[cl]; e < eo_s[cl + 1]; ++e) {
             Esc E = esc[e];
             float xv = bf16_to_f(x + (size_t)row * K + E.k);
             v = fix_esc_bf16(v, xv, E);
@@ -373,64 +391,80 @@ __global__ void __launch_bounds__(256, 1) k_rfma(const uint8_t* __restrict__ pac
 
 // ---------------------------------------------------------------------------------------------
 // k_big: 16*MT rows x (64*NB2) cols per CTA; grid = NBLK * G * S; cluster S along K, G outer K split.
-// Warps: wm = w&3 (m quarter), wn = w>>2 (n half).  Weights decoded once per step into a shared B tile.
+// Warps: wm = w&3 (m quarter), wn = w>>2 (n half).  A stage holds KK k16 steps; weights are decoded once per
+// stage into a shared B tile (double-buffered), one __syncthreads per stage.
 // ---------------------------------------------------------------------------------------------
-template <int MT, int NB2, bool ROUTER, int D>
+template <int MT, int NB2, bool ROUTER, int D, int KK>
 __global__ void __launch_bounds__(256, 1) k_big(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restrict__ x,
                                                 void* __restrict__ out, const int* __restrict__ esc_off,
                                                 const Esc* __restrict__ esc, float* __restrict__ scratch,
-                                                int* __restrict__ counters, int m, int K, int N, uint32_t base2, int S, int G) {
+                                                int* __restrict__ counters, int m, int K, int N, uint32_t base2, int S, int G, int diag) {
 #ifndef BW_STUB
     extern __shared__ __align__(16) uint8_t smem[];
+    const bool no_x = diag & 1, no_w = diag & 2, no_dec = diag & 4, no_mma = diag & 8, no_ld = diag & 16, no_bar = diag & 32;
     constexpr int NT = 8, BN = 64 * NB2, SMB = 32, EB = 16, LOB = ROUTER ? 64 : 0;
-    constexpr int STEP = 32 * (SMB + EB + LOB);                  // one packed n-block step
-    constexpr int ROWS = 16 * MT, XB = ROWS * 32, WB = NB2 * STEP, STAGE = WB + XB;
-    constexpr int BT = NB2 * 8 * 32 * 2 * 4;                      // B tile bytes (bf16x2 b0,b1 per lane per tile)
-    constexpr int NBT = ROUTER ? 2 : 1;                           // hi (+lo) tiles
-    constexpr int MTW = MT / 4, NTW = 4 * NB2;                    // per-warp m-tiles, n-tiles
+    constexpr int STEP = 32 * (SMB + EB + LOB);                  // one packed n-block k16 step
+    constexpr int ROWS = 16 * MT, XB = ROWS * 32, WB = NB2 * STEP, SUB = WB + XB, STAGE = KK * SUB;
+    constexpr int BT = NB2 * 8 * 32 * 2 * 4;                      // B tile bytes per k16 step (uint2 per lane per n-tile)
+    constexpr int NBT = ROUTER ? 2 : 1;                           // hi (+lo)
+    constexpr int BTS = KK * NBT * BT;                            // B tile bytes per stage
+    constexpr int MTW = MT / 4, NTW = 4 * NB2;
     static_assert(MT % 4 == 0, "MT multiple of 4");
+    static_assert(D * STAGE >= ROWS * BN * 4, "partial tile aliases the ring");
     const int tid = threadIdx.x, w = tid >> 5, lane = tid & 31, g = lane >> 2, q = lane & 3;
     const int wm = w & 3, wn = w >> 2;
     const int r = blockIdx.x % S, gi = (blockIdx.x / S) % G, nb = blockIdx.x / (S * G);
     const int KS = K >> 4;
     const int ci = gi * S + r;
     const int s0 = (int)(((long long)ci * KS) / (S * G)), s1 = (int)(((long long)(ci + 1) * KS) / (S * G));
-    const int nsteps = s1 - s0;
-    static_assert(D * STAGE >= ROWS * BN * 4, "partial tile aliases the ring");
+    const int nsteps = s1 - s0, nstages = (nsteps + KK - 1) / KK;
     uint8_t* ring = smem;
-    uint8_t* btile = smem + D * STAGE;                             // [2][NBT][NB2][8][32] uint2
-    float* P = reinterpret_cast<float*>(smem);                     // [ROWS][BN], aliases the (dead) ring
+    uint8_t* btile = smem + D * STAGE;                             // [2][KK][NBT][NB2*8][32] uint2
+    float* P = reinterpret_cast<float*>(smem);                     // [ROWS][BN], aliases the dead ring
 
-    auto issue = [&](int s) {
-        uint8_t* st = ring + (s % D) * STAGE;
-        for (int c = tid; c < NB2 * (STEP / 16); c += 256) {
-            int b = c / (STEP / 16), off = (c % (STEP / 16)) * 16;
-            const uint8_t* gs = packed + ((size_t)(nb * NB2 + b) * KS + s0 + s) * STEP + off;
-            cp_async16(st + b * STEP + off, gs, 16);
-        }
-        for (int c = tid; c < ROWS * 2; c += 256) {
-            int row = c >> 1, chunk = c & 1;
-            const __nv_bfloat16* gx = x + (size_t)(row < m ? row : 0) * K + (size_t)(s0 + s) * 16 + chunk * 8;
-            cp_async16(st + WB + row * 32 + ((chunk ^ ((row >> 2) & 1)) << 4), gx, row < m ? 16 : 0);
+    auto issue = [&](int st_i) {
+        uint8_t* st = ring + (st_i % D) * STAGE;
+#pragma unroll
+        for (int kk = 0; kk < KK; ++kk) {
+            const int step = st_i * KK + kk;
+            const bool live = step < nsteps;
+            uint8_t* sb = st + kk * SUB;
+            if (!no_w)
+            for (int c = tid; c < NB2 * (STEP / 16); c += 256) {
+                int b = c / (STEP / 16), off = (c % (STEP / 16)) * 16;
+                const uint8_t* gs = packed + ((size_t)(nb * NB2 + b) * KS + s0 + (live ? step : 0)) * STEP + off;
+                cp_async16(sb + b * STEP + off, gs, live ? 16 : 0);
+            }
+            if (!no_x)
+            for (int c = tid; c < ROWS * 2; c += 256) {
+                int row = c >> 1, chunk = c & 1;
+                const bool ok = live && row < m;
+                const __nv_bfloat16* gx = x + (size_t)(ok ? row : 0) * K + (size_t)(s0 + (live ? step : 0)) * 16 + chunk * 8;
+                cp_async16(sb + WB + row * 32 + ((chunk ^ ((row >> 2) & 1)) << 4), gx, ok ? 16 : 0);
+            }
         }
     };
-    auto decode = [&](int s) {
-        const uint8_t* st = ring + (s % D) * STAGE;
-        uint2* bt = reinterpret_cast<uint2*>(btile + (s & 1) * NBT * BT);
-        const int j = w;   // this warp decodes n-tile j of every packed n-block, lane = fragment lane
+    auto decode = [&](int st_i) {
+        const uint8_t* st = ring + (st_i % D) * STAGE;
+        uint2* bts = reinterpret_cast<uint2*>(btile + (st_i & 1) * BTS);
+        const int j = w;   // this warp decodes n-tile j of every packed n-block; lane = fragment lane
 #pragma unroll
-        for (int b = 0; b < NB2; ++b) {
-            const uint8_t* wst = st + b * STEP;
-            uint32_t sw = reinterpret_cast<const uint32_t*>(wst + lane * SMB)[j];
-            uint32_t e = reinterpret_cast<const uint32_t*>(wst + 32 * SMB + lane * EB)[j >> 1];
-            uint32_t ex0 = (j & 1) ? dec_ex<2>(e) : dec_ex<0>(e);
-            uint32_t ex1 = (j & 1) ? dec_ex<3>(e) : dec_ex<1>(e);
-            uint32_t b0 = dec_pair<false>(sw, ex0, base2), b1 = dec_pair<true>(sw, ex1, base2);
-            bt[(b * 8 + j) * 32 + lane] = make_uint2(b0, b1);
-            if (ROUTER) {
-                const uint32_t* low = reinterpret_cast<const uint32_t*>(wst + 32 * (SMB + EB) + lane * LOB);
-                uint32_t l0 = lo_pair(b0, low[2 * j]), l1 = lo_pair(b1, low[2 * j + 1]);
-                bt[NB2 * 8 * 32 + (b * 8 + j) * 32 + lane] = make_uint2(l0, l1);
+        for (int kk = 0; kk < KK; ++kk) {
+            uint2* bt = bts + kk * (NBT * BT / 8);
+#pragma unroll
+            for (int b = 0; b < NB2; ++b) {
+                const uint8_t* wst = st + kk * SUB + b * STEP;
+                uint32_t sw = reinterpret_cast<const uint32_t*>(wst)[j * 32 + lane];
+                uint32_t e = reinterpret_cast<const uint32_t*>(wst + 32 * SMB)[(j >> 1) * 32 + lane];
+                uint32_t ex0 = (j & 1) ? dec_ex<2>(e) : dec_ex<0>(e);
+                uint32_t ex1 = (j & 1) ? dec_ex<3>(e) : dec_ex<1>(e);
+                uint32_t b0 = dec_pair<false>(sw, ex0, base2), b1 = dec_pair<true>(sw, ex1, base2);
+                bt[(b * 8 + j) * 32 + lane] = make_uint2(b0, b1);
+                if (ROUTER) {
+                    const uint32_t* low = reinterpret_cast<const uint32_t*>(wst + 32 * (SMB + EB)) + lane;
+                    uint32_t l0 = lo_pair(b0, low[(2 * j) * 32]), l1 = lo_pair(b1, low[(2 * j + 1) * 32]);
+                    bt[NB2 * 8 * 32 + (b * 8 + j) * 32 + lane] = make_uint2(l0, l1);
+                }
             }
         }
     };
@@ -444,36 +478,43 @@ __global__ void __launch_bounds__(256, 1) k_big(const uint8_t* __restrict__ pack
             for (int c = 0; c < 4; ++c) acc[a][b][c] = 0.f;
 
 #pragma unroll 1
-    for (int s = 0; s < D - 1; ++s) { if (s < nsteps) issue(s); cp_commit(); }
+    for (int st_i = 0; st_i < D - 1; ++st_i) { if (st_i < nstages) issue(st_i); cp_commit(); }
     cp_wait<D - 2>();
     __syncthreads();
-    if (nsteps > 0) decode(0);
+    if (nstages > 0) decode(0);
 
 #pragma unroll 1
-    for (int s = 0; s < nsteps; ++s) {
+    for (int st_i = 0; st_i < nstages; ++st_i) {
         cp_wait<D - 3>();
-        __syncthreads();
-        if (s + 1 < nsteps) decode(s + 1);
-        if (s + D - 1 < nsteps) issue(s + D - 1);
+        if (!no_bar) __syncthreads();
+        if (st_i + 1 < nstages && !no_dec) decode(st_i + 1);
+        if (st_i + D - 1 < nstages) issue(st_i + D - 1);
         cp_commit();
-        const uint8_t* st = ring + (s % D) * STAGE;
-        const uint2* bt = reinterpret_cast<const uint2*>(btile + (s & 1) * NBT * BT);
-        uint32_t a[MTW][4];
+        const uint8_t* st = ring + (st_i % D) * STAGE;
+        const uint2* bts = reinterpret_cast<const uint2*>(btile + (st_i & 1) * BTS);
+        if (no_mma) continue;
 #pragma unroll
-        for (int mt = 0; mt < MTW; ++mt) {
-            int row = 16 * (wm * MTW + mt) + (lane & 15), chunk = (lane >> 4) ^ ((lane >> 2) & 1);
-            ldmatrix_x4(a[mt], st + WB + row * 32 + (chunk << 4));
-        }
+        for (int kk = 0; kk < KK; ++kk) {
+            if (st_i * KK + kk >= nsteps) break;
+            const uint2* bt = bts + kk * (NBT * BT / 8);
+            uint32_t a[MTW][4];
 #pragma unroll
-        for (int jj = 0; jj < NTW; ++jj) {
-            int J = wn * NTW + jj;
-            uint2 bb = bt[J * 32 + lane];
+            for (int mt = 0; mt < MTW; ++mt) {
+                int row = 16 * (wm * MTW + mt) + (lane & 15), chunk = (lane >> 4) ^ ((lane >> 2) & 1);
+                if (no_ld) { a[mt][0] = a[mt][1] = a[mt][2] = a[mt][3] = lane; }
+                else ldmatrix_x4(a[mt], st + kk * SUB + WB + row * 32 + (chunk << 4));
+            }
 #pragma unroll
-            for (int mt = 0; mt < MTW; ++mt) mma16816(acc[mt][jj], a[mt], bb.x, bb.y);
-            if (ROUTER) {
-                uint2 ll = bt[NB2 * 8 * 32 + J * 32 + lane];
+            for (int jj = 0; jj < NTW; ++jj) {
+                int J = wn * NTW + jj;
+                uint2 bb = no_ld ? make_uint2(lane, lane) : bt[J * 32 + lane];
 #pragma unroll
-                for (int mt = 0; mt < MTW; ++mt) mma16816(acc[mt][jj], a[mt], ll.x, ll.y);
+                for (int mt = 0; mt < MTW; ++mt) mma16816(acc[mt][jj], a[mt], bb.x, bb.y);
+                if (ROUTER) {
+                    uint2 ll = bt[NB2 * 8 * 32 + J * 32 + lane];
+#pragma unroll
+                    for (int mt = 0; mt < MTW; ++mt) mma16816(acc[mt][jj], a[mt], ll.x, ll.y);
+                }
             }
         }
     }
@@ -490,15 +531,17 @@ __global__ void __launch_bounds__(256, 1) k_big(const uint8_t* __restrict__ pack
     cg::cluster_group cluster = cg::this_cluster();
     if (S > 1) cluster.sync(); else __syncthreads();
     const int c0 = (r * BN) / S, c1 = ((r + 1) * BN) / S, ncols = c1 - c0;
-    const int NBLK_S = (int)gridDim.x / (S * G);
     float* myscr = scratch + ((size_t)(nb * G + gi) * ROWS) * BN;      // [ROWS][BN] slice of (nb, gi)
     __shared__ int ticket_s;
+    __shared__ int eo_s[BN + 1];
+    if (tid <= ncols) eo_s[tid] = __ldg(esc_off + nb * BN + c0 + tid);
     if (G > 1) {
         for (int idx = tid; idx < ROWS * ncols; idx += 256) {
             int c = c0 + idx % ncols, row = idx / ncols;
-            float v = 0.f;
-            for (int rr = 0; rr < S; ++rr) v += (S > 1 ? cluster.map_shared_rank(P, rr) : P)[row * BN + c];
-            myscr[row * BN + c] = v;
+            float vs[4];
+#pragma unroll
+            for (int rr = 0; rr < 4; ++rr) vs[rr] = (rr < S) ? (S > 1 ? cluster.map_shared_rank(P, rr) : P)[row * BN + c] : 0.f;
+            myscr[row * BN + c] = (vs[0] + vs[1]) + (vs[2] + vs[3]);
         }
         __threadfence();
         __syncthreads();
@@ -508,19 +551,25 @@ __global__ void __launch_bounds__(256, 1) k_big(const uint8_t* __restrict__ pack
         __threadfence();
         if (tid == 0) counters[nb * S + r] = 0;
     }
-    (void)NBLK_S;
-    for (int idx = tid; idx < ROWS * ncols; idx += 256) {
-        int c = c0 + idx % ncols, row = idx / ncols;
-        if (row >= m) continue;
+    __syncthreads();
+    const int nrows = m < ROWS ? m : ROWS;
+    for (int idx = tid; idx < nrows * ncols; idx += 256) {
+        int cl = idx % ncols, row = idx / ncols, c = c0 + cl;
         float v = 0.f;
         if (G > 1) {
-            for (int gg = 0; gg < G; ++gg) v += __ldcg(scratch + ((size_t)(nb * G + gg) * ROWS + row) * BN + c);
+            float vs[16];
+#pragma unroll
+            for (int gg = 0; gg < 16; ++gg) vs[gg] = (gg < G) ? __ldcg(scratch + ((size_t)(nb * G + gg) * ROWS + row) * BN + c) : 0.f;
+#pragma unroll
+            for (int gg = 0; gg < 16; ++gg) v += vs[gg];
         } else if (S > 1) {
-            for (int rr = 0; rr < S; ++rr) v += cluster.map_shared_rank(P, rr)[row * BN + c];
+            float vs[4];
+#pragma unroll
+            for (int rr = 0; rr < 4; ++rr) vs[rr] = (rr < S) ? cluster.map_shared_rank(P, rr)[row * BN + c] : 0.f;
+            v = (vs[0] + vs[1]) + (vs[2] + vs[3]);
         } else v = P[row * BN + c];
         int n = nb * BN + c;
-        int e0 = __ldg(esc_off + n), e1 = __ldg(esc_off + n + 1);
-        for (int e = e0; e < e1; ++e) {
+        for (int e = eo_s[cl]; e < eo_s[cl + 1]; ++e) {
             Esc E = esc[e];
             float xv = bf16_to_f(x + (size_t)row * K + E.k);
             v = ROUTER ? fix_esc_hilo(v, xv, E) : fix_esc_bf16(v, xv, E);
@@ -605,23 +654,25 @@ void rfma_launch(torch::Tensor packed, torch::Tensor x, torch::Tensor out, torch
 
 void big_launch(torch::Tensor packed, torch::Tensor x, torch::Tensor out, torch::Tensor esc_off, torch::Tensor esc,
                 torch::Tensor scratch, torch::Tensor counters,
-                int64_t m, int64_t K, int64_t N, int64_t base2, int64_t S, int64_t G, int64_t MT, int64_t NB2, bool router, int64_t D) {
+                int64_t m, int64_t K, int64_t N, int64_t base2, int64_t S, int64_t G, int64_t MT, int64_t NB2, bool router, int64_t D, int64_t KK, int64_t diag) {
     auto stream = at::cuda::getCurrentCUDAStream();
     int BN = 64 * (int)NB2;
     int NBLK = (int)N / BN, grid = NBLK * (int)G * (int)S;
     auto args = std::make_tuple((const uint8_t*)packed.data_ptr(), (const __nv_bfloat16*)x.data_ptr(), (void*)out.data_ptr(),
                                 (const int*)esc_off.data_ptr(), (const Esc*)esc.data_ptr(), (float*)scratch.data_ptr(),
-                                (int*)counters.data_ptr(), (int)m, (int)K, (int)N, (uint32_t)base2, (int)S, (int)G);
-#define BIG_CASE(MT_, NB2_, R_, D_)                                                                              \
-    if (MT == MT_ && NB2 == NB2_ && router == R_ && D == D_) {                                                   \
-        constexpr int STEP = 32 * (32 + 16 + (R_ ? 64 : 0)), STAGE = NB2_ * STEP + 16 * MT_ * 32;                \
+                                (int*)counters.data_ptr(), (int)m, (int)K, (int)N, (uint32_t)base2, (int)S, (int)G, (int)diag);
+#define BIG_CASE(MT_, NB2_, R_, D_, KK_)                                                                         \
+    if (MT == MT_ && NB2 == NB2_ && router == R_ && D == D_ && KK == KK_) {                                       \
+        constexpr int STEP = 32 * (32 + 16 + (R_ ? 64 : 0)), STAGE = KK_ * (NB2_ * STEP + 16 * MT_ * 32);        \
         constexpr int BT = NB2_ * 8 * 32 * 8, NBT = R_ ? 2 : 1;                                                  \
-        int smem = D_ * STAGE + 2 * NBT * BT;                                                                    \
-        std::apply([&](auto... a) { launch(k_big<MT_, NB2_, R_, D_>, grid, smem, (int)S, stream.stream(), a...); }, args); \
+        int smem = D_ * STAGE + 2 * KK_ * NBT * BT;                                                              \
+        std::apply([&](auto... a) { launch(k_big<MT_, NB2_, R_, D_, KK_>, grid, smem, (int)S, stream.stream(), a...); }, args); \
         return;                                                                                                  \
     }
-    BIG_CASE(4, 2, false, 12) BIG_CASE(8, 2, false, 12) BIG_CASE(16, 2, false, 12)
-    BIG_CASE(8, 1, true, 12) BIG_CASE(16, 1, true, 12)
+    BIG_CASE(4, 2, false, 12, 1) BIG_CASE(8, 2, false, 12, 1) BIG_CASE(16, 2, false, 12, 1)
+    BIG_CASE(8, 1, true, 12, 1) BIG_CASE(16, 1, true, 12, 1)
+    BIG_CASE(4, 2, false, 6, 2) BIG_CASE(8, 2, false, 6, 2) BIG_CASE(16, 2, false, 6, 2)
+    BIG_CASE(8, 1, true, 6, 2) BIG_CASE(16, 1, true, 6, 2)
     TORCH_CHECK(false, "no big config");
 }
 """
@@ -634,7 +685,7 @@ void rfma_launch(torch::Tensor packed, torch::Tensor x, torch::Tensor out, torch
                  int64_t m, int64_t K, int64_t N, int64_t base2, int64_t S, int64_t D);
 void big_launch(torch::Tensor packed, torch::Tensor x, torch::Tensor out, torch::Tensor esc_off, torch::Tensor esc,
                 torch::Tensor scratch, torch::Tensor counters,
-                int64_t m, int64_t K, int64_t N, int64_t base2, int64_t S, int64_t G, int64_t MT, int64_t NB2, bool router, int64_t D);
+                int64_t m, int64_t K, int64_t N, int64_t base2, int64_t S, int64_t G, int64_t MT, int64_t NB2, bool router, int64_t D, int64_t KK, int64_t diag);
 """
 
 _EXT = None
@@ -644,7 +695,7 @@ def _ext():
     global _EXT
     if _EXT is None:
         _EXT = load_inline(
-            name="bandwidth_proj_v3",
+            name="bandwidth_proj_v6",
             cpp_sources=CPP_SRC,
             cuda_sources=CUDA_SRC,
             functions=["small_launch", "rfma_launch", "big_launch"],
@@ -685,14 +736,16 @@ def _pack_layer(w: torch.Tensor):
     sm = torch.where(esc, torch.zeros_like(hi), (s << 7) | mant).to(torch.uint8)
     code = torch.where(esc, torch.zeros_like(code), code).to(torch.uint8)
     NB, KS = N // BN, K // 16
-    # SM plane: [nb][step][t=4g+q][j][kk=2h+i]  with n = nb*64 + 8j + g, k = 16 step + 8h + 2q + i
-    smp = sm.view(NB, NT, 8, KS, 2, 4, 2).permute(0, 3, 2, 5, 1, 4, 6).reshape(NB, KS, 32 * NT * 4)
-    # E plane: per thread NT/2 words; word wd holds tiles (2wd, 2wd+1); nibble index = 4i + 2(j%2) + h
-    cp = code.view(NB, NT // 2, 2, 8, KS, 2, 4, 2).permute(0, 4, 3, 6, 1, 7, 2, 5).reshape(NB, KS, 32, NT // 2, 4, 2)
+    # Lane-contiguous planes (conflict-free 4-byte smem reads): n = nb*64 + 8j + g, k = 16 step + 8h + 2q + i, lane = 4g+q
+    # SM plane: [nb][step][j][lane][kk=2h+i] bytes
+    smp = sm.view(NB, NT, 8, KS, 2, 4, 2).permute(0, 3, 1, 2, 5, 4, 6).reshape(NB, KS, 32 * NT * 4)
+    # E plane: [nb][step][wd][lane] words; word wd holds tiles (2wd, 2wd+1); nibble index = 4i + 2(j%2) + h
+    cp = code.view(NB, NT // 2, 2, 8, KS, 2, 4, 2).permute(0, 4, 1, 3, 6, 7, 2, 5).reshape(NB, KS, NT // 2, 32, 4, 2)
     eb = (cp[..., 0] | (cp[..., 1] << 4)).reshape(NB, KS, 32 * NT * 2)
     parts = [smp, eb]
     if router:
-        lo6 = lo.view(NB, NT, 8, KS, 2, 4, 2).permute(0, 3, 2, 5, 1, 4, 6).reshape(NB, KS, 32 * NT * 4)
+        # LO plane: [nb][step][j][h][lane][i] u16
+        lo6 = lo.view(NB, NT, 8, KS, 2, 4, 2).permute(0, 3, 1, 4, 2, 5, 6).reshape(NB, KS, 32 * NT * 4)
         lob = torch.stack([lo6 & 0xFF, lo6 >> 8], dim=-1).to(torch.uint8).reshape(NB, KS, 32 * NT * 8)
         parts.append(lob)
     packed = torch.cat(parts, dim=2).contiguous().view(-1)
@@ -727,14 +780,15 @@ def _small_cfg(layer, m, N, K):
 
 def _big_cfg(layer, m, N, K, router):
     if router:
-        return {"S": 2, "G": 8 if m <= 128 else 16, "NB2": 1, "D": 12}
+        return {"S": 2, "G": 8 if m <= 128 else 16, "NB2": 1, "D": BIG_D, "KK": BIG_KK}
     nblk = N // 128
     S, G = {18: (2, 3), 32: (2, 2), 64: (2, 1)}.get(nblk, (1, 1))
-    return {"S": S, "G": G, "NB2": 2, "D": BIG_D}
+    return {"S": S, "G": G, "NB2": 2, "D": BIG_D, "KK": BIG_KK}
 
 
 SMALL_D = int(os.environ.get("BW_SMALL_D", "4"))
-BIG_D = int(os.environ.get("BW_BIG_D", "12"))
+BIG_KK = int(os.environ.get("BW_BIG_KK", "2"))
+BIG_D = int(os.environ.get("BW_BIG_D", "6" if BIG_KK == 2 else "12"))
 
 
 def prepare(weights):
@@ -783,7 +837,7 @@ def kernel_fn(data, state):
             out = torch.empty((m, N), dtype=torch.float32, device=x.device)
             c = _big_cfg(layer, m, N, K, True)
             ext.big_launch(L["packed"], x, out, L["esc_off"], L["esc"], L["scratch"], L["counters"],
-                           m, K, N, L["base2"], c["S"], c["G"], MT, c["NB2"], True, c["D"])
+                           m, K, N, L["base2"], c["S"], c["G"], MT, c["NB2"], True, c["D"], c["KK"], 0)
             return out
         acc = torch.mm(x, state["_router_hi_t"], out_dtype=torch.float32)
         acc += torch.mm(x, state["_router_lo_t"], out_dtype=torch.float32)
@@ -798,6 +852,6 @@ def kernel_fn(data, state):
         out = torch.empty((m, N), dtype=torch.bfloat16, device=x.device)
         c = _big_cfg(layer, m, N, K, False)
         ext.big_launch(L["packed"], x, out, L["esc_off"], L["esc"], L["scratch"], L["counters"],
-                       m, K, N, L["base2"], c["S"], c["G"], MT, c["NB2"], False, c["D"])
+                       m, K, N, L["base2"], c["S"], c["G"], MT, c["NB2"], False, c["D"], c["KK"], 0)
         return out
     return torch.mm(x, state["_w"][layer][:N].t())

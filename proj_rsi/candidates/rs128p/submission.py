@@ -3040,6 +3040,20 @@ RQV = [  # (name, NT, ST, GS, PRB, WM, INS, FL): ST k64 slots (W 12 KB + x NT*12
     ("s4s5hzx", 128, 5, 1, 0, 0, 0, 35),
     ("s4s5hzw3x", 128, 5, 1, 0, 3, 0, 35),
     ("s4s5hzw4x", 128, 5, 1, 0, 4, 0, 35),
+    ("r8p", 128, 8, 1, 8, 0, 0, 64),
+    ("r8pi", 128, 8, 1, 8, 0, 1, 64),
+    ("s4s5hzp", 128, 5, 1, 0, 0, 0, 67),
+    ("s4s5hzpi", 128, 5, 1, 0, 0, 1, 67),
+    ("s4hzp", 128, 8, 1, 0, 0, 0, 67),
+    ("n256s5hzp", 256, 5, 1, 0, 0, 0, 67),
+    ("r8z", 128, 8, 1, 8, 0, 0, 128),
+    ("r8pz", 128, 8, 1, 8, 0, 0, 192),
+    ("r10d1", 128, 8, 1, 10, 0, 0, 256),
+    ("r10d2", 128, 8, 1, 10, 0, 0, 512),
+    ("r10d3", 128, 8, 1, 10, 0, 0, 768),
+    ("r10d4", 128, 8, 1, 10, 0, 0, 1024),
+    ("r10d5", 128, 8, 1, 10, 0, 0, 1280),
+    ("r11d1", 128, 8, 1, 11, 0, 0, 256),
 ]
 RQI = {v[0]: i for i, v in enumerate(RQV)}
 RQTOL = {1: 4e-3, 2: 5e-3, 3: 6e-3, 4: 6e-3, 5: 7e-3, 6: 7e-3, 7: 8e-3, 8: 8e-3, 9: 8e-3}  # judge 1e-2 (rows 5x)
@@ -3108,13 +3122,13 @@ template <int N0, int NR> __device__ __forceinline__ void rq_xsw(uint32_t* A, in
 // escape fix (pw10 pw_fix3 entry format): entry = seq << 17 | lane << 12 | reg << 8 | half << 7 | xor7, seq = stage within
 // the CTA's range. The warp's list is cached in registers, 32 entries per lane-spread window (entry i in lane i % 32), read
 // by shfl: no dependent global load per hit (pw10 reloaded the next entry from L2 after every hit, ~600 clk per escape).
-template <bool SW>
+template <bool SW, bool XZ = false>
 __device__ __forceinline__ void rq_fix(uint32_t (&A)[16], int seq, uint32_t& nx, uint32_t& nxs, int& ei, uint32_t& ec, const uint32_t* el, int lane, int& rq_nh) {
   while (nxs == (uint32_t)seq) {
     rq_nh++;
     if (lane == (int)((nx >> 12) & 31)) {
       const int r = (int)((nx >> 8) & 15);
-      const uint32_t xr = (nx & 0x7fu) << (8 + ((nx >> 7) & 1) * 16);
+      const uint32_t xr = XZ ? 0u : (nx & 0x7fu) << (8 + ((nx >> 7) & 1) * 16);
       if (SW) rq_xsw<0, 16>(A, r, xr);
       else {
 #pragma unroll
@@ -3365,6 +3379,25 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
     }
     RQ_T1(7);
   };
+  // rs128p FL bit 6 (GS = 1, WM 0): the escape list walk of stage s+1 runs during stage s's wait_group (it reads only the
+  // list registers), parking up to 3 (reg, xor) pairs per lane; the decode then applies them with predicated switches, so
+  // no SHFL chain sits between the full wait and the wgmma.fence (where it held the warpgroup's other 3 warps)
+  static_assert(!(FL & 64) || (GS == 1 && WM == 0), "FL bit 6: GS 1, WM 0 only");
+  uint32_t er0 = 0xffu, ex0 = 0u, er1 = 0xffu, ex1 = 0u, er2 = 0xffu, ex2 = 0u;
+  auto prewalk = [&](int seq) {
+    er0 = er1 = er2 = 0xffu;
+    while (nxs == (uint32_t)seq) {
+      nhits++;
+      if (lane == (int)((nx >> 12) & 31)) {
+        const uint32_t r = (nx >> 8) & 15u, xr = (FL & 128) ? 0u : (nx & 0x7fu) << (8 + ((nx >> 7) & 1) * 16);  // bit 7: XOR 0 (probe)
+        if (er0 == 0xffu) { er0 = r; ex0 = xr; } else if (er1 == 0xffu) { er1 = r; ex1 = xr; } else { er2 = r; ex2 = xr; }
+      }
+      ++ei;
+      if ((ei & 31) == 0) ec = __ldg(el + ei + lane);
+      nx = __shfl_sync(0xffffffffu, ec, ei & 31);
+      nxs = nx >> 17;
+    }
+  };
   auto dec = [&](int G, int ns, uint32_t (&A)[GS][16]) {
     if (INS) {  // force the LDS results in: time the data wait separately from the decode ALU work
       uint32_t t = 0;
@@ -3378,11 +3411,24 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
     for (int j = 0; j < GS; j++) {
       if (j < ns) {
         if (PRB == 10 || PRB == 11) {
+          // FL bits 8-10 (rs128p data probe): 1 all 1.0 | 2 1.0 + lane 0 reg 0 low half 2^-23 | 3 every low half 2^-23 |
+          // 4 1.0 + lane 0 reg 0 low half 2^-60 | 5 every reg 1.0 / 2^-7 mix (no tiny) | 0 the original pattern
+          constexpr int DP = (FL >> 8) & 7;
+          const uint32_t one = 0x3F803F80u ^ (Tb & 0u);
 #pragma unroll
-          for (int i = 0; i < 16; i++) A[j][i] = Tb + i * lane;
+          for (int i = 0; i < 16; i++) {
+            uint32_t v = DP == 0 ? Tb + i * lane : one;
+            if (DP == 2 && lane == 0 && i == 0) v = 0x3F803400u;
+            if (DP == 3) v = 0x3F803400u;
+            if (DP == 4 && lane == 0 && i == 0) v = 0x3F801D80u;
+            if (DP == 5) v = 0x3F803C00u;
+            A[j][i] = v ^ (Tb & (uint32_t)(p.m < 0));
+          }
         } else {
           rq_unit(Q[j][0], Q[j][1], Q[j][2], Tb, A[j]);
-          rq_fix<(FL & 32) != 0>(A[j], GS * G + j, nx, nxs, ei, ec, el, lane, nhits);
+          if (FL & 64) {
+            if (er0 != 0xffu) { rq_xsw<0, 16>(A[j], (int)er0, ex0); if (er1 != 0xffu) { rq_xsw<0, 16>(A[j], (int)er1, ex1); if (er2 != 0xffu) rq_xsw<0, 16>(A[j], (int)er2, ex2); } }
+          } else rq_fix<(FL & 32) != 0, (FL & 128) != 0>(A[j], GS * G + j, nx, nxs, ei, ec, el, lane, nhits);
         }
       }
     }
@@ -3479,6 +3525,7 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
         dec(G, decltype(NSC)::value, A);
         mma(G, NSC, A);
         if (G + 1 < NGT) ldr(G + 1);
+        if ((FL & 64) && PRB != 10 && PRB != 11) prewalk(G + 1);
         asm volatile("wgmma.wait_group.sync.aligned 1;\n" ::: "memory");
         fa(Ap);
         RQ_T1(6);
@@ -3502,6 +3549,7 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
     using FULLR = std::integral_constant<int, GS>;
     using ONER = std::integral_constant<int, 1>;
     ldr(0);
+    if ((FL & 64) && PRB != 10 && PRB != 11) prewalk(0);
     if (WM == 1 || WM == 2) dec(0, GS, A0);
     int G = 0;
     if (WM == 2) {  // buffer of round G = G % 3; host guarantees KCS >= GS
@@ -3744,6 +3792,9 @@ def _rqunpack(lay, tab, esc, N, K):
     return W.permute(0, 6, 3, 1, 2, 5, 4, 7).reshape(N, K)  # int32 bf16 bits (compare with w.view(int16) & 0xffff)
 
 
+RQESC_LANEMAX = [0]
+
+
 def _rqesc(esc6, NB, KC, KS, dev):
     """escape lists for grid (NB, KS): one fixed-stride slot of CAP entries per (ks, nb, warp) (CAP a multiple of 32,
     > the longest list, so every list ends in a sentinel), + 32 trailing sentinels; int32 [KS*NB*8*CAP + 32]"""
@@ -3760,6 +3811,8 @@ def _rqesc(esc6, NB, KC, KS, dev):
         gw, ent = gw[o], ent[o]
         rank = torch.arange(len(gw), device=dev) - torch.searchsorted(gw, gw)
         cap = (int(torch.bincount(gw, minlength=G).max()) + 1 + 31) // 32 * 32
+        key = (gw * 65536 + u) * 32 + ln
+        RQESC_LANEMAX[0] = int(torch.unique(key, return_counts=True)[1].max())  # rs128p FL bit 6 parks <= 3 per lane
     else:
         cap = 32
     arr = torch.full((G * cap + 32,), 0xffffffff, dtype=torch.long, device=dev)

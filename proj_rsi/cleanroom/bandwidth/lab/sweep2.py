@@ -48,9 +48,9 @@ for m in ms:
             out = torch.empty((m, N), dtype=torch.float32, device="cuda")
             fn = lambda: ext.rfma_launch(L["packed"], x, out, L["esc_off"], L["esc"], m, K, N, L["base2"], S, D)
         elif kind == "big":
-            MT = c.get("MT", 4 if m <= 64 else (8 if m <= 128 else 16)); S = c.get("S", 4); G = c.get("G", 1); NB2 = c.get("NB2", 1 if router else 2); D = c.get("D", 12)
+            MT = c.get("MT", 4 if m <= 64 else (8 if m <= 128 else 16)); S = c.get("S", 4); G = c.get("G", 1); NB2 = c.get("NB2", 1 if router else 2); KK = c.get("KK", 2); D = c.get("D", 6 if KK == 2 else 12); diag = c.get("diag", 0)
             out = torch.empty((m, N), dtype=torch.float32 if router else torch.bfloat16, device="cuda")
-            fn = lambda: ext.big_launch(L["packed"], x, out, L["esc_off"], L["esc"], L["scratch"], L["counters"], m, K, N, L["base2"], S, G, MT, NB2, router, D)
+            fn = lambda: ext.big_launch(L["packed"], x, out, L["esc_off"], L["esc"], L["scratch"], L["counters"], m, K, N, L["base2"], S, G, MT, NB2, router, D, KK, diag)
         else:
             fn = lambda: mod.kernel_fn(data, st)
         try:

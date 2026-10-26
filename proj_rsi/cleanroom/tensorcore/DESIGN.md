@@ -67,10 +67,59 @@ base 107 / 98) interleaved per unit (24576 B) and runs two wgmmas per k16 step i
   "last CTA converts" variant was measured and cost 7-10 us at m = 128/256: the `__threadfence` after 64-128 KB of
   atomics plus one CTA streaming the block serialised at the kernel tail.)
 
-## 4. Measured (H100 box, graph replay with L2 flush; us)
+## 4. Measured (H100 box, graph replay with L2 flush, median of 10-20; us, box replay floor 12-14 us inside every number)
 
-(filled in below from `h100_bench.py` and the ladder; see the table at the end of this file)
+The box was shared with other agents the whole time (the GPU lock is not honoured by everyone: the empty-graph replay
+floor was 12-14 us instead of ~4), so only differences within one run are meaningful.  `torch` is cuBLAS on bf16 W
+(the router: two cuBLAS GEMMs on the hi/lo split), i.e. the same thing the judge's bar runs at m >= 128.
+
+### 4.1 Ladder (qkv_gate, v23; `mode` = what the kernel does)
+
+| m | torch | stream+decode+wgmma (mode 3) | +convert kernel (8) | +fp32 red.add flush (4) | +escapes (5) | full (0) |
+|---|---|---|---|---|---|---|
+| 16  | 23.0 | 19.4 | 20.6 | 21.6 | 22.5 | 23.9 (v22) |
+| 128 | 22.6 | 21.7 | 23.6 | 25.7 | 27.2 | 30.1 (v22) |
+| 256 | 27.3 | 26.3 | 29.0 | 34.3 | 36.1 | 42.6 (v22) |
+
+Earlier ladder steps (v13): no-x-tile (mode 6) and no-wgmma (mode 7) are within 0.5 us of mode 3 at every m, i.e. the
+mainloop is purely W-stream-bound: the x tile re-reads from L2 (37 MB at m = 128, 75 MB at m = 256) and the tensor work
+are hidden.  **The whole gap to cuBLAS at m >= 128 is the split-K epilogue**: the fp32 `red.add` tail (every CTA flushes
+BN x MP x 4 B = 64-128 KB at the same moment: 8.6-17 MB of L2 atomics, 2-8 us), the escape path (1-3 us: a chain of
+dependent L2 loads at the start plus the register apply) and the convert kernel (1-3 us).
+
+### 4.2 Design experiments (all measured, see git log)
+
+* one wgmma per k16 step with `wait_group 1` after each: tensor pipe serialised, ~2x slower at m = 128 -> groups of 4
+  steps per commit, double-buffered A registers.
+* 384 threads + `setmaxnreg` (producer WG 40 / consumers 232): ptxas still capped the allocation at 168 and emitted
+  C7515 "wgmma serialized" for every variant; 288 threads (dedicated producer warp, no setmaxnreg) is clean but also
+  capped at 168, which spills at MP = 256; 256 threads with thread 0 as producer gives 255 registers -> used from MP = 64 up.
+  A dedicated producer warp at MP = 128 (288 threads) was 6% slower than the integrated one.
+* 4-7 vs 12 stages: no difference (the stream is latency-tolerant at 170-200 KB in flight).
+* fused "last CTA per n-block converts" epilogue: 7-10 us at m = 128/256 (fence after the atomics + one CTA streaming
+  the block) -> separate convert kernel, launched with programmatic dependent launch (saves ~0.5 us vs a plain launch).
+* escape fix-ups by scalar atomics: 7-14 us (dependent-load chains at the tail) -> prefetched smem buffer + register apply.
+* 2-CTA cluster DSMEM pre-reduction of the partials: measured +1-2 us *worse* at m = 16/128.  Analysis: with ~7 CTAs per
+  n-block, a CTA pair (c, c+1) shares c's last and c+1's first block; the push only replaces a mid-stream (already hidden)
+  flush, while both CTAs still end with a 64 KB atomic flush of their own last block, so the tail volume is unchanged and
+  the DSMEM push, the slot sum and the cluster sync are pure overhead.  Kept in the code (`CLUSTER = 2`) but off.
+* router grid 64 instead of 128 CTAs: slower (the 8 MB stream wants all SMs more than the atomics want fewer partials).
+
+### 4.3 Harness (h100_bench.py --official, v23 policy: packed kernel for m <= 64 on the four bf16 layers, all m on the router; torch above)
+
+(table from logs/tensorcore_bench6.log on the box, appended below when the queued run completes)
 
 ## 5. What next
 
-(see the end of this file)
+1. **Kill the atomic tail.**  The partial-sum volume is G x BN x MP x 4 B, independent of how K is split, and every CTA
+   flushes at the same moment.  Options, in order of expected payoff: (a) bf16x2 `red.add` partials for the *mid-stream*
+   flushes only (hidden anyway, so no), (b) align the stream-K partition so that CTA pairs/quads share exactly one
+   n-block and reduce through DSMEM *before* the tail (the pair's higher rank must have that block as its *last* block,
+   which the current consecutive partition does not give), (c) a K-split of 2 with BN = 64 for m >= 128 (halves the
+   tail bytes, doubles the x L2 traffic that is currently free at m = 128), (d) write partials with plain 16-byte
+   stores to a [split][m][N] buffer and reduce in the convert kernel with all SMs (no atomics; 8.6 MB write + read).
+2. Serve m = 128 with the packed kernel once the tail is < 1 us: the mainloop alone (mode 3) is already 4% faster than
+   cuBLAS on the H100 at m = 128 and 32% faster on the H200 by the byte ratio.
+3. The router could use a 13-bit lo plane with the exponent relative to hi's (4-bit j) instead of its own window
+   (escape rate 6e-4 -> ~1e-5), and the K=1024 `o` layer could use BK = 128 units (fewer, larger TMA transactions).
+4. Measure on an idle box: every number above carries a 12-14 us contended replay floor.

@@ -83,13 +83,13 @@ def plan_anat(layers, ms):
             v.append(("cublas", None, ly, m, 0, 0))
             for nm in ANAT:
                 v.append((nm, nm, ly, m, S.RQKS[ly], 0))
-            for nm in ("r8",):
+            for nm in ():
                 v.append((nm + "-noesc", nm, ly, m, S.RQKS[ly], 0))
             pass
     return v
 
 
-ANAT = ["r8", "r8x", "r8w3x", "r8w4x", "r10", "s4s5hz", "s4s5hzx", "s4s5hzw3x"]
+ANAT = ["r10", "r10d1", "r10d2", "r10d3", "r10d4", "r10d5", "r11d1"]
 PLANS = {"r1": plan_r1, "e5": plan_e5, "ins": plan_ins, "anat": plan_anat}
 
 
@@ -225,6 +225,7 @@ def main():
         noesc = lab.endswith("-noesc")  # timing only: empty escape lists (the output is not exact)
         if (ly, KS, noesc) not in escs:
             escs[(ly, KS, noesc)] = S._rqesc(esc[:0] if noesc else esc, lay.shape[0], lay.shape[1], KS, dev)
+            print("ESC %s KS=%d noesc=%s max escapes per (warp, stage, lane) %d" % (ly, KS, noesc, S.RQESC_LANEMAX[0]), flush=True)
         el, _ = escs[(ly, KS, noesc)]
         if ly not in cnts:
             cnts[ly] = torch.zeros(2 * lay.shape[0], dtype=torch.int32, device=dev)

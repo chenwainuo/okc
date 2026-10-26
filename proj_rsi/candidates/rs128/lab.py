@@ -103,7 +103,30 @@ def plan_m256b(layers, ms):
     return v
 
 
-PLANS = {"m256b": plan_m256b, "m256": plan_m256, "r1": plan_r1, "e5": plan_e5, "ins": plan_ins}
+def plan_dec(layers, ms):
+    """m=128 decomposition at the production geometry (ST 5, k64 rounds): resident / W only / W+x / +decode / +wgmma /
+    +epilogue, bare streams, epilogue-only, cuBLAS"""
+    v = []
+    for ly in layers:
+        v.append(("cublas", None, ly, 128, 0, 0))
+        for nm in ("f12s5", "f12xs5", "r8s5", "s0s5", "s1s5", "s2s5", "s3s5", "s3s5h", "s4s5z", "s4s5hz", "eps5"):
+            v.append((nm, nm, ly, 128, S.RQKS[ly], 0))
+        v.append(("s4s5zi", "s4s5zi", ly, 128, S.RQKS[ly], 0))
+    return v
+
+
+def plan_ks(layers, ms):
+    """K-split sweep at the production geometry: fewer CTAs, fewer partial bytes, longer streams per CTA"""
+    v = []
+    for ly in layers:
+        v.append(("cublas", None, ly, 128, 0, 0))
+        for ks in {"qkv_gate": (4, 5, 6, 7), "pooler": (2, 3, 4), "unpooler": (1, 2), "o": (1, 2)}[ly]:
+            for nm in ("s3s5", "s4s5hz", "s4s5z"):
+                v.append(("%s-ks%d" % (nm, ks), nm, ly, 128, ks, 0))
+    return v
+
+
+PLANS = {"ks": plan_ks, "dec": plan_dec, "m256b": plan_m256b, "m256": plan_m256, "r1": plan_r1, "e5": plan_e5, "ins": plan_ins}
 
 
 class Clocks:
