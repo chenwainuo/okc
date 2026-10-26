@@ -745,3 +745,21 @@ against untuned torch with a write flush, while r6 runs a per-shape cuBLASLt alg
 flushes — against that, the best CUTLASS config is 0.3–2.3 µs behind (pooler m=128 c64n 28.26 vs r6 27.42, +3%).
 So the bf16 CUTLASS pipeline is ~1–8% behind r6's tuned cuBLASLt on the box; the two-plane build must win on bytes
 (−25%) despite that. pw30 goes last in the reset chain as a transfer test only.
+
+## Workflow wf_d35c8afb-f3d complete: understanding + design for m ≥ 128 (audits/m128-plan.md)
+
+Understand: DeepGEMM's sm90 bf16 kernel keeps ONE wgmma group in flight (wait_group 0 per stage) and hides latency
+with ring depth and merged BLOCK_K=128 stages (8–12 wgmmas per sync round); clusters disabled on one-wave grids; TMA
+store epilogue; it routes bf16 to cuBLASLt by default on a full GPU. Pipeline diff: our wait/release protocol equals
+CUTLASS's; the difference is a single math warpgroup whose per-batch bookkeeping rivals the batch's tensor time at
+64x64; a 64x64 bf16 SS pipeline is capped at cuBLAS's level by the smem port (32 KB/stage ≈ 256 clk) and the L2
+model — bf16 SS can never beat cuBLAS; headroom exists only with register-A + 12-bit bytes + fewer x bytes. pw24's
+"+10.9 wgmma rung" was measured on the cluster variant that alone costs +9.4; bg12 (no cluster) is 72 clk/stage
+behind cuBLAS. Decode insertion ranking: two math warpgroups with register-A (−4.5 to −5.5 µs vs bf16-at-parity) ≈
+register-A with interleaved decode and k128 stages ≈ two-plane TMA+ldmatrix ≫ transform warpgroup → SS (+0 to +2) >
+consumer decode → stmatrix → SS (+2 to +4). DeepGEMM embedding: +29 KB over pw25's bundle, 1.6 s/instantiation.
+Design (RS128): swap-AB, 128 W rows x all tokens per CTA, two math warpgroups, register-A from the 12-bit pack decoded
+in the math warps, x as smem B, K split on a one-wave grid (pooler 32x4), producer WG with separate W and x lanes,
+setmaxnreg 40/232, cross-CTA reduce by cp.reduce.async.bulk.tensor bf16 add, no cluster; H200 estimate pooler m=128
+≈ 17.0 (16.5–17.8) vs cuBLAS 20.3; m=256 parity to −1. An agent now builds it on the H100 per the plan's ladder
+S0–S5 (milestones R1–R4), in parallel with the CUTLASS two-plane route (mx). P4 re-pointed at the no-cluster ladder.
