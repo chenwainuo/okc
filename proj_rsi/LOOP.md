@@ -410,3 +410,21 @@ Board unchanged: r6-c12 at 3428 (re-measured 3365–3386 in today's drift). Ever
 Conclusion: 3000 is not reachable from this evidence (ceiling 3067 without m ≥ 128 gains; realistic ≤ 3300–3350).
 Options for the user: (A) stop, r6 stands; (B) continue cheap m ≤ 32 / router iterations for ≤ 2–3%; (C) a long
 project on an m=128 transform-warpgroup kernel with uncertain payoff (≈ 0.2 ln if it beats cuBLAS by 3 µs).
+
+## Correction (user: "leaderboard is at 3ms"): the codec lever was mis-sized
+
+A 3000.75 exists on the board, so the ceiling model above is missing a lever. Recomputed with r6's table (stream part
+= packed bytes/3.8 TB/s scaled by bits/12; everything else as r6 pays it today):
+
+| bits/weight | m ≤ 32 only | + half the m=32 excess | + m=128 big four −3 µs | all three |
+|---|---:|---:|---:|---:|
+| 12.0 | 3437 | 3327 | 3253 | 3149 |
+| 11.4 | 3353 | 3243 | 3174 | 3069 |
+| 11.0 | 3297 | 3186 | 3121 | 3015 |
+| 10.6 | 3240 | 3128 | 3067 | 2961 |
+
+The earlier "≈ 0.1 ln" for an 11-bit codec counted it as a single-load effect; a byte cut applies to every load at
+once, so it is worth ≈ 0.06 ln per load per 8% of bytes. Weights have 10.46 bits of entropy (exponent ≈ 2.46 bits vs
+r6's 4-bit field). Main line now: pw17 = fixed 11-bit + escape lists inside r6's gv (analyst); in parallel a
+variable-length exponent codec study targeting ≈ 10.6–11.0 bits at ≤ 6 lane-instr/weight (implementer). The decode
+budget: 11 weights/clk/SM needed at m=1; the pw3/pw14 ladders show decode is hidden at m ≤ 8 today.
