@@ -1,0 +1,18 @@
+{
+  "id": "pw30",
+  "parent": "pw26",
+  "claim": "CUTLASS bf16 parity configs transfer to the H200. A 233-config H100 sweep (proj_rsi/tools/cutlass_sweep.py, proj_rsi/audits/cutlass_sweep.md) found four basic warp-specialised instantiations that cover the big-four shapes at m = 128 / 256 within ~1% of torch on the box (geomean 1.009 vs best torch): c64n = swap-AB 64x64x64 cluster 1x2 no-smem epilogue (qkv / pooler m=128), c128 = swap-AB 128x128x64 cluster 1x2 (o / unpooler m=256), n128 = non-swapped 64x128x64 raster along W rows (pooler m=256, unpooler / o m=128), n96 = non-swapped 64x96x64 raster along W rows (qkv m=256, 96 tiles like nvjet's 96x64). pw30 = pw26 with exactly these four; each is baked on all eight (layer, m) shapes against r6 (r6's own m=128/256 choice is tuned cuBLASLt) and picked per shape.",
+  "paths": "As pw26: CUTP = c64n / c128 / n128 / n96 (variant = config + 4 * raster), served only at m exactly 128 / 256, bake + validation + PROBE cuthbm, cut bake starts only with PREPARE_BUDGET_S - 100 s left, per-path 240 s budget check, build failure keeps r6.",
+  "target_shapes": [
+    "pooler m=128: c64n within 1.0 us of r6/torch in the bake",
+    "pooler m=256: n128 vs cuBLASLt heuristic (H100 bake: 30.8 vs heur 36.9, tuned r6 29.8)"
+  ],
+  "kill_if": "no config within 1.0 us of torch at pooler m=128 in the judge bake",
+  "mechanics": "Same embedded CUTLASS 3.9.2 header bundle as pw26 (no new headers needed: the new CUTCU compiles against the extracted bundle alone). C is void (beta = 0). StageCountAutoCarveout, PersistentScheduler with runtime raster order, hw_info.sm_count cached. load_inline 'cut30_*' with CUTFLAGS incl. -DNDEBUG and -gencode=arch=compute_90a,code=sm_90a.",
+  "local_checks": "Local compile of the 4 against the bundle: rc 0, 39 s, 0 spills, regs 60 / 74 / 90 / 154, no wgmma serialisation warning. File 818 KB. lint ok; cpu-check --official 9/9. H100 (/root/bench.sh pw30 --official): all official CHECKs ok; cut compiled in 58 s; PREPARE 94.8 s. H100 bake (us, r6 = tuned cuBLASLt / cuBLASLt heuristic / best CUTLASS): qkv128 18.82/20.38/c64n 21.15; qkv256 21.47/23.20/n96 22.94; o128 10.78/10.88/n128 11.10; o256 11.62/11.97/c128 12.13; pooler128 27.42/28.61/c64n 28.26; pooler256 29.44/36.93/n128 30.82; unpooler128 26.88/28.16/n128 28.26; unpooler256 28.06/30.24/c128 30.34. The per-shape ranking of the four matches the sweep, and they sit at about cuBLASLt-heuristic (torch) parity, but r6's tuned cuBLASLt beats every one by 0.3-2.3 us, so on the H100 every PICK is r6.",
+  "expected": "Score-neutral (all picks r6 on the H100); information value only: whether the H200 bake reproduces the H100 ordering and the c64n gap to r6 at pooler m=128.",
+  "risks": [
+    "Judge compile estimate: 39 s local / 58 s on the H100 box for 4 instantiations -> ~60-70 s on the judge, near the 70 s limit.",
+    "The sweep's parity was measured with h100_bench's write flush (flush.zero_()) against untuned torch; the bake's read-only flush against r6's tuned cuBLASLt is the stricter test and shows no win."
+  ]
+}
