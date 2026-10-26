@@ -678,3 +678,14 @@ Workflow wf_d35c8afb-f3d (ultracode): Understand (DeepGEMM sm90 bf16 kernel + ho
 pipelines' ranked structural defects; 12-bit decode insertion points) → Design (three independent designs, three
 judges, synthesis into audits/m128-plan.md with an H100 experiment order). Reset queue unchanged (pw26, pw27, pw29,
 pw28 at 00:00 UTC).
+
+## H100 box online (root@107.170.6.60): first calibration, pw23
+
+Container torch 2.8.0+cu128; local harness proj_rsi/tools/h100_bench.py. pw23 passes every official correctness
+case (m = 1, 5, 7, 8, 9, 33, 130, 512, 1000 on all five layers). Graph-replay times on the box (µs, overhead
+included): pooler m=1 28.0 (judge 13.95), unpooler m=1 13.3 (judge 4.44), router m=1 12.6 (judge 4.35), pooler
+m=128 39.9 vs torch 40.5 (judge 19.9 vs 20.3), qkv m=128 30.7 vs torch 31.0, verify32 pooler 44.6 vs 44.7. So:
+(1) the box's fixed replay cost is ~9 µs vs the judge's ~4 (now measured by a REPLAY_OVERHEAD probe in the
+harness); (2) big-shape kernel-side times scale ~0.7x to the judge as the HBM ratio predicts; (3) within-box
+comparisons (candidate vs r6 vs torch) are the evidence, absolute numbers are not. Queue on the box: pw26, pw27,
+pw29, pw28, pw24, pw25, pw10 (serialised by /root/gpu_lock.sh).

@@ -115,6 +115,14 @@ def main():
     shapes = args.shapes.split(",")
     flush = flush_buffer()
     rows = []
+    # fixed cost of one graph replay on this box (the judge pays its own; subtract to compare kernel-side time)
+    tiny = torch.zeros(32, device="cuda")
+    overhead = time_graph(lambda: tiny.add_(1.0), flush, args.reps)
+    read6 = torch.empty(6 << 20, dtype=torch.uint8, device="cuda")
+    sink6 = torch.zeros(1, dtype=torch.int64, device="cuda")
+    read6_us = time_graph(lambda: torch.sum(read6, dtype=torch.int64, out=sink6), flush, args.reps)
+    print(f"REPLAY_OVERHEAD {overhead:.2f} us  (empty graph replay)   READ6MB {read6_us:.2f} us (torch.sum of 6 MB)", flush=True)
+    rows.append({"replay_overhead_us": overhead, "read6mb_us": read6_us})
     # correctness on the judge-like cases first
     ms = sorted({LOADS[s] for s in shapes} | (set(OFFICIAL_M) if args.official else set()))
     for layer in layers:
