@@ -740,3 +740,8 @@ before the final adds; −1.4 µs, mostly the graph node); 2 CTAs/SM at m=256. L
 red reordering (0), 512-wide K slices (24+), 256-token CTAs. H200 estimate −1.0 to −1.5 µs at m=128. Harness lesson:
 a write flush (zero_) leaves L2 dirty and changes m=256 rankings; h100_bench now read-flushes like the judge.
 pw29h proposed; critic review next; it replaces pw29 in the reset queue if approved.
+pw30 (four parity configs as a judge candidate) built; on the box r6 won all eight shapes: the sweep's "parity" was
+against untuned torch with a write flush, while r6 runs a per-shape cuBLASLt algorithm search and the bake read-
+flushes — against that, the best CUTLASS config is 0.3–2.3 µs behind (pooler m=128 c64n 28.26 vs r6 27.42, +3%).
+So the bf16 CUTLASS pipeline is ~1–8% behind r6's tuned cuBLASLt on the box; the two-plane build must win on bytes
+(−25%) despite that. pw30 goes last in the reset chain as a transfer test only.
