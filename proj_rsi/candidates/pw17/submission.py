@@ -12,7 +12,13 @@ either through cluster DSMEM (path suffix a, r6's own S > 1 epilogue) or through
 12-bit codec on both hi and lo. Each new path is validated (one-hot x8 exact, random rows) and timed against the r6
 choice in a second bake (BAKE / PICK lines); kernel_fn takes the pw11 pick when it exists, else r6's dispatch.
 pw12: the same gv kernel with W streamed through a private per-warp cp.async.bulk smem ring (V bit 3, paths gb-*);
-decode, mma, escapes, reduction and epilogue unchanged. PROBE gvbulk lines compare it with r6 on pooler m=1."""
+decode, mma, escapes, reduction and epilogue unchanged. PROBE gvbulk lines compare it with r6 on pooler m=1.
+pw17: r6 unchanged (its 12-bit paths, bake and dispatch are byte- and SASS-identical) plus codec E paths (gv FMT 4, "ge-*"):
+the exponent is a pair-Huffman code (<= 8 bits per A register, 256-entry LUT in smem, single or lane-replicated) streamed
+per lane through a cp.async ring, the sign|mantissa byte plane is r6's low-byte plane; ~10.8-11.1 bits/weight against 12
+(proj_rsi/tools/CODEC_E_LAYOUT.md). Each pack is proven bit-exact by the reference unpacker before any E kernel runs, each
+path is validated like every second-bake path and timed against r6's pick (BAKE / PICK); PROBE ecod lines time the best E
+path against r6 on pooler m=1 and m=16, alternated."""
 from typing import TypedDict
 import time
 import torch
@@ -1196,24 +1202,29 @@ for _nm, _ly, _ms, _g, _v, _vars in (
         GXP.append(("gb-%s-n%d%s" % (_nm, _ns, "c%d" % _cu if _cu > 1 else ""), _ly, _ms, _g, _bv(_v, _ns, _cu)))
 
 
-# pw17: codec E paths (FMT 4) on r6's judge-picked geometry per (layer, bucket), plus r6's 512-thread pooler geometry
-# where the 1024-thread one sits at the 64-register cap. V: base | bit 19 ring ED 8 (default 4) | bit 20 LUT replicated
-# per lane (32 KB, conflict-free) | bit 21 fixed segment stride (no soff load). o is not served: at KU = 2 the per-lane
-# padding makes codec E 12.5 bits (codec study / STATS_E), worse than r6's 12. Only geometries with KU x RT >= 8.
+# pw17: codec E paths (FMT 4) on r6's judge-picked geometry per (layer, bucket) where KU x RT >= 8, plus the longest-K
+# geometry r6 has for each layer (pooler: r6's 512-thread 2.8.16, since the 1024-thread 2.16.8 sits at the 64-register cap
+# and spills with the decode state; unpooler m <= 8: 1.4.16, r6 picks 1.16.4 whose KU 4 pads to ~12 bits). V: base |
+# bit 19 ring ED 8 (default 4) | bit 20 LUT replicated per lane (32 KB, conflict-free) | bit 21 fixed segment stride (no
+# soff load). An 8th geometry field forces the plane register-ring depth ST: every entry below compiles with 0 spills
+# (ptxas, sm_90a); the m=32 entries need ST 1 and the single LUT, the m=16 pooler rep entry ST 1. Not served: o (KU 2:
+# 12.5 bits) and the router.
 GE = True
-GEP = []
 _E8, _ER, _EF = 1 << 19, 1 << 20, 1 << 21
-for _nm, _ly, _ms, _g, _v, _vars in (
-        ("q", "qkv_gate", (1, 8), (4, 1, 8, 16, 1, 1, 0), 1, ((0, ""), (_ER, "r"), (_E8, "d8"), (_EF, "f"))),
-        ("q", "qkv_gate", (16,), (4, 1, 4, 8, 4, 1, 2, 1), 1, ((0, ""), (_ER, "r"))),
-        ("q", "qkv_gate", (32,), (4, 1, 4, 16, 2, 1, 2, 1), 1, ((0, ""), (_ER, "r"))),
-        ("p", "pooler", (1, 8), (4, 2, 16, 8, 1, 1, 0), 3, ((0, ""), (_ER, "r"))),
-        ("p512", "pooler", (1, 8, 16), (4, 2, 8, 16, 1, 1, 0), 1, ((0, ""), (_ER, "r"), (_E8, "d8"), (_EF, "f"))),
-        ("p", "pooler", (32,), (4, 1, 8, 16, 1, 1, 2), 1, ((0, ""), (_ER, "r"))),
-        ("u16", "unpooler", (1, 8), (4, 1, 4, 16, 1, 1, 0), 1, ((0, ""), (_ER, "r"))),  # r6 picks (1,16,4): KU 4 < 8
-        ("u", "unpooler", (16, 32), (4, 1, 4, 16, 1, 1, 2), 1, ((0, ""), (_ER, "r")))):
-    for _b, _sfx in _vars if GE else ():
-        GEP.append(("ge-%s%s" % (_nm, _sfx), _ly, _ms if _sfx not in ("d8", "f") else tuple(m for m in _ms if m <= 8), _g, _v | _b))
+GEP = [] if not GE else [
+    ("ge-q", "qkv_gate", (1, 8, 16), None, None), ("ge-qr", "qkv_gate", (1, 8, 16), None, _ER),
+    ("ge-qd8", "qkv_gate", (1, 8), None, _E8), ("ge-qf", "qkv_gate", (1, 8), None, _EF),
+    ("ge-q", "qkv_gate", (32,), None, None),
+    ("ge-p512", "pooler", (1, 8, 16), (4, 2, 8, 16, 1, 1, 0), 0), ("ge-p512r", "pooler", (1, 8), (4, 2, 8, 16, 1, 1, 0), _ER),
+    ("ge-p512d8", "pooler", (1, 8), (4, 2, 8, 16, 1, 1, 0), _E8), ("ge-p512f", "pooler", (1, 8), (4, 2, 8, 16, 1, 1, 0), _EF),
+    ("ge-p512r", "pooler", (16,), (4, 2, 8, 16, 1, 1, 0, 1), _ER),
+    ("ge-p", "pooler", (32,), (4, 1, 8, 16, 1, 1, 2, 1), 0),
+    ("ge-u16", "unpooler", (1, 8), (4, 1, 4, 16, 1, 1, 0), 0), ("ge-u16r", "unpooler", (1, 8), (4, 1, 4, 16, 1, 1, 0), _ER),
+    ("ge-u", "unpooler", (16,), (4, 1, 4, 16, 1, 1, 2), 0), ("ge-ur", "unpooler", (16,), (4, 1, 4, 16, 1, 1, 2), _ER),
+    ("ge-u", "unpooler", (32,), (4, 1, 4, 16, 1, 1, 2, 1), 0)]
+# r6's judge-picked qkv geometries (job 23cecdef1bb54c9e): m <= 8 1.8.16 (V1), m=16 1.4.8 S4 XS2 ST1, m=32 1.4.16 S2 XS2 ST1
+_GEQ = {1: (4, 1, 8, 16, 1, 1, 0), 8: (4, 1, 8, 16, 1, 1, 0), 16: (4, 1, 4, 8, 4, 1, 2, 1), 32: (4, 1, 4, 16, 2, 1, 2, 1)}
+GEP = [(nm, ly, (m,), g if g is not None else _GEQ[m], 1 | (b or 0)) for nm, ly, ms, g, b in GEP for m in ms]
 GXP += GEP
 
 # pw14 PROBE ladder on r6's own gv (judge-picked geometries of job 23cecdef1bb54c9e), never registered as paths:
@@ -1795,6 +1806,7 @@ def prepare(weights):
             st["sel"] = {}
             print("PREP gx bake failed: %s" % str(error).splitlines()[-1][:200], flush=True)
     st.pop("gvc12", None)
+    st.pop("gepk", None)  # pw17: unpicked codec E packs (a picked plan keeps its own pack alive)
     print("PREP done in %.0fs" % (time.time() - _T0), flush=True)
     return st
 
@@ -2141,20 +2153,29 @@ def _frag_bits(fr):
 
 
 def _gepack(st, layer, inst, n):
-    """codec E pack for one geometry (cached), proven lossless by the reference unpacker (incl. the ring protocol at
-    the instance's ring depth) before any kernel uses it. Returns the pack dict or None (escape overflow, no gain,
-    or a failed proof)."""
+    """codec E pack for one geometry, proven lossless by the reference unpacker (incl. the ring protocol at the instance's
+    ring depth) before any kernel uses it. pack_e runs once per (layer, rows, geometry); the fixed-stride re-layout and
+    the proof at each ring depth are cached on top. Returns the pack dict or None (escape overflow, >= 12 bits, or a
+    failed proof)."""
     fmt, mt, stg, wr, wk, ku, s, rt, xs, v = inst
     ed = 8 if (v >> 19) & 1 else 4
     fixed = bool((v >> 21) & 1)
-    key = (layer, n, wr, wk, ku, s, rt, ed, fixed)
+    geo = (wr, wk, ku, s, rt)
     cache = st.setdefault("gepk", {})
+    key = (layer, n, geo, ed, fixed)
     if key in cache:
         return cache[key]
     t0 = time.time()
     fr = st[layer][0][: n // 16]  # unpooler at m <= 8 serves rows 0..1023 only
     T, KC = fr.shape[:2]
-    pk = pack_e(fr, (wr, wk, ku, s, rt), "%s g%d.%d.%d.%d.%d%s" % (layer, wr, wk, ku, s, rt, " fixed" if fixed else ""))
+    tag = "%s n=%d g%d.%d.%d.%d.%d" % (layer, n, wr, wk, ku, s, rt)
+    base = (layer, n, geo)
+    if base not in cache:
+        cache[base] = pack_e(fr, geo, tag)
+        if fr.is_cuda:
+            torch.cuda.synchronize()
+        print("PREP gepack %s pack_e %.2fs" % (tag, time.time() - t0), flush=True)
+    pk = cache[base]
     if pk is not None and fixed:  # one stride for every segment: no soff load in the kernel
         so = pk["soff"].long()
         P = (so[1:] - so[:-1]) // 32
@@ -2169,16 +2190,18 @@ def _gepack(st, layer, inst, n):
         dst[di] = src[si]
         pk = dict(pk, stream=dst.view(-1).contiguous(), soff=(torch.arange(nseg + 1, device=src.device) * pf * 32).int(), pfix=pf)
         pk["stats"] = dict(pk["stats"], bits=pk["stats"]["bits"] + 32.0 * (dst.numel() - src.numel()) / fr.numel())
-        print("STATS_E %s fixed stride %d pieces/lane: bits=%.4f" % (layer, pf, pk["stats"]["bits"]), flush=True)
+        print("STATS_E %s fixed stride %d pieces/lane: bits=%.4f" % (tag, pf, pk["stats"]["bits"]), flush=True)
     if pk is not None:
         if pk["stats"]["bits"] >= 12.0:
-            print("GE %s g%d.%d.%d.%d.%d: %.3f bits >= 12, not served" % (layer, wr, wk, ku, s, rt, pk["stats"]["bits"]), flush=True)
+            print("GE %s: %.3f bits >= 12, not served" % (tag, pk["stats"]["bits"]), flush=True)
             pk = None
-        elif not torch.equal(unpack_e(pk, T, KC, (wr, wk, ku, s, rt), ed), _frag_bits(fr)):
-            print("GE %s g%d.%d.%d.%d.%d ed%d: reference unpack MISMATCH, not served" % (layer, wr, wk, ku, s, rt, ed), flush=True)
+        elif not torch.equal(unpack_e(pk, T, KC, geo, ed), _frag_bits(fr)):
+            print("GE %s ed%d: reference unpack MISMATCH, not served" % (tag, ed), flush=True)
             pk = None
     cache[key] = pk
-    print("PREP gepack %s %.2fs" % (layer, time.time() - t0), flush=True)
+    if fr.is_cuda:
+        torch.cuda.synchronize()
+    print("PREP gepack %s ed%d%s %s in %.2fs" % (tag, ed, " fixed" if fixed else "", "proven bit-exact" if pk is not None else "declined", time.time() - t0), flush=True)
     return pk
 
 
@@ -2244,7 +2267,7 @@ def _gxbake(st):
                 inst = _gxinst(geo, v, m)
                 plan = _gxplan(st, layer, inst, n, packs)
                 if plan is None:
-                    print("BAKE %s m=%d %s declined-escapes" % (layer, m, name), flush=True)
+                    print("BAKE %s m=%d %s declined-%s" % (layer, m, name, "pack" if inst[0] == 4 else "escapes"), flush=True)
                     continue
                 a = (plan[1], plan[5], x, out, plan[2], st["gvws"], st["gvcnt"], plan[3], plan[6])
                 grid = ((m + 8 * inst[1] - 1) // (8 * inst[1])) * (n // (16 * inst[3] * inst[7])) * inst[6]
@@ -2271,26 +2294,18 @@ def _gxbake(st):
         if best[1] is not None:
             st["sel"][(layer, m)] = best[1]
         print("PICK %s m=%d %s %.2f" % (layer, m, best[0], best[2]), flush=True)
-        if m == 32 and layer in ("pooler", "qkv_gate"):  # PROBE xpol: x policy vs r6, alternated (pw16)
-            for sfx in ("-xcg", "-xelL1"):
-                cand = [(v_[0], k[2], v_[1]) for k, v_ in res_all.items() if k[:2] == (layer, m) and k[2].startswith("gc-") and k[2].endswith(sfx)]
-                if not cand or time.time() - _T0 > PREPARE_BUDGET_S:
-                    continue
+        if layer == "pooler" and m in (1, 16):  # PROBE ecod: the best codec E path vs r6, alternated (pw17 kill test)
+            cand = sorted((v_[0], k[2], v_[1]) for k, v_ in res_all.items() if k[:2] == (layer, m) and k[2].startswith("ge-"))
+            if not cand:
+                print("PROBE ecod pooler m=%d none" % m, flush=True)
+            elif time.time() - _T0 > PREPARE_BUDGET_S:
+                print("PROBE ecod pooler m=%d skipped-budget" % m, flush=True)
+            else:
                 tb, tr = [], []
                 for _ in range(3):
                     tb.append(_time_us(cand[0][2], x, out, flush, sink, 21))
                     tr.append(_time_us(r6, x, out, flush, sink, 21))
-                print("PROBE xpol %s m=%d %s %.2f r6=%.2f delta=%+.2f" % (layer, m, cand[0][1], min(tb), min(tr), min(tb) - min(tr)), flush=True)
-        if layer == "pooler" and m == 1:  # PROBE: best bulk-ring path per slot count vs r6, alternated (the stream gain)
-            for ns in (4, 8):
-                cand = sorted((v_[0], k[2], v_[1]) for k, v_ in res_all.items() if k[:2] == ("pooler", 1) and k[2].startswith("gb-") and ("-n%d" % ns) in k[2] and not k[2].endswith("-f"))
-                if not cand or time.time() - _T0 > PREPARE_BUDGET_S:
-                    continue
-                tb, tr = [], []
-                for _ in range(3):
-                    tb.append(_time_us(cand[0][2], x, out, flush, sink, 21))
-                    tr.append(_time_us(r6, x, out, flush, sink, 21))
-                print("PROBE gvbulk pooler m=1 n%d %s bulk %.2f r6=%.2f delta=%+.2f" % (ns, cand[0][1], min(tb), min(tr), min(tb) - min(tr)), flush=True)
+                print("PROBE ecod pooler m=%d %s %.2f r6=%.2f delta=%+.2f" % (m, cand[0][1], min(tb), min(tr), min(tb) - min(tr)), flush=True)
 
 
 def _gxladder(st):
