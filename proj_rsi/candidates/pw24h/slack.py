@@ -66,14 +66,14 @@ BHV = [  # (name, ST, BM, BN, CL, PP, WN, CG, RS, FN, PRB[, INS[, SY[, KS]]])
 ]
 SLACK = True  # slack.py (generated from this file by tools/mkslack.py) sets True: P4 decode-slack curve only
 if SLACK:
-    BHV = []
-    for _n in (0, 16, 32, 48, 64, 96):  # (name, ST, BM, BN, CL, PP, WN, CG, RS, FN, PRB, INS, SY, KS, ALU)
-        BHV += [("k2x-d%d" % _n, 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 9, 2, 3000 + _n), ("n128x-d%d" % _n, 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 9, 1, 3000 + _n)]
-    for _n in (0, 16, 32, 48, 64, 96):  # pipelined decode-first (q: 4 chains) and release-first (r: 4 chains, s: one chain)
-        BHV += [("k2x-q%d" % _n, 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 9, 2, 5000 + _n), ("k2x-r%d" % _n, 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 9, 2, 9000 + _n),
-                ("n128x-q%d" % _n, 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 9, 1, 5000 + _n), ("n128x-r%d" % _n, 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 9, 1, 9000 + _n)]
-        if _n in (16, 48, 96):
-            BHV += [("k2x-s%d" % _n, 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 9, 2, 8000 + _n), ("n128x-s%d" % _n, 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 9, 1, 8000 + _n)]
+    BHV = [("rsk2x", 7, 64, 64, 0, 0, 1, 0, 1, 0, 0, 0, 9, 2)]
+    for f, fn in enumerate(("ldsonly", "dec1", "orfp", "orimadfp", "oraligned", "prmtonly")):
+        BHV += [("rsdec-%s" % fn, 7, 64, 64, 0, 0, 1, 0, 1, 0, 0, 0, 9, 2, 50000 + f)]
+    for r in (2, 3, 4):
+        BHV += [("rsdec-dec1x%d" % r, 7, 64, 64, 0, 0, 1, 0, 1, 0, 0, 0, 9, 2, 50009 + r)]
+    for t, tn in ((1, "lop3"), (2, "hfma2"), (3, "ffma")):  # dec1 + R rounds x 16 ops / thread / k64
+        for r in (2, 4, 8, 12):
+            BHV += [("rsdec1+%s%d" % (tn, 16 * r), 7, 64, 64, 0, 0, 1, 0, 1, 0, 0, 0, 9, 2, 50000 + 20 * t + r)]
 BHI = {v[0]: i for i, v in enumerate(BHV)}
 
 BHCU = r"""
@@ -114,6 +114,63 @@ template <int NA> __device__ __forceinline__ void bh_fa(uint32_t (&A)[NA]) {
   for (int i = 0; i < NA; i++) asm volatile("" : "+r"(A[i]) :: "memory");
 }
 
+// P4c synthetic op of type OPT on chain value x (step parity i selects the runtime operand pair, so no two consecutive
+// ops can be merged or re-associated by ptxas): 0 IMAD | 1 LOP3 (majority) | 2 PRMT (runtime selector) | 3 SHF (funnel)
+// | 4 FFMA | 5 HFMA2.BF16 | 6 FMUL | 7 HMUL2.BF16
+template <int OPT> __device__ __forceinline__ void bh_op(uint32_t& x, int i, uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
+  const uint32_t p = (i & 1) ? c : a, q = (i & 1) ? d : b;
+  if constexpr (OPT == 0) asm volatile("mad.lo.u32 %0, %0, %1, %2;\n" : "+r"(x) : "r"(p), "r"(q));
+  else if constexpr (OPT == 1) asm volatile("lop3.b32 %0, %0, %1, %2, 0xE8;\n" : "+r"(x) : "r"(p), "r"(q));
+  else if constexpr (OPT == 2) asm volatile("prmt.b32 %0, %0, %1, %2;\n" : "+r"(x) : "r"(p), "r"(q));
+  else if constexpr (OPT == 3) asm volatile("shf.l.wrap.b32 %0, %1, %0, %2;\n" : "+r"(x) : "r"(p), "r"(q));
+  else if constexpr (OPT == 4) asm volatile("fma.rn.f32 %0, %0, %1, %2;\n" : "+r"(x) : "r"(p), "r"(q));
+  else if constexpr (OPT == 5) asm volatile("fma.rn.bf16x2 %0, %0, %1, %2;\n" : "+r"(x) : "r"(p), "r"(q));
+  else if constexpr (OPT == 6) asm volatile("mul.rn.f32 %0, %0, %1;\n" : "+r"(x) : "r"(p));
+  else asm volatile("mul.rn.bf16x2 %0, %0, %1;\n" : "+r"(x) : "r"(p));
+}
+__device__ __forceinline__ uint32_t bh_prmt(uint32_t a, uint32_t b, uint32_t s) { uint32_t d; asm("prmt.b32 %0, %1, %2, %3;\n" : "=r"(d) : "r"(a), "r"(b), "r"(s)); return d; }
+__device__ __forceinline__ uint32_t bh_hmul2(uint32_t a, uint32_t b) { uint32_t d; asm("mul.rn.bf16x2 %0, %1, %2;\n" : "=r"(d) : "r"(a), "r"(b)); return d; }
+// P4c decode formulations (8 weights from L0, L1 = low bytes, C = sign + 3-bit exponent offset nibbles) -> a[0..3] bf16x2
+template <int F> __device__ __forceinline__ void bh_dec(uint32_t L0, uint32_t L1, uint32_t C, uint32_t Tb, uint32_t K8, uint32_t Sc, uint32_t* a) {
+  if constexpr (F == 0) {  // no decode: the loaded words go to the wgmma as they are (data path floor)
+    a[0] = L0; a[1] = L1; a[2] = C; a[3] = L0 ^ C;
+  } else if constexpr (F == 1) {  // dec1 (pw10/r6): LOP3 + IADD, SHF + LOP3 + IADD, 4 PRMT = 9 INT / 8 weights
+    const uint32_t hl = (C & 0x87878787u) + Tb, hh = (__funnelshift_r(C, C, 4) & 0x87878787u) + Tb;
+    a[0] = bh_prmt(L0, hl, 0x5140); a[1] = bh_prmt(L0, hl, 0x7362); a[2] = bh_prmt(L1, hh, 0x5140); a[3] = bh_prmt(L1, hh, 0x7362);
+  } else if constexpr (F == 2) {  // OR-rebase + FP scale: (C & m) | K8 (one LOP3: fixed exponent bias 8), SHF + LOP3, 4 PRMT
+    // = 7 INT; then 4 HMUL2.BF16 by 2^(2B-16) restore the window base on the FP pipe (exact: power-of-two scaling)
+    const uint32_t hl = (C & 0x87878787u) | K8, hh = (__funnelshift_r(C, C, 4) & 0x87878787u) | K8;
+    a[0] = bh_hmul2(bh_prmt(L0, hl, 0x5140), Sc); a[1] = bh_hmul2(bh_prmt(L0, hl, 0x7362), Sc);
+    a[2] = bh_hmul2(bh_prmt(L1, hh, 0x5140), Sc); a[3] = bh_hmul2(bh_prmt(L1, hh, 0x7362), Sc);
+  } else if constexpr (F == 3) {  // as 2 with the nibble shift by IMAD (C * 16, values 4-7 stored one nibble lower): 6 INT + 1 IMAD + 4 HMUL2
+    const uint32_t hl = (C & 0x87878787u) | K8, hh = ((C * 16u) & 0x87878787u) | K8;
+    a[0] = bh_hmul2(bh_prmt(L0, hl, 0x5140), Sc); a[1] = bh_hmul2(bh_prmt(L0, hl, 0x7362), Sc);
+    a[2] = bh_hmul2(bh_prmt(L1, hh, 0x5140), Sc); a[3] = bh_hmul2(bh_prmt(L1, hh, 0x7362), Sc);
+  } else if constexpr (F == 4) {  // aligned window (B % 8 == 0, codec change): (C & m) | Tb, SHF + LOP3, 4 PRMT = 7 INT, no FP
+    const uint32_t hl = (C & 0x87878787u) | Tb, hh = (__funnelshift_r(C, C, 4) & 0x87878787u) | Tb;
+    a[0] = bh_prmt(L0, hl, 0x5140); a[1] = bh_prmt(L0, hl, 0x7362); a[2] = bh_prmt(L1, hh, 0x5140); a[3] = bh_prmt(L1, hh, 0x7362);
+  } else if constexpr (F >= 20) {  // dec1, then R = F % 20 rounds of 4 independent ops of type T = LOP3 / HFMA2 / FFMA
+    // (F / 20 = 1 / 2 / 3) on the four outputs: high-ILP pipe test (16 independent ops per thread per k64 per round)
+    constexpr int T = F / 20, NR = F % 20;
+    bh_dec<1>(L0, L1, C, Tb, K8, Sc, a);
+#pragma unroll
+    for (int r = 0; r < NR; r++) {
+#pragma unroll
+      for (int i = 0; i < 4; i++) bh_op<T == 1 ? 1 : T == 2 ? 5 : 4>(a[i], r, Sc, K8, Tb, Sc ^ K8);
+    }
+  } else if constexpr (F >= 10) {  // dec1 applied F - 9 times in sequence (each round decodes the previous round's output):
+    // real decode ILP at 2x / 4x / 8x the instruction count, to find the slack of a high-ILP decode
+    uint32_t l0 = L0, l1 = L1, c = C;
+#pragma unroll
+    for (int r = 0; r < F - 9; r++) {
+      bh_dec<1>(l0, l1, c, Tb, K8, Sc, a);
+      l0 = a[0] ^ a[1]; l1 = a[2] ^ a[3]; c = a[0] ^ a[3];
+    }
+  } else {  // merge floor: 4 PRMT per 8 weights (0.5 INT / weight), high bytes taken as stored
+    a[0] = bh_prmt(L0, C, 0x5140); a[1] = bh_prmt(L0, C, 0x7362); a[2] = bh_prmt(L1, C, 0x5140); a[3] = bh_prmt(L1, C, 0x7362);
+  }
+}
+
 template <int ST, int BM, int BN, int CL, int PP, int WN, int CG, int RS, int FN, int PRB, int INS, int SY, int KS, int ALU>
 __global__ void __launch_bounds__((PP ? 2 : BM / 64) * 128 + 64, 1)
 bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bfloat16* out, int m, int N, int K, unsigned long long* prof) {
@@ -124,6 +181,7 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
 #define BH_T1(i) do { if (INS) { unsigned long long t_ = clock64(); pc[i] += t_ - tq; tq = t_; } } while (0)
 
   constexpr int NC = PP ? 2 : BM / 64, NCT = NC * 128;
+  constexpr int AB = ALU % 100000, OPT = ALU / 100000;  // P4c: synthetic op type (critical-path rungs); AB >= 50000: RS decode F
   // KS: k64 sub-tiles per ring slot (2 = BLOCK_K 128: one barrier round and one commit per 8 wgmma)
   constexpr int WT1 = BM * 128, XT1 = BN * 128, WTB = WT1 * KS, XTB = XT1 * KS, NR = BN / 2;
   constexpr bool XON = PRB != 1, MMA = PRB == 0 || (PRB >= 3 && PRB <= 6), WAITS = PRB != 4 && PRB != 5, TMAON = PRB != 4;
@@ -215,6 +273,7 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
     const uint32_t aoff = PP ? 0u : (uint32_t)c * 8192u;
     uint32_t alu[4] = {(uint32_t)tid, (uint32_t)tid + 1u, (uint32_t)tid + 2u, (uint32_t)tid + 3u}, dzz = 0u;
     const uint32_t alu_a = ((uint32_t)K * 2654435761u) | 1u, alu_b = (uint32_t)m * 40503u + (uint32_t)N;  // runtime: no folding
+    const uint32_t alu_c = (alu_a ^ (alu_b << 1)) | 1u, alu_d = alu_b * 5u + alu_a;
     auto wait_in = [&](int s) {
       cwait(wfull + 8 * (s % ST), (s / ST) & 1);
       if (XON && !MB) cwait(xfull + 8 * (s % ST), (s / ST) & 1);
@@ -244,9 +303,9 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
         }
       }
     };
-    if (MMA && !RS && ALU >= 4000) {  // pipelined synthetic decode: slot s+1 is waited, read (3 LDS.128 per k64) and decoded
+    if (MMA && !RS && AB >= 4000 && AB < 50000) {  // pipelined synthetic decode: slot s+1 is waited, read (3 LDS.128 per k64) and decoded
       // after stage s's commit and before its wait_group, overlapping wgmma(s); the result feeds stage s+1's W descriptor
-      constexpr int NA = ALU % 1000, IL = (ALU / 1000) & 1 ? 4 : 1, NI = NA * KS / IL;
+      constexpr int NA = AB % 1000, IL = (AB / 1000) & 1 ? 4 : 1, NI = NA * KS / IL;
       auto decode = [&](int s) -> uint32_t {
         const uint32_t base = wring + (s % ST) * WTB + (uint32_t)(tid & 127) * 16u;
         uint32_t sd = 0;
@@ -279,7 +338,7 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
 #pragma unroll 1
       for (int s = 1; s < KC - 1; s++) {
         mma_stage(s);
-        if (ALU >= 8000) {  // release-first: free slot s-1 (wgmma s-1 done), then wait + decode s+1 while wgmma s runs
+        if (AB >= 8000) {  // release-first: free slot s-1 (wgmma s-1 done), then wait + decode s+1 while wgmma s runs
           bh_wgwait<1>();
           release(s - 1);
           wait_in(s + 1);
@@ -309,10 +368,10 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
           for (int j = 0; j < SPG; j++) wait_in(s0 + (u * SPG + j) * ds);
         }
         BH_T1(1);
-        if (ALU % 1000 && ALU < 4000) {  // synthetic decode load: ALU % 1000 int ops per thread per k64 stage; bit 1000: 4 chains;
+        if (AB % 1000 && AB < 4000) {  // synthetic decode load: ALU % 1000 int ops per thread per k64 stage; bit 1000: 4 chains;
           // bit 2000: the chains feed this unit's W descriptor (an unprovable zero), so ptxas cannot sink them past the wgmma
-          constexpr int NA = ALU % 1000, IL = (ALU / 1000) & 1 ? 4 : 1, NI = NA * KS * SPG / IL;
-          if (ALU >= 2000) {  // the decode reads the landed slot: seed the chains with a word of this unit's W tile
+          constexpr int NA = AB % 1000, IL = (AB / 1000) & 1 ? 4 : 1, NI = NA * KS * SPG / IL;
+          if (AB >= 2000) {  // the decode reads the landed slot: seed the chains with a word of this unit's W tile
             uint32_t wv;
             asm volatile("ld.shared.u32 %0, [%1];\n" : "=r"(wv) : "r"(wring + ((s0 + u * SPG * ds) % ST) * WTB + aoff + lane * 4) : "memory");
 #pragma unroll
@@ -321,9 +380,9 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
 #pragma unroll
           for (int i = 0; i < NI; i++) {
 #pragma unroll
-            for (int c4 = 0; c4 < IL; c4++) asm volatile("mad.lo.u32 %0, %0, %1, %2;\n" : "+r"(alu[c4]) : "r"(alu_a), "r"(alu_b));
+            for (int c4 = 0; c4 < IL; c4++) bh_op<OPT>(alu[c4], i, alu_a, alu_b, alu_c, alu_d);
           }
-          if (ALU >= 2000) dzz = ((alu[0] ^ alu[1] ^ alu[2] ^ alu[3]) == 0u && m < 0) ? 1024u : 0u;
+          if (AB >= 2000) dzz = ((alu[0] ^ alu[1] ^ alu[2] ^ alu[3]) == 0u && m < 0) ? 1024u : 0u;
         }
         bh_facc(D);
         if (!FN) bh_fence();
@@ -352,11 +411,25 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
       constexpr int NA = 16 * KS;
       uint32_t A0[NA], A1[NA];
       const int lrow = 16 * w + (lane & 7) + ((lane >> 3) & 1) * 8, lkh = lane >> 4;
+      const uint32_t dec_tb = (alu_b & 0x3fu) * 0x01010101u, dec_k8 = 0x08080808u | (alu_b & 0x0u) | ((uint32_t)(m < 0) << 4),
+                     dec_sc = 0x3f803f80u ^ ((uint32_t)(m < 0) << 20);  // runtime-opaque window base / bias / scale
       auto step = [&](uint32_t (&A)[NA], uint32_t (&Ap)[NA], int s, bool first) {
         BH_T0();
         if (WAITS) wait_in(s);
         BH_T1(1);
         const int slot = STALE ? 0 : s % ST;
+        if constexpr (AB >= 50000) {  // P4c: 3 LDS.128 per k64 (the 12-bit payload: 32 weights / thread) -> decode F -> A
+#pragma unroll
+          for (int kk = 0; kk < KS; kk++) {
+            const uint32_t base = wring + slot * WTB + kk * WT1 + (uint32_t)(tid & 127) * 16u;
+            uint32_t wd[12];
+#pragma unroll
+            for (int j = 0; j < 3; j++)
+              asm volatile("ld.shared.v4.u32 {%0,%1,%2,%3}, [%4];\n" : "=r"(wd[4 * j]), "=r"(wd[4 * j + 1]), "=r"(wd[4 * j + 2]), "=r"(wd[4 * j + 3]) : "r"(base + j * 2048) : "memory");
+#pragma unroll
+            for (int g = 0; g < 4; g++) bh_dec<AB - 50000>(wd[g], wd[4 + g], wd[8 + g], dec_tb, dec_k8, dec_sc, &A[16 * kk + 4 * g]);
+          }
+        } else
 #pragma unroll
         for (int kk = 0; kk < KS; kk++) {
           const uint32_t wb = wring + slot * WTB + kk * WT1 + aoff + lrow * 128;
@@ -468,7 +541,7 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
       }
       BH_T1(8);
     } else if (D[0] == 1.2345f) out[0] = __float2bfloat16(0.f);
-    if (ALU % 1000 && (alu[0] ^ alu[1] ^ alu[2] ^ alu[3]) == 0x9e3779b9u && D[1] == 1.2345f) out[1] = __float2bfloat16(0.f);
+    if (AB % 1000 && (alu[0] ^ alu[1] ^ alu[2] ^ alu[3]) == 0x9e3779b9u && D[1] == 1.2345f) out[1] = __float2bfloat16(0.f);
     if (INS && tid == 0) {
       pc[0] = clock64() - tq0;
       for (int i = 0; i < 5; i++) prof[(blockIdx.y * gridDim.x + blockIdx.x) * 16 + i] = pc[i];

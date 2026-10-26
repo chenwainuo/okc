@@ -1,5 +1,10 @@
 # P4b: how much per-stage ALU work one consumer warpgroup absorbs (decode slack), H100 box
 
+> **Correction (P4c, audits/p4-decode-pipe.md).** The synthetic rungs below use 4 *dependent chains* of N/4 ops. They are latency-bound: every op type, including full-rate FP32 FFMA, shows the same ~2.2 clk per op. So they overstate the cost of a real, high-ILP decode.
+>
+> Measured with the real data flow (3 LDS.128 → dec1 → wgmma A, register-A kernel), dec1 costs +0.03 to +0.32 µs at pooler m=128 on the H100, and the consumer absorbs about 2× dec1 before the knee. Read the H200 projection here as an upper bound; p4-decode-pipe.md has the corrected one (dec1 at the edge, aligned-window variant with margin).
+
+
 **Kernels.** pw24h's bf16 pipelines with no cluster:
 - **k2x:** 64×64 tile, BLOCK_K 128 (7 slots), pooler m=128, 128 CTAs.
 - **n128x:** 64×128 tile, BLOCK_K 64 (9 slots), pooler m=256, 128 CTAs.
