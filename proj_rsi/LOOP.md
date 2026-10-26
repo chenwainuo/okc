@@ -914,3 +914,9 @@ rs128 fixes in (e8d7ab8): r6 timed before the pack and after the variants (lower
 nonzero launch return, trapping zero-handshake timeouts; box rerun 65/65. Picks at m=128 (in-prepare): pooler 27.36 →
 24.77, qkv 18.75 → 16.77, unpooler 26.72 → 24.83 (~−2 each; variants noisy ±2 between runs). Approval marker written:
 rs128 submits first at the 00:00 UTC reset.
+rs128b (deferred refinements, box CUPTI): a separate W ring at equal depth matches R4 and deeper is monotonically
+worse (21.9 → 23.3–26.3); the epilogue tail (2300 clk, mostly the wait for the TMA reduce-add to read its slab) only
+yields −0.13–0.16 by issuing the first half-slab early; bake noise ±0.3–0.5. Not packaged. mx (CUTLASS two-plane)
+closed: −1.0/−0.6/tie/+2.4 at m=128, loses at m=256; its reusable pieces (in-chunk escape header, self-cleaning
+zeroing, one-lane reduce-add store) are documented in audits/mx-h100.md. The r6 inflation after heavy pack work
+appeared again (31.74/30.43) — the F1 baseline rule applies to every box bake.
