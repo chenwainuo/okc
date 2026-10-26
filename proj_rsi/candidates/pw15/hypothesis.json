@@ -1,0 +1,33 @@
+{
+  "id": "pw15",
+  "parent": "pw10",
+  "claim": "Last m=128 experiment: drop split-K entirely. Every earlier m=128 epilogue cost 4-8 µs (cluster DSMEM reduce +4.5, global last-arriver +8.2) at the tail of a one-wave grid. cuBLAS avoids that for pooler by tiling over tokens as well as rows. pw15 adds that structure to pw10's best pipeline (single ring, release after the covering wait_group): each CTA owns 64 W rows x a 64-token tile over the full K, with token tiles of one n-block launched adjacently so the second read of each packed W chunk hits L2. There is no workspace, counter or cluster, and bf16 is written straight from the wgmma D layout. Pooler m=128 = 64 x 2 = 128 CTAs. The W stream (50 MB packed) is read once from HBM and once from L2; x per CTA is 64 tokens x full K.",
+  "target_shapes": [
+    "pooler m=128: best token-tiled path at least 1.0 µs under torch in the bake (torch about 29)",
+    "unpooler / qkv / o m=128 and the four layers at m=256: below torch where possible (o and unpooler run 256 CTAs: 2 waves at 1 CTA/SM, 1 wave at 2 CTAs/SM)"
+  ],
+  "kill_if": "pooler m=128: the best token-tiled path is not under torch by >= 1.0 µs in the bake. The m=128 branch closes either way.",
+  "variants": {
+    "q1a": "1 consumer warpgroup (m64n64k16, 32 accumulators), 8 x 14 KB stages (113 KB), 1 CTA/SM.",
+    "q1b": "Same, 7 stages (99 KB), 2 CTAs/SM (109 regs).",
+    "q2": "2 consumer warpgroups ping-ponging on alternate stages (each decodes and MMAs its own stages, no k-split), 8 stages, partials summed once through smem.",
+    "q1c": "32-token tiles (m64n32k16), 8 x 10 KB stages, 2 CTAs/SM: 4 token tiles at m=128 (qkv 36 x 4 = 144 CTAs).",
+    "references": "pw10's pw-wk2 (m=128) and pw-v1d5 (m=256), unchanged.",
+    "paths": "m=128: pw-q1a, pw-q1b, pw-q2, pw-q1c, pw-wk2; m=256: pw-q1a, pw-q1b, pw-q2, pw-q1c, pw-v1d5 (the q paths serve both m: 4 token tiles of 64 at m=256)."
+  },
+  "probe_plan": "PROBE ladder on pooler m=128 with q1b (grid 64 x 2, 2 CTAs/SM): L1 W+x (stream + handshake), L2 +decode, L3 +wgmma (no epilogue), L4 full. L4 - L3 is the new epilogue (expected below 1 µs: no reduction, 16 KB of bf16 stores per CTA); L3 - L2 shows whether the MMA is still exposed with twice the CTAs per SM.",
+  "design": {
+    "grid": "1-D, cta = nb * NTT + tt with NTT = ceil(m / TN); TMA box {64, TN} at token row tt*TN; rows >= m are zero-filled.",
+    "ring": "pw10's single ring: stage = [x tile TN x 64][W chunk 4 x 1536 B], expect_tx = both, released after the wait_group covering the chunk. Empty barriers count the 4 warps of the warpgroup that owns the stage.",
+    "ping_pong": "Warpgroup kg takes chunks kg, kg+2, ...; pw10's A double buffering per warpgroup over its own chunk sequence; the escape walk skips entries of the other warpgroup's chunks (pw_fix4; lists ascend by chunk). The launcher requires an even ST >= 4: with an odd ST a ring slot alternates owners, a warpgroup skips every other phase of its full barrier, and the parity wait aliases. The protocol simulation found this at ST 3 (decode of a refilled slot) and ST 2 (deadlock).",
+    "epilogue": "bf16 pairs from the D layout: even g stores rows (g, g+1) of token 2t, odd g rows (g-1, g) of token 2t+1, each a 32-bit word (one shfl.xor 4 exchanges partner values), plus the +8 rows. No transpose buffer, no partials. Every output element is written exactly once (checked in the emulator)."
+  },
+  "register_budget_ptxas": "nvcc 12.8 sm_90a, all 0 spill, 0 stack, no LDL/STL, no C7519/C7520: q1a 108, q1b 109, q2 112, q1c 90; probes pQ1 33, pQ3 40, pQ4 106; references wk2 168, v1d5 202. SASS: HGMMA.64x64x16 (64x32x16 for q1c), ARRIVE + 4 HGMMA + DEPBAR.LE gsb0 0x1 per stage, STG.E (32-bit) output stores.",
+  "kernel_count": "28: 15 pwc (m<=32 and router), 2 pw10 wgmma references, 4 pw15 paths, 3 pw15 probes, 4 small pw6 probe kernels (unused). The 21 kernels shared with pw10 produce identical SASS. Local -cubin about 5 s.",
+  "verification_done_offline": "(1) emu_pw15.py: the token-tiled index chain (natural pack, kernel W addresses, A/B/D layouts, ping-pong chunk ownership with the escape skip, warpgroup partial sum, the pair-store addressing). Bit-exact on one-hot rows and fp64-exact on random rows for q1b (2 token tiles), q1a (odd m=121: partial last tile), q2 (m=128; odd m=97 with K=1024), q1c (TN 32: 4 tiles), q1b at m=256, q2 at m=200. Every output element is written exactly once. Removing the escape skip makes q2 fail (rel. error 0.87). (2) sim_pw15.py: 1225 randomized schedules over the launcher-allowed configurations (1 warpgroup any ST; ping-pong even ST >= 4; 1-128 chunks): no deadlock, no refill while a wgmma reads x, no decode of a refilled slot. Releasing right after the decode is caught 30/30. Odd ST with ping-pong is caught (now rejected by the launcher). (3) Lint ok; cpu-check --official 9/9; the full CUDA_SRC compiles with -std=c++20 against the torch mock.",
+  "risks": [
+    "W is read twice (HBM + L2); if the L2-hit assumption fails for adjacent token tiles under a 2-CTA/SM schedule, W traffic approaches 100 MB.",
+    "x per CTA is 64 tokens x full K (1 MB at pooler); x is 2 MB in total and L2-resident.",
+    "o / unpooler at 256 CTAs: q1a/q2 run 2 waves (1 CTA/SM); q1b/q1c run 1 wave (2 CTAs/SM)."
+  ]
+}
