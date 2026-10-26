@@ -623,3 +623,15 @@ Step-B plan (audits/cutlass-mixed-input.md): stock mixed-input collective compil
 uint4 A planes (36.8 s for both); route (i) = forked collective with two TMA streams (8-bit low byte + 4-bit sign/
 exponent-offset plane) merged in the convert step with r6's dec1 arithmetic, escapes (0.01%) by a 1–1.5 µs post-GEMM
 fixup kernel; expected pooler m=128 ≈ 16.5 judge-µs vs cuBLAS 20.3; ~5 days; gated on pw25 reaching cuBLAS parity.
+
+## Iteration 24 — pw25: CUTLASS bf16 path. Check `04dc0a41413f45f3`: 9/9, 3377.7 µs (= pw23). REJECTED; kill rule hit.
+
+Mechanics all worked: bundle extracted in the sandbox, `PREP cut compiled in 52s`, `PREP done in 170s`, 9/9.
+Speed: pooler m=128 in-prepare cuBLAS 23.81 | cutsk (stream-K) 37.92 | cut128 45.98 | cut128c2 47.84 (probe: 2.03
+TB/s on W bytes); unpooler cut128 28.10 vs 22.43; o cut128c2 13.79 vs 10.75; qkv cutsk 31.14 vs 18.78; m=256 46–56 vs
+27.7. The stock 128x64x64 cooperative warp-specialised kernel is a poor config for N=128 tokens (64 tiles on 132
+SMs; stream-K helps but is still +14 µs); cuBLAS's nvjet picks 64x64x64 with 13 stages, 1x2 cluster, coopB.
+Program status: step A (bf16 parity) failed on the first config. A CUTLASS tile/stage sweep could close part of the
+gap (1–2 checks, compile-time bound: 52 s for 3 instantiations), but even at parity the mixed-input fork is ~5 days
+with the deadline 9 days out, and no pipeline of ours — hand-written or CUTLASS — has yet reached cuBLAS on this
+shape. 27 checks in total; the board stands at 3399.3 (pw23).
