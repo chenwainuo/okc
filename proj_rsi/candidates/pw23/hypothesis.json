@@ -1,0 +1,17 @@
+{
+  "id": "pw23",
+  "parent": "pw22",
+  "claim": "pw22's rs64k32 beat r6 on router m=128 (judge 9.82 vs 10.58), but its profile (7.5 us kernel + 0.8 us memset) shows it is latency-bound on its single wait after issuing all loads; the floor for its bytes is about 2.5-3 us. pw23 keeps rs64k32's geometry and splits its K slice into 4 (or 2) cp.async commit groups, all issued up front, so the mma of stage s runs while s+1.. land. It also adds a 64 KB, 2-CTA/SM variant (256 CTAs). At m=256 one CTA holds both 128-token blocks: every ldmatrix'd W fragment feeds 4 m16 tiles, so the W load chain is not doubled. A self-cleaning reduction variant (red.add into a persistent zeroed workspace, the CTA completing a tile copies it out and re-zeroes it) removes the memset node. Expected router m=128 about 5-6 judge-us, m=256 about 6-7 (r6 10.6 / 11.3).",
+  "paths": "router m=128: rs64k32 (pw22, unchanged in-run reference), rp64k32s4 / rp64k32s2 (4 / 2 stages, 128 KB, 128 CTAs), rp64k64x2 (BN 64 x KR 128, 2 stages, 64 KB, 2 CTAs/SM, 256 CTAs), rp64k32sc (s4 + self-cleaning reduction, no memset). router m=256: rs64k32 (two token blocks), rv64k32 (TOKS 256, 4 stages, 192 KB, 128 CTAs), rv64k64x2 (TOKS 256, KR 128, 2 stages, 96 KB, 256 CTAs at 2/SM), rv64k32sc (self-cleaning). Same validation as pw22 (one-hot x8 bit-exact vs hi+lo, random 2e-5, odd m 121 / 250); PROBE rszero kept.",
+  "target_shapes": [
+    "router m=128: >= 1.0 us under rs64k32 (pw22: 14.66 in-prepare)",
+    "router m=256: under r6 (15.94 in-prepare)"
+  ],
+  "kill_if": "router m=128 best path not ≥ 1.0 µs under rs64k32 in the bake",
+  "local_checks": "nvcc 12.8 sm_90a -Xptxas -v: the 7 rsk2 instances have 0 spills (83-124 regs); rsk<64,256,0> is unchanged at 84 regs; r6's 78 gv instances are SASS-identical. SASS (rp64k32s4): 4 LDGDEPBAR commit groups, one DEPBAR.LE + BAR.SYNC per stage before its LDSM/HMMA. proj_rsi/tools/rs_emu.py, extended to TOKS 256 and the self-cleaning reduction, is bit-exact for every variant at m 128 / 121 / 200 / 256 / 250 / 199 / 130 (partial second blocks); an unswizzled write fails. lint ok; cpu-check --official 9/9; a CPU mock of the bake builds and dispatches every plan.",
+  "risks": [
+    "Stages share one CTA barrier each: 4 bar.syncs per CTA, which is cheap, but the first stage still waits a full DRAM latency.",
+    "TOKS 256 at 192 KB smem leaves 1 CTA/SM; rv64k64x2 is the 2/SM alternative.",
+    "Self-cleaning reduction: one CTA per tile copies 32-64 KB after the last red; pw11's data suggests this chain costs more than the 0.8 us memset node."
+  ]
+}

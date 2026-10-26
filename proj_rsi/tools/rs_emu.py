@@ -34,15 +34,15 @@ def ldm4(img, addr_halves):
     return regs
 
 
-def emulate(x, hi, lo, BN, KR, red):
+def emulate(x, hi, lo, BN, KR, red, TOKS=128):
     m, K = x.shape
     N = hi.shape[0]
-    TOK, NT8, WN = 128, BN // 16, BN // 2
+    TOK, NT8, WN, MI = TOKS, BN // 16, BN // 2, TOKS // 64
     xb = x.view(torch.int16).long() & 0xffff
     hb, lb = hi.view(torch.int16).long() & 0xffff, lo.view(torch.int16).long() & 0xffff
     lanes = torch.arange(32); g, t = lanes // 4, lanes % 4
     out = torch.zeros(m, N, dtype=torch.float64)
-    TB, KS, NTL = (m + 127) // 128, K // KR, N // BN
+    TB, KS, NTL = (m + TOK - 1) // TOK, K // KR, N // BN
     for tb in range(TB):
         for nt in range(NTL):
             slots = []
@@ -57,18 +57,18 @@ def emulate(x, hi, lo, BN, KR, red):
                 part = {}
                 for w in range(8):
                     wt, wn = w & 3, w >> 2
-                    acc = torch.zeros(2, NT8, 32, 4, dtype=torch.float64)
+                    acc = torch.zeros(MI, NT8, 32, 4, dtype=torch.float64)
                     for q in range(KR // 16):
                         A = []
-                        for mi in range(2):
-                            r = wt * 32 + mi * 16 + (lanes & 15); c = 2 * q + (lanes >> 4)
+                        for mi in range(MI):  # rsk2: mi = (128-token block, m16)
+                            r = (mi >> 1) * 128 + wt * 32 + (mi & 1) * 16 + (lanes & 15); c = 2 * q + (lanes >> 4)
                             A.append(ldm4(sx, (r * KR + ((c ^ (r & 7)) << 3)).tolist()))
                         for img in (sh, sl):
                             for nb in range(NT8 // 2):
                                 bj = lanes >> 3
                                 r = wn * WN + nb * 16 + (bj >> 1) * 8 + (lanes & 7); c = 2 * q + (bj & 1)
                                 Bv = ldm4(img, (r * KR + ((c ^ (r & 7)) << 3)).tolist())
-                                for mi in range(2):
+                                for mi in range(MI):
                                     a = A[mi]
                                     Am = torch.zeros(16, 16, dtype=torch.float64)
                                     Am[g, 2 * t], Am[g, 2 * t + 1] = bf(a[:, 0, 0]), bf(a[:, 0, 1])
@@ -83,13 +83,13 @@ def emulate(x, hi, lo, BN, KR, red):
                                         acc[mi, 2 * nb + half] += torch.stack((D[g, 2 * t], D[g, 2 * t + 1], D[g + 8, 2 * t], D[g + 8, 2 * t + 1]), 1)
                     part[w] = acc.float().double()
                 slots.append(part)
-            if red == 0:  # red.add into a zeroed output
+            if red in (0, 2):  # red.add into a zeroed output (2: into the workspace, then the completing CTA copies rows < m)
                 for part in slots:
                     for w, acc in part.items():
                         wt, wn = w & 3, w >> 2
-                        for mi in range(2):
+                        for mi in range(MI):
                             for j in range(NT8):
-                                tok = tb * TOK + wt * 32 + mi * 16 + g; n = nt * BN + wn * WN + j * 8 + 2 * t
+                                tok = tb * TOK + (mi >> 1) * 128 + wt * 32 + (mi & 1) * 16 + g; n = nt * BN + wn * WN + j * 8 + 2 * t
                                 for e, (dt, dn) in enumerate(((0, 0), (0, 1), (8, 0), (8, 1))):
                                     ok = tok + dt < m
                                     out[(tok + dt)[ok], (n + dn)[ok]] += acc[mi, j][ok, e]
@@ -120,16 +120,18 @@ def main():
     Wf = torch.randn(N, K, generator=gen) / K ** 0.5
     hi = Wf.to(torch.bfloat16); lo = (Wf - hi.float()).to(torch.bfloat16)
     ex = hi.double() + lo.double()
-    for BN, KR, red in ((64, 256, 0), (64, 128, 0), (128, 128, 0), (64, 256, 1), (64, 128, 1)):
-        for m in (128, 121, 200):
+    for BN, KR, red, TOKS, ms in ((64, 256, 0, 128, (128, 121, 200)), (64, 128, 0, 128, (128, 121)), (64, 256, 2, 128, (128, 121, 200)),
+                                  (64, 256, 0, 256, (256, 250, 130)), (64, 128, 0, 256, (256, 250)), (64, 256, 2, 256, (256, 199)),
+                                  (64, 256, 1, 128, (128, 121))):
+        for m in ms:
             x = torch.randn(m, K, generator=gen).to(torch.bfloat16)
-            o = emulate(x, hi, lo, BN, KR, red)
+            o = emulate(x, hi, lo, BN, KR, red, TOKS)
             ref = x.double() @ ex.t()
             err = float((o - ref).norm() / ref.norm())
             xo = torch.zeros(m, K); xo[torch.arange(m), torch.randint(K, (m,), generator=gen)] = 8.0; xo = xo.to(torch.bfloat16)
-            o2 = emulate(xo, hi, lo, BN, KR, red)
+            o2 = emulate(xo, hi, lo, BN, KR, red, TOKS)
             exact = torch.equal(o2, (xo.double() @ ex.t()).float().double())
-            print("   BN %3d KR %3d %s m=%3d: rel err %.1e one-hot exact %s" % (BN, KR, "red " if red == 0 else "last", m, err, exact))
+            print("   BN %3d KR %3d TOKS %d %s m=%3d: rel err %.1e one-hot exact %s" % (BN, KR, TOKS, ("red ", "last", "self")[red], m, err, exact))
             ok &= err < 1e-6 and exact
     # negative control: no swizzle on the write side
     global smem_image
