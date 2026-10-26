@@ -1,0 +1,41 @@
+{
+  "id": "pw13",
+  "parent": "pw10",
+  "claim": "The pw10 ladder split the 17 µs over the stream into four costs; see proj_rsi/audits/pw10-ladder.md. pw13 removes three of them on the m=128 / m=256 wgmma path. (1)+(iii): separate rings. W goes into a deep ring of its own (6 x 24 KB = 144 KB in flight at m=128) and is released right after the decode, so the HBM-bound W stream no longer waits for the MMA. x tiles go into a 4-slot ring released after the covering wgmma.wait_group. (iv): no cluster in the epilogue. fp32 partials are stored to a per-n-block workspace, then a fence and a counter; the last CTA reads the peers with .cg loads, transposes through smem and stores bf16 rows. (ii) is tried as a variant: x multicast to an n-block pair. Expected pooler m=128 about 25 µs in-prepare (torch 28.9; pw10 best 31.7).",
+  "target_shapes": [
+    "pooler m=128: pw-h1 < torch (28.9 in pw10's run); expected about 25",
+    "unpooler m=128 < torch (23.3), qkv m=128 < torch (21.6), o m=128 < torch (11.6)",
+    "m=256 (pw-vh1 / pw-vhmc): pooler < torch (34)"
+  ],
+  "kill_if": "pooler m=128 main path (pw-h1) >= torch in the bake. If the ladder then shows L1 W-only still well above the bare stream (17.2), the producer/consumer TMA skeleton itself is the limit and the wgmma family stops.",
+  "probe_plan": {
+    "where": "prepare(), after STATS, before the bake, <= 10 s; pooler m=128 on the h1 kernel (64 x 2 = 128 CTAs, no cluster); 'PROBE ladder <name> <grid> <us>'.",
+    "lines": {
+      "L1 W-only": "Producer streams W through the 144 KB W ring; consumers only wait and release. pw10 had 20.9 with 24 KB in flight; prediction about 17.5 (the bare stream at 64 KB in flight was 17.2). Tests cost (i).",
+      "L1 W+x": "Adds the x tiles (4-slot ring). pw10 had 25.4; prediction about 21-22, since x no longer shares slots with W.",
+      "L2 +decode": "pw10: 24.6; prediction about L1 W+x.",
+      "L3 +wgmma": "pw10: 30.1 (+5.5 over L2); prediction about L2 + 1-2 now that W release does not wait for the MMA. Tests cost (iii).",
+      "L4 full": "pw10: 34.6 (+4.5 epilogue); prediction about L3 + 1.5 with the no-cluster epilogue. Tests cost (iv)."
+    }
+  },
+  "design": {
+    "rings": "x ring: XST slots of the NT x 64 x tile (16 KB at m=128, 32 KB at m=256), TMA SWIZZLE_128B, xfull count 1 (expect_tx = whole tile), xempty count NWC (x 2 with multicast). W ring: WST slots of CPW = 4 chunks x RTB tiles x 1536 B (24 KB; a partial last stage carries fewer bytes), wfull count 1, wempty count NWC. m=128: XST 4, WST 6 (smem 209 KB); m=256: XST 3, WST 5 (217 KB). 1 CTA/SM.",
+    "producer": "One lane. Barrier init, the W prologue first (private), then the x prologue (after a cluster sync for multicast). Then a merged in-order schedule: issue whichever ring's next stage is needed at the earlier chunk (W stage w at chunk w*CPW, x stage s at chunk s), waiting on that ring's empty barrier. This order cannot deadlock: every x stage a pending W release depends on, and every W stage a pending x release depends on, is already issued. Checked in the protocol simulation.",
+    "consumer": "Per chunk u: [u % CPW == 0: wait wfull] -> 3 LDS + pw_dec + escape XOR -> [last chunk of the W stage: arrive wempty] -> wait xfull(u) -> fence -> 4 wgmma (2 per warpgroup with the k-split) -> commit -> wait_group 1 -> pin A(u-1), arrive xempty(u-1) (multicast: also on the peer's xempty via mapa + mbarrier.arrive.release.cluster.shared::cluster). End: wait_group 0, release the last x slot. SASS order per stage: LDS, PRMT, W release, WARPGROUP.ARRIVE, 4 HGMMA, DEPBAR.LE gsb0 1, x release.",
+    "epilogue": "Consumer-only named barrier. D is staged in fragment order (k-split: the second warpgroup adds its D). For KS > 1, each CTA writes its partial (FRAG float4, coalesced) to ws[nb][ks], then __threadfence, barrier, one atomicAdd on cnt[nb]. A CTA that is not last returns. The last does __threadfence, adds the KS-1 peer partials with __ldcg, resets cnt[nb] = 0 (clean graph replays) and continues. Then fragment -> [token][row] bf16 transpose in smem (16 KB at m=128) and 16-B row stores (BN = 64 -> 128 B per token row). No workspace zeroing: partials are overwritten every call. No cluster.",
+    "deviation": "The brief asked for stmatrix from the D layout. I kept the scalar st.shared.u16 transpose that pw9/pw10 already validated on the judge, because an untested stmatrix .trans layout would have no offline check. It is off the critical path (16 KB once per n-block, after the stream).",
+    "multicast": "hmc / vhmc: cluster (2,1,1) along n (NB even for every layer). The tensor map box is NT/2 rows; CTA rank r multicasts rows [r*NT/2, (r+1)*NT/2) into both CTAs at the same smem offset (a 1024-aligned half, so the swizzle phase is unchanged). Each CTA's xfull expects the whole tile (both halves), and xempty counts both CTAs' consumer warps, so a slot is refilled only after both CTAs' wgmmas retired it. Cluster syncs sit after barrier init (before any multicast) and after the stream (no remote write or arrive after it). The epilogue is the same no-cluster one. x L2 traffic halves (64 MB at pooler m=128).",
+    "k_split": "hk2: 2 consumer warpgroups on the same 64 rows, k16 steps {0,1} / {2,3}, branch-free (no ptxas C7520), setmaxnreg 40 / 232. It sits on the new rings, m=128 only.",
+    "ks_rule": "No rank rectangles any more, so KS = the largest of 1..4 with NB*KS <= 132: qkv 36 x 3 = 108, o 128 x 1, pooler 64 x 2, unpooler 128 x 1 (BN 64)."
+  },
+  "paths": "m=128: pw-h1 (main), pw-hk2, pw-hmc, pw-w1d8 and pw-wk2 (pw10 references, unchanged). m=256: pw-vh1, pw-vhmc, pw-v1d5, pw-vk2. Five or fewer per (layer, m). m<=32 and router m<=32: unchanged (inert).",
+  "register_budget_ptxas": "nvcc 12.8 sm_90a, all 0 spill, 0 stack, no LDL/STL, no C7519/C7520: h1 145, hk2 168 (setmaxnreg), hmc 148, vh1 208, vhmc 209; probes pH1 28, pH1w 28, pH2 43, pH3 143; pw10 refs w1d8 138, wk2 168, v1d5 202, vk2 168. SASS: UTMALDG.2D (UTMALDG.2D.MULTICAST in hmc/vhmc), HGMMA 64x128x16 / 64x256x16, DEPBAR.LE gsb0 0x1 at the x releases, W releases before each HGMMA batch.",
+  "kernel_count": "32: 15 pwc (m<=32 and router; SASS identical to pw10), 4 pw10 wgmma references, 5 pw13 paths, 4 pw13 probes, 4 small pw6 probe kernels (unused). The 23 kernels shared with pw10 produce identical SASS. Local -cubin about 7.6 s; judge compile was 36 s for pw9.",
+  "verification_done_offline": "(1) emu_pw13.py: the pw10 wgmma emulator (natural pack, A/B/D layouts, escapes, k-split) with the pw13 epilogue (sum of all K-slice partials, fragment -> [token][row] transpose, 16-B row pieces). Bit-exact on one-hot rows and fp64-exact on random rows for h1 (KS 2; KS 3 with odd m=121; KS 1), hk2 (KS 2; KS 4 with m=97), hmc, vh1 (m=256; m=200 with KS 3). Descriptor/swizzle check passes. (2) sim_pw13.py: 448 randomized schedules of the two-ring protocol, single CTA and multicast pairs (rings 4/6/4, 3/5/4, 2/2/1, 4/3/2; 1-64 chunks): no deadlock, no W slot refilled before every warp decoded it, no x slot refilled in either CTA while a wgmma reads it, no wgmma on an incomplete (multicast) x tile. Mutations caught 30/30: x released before the covering wait_group, and the multicast remote arrive dropped. (3) Lint ok; cpu-check --official 9/9; the full CUDA_SRC compiles with -std=c++20 against the torch mock.",
+  "risks": [
+    "smem 209-217 KB per CTA: 1 CTA/SM; pooler gets 128 CTAs on 132 SMs.",
+    "The multicast variants re-introduce a cluster (2,1,1) launch. pw7/pw10 suggest cluster launches cost several µs; the bake compares hmc against h1 directly.",
+    "The partial workspace adds 4 MB of stores plus about 2 MB of reads at pooler m=128 (KS 2), over L2. pw5's read-back cost came from many n-blocks per CTA at the tail; here each CTA owns one n-block.",
+    "qkv uses KS 3 (108 CTAs) and stays grid-limited."
+  ]
+}
