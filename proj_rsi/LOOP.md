@@ -1,7 +1,8 @@
 # muse_bf16_proj loop — head log
 
-Head: Fable 5.1 (high). Implementers/critics: Opus 5.5 (medium), one candidate directory each.
-Goal: board under 3000 µs (speedup ≥ 1.6103×). Incumbent on board: r6-c12, job `23cecdef1bb54c9e`, 3428.0 µs (1.4092×).
+Current head: Codex /root; four concurrent agents including head (hard runtime cap). One candidate directory per implementer; independent critic.
+Goal: official board under3000us. Verifiedbest rs32/job`fb548b5dc6f04696`,3200.615us. Latestpw36/job`e22a4b9d693d4902`9/9,3212.415us; no promotion. Currentqueue:`proj_rsi/queue.json`; resumestate:`handover_folder/12-codex-takeover.json`.
+Exactscore=4830.8/geomean(SGLang_load_sum/ours_load_sum) fromsamejob;62*geomean(ours) elsewhereinhistoryisapproximate, nottheofficialarithmetic. Historicalmodelroles/boardvaluesbelowarechronologicalevidence, notcurrentstate.
 Tools: `python3 -m proj_rsi {board,check,wait,result,status,lint,cpu-check,quota}`. Protocol: `proj_rsi/protocol.json`.
 History before this loop: `proj_rsi/archive/fable-LOG-2026-10-25.md` and `proj_rsi/submission/NOTE.md` (another session's summary).
 
@@ -1142,3 +1143,29 @@ candidate_file beforelocatingprofiles/archiving. The oldCLIlooked oneparenttoo
 highandcouldoverwriteanactualjobwithanemptyfallbacksummary. Verifiedbyreading
 thiscompletedjob throughdirectoryform:9/9,6loads,all30timingsretained; noGPU
 rerun/submission. Actualnormalizedprofile+log/reportarchived.
+
+
+### router-small01 terminal21:30:01UTC; nextarchitecture gates
+
+Onefixedm8 tensorfold/nointerCTAhandshake/lossless12-16bitprototype passed
+CPU/deviceindependentreview andactualTorchbuild. Realresources62regs/local0/
+occupancy1/2KiB; all4.19Mhi-lobits exact; requestedpayload6,619,904B vs8,388,608B.
+Bothactualpw36andprototypepass8192basiscolumns,18eagernormal/outlier/zero/nearby
+checksand10posttimingactualgraphoriginal/zero/freshnormal/freshoutlier/original
+checkswithNaNpoison. F1old7.872/candidate10.528/post7.904us; gain-2.656.
+Median40AB/BApairedgain-2.592;40/40lose. CLOSEwithoutport/sweep/slot. RawJSON
+publishedincandidatefolder; independentauditrouter-small01-preflight.md.
+RootPID354126/namedcontainerterminated; GPU0MiB. Logicalrequestedpayload isnot
+measuredHBMtraffic; don'tattributeexactlosswithoutprofiling.
+
+Addedhost h100_trial.sh deadline/cleanupoutsidecontainerheldlock. CPU-only
+queuedlocktest heldlockuntilouter25sdeadline:exit124,containerremovedat25.145s,
+noCUDAprocess. Regularroutertrialexit0alsoleftnojob/container. Thisprevents
+orphanedqueuedcontainerswhenanoutertimeoutkillsDockerclientbeforeinnerstarts.
+
+Nextfirstfalsifier: operand_reverse unpoolerM128N8192K4096/allM64channels/KS1,
+Xregister-A/Wproducerdecodedshared-B/twomathWGs/plainstore. Resourcearithmetic
+isnotlaunchproof; require384threadstatic<=168regs,nospill/C75,fullCPUlayoutproof
+beforeGPU. m256followupconditional;3m256layersaloneevenatpublishedSOLdon'treach
+3ms. RQpreparedfooterCPUcost/eligibilitytriagealsoactive; failedruntimeproducer
+patchremainsclosed. All4actualagentslotsusedincludinghead; hardcapnot8.

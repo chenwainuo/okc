@@ -1,6 +1,6 @@
 # muse_bf16_proj — handover (written 2026-10-26 19:10 UTC by the Fable head session)
 
-> **Codex takeover, 2026-10-26:** Read `12-codex-takeover.json` first. Live board verified rs32 at **3200.615 µs / 1.5093×, rank 81**. pw36 passed the clean parent comparison and is frozen for a check at the 00:00 UTC reset. The GPU lock now lives inside the container; old outer-lock instructions below are superseded.
+> **Codex takeover, 2026-10-26:** Read `12-codex-takeover.json` first. Live board verified rs32 at **3200.615 µs / 1.5093×, rank 81**. pw36 passed9/9 officialtests,3212.415us/job`e22a4b9d693d4902`; rs32remainsbest. The midnightwaiter iscancelled. Currentrankedqueue:`../proj_rsi/queue.json`. The GPU lock now lives inside the container; old outer-lock instructions below are superseded.
 
 Goal: get the okc `muse_bf16_proj` board under **3000 µs** (speedup ≥ 1.6103×). Board now: **3278.6 µs / 1.4734×, rank 111**
 (pw35 = pw34 + rtk router, scored job 5d880cd0aa504209, 19:02 UTC; previous pw34 846e25d9df09433f 3293.9). Leader 2951.5 (1.637×); top-10 cut 3121.5 (1.548×). Track closes 2026-11-04 23:59 PT.

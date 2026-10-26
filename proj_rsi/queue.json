@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-10-26T21:20:35.166263+00:00",
+  "updated_at_utc": "2026-10-26T21:45:09.409688+00:00",
   "goal_official_score_us_below": 3000,
   "incumbent": {
     "job": "fb548b5dc6f04696",
@@ -37,42 +37,16 @@
     "official_gpu": "H200 judge",
     "check_quota_left": 0,
     "scored_quota_left": 1,
-    "reset_utc": "2026-10-27T00:00:00Z"
+    "reset_utc": "2026-10-27T00:00:00Z",
+    "gpu_status": "idle; priortrialterminal; nextkernelCPU/resourcegatesbeforeGPU"
   },
   "ranked_open": [
     {
       "rank": 1,
-      "id": "router_small_m8",
-      "owner": "proj_tracks",
-      "status": "CPU_LAYOUT_AND_DEVICE_RESOURCE_PREFLIGHT",
-      "mechanism": "128CTAs x2experts fullK; diagonal tensor folding; adaptive lossless12/16bit windows; intraCTA-only reduction; removes interCTA handshake",
-      "evidence": "New source feasibility, no GPU speed claim; previously shipped FMT2 loads8MiB",
-      "conditional_scenarios": [
-        {
-          "score_us": 3193.459877517722,
-          "saving_us": 7.155130919611565,
-          "cuts_us": {
-            "verify 1/router": 0.5
-          }
-        },
-        {
-          "score_us": 3186.22367956463,
-          "saving_us": 14.391328872703525,
-          "cuts_us": {
-            "verify 1/router": 1.0
-          }
-        }
-      ],
-      "risk": "1024threads x64register cap; tensor-useful-work25%; Xtraffic16MiB; codecwidefallback; may lose decode/issue latency",
-      "kill_bar": "Reject spills/>64regs; independentcritic; exacthi+loFP32/fullKonehot+FP64+actualtimedgraphfresh/zero/outlier; >=.5us BOTHF1 and pairedgraph vsactualfrozenpw36pick",
-      "next": "One fixedm8 policy only; generalize tootherm only after measured win"
-    },
-    {
-      "rank": 2,
-      "id": "m256_next_mechanism",
+      "id": "m128_operand_reverse_first",
       "owner": "proj_integration",
-      "status": "ARCHITECTURE_SOURCE_FEASIBILITY_ONLY",
-      "mechanism": "One materially novel full-output design informed by real profiles; currentrq splitK/tail policies closed",
+      "status": "CORRECTED_RESOURCE_AND_LAYOUT_PASS_LAB_REVIEW_PENDING",
+      "mechanism": "Xregister-A,decodedWshared-B reusedby2mathWGs; m128unpoolerKS1plainstore firststrongtarget; m256conditional",
       "evidence": "Incumbent largeBF16 layers17.28/24.84/24.69us; no newkernel yet",
       "conditional_scenario": {
         "score_us": 3142.6012092030633,
@@ -83,11 +57,52 @@
           "verify 32/unpooler": 3.0
         }
       },
-      "risk": "3us perlayer is a target scenario, not expectation; portprobe inconclusive; no broad sweep or abandonedplan revival",
-      "next_gate": "Concrete measured bottleneck+source novelty+board leverage+bounded kill bar before implementation/GPU"
+      "risk": "Registerbudgets arithmetic isnotlaunchproof; currentproposal3WGs mayexceedstaticregisterallocation; Xtranspose32SHFL+32SELP per64tokenK64set; resident/ingressfirstfalsifierrequired",
+      "next_gate": "Concrete measured bottleneck+source novelty+board leverage+bounded kill bar before implementation/GPU",
+      "resource_gate": "384threads static168/0spill/noC75; originalprod64/math224exceededinitial64512CTA pool andwasNO-GO; corrected64/216requests63488<=64512,independentcompilepass",
+      "first_target": "unpoolerM128N8192K4096,KS1,64channels/allM128,plainTMAoutput",
+      "review": "proj_rsi/audits/operand-reverse-architecture-preflight.md; finalfrozenlabmustoraclemutatepoisonBOTHactualtimedgraphs"
+    },
+    {
+      "rank": 2,
+      "id": "aligned_epilogue",
+      "owner": "proj_tracks",
+      "status": "CPU_SOURCE_NOVELTY_AND_INSTRUCTION_ROI_ASSESSMENT",
+      "mechanism": "Narrowportofpower2weightrebase+onceFP32epiloguerestoreintoGV7opLOP3decoder; m16pooler/unpooleractualpaths only",
+      "prior_work": "Contrarianalreadyimplementspower2rebasing+epiloguerecoverywith4ops/pairdecoder; wholepolicyclosed. P4alignedwindowrungtimingonly; perdecodeHMUL2rebaseclosed. ClaimonlynarrowdirectGVimplementationifnovel+crediblegain.",
+      "gate": "Credible>=.3us F1+graph beforeprototype; removes2IMADbutnoALUops; couldbeNO-GO",
+      "risk": "FP32power2homogeneity,underflow/overflow,exactBF16weightencoding/probes,allfinalaccumscale; no per-inputCPUbranches",
+      "GPU_work": "NONE"
     }
   ],
   "closed_this_takeover": [
+    {
+      "id": "rq_footer",
+      "decision": "NO_GO_CPU_SOURCE_FEASIBILITY",
+      "evidence": "proj_rsi/candidates/rq_footer/README.md",
+      "reason": "Netnewbytescost.140/.059us aftercreditingallstockprefix; noescapeCUPTIreference.384/.223 leaves.244/.164usbeforenewmetadatawork below.3bar; graphupperreferenceconflicts; qkvseed1234overflowsexact8lanecapacity; nogeneralimpossibilityclaim",
+      "GPU_work": "NONE"
+    },
+    {
+      "id": "router_small_m8",
+      "decision": "CLOSED_GAIN_BAR_FAILED",
+      "runtime": "router-small01 terminal2026-10-26T21:30:01Z exit0; actualPID354126/containergoneGPU0MiB",
+      "gain_us": {
+        "F1": -2.6559997349977493,
+        "paired_graph": -2.5919999461621046
+      },
+      "slower_pairs": "40/40",
+      "correctness": "Both8192basiscolumns +18eagerFP64/taskcases +10actualtimedgraphfresh/zero/NaNpoisonchecksPASS",
+      "resources": {
+        "registers": 62,
+        "local_bytes": 0,
+        "CTAs_per_SM": 1,
+        "threads": 1024,
+        "shared_bytes": 2048
+      },
+      "evidence": "proj_rsi/candidates/router_small/router-small01.json",
+      "review": "proj_rsi/audits/router-small01-preflight.md"
+    },
     {
       "id": "o_direct_w",
       "decision": "CLOSE_FIXED_POLICY_NO_SWEEP",
@@ -137,13 +152,7 @@
       "decision": "CLOSE_UNCHANGED_POLICIES_NO_SHAPE_MEETS_GAIN_BAR"
     }
   ],
-  "hold": [
-    {
-      "id": "prepared_static_patch_footer",
-      "reason": "CPUproofonly; ideal extrafooter transportcost.11-.19us, not gain. Noescapegraphupperreference.672-.800us but CUPTI.223-.384; netgain uncertain andlowpriority. Require one concrete prototype clearing.3usbar; no sweep.",
-      "evidence": "proj_rsi/candidates/rs128p/PREPARED_PATCH_BRIEF.md"
-    }
-  ],
+  "hold": [],
   "verified_bases": [
     {
       "rank": 1,

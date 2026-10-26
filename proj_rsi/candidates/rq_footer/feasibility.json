@@ -1,0 +1,427 @@
+{
+  "state": "CPU_SOURCE_FEASIBILITY_GPU_UNRUN",
+  "parent_sha256": "a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad",
+  "layout_model_sha256": "2d960c3bac6e044abde7ecfb1bd69a858345fb2aba4eb5fd4ea9d9d1ca6b4020",
+  "policy": {
+    "variant": "s4s5z",
+    "NT": 128,
+    "ST": 5,
+    "GS": 1,
+    "FL": 2,
+    "footer_bytes": 128,
+    "record_capacity": 8,
+    "registers_per_lane": 2
+  },
+  "model_self_proof": {
+    "status": "CPU_layout_proof_pass_GPU_unimplemented",
+    "single_escape_cases": 24576,
+    "mixed_cases": 4,
+    "overflow_and_duplicate_fallback_cases": 3,
+    "K_split_ownership_cases": 20,
+    "stage_payload_bytes": 12288,
+    "footer_bytes": 128,
+    "payload_overhead_fraction": 0.010416666666666666,
+    "limits": "No full codec proof, GPU preparer, kernel, compile, performance or judge evidence."
+  },
+  "weights": {
+    "5151": {
+      "pooler": {
+        "N": 4096,
+        "K": 8192,
+        "NB": 32,
+        "KC": 128,
+        "stages": 4096,
+        "KS": 4,
+        "grid_CTAs": 128,
+        "stock_list_capacity": 32,
+        "max_stock_list_entries": 13,
+        "stock_initial_prefix_load_bytes": 131072,
+        "stock_list_refill_needed": false,
+        "packed_payload_bytes": 50331648,
+        "footer_bytes": 524288,
+        "global_escape_entries": 4668,
+        "codec_roundtrip_bit_exact": true,
+        "all_eligible_footer_patches_match_stock_lists": true,
+        "lane_record_histogram": {
+          "0": 1311,
+          "1": 1503,
+          "2": 833,
+          "3": 336,
+          "4": 90,
+          "5": 21,
+          "6": 2
+        },
+        "max_registers_per_lane_histogram": {
+          "0": 1311,
+          "1": 2772,
+          "2": 13
+        },
+        "escape_hits_per_stage_histogram": {
+          "0": 1311,
+          "1": 1499,
+          "2": 831,
+          "3": 339,
+          "4": 93,
+          "5": 20,
+          "6": 3
+        },
+        "overflow_count": 0,
+        "overflow_examples": [],
+        "whole_layer_eligible": true,
+        "first_examples": [
+          {
+            "nb": 0,
+            "chunk": 0,
+            "escapes": 1,
+            "lane_records": 1,
+            "footer_hex": "0000002000000000000000000000000000000000000000000000000000000000000000000100000001000000010000000100000001000000010000000100000008000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "nb": 0,
+            "chunk": 1,
+            "escapes": 3,
+            "lane_records": 3,
+            "footer_hex": "000000000000000040000000004000000001000000000000000000000000000000000000000000000000000001000000020000000300000003000000030000000f0000030000000001000003000000000a0300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "CPU_pack_proof_s": 2.3336640149354935,
+        "scope": "Exact reference CPU-generated BF16 weights; CUDA generator sequence/judge weights NOT asserted identical"
+      },
+      "qkv_gate": {
+        "N": 2304,
+        "K": 8192,
+        "NB": 18,
+        "KC": 128,
+        "stages": 2304,
+        "KS": 7,
+        "grid_CTAs": 126,
+        "stock_list_capacity": 32,
+        "max_stock_list_entries": 8,
+        "stock_initial_prefix_load_bytes": 129024,
+        "stock_list_refill_needed": false,
+        "packed_payload_bytes": 28311552,
+        "footer_bytes": 294912,
+        "global_escape_entries": 2605,
+        "codec_roundtrip_bit_exact": true,
+        "all_eligible_footer_patches_match_stock_lists": true,
+        "lane_record_histogram": {
+          "0": 730,
+          "1": 853,
+          "2": 491,
+          "3": 173,
+          "4": 47,
+          "5": 6,
+          "6": 4
+        },
+        "max_registers_per_lane_histogram": {
+          "0": 730,
+          "1": 1565,
+          "2": 9
+        },
+        "escape_hits_per_stage_histogram": {
+          "0": 730,
+          "1": 850,
+          "2": 492,
+          "3": 172,
+          "4": 49,
+          "5": 7,
+          "6": 4
+        },
+        "overflow_count": 0,
+        "overflow_examples": [],
+        "whole_layer_eligible": true,
+        "first_examples": [
+          {
+            "nb": 0,
+            "chunk": 0,
+            "escapes": 2,
+            "lane_records": 2,
+            "footer_hex": "0000000000000000000000010000004000000000000000000000000000000000000000000000000000000000010000000200000002000000020000000200000001000003000000000205000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "nb": 0,
+            "chunk": 1,
+            "escapes": 2,
+            "lane_records": 2,
+            "footer_hex": "0000000000000000000000200000000000000000000000000002000000000000000000000000000000000000010000000100000001000000010000000200000007030000000000000300000300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "CPU_pack_proof_s": 1.3465075865387917,
+        "scope": "Exact reference CPU-generated BF16 weights; CUDA generator sequence/judge weights NOT asserted identical"
+      },
+      "unpooler": {
+        "N": 8192,
+        "K": 4096,
+        "NB": 64,
+        "KC": 64,
+        "stages": 4096,
+        "KS": 2,
+        "grid_CTAs": 128,
+        "stock_list_capacity": 32,
+        "max_stock_list_entries": 11,
+        "stock_initial_prefix_load_bytes": 131072,
+        "stock_list_refill_needed": false,
+        "packed_payload_bytes": 50331648,
+        "footer_bytes": 524288,
+        "global_escape_entries": 3240,
+        "codec_roundtrip_bit_exact": true,
+        "all_eligible_footer_patches_match_stock_lists": true,
+        "lane_record_histogram": {
+          "0": 1865,
+          "1": 1473,
+          "2": 562,
+          "3": 158,
+          "4": 29,
+          "5": 7,
+          "6": 2
+        },
+        "max_registers_per_lane_histogram": {
+          "0": 1865,
+          "1": 2225,
+          "2": 6
+        },
+        "escape_hits_per_stage_histogram": {
+          "0": 1865,
+          "1": 1471,
+          "2": 561,
+          "3": 160,
+          "4": 30,
+          "5": 7,
+          "6": 2
+        },
+        "overflow_count": 0,
+        "overflow_examples": [],
+        "whole_layer_eligible": true,
+        "first_examples": [
+          {
+            "nb": 0,
+            "chunk": 3,
+            "escapes": 2,
+            "lane_records": 2,
+            "footer_hex": "1000000000000000000000000000000000000000000000000000000020000000000000000100000001000000010000000100000001000000010000000100000004030000000000000100000300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "nb": 0,
+            "chunk": 4,
+            "escapes": 1,
+            "lane_records": 1,
+            "footer_hex": "0000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000001000000010000000100000000000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "CPU_pack_proof_s": 2.2923340424895287,
+        "scope": "Exact reference CPU-generated BF16 weights; CUDA generator sequence/judge weights NOT asserted identical"
+      }
+    },
+    "1234": {
+      "pooler": {
+        "N": 4096,
+        "K": 8192,
+        "NB": 32,
+        "KC": 128,
+        "stages": 4096,
+        "KS": 4,
+        "grid_CTAs": 128,
+        "stock_list_capacity": 32,
+        "max_stock_list_entries": 12,
+        "stock_initial_prefix_load_bytes": 131072,
+        "stock_list_refill_needed": false,
+        "packed_payload_bytes": 50331648,
+        "footer_bytes": 524288,
+        "global_escape_entries": 4645,
+        "codec_roundtrip_bit_exact": true,
+        "all_eligible_footer_patches_match_stock_lists": true,
+        "lane_record_histogram": {
+          "0": 1270,
+          "1": 1547,
+          "2": 869,
+          "3": 314,
+          "4": 76,
+          "5": 16,
+          "6": 4
+        },
+        "max_registers_per_lane_histogram": {
+          "0": 1270,
+          "1": 2816,
+          "2": 10
+        },
+        "escape_hits_per_stage_histogram": {
+          "0": 1270,
+          "1": 1544,
+          "2": 868,
+          "3": 315,
+          "4": 79,
+          "5": 16,
+          "6": 4
+        },
+        "overflow_count": 0,
+        "overflow_examples": [],
+        "whole_layer_eligible": true,
+        "first_examples": [
+          {
+            "nb": 0,
+            "chunk": 0,
+            "escapes": 4,
+            "lane_records": 4,
+            "footer_hex": "0000000000000000000000000000000000008000000008040000000000008000000000000000000000000000000000000000000001000000030000000300000002030000000000000603000000000000080000020000000008000002000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "nb": 0,
+            "chunk": 1,
+            "escapes": 1,
+            "lane_records": 1,
+            "footer_hex": "4000000000000000000000000000000000000000000000000000000000000000000000000100000001000000010000000100000001000000010000000100000008000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "CPU_pack_proof_s": 2.3236931189894676,
+        "scope": "Exact reference CPU-generated BF16 weights; CUDA generator sequence/judge weights NOT asserted identical"
+      },
+      "qkv_gate": {
+        "N": 2304,
+        "K": 8192,
+        "NB": 18,
+        "KC": 128,
+        "stages": 2304,
+        "KS": 7,
+        "grid_CTAs": 126,
+        "stock_list_capacity": 32,
+        "max_stock_list_entries": 10,
+        "stock_initial_prefix_load_bytes": 129024,
+        "stock_list_refill_needed": false,
+        "packed_payload_bytes": 28311552,
+        "footer_bytes": 294912,
+        "global_escape_entries": 2658,
+        "codec_roundtrip_bit_exact": true,
+        "all_eligible_footer_patches_match_stock_lists": true,
+        "lane_record_histogram": {
+          "0": 723,
+          "1": 846,
+          "2": 477,
+          "3": 199,
+          "4": 45,
+          "5": 9,
+          "6": 4,
+          "9": 1
+        },
+        "max_registers_per_lane_histogram": {
+          "0": 723,
+          "1": 1579,
+          "2": 2
+        },
+        "escape_hits_per_stage_histogram": {
+          "0": 723,
+          "1": 843,
+          "2": 480,
+          "3": 199,
+          "4": 45,
+          "5": 9,
+          "6": 4,
+          "9": 1
+        },
+        "overflow_count": 1,
+        "overflow_examples": [
+          {
+            "nb": 17,
+            "chunk": 41,
+            "reason": "more_than8_lane_records",
+            "lanes": 9,
+            "max_registers_in_lane": 1
+          }
+        ],
+        "whole_layer_eligible": false,
+        "first_examples": [
+          {
+            "nb": 0,
+            "chunk": 0,
+            "escapes": 1,
+            "lane_records": 1,
+            "footer_hex": "0000800000000000000000000000000000000000000000000000000000000000000000000100000001000000010000000100000001000000010000000100000007000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "nb": 0,
+            "chunk": 1,
+            "escapes": 1,
+            "lane_records": 1,
+            "footer_hex": "0000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000100000007000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "CPU_pack_proof_s": 1.364426165819168,
+        "scope": "Exact reference CPU-generated BF16 weights; CUDA generator sequence/judge weights NOT asserted identical"
+      },
+      "unpooler": {
+        "N": 8192,
+        "K": 4096,
+        "NB": 64,
+        "KC": 64,
+        "stages": 4096,
+        "KS": 2,
+        "grid_CTAs": 128,
+        "stock_list_capacity": 32,
+        "max_stock_list_entries": 12,
+        "stock_initial_prefix_load_bytes": 131072,
+        "stock_list_refill_needed": false,
+        "packed_payload_bytes": 50331648,
+        "footer_bytes": 524288,
+        "global_escape_entries": 3179,
+        "codec_roundtrip_bit_exact": true,
+        "all_eligible_footer_patches_match_stock_lists": true,
+        "lane_record_histogram": {
+          "0": 1865,
+          "1": 1497,
+          "2": 570,
+          "3": 124,
+          "4": 38,
+          "5": 1,
+          "6": 1
+        },
+        "max_registers_per_lane_histogram": {
+          "0": 1865,
+          "1": 2224,
+          "2": 7
+        },
+        "escape_hits_per_stage_histogram": {
+          "0": 1865,
+          "1": 1492,
+          "2": 574,
+          "3": 124,
+          "4": 39,
+          "5": 1,
+          "6": 1
+        },
+        "overflow_count": 0,
+        "overflow_examples": [],
+        "whole_layer_eligible": true,
+        "first_examples": [
+          {
+            "nb": 0,
+            "chunk": 1,
+            "escapes": 2,
+            "lane_records": 2,
+            "footer_hex": "4000000000000000000000000000000000000000000000000000000000000008000000000100000001000000010000000100000001000000010000000100000002000002000000000d00000300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "nb": 0,
+            "chunk": 3,
+            "escapes": 1,
+            "lane_records": 1,
+            "footer_hex": "0000000000000000000000400000000000000000000000000000000000000000000000000000000000000000010000000100000001000000010000000100000005030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "CPU_pack_proof_s": 2.493957694619894,
+        "scope": "Exact reference CPU-generated BF16 weights; CUDA generator sequence/judge weights NOT asserted identical"
+      }
+    }
+  },
+  "static_cost": {
+    "baseline_W_stage_bytes": 12288,
+    "footer_W_stage_bytes": 12416,
+    "baseline_smem_bytes": 144520,
+    "footer_smem_bytes": 145160,
+    "extra_ring_shared_bytes": 640,
+    "original_arrival_counts_unchanged": true,
+    "eliminated_W_X_producers_or_barriers": 0,
+    "footer_must_be_read_before_W_empty_release": true,
+    "register_allocation": "Not compiled; cannot claim exact regs/spills",
+    "new_live_uint32_t_estimate": 5,
+    "retired_list_state_uint32_t_estimate": 4
+  }
+}

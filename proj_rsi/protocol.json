@@ -6,16 +6,56 @@
     "board_us_target": 3000.0,
     "speedup_required": 1.6103,
     "published_sglang_us": 4830.8,
-    "incumbent_board": {"job": "23cecdef1bb54c9e", "candidate": "proj_rsi/candidates/r6-c12/submission.py", "score_us": 3428.0, "speedup": 1.4092},
+    "incumbent_board": {
+      "job": "fb548b5dc6f04696",
+      "candidate": "proj_rsi/candidates/rs32/submission.py",
+      "score_us": 3200.6150084373335,
+      "speedup": 1.509334920715312
+    },
     "floor_us": 2384.0,
-    "log_gain_needed": 0.80,
-    "note": "Speedup is the geomean over six loads of SGLang load time over ours; a load is the sum of five layer times. Working in ln(ratio): r6 sums to 2.058 over six loads, 3000 us needs 2.859, the floor allows 4.236."
+    "log_gain_needed": 0.38838415684847727,
+    "note": "Exactscore=4830.8/geomean(SGLang_load_sum/ours_load_sum), sixequallyweightedloads. Holdsamejob SGLangvectorfixedforwhatif. 62*geomean(ours) isnotexactboardscore. floor_us isahistoricalprojectionfrompublisheduncompressedfloors, notauniversalboundwithlosslessweightcompression."
   },
   "roles": {
-    "head": {"model": "claude-fable-5-1", "effort": "high", "duties": ["reads every result", "does the board arithmetic", "chooses the next experiment", "writes the implementer brief", "decides promote/reject/refine", "spends the check budget", "keeps LOOP.md current"]},
-    "implementer": {"model": "claude-opus-5-5", "effort": "medium", "duties": ["writes exactly one candidate directory from the brief", "never edits the incumbent, the ledger, or another candidate", "runs python3 -m proj_rsi lint on the file before returning"]},
-    "critic": {"model": "claude-opus-5-5", "effort": "medium", "duties": ["different agent from the implementer", "reads the candidate for rule violations, graph safety, missing fallbacks, and wasted prepare time", "may not promote"]},
-    "executor": {"who": "head, via python3 -m proj_rsi check", "duties": ["quota guard", "okc check --no-wait", "wait, archive JSON/profile/log, record in the ledger"]}
+    "head": {
+      "model": "claude-fable-5-1",
+      "effort": "high",
+      "duties": [
+        "reads every result",
+        "does the board arithmetic",
+        "chooses the next experiment",
+        "writes the implementer brief",
+        "decides promote/reject/refine",
+        "spends the check budget",
+        "keeps LOOP.md current"
+      ]
+    },
+    "implementer": {
+      "model": "claude-opus-5-5",
+      "effort": "medium",
+      "duties": [
+        "writes exactly one candidate directory from the brief",
+        "never edits the incumbent, the ledger, or another candidate",
+        "runs python3 -m proj_rsi lint on the file before returning"
+      ]
+    },
+    "critic": {
+      "model": "claude-opus-5-5",
+      "effort": "medium",
+      "duties": [
+        "different agent from the implementer",
+        "reads the candidate for rule violations, graph safety, missing fallbacks, and wasted prepare time",
+        "may not promote"
+      ]
+    },
+    "executor": {
+      "who": "head, via python3 -m proj_rsi check",
+      "duties": [
+        "quota guard",
+        "okc check --no-wait",
+        "wait, archive JSON/profile/log, record in the ledger"
+      ]
+    }
   },
   "loop": [
     "1. head: read ledger + LOOP.md; recompute board projection (python3 -m proj_rsi board)",
@@ -57,10 +97,49 @@
     "No okc login, no rules acceptance, no edits to rsi/, serving/, muse_moe_w4a16/."
   ],
   "shape_model": {
-    "layers": {"qkv_gate": [2304, 8192], "o": [8192, 1024], "pooler": [4096, 8192], "unpooler": [8192, 4096], "router": [256, 8192]},
+    "layers": {
+      "qkv_gate": [
+        2304,
+        8192
+      ],
+      "o": [
+        8192,
+        1024
+      ],
+      "pooler": [
+        4096,
+        8192
+      ],
+      "unpooler": [
+        8192,
+        4096
+      ],
+      "router": [
+        256,
+        8192
+      ]
+    },
     "unpooler_slice": "n=1024 when m<=8",
-    "loads": {"decode 1": 1, "decode 16": 16, "decode 32": 32, "verify 1": 8, "verify 16": 128, "verify 32": 256},
+    "loads": {
+      "decode 1": 1,
+      "decode 16": 16,
+      "decode 32": 32,
+      "verify 1": 8,
+      "verify 16": 128,
+      "verify 32": 256
+    },
     "weight": 62,
     "judge_overhead": "yours_us is roughly kernel GPU time + 1.0-1.5 us after the judge subtracts about 4 us of replay cost; the practical floor for a tiny shape is about 2.5 us yours."
+  },
+  "runtime_authority": {
+    "updated_utc": "2026-10-26T21:35:18.883171+00:00",
+    "head": "Codex /root",
+    "models": "Useavailableinheritedmodel; rolemodelstringsbelowarehistoricalClaudehandoverpreferences, notavailable-runtimeclaims.",
+    "concurrent_agent_cap_including_head": 4,
+    "user_authorizes_agents_up_to": 8,
+    "queue": "proj_rsi/queue.json",
+    "ledger": "results/proj-rsi/ledger.json",
+    "handover": "handover_folder/12-codex-takeover.json",
+    "override": "Latestuserconfirms3msgoal. Reviewed65/65pw36usedoneexpiringscoredslotwith0checks;9/9officialtests+timingcomplete. Noautomaticpromotionorrepeat. Midnightwaitercancelled."
   }
 }

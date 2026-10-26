@@ -1,5 +1,5 @@
 {
-  "written_at_utc": "2026-10-26T21:20:35.166263+00:00",
+  "written_at_utc": "2026-10-26T21:45:09.409688+00:00",
   "supervisor": "Codex /root",
   "scope": "Continue Claude muse_bf16_proj RSI work from session notes + handover_folder; preserve prior work.",
   "objectives": {
@@ -76,7 +76,9 @@
       "Keep the soak stopped.",
       "No competing GPU work."
     ],
-    "lock_runtime_test": "same inode1807; C exited at monotonic15871561587989 before D entered15871581462511; external nonblocking lock probe failed while benchmark held lock."
+    "lock_runtime_test": "same inode1807; C exited at monotonic15871561587989 before D entered15871581462511; external nonblocking lock probe failed while benchmark held lock.",
+    "bounded_trial_source": "proj_rsi/tools/h100_trial.sh (hostdeadline+exactnamedcontainercleanup; innerjobGPUlockremainsinsidecontainer)",
+    "deadline_runtime_test": "CPU-onlyhostlockheldthroughouter25s; queuednamedcontainer timedout124 andwasabsentafter25.145s; lockreleased; noCUDAprocesswaslaunched."
   },
   "inherited_invalid_runs": {
     "stalled": "tensorcore_ladder9 qkv rows completed; stalled before router16 for >24min. Container a28b13f4ee6b stopped; original partial log retained.",
@@ -112,9 +114,9 @@
     "closed": "m256 rq, old codecs and other closed designs remain closed unless materially new evidence."
   },
   "agents": {
-    "proj_integration": "m256 materiallynew mechanism feasibility; completedo_direct_w+lt_graph nowclosed",
-    "proj_evidence": "independent runtime audit o_direct_w/lt_graph, nextsmallroutercritic",
-    "proj_tracks": "router_small diagonal tensor folding m8+adaptive losslesscodec prototype",
+    "proj_integration": "operand_reverse kernelcorrected64/216/resourceproofpass; finalfrozenlabpendingreview",
+    "proj_evidence": "independentoperand_reverse architecture/CPU/devicePASS; finalactualtimedgraphlabgatespending",
+    "proj_tracks": "rq_footerCPU NO-GO; nowaligned_epilogue narrowGVportCPUROIfeasibility",
     "root": "supervisor,physicalGPUexecutor,judge/quota,score/ROI/integration"
   },
   "continuation_rules": [
@@ -149,11 +151,18 @@
     },
     {
       "directory": "proj_rsi/candidates/router_small/",
-      "state": "CPU_PROTOTYPE_IMPLEMENTATION",
-      "hypothesis": "One fullK2expert/CTA tensorfold m8 nointerCTAhandshake; preflightbeforeGPU"
+      "state": "CLOSED_GAIN_BAR_FAILED",
+      "hypothesis": "One fullK2expert/CTA tensorfold m8 nointerCTAhandshake; preflightbeforeGPU",
+      "result": "AllGPUchecksPASS; F1-2.656us,paired-2.592gainus;40/40slower; noport/sweep"
+    },
+    {
+      "directory": "proj_rsi/candidates/operand_reverse/",
+      "state": "CPU_DEVICE_FEASIBILITY_ONLY",
+      "primary": "unpoolerM128N8192K4096,64channels/allM/KS1/plainstore; XregisterA/WdecodedsharedB",
+      "gate": "3WG384threads static<=168regs/0spill/noC75; fullCPUlayoutproof beforeGPU"
     }
   ],
-  "next_action": "Reviewindependentpw36officialaudit; router_smallCPU/devicepreflight thenoneGPUtrialifGO; m256novelmechanismfeasibility. Rankedqueue proj_rsi/queue.json. Beststillrs32/3200.615.",
+  "next_action": "Reviewfreezeoperand_reversecompleteoutputlab thenoneboundedGPUtrialifGO; alignedGVrebaseCPUfeasibilityparallel; noGPUcurrentlyrunning. Bestofficial3200.615.",
   "latest_user_directive": {
     "requested_minimum_agents": 5,
     "platform_concurrent_agent_cap_including_head": 4,
@@ -171,5 +180,22 @@
     "reason": "Latest user authorizes aggressive continuation; two scoredslots expire tonight; scoredrun performs same official tests and timing ascheck. Reviewed mergedpaths passed65/65H100. Supersedes resetcheckfirstplan; no duplicate.",
     "score_us": 3212.415452073451,
     "result_archived": true
+  },
+  "router_small_trial": {
+    "pid": 354126,
+    "container": "okc-proj-router-small01",
+    "status": "terminal_CLOSED_GAIN_BAR_FAILED",
+    "kernel_sha256": "042bfbbd2d0916f3bc33a3ff11c3ec1aac64bc97efc27dc2194b21269bf78f5a",
+    "lab_sha256": "069d214589a43177db4c633f1759961c56aa19927d984d482635a48e85fe8ba4",
+    "outer_s": 360,
+    "inner_s": 300,
+    "remote_log": "/root/okc/logs/router-small01.host.log",
+    "review": "proj_evidence GO; author/prototype source frozen; runtimecompile firstgate",
+    "F1_gain_us": -2.6559997349977493,
+    "paired_graph_gain_us": -2.5919999461621046,
+    "slower_pairs": "40/40",
+    "all_correctness_checks_pass": true,
+    "container_and_process_gone": true,
+    "raw_local": "results/proj-rsi/takeover/20261026/router-small01.json"
   }
 }

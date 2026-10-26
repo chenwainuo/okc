@@ -1,0 +1,38 @@
+{
+  "state": "NO_GO_CPU_SOURCE_FEASIBILITY",
+  "required_gain_us": 0.3,
+  "CUDA_prototype": null,
+  "reason": "No measured shipped fixed cost supports >=.3us net after optimistic byte credit and added footer instructions/lifetime dependency.",
+  "fallback": "Any stage overflow/duplicate/pack proof failure disables footer for entire layer; retain unchanged stock s4s5z.",
+  "costs": {
+    "pooler": {
+      "footer_bytes": 524288,
+      "optimistic_removed_prefix_bytes": 131072,
+      "net_added_bytes": 393216,
+      "H100_net_byte_floor_us": 0.1404342857142857,
+      "H200_net_byte_floor_us": 0.1034778947368421,
+      "observed_CUPTI_noescape_removal_us": 0.384,
+      "H100_optimistic_remaining_budget_before_metadata_us": 0.2435657142857143,
+      "H200_same_removal_remaining_budget_before_metadata_us": 0.2805221052631579
+    },
+    "qkv_gate": {
+      "footer_bytes": 294912,
+      "optimistic_removed_prefix_bytes": 129024,
+      "net_added_bytes": 165888,
+      "H100_net_byte_floor_us": 0.059245714285714283,
+      "H200_net_byte_floor_us": 0.04365473684210526,
+      "observed_CUPTI_noescape_removal_us": 0.223,
+      "H100_optimistic_remaining_budget_before_metadata_us": 0.1637542857142857,
+      "H200_same_removal_remaining_budget_before_metadata_us": 0.17934526315789473
+    },
+    "unpooler": {
+      "footer_bytes": 524288,
+      "optimistic_removed_prefix_bytes": 131072,
+      "net_added_bytes": 393216,
+      "H100_net_byte_floor_us": 0.1404342857142857,
+      "H200_net_byte_floor_us": 0.1034778947368421
+    }
+  },
+  "GPU_generator_or_judge_eligibility": "NOT_ASSERTED",
+  "router_small_frozen_executable_sources_verified": true
+}
