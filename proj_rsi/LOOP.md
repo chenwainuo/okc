@@ -467,3 +467,13 @@ found: most likely an m=128/256 kernel that beats cuBLAS (the transform-warpgrou
 the one untested structure) combined with a cheaper-than-expected decode, or a judge-side effect we have not
 identified. Recommendation: stop spending checks on refinements; any further attempt should be a from-scratch
 m ≥ 128 kernel program with its own multi-day budget, or a study of the leader's likely approach before building.
+
+## pw19 (user request): transform-warpgroup m ≥ 128 kernel
+
+Build opened at the user's request: decode in a dedicated warpgroup writing bf16 W tiles into a swizzled smem ring,
+MMA warpgroup doing only wait → wgmma SS (both operands from smem) → release, producer warp on separate packed-W and x
+rings; BN=64 (and BN=128 variant), cluster-2 DSMEM split-K, 1 vs 2 CTAs/SM, probe ladder. Per-stage budget at
+1 CTA/SM: ~350 cycles (6 KB packed W at 31 GB/s per SM) against 245 tensor cycles, ~170 decode warp-instr, ~300
+cycles of smem traffic — tight; 2 CTAs/SM or BN=128 is where a 3–4 µs win would have to come from. Expected: 27–29
+in-prepare vs cuBLAS 29.4 at 1 CTA/SM. Kill: pooler m=128 not ≥ 1.0 µs under torch. Payoff if it wins by 3 µs on the
+four big layers at m=128 and m=256: ≈ 0.2 ln (~3320 alone); necessary but not sufficient for 3000.
