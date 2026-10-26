@@ -818,3 +818,12 @@ rounds) / 22.32 (k128) | S4 full 23.2–24.0 + 1.3 zero-fill; in-prepare 26.98 v
 exact, rel L2 3.0e-3 at KS=4, checker passes. L2-resident period 731–757 clk per stage (decode ~190, issue ~175, data
 waits 140–180, x release ~65; x slots pinned three rounds). R2 targets ≤ 21.5 kernel-µs: hoist escape loads,
 in-kernel zeroing (pw29h pattern), decouple the x ring, overlap decode with wgmma issue/wait.
+
+## Scored pw31: job `bbb732a78955425b` — **3337.1 µs**, 1.4476× (CI 1.426–1.469). New incumbent (board 3399.3 → 3337.1, rank 121).
+
+Judge per-shape vs the reference run (cross-run, ±3% drift): router m=8 −1.02, unpooler m=8 −0.75, router m=32
+−0.73, router m=16 +0.09, m=1 tie; router m=128 +0.41 / m=256 +0.49 (cross-run noise band). Within-run (the judge's
+own bake, in-prepare): router m=128 rp64k32s4 13.54 | rw64k32s8z 13.12 (picked, −0.4 — vs −1.5 on the H100: the
+wgmma router's gain shrinks on the H200's faster HBM); m=256 r6 15.68 kept (rw 16.00). Small-shape picks: router
+rk-s16w8x/rk-s16w8z/rk-s8z at m=8/16/32, unpooler uk-s4x at m=1/8. Prepare 161 s (r6 119 + rw 39). Lesson: H100
+deltas for kernels near the latency floor transfer only partially; the judge's bake is the arbiter per shape.
