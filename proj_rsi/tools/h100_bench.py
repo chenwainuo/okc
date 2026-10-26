@@ -100,6 +100,7 @@ def main():
     ap.add_argument("--official", action="store_true", help="also validate the judge's official m cases")
     ap.add_argument("--json", type=Path, default=None)
     ap.add_argument("--no-torch-baseline", action="store_true")
+    ap.add_argument("--prepare-only", action="store_true", help="compile/bake only (warms the extension cache outside the GPU lock) and exit")
     args = ap.parse_args()
 
     torch.cuda.init()
@@ -110,6 +111,9 @@ def main():
     state = mod.prepare(weights)
     torch.cuda.synchronize()
     print(f"PREPARE {time.time() - t0:.1f}s", flush=True)
+    if args.prepare_only:
+        print("PREPARE_ONLY done (extension cache warm; bake numbers above may be perturbed by other GPU users)", flush=True)
+        return
 
     layers = args.layers.split(",")
     shapes = args.shapes.split(",")
