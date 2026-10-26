@@ -32,6 +32,40 @@ pw4 kernel family ("pw"), out[m, n] = x[m, K] @ W[n, K]^T for qkv_gate / o / poo
     x read at chunk c % (K/64), fp32 output; cluster (KS 8) and global (KS 16 / 32) epilogues, m in {1, 8, 16, 32, 128}.
   * prepare() prints STATS lines (bf16 weight statistics for the codec decision), then the PROBE ladder (pw10).
 
+pw19 design note -- "tw": decode in dedicated warps, both wgmma operands from shared memory (kind "t", kernel pwt).
+  Why: in pw9/pw10/pw13/pw15 one warpgroup paid stream wait, decode and MMA in turn per stage, and every fix exposed
+  the next cost (audits/pw10-ladder.md). Here the W stream, the decode and the tensor core run at their own rates:
+  * producer warp, lane 0: packed W chunks (r6's 12-bit codec, pw10's natural-k pack) by cp.async.bulk into a W ring,
+    x tiles by 2D TMA (128B swizzle) into an x ring; it polls both empty barriers (mbarrier.test_wait) and issues
+    whichever slot is free, W first, so a slow MMA never stalls the HBM stream (pw13's head-of-line blocking);
+  * decode warpgroup (4 warps): wait W full + A empty, 3 LDS.128 + pw_unit + escape fix per 16-row tile (pw10's exact
+    decode), 4 stmatrix.x4 per tile into the bf16 A ring in the wgmma K-major 128B-swizzled layout (row r, 16-B chunk c
+    at r*128 + ((c ^ (r & 7)) << 4), the x tile's layout), fence.proxy.async.shared::cta, arrive W empty + A full;
+  * MMA warpgroup(s): wait A full + x full, wgmma.fence, 4 x wgmma m64nNk16 SS (A and B descriptors: SBO 1024, 128B
+    swizzle, +32 B per k16 step), commit, wait_group(1), release the previous stage's A and x slots; pw10's cluster
+    (1, KS, 1) DSMEM epilogue (the no-cluster last-arriver lost: +8.2 vs +4.5).
+  Budget per 64-k stage, BN 64, m=128, one CTA per SM (H200: 3.8 TB/s / 132 SMs / 1.98 GHz = 14.5 B/clk/SM):
+  * stream: 6 KB packed W -> ~420 clk per stage (350 at 31 GB/s per SM); x is 16 KB from L2 per stage;
+  * decode: SASS of t64 = 82 warp-instr per tile per stage outside the escape-hit body (3 LDS.128, 16 PRMT, 4 STSM,
+    MEMBAR + FENCE.VIEW.ASYNC), 4 warps x 1 tile = 330 warp-instr over 4 schedulers: ~85 issue clk, hidden;
+  * tensor: 4 x m64n128k16 = 4 x 64 = 256 clk (61% of the stage); m=256: 512 clk > 420, so m=256 is tensor-bound at
+    ANY BN (tensor work per W byte grows with m, not with BN; BN 128 does not change the ratio);
+  * smem bandwidth (128 B/clk): wgmma reads A 8 KB + B 16 KB, decode writes 8 KB and reads 6 KB, TMA/bulk fills 22 KB:
+    ~60 KB per stage = ~470 clk, 10% over the stream. This, not decode or tensor time, is the binding per-SM limit
+    of the SS design at BN 64. BN 128 (two MMA warpgroups sharing one x tile) cuts the fills to 30 KB per 128 rows,
+    ~52 KB per 64 rows = ~400 clk: just under the stream, so BN 128 at 128 CTAs (KS 4, cluster 4) is the stronger
+    primary on paper; t64 is kept as the ladder instance for comparability with pw10.
+  * 2 CTAs/SM (t64x2: 108 KB, 90 regs, KS 4 -> 256 CTAs on pooler) doubles bytes in flight and overlaps one CTA's
+    ramp/epilogue with the other's stream; smem bandwidth per W byte is unchanged.
+  * x multicast over an n-pair (cluster 2 x KS) is left for pw20: it would make the epilogue cluster 4-8 wide.
+  Expected (stated before measuring): W+x at ~25 plus a hidden decode / MMA plus the 4.5 µs epilogue is ~27-29
+  in-prepare against cuBLAS 29.4 at 1 CTA/SM (t64); a 3-4 µs win, if any, comes from t128 / t64x2. m=256 cannot beat
+  the tensor floor (~1.2x the stream) but cuBLAS is at 31.
+  Instances: t64 (W 8 x 6 KB, x 4 x 16 KB, A 4 x 8 KB), t64x2 (6 / 3 / 3, MINB 2), t128 (BN 128, 6 x 12 KB / 4 / 3,
+  416 threads), v64 (m=256: 8 / 3 x 32 KB / 4). BN 128 at m=256 does not fit: 416 threads cap at 128 regs.
+  Checked: proj_rsi/tools/tw_emu.py (data path bit-exact incl. the swizzled bf16 tile, odd m, m=256, KS 1-8; protocol
+  sim with the "release before wgmma wait" and "missing proxy fence" mutations caught).
+
 pw9 design note -- wgmma fragment-layout check (PTX ISA 9.4 sec. 9.7.17.5.1.1.1 fig. 151/152; CUTLASS SM90 RS GMMA
 traits ALayout_64x16 = ((4,8,4),(2,2,2)):((128,1,16),(64,8,512)) vs SM80 m16n8k16 A ((4,8),(2,2,2)):((32,1),(16,8,128));
 proj_rsi/audits/wgmma-layout.md):

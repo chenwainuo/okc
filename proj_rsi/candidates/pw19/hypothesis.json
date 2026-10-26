@@ -1,0 +1,18 @@
+{
+  "id": "pw19",
+  "parent": "pw10",
+  "claim": "Every pw m>=128 design lost to cuBLAS because one warpgroup paid stream wait, decode and MMA in turn per stage. pw19 ('tw') splits the CTA into a producer warp, a decode warpgroup and one or two MMA warpgroups. The producer feeds separate W and x rings, polls their empty barriers and is never blocked by MMA progress. The decode warpgroup writes bf16 A tiles into a third ring in the wgmma K-major 128B-swizzled layout, then fences the async proxy. The MMA warpgroups run SS wgmma (both operands through descriptors, no register A). On the budget, per 64-k stage at BN 64: stream about 420 clk; decode 330 warp-instr over 4 schedulers, hidden; tensor 256 clk at m=128 and 512 at m=256, so m=256 is tensor-bound at any BN; shared-memory traffic about 60 KB, about 470 clk at 128 B/clk, the binding limit at BN 64. BN 128 halves the x fills, to about 400 clk per 64 rows. Expected pooler m=128 in-prepare: t64 about 27-29 against cuBLAS 29.4 (W+x 25 + epilogue 4.5, decode and MMA hidden). A 3-4 us win, if any, comes from t128 (BN 128, cluster 4, 128 CTAs) or t64x2 (2 CTAs/SM, 256 CTAs, twice the bytes in flight).",
+  "paths": "m=128: pw-tw64 (BN 64, KS <= 2: pooler 64x2, o/unpooler 128x1, qkv 36x2), pw-tw64x2 (2 CTAs/SM, 108 KB, KS <= 8 with <= 264 CTAs: pooler 64x4), pw-tw128 (BN 128, two MMA warpgroups, KS <= 4: pooler 32x4, o/unpooler 64x2, qkv 18x4). m=256: pw-tv64 (BN 64, KS <= 2). pw10's pw-w1d8 / pw-wk2 / pw-v1d5 / pw-vk2 are kept as in-run references, torch is the fallback, and the m <= 32 and router paths are as in pw10. PROBE ladder on t64, pooler m=128 (64x2): L1 W-only, L1 W+x, L2 +decode (bf16 tiles written), L3 +wgmma, L4 full.",
+  "target_shapes": [
+    "pooler m=128: best tw path >= 1.0 us under torch (29.4 in pw13's bake)",
+    "unpooler m=128 (torch 23.3), qkv m=128 (21.5), m=256 shapes (torch 28-31): below torch"
+  ],
+  "kill_if": "pooler m=128 best tw path not ≥ 1.0 µs under torch in the bake",
+  "ladder_reading": "L1 W-only should be close to pw13's deep-W-ring 19.2, and L1 W+x close to 25.3. If L2 - L1 > 1, the decode warpgroup or the stmatrix / proxy-fence path is the limit. If L3 - L2 > 2, the MMA side is the limit (smem bandwidth on the SS operands, or A-ring depth). L4 - L3 is the cluster epilogue (+4.5 in pw10).",
+  "local_checks": "nvcc 12.8 sm_90a, -Xptxas -v: pwt instances t64 / t64x2 / t128 at 90 regs, v64 at 155, probes 28-90, all 0 spills, no wgmma-serialization warning; pw10's references unchanged (138-202 regs). SASS (t64): HGMMA.64x128x16.F32.BF16 with gdesc operands only (SS, no register A); decode loop = 3 LDS.128, 16 PRMT, 4 STSM.16.M88.4, then MEMBAR.ALL.CTA + FENCE.VIEW.ASYNC.S before the A-full SYNCS.ARRIVE; WARPGROUP.DEPBAR.LE gsb0 1 before the A/x empty arrives. proj_rsi/tools/tw_emu.py: bit-exact for KS 1/2/4/8, odd m (121, 97, 101, 200), m=256 and BN 128; the r6 pack and an unswizzled stmatrix fail; protocol sim clean on 750 schedules per instance, with 'release before wgmma wait' and 'missing proxy fence' caught in 150/150. lint ok; cpu-check --official 9/9; every tw path and probe builds on the real weights (CPU mock of the runner).",
+  "risks": [
+    "Shared-memory bandwidth: about 60 KB per stage at BN 64 exceeds the stream period by about 10%. If the ladder's L3 step is large, t128 is the fix.",
+    "The stmatrix/descriptor layout is verified only by emulation against PTX's canonical K-major SW128 layout. It is the same layout pw10's TMA x tile used on the judge, but the A side is new.",
+    "The cluster epilogue costs 4.5 us; cluster 4 (t128, t64x2) may cost more to launch."
+  ]
+}
