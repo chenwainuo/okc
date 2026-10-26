@@ -666,3 +666,15 @@ rule; one-hot exact. Queue order at the 00:00 UTC reset: pw26 (CUTLASS sweep), p
 Reset queue (all approved, waiters chained): pw26 (CUTLASS 64x64 sweep, NDEBUG) → pw27 (P1 small-shape floor ladder
 + atomic-reduce gv paths) → pw29 (P3 router wgmma split-K) → pw28 (P2 qkv stream-K balancing, sentinel handoff).
 Each is measured against the pw25 run (04dc0a41413f45f3, r6 + router = the current incumbent's kernels).
+
+## 2026-10-26 15:20 UTC — H100 offered; ultracode workflows begin
+
+The user provides an H100 over ssh (root@162.243.109.198; key authorisation pending) and asks to keep it busy.
+Consequence: local measurement replaces the 20-checks-a-day bottleneck (H100: 3.35 TB/s HBM vs the H200 judge's
+4.8; same 132 SMs and 50 MB L2, so stream-bound times scale by ~0.7x and structural results transfer). Rules for its
+use: timing runs are serialised through /root/gpu_lock.sh (flock); the task's own harness muse_bf16_proj/checks.py
+calibrates each candidate against the judge; the judge remains the only board-relevant number.
+Workflow wf_d35c8afb-f3d (ultracode): Understand (DeepGEMM sm90 bf16 kernel + host/JIT/embeddability; our
+pipelines' ranked structural defects; 12-bit decode insertion points) → Design (three independent designs, three
+judges, synthesis into audits/m128-plan.md with an H100 experiment order). Reset queue unchanged (pw26, pw27, pw29,
+pw28 at 00:00 UTC).
