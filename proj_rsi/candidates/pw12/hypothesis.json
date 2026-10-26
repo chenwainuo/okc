@@ -1,0 +1,32 @@
+{
+  "id": "pw12",
+  "parent": "pw11",
+  "claim": "The judge's probes put the cp.async.bulk stream at 4.15-4.4 TB/s, against 3.55-3.6 TB/s for register-direct ld.global (r6 pooler m=1 at 13.95 judge-us = 3.6 TB/s). That is about 2 us per 50 MB shape at m=1/8/16, where r6 is otherwise at its ceiling. The pw lineage lost that gain to a producer/consumer skeleton with cross-CTA split-K. pw12 keeps r6's gv kernel exactly (row tile per CTA, K split across the CTA's own warps, in-CTA smem reduction, same decode, mma, escapes and epilogue) and changes only how a warp gets its W bytes. Each warp streams its own contiguous K range through a PRIVATE smem ring of NS slots (4 or 8). Each slot is filled by one cp.async.bulk per row tile and matrix, of CU contiguous 1536 B chunks (CU = 1 or 2; r6's pack is contiguous per warp across chunks), issued by lane 0 on a per-slot mbarrier with expect_tx equal to the slot bytes. The warp try_waits its own barrier and reads the 3 x 16 B per lane with ld.shared.v4 at the offsets r6's ld.global.v4 used. After the slot's last chunk is decoded into registers: __syncwarp, then lane 0 issues fence.proxy.async and re-issues the slot. No producer warp, no cross-warp handshake, no named barrier in the loop. It is selected by V bit 3 (slot count in bits 4-5, chunks per slot in bits 6-7), so every r6 / pw11 geometry can take it. All pw11 paths are unchanged.",
+  "target_shapes": [
+    "pooler m=1/8 <= 12.9 judge (r6 13.95 / 13.95); pooler m=16 <= 13.3 (r6 14.30)",
+    "unpooler m=16 <= 13.8 (r6 14.84); unpooler m=1/8 (n=1024) <= 4.4 (r6 4.88 / 4.50)",
+    "qkv_gate m=1/8 <= 9.0 (r6 9.97 / 9.90), combined with pw11's 144-row geometry in gb-q144b-n8",
+    "o m=1/8/16 <= 4.8 (r6 5.30 / 5.48 / 5.76)",
+    "router m<=32: gb-r-n4 (r6's hi+lo bf16 geometry) and gb-r12g8-n4 (12-bit) against r6 4.14 / 5.08 / 5.14 / 5.88",
+    "m=32 shapes: the bulk ring lowers registers by 30-40 (no W register ring), which may let the L1-x variants breathe; expected neutral"
+  ],
+  "kill_if": "Kill the bulk-ring load path if no pooler m=1 bulk-ring variant (gb-p-n4, gb-p16w-n4, gb-p16w-n8, gb-p16w-n4c2) is at least 1.0 us under the 'r6' line for pooler m=1 in the same bake. The PROBE gvbulk lines (alternated, 3 x 21 replays each) report the same comparison per slot count, even when the 1% rule hides it. If bulk wins at m=1 but loses at m=16/32, x (not W) is the limit there, and the next step is the pw11 wide-row geometries with the ring.",
+  "paths": {
+    "naming": "gb-<geometry>-n<slots>[c<chunks per slot>]. Geometry q/o/p/u/r = r6's judge-picked geometry for that (layer, bucket) from job 23cecdef1bb54c9e; p16w = r6's 16-warp pooler alternative (2,8,16); q144b/p128b/u128b/r12g8 = pw11's wide-row global-reduction geometries.",
+    "qkv_gate": "m=1,8: gb-q-n4, gb-q-n8, gb-q144b-n8; m=16: gb-q-n4, gb-q-n8 (S=4 cluster, as r6), gb-q144b-n8; m=32: gb-q-n4, gb-q-n8, gb-q144b-n8",
+    "o": "m=1,8: gb-o-n4 (KU=2, so the ring holds both chunks); m=16: gb-o-n4, gb-o64-s-n4; m=32: gb-o64-s-n4",
+    "pooler": "m=1,8: gb-p-n4 (32 warps, 210 KB, 1 CTA/SM), gb-p16w-n4 / -n8 / -n4c2; m=16: gb-p16w-n4 / -n8 / -n4c2, gb-p128b-n4; m=32: gb-p-n4 (66 KB: 2 CTAs/SM), gb-p-n8 (115 KB: 1 CTA/SM; this is the 1-vs-2 CTA/SM bake), gb-p128b-n4",
+    "unpooler": "m=1,8 (n=1024): gb-u-n4; m=16,32: gb-u-n4, gb-u-n8, gb-u128b-n4",
+    "router": "m=1,8,16: gb-r-n4 (FMT 2, cluster 8); m=32: gb-r-n4 (cluster 16); m=1..32: gb-r12g8-n4 (12-bit hi+lo, global reduction)",
+    "count": "54 new BAKE entries over 37 new kernel instances, plus 2 PROBE lines"
+  },
+  "validation": "As pw11: template _validate on every path for every baked m (one-hot x8 bit-exact; the router against hi+lo), random rows within tolerance, random rows at an odd m of the bucket. Cluster variants are guarded by cudaOccupancyMaxActiveClusters. FMT 2 router plans use r6's plain hi/lo fragments and an all -1 escape list.",
+  "compile_check": "nvcc 12.8 -arch=sm_90a -O3 -Xptxas -v on all 152 gv instances (78 r6 + 37 pw11 + 37 pw12): 63 s locally (pw11 44 s, r6 26 s). All 37 bulk-ring instances: 0 spill, 51-136 registers (30-40 fewer than the register-ring twins). Dynamic smem 28.6-211 KB, all under the 227 KB opt-in (computed from the same constexpr layout struct the kernel uses). The 78 r6 kernels are instruction-identical to r6's build. The 115 pw11 kernels are identical to the shipped pw11 (the 16 B-mode kernels were compared after pw11's fence change). Bulk-ring SASS: no W LDG.E.NA left. Per slot: SYNCS.ARRIVE.TRANS64 (expect_tx) + UBLKCP.S.G per row tile/matrix under ELECT. Per wait: SYNCS.PHASECHK.TRANS64.TRYWAIT. Per refill: WARPSYNC + FENCE.VIEW.ASYNC.S. Example: qkv m=1 n8 issues 16 UBLKCP (8 prologue + 8 refills for 16 chunks) and 48 LDS.128 for W.",
+  "offline_checks": "lint ok; cpu-check --official 9/9; the CPU mock of the second bake builds a plan for every pw11 and pw12 path, including the PROBE selection.",
+  "risks": [
+    "Hang risk: a warp whose mbarrier never completes would hang prepare. The bytes per slot (expect_tx = RT*NA*CU*NL*512) equal the sum of the slot's copies by construction (both come from the same constexpr). Slots are only filled for groups < KU/CU, and every wait has a matching fill. The parity sequence is r6's skinny-kernel pattern.",
+    "The 4.15-4.4 TB/s probe was a bulk stream with 64-160 KB rings per CTA. Here the per-SM ring is 48-192 KB, split into 8-32 independent per-warp rings of 1.5-3 KB slots. If many small copies stream worse than a few 16-40 KB stages, gb-p16w-n4c2 (3 KB slots) and the n8 variants show it.",
+    "Compile time grew from 44 to 63 s locally. The six pw11 L1-x m=32 variants that spill 8 B are still in. They can be dropped (about 5 s) if pw11's check shows their -s twins win.",
+    "Prepare: about 130 BAKE/PICK/PROBE lines (~5.5 KB; total log ~10 KB, under the 14 KB budget). The second bake skips paths after 240 s from import."
+  ]
+}
