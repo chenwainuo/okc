@@ -20,7 +20,7 @@ Merge (per k-block, 8 values, 9 ops = dec1): hl = (C & 0x87878787) + B * 0x01010
 B * 0x01010101; a0 = prmt(L0, hl, 0x5140), a1 = prmt(L0, hl, 0x7362), a2 = prmt(L1, hh, 0x5140), a3 = prmt(L1, hh, 0x7362)
 with L0, L1 the two plane8 words of the k-block.
 
-Escapes: per 64-row unit u, entries esc_off[u] .. esc_off[u + 1] of esc_rk (int32: r << 16 | k, r = row in unit) and
+Escapes: per 64-row unit u (sorted by k), entries esc_off[u] .. esc_off[u + 1] of esc_rk (int32: r << 16 | k, r = row in unit) and
 esc_d (float32: w - w_dec, exact in fp64 then rounded to fp32).
 
   python proj_rsi/tools/plane_pack.py [--device cuda]   # packs the reference weights, proves losslessness, prints stats
@@ -35,7 +35,10 @@ import torch
 
 UNIT = 64     # rows per unit (one warpgroup's wgmma M)
 KT = 64       # k per tile
-CHUNK = 6144  # bytes per (unit, k tile)
+PLANES = 6144  # plane bytes per (unit, k tile)
+HDR = 64       # escape header per (unit, k tile): u32 count | 15 x u32 (row << 22 | (k % 64) << 16 | (w ^ w_dec) 16 bits)
+HMAX = 15
+CHUNK = PLANES + HDR  # bytes per (unit, k tile)
 
 
 def _frag_index(dev):
@@ -99,7 +102,6 @@ def pack(w, base=None):
         C |= s4[..., 4 + (bb + 3) % 4] << (8 * bb + 3)
     C = torch.where(C >= 2 ** 31, C - 2 ** 32, C).int()  # [U, T, 128, 4]
     p4 = C.contiguous().view(torch.uint8).view(U, T, 2048)
-    buf = torch.cat((p8, p4), 2).contiguous()
     # escapes
     wdec = (sg << 15) | ((off + B) << 8) | lo
     ei = (~inw).nonzero()
@@ -107,13 +109,43 @@ def pack(w, base=None):
     wt = b[n_, k_].short().view(torch.bfloat16).double() if len(ei) else torch.zeros(0, dtype=torch.double, device=dev)
     wd = wdec[n_, k_].short().view(torch.bfloat16).double() if len(ei) else torch.zeros(0, dtype=torch.double, device=dev)
     u_ = n_ // UNIT
-    order = torch.argsort(u_ * (1 << 40) + (n_ % UNIT) * (1 << 20) + k_)
+    order = torch.argsort(u_ * (1 << 40) + k_ * (1 << 8) + (n_ % UNIT))  # per unit, sorted by k (the kernel copies x[:, k] from the streaming B tiles in k order)
     n_, k_, u_ = n_[order], k_[order], u_[order]
     esc_rk = (((n_ % UNIT) << 16) | k_).int()
     esc_d = (wt - wd)[order].float()
     esc_off = torch.zeros(U + 1, dtype=torch.int32, device=dev)
     esc_off[1:] = torch.cumsum(torch.bincount(u_, minlength=U), 0).int()
+    # per-chunk escape headers (the kernel reads them from smem with the planes: no global list, no latency)
+    hdr = torch.zeros(U, T, HDR, dtype=torch.uint8, device=dev)
+    if len(n_):
+        kt_ = k_ // KT
+        key = u_ * T + kt_
+        cnt = torch.bincount(key, minlength=U * T)
+        if int(cnt.max()) > HMAX:
+            return None  # a chunk has more escapes than its header holds
+        first = torch.cumsum(cnt, 0) - cnt
+        slot = torch.arange(len(key), device=dev) - first[key]  # key is sorted (u, k)
+        hv = hdr.view(U * T, HDR)
+        hv[:, 0:4] = cnt.int().contiguous().view(torch.uint8).view(U * T, 4)
+        xr = (b[n_, k_] ^ wdec[n_, k_]) & 0xffff
+        ent = (((n_ % UNIT) << 22) | ((k_ % KT) << 16) | xr).int().contiguous().view(torch.uint8).view(-1, 4)
+        for bb in range(4):
+            hv[key, 4 + 4 * slot + bb] = ent[:, bb]
+    buf = torch.cat((p8, p4, hdr), 2).contiguous()
     return {"buf": buf, "base": B, "esc_off": esc_off, "esc_rk": esc_rk, "esc_d": esc_d, "N": N, "K": K}
+
+
+def esc_max(pk, tm, splits):
+    """largest number of escapes one CTA (tm rows, one of `splits` k ranges, mx::Kernel's split rule) must correct"""
+    T = pk["K"] // KT
+    off, rk = pk["esc_off"].long(), pk["esc_rk"].long()
+    U = len(off) - 1
+    u = torch.repeat_interleave(torch.arange(U, device=rk.device), off[1:] - off[:-1])
+    kt = (rk & 0xffff) // KT
+    bounds = torch.tensor([s * T // splits for s in range(splits + 1)], device=rk.device)
+    sp = torch.searchsorted(bounds, kt, right=True) - 1
+    key = (u // (tm // UNIT)) * splits + sp
+    return int(torch.bincount(key).max()) if len(key) else 0
 
 
 def _prmt(a, b, sel):
@@ -132,9 +164,9 @@ def decode(pk):
     U, T, _ = buf.shape
     N, K = U * UNIT, T * KT
     dev = buf.device
-    words = buf.view(torch.int32).long() & 0xffffffff  # [U, T, 1536]
+    words = buf.view(torch.int32).long() & 0xffffffff  # [U, T, 1552]
     p8 = words[:, :, :1024].view(U, T, 2, 128, 4)      # [j][t][4 words]: words 0,1 = kb 2j (L0, L1), 2,3 = kb 2j+1
-    p4 = words[:, :, 1024:].view(U, T, 128, 4)         # [t][kb]
+    p4 = words[:, :, 1024:1536].view(U, T, 128, 4)     # [t][kb]
     Tb = B * 0x01010101
     vals = torch.zeros(U, T, 128, 4, 8, dtype=torch.long, device=dev)
     for kb in range(4):
@@ -167,10 +199,26 @@ def apply_escapes(wdec, pk):
     return w
 
 
+def apply_headers(wdec, pk):
+    """W from W_dec patched with the per-chunk header XORs (what the kernel does to its A fragments)"""
+    buf = pk["buf"]
+    U, T, _ = buf.shape
+    h = buf[:, :, PLANES:]
+    cnt = h[:, :, 0:4].contiguous().view(torch.int32)[..., 0]
+    ent = h[:, :, 4:64].contiguous().view(torch.int32).long() & 0xffffffff
+    w = wdec.view(torch.int16).int().clone() & 0xffff
+    slot = torch.arange(HMAX, device=buf.device)
+    m = slot[None, None, :] < cnt[..., None]
+    uu, tt, ss = m.nonzero(as_tuple=True)
+    ee = ent[uu, tt, ss]
+    rr, kk = uu * UNIT + ((ee >> 22) & 63), tt * KT + ((ee >> 16) & 63)
+    w[rr, kk] ^= (ee & 0xffff).int()
+    return torch.where(w >= 2 ** 15, w - 2 ** 16, w).short().view(torch.bfloat16).double()
+
+
 def verify(w, pk):
     wdec = decode(pk)
-    rec = apply_escapes(wdec, pk)
-    exact = torch.equal(rec, w.double())
+    exact = torch.equal(apply_escapes(wdec, pk), w.double()) and torch.equal(apply_headers(wdec, pk), w.double())
     return exact, wdec
 
 
