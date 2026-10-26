@@ -935,3 +935,12 @@ pw34 scored run 5a39372456514f20: 3361.2 = pw33 within drift (board keeps 3332.1
 the judge ("BAKE rq skipped-budget 160s": r6 119 s + rw 39 s exceeded the rq guard at budget−100 = 140 s; the box's
 r6 phase is only 35 s so it never showed). Guard moved to budget−45 in pw34 and rs128; pw34 resubmitted scored; the
 RS128 author is reordering prepare (rq bake before the rw build, compile thread from the top, ≤ 6 timed rq paths).
+
+## Scored pw34 (rerun): job `846e25d9df09433f` — **3293.9 µs**, 1.4666× (CI 1.445–1.489). New incumbent (3332.1 → 3293.9, rank 116).
+
+First packed-weight kernel to beat tuned cuBLASLt on the judge. Within-run bake on the H200 (in-prepare): pooler
+m=128 r6 25.31 → rq:s4s5z 22.62 (−2.7); qkv 19.49 → 16.70 (−2.8); unpooler 23.36 → 22.59 (−0.8, s4s5z). Judge
+times vs the pw33 run: qkv m=128 12.79 (−2.21), pooler 18.16 (−2.07), pooler m=256 24.91 (−0.76), unpooler m=128
+18.98 (+0.08), o +0.42 (noise). Prepare: r6 105 s, rw 34 s, rq ready at 140 s, bake inside budget after the
+guard fix. Lesson: the H200 kept ~2.7 µs of the box's ~2.9 at m=128 — a stream-bytes gain (50 vs 67 MB) transfers
+better than overlap gains, as the transfer rule predicts.
