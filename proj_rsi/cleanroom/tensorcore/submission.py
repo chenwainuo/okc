@@ -82,7 +82,7 @@ CUDA_SRC = r"""
 
 namespace tensorcore {
 
-constexpr int BN = 128, BK = 64, WBYTES = 12288, ECAP = 64;
+constexpr int BN = 128, BK = 64, WBYTES = 12288, ECAP = 64;   // escape capacity per CTA (the last 4 em slots hold offsets)
 template <int MP> constexpr int nthreads() { return MP <= DEDICATED_MAX_MP ? 288 : 256; }  // dedicated producer warp for small MP
 
 struct Params {
@@ -278,11 +278,11 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
   int stage = 0; uint32_t round = 0;
   int prev_stage = -1;
 
-  const int e_base = p.esc_off[unit0];
+  int* eoff = em + ECAP - 4;   // [e_base, e_mid, e_end] of the CTA's <= 2 n-blocks, loaded at prefetch time
   auto flush_block = [&](int j, int ulo, int uhi, int cnt) {
     // (1) escape fix-ups: the owning quad adds delta * x[tok][k] (prefetched into xe) into its accumulators
-    if (cnt <= ECAP) {
-      const int eb = p.esc_off[ulo] - e_base, ee = p.esc_off[uhi] - e_base;
+    if (cnt <= ECAP - 4) {
+      const int eb = (ulo == unit0 ? eoff[0] : eoff[1]) - eoff[0], ee = (uhi == unit1 ? eoff[2] : eoff[1]) - eoff[0];
       for (int e = eb; e < ee; ++e) {
         const int nl = (em[e] >> 6) & 127;
         if ((nl >> 6) == wg && ((nl & 63) >> 4) == warp && (nl & 7) == (lane >> 2)) {
@@ -345,7 +345,7 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
       if (wg == 0) asm volatile("bar.sync 2, 128;" ::: "memory"); else asm volatile("bar.sync 3, 128;" ::: "memory");
     }
     // (3) overflow path: too many escapes for the smem buffer -> scalar atomics
-    if (cnt > ECAP) {
+    if (cnt > ECAP - 4) {
       const int e0 = p.esc_off[ulo], e1 = p.esc_off[uhi];
       for (int e = e0 + (tid >> 5); e < e1; e += 8) {
         const int idx = p.esc_idx[e];                 // unit<<13 | n_local<<6 | k_local
@@ -364,7 +364,11 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
   // the bf16 x columns of the escapes (8 independent loads in flight per thread)
   auto prefetch_escapes = [&](int ulo, int uhi) -> int {
     const int e0 = p.esc_off[ulo], cnt = p.esc_off[uhi] - e0;
-    if (cnt <= ECAP) {
+    if (tid == 0) {
+      const int jmid = ((unit1 - 1) / p.KC) * p.KC;   // first unit of the CTA's last n-block
+      eoff[0] = e0; eoff[1] = p.esc_off[jmid > ulo ? jmid : ulo]; eoff[2] = e0 + cnt;
+    }
+    if (cnt <= ECAP - 4) {
       for (int e = tid; e < cnt; e += 256) { em[e] = p.esc_idx[e0 + e]; ed[e] = p.esc_delta[e0 + e]; }
       asm volatile("bar.sync 1, 256;" ::: "memory");
       for (int i0 = tid; i0 < cnt * MP; i0 += 256 * 8) {
@@ -621,7 +625,7 @@ def _build():
             src = src.replace(f"STAGES_{mp},", f"{st},")
         src = src.replace("DEDICATED_MAX_MP", str(DEDICATED_MAX_MP))
         _ext = load_inline(
-            name="tensorcore_gemm_v22",
+            name="tensorcore_gemm_v23",
             cpp_sources=CPP_SRC,
             cuda_sources=src,
             functions=["tensorcore_gemm"],
