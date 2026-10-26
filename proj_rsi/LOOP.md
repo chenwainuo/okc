@@ -525,3 +525,6 @@ Process note: the user is also driving the implementer directly; it ran this che
 Decision: refine → pw22, a standard split-K router for m=128/256 (4 output tiles x 32 K-splits = 128 CTAs, all x and
 hi/lo loads issued up front, mma from smem, fp32 reduction by red.global into a zeroed output (memset node in the
 graph) or last-arriver). Expected 4–5 µs vs 10.3/11.1 → ≈ 2–3% of score; kill at < 3 µs under torch.
+Duplicate check `801c044fd5ad48d6` (same pw21 file + finally-guard): 9/9, 3374.3 µs, 1.4316× — reproduces the
+implementer's run within 0.1%; all router picks r6; probe 110.5 again. Two same-file runs 20 minutes apart agree to
+0.1%, so the ~3% drift seen earlier is between judge sessions, not between adjacent runs.
