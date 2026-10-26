@@ -105,9 +105,42 @@ dependent L2 loads at the start plus the register apply) and the convert kernel 
   the DSMEM push, the slot sum and the cluster sync are pure overhead.  Kept in the code (`CLUSTER = 2`) but off.
 * router grid 64 instead of 128 CTAs: slower (the 8 MB stream wants all SMs more than the atomics want fewer partials).
 
-### 4.3 Harness (h100_bench.py --official, v23 policy: packed kernel for m <= 64 on the four bf16 layers, all m on the router; torch above)
+### 4.3 Harness: the packed kernel on every shape (h100_bench.py, v22/v23, `TC_MAX_M=256`; `yours` vs cuBLAS `torch`)
 
-(table from logs/tensorcore_bench6.log on the box, appended below when the queued run completes)
+| load | qkv_gate | o | pooler | unpooler | router (vs cuBLAS hi+lo) |
+|---|---|---|---|---|---|
+| decode1  (m=1)   | 23.8 / 23.2 | 18.4 / 13.5 | 31.6 / 31.7 | 14.4 / 13.5 (N=1024) | 14.6 / 22.1 |
+| verify1  (m=8)   | 24.2 / 22.7 | 18.1 / 13.8 | 32.8 / 31.9 | 14.2 / 13.3 (N=1024) | 15.0 / 21.6 |
+| decode16 (m=16)  | 25.1 / 22.8 | 18.4 / 13.5 | 32.5 / 32.5 | 33.2 / 29.3 | 15.9 / 21.5 |
+| decode32 (m=32)  | 24.2 / 22.7 | 19.0 / 13.2 | 34.0 / 32.6 | 34.9 / 29.3 | 16.3 / 22.7 |
+| verify16 (m=128) | 30.6 / 22.7 | 25.0 / 13.7 | 43.4 / 31.4 | 46.1 / 29.7 | 21.1 / 23.3 |
+| verify32 (m=256) | 42.3 / 27.4 | 35.5 / 15.0 | 61.0 / 34.8 | 61.2 / 30.6 | 27.8 / 29.9 |
+
+(m = 128/256 rows for the four bf16 layers from cmp5/ladder7, the rest from bench5.)  Correctness: every judge case
+(m = 1, 5, 7, 8, 9, 33, 130, 512, 1000 and the six loads, all five layers) passes with rel-L2 2e-5..1e-4 (bf16 layers,
+fp32 accumulation, better than cuBLAS's 1.5-2e-4), 2.5e-6 on the router (tolerance 1e-4), and every probe row exact
+(router probe rows 2.9e-6, from the hi+lo split).
+
+**Verdict on this box**: the mainloop is 4-15% faster than cuBLAS at every m (mode 3 above), but the split-K epilogue
+costs 3-5 us at m <= 32 and 8-16 us at m = 128/256, so the complete kernel loses to cuBLAS on the four bf16 layers
+(by 0.5-2.5 us at m <= 32, 8-30 us at m >= 128) and wins on the router at every m (by 1.0-7.5 us; the router's N = 256
+means 128 CTAs x 2 units: its cost is all fixed latency, which the packed kernel has less of than two cuBLAS calls).
+
+### 4.4 Shipped policy and its official table (bench6, `--official`, all 65 checks pass)
+
+`KERNEL_MAX_M = {bf16 layers: 0, router: 256}`: the four bf16 layers run cuBLAS on the bf16 weights (parity with
+SGLang = the judge's bar at m >= 128, below the bar's 12-bit reader at m <= 32), the router runs the packed hi+lo kernel.
+
+| load | qkv_gate | o | pooler | unpooler | router |
+|---|---|---|---|---|---|
+| decode1  | 22.6 / 21.9 | 14.2 / 14.2 | 32.9 / 32.4 | 13.4 / 13.7 | 15.2 / 19.7 |
+| decode16 | 22.4 / 22.2 | 13.9 / 13.4 | 32.1 / 31.6 | 30.2 / 29.6 | 16.3 / 20.9 |
+| decode32 | 23.4 / 24.1 | 14.2 / 13.7 | 32.0 / 31.8 | 30.0 / 29.2 | 16.5 / 21.2 |
+| verify1  | 22.5 / 22.4 | 14.4 / 14.1 | 31.8 / 31.7 | 14.5 / 14.0 | 15.0 / 20.0 |
+| verify16 | 23.8 / 22.7 | 14.0 / 13.8 | 31.7 / 31.3 | 31.1 / 29.8 | 20.9 / 21.7 |
+| verify32 | 26.9 / 27.3 | 15.1 / 14.9 | 39.8 / 39.7 | 33.4 / 31.0 | 27.8 / 28.1 |
+
+Prepare: 1-2 s of packing (plus ~30 s of nvcc for the 12 kernel instantiations on a cold cache; 39 s total measured).
 
 ## 5. What next
 

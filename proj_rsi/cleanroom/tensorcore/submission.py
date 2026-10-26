@@ -283,7 +283,7 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
   int* eoff = em + ECAP - 4;   // [e_base, e_mid, e_end] of the CTA's <= 2 n-blocks, loaded at prefetch time
   auto flush_block = [&](int j, int ulo, int uhi, int cnt) {
     // (1) escape fix-ups: the owning quad adds delta * x[tok][k] (prefetched into xe) into its accumulators
-    if (cnt <= ECAP - 4) {
+    if ((p.mode == 0 || p.mode == 5) && cnt <= ECAP - 4) {
       const int eb = (ulo == unit0 ? eoff[0] : eoff[1]) - eoff[0], ee = (uhi == unit1 ? eoff[2] : eoff[1]) - eoff[0];
       for (int e = eb; e < ee; ++e) {
         const int nl = (em[e] >> 6) & 127;
@@ -627,7 +627,7 @@ def _build():
             src = src.replace(f"STAGES_{mp},", f"{st},")
         src = src.replace("DEDICATED_MAX_MP", str(DEDICATED_MAX_MP))
         _ext = load_inline(
-            name="tensorcore_gemm_v23",
+            name="tensorcore_gemm_v24",
             cpp_sources=CPP_SRC,
             cuda_sources=src,
             functions=["tensorcore_gemm"],
