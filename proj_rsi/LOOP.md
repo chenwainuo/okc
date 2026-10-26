@@ -528,3 +528,16 @@ graph) or last-arriver). Expected 4–5 µs vs 10.3/11.1 → ≈ 2–3% of score
 Duplicate check `801c044fd5ad48d6` (same pw21 file + finally-guard): 9/9, 3374.3 µs, 1.4316× — reproduces the
 implementer's run within 0.1%; all router picks r6; probe 110.5 again. Two same-file runs 20 minutes apart agree to
 0.1%, so the ~3% drift seen earlier is between judge sessions, not between adjacent runs.
+
+## Iteration 20 — pw22: split-K router m=128/256. Check `cdb3e04eda1c4d13`: 9/9, 3379.6 µs. REFINE (first within-run win).
+
+Router m=128 in-prepare: r6 (cuBLASLt) 15.01 | **rs64k32 14.66 (picked)** | rs64k64 15.52 | rs128k64 16.83 | last-arriver
+26.0/32.6; judge verify16 router 9.82 vs 10.58 (−0.76). Profile: rsk kernel 7.5 µs + the memset node 0.8 µs. m=256:
+r6 15.94 | rs64k32 21.44 (two sequential token blocks) — lost. PROBE rszero 5.44 in-prepare (memset alone).
+Reading: the kernel is latency-bound with a single wait on 128 KB per CTA at 1 CTA/SM (16 MB total: floor ≈ 2.5–3 µs);
+7.5 µs leaves ~4 µs on the table at m=128 and the m=256 structure doubles the chain. Last-arriver loses because the
+partials are 16 MB. Gain so far ≈ 9 score-µs (noise-level), but it is the first path to beat r6 inside a run.
+Decision: refine → pw23: 2–3-stage pipelined loads per CTA (mma on stage s while s+1 lands), m=256 with both token
+blocks in flight (or a 256-token tile), 2 CTAs/SM where registers allow, and a cheaper zeroing (self-cleaning fp32
+workspace with the last CTA copying to out, vs the 0.8 µs memset node) baked against the memset. Target router
+m=128 ≤ 6 and m=256 ≤ 7 judge-µs → ≈ 70 score-µs.
