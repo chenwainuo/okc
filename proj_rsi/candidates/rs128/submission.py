@@ -2909,8 +2909,8 @@ def kernel_fn(data, state):
     rp = state.get("rq", {}).get((layer, x.shape[0]))  # rs128: m exactly 128 / 256, picked in the bake
     if rp is not None and rp["n"] == n:
         out = torch.empty((x.shape[0], n), dtype=torch.bfloat16, device=x.device)
-        _rqcall(state, rp, x.contiguous(), out)
-        return out
+        if _rqcall(state, rp, x.contiguous(), out) == 0:
+            return out
     p = state["sel"].get((layer, _bk(x.shape[0])))
     if p is not None and p[4] == n:
         out = torch.empty((x.shape[0], n), dtype=torch.float32 if layer == "router" else torch.bfloat16, device=x.device)
@@ -3209,13 +3209,14 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
       if (t == 0) {
         asm volatile("red.release.gpu.global.add.u32 [%0], 1;\n" :: "l"(p.cnt + nb) : "memory");
         // wait (off the critical path, while the mainloop runs) until every CTA of the block zeroed its slice; publish it
-        // to the epilogue through a shared flag. Bounded: a non-co-resident grid fails validation instead of hanging.
+        // to the epilogue through a shared flag. Bounded: a non-co-resident grid traps instead of hanging.
         uint32_t c = 0;
         for (int it = 0; it < (1 << 22); it++) {
           asm volatile("ld.acquire.gpu.global.u32 %0, [%1];\n" : "=r"(c) : "l"(p.cnt + nb) : "memory");
           if ((int)c >= KS) break;
           __nanosleep(128);
         }
+        if ((int)c < KS) asm volatile("trap;");  // not co-resident: fail loudly rather than reduce into unzeroed memory
         asm volatile("fence.proxy.async.global;\n" ::: "memory");
         asm volatile("st.release.cta.shared.u32 [%0], 1;\n" :: "r"(zflag) : "memory");
         // the last of the block's KS pollers resets both counters for the next launch (the kernel boundary orders it)
@@ -3438,9 +3439,10 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
     asm volatile("bar.sync %0, 128;\n" :: "r"(2 + g) : "memory");
     if (INS) ce[1] = clock64() - ce0;
     if (w == 0 && lane == 0) {
-      if (ZI) {  // the block's zeroing is complete (flag set by warp 10 long before; bounded spin)
+      if (ZI) {  // the block's zeroing is complete (flag set by warp 10 long before; bounded spin, trap on timeout)
         uint32_t f = 0;
         for (int it = 0; it < (1 << 24) && !f; it++) asm volatile("ld.acquire.cta.shared.u32 %0, [%1];\n" : "=r"(f) : "r"(zflag) : "memory");
+        if (!f) asm volatile("trap;");
         asm volatile("fence.proxy.async.global;\n" ::: "memory");
       }
       if (INS) ce[2] = clock64() - ce0;
@@ -3729,6 +3731,11 @@ def _rqbake(st, thr):
             continue
         w = st[layer + "_raw"]
         n, K = w.shape
+        xs, r6a = {}, {}
+        for m in (128, 256):  # r6 timed before the pack (critic F1: the first r6 timing after the pack read ~4 us high)
+            xs[m] = torch.randn((m, K), generator=gen, device=dev).to(torch.bfloat16)
+            o6 = torch.empty((m, n), dtype=torch.bfloat16, device=dev)
+            r6a[m] = _time_us(lambda xx, oo: _r6(xx, layer, n, st), xs[m], o6, flush, sink)
         pk = _rqpack(w)
         if pk is None or not torch.equal(_rqunpack(*pk, n, K), w.view(torch.int16).int() & 0xffff):
             print("BAKE rq %s pack not exact" % layer, flush=True)
@@ -3739,10 +3746,9 @@ def _rqbake(st, thr):
         cnt = torch.zeros(2 * lay.shape[0], dtype=torch.int32, device=dev)
         keep = False
         for m in (128, 256):
-            x = torch.randn((m, K), generator=gen, device=dev).to(torch.bfloat16)
+            x = xs[m]
             out = torch.empty((m, n), dtype=torch.bfloat16, device=dev)
-            best = ("r6", None, _time_us(lambda xx, oo: _r6(xx, layer, n, st), x, out, flush, sink))
-            print("BAKE %s m=%d r6 %.2f" % (layer, m, best[2]), flush=True)
+            cands = []
             for nm in RQBAKE[m]:
                 p = {"i": names.index(nm), "lay": lay, "esc": esc, "cnt": cnt, "KS": KS, "tab": tab, "n": n}
                 fn = lambda xx, oo, p=p: _rqcall(st, p, xx, oo)
@@ -3765,8 +3771,14 @@ def _rqbake(st, thr):
                     print("BAKE %s m=%d rq:%s ERROR %s" % (layer, m, nm, str(error).splitlines()[-1][:160]), flush=True)
                     continue
                 print("BAKE %s m=%d rq:%s %.2f (%s)" % (layer, m, nm, us, msg), flush=True)
+                cands.append((us, nm, p))
+            r6b = _time_us(lambda xx, oo: _r6(xx, layer, n, st), x, out, flush, sink)  # r6 re-timed after the variants
+            best = ("r6", None, min(r6a[m], r6b))
+            print("BAKE %s m=%d r6 %.2f (before pack %.2f, after variants %.2f)" % (layer, m, best[2], r6a[m], r6b), flush=True)
+            for us, nm, p in sorted(cands, key=lambda c: c[0]):
                 if us < best[2] * MARGIN:
                     best = ("rq:" + nm, p, us)
+                break
             if best[1] is not None:
                 st["rq"][(layer, m)] = best[1]
                 keep = True
