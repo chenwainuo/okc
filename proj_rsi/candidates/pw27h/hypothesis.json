@@ -1,0 +1,17 @@
+{
+  "id": "pw27",
+  "parent": "pw23",
+  "claim": "Track P1, the 6-8 MB shapes, where r6 sits 2.5-3 judge-us above SOL at 15x leverage (router m=1/8/16/32 4.35/4.88/5.28/6.29, unpooler n=1024 m<=8 4.4-4.6, o m<=8 5.2). (1) PROBE rd8 measures the floor of an 8 MB read with every load issued at launch, in the bake's own timing. It covers ld.global x NL per thread at 128/132/264/528/1056 CTAs, 8/16 KB cp.async.bulk chunks at 128/256 CTAs, and the reduction add-ons: 64 fp32 red.adds per CTA into a memset-zeroed output (memset node in the graph), a cluster-8 DSMEM reduce, and the memset alone. (2) Router, unpooler and o paths on r6's own gv with the K split reduced by red.add into a zeroed output instead of a cluster (gv V bit 26: no cluster launch, no cluster barriers), with every W chunk of a warp requested at launch (ring depth ST = KU). Router uses plain bf16 hi+lo, as r6 at m <= 32; unpooler/o use r6's 12-bit pack. If r6's 1-2 us over the stream on these shapes is cluster launch + barriers + DSMEM, the red.add epilogue (~16 K adds) plus a ~0.8 us memset node should recover part of it.",
+  "paths": "router m=1/8/16/32: rk-s8 (16 x 8 CTAs x 256 thr, KU 2), rk-s16 (256 CTAs x 128 thr), rk-s16w8 (256 CTAs x 256 thr, KU 1), rk-s32 (512 CTAs x 128 thr, m <= 16). unpooler m=1/8 (n=1024, K 4096): uk-s2 (128 CTAs x 256), uk-s4 (256 x 256), uk-s2w16 (128 x 512). o m=1/8: ok-s2 (1024 x 256), ok-s2w4 (1024 x 128). All are baked against r6's own dispatch in the second bake, with the template validation (router: one-hot x8 against hi+lo bit-exact, random 2e-5; bf16 layers: one-hot exact, random 4e-3; odd m 5 / 9 / 17). The bf16 partials of unpooler/o are added with red.global.add.noftz.bf16: one-hot rows stay exact, random rows take S-1 extra bf16 roundings.",
+  "target_shapes": [
+    "router m=8: >= 1.0 us under r6 (4.88 judge)",
+    "router m=1/16/32, unpooler and o m<=8: under r6"
+  ],
+  "kill_if": "router m=8 best path not ≥ 1.0 µs under r6 in the bake",
+  "local_checks": "gv block at the judge's sm_90 flags: 94 instances + the 8 probe kernels compile with 0 errors and 0 advisories; r6's 78 instances are SASS-identical; the 16 new red.add instances have 0 spills (54-156 regs); the probe kernels use 10-40 regs. redemit's index math is checked identical to emit's; the gv data path for S > 1 is r6's, judge-proven. lint ok; file 169,513 bytes; cpu-check --official 9/9; the CPU mock of the bake builds every plan (the cluster-occupancy decline is skipped for red.add paths, which launch no cluster).",
+  "risks": [
+    "The memset node (0.8-0.9 us measured as rszero) sits on the critical path; PROBE rd8 empty-memset prices it again.",
+    "bf16 red.add for unpooler/o rounds once per K split: S = 2-4 extra roundings, within the 1% tolerance, probe rows exact.",
+    "Router m=32 at 154-156 regs with 256 threads limits occupancy to 1 CTA/SM."
+  ]
+}
