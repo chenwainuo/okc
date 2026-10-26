@@ -1,0 +1,10 @@
+{
+  "id": "pw24h",
+  "claim": "The single-consumer 128-k-slot pipeline (BLOCK_K 128 slots, 7 x 32 KB, one merged full/empty barrier pair per slot, try_wait, no cluster, stmatrix.trans epilogue) reaches cuBLAS parity at m=128 and beats cuBLAS at pooler m=256 on the H200 as it does on the H100. H100 in-prepare: pooler m=128 k2x 28.58 vs 28.90; qkv m=128 rsk2x 20.67 vs 20.54; pooler m=256 n128x (the same pipeline on a 64x128 tile) 31.74 vs 34.11.",
+  "target_shapes": [
+    "pooler m=128: k2x within 0.5 us of torch (cuBLAS)",
+    "qkv_gate m=128: k2x / rsk2x within 0.5 us of torch",
+    "pooler m=256: n128x at least 1.0 us under torch"
+  ],
+  "kill_if": "the pooler m=256 path of this pipeline (n128x, 64x128 tile; k2x is the 64x64 m=128 path) is not at least 1.0 us under torch in the judge bake"
+}
