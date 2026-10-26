@@ -20,7 +20,14 @@ off the chain. There are 1, 2 or 4 independent substreams per lane, and refill w
 [substream][slot][lane] 4 B cp.async ring and are prefetched. 11.07 / 11.17 / 11.32 bits/weight (K 1 / 2 / 4) against 12
 (proj_rsi/tools/CODEC_E_LAYOUT.md v3). Each pack is proven bit-exact by the reference unpacker before any E kernel runs. Each
 path is validated like every second-bake path and timed against r6's pick (BAKE / PICK). PROBE ecod lines time the best E path
-against r6 on pooler m=1 and m=16, alternated."""
+against r6 on pooler m=1 and m=16, alternated.
+rs128 (audits/m128-plan.md): pw23 unchanged plus a swap-AB register-A split-K wgmma kernel for m exactly 128 / 256 on the
+pooler, qkv_gate, unpooler and o layers: 128 W rows x all tokens per CTA, two math warpgroups decode the lossless 12-bit
+pack (pw10 _pack_nat + _c12, re-blocked to 12 KB per 128-row k64 stage) into wgmma A registers, x is the smem B operand
+(2D TMA, SW128), one full barrier per ring slot shared by a W bulk lane and an x TMA lane, K split over KS CTAs on a
+one-wave grid, partials summed by cp.reduce.async.bulk.tensor bf16 add into out, which the kernel zeroes itself (each
+CTA its slice, release counter, polled off the critical path; no memset node, no cluster). Built in a background thread
+during r6's phase; BAKE / PICK lines time it against r6's own path per (layer, m); any failure leaves r6's choices."""
 from typing import TypedDict
 import time
 import torch
@@ -2171,6 +2178,7 @@ def prepare(weights):
             st[k + "_t"] = w.t().contiguous()  # [K, N] for the packed cuBLASLt layouts
         st[k + "_raw"] = w
     dev = weights["qkv_gate"].device
+    rqt = _rqstart() if RQ else None  # rs128: compile overlapped with r6's phase
     st["ws"] = torch.zeros((256 * 8192,), dtype=torch.float32, device=dev)
     st["cnt"] = torch.zeros((8 * 512,), dtype=torch.int32, device=dev)
     st["none"] = torch.empty(0, dtype=torch.bfloat16, device=dev)
@@ -2199,6 +2207,15 @@ def prepare(weights):
         finally:  # critic (pw21): never leave a capture open or a side stream busy for the judge's own captures
             if torch.cuda.is_current_stream_capturing():
                 print("PROBE l2scratch capture_left_open", flush=True)
+            torch.cuda.synchronize()
+    st["rq"] = {}
+    if RQ and rqt is not None:
+        try:
+            _rqbake(st, rqt)
+        except Exception as error:  # the rs128 bake can only add m = 128 / 256 paths; r6's choices stand on any failure
+            st["rq"] = {}
+            print("PREP rq bake failed: %s" % str(error).splitlines()[-1][:200], flush=True)
+        finally:
             torch.cuda.synchronize()
     st.pop("gvc12", None)
     st.pop("gepk", None)  # pw17: unpicked codec E packs (a picked plan keeps its own pack alive)
@@ -2889,6 +2906,11 @@ def kernel_fn(data, state):
     if "cpu" in state:
         w = state["raw"][layer]
         return x.float() @ w[:n].float().t() if layer == "router" else x @ w[:n].t()
+    rp = state.get("rq", {}).get((layer, x.shape[0]))  # rs128: m exactly 128 / 256, picked in the bake
+    if rp is not None and rp["n"] == n:
+        out = torch.empty((x.shape[0], n), dtype=torch.bfloat16, device=x.device)
+        _rqcall(state, rp, x.contiguous(), out)
+        return out
     p = state["sel"].get((layer, _bk(x.shape[0])))
     if p is not None and p[4] == n:
         out = torch.empty((x.shape[0], n), dtype=torch.float32 if layer == "router" else torch.bfloat16, device=x.device)
@@ -2970,6 +2992,10 @@ RQV = [  # (name, NT, ST, GS, PRB, WM, INS, FL): ST k64 slots (W 12 KB + x NT*12
     ("s4s6hz", 128, 6, 1, 0, 0, 0, 3),
     ("s4s5hz", 128, 5, 1, 0, 0, 0, 3),
     ("s4s5hzi", 128, 5, 1, 0, 0, 1, 3),
+    ("s4hz", 128, 8, 1, 0, 0, 0, 3),
+    ("n256s5hz", 256, 5, 1, 0, 0, 0, 3),
+    ("n256s4hz", 256, 4, 1, 0, 0, 0, 3),
+    ("n256s5z", 256, 5, 1, 0, 0, 0, 2),
     ("s3s7", 128, 7, 1, 4, 0, 0, 0),
     ("s3h", 128, 8, 1, 4, 0, 0, 1),
     ("s3m2h", 128, 8, 1, 4, 2, 0, 1),
@@ -3618,3 +3644,133 @@ def _rqesc(esc6, NB, KC, KS, dev):
 
 
 RQKS = {"pooler": 4, "unpooler": 2, "o": 2, "qkv_gate": 7}  # one-wave KS grid: N/128 x KS <= 132
+RQPROD = ["s4s5hz", "s4hz", "s4s5z", "n256s5hz", "n256s4hz", "n256s5z"]  # the extension the submission builds
+RQBAKE = {128: ["s4s5hz", "s4hz", "s4s5z"], 256: ["n256s5hz", "n256s4hz", "n256s5z"]}
+RQLAYERS = ("pooler", "qkv_gate", "unpooler", "o")
+RQ = True
+_rqthr = []
+
+
+def _rqstart():
+    """compile the RS128 extension in a background thread while r6's phase runs (CPU-only work; never fatal)"""
+    import threading
+
+    def build():
+        try:
+            _rqext([RQV[RQI[nm]] for nm in RQPROD])
+            _rqthr.append("ok")
+        except Exception as error:
+            _rqthr.append("failed: %s" % (str(error).splitlines()[-1][:200] if str(error) else type(error).__name__))
+    t = threading.Thread(target=build, daemon=True)
+    t.start()
+    return t
+
+
+def _rqcall(st, p, x, out):
+    return _rqmod[0].rqrun(p["i"], p["lay"], x, out, p["esc"], p["cnt"], p["KS"], p["tab"], 0, st["rq_e"], st["rq_sink"], 0)
+
+
+def _rqval(fn, w, m, n, gen, tol):
+    """one-hot x8 rows bit-exact against W over every K column (the split-K bf16 reduce-add must keep them exact),
+    random rows within the KS-dependent tolerance (judge: 1e-2, rows 5x)"""
+    K = w.shape[1]
+    out = torch.empty((m, n), dtype=torch.bfloat16, device=w.device)
+    exact = w[:n].t()
+    if K not in _EYE:
+        _EYE[K] = torch.eye(K, dtype=torch.bfloat16, device=w.device) * 8.0
+    eye = _EYE[K]
+    for start in range(0, K, m):
+        x = eye[start:start + m]
+        if x.shape[0] < m:
+            x = torch.cat((x, torch.zeros((m - x.shape[0], K), dtype=x.dtype, device=x.device)))
+        if fn(x.contiguous(), out) != 0:
+            return False, "launch error"
+        got = out[: min(m, K - start)]
+        want = exact[start:start + got.shape[0]] * 8.0
+        if not torch.isfinite(got).all() or not torch.equal(got.float(), want.float()):
+            return False, "one-hot mismatch at column %d" % start
+    for dist in (1.0, 30.0):
+        x = torch.randn((m, K), generator=gen, device=w.device)
+        if dist != 1.0:
+            x[:, torch.randperm(K, generator=gen, device=w.device)[: K // 100]] *= dist  # the task's 'outliers'
+        x = x.to(torch.bfloat16)
+        o = torch.empty((m, n), dtype=torch.bfloat16, device=w.device)
+        fn(x, o)
+        ref = x.double() @ w[:n].double().t()
+        err = float((o.double() - ref).norm() / ref.norm())
+        row = float(((o.double() - ref).norm(dim=-1) / ref.norm(dim=-1).clamp(min=1e-30)).max())
+        if not (err <= tol and row <= 5 * tol and torch.isfinite(o).all()):
+            return False, "random rel L2 %.2e row %.2e > %.0e" % (err, row, tol)
+    return True, "ok %.1e" % err
+
+
+def _rqbake(st, thr):
+    """RS128 bake: per (layer, m in 128 / 256) time r6's own path and each RS128 variant (graph replays from a cold L2,
+    the judge's method), pick a variant only if it validates and beats r6 by MARGIN; kernel_fn serves picks at m exactly"""
+    st["rq"] = {}
+    if time.time() - _T0 > PREPARE_BUDGET_S - 100:
+        print("BAKE rq skipped-budget %.0fs" % (time.time() - _T0), flush=True)
+        return
+    thr.join(timeout=max(1.0, PREPARE_BUDGET_S - 100 - (time.time() - _T0)))
+    if not _rqthr or _rqthr[0] != "ok" or _rqmod[0] is None:
+        print("BAKE rq build %s" % (_rqthr[0] if _rqthr else "not finished"), flush=True)
+        return
+    print("PREP rq extension ready at %.0fs" % (time.time() - _T0), flush=True)
+    names = [v[0] for v in [RQV[RQI[nm]] for nm in RQPROD]]
+    dev = st["pooler_raw"].device
+    st["rq_e"] = torch.empty(0, dtype=torch.int64, device=dev)
+    st["rq_sink"] = torch.zeros(4, dtype=torch.int32, device=dev)
+    flush = torch.empty(64 << 20, dtype=torch.float32, device=dev)
+    sink = torch.empty((), dtype=torch.float32, device=dev)
+    gen = torch.Generator(device=dev).manual_seed(12828)
+    for layer in RQLAYERS:
+        if time.time() - _T0 > PREPARE_BUDGET_S - 30:
+            print("BAKE rq %s skipped-budget" % layer, flush=True)
+            continue
+        w = st[layer + "_raw"]
+        n, K = w.shape
+        pk = _rqpack(w)
+        if pk is None or not torch.equal(_rqunpack(*pk, n, K), w.view(torch.int16).int() & 0xffff):
+            print("BAKE rq %s pack not exact" % layer, flush=True)
+            continue
+        lay, tab, esc6 = pk
+        KS = RQKS[layer]
+        esc, _ = _rqesc(esc6, lay.shape[0], lay.shape[1], KS, dev)
+        cnt = torch.zeros(2 * lay.shape[0], dtype=torch.int32, device=dev)
+        keep = False
+        for m in (128, 256):
+            x = torch.randn((m, K), generator=gen, device=dev).to(torch.bfloat16)
+            out = torch.empty((m, n), dtype=torch.bfloat16, device=dev)
+            best = ("r6", None, _time_us(lambda xx, oo: _r6(xx, layer, n, st), x, out, flush, sink))
+            print("BAKE %s m=%d r6 %.2f" % (layer, m, best[2]), flush=True)
+            for nm in RQBAKE[m]:
+                p = {"i": names.index(nm), "lay": lay, "esc": esc, "cnt": cnt, "KS": KS, "tab": tab, "n": n}
+                fn = lambda xx, oo, p=p: _rqcall(st, p, xx, oo)
+                try:
+                    r = fn(x, out)
+                    torch.cuda.synchronize()
+                    if r != 0:
+                        print("BAKE %s m=%d rq:%s ERROR launch %d" % (layer, m, nm, r), flush=True)
+                        continue
+                    ok, msg = _rqval(fn, w, m, n, gen, RQTOL[KS])
+                    torch.cuda.synchronize()
+                    if int(cnt.abs().sum()):  # the zero handshake must leave its counters at 0 after every launch
+                        cnt.zero_()
+                        ok, msg = False, "counters not reset"
+                    if not ok:
+                        print("BAKE %s m=%d rq:%s INVALID %s" % (layer, m, nm, msg), flush=True)
+                        continue
+                    us = _time_us(fn, x, out, flush, sink)
+                except Exception as error:
+                    print("BAKE %s m=%d rq:%s ERROR %s" % (layer, m, nm, str(error).splitlines()[-1][:160]), flush=True)
+                    continue
+                print("BAKE %s m=%d rq:%s %.2f (%s)" % (layer, m, nm, us, msg), flush=True)
+                if us < best[2] * MARGIN:
+                    best = ("rq:" + nm, p, us)
+            if best[1] is not None:
+                st["rq"][(layer, m)] = best[1]
+                keep = True
+            print("PICK %s m=%d %s %.2f" % (layer, m, best[0], best[2]), flush=True)
+        if not keep:
+            del lay, esc, cnt
+    torch.cuda.synchronize()
