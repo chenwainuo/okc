@@ -1199,26 +1199,27 @@ static int64_t gvl(const G& p, cudaStream_t st, int occ) {
 }
 
 // FP32 router, small m: CTA = R full rows (no cross-CTA reduction), 512 threads split K, fp32 weights read once
-template <int M, int R>
-__global__ void __launch_bounds__(512) rr(const float4* W, const __nv_bfloat16* x, float* out, int m, int N, int K) {
-  __shared__ float red[16][R * M];
+template <int M, int R, int NT = 512>
+__global__ void __launch_bounds__(NT) rr(const float4* W, const __nv_bfloat16* x, float* out, int m, int N, int K) {
+  __shared__ float red[NT / 32][R * M];
   const int t = threadIdx.x, lane = t & 31, w = t >> 5, K4 = K >> 2, row0 = blockIdx.x * R;
-  float4 wv[R][4];
+  constexpr int NI = 2048 / NT;  // float4 per thread per row (K = 8192)
+  float4 wv[R][NI];
 #pragma unroll
   for (int r = 0; r < R; r++)
 #pragma unroll
-    for (int i = 0; i < 4; i++) { const uint4 u = gnc(W + (size_t)(row0 + r) * K4 + t + i * 512); wv[r][i] = make_float4(__uint_as_float(u.x), __uint_as_float(u.y), __uint_as_float(u.z), __uint_as_float(u.w)); }
+    for (int i = 0; i < NI; i++) { const uint4 u = gnc(W + (size_t)(row0 + r) * K4 + t + i * NT); wv[r][i] = make_float4(__uint_as_float(u.x), __uint_as_float(u.y), __uint_as_float(u.z), __uint_as_float(u.w)); }
   float acc[R][M];
 #pragma unroll
   for (int r = 0; r < R; r++)
 #pragma unroll
     for (int q = 0; q < M; q++) acc[r][q] = 0.f;
 #pragma unroll
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < NI; i++)
 #pragma unroll
     for (int q = 0; q < M; q++) {
       if (q < m) {
-        const uint2 xv = __ldg((const uint2*)(x + (size_t)q * K) + t + i * 512);
+        const uint2 xv = __ldg((const uint2*)(x + (size_t)q * K) + t + i * NT);
         const float2 a = __bfloat1622float2(*(const __nv_bfloat162*)&xv.x), b = __bfloat1622float2(*(const __nv_bfloat162*)&xv.y);
 #pragma unroll
         for (int r = 0; r < R; r++) acc[r][q] = fmaf(wv[r][i].w, b.y, fmaf(wv[r][i].z, b.x, fmaf(wv[r][i].y, a.y, fmaf(wv[r][i].x, a.x, acc[r][q]))));
@@ -1237,7 +1238,7 @@ __global__ void __launch_bounds__(512) rr(const float4* W, const __nv_bfloat16* 
   if (t < R * M && t % M < m) {
     float v = 0.f;
 #pragma unroll
-    for (int i = 0; i < 16; i++) v += red[i][t];
+    for (int i = 0; i < NT / 32; i++) v += red[i][t];
     out[(size_t)(t % M) * N + row0 + t / M] = v;
   }
 }
@@ -1596,6 +1597,9 @@ int64_t rrrun(int64_t inst, torch::Tensor W, torch::Tensor x, torch::Tensor out)
     case 1: if (m > 1) return -1; rr<1, 2><<<N / 2, 512, 0, st>>>(w, xp, o, m, N, K); break;
     case 2: if (m > 8) return -1; rr<8, 2><<<N / 2, 512, 0, st>>>(w, xp, o, m, N, K); break;
     case 3: if (m > 8) return -1; rr<8, 4><<<N / 4, 512, 0, st>>>(w, xp, o, m, N, K); break;
+    case 4: if (m > 1) return -1; rr<1, 1, 256><<<N, 256, 0, st>>>(w, xp, o, m, N, K); break;
+    case 5: if (m > 1) return -1; rr<1, 2, 256><<<N / 2, 256, 0, st>>>(w, xp, o, m, N, K); break;
+    case 6: if (m > 1) return -1; rr<1, 1, 1024><<<N, 1024, 0, st>>>(w, xp, o, m, N, K); break;
     default: return -2;
   }
   const cudaError_t r = cudaGetLastError();
@@ -1776,22 +1780,21 @@ GXP += GEP
 _RD = 1 << 26
 _ZF, _PZ, _XZ = 1 << 27, 1 << 28, 1 << 29
 GRD = []
-for _nm, _g, _ms in (("rk-s8", (2, 1, 8, 2, 8, 1, 0, 2), (1, 8, 16, 32)),        # 16 x 8 = 128 CTAs x 256 thr
-                     ("rk-s16", (2, 1, 4, 2, 16, 1, 0, 2), (1, 8, 16, 32)),      # 256 CTAs x 128 thr
-                     ("rk-s16w8", (2, 1, 8, 1, 16, 1, 0, 1), (1, 8, 16, 32)),    # 256 CTAs x 256 thr, one chunk per warp
-                     ("rk-s32", (2, 1, 4, 1, 32, 1, 0, 1), (1, 8, 16))):         # 512 CTAs x 128 thr
-    GRD.append((_nm, "router", _ms, _g, _RD))
-    GRD.append((_nm + "z", "router", _ms, _g, _ZF))   # P1: in-kernel zero + flag, no memset node
-    GRD.append((_nm + "p", "router", _ms, _g, _PZ))   # P1: PDL zero kernel
-    GRD.append((_nm + "x", "router", _ms, _g, _XZ))   # P1: zeroer CTA plane + acquire flag
-for _nm, _ly, _g in (("uk-s2", "unpooler", (1, 1, 8, 4, 2, 1, 0, 4)),             # n=1024: 64 x 2 = 128 CTAs x 256 thr
-                     ("uk-s4", "unpooler", (1, 1, 8, 2, 4, 1, 0, 2)),             # 256 CTAs x 256 thr
-                     ("uk-s2w16", "unpooler", (1, 1, 16, 2, 2, 1, 0, 2)),         # 128 CTAs x 512 thr
-                     ("ok-s2", "o", (1, 1, 8, 1, 2, 1, 0, 1)),                    # 512 x 2 = 1024 CTAs x 256 thr
-                     ("ok-s2w4", "o", (1, 1, 4, 2, 2, 1, 0, 2))):                 # 1024 CTAs x 128 thr
-    GRD.append((_nm, _ly, (1, 8), _g, 1 | _RD))
-    GRD.append((_nm + "z", _ly, (1, 8), _g, 1 | _ZF))
-    GRD.append((_nm + "x", _ly, (1, 8), _g, 1 | _XZ))
+for _nm, _g, _ms, _vs in (("rk-s8", (2, 1, 8, 2, 8, 1, 0, 2), (1, 8, 16, 32), "zx"),         # 16 x 8 = 128 CTAs x 256 thr
+                          ("rk-s16", (2, 1, 4, 2, 16, 1, 0, 2), (8, 16, 32), "zx"),            # 256 CTAs x 128 thr
+                          ("rk-s16w8", (2, 1, 8, 1, 16, 1, 0, 1), (8, 16, 32), "zx"),         # 256 CTAs x 256 thr, one chunk per warp
+                          ("rk-s32", (2, 1, 4, 1, 32, 1, 0, 1), (8, 16), "zx"),                # 512 CTAs x 128 thr
+                          ("rk2-s16", (2, 2, 4, 2, 16, 1, 0, 2), (8, 16, 32), "zx"),           # 32-row CTAs: 8 x 16 = 128 CTAs x 256 thr
+                          ("rk2-s32", (2, 2, 4, 1, 32, 1, 0, 1), (8, 16, 32), "zx"),           # 256 CTAs x 256 thr
+                          ("rk2-s16w2", (2, 2, 2, 4, 16, 1, 0, 4), (8, 16, 32), "zx")):        # 128 CTAs x 128 thr, 4 chunks per warp
+    for _c in _vs:
+        GRD.append((_nm + _c, "router", _ms, _g, {"z": _ZF, "x": _XZ, "p": _PZ}[_c]))  # P1 self-zeroing variants
+for _nm, _ly, _g, _vs in (("uk-s4", "unpooler", (1, 1, 8, 2, 4, 1, 0, 2), "zx"),    # n=1024: 64 x 4 = 256 CTAs x 256 thr
+                          ("uk-s2w16", "unpooler", (1, 1, 16, 2, 2, 1, 0, 2), "zx"),  # 128 CTAs x 512 thr
+                          ("uk-s8", "unpooler", (1, 1, 8, 1, 8, 1, 0, 1), "zx"),      # 512 CTAs x 256 thr, one chunk per warp
+                          ("uk-s4w4", "unpooler", (1, 1, 4, 4, 4, 1, 0, 4), "zx")):   # 256 CTAs x 128 thr
+    for _c in _vs:
+        GRD.append((_nm + _c, _ly, (1, 8), _g, 1 | {"z": _ZF, "x": _XZ}[_c]))
 GXP += GRD
 
 
@@ -1953,7 +1956,7 @@ def _gvok(st, plan, exact, w, mr):
     return bool(torch.isfinite(out).all()) and float((out.double() - ref).norm() / ref.norm()) < (2e-5 if dt == torch.float32 else 4e-3)
 
 
-RRB = {1: (0, 1), 8: (2, 3)}  # P1: rr2/rr3 (no cross-CTA reduction) re-measured at m=8 on the H100; fp32 router kernels per bucket (m8 rr: 7.7-14.9 us on the H200, v12 4.7)
+RRB = {1: (0, 1, 4, 5, 6), 8: (2, 3)}  # P1: rr2/rr3 (no cross-CTA reduction) re-measured at m=8 on the H100; fp32 router kernels per bucket (m8 rr: 7.7-14.9 us on the H200, v12 4.7)
 
 
 def _name(i):
