@@ -1836,7 +1836,7 @@ def _gxbake(st):
                 for _ in range(3):
                     tb.append(_time_us(cand[0][2], x, out, flush, sink, 21))
                     tr.append(_time_us(r6, x, out, flush, sink, 21))
-                print("PROBE xpol %s m=%d %s %.2f r6 %.2f delta %+.2f" % (layer, m, cand[0][1], min(tb), min(tr), min(tb) - min(tr)), flush=True)
+                print("PROBE xpol %s m=%d %s %.2f r6=%.2f delta=%+.2f" % (layer, m, cand[0][1], min(tb), min(tr), min(tb) - min(tr)), flush=True)
         if layer == "pooler" and m == 1:  # PROBE: best bulk-ring path per slot count vs r6, alternated (the stream gain)
             for ns in (4, 8):
                 cand = sorted((v_[0], k[2], v_[1]) for k, v_ in res_all.items() if k[:2] == ("pooler", 1) and k[2].startswith("gb-") and ("-n%d" % ns) in k[2] and not k[2].endswith("-f"))
@@ -1846,7 +1846,7 @@ def _gxbake(st):
                 for _ in range(3):
                     tb.append(_time_us(cand[0][2], x, out, flush, sink, 21))
                     tr.append(_time_us(r6, x, out, flush, sink, 21))
-                print("PROBE gvbulk pooler m=1 n%d %s bulk %.2f r6 %.2f delta %+.2f" % (ns, cand[0][1], min(tb), min(tr), min(tb) - min(tr)), flush=True)
+                print("PROBE gvbulk pooler m=1 n%d %s bulk %.2f r6=%.2f delta=%+.2f" % (ns, cand[0][1], min(tb), min(tr), min(tb) - min(tr)), flush=True)
 
 
 def _gxladder(st):
