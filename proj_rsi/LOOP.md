@@ -572,3 +572,13 @@ halfway to SOL → 3159. Largest gaps (judge µs over SOL): router m=256 8.5, qk
 m=128/256 roughly halfway to SOL (pooler m=128 ≈ 17 judge-µs vs cuBLAS 20.3), i.e. exactly the kernel six of our
 designs failed to build (best ≈ 27 judge-µs). Public write-ups found (ozgureyilmaz, lee101, PostTrainLLM) are all at
 ≤ 1.15× and say nothing about the top tier. Kernel track closes 2026-11-04 23:59 PT.
+
+## Program to 2026-11-04 (audits/m128-study.md) — day 1 opened: pw24
+
+Study conclusion: the binding limit at m ≥ 128 is L2→SM delivery (cuBLAS 10.7 TB/s on 262 MB; ours 7.0–8.7), split-K
+cost 4.5–8.2 µs in every variant and must go. Recommended design (b): cuBLAS's geometry (64 rows x 64 tokens, full K,
+no split-K, 128 CTAs) with cluster-2 W multicast over the token-tile pair, two producer lanes, ~168 KB in flight; the
+seven teams near 1.55x need no codec at all if a bf16 GEMM streams at 4.0–4.2 TB/s (16–17 µs vs cuBLAS 20.3).
+Plan: days 1–2 bf16 version with a ladder (kill if W+x > 20 in-prepare); days 3–4 add the 12-bit decode; days 5–6
+x multicast if delivery still binds; days 7–9 harden + final scored run. (a) CUTLASS mixed-input (8-bit + 4-bit
+planes) is the fallback if (b) stays below 9 TB/s. pw24 = day 1.
