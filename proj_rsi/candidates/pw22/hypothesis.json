@@ -1,0 +1,16 @@
+{
+  "id": "pw22",
+  "parent": "pw21",
+  "claim": "pw21's router paths ran latency-bound (4 warps/SM, one x round trip per K chunk) and tied cuBLAS. pw22 runs the router at m=128/256 as a plain split-K GEMM, out = x @ (hi + lo)^T in fp32. A CTA covers 64 (or 128) output columns x one K split (256 or 128) x one 128-token block. Every x and hi/lo byte it needs (64-128 KB) is requested up front with cp.async into XOR-swizzled smem, followed by one wait and ldmatrix + mma.sync, with hi and lo accumulating into the same fp32 registers. The K splits are reduced either by red.global.add.v2.f32 into an output zeroed by a memset node in the same graph, or by a last-arriver over fp32 workspace slots. That gives 128-256 CTAs per 128-token block, all loads in flight at launch, and about 2 us of mma.sync work. Expected about 4-5 judge-us against r6's 10.1 / 11.3, about +2-3% on the score.",
+  "paths": "router m=128 and m=256 only (other m keep r6's dispatch; m=256 = two 128-token blocks in grid.z). rs64k32 (BN 64, KR 256, 4 x 32 CTAs, 128 KB smem, red), rs64k64 (BN 64, KR 128, 4 x 64, 64 KB, red), rs128k64 (BN 128, KR 128, 2 x 64, 96 KB, red), rs64k32l / rs64k64l (last-arriver, no zeroing). Baked against r6 (cuBLASLt) after the second bake. Validation per the template: one-hot x8 bit-exact against hi+lo, random rows at 2e-5 (judge 1e-4), random rows at odd m 121 / 250. PROBE rszero times the zeroing memset alone. pw21's rt-* paths and the l2scratch probe are removed.",
+  "target_shapes": [
+    "router m=128: <= 6 judge-us (r6 10.1)",
+    "router m=256: <= 7 (r6 11.3)"
+  ],
+  "kill_if": "router m=128 best path not ≥ 3 µs under torch in the bake",
+  "local_checks": "nvcc 12.8 sm_90a -Xptxas -v: the 5 rsk instances have 0 spills (84-133 regs); r6's 78 gv instances are SASS-identical. proj_rsi/tools/rs_emu.py emulates the cp.async swizzle, ldmatrix.x4 and mma.sync fragments per PTX, plus both reductions (incl. the last-arriver slot decode). It is bit-exact for all 5 variants at m 128 / 121 / 200 (two token blocks, partial second), and unswizzled smem writes fail as they must. lint ok; cpu-check --official 9/9; a CPU mock of _rsbake builds and dispatches every plan.",
+  "risks": [
+    "The zeroing memset node sits on the critical path of the red variants (PROBE rszero measures it); the last-arriver variants avoid it but serialize a 1-2 MB L2 read on one CTA per n tile.",
+    "A single wait after all loads leaves the mma idle during the load latency (about 1-2 us); a 2-stage split is the next step if the bake lands near 6 us."
+  ]
+}
