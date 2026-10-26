@@ -40,10 +40,14 @@ class Inputs(TypedDict):
 BN, BK = 128, 64
 WBYTES = BN * BK * 12 // 8  # 12288 bytes per unit
 GRID = 132
-CLUSTER = int(os.environ.get("TC_CLUSTER", "2"))
+CLUSTER = int(os.environ.get("TC_CLUSTER", "1"))
 CLUSTER_MAX_MP = 128  # no smem room for a 128 KB slot at MP = 256; CLUSTER = CTAs per cluster for the DSMEM pre-reduction (1 = off)
 PDL = int(os.environ.get("TC_PDL", "1"))  # programmatic dependent launch of the convert kernel
-MODE = 0  # ladder: 0 full, 3 no flush, 4 red.add flush only, 5 escapes only (no red.add), 6 no x tile (no flush), 7 no wgmma (no flush)
+# largest m served by the packed-W kernel per layer; above it cuBLAS (torch) is faster on the H100 (its split-K tail of
+# fp32 atomics costs 2-5 us at m = 128/256, see DESIGN.md)
+KERNEL_MAX_M = {"qkv_gate": 64, "o": 64, "pooler": 64, "unpooler": 64, "router": 256}
+KERNEL_MAX_M = {k: int(os.environ.get("TC_MAX_M", v)) for k, v in KERNEL_MAX_M.items()}
+MODE = 0  # ladder: 0 full, 3 no flush, 4 red.add flush only, 5 escapes only (no red.add), 6 no x tile (no flush), 7 no wgmma (no flush), 8 no flush + convert kernel
 DEDICATED_MAX_MP = 32  # MP <= this: dedicated producer warp (288 threads); above: thread 0 issues loads (256 threads)
 MPS = [8, 16, 32, 64, 128, 256]
 STAGES = {8: 11, 16: 10, 32: 9, 64: 8, 128: 4, 256: 4}      # cluster of 2 reserves a 256*MP*2-byte slot (MP<=128)
@@ -274,10 +278,12 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
   int stage = 0; uint32_t round = 0;
   int prev_stage = -1;
 
+  const int e_base = p.esc_off[unit0];
   auto flush_block = [&](int j, int ulo, int uhi, int cnt) {
     // (1) escape fix-ups: the owning quad adds delta * x[tok][k] (prefetched into xe) into its accumulators
     if (cnt <= ECAP) {
-      for (int e = 0; e < cnt; ++e) {
+      const int eb = p.esc_off[ulo] - e_base, ee = p.esc_off[uhi] - e_base;
+      for (int e = eb; e < ee; ++e) {
         const int nl = (em[e] >> 6) & 127;
         if ((nl >> 6) == wg && ((nl & 63) >> 4) == warp && (nl & 7) == (lane >> 2)) {
           const float d = ed[e];
@@ -354,7 +360,8 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
       }
     }
   };
-  // escape prefetch at the start of an n-block: metadata, then the x columns (overlaps the pipeline fill)
+  // escape prefetch for the CTA's whole unit range, once at kernel start (overlaps the pipeline fill): metadata, then
+  // the bf16 x columns of the escapes (8 independent loads in flight per thread)
   auto prefetch_escapes = [&](int ulo, int uhi) -> int {
     const int e0 = p.esc_off[ulo], cnt = p.esc_off[uhi] - e0;
     if (cnt <= ECAP) {
@@ -379,6 +386,7 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
     }
     return cnt;
   };
+  const int cnt_all = (p.mode == 0 || p.mode == 5) ? prefetch_escapes(unit0, unit1) : 0;
   // one group of GS k16-steps: decode into ab, issue, then wait so that <=1 group stays in flight (double-buffered A)
   // or 0 (single-buffered: the other consumer warpgroup keeps the tensor pipe busy meanwhile).
   auto group_body = [&](const int g, const uint8_t* wp, const uint32_t xaddr, const uint32_t scale2, uint32_t (*ab)[4]) {
@@ -441,7 +449,6 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
     const int ulo = max(unit0, j * p.KC), uhi = min(unit1, (j + 1) * p.KC);
     #pragma unroll
     for (int i = 0; i < NACC; ++i) acc[i] = 0.f;
-    const int cnt = (p.mode == 0 || p.mode == 5) ? prefetch_escapes(ulo, uhi) : 0;
     if constexpr (NG == 1) {
       for (int u = ulo; u < uhi; u += 2) {
         unit_body(u, 0);
@@ -454,7 +461,7 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
     if (prev_stage >= 0 && t == 0) mbar_arrive(&empty[prev_stage]);
     prev_stage = -1;
     if (p.mode == 0 || p.mode == 5) asm volatile("bar.sync 1, 256;" ::: "memory");   // xe visible to all
-    if (p.mode == 0 || (p.mode >= 4 && p.mode <= 5)) flush_block(j, ulo, uhi, cnt);
+    if (p.mode == 0 || (p.mode >= 4 && p.mode <= 5)) flush_block(j, ulo, uhi, cnt_all);
   }
 #endif  // __CUDA_ARCH_FEAT_SM90_ALL
 }
@@ -513,7 +520,7 @@ static void launch_mp(const CUtensorMap& map, const Params& p, size_t smem, cuda
   } else {
     gemm_kernel<MP, STAGES, DUAL><<<p.G, nthreads<MP>(), smem, stream>>>(map, p);
   }
-  if (p.mode == 0) {
+  if (p.mode == 0 || p.mode == 8) {
     const int total4 = p.m * p.N / 4;
     if (p.pdl) {
       cudaLaunchConfig_t cfg = {};
@@ -614,7 +621,7 @@ def _build():
             src = src.replace(f"STAGES_{mp},", f"{st},")
         src = src.replace("DEDICATED_MAX_MP", str(DEDICATED_MAX_MP))
         _ext = load_inline(
-            name="tensorcore_gemm_v21",
+            name="tensorcore_gemm_v22",
             cpp_sources=CPP_SRC,
             cuda_sources=src,
             functions=["tensorcore_gemm"],
@@ -763,7 +770,7 @@ def kernel_fn(data: Inputs, state: dict) -> torch.Tensor:
     layer, n, m = cfg["layer"], cfg["n"], cfg["m"]
     dual = layer == "router"
     mp = _mp_for(m)
-    if mp == 0:
+    if mp == 0 or m > KERNEL_MAX_M[layer]:
         if dual:
             acc = torch.mm(x, state["router_hi_t"], out_dtype=torch.float32)
             acc += torch.mm(x, state["router_lo_t"], out_dtype=torch.float32)
