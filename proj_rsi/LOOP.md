@@ -428,3 +428,18 @@ once, so it is worth ≈ 0.06 ln per load per 8% of bytes. Weights have 10.46 bi
 r6's 4-bit field). Main line now: pw17 = fixed 11-bit + escape lists inside r6's gv (analyst); in parallel a
 variable-length exponent codec study targeting ≈ 10.6–11.0 bits at ≤ 6 lane-instr/weight (implementer). The decode
 budget: 11 weights/clk/SM needed at m=1; the pw3/pw14 ladders show decode is hidden at m ≤ 8 today.
+
+## Iteration 15 — pw17: codec E (pair-Huffman exponent, 11.07 bits) in r6's gv. Check `9f6de54218a447d5`: 9/9, 3389.6 µs. REFINE.
+
+Correctness: the codec and its kernel are bit-exact on the judge (first run on hardware). Speed: every E path lost by
+8–12 µs in-prepare — pooler m=1 r6 18.30 | ge-p512r (replicated LUT) 26.24 | ge-p512 29.44 | ge-p512f 29.18 |
+ge-p512d8 36.32; qkv m=1 r6 14.37 | ge-qr 26.34; unpooler m=1 r6 8.77 | ge-u16 18.75; m=16 pooler r6 18.37 | ge-p512r
+28.99. The critic's steady-state estimate (decode 35% of the per-unit budget, hidden) was wrong by ~3x: the kernel
+runs at 1.45–2.1x the stream time, i.e. it is bound by the serial per-lane decode chain (16 dependent LDS lookups per
+unit, each gating the next bit position), not by issue slots or bandwidth. Byte saving realised: 7.8% (11.07 bits with
+padding), worth ~1 µs per 50 MB shape if hidden.
+Decision: refine → pw18: (a) canonical Huffman so the code length comes from the leading bits by ALU (clz/lop, ~4 ops,
+no memory access on the chain) while the exponent LUT lookup moves off the chain; (b) two independent sub-streams per
+lane (ILP 2) as a variant; (c) same geometry set. Honest yield if hidden: ~0.5 µs net per m ≤ 16 big shape → ~0.12–0.15
+ln → ~3330–3350; the codec lever as built is an ~3% lever, not the 8–12% the bits suggest, because E cannot serve
+m=32 or o and the 512-thread geometry costs 0.2 µs.
