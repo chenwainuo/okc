@@ -443,3 +443,27 @@ no memory access on the chain) while the exponent LUT lookup moves off the chain
 lane (ILP 2) as a variant; (c) same geometry set. Honest yield if hidden: ~0.5 µs net per m ≤ 16 big shape → ~0.12–0.15
 ln → ~3330–3350; the codec lever as built is an ~3% lever, not the 8–12% the bits suggest, because E cannot serve
 m=32 or o and the 512-thread geometry costs 0.2 µs.
+
+## Iteration 16 — pw18: codec E v3 (ALU lengths, conflict-free ring, 1/2/4 sub-streams). Check `b15f30a832ab4169`: 9/9, 3390.6 µs. REJECTED; codec lever CLOSED.
+
+In-prepare: pooler m=1 r6 18.02 | ge-p512 27.81 | ge-p512r 29.09 | -k2 29.92 | -k4 29.47 (pw17: 26.24); qkv m=1 r6
+14.21 | ge-q 25.18 | -k4 25.92; unpooler m=1 r6 8.48 | ge-u16 19.46; m=16 pooler r6 18.43 | ge-p512r 29.18.
+Removing the LDS from the chain, making the ring conflict-free and adding ILP changed nothing (±1 µs): two
+latency models in a row (chained LDS; bank conflicts) failed to predict. The constant is the instruction count:
+256–286 warp-instructions per 1024-weight unit vs r6's 49. Pooler m=1 = 32.8k units → 8.8 M warp-instr → 67k per SM
+→ ≥ 9.3 µs at a perfect 4 IPC, realistically 15–18 µs: the kernel is issue-bound at ~2x the 13 µs stream, exactly as
+measured. A variable-length decode needs ≥ 5–6 lane-instr/weight (peek, length, shift, value, plane merge, select);
+hiding under the stream alongside r6's own 1.5/weight needs ≤ ~2. No scheme considered (pair/quad symbols,
+bit-planes with compaction) gets there. The codec's realised payoff was 7.8% of bytes for 10 µs of issue.
+Closed. Together with Iterations 10–14 this means r6's 12-bit fixed-width codec is at the decode sweet spot for this
+kernel structure on this judge.
+
+## Where this leaves the goal (2026-10-26, after 18 checks)
+
+Board: r6 at 3428 (drift-measured 3365–3391 today). Every lever measured: m ≤ 8 at the stream; m=16/32 excess is x
+loads + decode with no cheap fix found; m ≥ 128 five designs behind cuBLAS; codec at the decode budget; router
+latency-bound (~50 score-µs, unbuilt). The 3000.75 on the board therefore comes from something this loop has not
+found: most likely an m=128/256 kernel that beats cuBLAS (the transform-warpgroup design in audits/pw10-ladder.md is
+the one untested structure) combined with a cheaper-than-expected decode, or a judge-side effect we have not
+identified. Recommendation: stop spending checks on refinements; any further attempt should be a from-scratch
+m ≥ 128 kernel program with its own multi-day budget, or a study of the leader's likely approach before building.
