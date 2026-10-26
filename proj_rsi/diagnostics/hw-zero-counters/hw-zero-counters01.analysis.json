@@ -1,0 +1,68 @@
+{
+  "purpose": "AGGREGATE_TRAFFIC_OBSERVATION_ONLY_NO_SPEED_CLAIM",
+  "cases": {
+    "compression_generic": {
+      "ID": "0",
+      "kernel": "nvjet_tst_128x64_64x8_1x1_v_bz_coopB_NNN",
+      "values": {
+        "dram__bytes_read.sum": 17842944.0,
+        "dram__bytes_write.sum": 2449408.0,
+        "dram__sectors_read.sum": 557592.0,
+        "dram__sectors_write.sum": 76544.0,
+        "lrc__ilc_input_sectors.sum": 65590.0,
+        "lrc__ilc_input_sectors_compressible.sum": 0.0,
+        "lrc__ilc_output_sectors.sum": 65590.0,
+        "lrc__average_ilc_input_sector_compression_rate.ratio": 1.0,
+        "lrc__average_ilc_input_sector_success_rate.pct": 0.0,
+        "lrc__average_ilc_output_sector_compression_achieved_rate.ratio": 0.0,
+        "lts__t_sectors.sum": 2513523.0,
+        "lts__d_sectors_fill_device.sum": 557588.0,
+        "lts__t_sector_hit_rate.pct": 31.88,
+        "launch__grid_dim_x": 1.0,
+        "launch__grid_dim_y": 128.0,
+        "launch__grid_dim_z": 1.0,
+        "launch__block_dim_x": 384.0,
+        "launch__block_dim_y": 1.0,
+        "launch__block_dim_z": 1.0,
+        "launch__registers_per_thread": 168.0,
+        "launch__shared_mem_per_block": 214292.0
+      }
+    },
+    "compression_none": {
+      "ID": "1",
+      "kernel": "nvjet_tst_128x64_64x8_1x1_v_bz_coopB_NNN",
+      "values": {
+        "dram__bytes_read.sum": 68174336.0,
+        "dram__bytes_write.sum": 2333696.0,
+        "dram__sectors_read.sum": 2130448.0,
+        "dram__sectors_write.sum": 72928.0,
+        "lrc__ilc_input_sectors.sum": 65549.0,
+        "lrc__ilc_input_sectors_compressible.sum": 0.0,
+        "lrc__ilc_output_sectors.sum": 65549.0,
+        "lrc__average_ilc_input_sector_compression_rate.ratio": 1.0,
+        "lrc__average_ilc_input_sector_success_rate.pct": 0.0,
+        "lrc__average_ilc_output_sector_compression_achieved_rate.ratio": 0.0,
+        "lts__t_sectors.sum": 4268938.0,
+        "lts__d_sectors_fill_device.sum": 2130450.0,
+        "lts__t_sector_hit_rate.pct": 25.31,
+        "launch__grid_dim_x": 1.0,
+        "launch__grid_dim_y": 128.0,
+        "launch__grid_dim_z": 1.0,
+        "launch__block_dim_x": 384.0,
+        "launch__block_dim_y": 1.0,
+        "launch__block_dim_z": 1.0,
+        "launch__registers_per_thread": 168.0,
+        "launch__shared_mem_per_block": 214292.0
+      }
+    }
+  },
+  "observed_DRAM_read_bytes_saved": 50331392.0,
+  "observed_DRAM_read_reduction_pct": 73.8274766621856,
+  "L2_requested_sectors_delta": -1755415.0,
+  "L2_hit_rate_pct_point_delta": 6.57,
+  "ILC_counter_limit": "ILC input/output are not documented here as a dedicated weight decompression path. Zero during read-only Lt is not proof that population never compressed.",
+  "attribution_limit": "All-kernel aggregate includes X/output/cache/metadata. One allocation pair is not a confidence interval or a whole-W compression ratio.",
+  "runtime_unavailable_ILC_metrics": [],
+  "control_payload": "KNOWN_ZERO_BF16_WT",
+  "interpretation": "observer/path responsiveness control; flat stays ambiguous; not challenge-weight or latency evidence"
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-10-26T23:39:16.961288+00:00",
+  "updated_at_utc": "2026-10-26T23:56:06.192261+00:00",
   "goal_official_score_us_below": 3000,
   "incumbent": {
     "job": "fb548b5dc6f04696",
@@ -38,84 +38,46 @@
     "check_quota_left": 0,
     "scored_quota_left": 1,
     "reset_utc": "2026-10-27T00:00:00Z",
-    "gpu_status": "Idle0MiBafterV3; V4CPUimplementation/HWcausebrief/independentreviewparallel"
+    "gpu_status": "Idle0MiBafterzero; packed-XphysicalregisterrepairandcompressionlayoutCPUfeasibilityparallel"
   },
   "ranked_open": [
     {
-      "rank": 1,
-      "id": "operand_reverse_v4",
+      "id": "operand_reverse_packed_x",
       "family": "operand_reverse",
       "owner": "proj_tracks",
-      "status": "CPU_IMPLEMENTATION",
-      "hypothesis": "EnforcedK4096permitsbounded32bitoffsetandhoistedrow/stageaddress; removepervectorruntimeKwideaddresswork whilepreservingV3loader/demux/pipeline/geometry",
-      "predicted_observations": "ActualSASSfewerrepeatedIMAD.WIDE/LEA.HI aroundsame8LDG; valid4wayinc/V1/V3/V4latencytest",
-      "next": "Fullmap/overflow/lifetime/sourceproof, compile/SASS andindependentreview; thenoneboundedvalidcomparison",
+      "status": "CPU_CORRECTNESS_REVISION_NATIVE_A4",
+      "hypothesis": "Freshpercall1MiBnativeAfragmentpackmovesXtransposeoutof128consumerCTAs, allowing4coalescedv4loads/noSHFLratherthanV1transposeorV2scalaramplification",
+      "predicted_observations": "Exactbitbijection/1MiBworkspace; main4vectorloads/64sectorinstances/noSHFL; two-nodecompletegraphwinsorloseswithpackfullyincluded",
+      "comparison": [
+        "actual_incumbent",
+        "best_failed_v1",
+        "v4_if_valid",
+        "pack_plus_main"
+      ],
+      "validity": "Everycallpackfresh; poisonworkspace+retainedoutput, freshXnormal/outlier/probes, allK/FP64/source/bytes/counters/lifetime; noinputcache",
+      "cost": "Extra1MiBlogicalread+1MiBwrite andonepacknodeperinvocation, memorysectortrafficmustmeasure",
+      "next": "CPUmap/inverse/overflow/lifetime/sourceandSASSresourceproof; independentreviewbeforeGPU",
       "forecast": {
-        "attainable_gain": "UNKNOWN; notclaimedcriticalpathuntiltest",
-        "information_value": "Separateaddressgenerationcostfrom8Bload/demuxpolicy",
-        "conditional_official_score_gain": "UNMEASURED; no localincumbentwin yet"
-      }
-    },
-    {
-      "rank": 2,
-      "id": "operand_reverse_v3",
-      "family": "operand_reverse",
-      "owner": "proj_tracks",
-      "status": "VALID_PROGRESS_VS_V2_REGRESSION_VS_V1_AND_INCUMBENT",
-      "evidence": "V2correctbut57usvs47usv1; scalarloaderrequestedsectors128touches/64unique, v1coalesced64/64. RemovedSHFLaloneinsufficient.",
-      "hypothesis": "8Bcoalescedloads+pairlane2x2demux:8LDG+16SHFL16SEL vs v1 4LDG+32SHFL32SEL; matchesv1 sectorfootprint and4ahead rawQ4/A2; no_allocatefixed",
-      "next": "V4addressspecialization/hoist; V3sourceandresultsretained",
-      "source_sha256": "3f90a6c77eeec6494c21019828ef01f93c0451f0d64e567f78a9ce0349abc2b9",
-      "manifest_sha256": "dc460284e95b930e98a214264f66a139dffa8bbe69ee0fbbc2a1af9fddd3db66",
-      "forecast": {
-        "speedup": "UNMEASURED; need <24.224us priorlocalincumbent towin, <47.232us toprogressv1",
-        "information_value": "Testcoalesced8Bfront-end/demuxtradeoffafterv2failedscalarroute",
-        "conditional_score_value": "UnknownuntilofficialH200dispatchwin; localrqcomparator differsofficialLt"
+        "attainable_gain": "UNKNOWN; largemechanismbutpackoverheadmayerasebenefit",
+        "information_value": "Separateamortizedlayoutconversionfromconsumerload/shufflecost",
+        "official_gain": "UNMEASURED"
       },
-      "pid": 371832,
-      "container": "okc-proj-operand-reverse-v301",
-      "inner_s": 240,
-      "outer_s": 300,
-      "review": "proj_rsi/audits/operand-reverse-v3-preflight.md",
-      "terminal": "2026-10-26T23:36:47Z exit0"
+      "rank": 1,
+      "observed_failure": "UnadmittedidentityrawQtoAcopymergedphysicalregisters; futureLDGoverwritesasyncA beforeconsumption/retirement despitezeroC75",
+      "plan_revision": "Preservefailedsource; useprovenretirednativeA4/3ahead; recordlookaheadconfound; repeatphysicalSASSgatebeforeGPU"
     },
     {
-      "rank": 3,
-      "id": "reverse_v1_v2_memory_diagnostic",
-      "owner": "root",
-      "status": "VALID_ANALYSIS_COMPLETE",
-      "purpose": "QuantifyactualL1/L2sectorrequests/cachehit/LSUpressurev1v2; counteronly,nooptimizationorofficialclaim",
-      "driver": "proj_rsi/tools/operand_reverse_versions_ncu.py",
-      "driver_sha256": "ce6d3407101b191bae27150f6670691d0440185dc1586df483ee7fde67b09493",
-      "pid": 369783,
-      "container": "okc-proj-reverse-v1-v2-ncu01",
-      "deadline": "inner180s/outer240s",
-      "review": "proj_rsi/audits/operand-reverse-versions-ncu-preflight.md",
-      "terminal": "2026-10-26T23:27:50Z exit0",
-      "passes_per_kernel": 32,
-      "process_and_container_gone": true,
-      "analysis": "proj_rsi/audits/operand-reverse-v1-v2-memory-roi.md"
-    },
-    {
-      "rank": 4,
-      "id": "hw_compression_counters",
+      "id": "hw_compression_reversible_layout",
       "family": "hw_compression",
       "owner": "proj_integration",
-      "status": "VALID_NEGLIGIBLE_TRAFFIC_REDUCTION_DIAGNOSE_CAUSE",
-      "purpose": "PhysicalDRAMreadcomparisonGENERICvsVMMNONE withsamefixednativeLtconfig; determinewhetherallocationactuallychangestraffic underexistingD2Dpopulation",
-      "metadata": "H100CC90 lrc__ilc_input_sectors/output_sectors/compressible metrics verified; eventdirectionneedsprimarysemanticqualification",
-      "next": "Independentreviewonefixedtwo-nodecounterdriver; nopopulationsweep orratiofromeligibilityflag.",
-      "manifest_sha256": "e4f66b6d321a08c8c28eec6c2cb171ee1d731e4f499a2c2f9b2a8a7bc4562596",
-      "pid": 370830,
-      "container": "okc-proj-hw-native-counters01",
-      "inner_s": 180,
-      "outer_s": 240,
-      "review": "proj_rsi/audits/hw-compression-counters-preflight.md",
-      "ordering": "ExecutedwhileV3freeze/reviewCPUinprogress; nodeexclusive; nofunctionaldependencyonV3",
-      "terminal": "2026-10-26T23:31:19Z exit0",
-      "passes_per_kernel": 3,
-      "process_and_container_gone": true,
-      "analysis": "proj_rsi/audits/hw-compression-counters-preflight.md"
+      "status": "CPU_FEASIBILITY",
+      "hypothesis": "KnownzeroresponsebutnormalBF16flatpointsatpayloadpatternopportunity; bitexactreversiblecentering/zigzagorbyteplanesmayexposehomogeneouspatterns",
+      "next": "All65536bitinverseproof andactualrandomweightlocalpatterns/payload/decodecost, primarylimits; noGPUorservingrewriteyet",
+      "forecast": {
+        "attainable_gain": "UNKNOWN; mustbeatstock12bitpackedactualpathafterdecodecost",
+        "information_value": "Distinguishpatternlayoutopportunityfromworkingallocator/populationpath"
+      },
+      "rank": 2
     }
   ],
   "closed_this_takeover": [
@@ -282,6 +244,64 @@
       "archive": "proj_rsi/diagnostics/operand_reverse",
       "status": "VALID_REVIEW_COMPLETE",
       "conclusion": "MathXtranspose/deliveryexposure,notBpublicationstarvation; originalbaselinecombinedfullW+Xingresswaitlarge. Nosourceportorprofilerepeat."
+    },
+    {
+      "rank": 4,
+      "id": "reverse_v1_v2_memory_diagnostic",
+      "owner": "root",
+      "status": "VALID_ANALYSIS_COMPLETE",
+      "purpose": "QuantifyactualL1/L2sectorrequests/cachehit/LSUpressurev1v2; counteronly,nooptimizationorofficialclaim",
+      "driver": "proj_rsi/tools/operand_reverse_versions_ncu.py",
+      "driver_sha256": "ce6d3407101b191bae27150f6670691d0440185dc1586df483ee7fde67b09493",
+      "pid": 369783,
+      "container": "okc-proj-reverse-v1-v2-ncu01",
+      "deadline": "inner180s/outer240s",
+      "review": "proj_rsi/audits/operand-reverse-versions-ncu-preflight.md",
+      "terminal": "2026-10-26T23:27:50Z exit0",
+      "passes_per_kernel": 32,
+      "process_and_container_gone": true,
+      "analysis": "proj_rsi/audits/operand-reverse-v1-v2-memory-roi.md"
+    },
+    {
+      "rank": 5,
+      "id": "hw_compression_counters",
+      "family": "hw_compression",
+      "owner": "proj_integration",
+      "status": "VALID_NEGLIGIBLE_TRAFFIC_REDUCTION_DIAGNOSE_CAUSE",
+      "purpose": "PhysicalDRAMreadcomparisonGENERICvsVMMNONE withsamefixednativeLtconfig; determinewhetherallocationactuallychangestraffic underexistingD2Dpopulation",
+      "metadata": "H100CC90 lrc__ilc_input_sectors/output_sectors/compressible metrics verified; eventdirectionneedsprimarysemanticqualification",
+      "next": "Independentreviewonefixedtwo-nodecounterdriver; nopopulationsweep orratiofromeligibilityflag.",
+      "manifest_sha256": "e4f66b6d321a08c8c28eec6c2cb171ee1d731e4f499a2c2f9b2a8a7bc4562596",
+      "pid": 370830,
+      "container": "okc-proj-hw-native-counters01",
+      "inner_s": 180,
+      "outer_s": 240,
+      "review": "proj_rsi/audits/hw-compression-counters-preflight.md",
+      "ordering": "ExecutedwhileV3freeze/reviewCPUinprogress; nodeexclusive; nofunctionaldependencyonV3",
+      "terminal": "2026-10-26T23:31:19Z exit0",
+      "passes_per_kernel": 3,
+      "process_and_container_gone": true,
+      "analysis": "proj_rsi/audits/hw-compression-counters-preflight.md"
+    },
+    {
+      "rank": 3,
+      "id": "hw_compression_zero_control",
+      "family": "hw_compression",
+      "owner": "proj_integration",
+      "status": "VALID_OBSERVER_PATH_RESPONSE",
+      "hypothesis": "KnownlowentropyzeroWtunderunchangedD2D/Ltcanestablishwhetherobserverandallocationpathrespondtodifferentcompressibility; realpairnearlyflatdoesnotisolatecause",
+      "predicted_observations": "GENvsNONEreadcounterresponseforknownzero, fixedshader/config/logicaltraffic; zeroILCorflatreadremainsambiguous",
+      "next": "Fullzerooutputpoison/freshnonzeroXmutations/bytes/Region0sourceproof andindependentreview; thenboundedtwo-nodecapture",
+      "forecast": {
+        "speedup": "NONE_DIAGNOSTIC_ONLY",
+        "information_value": "Separateobservability/populationpathfromrealweightentropy; notpostILCwireratioproof"
+      },
+      "manifest_sha256": "98c21a58ab9d4ce2a3f3407c7c66575317c50b330c4b214be9619742c6f21b1c",
+      "source_sha256": "c9b28e8627864f23832db788660569c2a93ca8c2bdfafccbd64f1dd59ec00bfb",
+      "review": "proj_rsi/audits/hw-compression-zero-preflight.md",
+      "result": "proj_rsi/diagnostics/hw-zero-counters/hw-zero-counters01.json",
+      "read_reduction_pct": 73.8274766621856,
+      "terminal": "2026-10-26T23:49:24Z exit0"
     }
   ],
   "family_status": {
@@ -325,6 +345,61 @@
       },
       "result": "proj_rsi/candidates/operand_reverse_v3/operand-reverse-v301.json",
       "next": "V4addressworkcausaltest"
+    }
+  ],
+  "completed_action_records": [
+    {
+      "rank": 3,
+      "id": "operand_reverse_v3",
+      "family": "operand_reverse",
+      "owner": "proj_tracks",
+      "status": "VALID_PROGRESS_VS_V2_REGRESSION_VS_V1_AND_INCUMBENT",
+      "evidence": "V2correctbut57usvs47usv1; scalarloaderrequestedsectors128touches/64unique, v1coalesced64/64. RemovedSHFLaloneinsufficient.",
+      "hypothesis": "8Bcoalescedloads+pairlane2x2demux:8LDG+16SHFL16SEL vs v1 4LDG+32SHFL32SEL; matchesv1 sectorfootprint and4ahead rawQ4/A2; no_allocatefixed",
+      "next": "V4addressspecialization/hoist; V3sourceandresultsretained",
+      "source_sha256": "3f90a6c77eeec6494c21019828ef01f93c0451f0d64e567f78a9ce0349abc2b9",
+      "manifest_sha256": "dc460284e95b930e98a214264f66a139dffa8bbe69ee0fbbc2a1af9fddd3db66",
+      "forecast": {
+        "speedup": "UNMEASURED; need <24.224us priorlocalincumbent towin, <47.232us toprogressv1",
+        "information_value": "Testcoalesced8Bfront-end/demuxtradeoffafterv2failedscalarroute",
+        "conditional_score_value": "UnknownuntilofficialH200dispatchwin; localrqcomparator differsofficialLt"
+      },
+      "pid": 371832,
+      "container": "okc-proj-operand-reverse-v301",
+      "inner_s": 240,
+      "outer_s": 300,
+      "review": "proj_rsi/audits/operand-reverse-v3-preflight.md",
+      "terminal": "2026-10-26T23:36:47Z exit0"
+    },
+    {
+      "rank": 1,
+      "id": "operand_reverse_v4",
+      "family": "operand_reverse",
+      "owner": "proj_tracks",
+      "status": "VALID_PARTIAL_PROGRESS_VS_V3_NO_INCUMBENT_GAIN",
+      "hypothesis": "EnforcedK4096permitsbounded32bitoffsetandhoistedrow/stageaddress; removepervectorruntimeKwideaddresswork whilepreservingV3loader/demux/pipeline/geometry",
+      "predicted_observations": "ActualSASSfewerrepeatedIMAD.WIDE/LEA.HI aroundsame8LDG; valid4wayinc/V1/V3/V4latencytest",
+      "next": "Fullmap/overflow/lifetime/sourceproof, compile/SASS andindependentreview; thenoneboundedvalidcomparison",
+      "forecast": {
+        "attainable_gain": "UNKNOWN; notclaimedcriticalpathuntiltest",
+        "information_value": "Separateaddressgenerationcostfrom8Bload/demuxpolicy",
+        "conditional_official_score_gain": "UNMEASURED; no localincumbentwin yet"
+      },
+      "pid": 373129,
+      "container": "okc-proj-operand-reverse-v401",
+      "inner_s": 240,
+      "outer_s": 300,
+      "source_sha256": "5b6c3fb45f686b07a203ba7fb6feb0bdd5329cb48fa105b2a39b530759f7fee8",
+      "manifest_sha256": "90a7a4b8c90287c2982619564f4025f4cf744b1e9b26aa621f7f58770ac6f786",
+      "review": "proj_rsi/audits/operand-reverse-v4-preflight.md",
+      "terminal": "2026-10-26T23:48:38Z exit0",
+      "result": "proj_rsi/candidates/operand_reverse_v4/operand-reverse-v401.json",
+      "F1_us": 52.09600180387497,
+      "paired_gain_us": {
+        "v3": 4.608001559972763,
+        "v1": -4.960000514984131,
+        "incumbent": -28.416000306606293
+      }
     }
   ]
 }

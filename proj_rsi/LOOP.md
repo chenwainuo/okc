@@ -1283,3 +1283,24 @@ F1v355.072/v256.640/v147.360/inc24.032us; pairedgain+2.176vsV2,-7.520vsV1,
 winorofficialspeedup. NextV4isolatesrepeatedruntimeKaddressworkbyfixed4096stride
 specialization/hoist, allV3dataflow/cache/geometryunchanged; CPU/SASSreviewbeforeGPU.
 Officialbeststillrs32/jobfb548b5dc6f04696/3200.615us;3msnotachieved.
+
+
+### 23:48–23:56UTC — address improvement; compression control responds
+
+V4terminal373129/23:48:38exit0 valid4way+20actualgraphs/fulloracles. Conservative
+F1V452.096/V354.784/V146.944/inc24.192us. Pairedgain+4.608V3,-4.960V1,-28.416inc;
+21/21winsV3only. AddresspolicyimprovesV3butV1remainsthefamily'sfasterfailedversion.
+Noport. Arithmetic/register/schedulingcontributionsnotseparatelyidentified.
+
+Fresh-XpackingbranchCPUproofmaps1MiBbijectivelytoA-fragmentlayout. Simpleflat-u32
+packwarpshave4read+4write32Bsectors;consumer4coalescedv4loads/64sectors/noshuffle.
+Wholepack+mainmustbetimed. InitialQ4/A2identitycopycompiledwithphysicalAoverwrites
+BEFOREretirementdespite0C75;caughtBEFOREGPU. Preservebadsource/SASS;explicitroot
+revisiontonativeA4retiredslots/3aheadwithactualphysicalSASSgate,newfreeze/review.
+
+KnownzeroGENvsNONEcontrol373969terminal23:49:24exit0/3passes/node,fullzerobytes/
+12oracles/Region0. Observedreads17,842,944vs68,174,336B,73.82747666%reduction.
+ThisestablishesD2D/allocation/consumer/observerresponsiveness;notnormalweightgain,
+wirecompressionfactororlatency. ILCeligible0bothdespitereadresponseprovesthose
+fieldsarenotsufficientreadbenefitwitnesses. NextCPUreversiblepattern/bitinverse/
+decodecosttriage;SMwritefollowupnotneedednow. Allprevioussources/resultsretained.

@@ -1,0 +1,259 @@
+{
+  "status": "DIAGNOSTIC_COMPLETE_COUNTERS_UNINTERPRETED",
+  "purpose": "KNOWN_ZERO_PATH_OBSERVER_CONTROL_NO_SPEED_CLAIM",
+  "control_payload": "KNOWN_ZERO_BF16_WT",
+  "normal_weight_rerun": false,
+  "parent_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "real_counter_manifest_sha256": "e4f66b6d321a08c8c28eec6c2cb171ee1d731e4f499a2c2f9b2a8a7bc4562596",
+  "fixed_helper": {
+    "directory": "/okc/proj_rsi/candidates/hw_compression_owner",
+    "manifest_sha256": "8f32b91ee4146b2c9534360897d5953850f57b370c1ae653b5b04d325d80c781",
+    "sha256": {
+      "owner_cpu.cpp": "37bd530c08e466e73d17603e1e6c8f05dff614c4b12c15a0827317f3a6461400",
+      "cpu_probe.py": "1e3ab03f85d7a49b8c51c9ebf51dd3ff5fd338c02dfbe453461721d24659714b",
+      "cpu-torch213.json": "fff605fe7fc0a327e8d38b093ed19d090dd73417a712c26a7e3b12692088bb06",
+      "cpu-torch28-initial.json": "ae0f7ed6244fd3c50b995238f49d50ba420796b1d737305efeeec93ae6f050c3",
+      "cpu-torch28-locals.json": "e488ec9b8aff7fd62192ee031934a6aa8941bf528e9ad13d89446cb5ca641df0",
+      "allocator.cpp": "7f2dea1ecdcbff20efd1daad1a4250f775bbf9cfb8b9a76a16f257c1268140f8",
+      "adapter.py": "d76e63471c772aa69b0b76b2360ba4dde50f376e1cd33a88de575ff1e3e25362",
+      "build_helper.py": "b2953f722c7f392361aba08f0efc77f34eff21fbab5da6e74838db3477577f01",
+      "helper-build.json": "2e4d38fe9d0f76122f42de32be0632087439aade3d7cea490b0f879b26426cf7",
+      "README.md": "c445d020159ef76bea4fb2aed87b6a7eea4c5538a646b86803c318b0b75d629d",
+      "gpu_lifetime.py": "5e0dc4534b201fb9eb048fd4b2441bd10d5dff2cec2c689e02e9043a73422dac"
+    },
+    "ABI": {
+      "CUDA_VERSION": 12080,
+      "CUmemAllocationProp_size": 32,
+      "COMP_NONE": 0,
+      "COMP_GENERIC": 1
+    }
+  },
+  "population": "UNCHANGED_cuMemcpyDtoDAsync_then_stream_sync",
+  "profile_order": [
+    "compression_generic",
+    "compression_none"
+  ],
+  "checks": [
+    {
+      "case": "generic_lt",
+      "stage": "immediately_after_profiled_graph",
+      "NaN_poison_overwritten": true,
+      "complete_output": "EXACT_ZERO",
+      "input_immutable": true
+    },
+    {
+      "case": "none_lt",
+      "stage": "immediately_after_profiled_graph",
+      "NaN_poison_overwritten": true,
+      "complete_output": "EXACT_ZERO",
+      "input_immutable": true
+    }
+  ],
+  "cleanup": {
+    "counts_live": [
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 2
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 2
+      }
+    ],
+    "counts_after_alias_drop": [
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      }
+    ],
+    "counts_after_close": [
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      },
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      }
+    ],
+    "status": "CHECKED_CLOSE_PASS"
+  },
+  "all_K_onehot": "NOT_RUN_ZERO_WEIGHT_UNINFORMATIVE; prior real-native4096basis is separate evidence",
+  "fixed_lt": {
+    "layout": 2,
+    "cfg": [
+      66,
+      18,
+      1,
+      0,
+      0,
+      4,
+      35,
+      0,
+      2
+    ],
+    "process_local_code": 200008,
+    "extension_sha256": "5acd39f2d6491f6d200422d9f9b7339f07d6142fb5c8499eadb024a7f400efb7",
+    "link_flags": [
+      "-L/opt/conda/lib/python3.11/site-packages/nvidia/cublas/lib",
+      "-l:libcublasLt.so.12",
+      "-Wl,-rpath,/opt/conda/lib/python3.11/site-packages/nvidia/cublas/lib"
+    ],
+    "cublas_wheel": "12.8.4.1",
+    "Wt_bytes": 67108864,
+    "Wt_sha256": "3b6a07d0d404fab4e23b6d34bc6696a6a312dd92821332385e5af7c01c421351",
+    "expected_kernel": "nvjet_tst_128x64_64x8_1x1_v_bz_coopB_NNN",
+    "expected_grid": [
+      1,
+      128,
+      1
+    ],
+    "expected_block": [
+      384,
+      1,
+      1
+    ],
+    "expected_registers": 168,
+    "expected_shared_bytes": 213268
+  },
+  "capabilities": {
+    "device": 0,
+    "vmm_supported": 1,
+    "generic_compression_supported": 1
+  },
+  "allocations": [
+    {
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 1,
+        "actual_compression": 1,
+        "device": 0,
+        "ptr": 12918456320,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 1,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    },
+    {
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 0,
+        "actual_compression": 0,
+        "device": 0,
+        "ptr": 12985565184,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 0,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    }
+  ],
+  "preprofile_actual_graph_checks": [
+    {
+      "case": "generic_lt",
+      "stage": "preprofile",
+      "input": "original_nonzero_X8851",
+      "NaN_poison_overwritten": true,
+      "complete_output": "EXACT_ZERO",
+      "X_immutable": true
+    },
+    {
+      "case": "none_lt",
+      "stage": "preprofile",
+      "input": "original_nonzero_X8851",
+      "NaN_poison_overwritten": true,
+      "complete_output": "EXACT_ZERO",
+      "X_immutable": true
+    },
+    {
+      "case": "generic_lt",
+      "stage": "preprofile",
+      "input": "fresh_nonzero_outliers_X8853",
+      "NaN_poison_overwritten": true,
+      "complete_output": "EXACT_ZERO",
+      "X_immutable": true
+    },
+    {
+      "case": "none_lt",
+      "stage": "preprofile",
+      "input": "fresh_nonzero_outliers_X8853",
+      "NaN_poison_overwritten": true,
+      "complete_output": "EXACT_ZERO",
+      "X_immutable": true
+    }
+  ],
+  "fresh_output_checks": [
+    {
+      "case": "generic_lt",
+      "input": "fresh_nonzero_X8853",
+      "new_output_allocation": true,
+      "NaN_overwritten": true,
+      "complete_output": "EXACT_ZERO",
+      "X_immutable": true
+    },
+    {
+      "case": "none_lt",
+      "input": "fresh_nonzero_X8853",
+      "new_output_allocation": true,
+      "NaN_overwritten": true,
+      "complete_output": "EXACT_ZERO",
+      "X_immutable": true
+    }
+  ],
+  "postprofile_actual_graph_checks": [
+    {
+      "case": "generic_lt",
+      "stage": "postprofile",
+      "input": "original_nonzero_X8851",
+      "NaN_poison_overwritten": true,
+      "complete_output": "EXACT_ZERO",
+      "X_immutable": true
+    },
+    {
+      "case": "none_lt",
+      "stage": "postprofile",
+      "input": "original_nonzero_X8851",
+      "NaN_poison_overwritten": true,
+      "complete_output": "EXACT_ZERO",
+      "X_immutable": true
+    },
+    {
+      "case": "generic_lt",
+      "stage": "postprofile",
+      "input": "fresh_nonzero_outliers_X8853",
+      "NaN_poison_overwritten": true,
+      "complete_output": "EXACT_ZERO",
+      "X_immutable": true
+    },
+    {
+      "case": "none_lt",
+      "stage": "postprofile",
+      "input": "fresh_nonzero_outliers_X8853",
+      "NaN_poison_overwritten": true,
+      "complete_output": "EXACT_ZERO",
+      "X_immutable": true
+    }
+  ],
+  "immutable_zero_Wt_raw_X": "EXACT"
+}
