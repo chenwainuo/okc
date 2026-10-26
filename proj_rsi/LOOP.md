@@ -708,3 +708,8 @@ pw28 — balancing ties r6 at m ≤ 16 (delta 0.00) and loses at m=32 (+1.7): th
 hardware; P2 now runs a composition ladder. pw29 — only pw23's rp paths appear (rwk variants absent: investigating);
 m=256 cuBLASLt 14.88 beats rv64k32 18.08. The harness's REPLAY_OVERHEAD (11 µs, idle-GPU) is not the in-prepare
 replay cost (3.46): small-shape comparisons use in-prepare BAKE/PROBE numbers only.
+Box pitfall found and fixed: torch 2.8 in the container appends -gencode compute_90/sm_90 to every load_inline build
+(TORCH_CUDA_ARCH_LIST unset), which breaks hand-written wgmma extensions (pw24's bg, pw29's rwk "build failed" on the
+box; CUTLASS survives via its __CUDA_ARCH_FEAT_SM90_ALL guards). /root/okc_run.sh now sets TORCH_CUDA_ARCH_LIST=9.0a;
+pw24 and pw29 re-queued. Candidates should guard wgmma/setmaxnreg/multicast code with __CUDA_ARCH_FEAT_SM90_ALL so a
+stray sm_90 pass compiles to a stub instead of failing the extension.
