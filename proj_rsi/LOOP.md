@@ -763,3 +763,9 @@ in the math warps, x as smem B, K split on a one-wave grid (pooler 32x4), produc
 setmaxnreg 40/232, cross-CTA reduce by cp.reduce.async.bulk.tensor bf16 add, no cluster; H200 estimate pooler m=128
 ≈ 17.0 (16.5–17.8) vs cuBLAS 20.3; m=256 parity to −1. An agent now builds it on the H100 per the plan's ladder
 S0–S5 (milestones R1–R4), in parallel with the CUTLASS two-plane route (mx). P4 re-pointed at the no-cluster ladder.
+mx M2 (box, pooler m=128, read flush incl. 3.6 µs replay): torch 28.32 | bf16 CUTLASS 64x64 c1x2 27.97 | mx two-plane
+e0 27.52 — output bit-identical to x @ W_dec^T, 74 regs, 0 spills; only −0.45 µs so far because the kernel is not
+stream-bound (HBM ≈ 2.1 TB/s): x L2→SM re-reads (128 MB at 64-row tiles) bind, as the workflow predicted. c2x2 49,
+128x64 single-WG 38 (64 CTAs), escape prologue 60 µs (serialised gathers; to be replaced by an epilogue correction).
+Next for mx: A-only/B-only probes, then the 128-row cooperative tile with split-K to 128 CTAs and a TMA reduce-add
+epilogue (= RS128's geometry).
