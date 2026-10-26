@@ -2938,8 +2938,12 @@ __global__ void __launch_bounds__(128, MINB) rwk(const __nv_bfloat16* __restrict
   if constexpr (CL > 1) rw_csync(); else __syncthreads();
   const int nr = (MODE & 2) ? 0 : rows;  // MODE 2 (ladder): no reductions
   if constexpr (CL == 1) {
+    // MODE 8: rotate the row order by K split, so the G CTAs of a tile (finishing together) hit different lines
+    const int rot = (MODE & 8) ? (int)blockIdx.y * (nr / (int)gridDim.y + 1) : 0;
     for (int i = tid; i < nr * 16; i += 128) {
-      const int r = i >> 4, c4 = i & 15;
+      int r = (i >> 4) + rot;
+      r = (MODE & 8) ? r % nr : r;
+      const int c4 = i & 15;
       rw_red4(out + (size_t)(t0 + r) * N + n0 + 4 * c4, *(const float4*)(sd + r * SP + 4 * c4));
     }
   } else {
@@ -3041,6 +3045,7 @@ RWV.update({104: (256, 4, 3, 128, 128, 2, 0, 1), 105: (256, 4, 2, 128, 128, 2, 0
             120: RWV[100][:6] + (4, 1), 121: RWV[100][:6] + (0, 2), 123: RWV[100][:6] + (4, 2), 126: RWV[101][:6] + (4, 1),
             127: RWV[102][:6] + (4, 1), 107: (256, 4, 3, 128, 128, 2, 4, 1), 140: (256, 4, 3, 128, 128, 2, 4, 2),
             141: (256, 4, 3, 128, 128, 2, 0, 2), 142: RWV[101][:6] + (4, 2),
+            150: RWV[101][:6] + (12, 1), 151: (256, 4, 3, 128, 128, 2, 12, 1), 152: (256, 4, 4, 128, 128, 1, 12, 1),
             130: RWV[113][:6] + (4, 1), 131: RWV[113][:6] + (0, 2), 136: RWV[112][:6] + (4, 1)})
 RWLAD = True  # pw29h ladder instances: variant + 1000 * MODE (1 = loads only, 2 = no reds, 3 = loads only, no reds)
 if RWLAD:
@@ -3060,8 +3065,9 @@ def _rwwg(n):
 
 
 def _rwsrc():
-    cases = "\n".join("    case %d: return rw_go<%s>(xp, h, l, o, m, N, K, c, %d, st);" % (v, ", ".join(map(str, c)), i) for i, (v, c) in enumerate(sorted(RWV.items())))
-    occ = "\n".join("    case %d: return rw_occ<%s>(m, N, K);" % (v, ", ".join(map(str, c))) for v, c in sorted(RWV.items()))
+    use = {v: c for v, c in RWV.items() if RWALL or v in {p[1] for p in RSP}}
+    cases = "\n".join("    case %d: return rw_go<%s>(xp, h, l, o, m, N, K, c, %d, st);" % (v, ", ".join(map(str, c)), i) for i, (v, c) in enumerate(sorted(RWV.items())) if v in use)
+    occ = "\n".join("    case %d: return rw_occ<%s>(m, N, K);" % (v, ", ".join(map(str, c))) for v, c in sorted(use.items()))
     return RWCU.replace("@@WG@@", _rwwg(128) + _rwwg(256)).replace("@@RWCASES@@", cases).replace("@@RWOCC@@", occ)
 
 
@@ -3095,7 +3101,7 @@ def _rwext():
 # persistent zeroed workspace, the CTA completing a tile copies it out and re-zeroes it: no memset node). m = 256: one
 # CTA holds both 128-token blocks (TOKS 256: every W fragment feeds 4 m16 tiles): rv64k32 (192 KB, 128 CTAs), rv64k64x2
 # (96 KB, 256 CTAs at 2/SM), rv64k32sc (self-cleaning).
-RSP = [("rs64k32", 0, True, (128, 256)), ("rp64k32s4", 5, True, (128,)), ("rp64k32s2", 6, True, (128,)),
+RSPALL = [("rs64k32", 0, True, (128, 256)), ("rp64k32s4", 5, True, (128,)), ("rp64k32s2", 6, True, (128,)),
        ("rp64k64x2", 7, True, (128,)), ("rp64k32sc", 8, False, (128,)),
        ("rv64k32", 9, True, (256,)), ("rv64k64x2", 10, True, (256,)), ("rv64k32sc", 11, False, (256,)),
        # pw29 (rwk, wgmma; variant >= 100 = RWV): rw64k32s4 / s8 = 128 CTAs, 4 / 8 stages; rw64k64s4x2 = KR 128, 256
@@ -3109,7 +3115,15 @@ RSP = [("rs64k32", 0, True, (128, 256)), ("rp64k32s4", 5, True, (128,)), ("rp64k
        ("rw64k32s8z", 126, False, (128, 256)), ("rw64k64s4x2z", 127, False, (128, 256)),
        ("rw64k32r3x2", 104, True, (128, 256)), ("rw64k32r2x2", 105, True, (128, 256)), ("rw64k32r2x2z", 106, False, (128, 256)),
        ("rw64k32r3x2z", 107, False, (128, 256)), ("rw64k32r3x2zc2", 140, False, (128, 256)), ("rw64k32r3x2c2", 141, True, (128, 256)), ("rw64k32s8zc2", 142, False, (128,)),
+       ("rw64k32s8zr", 150, False, (128, 256)), ("rw64k32r3x2zr", 151, False, (128, 256)), ("rw64k32s4zr", 152, False, (128,)),
        ("rwv64k32s8h2z", 130, False, (256,)), ("rwv64k32s8h2c2", 131, True, (256,)), ("rwv64k64s4x2z", 136, False, (256,))]
+
+# pw29h shipped bake set (H100 rbench, judge-like read flush): pw23's rp64k32s4 as the in-run incumbent, pw29's
+# rw64k32s8 as the wgmma reference, the self-zeroing winners; every self-zeroing grid is one co-resident wave.
+RSP = [p for p in RSPALL if p[0] in ("rp64k32s4", "rw64k32s8", "rw64k32s4z", "rw64k32s8z", "rw64k32r3x2z", "rw64k32r3x2",
+                                     "rwv64k64s4x2")]
+RSP = [(nm, v, zf, (128,) if nm in ("rw64k32s8", "rw64k32s8z") else ms) for nm, v, zf, ms in RSP]
+RWALL = False  # rbench sets True: build every RWV instance, not only the shipped ones
 
 
 def _rscall(st, p, x, out):

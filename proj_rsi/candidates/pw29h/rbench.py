@@ -76,6 +76,7 @@ def main():
     dev = "cuda"
     print("device %s torch %s" % (torch.cuda.get_device_name(0), torch.__version__), flush=True)
     mod = load(args.sub)
+    mod.RWALL = True
     w = reference.generate_weights(1234)["router"].contiguous()  # fp32 [256, 8192]
     n, K = w.shape
     hi = w.to(torch.bfloat16)
@@ -120,7 +121,7 @@ def main():
             return 0
         paths.append(("torch2mm", t2))
         paths.append(("r6heur", r6h))
-        for name, v, zf, ms in mod.RSP:
+        for name, v, zf, ms in mod.RSPALL:
             if m not in ms or (v < 100 and not gv):
                 continue
             plan = (-7, v, zf, None, n, None, None)
@@ -132,7 +133,7 @@ def main():
         ladder = []
         if args.ladder:
             ext = mod._rwext()
-            for name, v, zf, ms in mod.RSP:
+            for name, v, zf, ms in mod.RSPALL:
                 if v not in (101, 104) or m not in ms:
                     continue
                 for md, tag in ((1, "ld"), (3, "ld-nored"), (2, "ld+mma-nored")):
@@ -141,7 +142,7 @@ def main():
                 ladder.append(("%s:nozero" % name, lambda xx, oo, v=v: ext.rwrun(v, xx, st["rs_hi"], st["rs_lo"], oo, st["rw_cnt"])))
         paths += ladder
         ext = mod._rwext()
-        for name, v, zf, ms in mod.RSP:
+        for name, v, zf, ms in mod.RSPALL:
             if v >= 100 and m in ms:
                 print("RB m=%d %-24s occ %d (clusters if cN, else CTAs/SM)" % (m, name, ext.rwocc(v, m, n, K)), flush=True)
         if only:
