@@ -541,3 +541,13 @@ Decision: refine → pw23: 2–3-stage pipelined loads per CTA (mma on stage s w
 blocks in flight (or a 256-token tile), 2 CTAs/SM where registers allow, and a cheaper zeroing (self-cleaning fp32
 workspace with the last CTA copying to out, vs the 0.8 µs memset node) baked against the memset. Target router
 m=128 ≤ 6 and m=256 ≤ 7 judge-µs → ≈ 70 score-µs.
+
+## Iteration 21 — pw23: pipelined split-K router. Check `9e45ff0e1e78459d`: 9/9, 3377.2 µs. PROMOTE → scored submission.
+
+Router m=128 in-prepare: r6 15.10 | rs64k32 14.94 | **rp64k32s4 13.89 (picked)** | rp64k32s2 13.95 | rp64k64x2 15.81 |
+rp64k32sc 15.71 (self-cleaning loses to the 0.9 µs memset node); judge verify16 router 8.84 vs 10.58 in the r6 run
+(−1.7 µs, ≈ 13 score-µs). m=256: r6 15.62 | rv64k32 18.21 | rv64k64x2 19.58 | rv64k32sc 22.53 — r6 kept. Profile:
+rsk2 7.5 µs + memset 0.9; floor for 16 MB ≈ 3, so ~4 µs remain at m=128 (suspects: scalar fp32 atomics burst at the
+end of a one-wave grid, 4 MB of partials; first-stage latency), and m=256 needs the kernel under ~8 µs to beat cuBLAS.
+pw23 is r6 plus a strictly better router at m=128 and is the first candidate that dominates r6 within a run → scored
+submission (10 slots unused). Expected board: today's r6 drift band (3365–3390) minus ~13 µs.
