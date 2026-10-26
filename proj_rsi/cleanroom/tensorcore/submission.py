@@ -41,7 +41,8 @@ BN, BK = 128, 64
 WBYTES = BN * BK * 12 // 8  # 12288 bytes per unit
 GRID = 132
 CLUSTER = int(os.environ.get("TC_CLUSTER", "2"))
-CLUSTER_MAX_MP = 128  # no smem room for a 128 KB slot at MP = 256  # CTAs per cluster for the DSMEM pre-reduction of split-K partials (1 = off)
+CLUSTER_MAX_MP = 128  # no smem room for a 128 KB slot at MP = 256; CLUSTER = CTAs per cluster for the DSMEM pre-reduction (1 = off)
+PDL = int(os.environ.get("TC_PDL", "1"))  # programmatic dependent launch of the convert kernel
 MODE = 0  # ladder: 0 full, 3 no flush, 4 red.add flush only, 5 escapes only (no red.add), 6 no x tile (no flush), 7 no wgmma (no flush)
 DEDICATED_MAX_MP = 32  # MP <= this: dedicated producer warp (288 threads); above: thread 0 issues loads (256 threads)
 MPS = [8, 16, 32, 64, 128, 256]
@@ -92,6 +93,7 @@ struct Params {
   const float* __restrict__ esc_delta;
   int N, K, m, NB, KC, U, G, cl;   // cl: cluster size (1 or 2) for the DSMEM pre-reduction of split-K partials
   uint32_t scale2, scale2b;   // bf16x2 exponent scales of the (hi, lo) streams
+  int pdl;    // programmatic dependent launch of the convert kernel
   int mode;   // 0 full, 3 no flush, 4 flush red.add only, 5 +escapes (no counters/convert)
 };
 
@@ -227,6 +229,7 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
     asm volatile("fence.proxy.async.shared::cta;" ::: "memory");
   }
   __syncthreads();
+  if (p.pdl) asm volatile("griddepcontrol.launch_dependents;" ::: "memory");
   if (p.cl > 1) cluster_sync_all();
 
   auto issue_load = [&](const int u, const int st) {
@@ -459,6 +462,9 @@ __global__ void __launch_bounds__(nthreads<MP>(), 1) gemm_kernel(const __grid_co
 // ws (fp32 [m][N], contiguous) -> out (bf16, or fp32 copy), and re-zero ws
 template <bool DUAL>
 __global__ void convert_kernel(float* __restrict__ ws, void* __restrict__ out, int total4) {
+#if defined(__CUDA_ARCH_FEAT_SM90_ALL)
+  asm volatile("griddepcontrol.wait;" ::: "memory");
+#endif
   const int i = blockIdx.x * blockDim.x + threadIdx.x;
   if (i >= total4) return;
   float4 val = __ldcg(reinterpret_cast<const float4*>(ws) + i);
@@ -509,14 +515,24 @@ static void launch_mp(const CUtensorMap& map, const Params& p, size_t smem, cuda
   }
   if (p.mode == 0) {
     const int total4 = p.m * p.N / 4;
-    convert_kernel<DUAL><<<(total4 + 255) / 256, 256, 0, stream>>>(p.ws, p.out, total4);
+    if (p.pdl) {
+      cudaLaunchConfig_t cfg = {};
+      cfg.gridDim = dim3((total4 + 255) / 256); cfg.blockDim = dim3(256); cfg.dynamicSmemBytes = 0; cfg.stream = stream;
+      cudaLaunchAttribute attr[1];
+      attr[0].id = cudaLaunchAttributeProgrammaticStreamSerialization; attr[0].val.programmaticStreamSerializationAllowed = 1;
+      cfg.attrs = attr; cfg.numAttrs = 1;
+      cudaError_t e = cudaLaunchKernelEx(&cfg, convert_kernel<DUAL>, p.ws, p.out, total4);
+      TORCH_CHECK(e == cudaSuccess, "PDL launch failed: ", cudaGetErrorString(e));
+    } else {
+      convert_kernel<DUAL><<<(total4 + 255) / 256, 256, 0, stream>>>(p.ws, p.out, total4);
+    }
   }
 }
 
 void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tensor ws, torch::Tensor out,
           torch::Tensor counters, torch::Tensor expected, torch::Tensor esc_off, torch::Tensor esc_idx,
           torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int cl, int64_t scale2, int64_t scale2b,
-          int dual, int mode) {
+          int dual, int pdl, int mode) {
   CUtensorMap map;
   cuuint64_t gdim[2] = {(cuuint64_t)K, (cuuint64_t)m};
   cuuint64_t gstride[1] = {(cuuint64_t)K * 2};
@@ -539,6 +555,7 @@ void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tens
   p.N = N; p.K = K; p.m = m; p.NB = NB; p.KC = KC; p.U = U; p.G = G; p.cl = cl;
   p.scale2 = (uint32_t)scale2;
   p.scale2b = (uint32_t)scale2b;
+  p.pdl = pdl;
   p.mode = mode;
   size_t smem = 1024 + (size_t)stages * (MP * 128 + (dual ? 2 : 1) * WBYTES) + 2 * stages * 8 + 2 * 8 * 68 * 4 + ECAP * 8 + (size_t)ECAP * MP * 2 + 16;
   smem += (size_t)(cl - 1) * 256 * (MP / 2) * 4;
@@ -572,8 +589,8 @@ void gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tens
 void tensorcore_gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tensor ws, torch::Tensor out,
                      torch::Tensor counters, torch::Tensor expected, torch::Tensor esc_off, torch::Tensor esc_idx,
                      torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int cl, int64_t scale2, int64_t scale2b,
-                     int dual, int mode) {
-  tensorcore::gemm(MP, stages, packed, x, ws, out, counters, expected, esc_off, esc_idx, esc_delta, N, K, m, NB, KC, U, G, cl, scale2, scale2b, dual, mode);
+                     int dual, int pdl, int mode) {
+  tensorcore::gemm(MP, stages, packed, x, ws, out, counters, expected, esc_off, esc_idx, esc_delta, N, K, m, NB, KC, U, G, cl, scale2, scale2b, dual, pdl, mode);
 }
 """
 
@@ -581,7 +598,7 @@ CPP_SRC = """
 void tensorcore_gemm(int MP, int stages, torch::Tensor packed, torch::Tensor x, torch::Tensor ws, torch::Tensor out,
                      torch::Tensor counters, torch::Tensor expected, torch::Tensor esc_off, torch::Tensor esc_idx,
                      torch::Tensor esc_delta, int N, int K, int m, int NB, int KC, int U, int G, int cl, int64_t scale2, int64_t scale2b,
-                     int dual, int mode);
+                     int dual, int pdl, int mode);
 """
 
 _ext = None
@@ -597,7 +614,7 @@ def _build():
             src = src.replace(f"STAGES_{mp},", f"{st},")
         src = src.replace("DEDICATED_MAX_MP", str(DEDICATED_MAX_MP))
         _ext = load_inline(
-            name="tensorcore_gemm_v20",
+            name="tensorcore_gemm_v21",
             cpp_sources=CPP_SRC,
             cuda_sources=src,
             functions=["tensorcore_gemm"],
@@ -757,5 +774,5 @@ def kernel_fn(data: Inputs, state: dict) -> torch.Tensor:
     out = torch.empty(m, n, dtype=torch.float32 if dual else torch.bfloat16, device=x.device)
     _ext.tensorcore_gemm(mp, (DSTAGES if dual else STAGES)[mp], info["packed"], x, info["ws"], out, info["counters"], exp_t,
                          info["esc_off"], info["esc_idx"], info["esc_delta"], n, info["K"], m, NB, info["KC"], U, G,
-                         CLUSTER if mp <= CLUSTER_MAX_MP else 1, info["scale2"], info.get("scale2b", 0), int(dual), MODE)
+                         CLUSTER if mp <= CLUSTER_MAX_MP else 1, info["scale2"], info.get("scale2b", 0), int(dual), PDL, MODE)
     return out
