@@ -805,3 +805,10 @@ pw32 (k2x/n128x ported onto pw23): on the box the bake picks nothing — r6's tu
 pipeline by 0.1–2.5 µs (pooler m=128 27.10 vs 28.38; pooler m=256 29.70 vs 32.16); P4's "parity" was vs torch.mm,
 which the tuned path beats by 1.6–4 µs. Not submitted. Correct targets for the 12-bit kernels (box in-prepare, r6):
 pooler m=128 27.10, qkv 19.49, unpooler 27.04, o 11.04, pooler m=256 29.70.
+
+## Scored submission of pw31 (= pw23 + pw27h small shapes + pw29h router): job `bbb732a78955425b` (16:42 UTC)
+
+Critic approved the merge (diff3 byte-exact, both fixes present, 65/65 box checks, picks as expected). Expected judge
+effect from the box deltas (in-prepare): router m=128 −2.1, router m=8/16/32 −1.0/−1.0/−1.2, unpooler m=8 −0.3 →
+roughly 35–45 score-µs (≈ 1–1.3%) plus the draw. Reset chain unchanged (its pw27h/pw29h checks become confirmatory).
+P4 asked for a decode-slack curve in the k2x pipeline (instructions per thread per stage a single consumer absorbs).
