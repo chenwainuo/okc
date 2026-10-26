@@ -1,0 +1,29 @@
+{
+  "id": "pw14",
+  "parent": "pw12",
+  "question": "What makes r6's gv about 3 us slower at m=32 than at m=1 (judge pooler 16.86 vs 13.91, qkv 14.76 vs 9.71), when pw11 showed x L2 traffic costs at most about 1 us? pw14 is pw12 unchanged (same bake, same PICK logic; every pw12 kernel's SASS is identical) plus a PROBE ladder on r6's own gv kernel. It reports, from the same _time_us, how the time builds up from the bare W stream to the full kernel at m=1/8 and m=32, plus two register-cap probes and the pw12 bulk ring's bare stream at m=32.",
+  "probes": {
+    "format": "PROBE gvlad <layer> m=<m> <step> <us> regs=<numRegs from cudaFuncGetAttributes> ctas/sm=<cudaOccupancy co-resident CTAs / SMs>",
+    "steps": "L0 = r6's ld.global W stream only, consumed by an XOR into one register (no x, decode, mma, reduction or store). L1 = + x loads (XOR-consumed). L2 = + decode (the 12-bit decode and escape walk; A and B XOR-consumed). L3 = + mma (no reduction or store). L4 = r6's real pick for the shape (its geometry name, regs and CTAs/SM printed). The steps are V bits 9-11 of the same template, so everything else is r6's code.",
+    "geometries": "r6's judge picks (job 23cecdef1bb54c9e). pooler m=1/8: (2,16,8,1,1,0) rolled, 1024 thr. pooler m=32: (1,8,16,1,1,2). qkv m=1/8: (1,8,16,1,1,0). qkv m=32: (1,4,16,2,1,2) ST 1, cluster 2.",
+    "coverage": "m=1 and m=8 share the MT=1 kernels: L0 and L3, then L4. m=32: L0, L1, L2, L3, L4. m=16: L4 only, because a full m=16 ladder would exceed the 16-kernel cap.",
+    "occupancy": "m=32 full kernel with the __launch_bounds__ minBlocks override (V bits 12-14). pooler cap64 = 4 CTAs x 256 thr, the register cap of r6's m=1 pooler instance (64): ptxas 64 regs but 1520 B spill, so it also measures what spilling costs. pooler cap255 = 1 CTA/SM, 152 regs, 0 spill. qkv cap255: 142 regs, 0 spill. r6's m=1 qkv instance is already uncapped (106 regs), so qkv gets only the cap255 probe.",
+    "bulk": "L0-bulk8 = the pw12 bulk-ring load path (8 slots, no proxy fence) at the pooler m=32 geometry, XOR-consumed: 59 regs. Compare with pooler m=32 L0 (register loads).",
+    "count": "16 probe kernels. Ladder-only compile 6.7 s locally."
+  },
+  "reading_guide": [
+    "L0(m=32) vs L0(m=1): the W stream itself at the m=32 geometry (256 thr, 2 CTAs/SM) vs the m=1 geometry (1024 thr, 1 CTA/SM).",
+    "L1 - L0: x loads (L1/L2 traffic plus LSU wavefronts). pw11 bounds this at about 1 us.",
+    "L2 - L1: decode. It should not depend on m, since decode is shared by all token tiles.",
+    "L3 - L2: mma issue and latency, about 4x more HMMA at m=32 than at m=8.",
+    "L4 - L3: in-CTA reduction plus epilogue (qkv m=32 also includes the cluster-2 DSMEM step).",
+    "cap255 / cap64 vs L4: whether registers, through occupancy, limit bytes in flight."
+  ],
+  "caveats": [
+    "With no compute in the way, ptxas hoists every W load in L0/L1. The m=32 L0 SASS issues all 48 LDG.E.NA.128 of the warp's 16 chunks up front (126 regs), where r6's real kernel keeps ST=2. L0 at m=32 is therefore the stream of that grid at maximum per-warp depth, an upper bound on what the load path delivers, not r6's depth. pooler m=1 L0 keeps r6's ST=1 rolled loop (SASS: 3 LDG + 6 LOP3 per iteration). The bulk-ring L0 has the same caveat in its favour (ring-limited depth).",
+    "L1 and L3 at m=32 hit the 128-register cap and spill 16-72 B (the XOR consumers lengthen live ranges). That is small next to the effects being looked for, but noted.",
+    "The probes are compiled for the r6 geometries of job 23cecdef1bb54c9e. If r6's bake picks a different geometry on the day, L4 prints the picked name and the ladder still describes the job's geometry."
+  ],
+  "kill_if": "Not a speed candidate. The bake and PICK are pw12's, so pw14's own score only re-measures pw12. Success = every PROBE gvlad line present and the m=32 gap attributed (the L0..L4 steps summing to L4 within noise).",
+  "local_checks": "nvcc 12.8 -Xptxas -v: 153 kernels (137 pw12 + 16 probes). pw12's 137 kernels are SASS-identical; the one diff is the ptxasOptions metadata string. lint ok; cpu-check --official 9/9."
+}
