@@ -136,7 +136,19 @@ def plan_ep(layers, ms):
     return v
 
 
-PLANS = {"ep": plan_ep, "ks": plan_ks, "dec": plan_dec, "m256b": plan_m256b, "m256": plan_m256, "r1": plan_r1, "e5": plan_e5, "ins": plan_ins}
+def plan_sk(layers, ms):
+    """stream-K grid on all 132 SMs (KS = -132) vs the shipped KS grid, same run"""
+    v = []
+    for ly in layers:
+        v.append(("cublas", None, ly, 128, 0, 0))
+        for nm in ("s3s5", "s4s5hz", "s4s5z"):
+            v.append((nm, nm, ly, 128, S.RQKS[ly], 0))
+        for nm in ("s3s5k", "s4s5hzk", "s4s5zk"):
+            v.append((nm, nm, ly, 128, -132, 0))
+    return v
+
+
+PLANS = {"sk": plan_sk, "ep": plan_ep, "ks": plan_ks, "dec": plan_dec, "m256b": plan_m256b, "m256": plan_m256, "r1": plan_r1, "e5": plan_e5, "ins": plan_ins}
 
 
 class Clocks:
@@ -269,11 +281,11 @@ def main():
             continue
         lay, tab, esc = packs[ly]
         if (ly, KS) not in escs:
-            escs[(ly, KS)] = S._rqesc(esc, lay.shape[0], lay.shape[1], KS, dev)
+            escs[(ly, KS)] = (S._rqesc_sk(esc, lay.shape[0], lay.shape[1], -KS, dev), None) if KS < 0 else S._rqesc(esc, lay.shape[0], lay.shape[1], KS, dev)
         el, _ = escs[(ly, KS)]
-        if ly not in cnts:
-            cnts[ly] = torch.zeros(2 * lay.shape[0], dtype=torch.int32, device=dev)
-        eo = cnts[ly]
+        if (ly, KS < 0) not in cnts:
+            cnts[(ly, KS < 0)] = S._rqcnt_sk(lay.shape[0], lay.shape[1], -KS, dev) if KS < 0 else torch.zeros(2 * lay.shape[0], dtype=torch.int32, device=dev)
+        eo = cnts[(ly, KS < 0)]
         i = names.index(nm)
         v = S.RQV[S.RQI[nm]]
         full = v[4] in (0, 7) and not (v[4] == 0 and v[7] & 2)
@@ -291,7 +303,7 @@ def main():
         info = ""
         if v[4] == 0 and v[7] & 2:
             torch.cuda.synchronize()
-            if int(eo.abs().sum()):
+            if int(eo[: 2 * lay.shape[0]].abs().sum()):
                 print("COUNTERS %s not reset: %s" % (tag, eo.tolist()[:8]), flush=True)
         if v[4] == 0 and wal == 0 and not args.no_validate:
             t1 = time.time()

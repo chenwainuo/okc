@@ -654,20 +654,246 @@ latency_gemv_w(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restri
 #endif
 }
 
+// ---------------------------------------------------------------------------------------------------------
+// LOADER 3: warp-specialised. Warp 8 lane 0 streams whole CTA stages (all 8 k64 blocks, contiguous in the
+// packed order) with 1-D TMA into a ring of S slots (full/empty mbarriers); the 8 consumer warps never issue
+// weight loads, so their shared-memory pipe stays free for the math. Each consumer warp pulls its own x slice
+// (m rows x 64 k) for stage s+S with cp.async into its private part of the slot right after releasing stage s.
+template <int NB, int MT, int MODE>
+__global__ void __launch_bounds__(288, 1)
+latency_gemv_t(const uint8_t* __restrict__ packed, const __nv_bfloat16* __restrict__ x, void* __restrict__ out,
+               const uint8_t* __restrict__ excw, int ecap, int ksplit, int dbg,
+               int m, int K, int N, int nstages, int S, uint32_t lut_lo, uint32_t lut_hi, uint32_t lut2_lo, uint32_t lut2_hi)
+{
+    constexpr bool DUAL = MODE == 2;
+    constexpr int NPL = DUAL ? 2 : 1;
+    constexpr int NT = (NB + 7) / 8;
+    constexpr int STAGE = 8 * NB * 96 * NPL;
+    extern __shared__ __align__(128) uint8_t smem[];
+    __shared__ __align__(8) uint64_t fullb[16], emptyb[16];
+
+    const int tid = threadIdx.x, warp = tid >> 5, lane = tid & 31, g = lane >> 2, c = lane & 3;
+    const int cta = blockIdx.x;
+    const int ntile = cta / ksplit, kq = cta - ntile * ksplit;
+    const int nst = nstages / ksplit, st0 = kq * nst;
+    const int XW = m * 128;                                  // one warp's x slice per stage
+    const int SLOT = (STAGE + 8 * XW + 127) & ~127;
+    const int EB = ecap * 8;
+    uint8_t* ring = smem + 8 * EB;
+    const uint8_t* src = packed + ((size_t)ntile * (size_t)nstages + st0) * STAGE;
+    const uint8_t* xb = reinterpret_cast<const uint8_t*>(x);
+    stamp(dbg, cta, warp, lane, 0);
+
+    if (tid == 256) {
+        for (int i = 0; i < S; ++i) { mbar_init(&fullb[i], 1); mbar_init(&emptyb[i], 8); }
+#ifdef LATENCY_SM90A
+        asm volatile("fence.mbarrier_init.release.cluster;" ::: "memory");
+#endif
+        // the first S stages go out before anyone waits
+        for (int st = 0; st < S && st < nst; ++st) {
+            mbar_expect_tx(&fullb[st], STAGE);
+            tma_load_1d(ring + st * SLOT, src + (size_t)st * STAGE, STAGE, &fullb[st]);
+        }
+    }
+    auto issue_x = [&](int st) {
+        if (st < nst) {
+            uint8_t* d = ring + (st % S) * SLOT + STAGE + warp * XW;
+            const int k0 = (st0 + st) * 512 + warp * 64;
+            for (int i = lane; i < m * 8; i += 32) {
+                const int r = i >> 3, ch = i & 7;
+                cp_async16(d + r * 128 + ((ch ^ ((r & 1) << 2)) << 4), xb + ((size_t)r * K + k0 + ch * 8) * 2);
+            }
+        }
+        cp_commit();
+    };
+    uint8_t* eslot = smem + (warp < 8 ? warp : 0) * EB;
+    if (warp < 8) {
+        const uint8_t* es = excw + (size_t)(cta * 8 + warp) * EB;
+        for (int i = lane; i < EB / 16; i += 32) cp_async16(eslot + i * 16, es + i * 16);
+        for (int i = 0; i < S; ++i) issue_x(i);
+    }
+    __syncthreads();   // barrier init visible
+    stamp(dbg, cta, warp, lane, 1);
+
+    float acc[MT][NT][4];
+#pragma unroll
+    for (int a = 0; a < MT; ++a)
+#pragma unroll
+        for (int t = 0; t < NT; ++t)
+#pragma unroll
+            for (int i = 0; i < 4; ++i) acc[a][t][i] = 0.f;
+
+    if (warp == 8) {
+        if (lane == 0)
+            for (int st = S; st < nst; ++st) {
+                const int slot = st % S;
+                mbar_wait(&emptyb[slot], (uint32_t)(((st / S) - 1) & 1));
+                mbar_expect_tx(&fullb[slot], STAGE);
+                tma_load_1d(ring + slot * SLOT, src + (size_t)st * STAGE, STAGE, &fullb[slot]);
+            }
+    } else {
+        int ep = 0;
+        for (int s = 0; s < nst; ++s) {
+            const int slot = s % S;
+            const uint8_t* base = ring + slot * SLOT;
+            const uint8_t* xs = base + STAGE + warp * XW;
+            cp_wait_rt(S - 1);
+            mbar_wait(&fullb[slot], (uint32_t)((s / S) & 1));
+            __syncwarp();
+            if (s == 0) stamp(dbg, cta, warp, lane, 2);
+            if (s == nst / 2) stamp(dbg, cta, warp, lane, 3);
+            uint32_t xc[MT][2][2][4];
+#pragma unroll
+            for (int a = 0; a < MT; ++a)
+#pragma unroll
+                for (int h = 0; h < 2; ++h)
+#pragma unroll
+                    for (int rr = 0; rr < 2; ++rr) {
+                        const int row = g + 8 * rr + 16 * a;
+                        if (row < m) {
+                            const uint4 v = lds128(xs + row * 128 + (((h * 4 + c) ^ ((row & 1) << 2)) << 4));
+                            xc[a][h][rr][0] = v.x; xc[a][h][rr][1] = v.y; xc[a][h][rr][2] = v.z; xc[a][h][rr][3] = v.w;
+                        } else {
+                            xc[a][h][rr][0] = xc[a][h][rr][1] = xc[a][h][rr][2] = xc[a][h][rr][3] = 0u;
+                        }
+                    }
+            if (dbg & 2) {
+                acc[0][0][0] += __uint_as_float(lds32(base + lane * 4) & 0x3fffffffu);
+            } else
+#pragma unroll
+            for (int t = 0; t < NT; ++t) {
+                const int n = t * 8 + g;
+                const bool has = (NB % 8 == 0) || (n < NB);
+                uint32_t bf[2][2][2];
+#pragma unroll
+                for (int pl = 0; pl < NPL; ++pl) {
+                    uint4 L = make_uint4(0u, 0u, 0u, 0u);
+                    uint2 H = make_uint2(0u, 0u);
+                    const uint8_t* pb = base + pl * (8 * NB * 96);
+                    const uint32_t l0 = pl ? lut2_lo : lut_lo, l1 = pl ? lut2_hi : lut_hi;
+                    if (has) {
+                        L = lds128(pb + warp * (NB * 64) + n * 64 + c * 16);
+                        H = lds64(pb + 8 * NB * 64 + warp * (NB * 32) + n * 32 + c * 8);
+                    }
+                    decode4(L.x, H.x, l0, l1, bf[0][0][0], bf[0][0][1]);
+                    decode4(L.y, H.x >> 16, l0, l1, bf[0][1][0], bf[0][1][1]);
+                    decode4(L.z, H.y, l0, l1, bf[1][0][0], bf[1][0][1]);
+                    decode4(L.w, H.y >> 16, l0, l1, bf[1][1][0], bf[1][1][1]);
+#pragma unroll
+                    for (int h = 0; h < 2; ++h)
+#pragma unroll
+                        for (int f = 0; f < 2; ++f)
+#pragma unroll
+                            for (int a = 0; a < MT; ++a) {
+                                uint32_t A[4] = {xc[a][h][0][2 * f], xc[a][h][1][2 * f], xc[a][h][0][2 * f + 1], xc[a][h][1][2 * f + 1]};
+                                mma_bf16(acc[a][t], A, bf[h][f][0], bf[h][f][1]);
+                            }
+                }
+            }
+            while (ep < ecap && !(dbg & 4)) {
+                const uint32_t nk = lds32(eslot + ep * 8);
+                const int k = (int)(nk >> 16);
+                if ((k >> 9) != st0 + s) break;
+                const float delta = __uint_as_float(lds32(eslot + ep * 8 + 4));
+                ++ep;
+                const int nl = nk & 0xFFFF, kl = k & 63;
+                const int t = nl >> 3, col = nl & 7, cc = col >> 1, j = col & 1;
+                if (cc == c) {
+#pragma unroll
+                    for (int a = 0; a < MT; ++a) {
+                        const int r0 = g + 16 * a, r1 = r0 + 8;
+                        const float x0 = r0 < m ? __uint_as_float(lds16(xs + r0 * 128 + ((((kl >> 3) ^ ((r0 & 1) << 2))) << 4) + (kl & 7) * 2) << 16) : 0.f;
+                        const float x1 = r1 < m ? __uint_as_float(lds16(xs + r1 * 128 + ((((kl >> 3) ^ ((r1 & 1) << 2))) << 4) + (kl & 7) * 2) << 16) : 0.f;
+#pragma unroll
+                        for (int tt = 0; tt < NT; ++tt)
+                            if (tt == t) {
+                                if (j == 0) { acc[a][tt][0] += x0 * delta; acc[a][tt][2] += x1 * delta; }
+                                else        { acc[a][tt][1] += x0 * delta; acc[a][tt][3] += x1 * delta; }
+                            }
+                    }
+                }
+            }
+            __syncwarp();
+            if (lane == 0) mbar_arrive(&emptyb[slot]);
+            issue_x(s + S);
+        }
+    }
+    cp_wait<0>();
+    stamp(dbg, cta, warp, lane, 4);
+
+    __syncthreads();
+    stamp(dbg, cta, warp, lane, 5);
+    float* red = reinterpret_cast<float*>(smem);
+    constexpr int RROWS = MT * 16, RCOLS = NT * 8;
+    if (warp < 8)
+#pragma unroll
+    for (int a = 0; a < MT; ++a)
+#pragma unroll
+        for (int t = 0; t < NT; ++t) {
+            const int r0 = g + 16 * a, col = t * 8 + 2 * c;
+            float* p = red + (size_t)warp * RROWS * RCOLS;
+            *reinterpret_cast<float2*>(p + r0 * RCOLS + col) = make_float2(acc[a][t][0], acc[a][t][1]);
+            *reinterpret_cast<float2*>(p + (r0 + 8) * RCOLS + col) = make_float2(acc[a][t][2], acc[a][t][3]);
+        }
+    __syncthreads();
+    const int total = m * NB;
+    if (ksplit == 1) {
+        if (tid < 256) for (int idx = tid; idx < total; idx += 256) {
+            const int row = idx / NB, col = idx - row * NB;
+            float sum = 0.f;
+#pragma unroll
+            for (int w = 0; w < 8; ++w) sum += red[(size_t)w * RROWS * RCOLS + row * RCOLS + col];
+            const size_t o = (size_t)row * N + (size_t)ntile * NB + col;
+            if (DUAL) reinterpret_cast<float*>(out)[o] = sum;
+            else reinterpret_cast<__nv_bfloat16*>(out)[o] = __float2bfloat16(sum);
+        }
+        stamp(dbg, cta, warp, lane, 6);
+        return;
+    }
+    float* red2 = red + 8 * RROWS * RCOLS;
+    if (tid < 256) for (int idx = tid; idx < total; idx += 256) {
+        const int row = idx / NB, col = idx - row * NB;
+        float sum = 0.f;
+#pragma unroll
+        for (int w = 0; w < 8; ++w) sum += red[(size_t)w * RROWS * RCOLS + row * RCOLS + col];
+        red2[idx] = sum;
+    }
+#ifdef LATENCY_SM90A
+    asm volatile("barrier.cluster.arrive.release.aligned;\nbarrier.cluster.wait.acquire.aligned;" ::: "memory");
+    const uint32_t r2 = (uint32_t)__cvta_generic_to_shared(red2);
+    if (tid < 256) for (int idx = kq * 256 + tid; idx < total; idx += 256 * ksplit) {
+        float sum = 0.f;
+        for (int r = 0; r < ksplit; ++r) {
+            uint32_t ra; float v;
+            asm volatile("mapa.shared::cluster.u32 %0, %1, %2;" : "=r"(ra) : "r"(r2 + idx * 4), "r"(r));
+            asm volatile("ld.shared::cluster.f32 %0, [%1];" : "=f"(v) : "r"(ra) : "memory");
+            sum += v;
+        }
+        const int row = idx / NB, col = idx - row * NB;
+        const size_t o = (size_t)row * N + (size_t)ntile * NB + col;
+        if (DUAL) reinterpret_cast<float*>(out)[o] = sum;
+        else reinterpret_cast<__nv_bfloat16*>(out)[o] = __float2bfloat16(sum);
+    }
+    asm volatile("barrier.cluster.arrive.release.aligned;\nbarrier.cluster.wait.acquire.aligned;" ::: "memory");
+#endif
+}
+
 template <int NB, int MT, int MODE>
 void launch_w(const torch::Tensor& packed, const torch::Tensor& x, torch::Tensor& out, const torch::Tensor& excw,
               int ecap, int ksplit, int dbg, int m, int K, int N, int nstages, int S, const uint32_t* lut, int smem_bytes) {
-    auto kfn = latency_gemv_w<NB, MT, MODE>;
+    auto kfn = (dbg & 256) ? latency_gemv_t<NB, MT, MODE> : latency_gemv_w<NB, MT, MODE>;
     static bool configured = false;
     if (!configured) {
-        cudaFuncSetAttribute(kfn, cudaFuncAttributeMaxDynamicSharedMemorySize, 220 * 1024);
-        cudaFuncSetAttribute(kfn, cudaFuncAttributeNonPortableClusterSizeAllowed, 1);
+        for (auto f : {latency_gemv_t<NB, MT, MODE>, latency_gemv_w<NB, MT, MODE>}) {
+            cudaFuncSetAttribute(f, cudaFuncAttributeMaxDynamicSharedMemorySize, 220 * 1024);
+            cudaFuncSetAttribute(f, cudaFuncAttributeNonPortableClusterSizeAllowed, 1);
+        }
         configured = true;
     }
     const int n_cta = N / NB * ksplit;
     cudaLaunchConfig_t cfg = {};
     cfg.gridDim = dim3(n_cta);
-    cfg.blockDim = dim3((dbg & 32) ? 256 + 32 * (((dbg >> 6) & 3) + 1) : 256);
+    cfg.blockDim = dim3((dbg & 256) ? 288 : (dbg & 32) ? 256 + 32 * (((dbg >> 6) & 3) + 1) : 256);
     cfg.dynamicSmemBytes = smem_bytes;
     cfg.stream = at::cuda::getCurrentCUDAStream();
     cudaLaunchAttribute attr[1];
@@ -740,19 +966,19 @@ torch::Tensor latency_gemv_w_run(torch::Tensor packed, torch::Tensor x, torch::T
 """
 
 _EXT = None
-LOADER = int(os.environ.get("LATENCY_LOADER", "2"))
+LOADER = int(os.environ.get("LATENCY_LOADER", "3"))
 
 
 def _ext():
     global _EXT
     if _EXT is None:
         _EXT = load_inline(
-            name=f"latency_gemv_v10_l{LOADER}",
+            name=f"latency_gemv_v11_l{min(LOADER, 2)}",
             cpp_sources=[CPP_SRC],
             cuda_sources=[CUDA_SRC],
             functions=["latency_gemv_run", "latency_gemv_w_run", "latency_stamps"],
             extra_cuda_cflags=["-O3", "-gencode=arch=compute_90a,code=sm_90a", "--use_fast_math", "-std=c++17",
-                               f"-DLATENCY_LOADER={LOADER}"],
+                               f"-DLATENCY_LOADER={min(LOADER, 2)}"],
             verbose=False,
         )
     return _EXT
@@ -980,14 +1206,29 @@ def _warp_layout(p):
     return torch.cat(parts, dim=3).permute(0, 2, 1, 3).contiguous()
 
 
+def _t_geometry(p, m, ks, ecap):
+    stage = 8 * p["NB"] * 96 * (2 if p["mode"] == 2 else 1)
+    slot = (stage + 8 * m * 128 + 127) // 128 * 128
+    eb = 8 * ecap * 8
+    S = max(1, min(p["nstages"] // ks, W_SMAX, (W_SMEM - eb) // slot))
+    mt = 2 if m > 16 else 1
+    red = 8 * (16 * mt) * ((p["NB"] + 7) // 8 * 8) * 4 + (m * p["NB"] * 4 if ks > 1 else 0)
+    return S, max(eb + S * slot, red)
+
+
 def _run(state, key, x):
     m = x.shape[0]
-    if LOADER == 2:
+    if LOADER >= 2:
         for mm, nb, ks in PLAN[key]:
             if m <= mm:
                 break
         p = state["packs"][(key, nb)]
         excw, ecap = p["excw_ks"][ks]
+        if LOADER == 3:
+            S, smem = _t_geometry(p, m, ks, ecap)
+            return state["ext"].latency_gemv_w_run(p["packed"], x, excw, ecap, ks, nb, p["N"], p["nstages"], S,
+                                                    p["lut"][0], p["lut"][1], p["lut"][2], p["lut"][3], smem, p["mode"],
+                                                    DBG | 256)
         if WLAYOUT:
             S, smem = _w_geometry(p, m, ks, ecap)
             return state["ext"].latency_gemv_w_run(p["packed_w"], x, excw, ecap, ks, nb, p["N"], p["nstages"], S,

@@ -988,3 +988,14 @@ new rtk (one TMA-issuing warp, a math warpgroup, a zeroing warp, no memset node)
 start is the biggest remaining fixed term; cluster-of-4 x sharing failed (two waves, self-zeroing deadlock — grids
 that cannot co-reside are now refused). All 11 official router checks pass. Ship: pw35 = pw34 @ 49b22d8 + the rtk
 router section, box-validated against pw34 in one run, targeted at a scored slot before the 00:00 UTC reset.
+
+## 19:30 UTC — handover written: `handover_folder/` (README + 11 files), pw35 scored run launched
+
+RS128 m=128 decomposition (box, kernel-µs, pooler/qkv): resident 14.37/9.47, bare W stream 17.98/11.17, W+x 18.91/12.03,
++handshake 18.96/12.11, +decode 19.66/12.75, +wgmma 20.99/14.21, full 21.92/15.07; x +0.94, decode+wgmma flow +2, epilogue
++0.9–1.6 (L2 reduce-transaction bound; per-warp reduces worse); fewer CTAs worse (per-SM ingest). P4 anatomy (commit 5b86c0f):
+streamed stage 941 clk, resident 749, resident-no-escapes 646; the escape walk costs 2.16 µs resident because the 4-warp
+wgmma.fence waits on the list-walking warp (issue 92 → 188 clk); all other per-stage levers ±0.1; next = producer-written
+escape patch table (expected −0.4…−0.6 box, more on the H200). pw35 (= pw34 + rtk router; box −2.4 at router m=256, −0.5 at
+m=128, 65/65) scored run launched 19:08 UTC → results/proj-rsi/jobs/pw35.scored.txt. Open agents: RS128 author (stream-K grid,
+x multicast), P4 (patch table), rs32, latency loader, clean-room workflow (3 schools + verifier/judges).

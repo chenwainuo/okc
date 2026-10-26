@@ -209,6 +209,129 @@ __device__ __forceinline__ void reduce_cols(const float* P, int S, int r, int m,
     }
 }
 
+constexpr int ESC_CAP = 64;   // escape entries staged in shared memory per CTA (the rest are read from global)
+
+// Stage this CTA's escape offsets, entries and the x values they need, at kernel start (latency hidden behind
+// the stream prologue).  xe_s[e][row] holds the bf16 pair x[row][k & ~1] as one 32-bit word (cp.async 4 B).
+template <int ROWS, int BN>
+__device__ __forceinline__ void stage_escapes(int* eo_s, Esc* esc_s, uint32_t* xe_s, int& n_esc_s,
+                                              const int* __restrict__ esc_off, const Esc* __restrict__ esc,
+                                              const __nv_bfloat16* __restrict__ x, int K, int m, int nb, int c0, int ncols, int tid) {
+    if (tid <= ncols) eo_s[tid] = __ldg(esc_off + nb * BN + c0 + tid);
+    __syncthreads();
+    const int e0 = eo_s[0], ne = eo_s[ncols] - e0;
+    const int nstage = ne < ESC_CAP ? ne : ESC_CAP;
+    if (tid == 0) n_esc_s = nstage;
+    if (tid < nstage) esc_s[tid] = esc[e0 + tid];
+    __syncthreads();
+    const int nrows = m < ROWS ? m : ROWS;
+    for (int i = tid; i < nstage * nrows; i += 256) {
+        const int le = i / nrows, row = i % nrows;
+        const int k2 = esc_s[le].k & ~1;
+        cp_async4(xe_s + le * ROWS + row, x + (size_t)row * K + k2);
+    }
+}
+
+// Split-K reduction over the S cluster partials (explicit DSMEM loads, 4 columns x 2 rows per batch) + exact
+// escape fix (x from the staged pairs) + store.  Thread -> 4-column group, rows strided.
+template <bool ROUTER, bool EXACT, int ROWS, int BN>
+__device__ __forceinline__ void reduce_store(const float* P, int S, int r, int m, int nb, int tid,
+                                             const __nv_bfloat16* __restrict__ x, int K, int N,
+                                             const int* eo_s, const Esc* esc_s, const uint32_t* xe_s, int n_esc_s,
+                                             const Esc* __restrict__ esc, void* __restrict__ out) {
+    const int c0 = (r * BN) / S, c1 = ((r + 1) * BN) / S, ncols = c1 - c0;
+    const int CG = (ncols + 3) >> 2, RG = 256 / CG;
+    if (tid >= RG * CG) return;
+    const int cg = tid % CG, cl0 = cg * 4;
+    const int nrows = m < ROWS ? m : ROWS;
+    const bool vec = ((c0 + cl0) & 3) == 0 && cl0 + 4 <= ncols;
+    uint32_t pr[16];
+#pragma unroll
+    for (int rr = 0; rr < 16; ++rr) pr[rr] = (rr < S) ? dsmem_map(P, rr) : 0u;
+    const int ea = eo_s[cl0], eb = eo_s[cl0 + 4 <= ncols ? cl0 + 4 : ncols], ebase = eo_s[0];
+    for (int row0 = tid / CG; row0 < nrows; row0 += 2 * RG) {
+        float v[2][4];
+#pragma unroll
+        for (int i = 0; i < 2; ++i)
+#pragma unroll
+            for (int j = 0; j < 4; ++j) v[i][j] = 0.f;
+#pragma unroll
+        for (int pass = 0; pass < 2; ++pass) {
+            if (pass == 1 && S <= 8) break;
+            float t[2][8][4];
+#pragma unroll
+            for (int i = 0; i < 2; ++i) {
+                const int row = row0 + i * RG;
+                const bool ok = row < nrows;
+#pragma unroll
+                for (int q = 0; q < 8; ++q) {
+                    const int rr = pass * 8 + q;
+                    const uint32_t off = (uint32_t)(row * BN + c0 + cl0) * 4u;
+                    if (ok && rr < S) {
+                        if (vec) {
+                            float4 f;
+                            if (S == 1) f = *reinterpret_cast<const float4*>(P + row * BN + c0 + cl0);
+                            else asm volatile("ld.shared::cluster.v4.f32 {%0,%1,%2,%3}, [%4];" : "=f"(f.x), "=f"(f.y), "=f"(f.z), "=f"(f.w) : "r"(pr[rr] + off));
+                            t[i][q][0] = f.x; t[i][q][1] = f.y; t[i][q][2] = f.z; t[i][q][3] = f.w;
+                        } else {
+#pragma unroll
+                            for (int j = 0; j < 4; ++j)
+                                t[i][q][j] = (cl0 + j < ncols) ? (S == 1 ? P[row * BN + c0 + cl0 + j] : dsmem_ld(pr[rr] + off + 4u * j)) : 0.f;
+                        }
+                    } else {
+#pragma unroll
+                        for (int j = 0; j < 4; ++j) t[i][q][j] = 0.f;
+                    }
+                }
+            }
+#pragma unroll
+            for (int i = 0; i < 2; ++i)
+#pragma unroll
+                for (int q = 0; q < 8; ++q)
+#pragma unroll
+                    for (int j = 0; j < 4; ++j) v[i][j] += t[i][q][j];
+        }
+        // escapes of these 4 columns (entries sorted by column)
+        for (int e = ea; e < eb; ++e) {
+            const int le = e - ebase;
+            Esc E;
+            if (le < n_esc_s) E = esc_s[le]; else E = esc[e];
+            const int j = E.pad - c0 - cl0;
+#pragma unroll
+            for (int i = 0; i < 2; ++i) {
+                const int row = row0 + i * RG;
+                if (row < nrows) {
+                    float xv;
+                    if (le < n_esc_s) {
+                        uint32_t pr2 = xe_s[le * ROWS + row];
+                        xv = __uint_as_float((E.k & 1) ? (pr2 & 0xFFFF0000u) : (pr2 << 16));
+                    } else xv = bf16_to_f(x + (size_t)row * K + E.k);
+#pragma unroll
+                    for (int jj = 0; jj < 4; ++jj)
+                        if (jj == j) v[i][jj] = (ROUTER && !EXACT) ? fix_esc_hilo(v[i][jj], xv, E) : fix_esc_bf16(v[i][jj], xv, E);
+                }
+            }
+        }
+#pragma unroll
+        for (int i = 0; i < 2; ++i) {
+            const int row = row0 + i * RG;
+            if (row >= nrows) continue;
+            if (ROUTER) {
+                float* o = reinterpret_cast<float*>(out) + (size_t)row * N + nb * BN + c0 + cl0;
+                if (vec) *reinterpret_cast<float4*>(o) = make_float4(v[i][0], v[i][1], v[i][2], v[i][3]);
+                else { for (int j = 0; j < 4; ++j) if (cl0 + j < ncols) o[j] = v[i][j]; }
+            } else {
+                __nv_bfloat16* o = reinterpret_cast<__nv_bfloat16*>(out) + (size_t)row * N + nb * BN + c0 + cl0;
+                if (vec) {
+                    __nv_bfloat162 a = __floats2bfloat162_rn(v[i][0], v[i][1]), b = __floats2bfloat162_rn(v[i][2], v[i][3]);
+                    uint2 u = make_uint2(*reinterpret_cast<uint32_t*>(&a), *reinterpret_cast<uint32_t*>(&b));
+                    *reinterpret_cast<uint2*>(o) = u;
+                } else { for (int j = 0; j < 4; ++j) if (cl0 + j < ncols) o[j] = __float2bfloat16_rn(v[i][j]); }
+            }
+        }
+    }
+}
+
 // ---------------------------------------------------------------------------------------------
 // k_small: m <= 16*MT (MT = 1, 2).  grid = NBLK * S, cluster S along K.  8 warps split the CTA's K range.
 // ---------------------------------------------------------------------------------------------
@@ -233,6 +356,12 @@ __global__ void __launch_bounds__(256, 2) k_small(const uint8_t* __restrict__ pa
     uint8_t* ring = smem + w * (D * STAGE);
     float* P = reinterpret_cast<float*>(smem) + 8 * ROWS * BN;   // [ROWS][BN], aliases the dead ring
 
+    __shared__ int eo_s[BN + 1];
+    __shared__ __align__(16) Esc esc_s[ESC_CAP];
+    __shared__ uint32_t xe_s[ESC_CAP * ROWS];
+    __shared__ int n_esc_s;
+    const int c0 = (r * BN) / S, c1 = ((r + 1) * BN) / S;
+
     float acc[MT][NT][4];
 #pragma unroll
     for (int a = 0; a < MT; ++a)
@@ -256,6 +385,8 @@ __global__ void __launch_bounds__(256, 2) k_small(const uint8_t* __restrict__ pa
     };
 #pragma unroll 1
     for (int s = 0; s < D - 1; ++s) { if (s < nsteps) issue(s); cp_commit(); }
+    stage_escapes<ROWS, BN>(eo_s, esc_s, xe_s, n_esc_s, esc_off, esc, x, K, m, nb, c0, c1 - c0, tid);
+    cp_commit();   // the x-pair copies form one more group; it is older than every ring group still pending
 
 #pragma unroll 1
     for (int s = 0; s < nsteps; ++s) {
@@ -308,21 +439,18 @@ __global__ void __launch_bounds__(256, 2) k_small(const uint8_t* __restrict__ pa
             *reinterpret_cast<float2*>(red + (row + 8) * BN + col) = make_float2(acc[mt][j][2], acc[mt][j][3]);
         }
     __syncthreads();
-    for (int idx = tid; idx < ROWS * BN; idx += 256) {
-        float v = 0.f;
+    for (int idx = tid; idx < ROWS * BN / 4; idx += 256) {
+        float4 v = make_float4(0.f, 0.f, 0.f, 0.f);
 #pragma unroll
-        for (int ww = 0; ww < 8; ++ww) v += reinterpret_cast<const float*>(smem)[ww * ROWS * BN + idx];
-        P[idx] = v;
+        for (int ww = 0; ww < 8; ++ww) {
+            float4 t = reinterpret_cast<const float4*>(smem)[ww * (ROWS * BN / 4) + idx];
+            v.x += t.x; v.y += t.y; v.z += t.z; v.w += t.w;
+        }
+        reinterpret_cast<float4*>(P)[idx] = v;
     }
     cg::cluster_group cluster = cg::this_cluster();
     if (S > 1) cluster.sync(); else __syncthreads();
-    __shared__ int eo_s[BN + 1];
-    {
-        const int c0 = (r * BN) / S, c1 = ((r + 1) * BN) / S, ncols = c1 - c0;
-        if (tid <= ncols) eo_s[tid] = __ldg(esc_off + nb * BN + c0 + tid);
-    }
-    __syncthreads();
-    reduce_cols<ROUTER, ROWS, BN, 0>(P, no_clu ? 1 : S, no_clu ? 0 : r, m, nb, tid, x, K, N, eo_s, esc, out, nullptr, nullptr, 0, 1);
+    reduce_store<ROUTER, false, ROWS, BN>(P, no_clu ? 1 : S, no_clu ? 0 : r, m, nb, tid, x, K, N, eo_s, esc_s, xe_s, n_esc_s, esc, out);
     if (S > 1) cluster.sync();
 #endif
 }
@@ -357,8 +485,15 @@ __global__ void __launch_bounds__(256, 1) k_rfma(const uint8_t* __restrict__ pac
 #pragma unroll
         for (int c = lane; c < STEP / 16; c += 32) cp_async16(st + c * 16, gs + c * 16, 16);
     };
+    __shared__ int eo_s[BN + 1];
+    __shared__ __align__(16) Esc esc_s[ESC_CAP];
+    __shared__ uint32_t xe_s[ESC_CAP * ROWS];
+    __shared__ int n_esc_s;
+    const int c0 = (r * BN) / S, c1 = ((r + 1) * BN) / S;
 #pragma unroll 1
     for (int s = 0; s < D - 1; ++s) { if (s < nsteps) issue(s); cp_commit(); }
+    stage_escapes<ROWS, BN>(eo_s, esc_s, xe_s, n_esc_s, esc_off, esc, x, K, m, nb, c0, c1 - c0, tid);
+    cp_commit();
     // stage x (rows >= m zero)
     for (int idx = tid; idx < ROWS * (KC / 8); idx += 256) {
         int row = idx / (KC / 8), k8 = (idx % (KC / 8)) * 8;
@@ -432,21 +567,18 @@ __global__ void __launch_bounds__(256, 1) k_rfma(const uint8_t* __restrict__ pac
             for (int j = 0; j < NT; ++j) red[row * BN + 8 * j + g] = acc[row][j];
     }
     __syncthreads();
-    for (int idx = tid; idx < ROWS * BN; idx += 256) {
-        float v = 0.f;
+    for (int idx = tid; idx < ROWS * BN / 4; idx += 256) {
+        float4 v = make_float4(0.f, 0.f, 0.f, 0.f);
 #pragma unroll
-        for (int ww = 0; ww < 8; ++ww) v += reinterpret_cast<const float*>(smem)[ww * ROWS * BN + idx];
-        P[idx] = v;
+        for (int ww = 0; ww < 8; ++ww) {
+            float4 t = reinterpret_cast<const float4*>(smem)[ww * (ROWS * BN / 4) + idx];
+            v.x += t.x; v.y += t.y; v.z += t.z; v.w += t.w;
+        }
+        reinterpret_cast<float4*>(P)[idx] = v;
     }
     cg::cluster_group cluster = cg::this_cluster();
     if (S > 1) cluster.sync(); else __syncthreads();
-    __shared__ int eo_s[BN + 1];
-    {
-        const int c0 = (r * BN) / S, c1 = ((r + 1) * BN) / S, ncols = c1 - c0;
-        if (tid <= ncols) eo_s[tid] = __ldg(esc_off + nb * BN + c0 + tid);
-    }
-    __syncthreads();
-    reduce_cols<true, ROWS, BN, 0, true>(P, S, r, m, nb, tid, x, K, N, eo_s, esc, out, nullptr, nullptr, 0, 1);
+    reduce_store<true, true, ROWS, BN>(P, S, r, m, nb, tid, x, K, N, eo_s, esc_s, xe_s, n_esc_s, esc, out);
     if (S > 1) cluster.sync();
 #endif
 }
@@ -739,7 +871,7 @@ def _ext():
     global _EXT
     if _EXT is None:
         _EXT = load_inline(
-            name="bandwidth_proj_v8",
+            name="bandwidth_proj_v9",
             cpp_sources=CPP_SRC,
             cuda_sources=CUDA_SRC,
             functions=["small_launch", "rfma_launch", "big_launch"],
@@ -816,6 +948,7 @@ def _pack_layer(w: torch.Tensor):
         ent[:, 0] = k_idx.to(torch.int32)
         ent[:, 1] = wt.view(torch.int32)
         ent[:, 2] = wd.view(torch.int32)
+        ent[:, 3] = (n_idx % BN).to(torch.int32)
     base2 = ((base << 7) | ((base << 7) << 16)) & 0xFFFFFFFF
     return {"packed": packed, "esc_off": esc_off, "esc": ent.contiguous(), "base2": base2, "n_esc": int(idx.shape[0]), "base": base,
             "nboff": nboff, "sstride": sstride}
@@ -839,6 +972,7 @@ def _big_cfg(layer, m, N, K, router):
 
 
 INTERLEAVE = int(os.environ.get("BW_INTERLEAVE", "1"))
+BIG_ENABLE = int(os.environ.get("BW_BIG", "0"))   # mma.sync big-m kernel: measured below cuBLAS, off by default
 SMALL_D = int(os.environ.get("BW_SMALL_D", "4"))
 BIG_KK = int(os.environ.get("BW_BIG_KK", "2"))
 BIG_D = int(os.environ.get("BW_BIG_D", "6" if BIG_KK == 2 else "12"))
@@ -885,7 +1019,7 @@ def kernel_fn(data, state):
             out = torch.empty((m, N), dtype=torch.float32, device=x.device)
             ext.small_launch(L["packed"], x, out, L["esc_off"], L["esc"], m, K, N, L["base2"], 16, 2, True, 4, 0, L["nboff"], L["sstride"])
             return out
-        if m in (128, 256) or (64 < m <= 256):
+        if BIG_ENABLE and (64 < m <= 256):
             MT = 8 if m <= 128 else 16
             out = torch.empty((m, N), dtype=torch.float32, device=x.device)
             c = _big_cfg(layer, m, N, K, True)
@@ -900,7 +1034,7 @@ def kernel_fn(data, state):
         c = _small_cfg(layer, m, N, K)
         ext.small_launch(L["packed"], x, out, L["esc_off"], L["esc"], m, K, N, L["base2"], c["S"], 1 if m <= 16 else 2, False, SMALL_D, 0, L["nboff"], L["sstride"])
         return out
-    if m <= 256:
+    if BIG_ENABLE and m <= 256:
         MT = 4 if m <= 64 else (8 if m <= 128 else 16)
         out = torch.empty((m, N), dtype=torch.bfloat16, device=x.device)
         c = _big_cfg(layer, m, N, K, False)

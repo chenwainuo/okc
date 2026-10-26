@@ -80,9 +80,33 @@ stream at ~3.7 TB/s): 19M weights in 7.6 µs = 11 lane-ops/weight of issue budge
   writes its fp32 slice to a scratch buffer, the last arriver (atomic ticket) sums all G slices in order — no memset
   node, no spinning, deterministic.
 
-## 3. Measured (H100 SXM box, harness graph replays, cold L2)
+## 3. What the measurements taught (H100 SXM box)
 
-(filled in below from `logs/bandwidth/*.log`)
+Measurement note: the box was CPU-saturated by other agents' nvcc jobs the whole session, which inflates the
+harness's per-replay numbers (its empty-graph replay read 12-16 µs instead of ~4). All kernel-side numbers below come
+from `lab/sweep2.py`: one CUDA graph holding 8 × (256 MB L2-flush read, kernel), minus the flush-only graph, so CPU
+launch jitter cancels; torch (cuBLAS, bf16 weights) is timed the same way in the same process.
+
+1. **Residency, not bytes in flight, was the first limiter.** Clusters are scheduled per GPC: with one CTA per SM a
+   cluster of 3 leaves 117 CTAs resident, 4 or 8 leave 120, so every "128 CTA" grid with S >= 3 ran in two waves
+   (`cudaOccupancyMaxActiveClusters` is now printed for every config). Only S <= 2 fills the GPU at one CTA/SM;
+   S = 3 needs two CTAs/SM (k_small at <= 128 registers, 80 KB smem).
+2. **The epilogue was the second.** Per-output loops that touch memory serialize one latency per output: `esc_off`
+   loads (L2, ~600 cycles) and DSMEM reads through generic pointers from `map_shared_rank` (measured ~1 µs each —
+   k_big's epilogue alone cost 50 µs with every loop component ablated). Fix: escape offsets staged in smem once per
+   CTA, and the split-K reduction as a batched gather (`mapa` + `ld.shared::cluster`, 4 rows × S ranks of
+   independent loads per thread before any add).
+3. **Shared-memory bank conflicts in the decode loads.** The first stream layout kept each lane's bytes contiguous
+   (lane stride 32 B), so the per-tile 4-byte loads were 8-way conflicted. The planes are now lane-contiguous
+   (`[tile][lane]` words), conflict-free, at the cost of a `__syncwarp` after `cp.async.wait_group`.
+4. **Pure streaming through per-warp cp.async rings reached only ~2.2 TB/s** (28 MB in 12.7 µs with decode and mma
+   ablated) against 2.9 TB/s for a grid-stride read of the same bytes. 864 independent 1.5 KB streams spread over
+   the whole weight have poor DRAM page locality; the stream is now stored step-major (all 64-column blocks' step s
+   adjacent) so the concurrently streamed addresses form one sliding window.
+
+### Measured table
+
+(see the end of this file; filled from `logs/bandwidth/batch*.log` and the final harness run)
 
 ## 4. Why it should beat the bar on the judge
 

@@ -3057,6 +3057,12 @@ RQV = [  # (name, NT, ST, GS, PRB, WM, INS, FL): ST k64 slots (W 12 KB + x NT*12
     ("r8pzi", 128, 8, 1, 8, 0, 1, 192),
     ("s4s5hzxi", 128, 5, 1, 0, 0, 1, 35),
     ("s4s5hzzi", 128, 5, 1, 0, 0, 1, 131),
+    ("s4s5hzt", 128, 5, 1, 0, 0, 0, 2051),
+    ("s4s5hzti", 128, 5, 1, 0, 0, 1, 2051),
+    ("s4hzt", 128, 8, 1, 0, 0, 0, 2051),
+    ("r8t", 128, 8, 1, 8, 0, 0, 2048),
+    ("r8ti", 128, 8, 1, 8, 0, 1, 2048),
+    ("n256s5hzt", 256, 5, 1, 0, 0, 0, 2051),
     ("r8pz", 128, 8, 1, 8, 0, 0, 192),
     ("r10d1", 128, 8, 1, 10, 0, 0, 256),
     ("r10d2", 128, 8, 1, 10, 0, 0, 512),
@@ -3197,7 +3203,9 @@ template <int NT> __device__ __forceinline__ void rq_wgss(float (&D)[NT / 2], ui
 template <int NT, int ST, int GS, int PRB, int WM, int INS, int FL>
 struct RqC {
   static constexpr int XB = NT * 128, WB = 12288, ND = NT / 2;
-  static constexpr int SMEM = 1024 + ST * (XB + WB) + 24 * ST + 16;
+  static constexpr bool PT = (FL & 2048) != 0;  // rs128p: escape patch tables (see the kernel)
+  static constexpr int PTB = 32 + 8 * 32 * 8;   // per slot: 8 lane masks + [8 warps][32 lanes][2] patch words
+  static constexpr int SMEM = 1024 + ST * (XB + WB) + 24 * ST + 16 + (PT ? 16 + ST * PTB + 8 * 64 * 4 : 0);
 };
 
 // Ring: ST k64 slots, slot i = x tile (XB, 1024-aligned) in the x ring + 12 KB W chunk in the W ring. ONE full barrier
@@ -3221,6 +3229,15 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
   const uint32_t sraw = (uint32_t)__cvta_generic_to_shared(smem), sbase = (sraw + 1023u) & ~1023u;
   const uint32_t xring = sbase, wring = sbase + ST * XB, bars = wring + ST * WB;
   const uint32_t full = bars, wempty = bars + 8 * ST, xempty = bars + 16 * ST, zflag = bars + 24 * ST;
+  // rs128p FL bit 11 (PT): escape patch tables. Warp 11 (idle after the zeroing handshake) copies the CTA's 8 escape lists
+  // to smem before the W flood, then per stage writes into the slot's table a lane mask per math warp and up to 2 patch
+  // words per lane (xor | reg) and arrives on the slot's full barrier (count + 1), gated on the W empty barrier like the
+  // W lane. Math warps load their mask (and words, for flagged lanes) with the W LDS and XOR after the decode: no list
+  // walk, no SHFL chain in front of the four-warp wgmma.fence.
+  constexpr bool PT = C::PT;
+  constexpr int PTB = C::PTB;
+  static_assert(!PT || (GS == 1 && (WM == 0 || WM == 5)), "PT: GS 1, WM 0 / 5");
+  const uint32_t ptab = (zflag + 16 + 15) & ~15u, plist = ptab + ST * PTB;
   const int tid = threadIdx.x, warp = tid >> 5, lane = tid & 31;
   const int nb = blockIdx.x, ks = blockIdx.y, KS = gridDim.y;
   const int s0 = (int)((long long)ks * p.KC / KS), KCS = (int)((long long)(ks + 1) * p.KC / KS) - s0;
@@ -3228,9 +3245,34 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
   // escape-list window issued before the producers start the W flood (a load issued after it waits behind ~28 MB)
   const uint32_t* el = p.esc + (size_t)((ks * p.NB + nb) * 8 + (warp & 7)) * p.ecap;
   uint32_t ec = warp < 8 ? __ldg(el + lane) : 0u;
+  if (PT && warp == 11) {  // the CTA's 8 lists (<= 64 entries each, host-checked) to smem, issued before the W flood
+    for (int i = lane; i < 8 * 64; i += 32) {
+      const int lw = i >> 6, li = i & 63;
+      const uint32_t v = li < p.ecap ? __ldg(p.esc + (size_t)((ks * p.NB + nb) * 8 + lw) * p.ecap + li) : 0xffffffffu;
+      asm volatile("st.shared.u32 [%0], %1;\n" :: "r"(plist + (uint32_t)i * 4), "r"(v) : "memory");
+    }
+    if (RES) {  // resident probe (no ring): slot 0's table patches, every stage, each lane that has any escape in the CTA
+      __syncwarp();
+      if (lane < 8) {
+        uint32_t mask = 0;
+        for (int li = 0; li < 64; li++) {
+          uint32_t e;
+          asm volatile("ld.shared.u32 %0, [%1];\n" : "=r"(e) : "r"(plist + (uint32_t)(lane * 64 + li) * 4) : "memory");
+          if (e == 0xffffffffu) break;
+          const uint32_t ln = (e >> 12) & 31, wv = ((e & 0x7fu) << (8 + ((e >> 7) & 1) * 16)) | ((e >> 8) & 15u);
+          if (!((mask >> ln) & 1)) {
+            const uint32_t a = ptab + 32 + ((uint32_t)lane * 32 + ln) * 8;
+            asm volatile("st.shared.u32 [%0], %1;\nst.shared.u32 [%0+4], 0;\n" :: "r"(a), "r"(wv) : "memory");
+            mask |= 1u << ln;
+          }
+        }
+        asm volatile("st.shared.u32 [%0], %1;\n" :: "r"(ptab + (uint32_t)lane * 4), "r"(mask) : "memory");
+      }
+    }
+  }
   if (tid == 0) {
     for (int i = 0; i < ST; i++) {
-      asm volatile("mbarrier.init.shared::cta.b64 [%0], %1;\n" :: "r"(full + 8 * i), "r"(XON ? 2 : 1));
+      asm volatile("mbarrier.init.shared::cta.b64 [%0], %1;\n" :: "r"(full + 8 * i), "r"((XON ? 2 : 1) + (PT && !RES ? 1 : 0)));
       asm volatile("mbarrier.init.shared::cta.b64 [%0], 8;\n" :: "r"(wempty + 8 * i));
       asm volatile("mbarrier.init.shared::cta.b64 [%0], 8;\n" :: "r"(xempty + 8 * i));
     }
@@ -3306,6 +3348,30 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
         if (atomicAdd(p.cnt + p.NB + nb, 1) == KS - 1) { p.cnt[nb] = 0; p.cnt[p.NB + nb] = 0; }
       }
     }
+    if (PT && !RES && warp == 11) {  // patch-table lane (after its zeroing share); lanes 0-7 own math warp w = lane's list
+      const uint32_t lb = plist + (uint32_t)(lane & 7) * 256;
+      uint32_t cur = 0xffffffffu, ci = 0;
+      if (lane < 8) asm volatile("ld.shared.u32 %0, [%1];\n" : "=r"(cur) : "r"(lb) : "memory");
+      for (int s = 0; s < KCS; s++) {
+        const int slot = s % ST;
+        if (s >= ST) rq_wait(wempty + 8 * slot, ((s / ST) - 1) & 1);
+        if (lane < 8) {
+          const uint32_t tb = ptab + slot * PTB;
+          uint32_t mask = 0;
+          while ((cur >> 17) == (uint32_t)s) {
+            const uint32_t ln = (cur >> 12) & 31, wv = ((cur & 0x7fu) << (8 + ((cur >> 7) & 1) * 16)) | ((cur >> 8) & 15u);
+            const uint32_t a = tb + 32 + ((uint32_t)lane * 32 + ln) * 8;
+            if ((mask >> ln) & 1) asm volatile("st.shared.u32 [%0+4], %1;\n" :: "r"(a), "r"(wv) : "memory");
+            else { asm volatile("st.shared.u32 [%0], %1;\nst.shared.u32 [%0+4], 0;\n" :: "r"(a), "r"(wv) : "memory"); mask |= 1u << ln; }
+            ++ci;
+            asm volatile("ld.shared.u32 %0, [%1];\n" : "=r"(cur) : "r"(lb + ci * 4) : "memory");
+          }
+          asm volatile("st.shared.u32 [%0], %1;\n" :: "r"(tb + (uint32_t)lane * 4), "r"(mask) : "memory");
+        }
+        __syncwarp();
+        if (lane == 0) rq_arrive(full + 8 * slot);  // release: the table stores precede the consumers' acquire
+      }
+    }
     return;
   }
   // ---------------- math warpgroups: warp w of WG g decodes W rows 64g + 16w .. +15 of the block (= tile 4g + w = warp)
@@ -3348,6 +3414,12 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
         if (PRB != 1 && PRB != 2) {
           const uint32_t a = wl + slot * WB;
           Q[j][0] = rq_lds(a); Q[j][1] = rq_lds(a + 512); Q[j][2] = rq_lds(a + 1024);
+          if (PT) {
+            const uint32_t tb = ptab + slot * PTB;
+            asm volatile("ld.shared.u32 %0, [%1];\n" : "=r"(pmask) : "r"(tb + (uint32_t)warp * 4) : "memory");
+            if ((pmask >> lane) & 1)
+              asm volatile("ld.shared.v2.u32 {%0, %1}, [%2];\n" : "=r"(pw0), "=r"(pw1) : "r"(tb + 32 + ((uint32_t)warp * 32 + lane) * 8) : "memory");
+          }
         }
       }
     }
@@ -3395,6 +3467,7 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
   // no SHFL chain sits between the full wait and the wgmma.fence (where it held the warpgroup's other 3 warps)
   static_assert(!(FL & 64) || (GS == 1 && WM == 0), "FL bit 6: GS 1, WM 0 only");
   uint32_t er0 = 0xffu, ex0 = 0u, er1 = 0xffu, ex1 = 0u, er2 = 0xffu, ex2 = 0u;
+  uint32_t pmask = 0u, pw0 = 0u, pw1 = 0u;  // PT: this warp's lane mask and this lane's patch words for the stage
   const uint32_t zmask = 0u - (uint32_t)(p.m < 0);  // 0 at run time, unknown to the compiler (FL bit 7 probe)
   auto prewalk = [&](int seq) {
     const unsigned long long te = INS ? clock64() : 0;
@@ -3448,7 +3521,12 @@ __global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant_
             sink += t & 1;
           }
           const unsigned long long te = INS ? clock64() : 0;
-          if (FL & 64) {
+          if (PT) {
+            if ((pmask >> lane) & 1) {
+              rq_xsw<0, 16>(A[j], (int)(pw0 & 15u), pw0 & ~15u);
+              if (pw1) rq_xsw<0, 16>(A[j], (int)(pw1 & 15u), pw1 & ~15u);
+            }
+          } else if (FL & 64) {
             if (er0 != 0xffu) { rq_xsw<0, 16>(A[j], (int)er0, ex0); if (er1 != 0xffu) { rq_xsw<0, 16>(A[j], (int)er1, ex1); if (er2 != 0xffu) rq_xsw<0, 16>(A[j], (int)er2, ex2); } }
           } else rq_fix<(FL & 32) != 0, (FL & 128) != 0>(A[j], GS * G + j, nx, nxs, ei, ec, el, lane, nhits, zmask);
           if (INS) {
@@ -3712,6 +3790,7 @@ static int rq_go(RqP& p, torch::Tensor x, torch::Tensor out, int KS, int info) {
     return info == 1 ? a.numRegs : info == 2 ? (int)a.localSizeBytes : C::SMEM;
   }
   if (p.m < 1 || p.m > NT || KS < 1 || p.KC / KS < GS || KS > 64) return -4;
+  if (C::PT && p.ecap > 64) return -14;  // rs128p: the patch-table lane holds <= 64 entries per list in smem
   RqTmap tx, to;
   int r = rq_map(&tx, x.data_ptr(), p.K, p.m, NT);
   if (r) return r;
