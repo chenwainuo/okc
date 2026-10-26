@@ -119,3 +119,27 @@ Final tally, pooler m=128 in-prepare: the best packed-weight wgmma path was pw10
 Every variant left a stage of the pipeline serialized behind another. One consumer warpgroup decodes and issues its wgmma while one producer lane feeds a ring whose slots stay pinned until the MMA retires. Whichever cost was removed (epilogue, split-K, x traffic), the next one (decode at full K, then wgmma) became exposed by about the same amount.
 
 The structural change a future attempt must make first: decouple the decode from the MMA warpgroup. Dedicated decode warps would write bf16 A tiles to shared memory for an SS-wgmma consumer, CUTLASS's mixed-input "transform" warpgroup pattern. Then the W stream, the decode and the tensor core each run at their own rate, instead of one warpgroup paying all three per stage.
+
+## pw19 post-mortem (check `09e3c6f672a24c71`): transform warpgroup + SS wgmma, kill rule hit
+
+Ladder tw64 (pw10 w1d4): W-only 19.9 (20.9) | W+x 30.4 (25.4) | +decode 32.5 (24.6) | +wgmma 39.5 (30.1) | full 43.8 (34.6).
+
+**(1) x delivery, +5.** Kernel time is in-prepare minus about 5 µs.
+
+| | Bytes | Kernel time | Throughput |
+|---|---|---|---|
+| tw64 W+x | 178 MB | 25.4 µs | 7.0 TB/s |
+| pw10 W+x | 178 MB | 20.4 µs | 8.7 TB/s |
+| cuBLAS nvjet 64x64, 13 stages | 262 MB | 24.6 µs | 10.7 TB/s |
+
+- **Cause: the x ring is too shallow.** tw64's x ring has 4 × 16 KB slots, and wgmma pins one or two until wait_group, so about 32–48 KB of x is in flight per SM. pw10's single 8-stage ring kept about 96 KB.
+- At about 1 µs of loaded L2 latency, 48 GB/s per SM of x needs ≥ 48 KB in flight; tw64 sits at that floor.
+- The polling producer lane is a secondary suspect; it has not been measured.
+
+**(2) +wgmma, +7.**
+- The stage period at L3 is about 1,070 clk (34.5 µs × 1.98 GHz / 64 stages), against a 420 clk stream.
+- Shared-memory traffic per stage is about 60 KB: TMA/bulk fills 22, stmatrix 8, packed reads 6, SS reads 24 (A 8 + B 16). That is about 470 clk at 128 B/clk, so bandwidth alone explains only about 50 of the about 216 clk added per stage.
+- The rest is latency: about 3 A slots × 1 x slot in the pipe serialize decode → fence → wgmma → release.
+- tw64x2 (55.0) doubled per-SM smem demand on top of a cluster-4 launch. tw128 is also cluster 4 (60.6), and tw128c2 at 64 CTAs is 55.1. Contention and cluster cost cannot be separated with this data.
+
+**(3) A seventh design** would need ≥ 12 stages (≥ 190 KB) in flight per SM, with register-A wgmma and 64-token tiles without split-K. Extrapolating pw10's 4→8-stage gain (−1.9), I estimate at most 1–2 µs over wk2 (31.3 → about 29.5–30). That is parity with cuBLAS (29.5), not a win.
