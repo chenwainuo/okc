@@ -1,0 +1,16 @@
+{
+  "id": "pw26",
+  "parent": "pw25",
+  "claim": "pw25's stock 128x64 CUTLASS tiles gave only 64 tiles on pooler m=128 (64 of 132 SMs streaming W): 46.0 vs cuBLAS 23.8. pw26 replaces the three instantiations with nvjet's shape, 64x64 tiles (128 tiles), swept over depth, cluster and K-block: cw13 (64x64x64, 13 stages, 1 CTA/SM), cw7c2 (64x64x64, 7 stages, cluster 1x2 with W multicast to the two token tiles: nvjet's cluster), cw7 (64x64x64, 7 stages, 112 KB, 2 CTAs/SM) and cwk128 (64x64x128, 4 stages). All use CUTLASS's basic warp-specialised kernel (one producer + one consumer warpgroup, 63 regs). The ping-pong kernel spilled 8-36 B at every stage count and epilogue tried (13 / 6 stages; TMA, no-smem and auto epilogues), so it was dropped per the 0-spill rule. Expected in-prepare 24-28 on pooler m=128.",
+  "paths": "As pw25 with CUTP = cw13 / cw7c2 / cw7 / cwk128 for the big four at m=128 / 256; bake, validation, PROBE cuthbm and the 140 s guard unchanged.",
+  "target_shapes": [
+    "pooler m=128: within 1.0 us of torch (24.2 in pw24's bake), better if stream-K fills the SMs"
+  ],
+  "kill_if": "pooler m=128 best CUTLASS path not within 1.0 µs of torch in the bake",
+  "mechanics": "The minimal header set (458 CUTLASS / CuTe headers from nvcc -M of the kernel TU, plus LICENSE.txt, BSD-3) is embedded as tar.xz + base64 (898 KB; the file is 1.07 MB). At prepare it is extracted with tarfile into a private tempfile.mkdtemp dir, and load_inline builds 'cut25_*' with extra_include_paths and CUTFLAGS = -O3 -lineinfo --use_fast_math -gencode=arch=compute_90a,code=sm_90a --expt-relaxed-constexpr. There is no network and no subprocess beyond load_inline. The kernel TU has no torch headers; the 10-line glue is in cpp_sources. A failed build prints 'PREP cut build failed: <reason>' and r6 + router stand; the bake starts only if prepare has 60 s left, and each path checks the 240 s budget.",
+  "local_checks": "Extract the embedded bundle and compile with the file's own CUTFLAGS: rc 0, 29.7 s local for 4 instantiations (judge estimate ~45-50 s: pw25 took 52 s for 3 at a 30 s local build), 0 errors, 4 x 63 regs, 0 spills. File 817,088 bytes. lint ok; cpu-check --official 9/9. Prepare estimate: r6 118 + router 6 + cut ~50 + bake ~35 = ~210 s.",
+  "risks": [
+    "The basic (non-ping-pong) kernel has one consumer warpgroup per CTA; the epilogue is not overlapped with the next tile's mainloop.",
+    "cw7 relies on 2 CTAs/SM (63 regs x 256 threads and 112 KB smem allow it; not checked by an occupancy query here)."
+  ]
+}
