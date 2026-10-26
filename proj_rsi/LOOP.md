@@ -890,3 +890,7 @@ the comparative lessons and then takes RS128's deferred refinements (deeper W-on
 
 qkv vs the pw31 run: m=1 −0.72, m=8 −0.52, m=32 −0.16, m=16 +0.15 (the box's −1.1 at m=16 did not transfer; the
 judge's bake picked by its own numbers). Net ≈ 5 µs of score; the small-shape + router gains of pw31 hold.
+mx vs RS128 per-CTA terms (audits/mx-h100.md): entry → first wgmma 1.5 vs 2.0 µs; epilogue 1.5 vs 1.5; stage period
+~0.60 vs ~0.44 µs per 12 KB. RS128 should borrow mx's in-chunk escape header (removes the escape-list global loads,
+likely RS128's +0.5 µs to first wgmma); mx's probes say the binding term is W-stream latency (no-A −4.3, no-B −0.6).
+rs128b (deeper W-only barrier, epilogue tail, escape header) starts once RS128's R4 commit lands.
