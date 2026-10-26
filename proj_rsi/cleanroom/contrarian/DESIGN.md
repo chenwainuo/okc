@@ -76,10 +76,11 @@ soak process ran outside the lock, so absolute numbers are inflated; ratios with
 | router   | 32  | 18.82 | 17.82 | 1.06 | (4,64,8) mma     |
 | router   | 128 | 19.65 | 27.23 | 0.72 | (8,64,4) mma     |
 
-Correctness: the harness checked m = 1, 32, 128 on o and qkv_gate (relative L2 ~1e-4, probe rows exact); the
-bake verifies every candidate config (all 30 shapes x all candidates) against a torch fp32 reference at 1e-2
-(router 1e-4) — none failed in the final version. The `--official` harness run is queued behind other agents'
-jobs at the time of writing (see the structured result for its status).
+Correctness (`check_all_h100.log`, task checker, final version): all 65 cases pass — every layer at
+m = 1, 5, 7, 8, 9(outliers), 16, 32, 33, 128, 130, 256, 512(outliers), 1000(outliers); relative L2 1e-7..2e-4
+(router 2e-6..6e-6); every probe row exact to 0.0 (router 3e-6, the hi+lo split). The bake additionally verifies
+every candidate config against a torch fp32 reference (none failed). The `--official` harness timing run was
+queued behind other agents' jobs at the time of writing (see the structured result for its status).
 
 Verdict vs the bar: not there. The bar reads 12-bit at the HBM rate at m <= 8 (1.4x cuBLAS on qkv); this kernel
 is 1.1-1.2x cuBLAS at m <= 16 and loses at m >= 32, so prepare will route most shapes to cuBLAS on the judge.
