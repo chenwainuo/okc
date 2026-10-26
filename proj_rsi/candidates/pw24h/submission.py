@@ -67,13 +67,13 @@ BHV = [  # (name, ST, BM, BN, CL, PP, WN, CG, RS, FN, PRB[, INS[, SY[, KS]]])
 SLACK = False  # slack.py (generated from this file by tools/mkslack.py) sets True: P4 decode-slack curve only
 if SLACK:
     BHV = []
-    for _n in (0, 16, 32, 48, 64, 96, 128):  # (name, ST, BM, BN, CL, PP, WN, CG, RS, FN, PRB, INS, SY, KS, ALU): 4 chains feeding the wgmma
-        a = 3000 + _n
-        BHV += [("k2x-d%d" % _n, 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 9, 2, a), ("n128x-d%d" % _n, 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 9, 1, a)]
-    for _n in (0, 32, 48, 64, 96, 128):  # ping-pong, each warpgroup releases its slot right after its own wgmma (wait_group 0)
-        a = 3000 + _n
-        BHV += [("pp0k2-d%d" % _n, 7, 64, 64, 0, 1, 0, 0, 0, 1, 0, 0, 1, 2, a), ("pp0k1-d%d" % _n, 12, 64, 64, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, a),
-                ("pp0n128-d%d" % _n, 9, 64, 128, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, a)]
+    for _n in (0, 16, 32, 48, 64, 96):  # (name, ST, BM, BN, CL, PP, WN, CG, RS, FN, PRB, INS, SY, KS, ALU)
+        BHV += [("k2x-d%d" % _n, 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 9, 2, 3000 + _n), ("n128x-d%d" % _n, 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 9, 1, 3000 + _n)]
+    for _n in (0, 16, 32, 48, 64, 96):  # pipelined decode-first (q: 4 chains) and release-first (r: 4 chains, s: one chain)
+        BHV += [("k2x-q%d" % _n, 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 9, 2, 5000 + _n), ("k2x-r%d" % _n, 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 9, 2, 9000 + _n),
+                ("n128x-q%d" % _n, 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 9, 1, 5000 + _n), ("n128x-r%d" % _n, 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 9, 1, 9000 + _n)]
+        if _n in (16, 48, 96):
+            BHV += [("k2x-s%d" % _n, 7, 64, 64, 0, 0, 1, 0, 0, 1, 0, 0, 9, 2, 8000 + _n), ("n128x-s%d" % _n, 9, 64, 128, 0, 0, 1, 0, 0, 1, 0, 0, 9, 1, 8000 + _n)]
 BHI = {v[0]: i for i, v in enumerate(BHV)}
 
 BHCU = r"""
@@ -244,7 +244,61 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
         }
       }
     };
-    if (MMA && !RS) {
+    if (MMA && !RS && ALU >= 4000) {  // pipelined synthetic decode: slot s+1 is waited, read (3 LDS.128 per k64) and decoded
+      // after stage s's commit and before its wait_group, overlapping wgmma(s); the result feeds stage s+1's W descriptor
+      constexpr int NA = ALU % 1000, IL = (ALU / 1000) & 1 ? 4 : 1, NI = NA * KS / IL;
+      auto decode = [&](int s) -> uint32_t {
+        const uint32_t base = wring + (s % ST) * WTB + (uint32_t)(tid & 127) * 16u;
+        uint32_t sd = 0;
+#pragma unroll
+        for (int kk = 0; kk < KS; kk++) {
+#pragma unroll
+          for (int j = 0; j < 3; j++) {
+            uint32_t a0, a1, a2, a3;
+            asm volatile("ld.shared.v4.u32 {%0,%1,%2,%3}, [%4];\n" : "=r"(a0), "=r"(a1), "=r"(a2), "=r"(a3) : "r"(base + kk * WT1 + j * 2048) : "memory");
+            sd ^= a0 ^ a1 ^ a2 ^ a3;
+          }
+        }
+#pragma unroll
+        for (int c4 = 0; c4 < 4; c4++) alu[c4] ^= sd;
+#pragma unroll
+        for (int i = 0; i < NI; i++) {
+#pragma unroll
+          for (int c4 = 0; c4 < IL; c4++) asm volatile("mad.lo.u32 %0, %0, %1, %2;\n" : "+r"(alu[c4]) : "r"(alu_a), "r"(alu_b));
+        }
+        return ((alu[0] ^ alu[1] ^ alu[2] ^ alu[3]) == 0u && m < 0) ? 1024u : 0u;
+      };
+      // first and last stages peeled: a branch in the loop body puts ptxas's injected warpgroup.arrive on a divergent
+      // path and serializes the wgmma (C7520)
+      auto mma_stage = [&](int s) { bh_facc(D); bh_fence(); issue(s); bh_commit(); bh_facc(D); };
+      wait_in(0);
+      dzz = decode(0);
+      mma_stage(0);
+      wait_in(1);
+      dzz = decode(1);
+#pragma unroll 1
+      for (int s = 1; s < KC - 1; s++) {
+        mma_stage(s);
+        if (ALU >= 8000) {  // release-first: free slot s-1 (wgmma s-1 done), then wait + decode s+1 while wgmma s runs
+          bh_wgwait<1>();
+          release(s - 1);
+          wait_in(s + 1);
+          dzz = decode(s + 1);
+        } else {  // decode-first (as specified): slot s-1 is held until s+1 has landed and been decoded
+          wait_in(s + 1);
+          const uint32_t dzn = decode(s + 1);
+          bh_wgwait<1>();
+          release(s - 1);
+          dzz = dzn;
+        }
+      }
+      mma_stage(KC - 1);
+      bh_wgwait<1>();
+      release(KC - 2);
+      bh_wgwait<0>();
+      bh_facc(D);
+      release(KC - 1);
+    } else if (MMA && !RS) {
       const int nu = nst / SPG;
       if (FN) bh_fence();
 #pragma unroll 1
@@ -255,7 +309,7 @@ bh(const __grid_constant__ BgTmap tw, const __grid_constant__ BgTmap tx, __nv_bf
           for (int j = 0; j < SPG; j++) wait_in(s0 + (u * SPG + j) * ds);
         }
         BH_T1(1);
-        if (ALU % 1000) {  // synthetic decode load: ALU % 1000 int ops per thread per k64 stage; bit 1000: 4 chains;
+        if (ALU % 1000 && ALU < 4000) {  // synthetic decode load: ALU % 1000 int ops per thread per k64 stage; bit 1000: 4 chains;
           // bit 2000: the chains feed this unit's W descriptor (an unprovable zero), so ptxas cannot sink them past the wgmma
           constexpr int NA = ALU % 1000, IL = (ALU / 1000) & 1 ? 4 : 1, NI = NA * KS * SPG / IL;
           if (ALU >= 2000) {  // the decode reads the landed slot: seed the chains with a word of this unit's W tile

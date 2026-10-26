@@ -69,3 +69,51 @@ The second math warpgroup never helps; it is worse than the single consumer at e
   - fewer decode instructions per weight: about ≤ 16 per thread per k64 (+0.4 on the H100), e.g. packed-pair PRMT tricks; or
   - a geometry with more stream time per decoded weight.
 - At m=256 neither 64×128 tile variant has slack for any decode.
+
+## Software-pipelined placement (coordinator's rung), runs slack3 / slack4
+
+**What these rungs do.** Stage s+1's slot is waited and read with 3 `LDS.128` per thread per k64 (6 KB per k64 per CTA, the 12-bit payload). N ops then run on that data. The result feeds stage s+1's W descriptor. All of this happens after stage s's wgmma commit, so it overlaps wgmma(s).
+
+**Two orders:**
+- **(q) decode-first, as specified:** commit(s) → wait(s+1) → LDS → ops → wait_group(1) → release(s−1).
+- **(r) release-first:** commit(s) → wait_group(1) → release(s−1) → wait(s+1) → LDS → ops.
+
+**Chain shapes.** "4 ch" is four independent chains of N/4 (ILP); "1 ch" is one dependent chain of N. The critical-path "d" curve above is likewise N ops in total over four chains.
+
+**Build fixes needed first.** A branch in the loop body put ptxas's injected warpgroup.arrive on a divergent path and serialized the wgmma (C7520). The first and last stages are peeled, and the SASS order was checked: HGMMA(s) → DEPBAR → release → TRYWAIT(s+1) → LDS.128 → IMAD → HGMMA(s+1).
+
+**k2x, pooler m=128** (cuBLAS 28.5–28.9):
+
+| N | 0 | 16 | 32 | 48 | 64 | 96 |
+|---|---|---|---|---|---|---|
+| critical path, 4 ch (slack3) | 27.81 | 28.64 | 28.93 | 29.18 | 31.55 | 35.52 |
+| critical path, 4 ch (slack4) | 28.42 | 29.09 | 29.54 | 29.54 | 31.71 | 36.10 |
+| pipelined decode-first, 4 ch | 29.28 | 28.90 / 29.47 | 31.36 / 31.33 | 32.80 / 33.09 | 34.78 / 35.58 | 39.78 / 40.16 |
+| pipelined release-first, 4 ch | 29.25 | 29.34 | 31.58 | 32.93 | 35.55 | 40.22 |
+| pipelined decode-first, 1 ch | – | 30.11 | 34.53 | 38.62 | 43.33 | 52.26 |
+| pipelined release-first, 1 ch | – | 30.69 | – | 38.72 | – | 53.41 |
+
+**n128x, pooler m=256** (cuBLAS 36.4–37.2; r6 tuned 29.7):
+
+| N | 0 | 16 | 32 | 48 | 64 | 96 |
+|---|---|---|---|---|---|---|
+| critical path, 4 ch | 31.17 / 32.58 | 35.71 / 36.48 | 38.30 / 38.85 | 40.22 / 41.06 | 42.69 / 43.10 | 46.88 / 47.42 |
+| pipelined decode-first, 4 ch | 37.50 | 40.83 / 40.96 | 42.53 / 42.43 | 44.93 / 45.09 | 47.14 / 47.74 | 51.49 / 52.03 |
+| pipelined release-first, 4 ch | 38.24 | 40.48 | 42.40 | 44.80 | 46.85 | 51.49 |
+| pipelined decode-first, 1 ch | – | 42.05 | 47.39 | 50.18 | 54.34 | 63.94 |
+| pipelined release-first, 1 ch | – | 42.46 | – | 50.46 | – | 63.81 |
+
+**Reading.**
+
+1. **Pipelining buys no slack on this pipeline.**
+   - Past the first 16 ops, every placement has the same slope: about 2.1–2.2 clk per op per k64 stage (k2x release-first: +10.9 µs from 16 to 96 ops).
+   - That is the per-warp INT issue rate (IMAD, LOP3, PRMT and SHF all issue at 2 clk per warp instruction on H100), not a dependency latency.
+   - Overlapping with the async wgmma cannot hide issue slots the consumer warp itself must spend.
+2. **One dependent chain is much worse** (latency-bound). A decode needs at least 4 independent chains per thread.
+3. **Reading slot s+1 (N=0) costs +0.85 µs at k2x and +5 µs at n128x by itself.**
+   - These SS kernels already move 32 KB (k2x) or 48 KB (n128x) of TMA writes plus wgmma reads per k64. The extra 6 KB of LDS pushes n128x over the 128 B/clk smem port (≈ 55 KB per 433-clk stage).
+   - This part is pessimistic for a real RS 12-bit kernel. There A comes from registers (no 8 KB wgmma A read) and W lands as 6 KB, not 8 KB. A real decode's reads replace the A read, not add to it.
+4. **For the 12-bit builds** (36–50 decode instructions per thread per k64 at 64 rows):
+   - Expect about +2.2 clk per instruction per stage beyond roughly 16–48 instructions of slack on the H100: ≈ +0.6–1.1 µs at pooler m=128 on the box.
+   - Expect about +5–7 µs on the H200, where S(0) ≥ the stream period.
+   - Software pipelining, ping-pong or a transform warpgroup do not change this; the fix is fewer instructions per weight.
