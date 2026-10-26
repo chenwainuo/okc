@@ -43,9 +43,11 @@ GRID = 132
 CLUSTER = int(os.environ.get("TC_CLUSTER", "1"))
 CLUSTER_MAX_MP = 128  # no smem room for a 128 KB slot at MP = 256; CLUSTER = CTAs per cluster for the DSMEM pre-reduction (1 = off)
 PDL = int(os.environ.get("TC_PDL", "1"))  # programmatic dependent launch of the convert kernel
-# largest m served by the packed-W kernel per layer; above it cuBLAS (torch) is faster on the H100 (its split-K tail of
-# fp32 atomics costs 2-5 us at m = 128/256, see DESIGN.md)
-KERNEL_MAX_M = {"qkv_gate": 64, "o": 64, "pooler": 64, "unpooler": 64, "router": 256}
+# largest m served by the packed-W kernel per layer; above it torch (cuBLAS on bf16 W / the hi+lo pair).  On the H100 box
+# the packed kernel's mainloop beats cuBLAS at every m, but its split-K epilogue (fp32 atomic tail, escape fix-ups,
+# convert kernel: 3-5 us of fixed latency) eats the 25% byte saving on the four bf16 layers; it wins on the router at
+# every m (see DESIGN.md).  TC_MAX_M=256 serves everything with the kernel.
+KERNEL_MAX_M = {"qkv_gate": 0, "o": 0, "pooler": 0, "unpooler": 0, "router": 256}
 KERNEL_MAX_M = {k: int(os.environ.get("TC_MAX_M", v)) for k, v in KERNEL_MAX_M.items()}
 MODE = 0  # ladder: 0 full, 3 no flush, 4 red.add flush only, 5 escapes only (no red.add), 6 no x tile (no flush), 7 no wgmma (no flush), 8 no flush + convert kernel
 DEDICATED_MAX_MP = 32  # MP <= this: dedicated producer warp (288 threads); above: thread 0 issues loads (256 threads)
