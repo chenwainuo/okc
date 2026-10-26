@@ -25,5 +25,13 @@
     "The probes are compiled for the r6 geometries of job 23cecdef1bb54c9e. If r6's bake picks a different geometry on the day, L4 prints the picked name and the ladder still describes the job's geometry."
   ],
   "kill_if": "Not a speed candidate. The bake and PICK are pw12's, so pw14's own score only re-measures pw12. Success = every PROBE gvlad line present and the m=32 gap attributed (the L0..L4 steps summing to L4 within noise).",
-  "local_checks": "nvcc 12.8 -Xptxas -v: 153 kernels (137 pw12 + 16 probes). pw12's 137 kernels are SASS-identical; the one diff is the ptxasOptions metadata string. lint ok; cpu-check --official 9/9."
+  "local_checks": "nvcc 12.8 -Xptxas -v: 153 kernels (137 pw12 + 16 probes). pw12's 137 kernels are SASS-identical; the one diff is the ptxasOptions metadata string. lint ok; cpu-check --official 9/9.",
+  "claim": "Probe ladder on r6's gv kernel attributes the m=32 vs m=1 gap (pooler 16.86 vs 13.91, qkv 14.76 vs 9.71 judge-us) to W stream depth, x loads, decode, mma or register occupancy; pw12 paths re-measured unchanged.",
+  "target_shapes": [
+    "decode 32/pooler",
+    "decode 32/qkv_gate",
+    "decode 16/pooler",
+    "decode 1/pooler",
+    "decode 1/qkv_gate"
+  ]
 }
