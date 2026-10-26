@@ -899,3 +899,8 @@ full-rate FFMA showed 2.2 clk/op); in the real register-A path (LDS → dec1 →
 pooler m=128 on the box; PRMT merge floor 0.5 ALU ops/weight, dec1 0.875 + 0.25 IMAD; aligned-window codec +0.07;
 headroom ~2x dec1 per stage on the H100, at the edge on the H200. The "INT-pipe-bound" conclusion is withdrawn;
 RS128's 0.44 µs/stage is barrier/issue/wait structure, not decode.
+RS128 R3/R4 done (commit afe782e): box bake picks rs128 at pooler/qkv/unpooler m=128 (24.32/16.93/23.84 vs r6
+31.30/19.07/30.66 in-prepare; the r6 pooler line is anomalously high vs the same run's tuned search 27.58 — a
+background compile thread during r6's bake is the suspect), r6 kept for o and all m=256 (0 spills at 128 accumulators);
+65/65 box checks; harness verify16 pooler 26.98 vs torch 29.74. Critic review running; rs128 is re-armed to submit
+FIRST at the 00:00 UTC reset once approved.
