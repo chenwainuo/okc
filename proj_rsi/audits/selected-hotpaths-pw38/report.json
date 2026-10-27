@@ -1,0 +1,2459 @@
+{
+  "official_job_id": "a3f0ebf25a754c01",
+  "score_us": 3198.6175079817262,
+  "evidence": [
+    {
+      "path": "proj_rsi/current_leaderboard_stack.json",
+      "sha256": "a0047afad7d4fa9e36baa572af4dcab674e53cd3fad7c8474dca2f559a4fcc5f"
+    },
+    {
+      "path": "results/proj-rsi/releases/pw38-v1-29e557ea53f3/profiles/submission.a3f0ebf25a754c01.json",
+      "sha256": "f10842d067824979dad7afc954fab9269d4dad726c7cf9ddeaabbb1a48c54cfb"
+    },
+    {
+      "path": "results/proj-rsi/scheduler/artifacts/research.pw45.gpu.01/collection-1793111000996134576/logs/scheduler/pw45-stack-01/run/result.json",
+      "sha256": "f6dbb69bf5359f1492170738a94977bf7e438a7faf132c455e598095fafad714"
+    }
+  ],
+  "scope": "Projection benchmark only; not a full model serving trace.",
+  "ranking": "Mean within-load latency fraction across six equal log-weight loads.",
+  "limitations": [
+    "Conditional cuts are arithmetic scenarios, not measured gains.",
+    "Selected case counts are not production request frequencies.",
+    "H100 local picks and H200 scored picks may differ.",
+    "No sampled inner-loop bottleneck is established by this export.",
+    "Local graph identities lack per-kernel event durations."
+  ],
+  "load_component_sums_us": {
+    "decode 1": 36.229055941024434,
+    "decode 16": 50.57540888057644,
+    "decode 32": 53.6707583295384,
+    "verify 1": 36.986198518443686,
+    "verify 16": 64.11257118907797,
+    "verify 32": 84.03760796180404
+  },
+  "groups": {
+    "family": [
+      {
+        "name": "gv",
+        "selected_cases": 14,
+        "score_elasticity": 0.46587055590888005,
+        "conditional_10pct_latency_cut_score_gain_us": 152.22102625121124
+      },
+      {
+        "name": "rq",
+        "selected_cases": 7,
+        "score_elasticity": 0.263948131296316,
+        "conditional_10pct_latency_cut_score_gain_us": 86.28495054013001
+      },
+      {
+        "name": "Lt/vendor",
+        "selected_cases": 6,
+        "score_elasticity": 0.21364718789441942,
+        "conditional_10pct_latency_cut_score_gain_us": 70.2126593994526
+      },
+      {
+        "name": "rtk",
+        "selected_cases": 2,
+        "score_elasticity": 0.03870057096526307,
+        "conditional_10pct_latency_cut_score_gain_us": 12.427105435254816
+      },
+      {
+        "name": "rr",
+        "selected_cases": 1,
+        "score_elasticity": 0.0178335539351215,
+        "conditional_10pct_latency_cut_score_gain_us": 5.729871213282877
+      }
+    ],
+    "layer": [
+      {
+        "name": "pooler",
+        "selected_cases": 6,
+        "score_elasticity": 0.31859875474922905,
+        "conditional_10pct_latency_cut_score_gain_us": 101.93597725148084
+      },
+      {
+        "name": "unpooler",
+        "selected_cases": 6,
+        "score_elasticity": 0.23083291279450482,
+        "conditional_10pct_latency_cut_score_gain_us": 73.94183107921026
+      },
+      {
+        "name": "qkv_gate",
+        "selected_cases": 6,
+        "score_elasticity": 0.2168491887647864,
+        "conditional_10pct_latency_cut_score_gain_us": 69.37128447048099
+      },
+      {
+        "name": "o",
+        "selected_cases": 6,
+        "score_elasticity": 0.12311363416614338,
+        "conditional_10pct_latency_cut_score_gain_us": 39.382878682150476
+      },
+      {
+        "name": "router",
+        "selected_cases": 6,
+        "score_elasticity": 0.11060550952533638,
+        "conditional_10pct_latency_cut_score_gain_us": 35.37943223443199
+      }
+    ]
+  },
+  "scored_routes": [
+    {
+      "index": 2,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "pooler",
+      "family": "gv",
+      "scored_latency_us": 13.932749318630616,
+      "score_elasticity": 0.06409564991752789,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         15.1 \u00b5s 100.0%      1\ntotal                                                             15.1 \u00b5s"
+    },
+    {
+      "index": 17,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "pooler",
+      "family": "gv",
+      "scored_latency_us": 13.624331386249795,
+      "score_elasticity": 0.06139376277278055,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         13.8 \u00b5s 100.0%      1\ntotal                                                             13.8 \u00b5s"
+    },
+    {
+      "index": 8,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "unpooler",
+      "family": "gv",
+      "scored_latency_us": 15.056268841861057,
+      "score_elasticity": 0.049616566545918846,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                         14.6 \u00b5s 100.0%      1\ntotal                                                             14.6 \u00b5s"
+    },
+    {
+      "index": 27,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "pooler",
+      "family": "Lt/vendor",
+      "scored_latency_us": 24.838092077506154,
+      "score_elasticity": 0.04925987439812923,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_64x128_64x8_1x2_v_bz_NNT                           24.8 \u00b5s 100.0%      1\ntotal                                                             24.8 \u00b5s"
+    },
+    {
+      "index": 12,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "pooler",
+      "family": "rq",
+      "scored_latency_us": 15.826435403605194,
+      "score_elasticity": 0.049146673459288255,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.6 \u00b5s 100.0%      1\ntotal                                                             15.6 \u00b5s"
+    },
+    {
+      "index": 23,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "unpooler",
+      "family": "Lt/vendor",
+      "scored_latency_us": 18.488145889506868,
+      "score_elasticity": 0.04806167637800301,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN                           18.5 \u00b5s 100.0%      1\ntotal                                                             18.5 \u00b5s"
+    },
+    {
+      "index": 13,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "unpooler",
+      "family": "rq",
+      "scored_latency_us": 15.431064965742554,
+      "score_elasticity": 0.047918908564063355,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s"
+    },
+    {
+      "index": 7,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "pooler",
+      "family": "gv",
+      "scored_latency_us": 14.390735001894722,
+      "score_elasticity": 0.04742336022062791,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                         15.0 \u00b5s 100.0%      1\ntotal                                                             15.0 \u00b5s"
+    },
+    {
+      "index": 22,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "pooler",
+      "family": "rq",
+      "scored_latency_us": 18.187236461269034,
+      "score_elasticity": 0.04727943398087519,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)           18.9 \u00b5s 100.0%      1\ntotal                                                             18.9 \u00b5s"
+    },
+    {
+      "index": 28,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "unpooler",
+      "family": "Lt/vendor",
+      "scored_latency_us": 23.407247194046388,
+      "score_elasticity": 0.04642216693563597,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_1x2_h_bz_NNN                          23.7 \u00b5s 100.0%      1\ntotal                                                             23.7 \u00b5s"
+    },
+    {
+      "index": 15,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "qkv_gate",
+      "family": "gv",
+      "scored_latency_us": 9.34395620057617,
+      "score_elasticity": 0.04210559873172095,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)                       9.1 \u00b5s 100.0%      1\ntotal                                                              9.1 \u00b5s"
+    },
+    {
+      "index": 0,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "qkv_gate",
+      "family": "gv",
+      "scored_latency_us": 8.998907245198474,
+      "score_elasticity": 0.041398204707327406,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.4 \u00b5s 100.0%      1\ntotal                                                              9.4 \u00b5s"
+    },
+    {
+      "index": 25,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "qkv_gate",
+      "family": "Lt/vendor",
+      "scored_latency_us": 17.21299688043921,
+      "score_elasticity": 0.03413748776274605,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           19.5 \u00b5s 100.0%      1\ntotal                                                             19.5 \u00b5s"
+    },
+    {
+      "index": 20,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "qkv_gate",
+      "family": "rq",
+      "scored_latency_us": 12.965923991112879,
+      "score_elasticity": 0.03370614049277571,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           12.8 \u00b5s 100.0%      1\ntotal                                                             12.8 \u00b5s"
+    },
+    {
+      "index": 5,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "qkv_gate",
+      "family": "rq",
+      "scored_latency_us": 10.135791390766,
+      "score_elasticity": 0.03340157998755091,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.9 \u00b5s 100.0%      1\ntotal                                                              9.9 \u00b5s"
+    },
+    {
+      "index": 10,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "qkv_gate",
+      "family": "rq",
+      "scored_latency_us": 10.337045079234727,
+      "score_elasticity": 0.03210017708266539,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.1 \u00b5s 100.0%      1\ntotal                                                             10.1 \u00b5s"
+    },
+    {
+      "index": 16,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "o",
+      "family": "gv",
+      "scored_latency_us": 5.279801097479335,
+      "score_elasticity": 0.023791762463533022,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           4.0 \u00b5s 100.0%      1\ntotal                                                              4.0 \u00b5s"
+    },
+    {
+      "index": 1,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "o",
+      "family": "gv",
+      "scored_latency_us": 5.163943544877164,
+      "score_elasticity": 0.02375599460500849,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           3.8 \u00b5s 100.0%      1\ntotal                                                              3.8 \u00b5s"
+    },
+    {
+      "index": 11,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "o",
+      "family": "rq",
+      "scored_latency_us": 6.56776081090015,
+      "score_elasticity": 0.02039521772909718,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                5.5 \u00b5s 100.0%      1\ntotal                                                              5.5 \u00b5s"
+    },
+    {
+      "index": 19,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "router",
+      "family": "gv",
+      "scored_latency_us": 4.470568823516361,
+      "score_elasticity": 0.020145211829429875,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.4 \u00b5s 100.0%      1\ntotal                                                              3.4 \u00b5s"
+    },
+    {
+      "index": 24,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "router",
+      "family": "rtk",
+      "scored_latency_us": 7.647228404785486,
+      "score_elasticity": 0.019879690423044123,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.1 \u00b5s 100.0%      1\ntotal                                                              6.1 \u00b5s"
+    },
+    {
+      "index": 3,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "unpooler",
+      "family": "gv",
+      "scored_latency_us": 4.256898893461422,
+      "score_elasticity": 0.019583263501681384,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.4 \u00b5s 100.0%      1\ntotal                                                              3.4 \u00b5s"
+    },
+    {
+      "index": 6,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "o",
+      "family": "gv",
+      "scored_latency_us": 5.8883968252255166,
+      "score_elasticity": 0.019404676948599566,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           5.2 \u00b5s 100.0%      1\ntotal                                                              5.2 \u00b5s"
+    },
+    {
+      "index": 18,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "unpooler",
+      "family": "gv",
+      "scored_latency_us": 4.267541010622022,
+      "score_elasticity": 0.019230330869202256,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.5 \u00b5s 100.0%      1\ntotal                                                              3.5 \u00b5s"
+    },
+    {
+      "index": 29,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "router",
+      "family": "rtk",
+      "scored_latency_us": 9.489970683017647,
+      "score_elasticity": 0.01882088054221894,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       8.0 \u00b5s 100.0%      1\ntotal                                                              8.0 \u00b5s"
+    },
+    {
+      "index": 26,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "o",
+      "family": "Lt/vendor",
+      "scored_latency_us": 9.089301126794638,
+      "score_elasticity": 0.018026257027936466,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                            8.4 \u00b5s 100.0%      1\ntotal                                                              8.4 \u00b5s"
+    },
+    {
+      "index": 4,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "router",
+      "family": "rr",
+      "scored_latency_us": 3.87655693885676,
+      "score_elasticity": 0.0178335539351215,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       3.1 \u00b5s 100.0%      1\ntotal                                                              3.1 \u00b5s"
+    },
+    {
+      "index": 21,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "o",
+      "family": "Lt/vendor",
+      "scored_latency_us": 6.824036442403706,
+      "score_elasticity": 0.017739725391968653,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopB_NNN                      5.5 \u00b5s 100.0%      1\ntotal                                                              5.5 \u00b5s"
+    },
+    {
+      "index": 14,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "router",
+      "family": "gv",
+      "scored_latency_us": 5.508452070055779,
+      "score_elasticity": 0.017105689831552497,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.1 \u00b5s 100.0%      1\ntotal                                                              4.1 \u00b5s"
+    },
+    {
+      "index": 9,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "router",
+      "family": "gv",
+      "scored_latency_us": 5.104216820829146,
+      "score_elasticity": 0.016820482963969433,
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s"
+    }
+  ],
+  "scored_kernel_events": [
+    {
+      "index": 0,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "qkv_gate",
+      "kernel_display_name": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)",
+      "profile_gpu_us_rounded": 9.4,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 1,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "o",
+      "kernel_display_name": "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)",
+      "profile_gpu_us_rounded": 3.8,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 2,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "pooler",
+      "kernel_display_name": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)",
+      "profile_gpu_us_rounded": 15.1,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 3,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "unpooler",
+      "kernel_display_name": "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)",
+      "profile_gpu_us_rounded": 3.4,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 4,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "router",
+      "kernel_display_name": "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...",
+      "profile_gpu_us_rounded": 3.1,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 5,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "qkv_gate",
+      "kernel_display_name": "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
+      "profile_gpu_us_rounded": 9.9,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 6,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "o",
+      "kernel_display_name": "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)",
+      "profile_gpu_us_rounded": 5.2,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 7,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "pooler",
+      "kernel_display_name": "void gv<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)",
+      "profile_gpu_us_rounded": 15.0,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 8,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "unpooler",
+      "kernel_display_name": "void gv<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)",
+      "profile_gpu_us_rounded": 14.6,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 9,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "router",
+      "kernel_display_name": "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)",
+      "profile_gpu_us_rounded": 4.2,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 10,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "qkv_gate",
+      "kernel_display_name": "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
+      "profile_gpu_us_rounded": 10.1,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 11,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "o",
+      "kernel_display_name": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
+      "profile_gpu_us_rounded": 5.5,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 12,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "pooler",
+      "kernel_display_name": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
+      "profile_gpu_us_rounded": 15.6,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 13,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "unpooler",
+      "kernel_display_name": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
+      "profile_gpu_us_rounded": 15.2,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 14,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "router",
+      "kernel_display_name": "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)",
+      "profile_gpu_us_rounded": 4.1,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 15,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "qkv_gate",
+      "kernel_display_name": "void gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)",
+      "profile_gpu_us_rounded": 9.1,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 16,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "o",
+      "kernel_display_name": "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)",
+      "profile_gpu_us_rounded": 4.0,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 17,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "pooler",
+      "kernel_display_name": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)",
+      "profile_gpu_us_rounded": 13.8,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 18,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "unpooler",
+      "kernel_display_name": "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)",
+      "profile_gpu_us_rounded": 3.5,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 19,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "router",
+      "kernel_display_name": "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)",
+      "profile_gpu_us_rounded": 3.4,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 20,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "qkv_gate",
+      "kernel_display_name": "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)",
+      "profile_gpu_us_rounded": 12.8,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 21,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "o",
+      "kernel_display_name": "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopB_NNN",
+      "profile_gpu_us_rounded": 5.5,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 22,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "pooler",
+      "kernel_display_name": "void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)",
+      "profile_gpu_us_rounded": 18.9,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 23,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "unpooler",
+      "kernel_display_name": "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN",
+      "profile_gpu_us_rounded": 18.5,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 24,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "router",
+      "kernel_display_name": "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...",
+      "profile_gpu_us_rounded": 6.1,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 25,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "qkv_gate",
+      "kernel_display_name": "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN",
+      "profile_gpu_us_rounded": 19.5,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 26,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "o",
+      "kernel_display_name": "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN",
+      "profile_gpu_us_rounded": 8.4,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 27,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "pooler",
+      "kernel_display_name": "nvjet_sm90_tst_64x128_64x8_1x2_v_bz_NNT",
+      "profile_gpu_us_rounded": 24.8,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 28,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "unpooler",
+      "kernel_display_name": "nvjet_sm90_tst_128x128_64x6_1x2_h_bz_NNN",
+      "profile_gpu_us_rounded": 23.7,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    },
+    {
+      "index": 29,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "router",
+      "kernel_display_name": "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...",
+      "profile_gpu_us_rounded": 8.0,
+      "profile_share_pct_rounded": 100.0,
+      "calls": 1
+    }
+  ],
+  "observed_local_graphs": [
+    {
+      "shape": "decode1/qkv_gate",
+      "actual_pick": {
+        "family": "GV",
+        "id": 6,
+        "variant": [
+          1,
+          1,
+          1,
+          1,
+          16,
+          8,
+          1,
+          1,
+          2,
+          8193
+        ],
+        "origin": "gv"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00)"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        15.904000028967857,
+        14.399999752640724,
+        14.4640002399683,
+        14.208000153303146,
+        14.911999925971031,
+        14.303999952971935,
+        14.655999839305878,
+        14.431999996304512,
+        14.527999795973301,
+        14.399999752640724,
+        14.592000283300877,
+        14.303999952971935,
+        14.336000196635723,
+        15.424000099301338,
+        14.495999552309513,
+        14.303999952971935,
+        14.303999952971935,
+        14.303999952971935,
+        14.336000196635723,
+        14.271999709308147,
+        14.368000440299511,
+        14.240000396966934,
+        14.240000396966934,
+        14.4640002399683,
+        14.4640002399683,
+        14.62399959564209,
+        14.368000440299511,
+        14.399999752640724,
+        14.560000039637089,
+        14.336000196635723
+      ]
+    },
+    {
+      "shape": "decode1/o",
+      "actual_pick": {
+        "family": "GV",
+        "id": 29,
+        "variant": [
+          1,
+          1,
+          2,
+          1,
+          8,
+          2,
+          1,
+          1,
+          0,
+          1
+        ],
+        "origin": "gv"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00)"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        9.184000082314014,
+        8.927999995648861,
+        8.86400043964386,
+        8.895999751985073,
+        9.279999881982803,
+        9.184000082314014,
+        9.056000038981438,
+        9.088000282645226,
+        8.736000396311283,
+        8.86400043964386,
+        9.216000325977802,
+        10.111999697983265,
+        8.895999751985073,
+        8.927999995648861,
+        9.056000038981438,
+        8.832000195980072,
+        9.02399979531765,
+        8.895999751985073,
+        9.02399979531765,
+        8.832000195980072,
+        8.895999751985073,
+        9.02399979531765,
+        8.86400043964386,
+        8.960000239312649,
+        9.02399979531765,
+        8.86400043964386,
+        8.960000239312649,
+        9.247999638319016,
+        8.927999995648861,
+        9.02399979531765
+      ]
+    },
+    {
+      "shape": "decode1/pooler",
+      "actual_pick": {
+        "family": "GV",
+        "id": 51,
+        "variant": [
+          1,
+          1,
+          2,
+          2,
+          8,
+          16,
+          1,
+          1,
+          0,
+          1
+        ],
+        "origin": "gv"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<1, 1, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 1.232e-04 (worst row 1.232e-04)"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        21.376000717282295,
+        21.43999934196472,
+        21.824000403285027,
+        21.407999098300934,
+        21.60000056028366,
+        21.536000072956085,
+        21.407999098300934,
+        21.27999998629093,
+        22.911999374628067,
+        21.503999829292297,
+        21.536000072956085,
+        22.71999977529049,
+        21.60000056028366,
+        21.95199951529503,
+        21.60000056028366,
+        21.75999991595745,
+        21.79200015962124,
+        22.336000576615334,
+        21.215999498963356,
+        21.536000072956085,
+        23.16799946129322,
+        21.60000056028366,
+        21.27999998629093,
+        22.495999932289124,
+        21.43999934196472,
+        21.536000072956085,
+        21.568000316619873,
+        21.95199951529503,
+        21.63200080394745,
+        21.503999829292297
+      ]
+    },
+    {
+      "shape": "decode1/unpooler",
+      "actual_pick": {
+        "family": "GV",
+        "id": 93,
+        "variant": [
+          1,
+          1,
+          2,
+          1,
+          8,
+          2,
+          4,
+          1,
+          0,
+          536870913
+        ],
+        "origin": "sel"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 3.622e-03 (worst row 3.622e-03)"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        7.391999941319227,
+        7.135999854654074,
+        7.296000141650438,
+        7.040000054985285,
+        7.168000098317862,
+        7.296000141650438,
+        7.360000163316727,
+        7.071999832987785,
+        7.23200011998415,
+        7.104000076651573,
+        7.296000141650438,
+        7.135999854654074,
+        8.320000022649765,
+        7.104000076651573,
+        7.135999854654074,
+        7.040000054985285,
+        7.135999854654074,
+        7.23200011998415,
+        7.104000076651573,
+        7.135999854654074,
+        7.23200011998415,
+        7.296000141650438,
+        7.104000076651573,
+        7.296000141650438,
+        7.104000076651573,
+        7.135999854654074,
+        7.2639998979866505,
+        7.007999811321497,
+        7.135999854654074,
+        7.104000076651573
+      ]
+    },
+    {
+      "shape": "decode1/router",
+      "actual_pick": {
+        "family": "RR",
+        "id": 1007,
+        "origin": "gv"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void rr<1, 2, 1024>(float4 const*, __nv_bfloat16 const*, float*, int, int, int)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 1.431e-07 (worst row 1.431e-07)"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        6.87999976798892,
+        6.87999976798892,
+        6.87999976798892,
+        7.007999811321497,
+        7.199999876320362,
+        6.912000011652708,
+        6.816000211983919,
+        6.943999789655209,
+        6.976000033318996,
+        7.007999811321497,
+        7.104000076651573,
+        6.816000211983919,
+        6.943999789655209,
+        6.976000033318996,
+        6.816000211983919,
+        6.976000033318996,
+        6.976000033318996,
+        6.752000190317631,
+        6.976000033318996,
+        6.976000033318996,
+        6.816000211983919,
+        6.816000211983919,
+        7.168000098317862,
+        6.87999976798892,
+        6.912000011652708,
+        6.912000011652708,
+        7.168000098317862,
+        6.976000033318996,
+        7.104000076651573,
+        6.943999789655209
+      ]
+    },
+    {
+      "shape": "decode16/qkv_gate",
+      "actual_pick": {
+        "family": "GV",
+        "id": 15,
+        "variant": [
+          1,
+          2,
+          2,
+          2,
+          8,
+          16,
+          1,
+          1,
+          0,
+          1
+        ],
+        "origin": "gv"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 3.315e-05 (worst row 8.115e-05); 3 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        14.495999552309513,
+        14.879999682307243,
+        14.688000082969666,
+        14.527999795973301,
+        14.495999552309513,
+        14.816000126302242,
+        14.527999795973301,
+        14.84800036996603,
+        14.84800036996603,
+        14.720000326633453,
+        15.135999768972397,
+        14.62399959564209,
+        14.560000039637089,
+        15.135999768972397,
+        15.039999969303608,
+        14.592000283300877,
+        14.783999882638454,
+        14.84800036996603,
+        15.104000456631184,
+        14.655999839305878,
+        14.592000283300877,
+        14.62399959564209,
+        14.751999638974667,
+        14.495999552309513,
+        14.527999795973301,
+        14.560000039637089,
+        14.592000283300877,
+        14.879999682307243,
+        14.592000283300877,
+        14.560000039637089
+      ]
+    },
+    {
+      "shape": "decode16/o",
+      "actual_pick": {
+        "family": "GV",
+        "id": 33,
+        "variant": [
+          1,
+          2,
+          2,
+          1,
+          8,
+          2,
+          1,
+          1,
+          0,
+          0
+        ],
+        "origin": "gv"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 0>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 4.762e-06 (worst row 2.238e-05); 3 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        8.927999995648861,
+        8.832000195980072,
+        8.671999908983707,
+        8.991999551653862,
+        8.927999995648861,
+        8.671999908983707,
+        8.86400043964386,
+        8.832000195980072,
+        9.02399979531765,
+        8.832000195980072,
+        8.832000195980072,
+        8.960000239312649,
+        8.895999751985073,
+        8.832000195980072,
+        10.048000141978264,
+        9.952000342309475,
+        8.927999995648861,
+        8.960000239312649,
+        8.799999952316284,
+        8.895999751985073,
+        8.991999551653862,
+        8.767999708652496,
+        8.799999952316284,
+        8.960000239312649,
+        8.86400043964386,
+        8.799999952316284,
+        8.767999708652496,
+        8.767999708652496,
+        8.927999995648861,
+        8.895999751985073
+      ]
+    },
+    {
+      "shape": "decode16/pooler",
+      "actual_pick": {
+        "family": "GV",
+        "id": 54,
+        "variant": [
+          1,
+          2,
+          2,
+          2,
+          8,
+          16,
+          1,
+          1,
+          0,
+          0
+        ],
+        "origin": "gv"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<1, 2, 2, 2, 8, 16, 1, 1, 0, 0>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 5.204e-05 (worst row 1.285e-04); 3 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        21.376000717282295,
+        21.60000056028366,
+        21.183999255299568,
+        21.60000056028366,
+        21.376000717282295,
+        22.6879995316267,
+        21.344000473618507,
+        21.63200080394745,
+        21.215999498963356,
+        21.536000072956085,
+        21.47199958562851,
+        21.536000072956085,
+        21.407999098300934,
+        21.727999672293663,
+        22.5600004196167,
+        21.727999672293663,
+        21.215999498963356,
+        22.048000246286392,
+        22.655999287962914,
+        21.503999829292297,
+        21.215999498963356,
+        21.63200080394745,
+        22.272000089287758,
+        21.91999927163124,
+        22.6879995316267,
+        21.888000890612602,
+        21.344000473618507,
+        22.784000262618065,
+        21.536000072956085,
+        21.75999991595745
+      ]
+    },
+    {
+      "shape": "decode16/unpooler",
+      "actual_pick": {
+        "family": "GV",
+        "id": 64,
+        "variant": [
+          1,
+          2,
+          2,
+          1,
+          4,
+          16,
+          1,
+          1,
+          2,
+          1
+        ],
+        "origin": "gv"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 6.356e-05 (worst row 1.708e-04); 3 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        21.536000072956085,
+        21.888000890612602,
+        21.31200022995472,
+        21.79200015962124,
+        21.75999991595745,
+        21.824000403285027,
+        21.568000316619873,
+        21.727999672293663,
+        21.727999672293663,
+        21.79200015962124,
+        21.60000056028366,
+        22.016000002622604,
+        21.568000316619873,
+        22.304000332951546,
+        21.63200080394745,
+        21.79200015962124,
+        21.983999758958817,
+        21.983999758958817,
+        21.856000646948814,
+        21.75999991595745,
+        22.87999913096428,
+        21.663999184966087,
+        21.75999991595745,
+        21.824000403285027,
+        22.5600004196167,
+        21.79200015962124,
+        21.247999742627144,
+        21.95199951529503,
+        21.376000717282295,
+        21.856000646948814
+      ]
+    },
+    {
+      "shape": "decode16/router",
+      "actual_pick": {
+        "family": "GV",
+        "id": 86,
+        "variant": [
+          2,
+          2,
+          1,
+          1,
+          8,
+          1,
+          16,
+          1,
+          0,
+          134217728
+        ],
+        "origin": "sel"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 2.498e-06 (worst row 2.849e-06); 3 probe rows exact to 2.7e-06"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        8.031999692320824,
+        7.807999849319458,
+        7.872000336647034,
+        7.872000336647034,
+        8.063999935984612,
+        8.0960001796484,
+        7.968000136315823,
+        7.872000336647034,
+        8.128000423312187,
+        7.872000336647034,
+        7.903999648988247,
+        7.903999648988247,
+        7.807999849319458,
+        8.00000037997961,
+        7.903999648988247,
+        7.7760000713169575,
+        7.935999892652035,
+        8.063999935984612,
+        7.840000092983246,
+        8.00000037997961,
+        7.807999849319458,
+        7.840000092983246,
+        7.935999892652035,
+        7.872000336647034,
+        7.935999892652035,
+        7.872000336647034,
+        8.0960001796484,
+        7.7760000713169575,
+        7.968000136315823,
+        7.935999892652035
+      ]
+    },
+    {
+      "shape": "decode32/qkv_gate",
+      "actual_pick": {
+        "family": "RQ",
+        "name": "t32s5hze",
+        "variant": [
+          "t32s5hze",
+          32,
+          5,
+          1,
+          0,
+          0,
+          0,
+          35
+        ],
+        "KS": 6,
+        "actual_regs_local_shared": [
+          168,
+          0,
+          83080
+        ]
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 3.763e-03 (worst row 4.089e-03); 4 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        15.48799965530634,
+        15.263999812304974,
+        15.615999698638916,
+        15.48799965530634,
+        16.48000068962574,
+        15.87199978530407,
+        15.263999812304974,
+        15.552000142633915,
+        15.48799965530634,
+        15.584000386297703,
+        15.32800029963255,
+        15.584000386297703,
+        15.231999568641186,
+        15.168000012636185,
+        15.39199985563755,
+        16.64000004529953,
+        16.51199907064438,
+        15.552000142633915,
+        15.39199985563755,
+        15.263999812304974,
+        15.359999611973763,
+        15.584000386297703,
+        15.552000142633915,
+        15.584000386297703,
+        15.263999812304974,
+        15.359999611973763,
+        15.807999297976494,
+        15.200000256299973,
+        16.863999888300896,
+        15.71200042963028
+      ]
+    },
+    {
+      "shape": "decode32/o",
+      "actual_pick": {
+        "family": "RQ",
+        "name": "t32s5hze",
+        "variant": [
+          "t32s5hze",
+          32,
+          5,
+          1,
+          0,
+          0,
+          0,
+          35
+        ],
+        "KS": 2,
+        "actual_regs_local_shared": [
+          168,
+          0,
+          83080
+        ]
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 2.139e-03 (worst row 2.986e-03); 4 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        9.952000342309475,
+        9.8879998549819,
+        10.111999697983265,
+        10.17600018531084,
+        10.048000141978264,
+        9.8879998549819,
+        9.8879998549819,
+        10.111999697983265,
+        9.983999654650688,
+        10.015999898314476,
+        9.952000342309475,
+        9.79200005531311,
+        9.920000098645687,
+        10.015999898314476,
+        10.111999697983265,
+        9.952000342309475,
+        10.367999784648418,
+        9.8879998549819,
+        10.015999898314476,
+        10.111999697983265,
+        9.759999811649323,
+        9.920000098645687,
+        9.8879998549819,
+        10.048000141978264,
+        9.983999654650688,
+        9.824000298976898,
+        10.015999898314476,
+        9.824000298976898,
+        10.111999697983265,
+        9.983999654650688
+      ]
+    },
+    {
+      "shape": "decode32/pooler",
+      "actual_pick": {
+        "family": "RQ",
+        "name": "t32s5hze",
+        "variant": [
+          "t32s5hze",
+          32,
+          5,
+          1,
+          0,
+          0,
+          0,
+          35
+        ],
+        "KS": 4,
+        "actual_regs_local_shared": [
+          168,
+          0,
+          83080
+        ]
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 3.394e-03 (worst row 3.727e-03); 4 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        22.336000576615334,
+        22.143999114632607,
+        22.08000048995018,
+        22.016000002622604,
+        22.911999374628067,
+        22.39999920129776,
+        23.48800003528595,
+        22.304000332951546,
+        23.679999634623528,
+        22.143999114632607,
+        21.91999927163124,
+        22.272000089287758,
+        21.824000403285027,
+        23.64799939095974,
+        22.911999374628067,
+        22.175999358296394,
+        22.207999601960182,
+        23.615999147295952,
+        22.048000246286392,
+        22.23999984562397,
+        22.336000576615334,
+        22.495999932289124,
+        22.048000246286392,
+        22.336000576615334,
+        22.23999984562397,
+        21.888000890612602,
+        22.336000576615334,
+        22.143999114632607,
+        22.048000246286392,
+        23.455999791622162
+      ]
+    },
+    {
+      "shape": "decode32/unpooler",
+      "actual_pick": {
+        "family": "RQ",
+        "name": "t32s5hze",
+        "variant": [
+          "t32s5hze",
+          32,
+          5,
+          1,
+          0,
+          0,
+          0,
+          35
+        ],
+        "KS": 2,
+        "actual_regs_local_shared": [
+          168,
+          0,
+          83080
+        ]
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 2.621e-03 (worst row 3.000e-03); 4 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        22.016000002622604,
+        22.016000002622604,
+        22.175999358296394,
+        21.888000890612602,
+        22.175999358296394,
+        22.5600004196167,
+        22.112000733613968,
+        21.727999672293663,
+        22.36800082027912,
+        22.463999688625336,
+        21.888000890612602,
+        22.016000002622604,
+        21.727999672293663,
+        22.08000048995018,
+        21.983999758958817,
+        22.207999601960182,
+        22.943999618291855,
+        22.336000576615334,
+        21.983999758958817,
+        22.39999920129776,
+        22.207999601960182,
+        22.816000506281853,
+        21.983999758958817,
+        22.36800082027912,
+        23.16799946129322,
+        21.91999927163124,
+        21.983999758958817,
+        22.112000733613968,
+        22.08000048995018,
+        22.08000048995018
+      ]
+    },
+    {
+      "shape": "decode32/router",
+      "actual_pick": {
+        "family": "GV",
+        "id": 84,
+        "variant": [
+          2,
+          4,
+          2,
+          1,
+          8,
+          2,
+          8,
+          1,
+          0,
+          134217728
+        ],
+        "origin": "sel"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 2.492e-06 (worst row 2.864e-06); 4 probe rows exact to 2.7e-06"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        8.128000423312187,
+        8.352000266313553,
+        8.1599997356534,
+        8.1599997356534,
+        8.383999578654766,
+        8.191999979317188,
+        8.352000266313553,
+        8.383999578654766,
+        8.287999778985977,
+        8.383999578654766,
+        8.352000266313553,
+        8.191999979317188,
+        8.191999979317188,
+        8.1599997356534,
+        8.287999778985977,
+        8.1599997356534,
+        7.968000136315823,
+        9.119999594986439,
+        8.287999778985977,
+        8.128000423312187,
+        8.128000423312187,
+        8.25599953532219,
+        8.287999778985977,
+        8.1599997356534,
+        8.383999578654766,
+        8.48000030964613,
+        8.031999692320824,
+        8.383999578654766,
+        8.383999578654766,
+        8.128000423312187
+      ]
+    },
+    {
+      "shape": "verify1/qkv_gate",
+      "actual_pick": {
+        "family": "GV",
+        "id": 6,
+        "variant": [
+          1,
+          1,
+          1,
+          1,
+          16,
+          8,
+          1,
+          1,
+          2,
+          8193
+        ],
+        "origin": "gv"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 2.102e-07 (worst row 6.179e-07); 1 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        14.527999795973301,
+        14.336000196635723,
+        14.175999909639359,
+        14.592000283300877,
+        14.431999996304512,
+        14.62399959564209,
+        14.303999952971935,
+        14.399999752640724,
+        14.112000353634357,
+        14.368000440299511,
+        14.527999795973301,
+        14.399999752640724,
+        14.431999996304512,
+        14.271999709308147,
+        14.14399966597557,
+        15.744000673294067,
+        15.359999611973763,
+        14.303999952971935,
+        14.560000039637089,
+        14.399999752640724,
+        14.240000396966934,
+        14.240000396966934,
+        14.175999909639359,
+        14.4640002399683,
+        15.424000099301338,
+        14.303999952971935,
+        14.208000153303146,
+        14.592000283300877,
+        14.175999909639359,
+        14.271999709308147
+      ]
+    },
+    {
+      "shape": "verify1/o",
+      "actual_pick": {
+        "family": "GV",
+        "id": 28,
+        "variant": [
+          1,
+          1,
+          2,
+          1,
+          8,
+          2,
+          1,
+          1,
+          0,
+          0
+        ],
+        "origin": "gv"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 1.125e-06 (worst row 5.429e-06); 1 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        9.119999594986439,
+        8.960000239312649,
+        8.767999708652496,
+        9.088000282645226,
+        9.119999594986439,
+        10.143999941647053,
+        10.33599954098463,
+        9.631999768316746,
+        8.991999551653862,
+        8.86400043964386,
+        9.02399979531765,
+        8.736000396311283,
+        9.088000282645226,
+        8.960000239312649,
+        9.088000282645226,
+        9.02399979531765,
+        9.184000082314014,
+        8.927999995648861,
+        8.991999551653862,
+        9.056000038981438,
+        8.767999708652496,
+        8.799999952316284,
+        8.86400043964386,
+        9.312000125646591,
+        8.960000239312649,
+        9.119999594986439,
+        8.799999952316284,
+        8.895999751985073,
+        8.767999708652496,
+        8.991999551653862
+      ]
+    },
+    {
+      "shape": "verify1/pooler",
+      "actual_pick": {
+        "family": "GV",
+        "id": 50,
+        "variant": [
+          1,
+          1,
+          2,
+          2,
+          8,
+          16,
+          1,
+          1,
+          0,
+          0
+        ],
+        "origin": "gv"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<1, 1, 2, 2, 8, 16, 1, 1, 0, 0>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 1.171e-05 (worst row 3.142e-05); 1 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        21.215999498963356,
+        22.52800017595291,
+        21.536000072956085,
+        21.31200022995472,
+        22.016000002622604,
+        21.43999934196472,
+        22.592000663280487,
+        21.43999934196472,
+        22.592000663280487,
+        21.344000473618507,
+        21.376000717282295,
+        21.536000072956085,
+        21.15200087428093,
+        21.824000403285027,
+        21.407999098300934,
+        21.376000717282295,
+        22.495999932289124,
+        21.824000403285027,
+        21.344000473618507,
+        21.79200015962124,
+        21.695999428629875,
+        21.31200022995472,
+        21.503999829292297,
+        21.344000473618507,
+        21.536000072956085,
+        21.60000056028366,
+        21.663999184966087,
+        21.663999184966087,
+        20.927999168634415,
+        22.5600004196167
+      ]
+    },
+    {
+      "shape": "verify1/unpooler",
+      "actual_pick": {
+        "family": "GV",
+        "id": 93,
+        "variant": [
+          1,
+          1,
+          2,
+          1,
+          8,
+          2,
+          4,
+          1,
+          0,
+          536870913
+        ],
+        "origin": "sel"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 2.804e-03 (worst row 3.756e-03); 1 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        7.135999854654074,
+        7.168000098317862,
+        7.23200011998415,
+        7.168000098317862,
+        7.104000076651573,
+        7.199999876320362,
+        7.135999854654074,
+        7.135999854654074,
+        7.168000098317862,
+        7.168000098317862,
+        7.488000206649303,
+        7.296000141650438,
+        7.296000141650438,
+        7.135999854654074,
+        7.071999832987785,
+        7.327999919652939,
+        7.296000141650438,
+        7.360000163316727,
+        7.2639998979866505,
+        7.168000098317862,
+        7.296000141650438,
+        7.327999919652939,
+        7.296000141650438,
+        7.135999854654074,
+        7.135999854654074,
+        7.199999876320362,
+        7.168000098317862,
+        7.360000163316727,
+        7.327999919652939,
+        7.296000141650438
+      ]
+    },
+    {
+      "shape": "verify1/router",
+      "actual_pick": {
+        "family": "GV",
+        "id": 88,
+        "variant": [
+          2,
+          1,
+          1,
+          1,
+          8,
+          1,
+          16,
+          1,
+          0,
+          536870912
+        ],
+        "origin": "sel"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 2.461e-06 (worst row 2.708e-06); 1 probe rows exact to 2.7e-06"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        7.840000092983246,
+        7.807999849319458,
+        7.807999849319458,
+        7.679999805986881,
+        7.7760000713169575,
+        7.712000049650669,
+        7.712000049650669,
+        7.807999849319458,
+        7.679999805986881,
+        7.712000049650669,
+        7.552000228315592,
+        7.74399982765317,
+        7.712000049650669,
+        7.679999805986881,
+        7.74399982765317,
+        7.807999849319458,
+        7.648000027984381,
+        7.648000027984381,
+        7.679999805986881,
+        7.679999805986881,
+        7.679999805986881,
+        7.584000006318092,
+        7.615999784320593,
+        7.679999805986881,
+        7.74399982765317,
+        7.7760000713169575,
+        7.679999805986881,
+        7.807999849319458,
+        7.807999849319458,
+        7.840000092983246
+      ]
+    },
+    {
+      "shape": "verify16/qkv_gate",
+      "actual_pick": {
+        "family": "RQ",
+        "name": "s4s5hzEH",
+        "variant": [
+          "s4s5hzEH",
+          128,
+          5,
+          1,
+          0,
+          0,
+          0,
+          65539
+        ],
+        "KS": 7,
+        "actual_regs_local_shared": [
+          168,
+          0,
+          144520
+        ]
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 4.037e-03 (worst row 4.383e-03); 15 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        17.503999173641205,
+        17.24799908697605,
+        18.015999346971512,
+        17.632000148296356,
+        17.44000054895878,
+        17.664000391960144,
+        17.88800023496151,
+        18.400000408291817,
+        17.696000635623932,
+        17.343999817967415,
+        17.216000705957413,
+        18.783999606966972,
+        17.216000705957413,
+        17.855999991297722,
+        17.88800023496151,
+        18.239999189972878,
+        17.44000054895878,
+        17.696000635623932,
+        17.44000054895878,
+        17.59999990463257,
+        18.112000077962875,
+        17.343999817967415,
+        17.24799908697605,
+        17.59999990463257,
+        17.75999926030636,
+        17.08799973130226,
+        17.952000722289085,
+        16.96000061929226,
+        17.11999997496605,
+        17.855999991297722
+      ]
+    },
+    {
+      "shape": "verify16/o",
+      "actual_pick": {
+        "family": "LT",
+        "lt": 200024
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "nvjet_tst_128x64_64x8_1x1_v_bz_coopB_NNN"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 5.513e-05 (worst row 2.131e-04); 15 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        11.19999960064888,
+        10.944000445306301,
+        10.975999757647514,
+        11.136000044643879,
+        10.912000201642513,
+        10.816000401973724,
+        10.879999957978725,
+        10.816000401973724,
+        10.751999914646149,
+        10.975999757647514,
+        10.879999957978725,
+        10.944000445306301,
+        10.751999914646149,
+        10.879999957978725,
+        10.944000445306301,
+        10.816000401973724,
+        10.816000401973724,
+        10.688000358641148,
+        10.879999957978725,
+        10.816000401973724,
+        10.751999914646149,
+        11.04000024497509,
+        10.816000401973724,
+        11.136000044643879,
+        10.71999967098236,
+        10.751999914646149,
+        10.879999957978725,
+        10.71999967098236,
+        11.04000024497509,
+        10.912000201642513
+      ]
+    },
+    {
+      "shape": "verify16/pooler",
+      "actual_pick": {
+        "family": "RQ",
+        "name": "s4s5hz",
+        "variant": [
+          "s4s5hz",
+          128,
+          5,
+          1,
+          0,
+          0,
+          0,
+          3
+        ],
+        "KS": 4,
+        "actual_regs_local_shared": [
+          168,
+          0,
+          144520
+        ]
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 3.425e-03 (worst row 3.703e-03); 15 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        24.25600029528141,
+        24.064000695943832,
+        24.70399998128414,
+        23.903999477624893,
+        23.744000121951103,
+        24.57600086927414,
+        24.159999564290047,
+        24.12799932062626,
+        24.447999894618988,
+        25.728000327944756,
+        24.224000051617622,
+        25.02400055527687,
+        24.09599907696247,
+        23.711999878287315,
+        24.607999250292778,
+        24.960000067949295,
+        23.903999477624893,
+        25.087999179959297,
+        23.80800060927868,
+        24.320000782608986,
+        24.607999250292778,
+        23.584000766277313,
+        25.599999353289604,
+        24.57600086927414,
+        24.224000051617622,
+        24.191999807953835,
+        25.631999596953392,
+        24.383999407291412,
+        23.93599972128868,
+        24.639999493956566
+      ]
+    },
+    {
+      "shape": "verify16/unpooler",
+      "actual_pick": {
+        "family": "RQ",
+        "name": "s4s5hz",
+        "variant": [
+          "s4s5hz",
+          128,
+          5,
+          1,
+          0,
+          0,
+          0,
+          3
+        ],
+        "KS": 2,
+        "actual_regs_local_shared": [
+          168,
+          0,
+          144520
+        ]
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 2.687e-03 (worst row 3.000e-03); 15 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        24.960000067949295,
+        23.871999233961105,
+        24.159999564290047,
+        24.89599958062172,
+        24.320000782608986,
+        24.25600029528141,
+        24.12799932062626,
+        23.711999878287315,
+        24.12799932062626,
+        24.70399998128414,
+        23.840000852942467,
+        25.631999596953392,
+        23.871999233961105,
+        23.93599972128868,
+        24.25600029528141,
+        24.512000381946564,
+        25.312000885605812,
+        25.37599951028824,
+        24.224000051617622,
+        23.903999477624893,
+        24.09599907696247,
+        24.09599907696247,
+        25.50400048494339,
+        24.57600086927414,
+        23.93599972128868,
+        24.351999163627625,
+        24.159999564290047,
+        24.159999564290047,
+        24.320000782608986,
+        24.191999807953835
+      ]
+    },
+    {
+      "shape": "verify16/router",
+      "actual_pick": {
+        "family": "router",
+        "variant": -7,
+        "id": 201,
+        "origin": "sel"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, float*, int, int, int, int*, int)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 2.519e-06 (worst row 2.882e-06); 15 probe rows exact to 2.8e-06"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        10.591999627649784,
+        10.463999584317207,
+        10.623999871313572,
+        10.623999871313572,
+        10.56000031530857,
+        10.528000071644783,
+        10.623999871313572,
+        10.495999827980995,
+        10.65600011497736,
+        10.495999827980995,
+        10.528000071644783,
+        10.432000271975994,
+        10.65600011497736,
+        10.65600011497736,
+        10.591999627649784,
+        10.304000228643417,
+        10.56000031530857,
+        10.27199998497963,
+        10.623999871313572,
+        10.432000271975994,
+        10.688000358641148,
+        10.591999627649784,
+        10.495999827980995,
+        10.432000271975994,
+        10.56000031530857,
+        10.432000271975994,
+        10.623999871313572,
+        10.432000271975994,
+        10.591999627649784,
+        10.56000031530857
+      ]
+    },
+    {
+      "shape": "verify32/qkv_gate",
+      "actual_pick": {
+        "family": "LT",
+        "lt": 49
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "nvjet_tst_72x64_64x12_1x1_v_bz_TNN"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 2.166e-04 (worst row 5.020e-04); 31 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        22.39999920129776,
+        21.75999991595745,
+        21.47199958562851,
+        22.048000246286392,
+        21.79200015962124,
+        21.503999829292297,
+        21.75999991595745,
+        21.407999098300934,
+        21.63200080394745,
+        21.47199958562851,
+        23.00800010561943,
+        21.856000646948814,
+        22.784000262618065,
+        21.663999184966087,
+        22.816000506281853,
+        21.91999927163124,
+        21.60000056028366,
+        23.296000435948372,
+        21.695999428629875,
+        21.60000056028366,
+        22.36800082027912,
+        21.407999098300934,
+        21.695999428629875,
+        21.43999934196472,
+        22.304000332951546,
+        21.568000316619873,
+        22.175999358296394,
+        22.84800074994564,
+        21.888000890612602,
+        21.27999998629093
+      ]
+    },
+    {
+      "shape": "verify32/o",
+      "actual_pick": {
+        "family": "LT",
+        "lt": 200018
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "nvjet_tst_64x128_64x8_1x1_v_bz_NNN"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 5.524e-05 (worst row 2.320e-04); 31 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        12.160000391304493,
+        11.744000017642975,
+        12.095999903976917,
+        11.872000060975552,
+        11.90400030463934,
+        13.407999649643898,
+        12.28800043463707,
+        12.095999903976917,
+        12.128000147640705,
+        11.90400030463934,
+        11.90400030463934,
+        12.128000147640705,
+        12.06399966031313,
+        11.935999616980553,
+        13.279999606311321,
+        11.711999773979187,
+        12.256000190973282,
+        11.96799986064434,
+        11.776000261306763,
+        11.776000261306763,
+        12.223999947309494,
+        11.96799986064434,
+        12.000000104308128,
+        12.223999947309494,
+        12.128000147640705,
+        11.96799986064434,
+        12.095999903976917,
+        11.807999573647976,
+        11.935999616980553,
+        13.279999606311321
+      ]
+    },
+    {
+      "shape": "verify32/pooler",
+      "actual_pick": {
+        "family": "LT",
+        "lt": 200018
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "nvjet_tst_64x128_64x8_1x1_v_bz_NNN"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 2.074e-04 (worst row 4.242e-04); 31 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        29.632000252604485,
+        31.007999554276466,
+        29.120000079274178,
+        29.952000826597214,
+        29.440000653266907,
+        29.311999678611755,
+        29.24799919128418,
+        29.37600016593933,
+        29.69600073993206,
+        30.6560005992651,
+        29.56799976527691,
+        29.40800040960312,
+        30.6560005992651,
+        29.7279991209507,
+        29.503999277949333,
+        32.48000144958496,
+        29.023999348282814,
+        29.120000079274178,
+        30.880000442266464,
+        29.343999922275543,
+        29.37600016593933,
+        30.432000756263733,
+        29.08799983561039,
+        29.279999434947968,
+        30.559999868273735,
+        29.600000008940697,
+        29.343999922275543,
+        29.664000496268272,
+        30.079999938607216,
+        29.7279991209507
+      ]
+    },
+    {
+      "shape": "verify32/unpooler",
+      "actual_pick": {
+        "family": "LT",
+        "lt": 300012
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "nvjet_tst_128x128_64x6_1x1_v_bz_coopA_NNN"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 1.430e-04 (worst row 3.256e-04); 31 probe rows exact to 0.0e+00"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        29.279999434947968,
+        27.775999158620834,
+        28.863999992609024,
+        27.83999964594841,
+        27.936000376939774,
+        27.871999889612198,
+        27.936000376939774,
+        27.871999889612198,
+        27.807999402284622,
+        29.023999348282814,
+        27.807999402284622,
+        27.871999889612198,
+        27.936000376939774,
+        27.83999964594841,
+        27.83999964594841,
+        27.744000777602196,
+        29.08799983561039,
+        29.08799983561039,
+        27.744000777602196,
+        28.095999732613564,
+        27.775999158620834,
+        27.775999158620834,
+        27.904000133275986,
+        28.991999104619026,
+        28.12799997627735,
+        27.712000533938408,
+        27.807999402284622,
+        27.712000533938408,
+        29.152000322937965,
+        29.08799983561039
+      ]
+    },
+    {
+      "shape": "verify32/router",
+      "actual_pick": {
+        "family": "router",
+        "variant": -7,
+        "id": 200,
+        "origin": "sel"
+      },
+      "actual_graph_profile": {
+        "kernels": [
+          "void rtk<512, 6, 128, 128, 1, 4>(RtMap, RtMap, RtMap, float*, int, int, int, int*, int)"
+        ],
+        "nodes": 1,
+        "oracle": "relative L2 error 2.668e-06 (worst row 3.247e-06); 31 probe rows exact to 2.8e-06"
+      },
+      "measured_paired_replays": 30,
+      "per_kernel_duration_us": null,
+      "whole_graph_samples_us": [
+        13.75999953597784,
+        13.279999606311321,
+        13.952000066637993,
+        13.279999606311321,
+        13.952000066637993,
+        13.439999893307686,
+        13.504000380635262,
+        13.407999649643898,
+        13.311999849975109,
+        14.015999622642994,
+        13.279999606311321,
+        12.992000207304955,
+        13.69599997997284,
+        13.183999806642532,
+        13.887999579310417,
+        13.21600005030632,
+        13.75999953597784,
+        12.992000207304955,
+        13.472000136971474,
+        12.896000407636166,
+        14.175999909639359,
+        12.799999676644802,
+        13.472000136971474,
+        13.088000006973743,
+        13.376000337302685,
+        13.407999649643898,
+        13.952000066637993,
+        13.024000450968742,
+        13.632000423967838,
+        14.4640002399683
+      ]
+    }
+  ]
+}

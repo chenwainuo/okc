@@ -400,7 +400,9 @@ class GPUDispatcher:
                 idle_deadline=None
             else:
                 ranked=self.store.rank('gpu')
-                ready=[row for row in ranked if self.store.get(row['id'])['state']=='READY']
+                # rank() returns full job copies from one locked WAL read.
+                # Use that coherent view as a hint; claim() rechecks atomically.
+                ready=[row for row in ranked if row['state']=='READY']
                 if not ready:
                     if idle_wait_seconds==0:return {'status':'NO_READY_JOB','collected':completed}
                     now=time.monotonic()
@@ -412,7 +414,7 @@ class GPUDispatcher:
                     # active ownership and current ROI ranking after every wake.
                     time.sleep(wait)
                     continue
-                candidate=self.store.get(ready[0]['id'])
+                candidate=ready[0]
                 if candidate['launch']['outer_seconds']>remaining:
                     return {'status':'INSUFFICIENT_RESERVATION_BUDGET','collected':completed}
                 job=self.launch_next(owner,deadline_monotonic=deadline)

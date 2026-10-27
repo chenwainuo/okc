@@ -1,0 +1,91 @@
+index,load,m,layer,family,scored_latency_us,score_elasticity,scored_kernel_report
+2,decode 1,1,pooler,gv,13.932749318630616,0.06409564991752789,"kernel                                                           GPU time  share  calls
+void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         15.1 µs 100.0%      1
+total                                                             15.1 µs"
+17,verify 1,8,pooler,gv,13.624331386249795,0.06139376277278055,"kernel                                                           GPU time  share  calls
+void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         13.8 µs 100.0%      1
+total                                                             13.8 µs"
+8,decode 16,16,unpooler,gv,15.056268841861057,0.049616566545918846,"kernel                                                           GPU time  share  calls
+void gv<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                         14.6 µs 100.0%      1
+total                                                             14.6 µs"
+27,verify 32,256,pooler,Lt/vendor,24.838092077506154,0.04925987439812923,"kernel                                                           GPU time  share  calls
+nvjet_sm90_tst_64x128_64x8_1x2_v_bz_NNT                           24.8 µs 100.0%      1
+total                                                             24.8 µs"
+12,decode 32,32,pooler,rq,15.826435403605194,0.049146673459288255,"kernel                                                           GPU time  share  calls
+void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.6 µs 100.0%      1
+total                                                             15.6 µs"
+23,verify 16,128,unpooler,Lt/vendor,18.488145889506868,0.04806167637800301,"kernel                                                           GPU time  share  calls
+nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN                           18.5 µs 100.0%      1
+total                                                             18.5 µs"
+13,decode 32,32,unpooler,rq,15.431064965742554,0.047918908564063355,"kernel                                                           GPU time  share  calls
+void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.2 µs 100.0%      1
+total                                                             15.2 µs"
+7,decode 16,16,pooler,gv,14.390735001894722,0.04742336022062791,"kernel                                                           GPU time  share  calls
+void gv<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                         15.0 µs 100.0%      1
+total                                                             15.0 µs"
+22,verify 16,128,pooler,rq,18.187236461269034,0.04727943398087519,"kernel                                                           GPU time  share  calls
+void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)           18.9 µs 100.0%      1
+total                                                             18.9 µs"
+28,verify 32,256,unpooler,Lt/vendor,23.407247194046388,0.04642216693563597,"kernel                                                           GPU time  share  calls
+nvjet_sm90_tst_128x128_64x6_1x2_h_bz_NNN                          23.7 µs 100.0%      1
+total                                                             23.7 µs"
+15,verify 1,8,qkv_gate,gv,9.34395620057617,0.04210559873172095,"kernel                                                           GPU time  share  calls
+void gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)                       9.1 µs 100.0%      1
+total                                                              9.1 µs"
+0,decode 1,1,qkv_gate,gv,8.998907245198474,0.041398204707327406,"kernel                                                           GPU time  share  calls
+void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.4 µs 100.0%      1
+total                                                              9.4 µs"
+25,verify 32,256,qkv_gate,Lt/vendor,17.21299688043921,0.03413748776274605,"kernel                                                           GPU time  share  calls
+nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           19.5 µs 100.0%      1
+total                                                             19.5 µs"
+20,verify 16,128,qkv_gate,rq,12.965923991112879,0.03370614049277571,"kernel                                                           GPU time  share  calls
+void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           12.8 µs 100.0%      1
+total                                                             12.8 µs"
+5,decode 16,16,qkv_gate,rq,10.135791390766,0.03340157998755091,"kernel                                                           GPU time  share  calls
+void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.9 µs 100.0%      1
+total                                                              9.9 µs"
+10,decode 32,32,qkv_gate,rq,10.337045079234727,0.03210017708266539,"kernel                                                           GPU time  share  calls
+void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.1 µs 100.0%      1
+total                                                             10.1 µs"
+16,verify 1,8,o,gv,5.279801097479335,0.023791762463533022,"kernel                                                           GPU time  share  calls
+void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           4.0 µs 100.0%      1
+total                                                              4.0 µs"
+1,decode 1,1,o,gv,5.163943544877164,0.02375599460500849,"kernel                                                           GPU time  share  calls
+void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           3.8 µs 100.0%      1
+total                                                              3.8 µs"
+11,decode 32,32,o,rq,6.56776081090015,0.02039521772909718,"kernel                                                           GPU time  share  calls
+void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                5.5 µs 100.0%      1
+total                                                              5.5 µs"
+19,verify 1,8,router,gv,4.470568823516361,0.020145211829429875,"kernel                                                           GPU time  share  calls
+void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.4 µs 100.0%      1
+total                                                              3.4 µs"
+24,verify 16,128,router,rtk,7.647228404785486,0.019879690423044123,"kernel                                                           GPU time  share  calls
+void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.1 µs 100.0%      1
+total                                                              6.1 µs"
+3,decode 1,1,unpooler,gv,4.256898893461422,0.019583263501681384,"kernel                                                           GPU time  share  calls
+void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.4 µs 100.0%      1
+total                                                              3.4 µs"
+6,decode 16,16,o,gv,5.8883968252255166,0.019404676948599566,"kernel                                                           GPU time  share  calls
+void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           5.2 µs 100.0%      1
+total                                                              5.2 µs"
+18,verify 1,8,unpooler,gv,4.267541010622022,0.019230330869202256,"kernel                                                           GPU time  share  calls
+void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.5 µs 100.0%      1
+total                                                              3.5 µs"
+29,verify 32,256,router,rtk,9.489970683017647,0.01882088054221894,"kernel                                                           GPU time  share  calls
+void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       8.0 µs 100.0%      1
+total                                                              8.0 µs"
+26,verify 32,256,o,Lt/vendor,9.089301126794638,0.018026257027936466,"kernel                                                           GPU time  share  calls
+nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                            8.4 µs 100.0%      1
+total                                                              8.4 µs"
+4,decode 1,1,router,rr,3.87655693885676,0.0178335539351215,"kernel                                                           GPU time  share  calls
+void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       3.1 µs 100.0%      1
+total                                                              3.1 µs"
+21,verify 16,128,o,Lt/vendor,6.824036442403706,0.017739725391968653,"kernel                                                           GPU time  share  calls
+nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopB_NNN                      5.5 µs 100.0%      1
+total                                                              5.5 µs"
+14,decode 32,32,router,gv,5.508452070055779,0.017105689831552497,"kernel                                                           GPU time  share  calls
+void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.1 µs 100.0%      1
+total                                                              4.1 µs"
+9,decode 16,16,router,gv,5.104216820829146,0.016820482963969433,"kernel                                                           GPU time  share  calls
+void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.2 µs 100.0%      1
+total                                                              4.2 µs"
