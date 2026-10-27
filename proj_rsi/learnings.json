@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "registry_version": 8,
+  "registry_version": 9,
   "lessons": [
     {
       "id": "native-x-parent-progress",
@@ -4270,7 +4270,7 @@
       "transfer_limits": [
         "Query3to4 is maximum active CTA capacity, not measured residency or achieved scheduling.",
         "Shared76458to57088bytes changes cache policy as well as capacity, so this is not an isolated occupancy intervention.",
-        "Each F1 block reuses seeds7800–7804, so internal brackets use the same bank. Paired seeds7900–7911 and blocked/interleaved schedules differ; route histograms alone do not establish why estimators differ.",
+        "Each F1 block reuses seeds7800\u20137804, so internal brackets use the same bank. Paired seeds7900\u20137911 and blocked/interleaved schedules differ; route histograms alone do not establish why estimators differ.",
         "Do not add isolated gains, transfer profiles into clean event medians, or reject the family because brackets lose."
       ],
       "confidence": {
@@ -4360,7 +4360,7 @@
       "observations": [
         {
           "id": "code",
-          "statement": "Exact offline target shrank 2080→1992 instructions and 110→108 registers; this is static codegen evidence.",
+          "statement": "Exact offline target shrank 2080\u21921992 instructions and 110\u2192108 registers; this is static codegen evidence.",
           "outcome": "positive",
           "evidence": "static",
           "selector": {
@@ -4424,7 +4424,7 @@
         },
         {
           "id": "aggregate",
-          "statement": "Equal-weight 48 matched pairs give control−candidate median −0.063999556us, 22wins/1tie/25losses; candidate regresses.",
+          "statement": "Equal-weight 48 matched pairs give control\u2212candidate median \u22120.063999556us, 22wins/1tie/25losses; candidate regresses.",
           "outcome": "negative",
           "evidence": "robust",
           "selector": {
@@ -4457,7 +4457,7 @@
         },
         {
           "id": "prior",
-          "statement": "Prior paired−0.079999678us and positive F1 endpoints +0.032000244/+0.160001218us remain preserved.",
+          "statement": "Prior paired\u22120.079999678us and positive F1 endpoints +0.032000244/+0.160001218us remain preserved.",
           "outcome": "mixed",
           "evidence": "robust",
           "selector": {
@@ -4571,7 +4571,7 @@
       "observations": [
         {
           "id": "m1",
-          "statement": "Same-H200-prepare M1 median(parent−keyed) is +0.048000365us; completed choice selects keyed.",
+          "statement": "Same-H200-prepare M1 median(parent\u2212keyed) is +0.048000365us; completed choice selects keyed.",
           "outcome": "positive",
           "evidence": "choice",
           "selector": {
@@ -4664,7 +4664,7 @@
         },
         {
           "id": "m8",
-          "statement": "Same-H200-prepare M8 median(parent−keyed) is −0.016000122us; completed choice retains parent.",
+          "statement": "Same-H200-prepare M8 median(parent\u2212keyed) is \u22120.016000122us; completed choice retains parent.",
           "outcome": "negative",
           "evidence": "choice",
           "selector": {
@@ -4805,7 +4805,7 @@
       ],
       "scope": "Refines v1 with new GV53 keyed-choice evidence; prior split-CTA observations remain immutable in v1. This is a tuning-input comparison, not a matched old/new scored-case experiment.",
       "transfer_limits": [
-        "No H100→H200 gain transfer or forced M8 selection.",
+        "No H100\u2192H200 gain transfer or forced M8 selection.",
         "AB/BA block signs disagree for M1; tiny point is preserved without a significance cutoff.",
         "Scored inputs, routes and calibration differ across jobs; no source-only official effect is isolated."
       ],
@@ -4961,7 +4961,7 @@
         },
         {
           "id": "accounting",
-          "statement": "Replacing only the two target calibrated times in the old vector yields−1.828819us score delta: arithmetic accounting, not an isolated source gain or additive stack effect.",
+          "statement": "Replacing only the two target calibrated times in the old vector yields\u22121.828819us score delta: arithmetic accounting, not an isolated source gain or additive stack effect.",
           "outcome": "mixed",
           "evidence": "score",
           "selector": {
@@ -5137,7 +5137,7 @@
         },
         {
           "id": "outcome",
-          "statement": "Cheap execution still found a−0.063999556us aggregate paired result; reuse is a cost improvement, not kernel speed evidence.",
+          "statement": "Cheap execution still found a\u22120.063999556us aggregate paired result; reuse is a cost improvement, not kernel speed evidence.",
           "outcome": "negative",
           "evidence": "robust",
           "selector": {
@@ -5195,6 +5195,1368 @@
       },
       "cost": {
         "basis": "Measured total host run3.653058080s; compilation0 calls. Not a requested GPU reservation.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      }
+    },
+    {
+      "id": "exact-so-reuse-bounds-robustness-cost",
+      "version": 2,
+      "supersedes": "8fc060d17fa2612a40387dacac39a6324670e15accce633fcd6b046847ac8cde",
+      "record_sha256": "56dd98953b1d8c63e4919d3bd760e256a364ce2f291f7ed9fec734afc9cb4c46",
+      "title": "Exact-binary reuse and a thin ABI bound diagnostic cost, not kernel gains",
+      "tags": [
+        "projection",
+        "learning-v9"
+      ],
+      "context": {
+        "experiment_id": "research.gv53.thin.cabi.validation.01",
+        "family": "muse_bf16_proj",
+        "parents": [
+          "incumbent projection 501d lineage"
+        ],
+        "comparators": [
+          "same native kernel PyBind versus thin C ABI",
+          "earlier build cost descriptive only"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100; CPU accounting explicitly separated"
+        },
+        "validity": "VALIDATED_DIAGNOSIS",
+        "disposition": "CPU_ACCOUNTING",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/gv53_thin_cabi_validation_v1/driver.py",
+            "sha256": "71f85318278b22ef99b2c89a27cdd29f37fdb9e19b2832e223197f7b9e94b94f",
+            "role": "thin ABI driver"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "robust",
+          "path": "proj_rsi/audits/gv-unpool16-deltakey-robust-result/analysis.json",
+          "sha256": "cc9748f850e7e457832e5b40b3fdc82f500e4e04d678fc53529510e714266800"
+        },
+        {
+          "id": "thin",
+          "path": "proj_rsi/audits/gv53-thin-cabi-validation-result-v1/analysis.json",
+          "sha256": "90dd897130848ea70298bbc47e666118f2e18affe443fca4ed837621ee7a167d"
+        }
+      ],
+      "observations": [
+        {
+          "id": "cost",
+          "statement": "Complete three-weight run elapsed3.653058080s; native load0.002178360s and weight packing0.036164963s are separate recorded costs.",
+          "outcome": "positive",
+          "evidence": "robust",
+          "selector": {
+            "json_pointer": "/cost",
+            "equals": {
+              "native_load_seconds": 0.0021783600095659494,
+              "task_weight_pack_seconds": 0.03616496299218852,
+              "run_elapsed_seconds": 3.6530580800026655
+            }
+          }
+        },
+        {
+          "id": "validation",
+          "statement": "No native compile/profiler calls:240 clean timings,30 warmups and30 own-terminal oracles, source/cleanup checks retained.",
+          "outcome": "neutral",
+          "evidence": "robust",
+          "selector": {
+            "json_pointer": "/validation",
+            "equals": {
+              "launch_source_pins": 13,
+              "journal_rows": 270,
+              "clean_calls": 240,
+              "warmups": 30,
+              "own_timed_terminal_oracles": 30,
+              "retained_mutations": 30,
+              "basis_columns_per_arm_per_weight": 16,
+              "native_compile_calls": 0,
+              "profiler_calls": 0,
+              "post_scope_cleanup": {
+                "allocated": 0,
+                "reserved": 0,
+                "before_blas_clear": {
+                  "allocated": 33554432,
+                  "reserved": 1832910848
+                },
+                "blas_map_entries_workspace_bytes_after": [
+                  1,
+                  33554432,
+                  0
+                ],
+                "clear_error": null,
+                "after_run_scope_and_drain": true
+              },
+              "external_cleanup": {
+                "cleanup_failed": false,
+                "compute_pids": [],
+                "container_exists": false,
+                "containers": [],
+                "gpu_memory_mib": 0,
+                "guard_pids": [],
+                "host_log_exists": true,
+                "terminal_exit": 0
+              },
+              "task_FP64_oracles": 78,
+              "exact_basis_launches": 6,
+              "basis_rows_across_arms_weights": 96
+            }
+          }
+        },
+        {
+          "id": "outcome",
+          "statement": "Cheap execution still found a\u22120.063999556us aggregate paired result; reuse is a cost improvement, not kernel speed evidence.",
+          "outcome": "negative",
+          "evidence": "robust",
+          "selector": {
+            "json_pointer": "/aggregate_equal_weight_diagnostic/median_us",
+            "equals": -0.06399955600500107
+          }
+        },
+        {
+          "id": "thin-build",
+          "statement": "Thin native compile 1.609522411s + link 0.048527525s = 1.658049936s; total driver 5.985287921s. Earlier PyBind 42.186037737s is descriptive, not a controlled 40s saving.",
+          "outcome": "neutral",
+          "evidence": "thin",
+          "selector": {
+            "json_pointer": "/build_seconds",
+            "equals": {
+              "Torch_import": 0.8566931509994902,
+              "collected_PyBind_import": 0.0006944510096218437,
+              "thin_native_compile": 1.6095224110031268,
+              "thin_link": 0.0485275250102859,
+              "thin_compile_link_sum": 1.6580499360134127,
+              "thin_dlopen": 0.0007318569987546653,
+              "driver_total": 5.985287920993869,
+              "prior_PyBind_compile_and_load_descriptive_only": 42.18603773700306,
+              "paired_build_savings": null
+            }
+          }
+        },
+        {
+          "id": "thin-lifetime",
+          "statement": "Strong owners survive dropped caller references and nondefault capture/different replay streams; graph reset/drain precedes owner release.",
+          "outcome": "neutral",
+          "evidence": "thin",
+          "selector": {
+            "json_pointer": "/lifetime_probe",
+            "equals": {
+              "strong_owners_after_caller_refs_dropped": true,
+              "nondefault_capture_and_different_replay_streams": true,
+              "fresh_current_X_own_output_checks": 2,
+              "graph_reset_before_owner_release": true,
+              "weak_owners_released_after_drain": true
+            }
+          }
+        },
+        {
+          "id": "interface-0",
+          "statement": "Identical native kernel/interface timings retain both signs and all F1 endpoints; these are interface replay variability, not native or official score gains.",
+          "outcome": "mixed",
+          "evidence": "thin",
+          "selector": {
+            "json_pointer": "/all_signed_interface_timing/0",
+            "equals": {
+              "native_arm": 0,
+              "M": 1,
+              "paired_pybind_minus_cabi_us": 0.12800004333257675,
+              "F1_endpoint_average_pybind_minus_cabi_us": 0.2560000866651535,
+              "F1_conservative_pybind_minus_cabi_us": -0.19199959933757782,
+              "pair_wins_ties_losses": [
+                14,
+                1,
+                9
+              ],
+              "all_signed_deltas_us": [
+                0.5759987980127335,
+                -0.3519989550113678,
+                -0.3519989550113678,
+                -0.35200081765651703,
+                0.5440004169940948,
+                -0.5759987980127335,
+                0.22399984300136566,
+                0.19200146198272705,
+                0.31999871134757996,
+                0.19200146198272705,
+                0.0,
+                -0.2560000866651535,
+                -0.06400048732757568,
+                -0.0959988683462143,
+                -0.0959988683462143,
+                0.5439985543489456,
+                0.12800097465515137,
+                0.35200081765651703,
+                0.12800097465515137,
+                0.22399984300136566,
+                -0.03200024366378784,
+                0.12799911201000214,
+                0.06400048732757568,
+                0.12800097465515137
+              ],
+              "claim": "Same kernel/interface replay variability, not a native/score gain."
+            }
+          }
+        },
+        {
+          "id": "interface-1",
+          "statement": "Identical native kernel/interface timings retain both signs and all F1 endpoints; these are interface replay variability, not native or official score gains.",
+          "outcome": "mixed",
+          "evidence": "thin",
+          "selector": {
+            "json_pointer": "/all_signed_interface_timing/1",
+            "equals": {
+              "native_arm": 0,
+              "M": 8,
+              "paired_pybind_minus_cabi_us": 0.06400048732757568,
+              "F1_endpoint_average_pybind_minus_cabi_us": -9.313225746154785e-07,
+              "F1_conservative_pybind_minus_cabi_us": -0.1600012183189392,
+              "pair_wins_ties_losses": [
+                15,
+                0,
+                9
+              ],
+              "all_signed_deltas_us": [
+                0.5440004169940948,
+                0.09600073099136353,
+                -1.3120006769895554,
+                -0.12799911201000214,
+                0.5760006606578827,
+                0.12800097465515137,
+                0.03200024366378784,
+                0.4159994423389435,
+                -0.09600073099136353,
+                0.15999935567378998,
+                0.03200024366378784,
+                -0.06400048732757568,
+                -0.19200146198272705,
+                -0.12799911201000214,
+                0.2879984676837921,
+                0.03200024366378784,
+                -0.3200005739927292,
+                0.12800097465515137,
+                0.12800097465515137,
+                -0.1600012183189392,
+                0.5759987980127335,
+                -0.9599998593330383,
+                1.3759993016719818,
+                0.7360000163316727
+              ],
+              "claim": "Same kernel/interface replay variability, not a native/score gain."
+            }
+          }
+        },
+        {
+          "id": "interface-2",
+          "statement": "Identical native kernel/interface timings retain both signs and all F1 endpoints; these are interface replay variability, not native or official score gains.",
+          "outcome": "mixed",
+          "evidence": "thin",
+          "selector": {
+            "json_pointer": "/all_signed_interface_timing/2",
+            "equals": {
+              "native_arm": 1,
+              "M": 1,
+              "paired_pybind_minus_cabi_us": -0.12800004333257675,
+              "F1_endpoint_average_pybind_minus_cabi_us": -0.04799943417310715,
+              "F1_conservative_pybind_minus_cabi_us": -0.0959988683462143,
+              "pair_wins_ties_losses": [
+                8,
+                0,
+                16
+              ],
+              "all_signed_deltas_us": [
+                0.19199959933757782,
+                -0.06400048732757568,
+                0.19199959933757782,
+                -0.3200005739927292,
+                0.15999935567378998,
+                -0.28800033032894135,
+                -0.09600073099136353,
+                -0.09600073099136353,
+                0.12800097465515137,
+                -0.28800033032894135,
+                0.19199959933757782,
+                0.12800097465515137,
+                -0.3200005739927292,
+                -0.09600073099136353,
+                0.3519989550113678,
+                -0.2560000866651535,
+                -1.695999875664711,
+                -1.3759993016719818,
+                -0.8960012346506119,
+                0.15999935567378998,
+                -0.38400106132030487,
+                -0.19200146198272705,
+                -0.8000005036592484,
+                -0.15999935567378998
+              ],
+              "claim": "Same kernel/interface replay variability, not a native/score gain."
+            }
+          }
+        },
+        {
+          "id": "interface-3",
+          "statement": "Identical native kernel/interface timings retain both signs and all F1 endpoints; these are interface replay variability, not native or official score gains.",
+          "outcome": "mixed",
+          "evidence": "thin",
+          "selector": {
+            "json_pointer": "/all_signed_interface_timing/3",
+            "equals": {
+              "native_arm": 1,
+              "M": 8,
+              "paired_pybind_minus_cabi_us": 0.03200024366378784,
+              "F1_endpoint_average_pybind_minus_cabi_us": -0.03200024366378784,
+              "F1_conservative_pybind_minus_cabi_us": -0.06400048732757568,
+              "pair_wins_ties_losses": [
+                13,
+                1,
+                10
+              ],
+              "all_signed_deltas_us": [
+                1.536000519990921,
+                -0.15999935567378998,
+                0.28800033032894135,
+                0.28800033032894135,
+                -0.09600073099136353,
+                -0.6080009043216705,
+                0.03200024366378784,
+                0.1600012183189392,
+                -0.35200081765651703,
+                -0.19199959933757782,
+                -0.671999529004097,
+                0.0,
+                -0.09600073099136353,
+                0.19199959933757782,
+                -0.3200005739927292,
+                0.03200024366378784,
+                0.19199959933757782,
+                0.7360000163316727,
+                0.22399984300136566,
+                -0.7360000163316727,
+                1.1520013213157654,
+                -0.12799911201000214,
+                0.19199959933757782,
+                0.3519989550113678
+              ],
+              "claim": "Same kernel/interface replay variability, not a native/score gain."
+            }
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Exact-binary reuse can answer a bounded fixture-generalization question without paying another native compilation.",
+          "status": "supported_in_scope",
+          "observation_ids": [
+            "cost",
+            "validation",
+            "outcome"
+          ]
+        }
+      ],
+      "scope": "Extends prior exact-SO three-weight cost evidence; thin ABI is one same-kernel transport diagnostic, not a controlled PyBind build-cost experiment.",
+      "transfer_limits": [
+        "Raw-pointer ABI transfer requires validated metadata, strong ownership and correct current stream.",
+        "Prior robust aggregate paired -0.063999556us remains a loss; cheaper testing does not improve kernels.",
+        "Do not extrapolate this ABI to different structs, clusters or binaries."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Reopen only for a new causal comparison whose exact SO can be reused, or a changed ABI requiring a bounded lifetime check.",
+      "next_test": {
+        "question": "Reopen only for a new causal comparison whose exact SO can be reused, or a changed ABI requiring a bounded lifetime check.",
+        "controls": [
+          "Reuse unchanged proofs and frozen evidence within their assumptions."
+        ],
+        "discriminator": "Reopen only for a new causal comparison whose exact SO can be reused, or a changed ABI requiring a bounded lifetime check.",
+        "stop_rule": "No unchanged rerun or new broad campaign solely to populate learning.",
+        "required_gates": [
+          "Reuse existing scope-appropriate validity requirements; this learning proposal adds no gate."
+        ]
+      },
+      "related_queue_ids": [
+        "research.gv53.thin.cabi.validation.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "No kernel or official score gain is forecast; root owns any follow-up admission."
+        ]
+      },
+      "cost": {
+        "basis": "Measured thin compile/link 1.658049936s, total 5.985287921s; paired build savings unknown.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      }
+    },
+    {
+      "id": "rq11-full-residency-ledger",
+      "version": 3,
+      "supersedes": "d89e8697c8f14d26ac1cfe31c157491930ff211e3aa3c10fdc2f8de56cb5ee9e",
+      "title": "Charge escape capacity and complete residency before claiming narrow-payload savings",
+      "tags": [
+        "projection",
+        "learning-v9"
+      ],
+      "context": {
+        "experiment_id": "research.gv.top8.exponent.stats.01",
+        "family": "muse_bf16_proj",
+        "parents": [
+          "incumbent projection 501d lineage"
+        ],
+        "comparators": [
+          "old aligned range versus best affine8 versus global top8"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100; CPU accounting explicitly separated"
+        },
+        "validity": "VALIDATED_DIAGNOSIS",
+        "disposition": "CPU_ACCOUNTING",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/gv_top8_exponent_stats_v1/stats.py",
+            "sha256": "ff04b84167fb412f5339c4f2ca02f3c117bed36abecf6863c437ba23401cc096",
+            "role": "weight-only diagnostic"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "bytes",
+          "path": "proj_rsi/candidates/rq11_actualescape/selected-geometry-summary.json",
+          "sha256": "594e6cb615163d498b83a4820e733a6f7eb65f5f09a18df248fdb902354d70e8"
+        },
+        {
+          "id": "scope",
+          "path": "proj_rsi/candidates/rq11_actualescape/README.md",
+          "sha256": "9fa8cb9098fee992a410dc8c94f31a59cee422a317bd297d4655866384abdcb5"
+        },
+        {
+          "id": "top8",
+          "path": "proj_rsi/candidates/gv_top8_exponent_stats_v1/actual-analysis/analysis-v1.json",
+          "sha256": "cd3430bd3e66bb5f5ed721adc6da80913cd1a3fec5c2412a8d4613ec8ac97db1"
+        }
+      ],
+      "observations": [
+        {
+          "id": "packed",
+          "statement": "CPU QKV packed+ESC allocation saves bytes.",
+          "outcome": "positive",
+          "evidence": "bytes",
+          "selector": {
+            "json_pointer": "/selected_geometry_rows/0/net_bytes_saved",
+            "equals": 1069056
+          }
+        },
+        {
+          "id": "residency",
+          "statement": "CPU QKV residency including stock esc6 cache grows despite packed savings.",
+          "outcome": "negative",
+          "evidence": "bytes",
+          "selector": {
+            "json_pointer": "/selected_geometry_rows/0/net_residency_bytes_saved_with_stock_cache",
+            "equals": -11085360
+          }
+        },
+        {
+          "id": "transfer",
+          "statement": "CUDA fixture bit identity is explicitly unknown.",
+          "outcome": "neutral",
+          "evidence": "bytes",
+          "selector": {
+            "json_pointer": "/GPU_fixture_bit_identity",
+            "equals": "UNKNOWN_NOT_CLAIMED"
+          }
+        },
+        {
+          "id": "scope",
+          "statement": "CPU accounting must not become a GPU compression or speed claim.",
+          "outcome": "neutral",
+          "evidence": "scope",
+          "selector": {
+            "contains": "These numbers must not be relabelled as actual H100/H200 weight compression ratios or serving speed measurements."
+          }
+        },
+        {
+          "id": "top8-affine-0",
+          "statement": "seed 5151 pooler: arbitrary global top8 equals best affine8 coverage; additional dictionary coverage is zero.",
+          "outcome": "neutral",
+          "evidence": "top8",
+          "selector": {
+            "json_pointer": "/rows/0/dictionary_coverage_gain_vs_best_affine",
+            "equals": 0
+          }
+        },
+        {
+          "id": "top8-capacity-0",
+          "statement": "seed 5151 pooler: every group exceeds both 32 and 64 repairs. Nominal 11-bit fixed byte total is UNREPRESENTABLE in original 128B packet; extra overflow byte estimate excludes indices/alignment.",
+          "outcome": "negative",
+          "evidence": "top8",
+          "selector": {
+            "json_pointer": "/rows/0/codebooks/global_top8_exp8",
+            "equals": {
+              "table": [
+                120,
+                119,
+                121,
+                118,
+                117,
+                116,
+                115,
+                114
+              ],
+              "repairs": 454059,
+              "repair_fraction": 0.013532012701034546,
+              "groups": 4096,
+              "min": 69,
+              "p50": 111,
+              "p95": 128,
+              "p99": 136,
+              "max": 147,
+              "groups_over32": 4096,
+              "groups_over64": 4096,
+              "all_fit128B": false,
+              "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46661640,
+              "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1291948
+            }
+          }
+        },
+        {
+          "id": "top8-affine-1",
+          "statement": "seed 5151 unpooler: arbitrary global top8 equals best affine8 coverage; additional dictionary coverage is zero.",
+          "outcome": "neutral",
+          "evidence": "top8",
+          "selector": {
+            "json_pointer": "/rows/1/dictionary_coverage_gain_vs_best_affine",
+            "equals": 0
+          }
+        },
+        {
+          "id": "top8-capacity-1",
+          "statement": "seed 5151 unpooler: every group exceeds both 32 and 64 repairs. Nominal 11-bit fixed byte total is UNREPRESENTABLE in original 128B packet; extra overflow byte estimate excludes indices/alignment.",
+          "outcome": "negative",
+          "evidence": "top8",
+          "selector": {
+            "json_pointer": "/rows/1/codebooks/global_top8_exp8",
+            "equals": {
+              "table": [
+                120,
+                121,
+                119,
+                118,
+                117,
+                122,
+                116,
+                115
+              ],
+              "repairs": 420145,
+              "repair_fraction": 0.012521296739578247,
+              "groups": 2048,
+              "min": 159,
+              "p50": 205,
+              "p95": 228,
+              "p99": 240,
+              "max": 258,
+              "groups_over32": 2048,
+              "groups_over64": 2048,
+              "all_fit128B": false,
+              "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46399496,
+              "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1418436
+            }
+          }
+        },
+        {
+          "id": "top8-reduction-1",
+          "statement": "seed 5151 unpooler: odd affine base115 reduces repairs by this count, yet every group still exceeds capacity.",
+          "outcome": "mixed",
+          "evidence": "top8",
+          "selector": {
+            "json_pointer": "/rows/1/old_aligned_to_best_affine_repair_reduction",
+            "equals": 415399
+          }
+        },
+        {
+          "id": "top8-affine-2",
+          "statement": "seed 60631 pooler: arbitrary global top8 equals best affine8 coverage; additional dictionary coverage is zero.",
+          "outcome": "neutral",
+          "evidence": "top8",
+          "selector": {
+            "json_pointer": "/rows/2/dictionary_coverage_gain_vs_best_affine",
+            "equals": 0
+          }
+        },
+        {
+          "id": "top8-capacity-2",
+          "statement": "seed 60631 pooler: every group exceeds both 32 and 64 repairs. Nominal 11-bit fixed byte total is UNREPRESENTABLE in original 128B packet; extra overflow byte estimate excludes indices/alignment.",
+          "outcome": "negative",
+          "evidence": "top8",
+          "selector": {
+            "json_pointer": "/rows/2/codebooks/global_top8_exp8",
+            "equals": {
+              "table": [
+                120,
+                119,
+                121,
+                118,
+                117,
+                116,
+                115,
+                114
+              ],
+              "repairs": 455150,
+              "repair_fraction": 0.013564527034759521,
+              "groups": 4096,
+              "min": 76,
+              "p50": 111,
+              "p95": 129,
+              "p99": 136,
+              "max": 154,
+              "groups_over32": 4096,
+              "groups_over64": 4096,
+              "all_fit128B": false,
+              "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46661640,
+              "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1296312
+            }
+          }
+        },
+        {
+          "id": "top8-affine-3",
+          "statement": "seed 60631 unpooler: arbitrary global top8 equals best affine8 coverage; additional dictionary coverage is zero.",
+          "outcome": "neutral",
+          "evidence": "top8",
+          "selector": {
+            "json_pointer": "/rows/3/dictionary_coverage_gain_vs_best_affine",
+            "equals": 0
+          }
+        },
+        {
+          "id": "top8-capacity-3",
+          "statement": "seed 60631 unpooler: every group exceeds both 32 and 64 repairs. Nominal 11-bit fixed byte total is UNREPRESENTABLE in original 128B packet; extra overflow byte estimate excludes indices/alignment.",
+          "outcome": "negative",
+          "evidence": "top8",
+          "selector": {
+            "json_pointer": "/rows/3/codebooks/global_top8_exp8",
+            "equals": {
+              "table": [
+                120,
+                121,
+                119,
+                118,
+                117,
+                122,
+                116,
+                115
+              ],
+              "repairs": 419979,
+              "repair_fraction": 0.01251634955406189,
+              "groups": 2048,
+              "min": 150,
+              "p50": 205,
+              "p95": 228,
+              "p99": 239,
+              "max": 252,
+              "groups_over32": 2048,
+              "groups_over64": 2048,
+              "all_fit128B": false,
+              "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46399496,
+              "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1417772
+            }
+          }
+        },
+        {
+          "id": "top8-reduction-3",
+          "statement": "seed 60631 unpooler: odd affine base115 reduces repairs by this count, yet every group still exceeds capacity.",
+          "outcome": "mixed",
+          "evidence": "top8",
+          "selector": {
+            "json_pointer": "/rows/3/old_aligned_to_best_affine_repair_reduction",
+            "equals": 415296
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Retaining unneeded esc6 metadata may erase representation savings; reducing bytes may still lose to increased escape/decode work.",
+          "status": "unproven",
+          "observation_ids": [
+            "packed",
+            "residency",
+            "transfer",
+            "scope"
+          ]
+        }
+      ],
+      "scope": "Preserves prior CPU RQ11 +1069056 packed bytes saved / -11085360 residency bytes saved with stock cache and unknown CUDA bit identity. New actual weight-only statistics are separate: seeds5151/60631, two old GV geometries; no decode/prepare/output test.",
+      "transfer_limits": [
+        "Pooler nominal46661640B and unpooler46399496B are not representable streams or measured savings.",
+        "Top8 affine equality is observed for four fixtures, not universal.",
+        "Capacity failure rejects this encoding-only fixed-packet version; no whole-family or runtime rejection."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "A new representation must account for overflow/index/padding/transport and retained metadata; reopen only if complete actual-fixture capacity and byte accounting become feasible.",
+      "next_test": {
+        "question": "A new representation must account for overflow/index/padding/transport and retained metadata; reopen only if complete actual-fixture capacity and byte accounting become feasible.",
+        "controls": [
+          "Reuse unchanged proofs and frozen evidence within their assumptions."
+        ],
+        "discriminator": "A new representation must account for overflow/index/padding/transport and retained metadata; reopen only if complete actual-fixture capacity and byte accounting become feasible.",
+        "stop_rule": "No unchanged rerun or new broad campaign solely to populate learning.",
+        "required_gates": [
+          "Reuse existing scope-appropriate validity requirements; this learning proposal adds no gate."
+        ]
+      },
+      "related_queue_ids": [
+        "research.gv.top8.exponent.stats.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "No kernel or official score gain is forecast; root owns any follow-up admission."
+        ]
+      },
+      "cost": {
+        "basis": "Actual weight-only diagnostic elapsed 8.807076377997873s; no JIT, prepare, activations or performance claim.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "60dbc71defd27ad6e3b369a47a3164522e9ace36126c13be30d277019b9f0f44"
+    },
+    {
+      "id": "gv53-payload-layout-ownership-lower-bound",
+      "version": 1,
+      "supersedes": null,
+      "record_sha256": "09fc71c45aba177d8850b05d6f958984cf94407439e8f44d788151fb278b44b5",
+      "title": "Planar payload already meets the current ownership/load lower bound",
+      "tags": [
+        "projection",
+        "learning-v9"
+      ],
+      "context": {
+        "experiment_id": "layout",
+        "family": "muse_bf16_proj",
+        "parents": [
+          "incumbent projection 501d lineage"
+        ],
+        "comparators": [
+          "planar versus direct AoS48 versus cooperative flat AoS under fixed ownership"
+        ],
+        "hardware": {
+          "kind": "CPU",
+          "model": "CPU address and operand ownership accounting"
+        },
+        "validity": "CPU_VALIDATED",
+        "disposition": "CPU_ACCOUNTING",
+        "sources": [
+          {
+            "path": "proj_rsi/audits/gv53-payload-layout-feasibility-v1/address_accounting.py",
+            "sha256": "57f966c60530fa04e9fb0207c4f5c4d38259ca9e2518d1c9a7a894eab8c43669",
+            "role": "CPU address model"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "layout",
+          "path": "proj_rsi/audits/gv53-payload-layout-feasibility-v1/accounting.json",
+          "sha256": "eded954419f62614a9d11d2329229de1ad11c0ab1d0992d675217605a075dd06"
+        }
+      ],
+      "observations": [
+        {
+          "id": "planar-aligned",
+          "statement": "Aligned planar1536B payload uses three warp LDG128 and48 sector instruction incidences; these are modeled addresses, not hardware transactions.",
+          "outcome": "neutral",
+          "evidence": "layout",
+          "selector": {
+            "json_pointer": "/address_models_by_base_mod32/0/planar",
+            "equals": {
+              "bytes": 1536,
+              "unique_32byte_sector_set_size": 48,
+              "sector_set_size_per_warp_load": [
+                16,
+                16,
+                16
+              ],
+              "sector_instruction_incidences": 48,
+              "payload_warp_LDG128_instructions": 3,
+              "note": "Sector address incidences only, not measured L1 requests/replays/L2/DRAM transactions."
+            }
+          }
+        },
+        {
+          "id": "aos-aligned",
+          "statement": "Direct per-lane48B AoS retains1536B and3 loads but doubles aligned sector instruction incidences48 to96.",
+          "outcome": "negative",
+          "evidence": "layout",
+          "selector": {
+            "json_pointer": "/address_models_by_base_mod32/0/AoS48",
+            "equals": {
+              "bytes": 1536,
+              "unique_32byte_sector_set_size": 48,
+              "sector_set_size_per_warp_load": [
+                32,
+                32,
+                32
+              ],
+              "sector_instruction_incidences": 96,
+              "payload_warp_LDG128_instructions": 3,
+              "note": "Sector address incidences only, not measured L1 requests/replays/L2/DRAM transactions."
+            }
+          }
+        },
+        {
+          "id": "misaligned-planar",
+          "statement": "At base mod32=16 planar has51 sector incidences and49 unique sectors; actual runtime alignment is not established.",
+          "outcome": "neutral",
+          "evidence": "layout",
+          "selector": {
+            "json_pointer": "/address_models_by_base_mod32/16/planar",
+            "equals": {
+              "bytes": 1536,
+              "unique_32byte_sector_set_size": 49,
+              "sector_set_size_per_warp_load": [
+                17,
+                17,
+                17
+              ],
+              "sector_instruction_incidences": 51,
+              "payload_warp_LDG128_instructions": 3,
+              "note": "Sector address incidences only, not measured L1 requests/replays/L2/DRAM transactions."
+            }
+          }
+        },
+        {
+          "id": "ownership",
+          "statement": "Cooperative flat AoS would require at least12 scalar SHFL under original ownership, versus planar0; lower bound, not compiled instruction count.",
+          "outcome": "negative",
+          "evidence": "layout",
+          "selector": {
+            "json_pointer": "/concrete_alternative/minimum_scalar_SHFL_instructions_given_original_operand_ownership",
+            "equals": 12
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "An AoS coalescing-only rewrite improves the payload mover under unchanged ownership.",
+          "status": "refuted",
+          "observation_ids": [
+            "planar-aligned",
+            "aos-aligned",
+            "ownership"
+          ]
+        }
+      ],
+      "scope": "Exact M8 pooler tuple under current16B/lane primitive and original operand ownership. Distinct from generic codec-residency ledgers.",
+      "transfer_limits": [
+        "No measured cache requests, replays, DRAM traffic or timing.",
+        "Changing mover primitive or operand ownership can invalidate the bound."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Reopen only if actual per-PC requests/alignment contradict the model or a concrete ownership/mover change removes a cost absent here.",
+      "next_test": {
+        "question": "Reopen only if actual per-PC requests/alignment contradict the model or a concrete ownership/mover change removes a cost absent here.",
+        "controls": [
+          "Reuse unchanged proofs and frozen evidence within their assumptions."
+        ],
+        "discriminator": "Reopen only if actual per-PC requests/alignment contradict the model or a concrete ownership/mover change removes a cost absent here.",
+        "stop_rule": "No unchanged rerun or new broad campaign solely to populate learning.",
+        "required_gates": [
+          "Reuse existing scope-appropriate validity requirements; this learning proposal adds no gate."
+        ]
+      },
+      "related_queue_ids": [
+        "CPU.gv53.payload.layout.feasibility.v1"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "No kernel or official score gain is forecast; root owns any follow-up admission."
+        ]
+      },
+      "cost": {
+        "basis": "CPU-only accounting; no native compile justified solely by coalescing hypothesis.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      }
+    },
+    {
+      "id": "gv53-quarter-pipeline-control-cost",
+      "version": 1,
+      "supersedes": null,
+      "record_sha256": "738b748005ea76de8d05fc68612c3c4b5e76c4dca49a29857dcb4c852249892b",
+      "title": "Earlier first MMA and fewer sparse headers did not improve whole-kernel timing",
+      "tags": [
+        "projection",
+        "learning-v9"
+      ],
+      "context": {
+        "experiment_id": "research.gv53.quarter.stream.fixed.01; research.gv53.quarter.sparse.fixed.01; research.gv53.exactso.counters.01",
+        "family": "muse_bf16_proj",
+        "parents": [
+          "incumbent projection 501d lineage"
+        ],
+        "comparators": [
+          "control versus quarter versus sparse; clean timing separate from profiling"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100; CPU accounting explicitly separated"
+        },
+        "validity": "VALIDATED_DIAGNOSIS",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/gv53_quarter_stream_v1/pilot.cu",
+            "sha256": "b7c8fccd8a92c57387872f41e164aefb86d70f5756ebef6ba5ae6b8a2bc7a7fb",
+            "role": "quarter source"
+          },
+          {
+            "path": "proj_rsi/candidates/gv53_quarter_sparse_header_v1/pilot.cu",
+            "sha256": "f1fa67927bf0ea43c64642934ea650da8f42b918e383c8e7b9e17ee52bb855da",
+            "role": "sparse source"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "quarter",
+          "path": "proj_rsi/audits/gv53-quarter-stream-result-v1/analysis.json",
+          "sha256": "e60fa27faef5e3523f6cc2d74e31534a94bff41e8a0252df9a9e6e0ba600c677"
+        },
+        {
+          "id": "sparse",
+          "path": "proj_rsi/audits/gv53-quarter-sparse-result-v1/analysis.json",
+          "sha256": "17f8720283ea2ba18a2c912d7d10fb652db77b9580ef650d2b9040a32ead0efd"
+        },
+        {
+          "id": "profile",
+          "path": "proj_rsi/audits/gv53-exactso-counter-result-v1/analysis.json",
+          "sha256": "e8e35c1f8e090063834a95524c847b2e5a3d780185f3c17a0a8a3db6d300842a"
+        },
+        {
+          "id": "quarter_native",
+          "path": "proj_rsi/audits/gv53-quarter-stream-result-v1/native-analysis.json",
+          "sha256": "5382143030e32a3b825e968e7bb898d9c01a96d52316b159401a4f7ec2dfd342"
+        },
+        {
+          "id": "sparse_native",
+          "path": "proj_rsi/audits/gv53-quarter-sparse-result-v1/native-analysis.json",
+          "sha256": "8d568875e950652f2d4b5cb8e2a738a30e9ed5dd9a6f135b1078f92fca62a1af"
+        }
+      ],
+      "observations": [
+        {
+          "id": "quarter_native",
+          "statement": "Actual collected native target matches CPU prototype; first-MMA PRMT4 and quarter462/sparse455 nonNOP establish the intended static schedule, not a timing gain.",
+          "outcome": "neutral",
+          "evidence": "quarter_native",
+          "selector": {
+            "json_pointer": "/functions/_Z10gv_quarterILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G",
+            "equals": {
+              "actual_PC_predicate_full128bit_encoding_matches_CPU_prototype": true,
+              "slots": 472,
+              "nonNOP": 462,
+              "PRMT_before_first_HMMA": 4,
+              "HMMA_PC": [
+                "0xa40",
+                "0xe20",
+                "0x1040",
+                "0x1300"
+              ]
+            }
+          }
+        },
+        {
+          "id": "sparse_native",
+          "statement": "Actual collected native target matches CPU prototype; first-MMA PRMT4 and quarter462/sparse455 nonNOP establish the intended static schedule, not a timing gain.",
+          "outcome": "neutral",
+          "evidence": "sparse_native",
+          "selector": {
+            "json_pointer": "/functions/_Z17gv_sparse_quarterILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G",
+            "equals": {
+              "actual_PC_predicate_full128bit_encoding_exact_vs_CPU": true,
+              "slots": 464,
+              "nonNOP": 455,
+              "PRMT_before_first_HMMA": 4,
+              "VOTE": [
+                [
+                  "0x4b0",
+                  "VOTEU.ANY UR12, UPT, P0"
+                ]
+              ],
+              "HMMA_PC": [
+                "0xab0",
+                "0xdb0",
+                "0x10b0",
+                "0x13c0"
+              ],
+              "empty_unit_header_repair_branches": [
+                [
+                  "0x820",
+                  "@!P1 BRA 0x860"
+                ],
+                [
+                  "0x840",
+                  "SHFL.IDX PT, R56, R0, R57, 0x1f"
+                ],
+                [
+                  "0x860",
+                  "@!P1 BRA 0xab0"
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "quarter-paired_median_control_minus_new_us",
+          "statement": "Quarter initial paired control-new -0.144000165us: a loss.",
+          "outcome": "negative",
+          "evidence": "quarter",
+          "selector": {
+            "json_pointer": "/rows/0/paired_median_control_minus_new_us",
+            "equals": -0.14400016516447067
+          }
+        },
+        {
+          "id": "quarter-F1_endpoint_average_control_minus_new_us",
+          "statement": "Quarter F1 endpoint-average control-new +0.256000087us; retain mixed sign and endpoint drift.",
+          "outcome": "mixed",
+          "evidence": "quarter",
+          "selector": {
+            "json_pointer": "/rows/0/F1_endpoint_average_control_minus_new_us",
+            "equals": 0.2560000866651535
+          }
+        },
+        {
+          "id": "quarter-F1_conservative_min_endpoint_control_minus_new_us",
+          "statement": "Quarter conservative endpoint control-new -0.320000574us.",
+          "outcome": "negative",
+          "evidence": "quarter",
+          "selector": {
+            "json_pointer": "/rows/0/F1_conservative_min_endpoint_control_minus_new_us",
+            "equals": -0.3200005739927292
+          }
+        },
+        {
+          "id": "retest-paired-0",
+          "statement": "Control-quarter -0.191999599us retest loss. Positive first-minus-second favors second; comparisons share24 triples and are not additive.",
+          "outcome": "negative",
+          "evidence": "sparse",
+          "selector": {
+            "json_pointer": "/comparisons/0/paired_median_first_minus_second_us",
+            "equals": -0.19199959933757782
+          }
+        },
+        {
+          "id": "retest-blocked-0",
+          "statement": "Blocked endpoint-average retains the signed first-minus-second effect from the same trial.",
+          "outcome": "negative",
+          "evidence": "sparse",
+          "selector": {
+            "json_pointer": "/comparisons/0/blocked_endpoint_average_first_minus_second_us",
+            "equals": -0.23999903351068497
+          }
+        },
+        {
+          "id": "retest-paired-1",
+          "statement": "Control-sparse -0.223999843us loss. Positive first-minus-second favors second; comparisons share24 triples and are not additive.",
+          "outcome": "negative",
+          "evidence": "sparse",
+          "selector": {
+            "json_pointer": "/comparisons/1/paired_median_first_minus_second_us",
+            "equals": -0.22399984300136566
+          }
+        },
+        {
+          "id": "retest-blocked-1",
+          "statement": "Blocked endpoint-average retains the signed first-minus-second effect from the same trial.",
+          "outcome": "negative",
+          "evidence": "sparse",
+          "selector": {
+            "json_pointer": "/comparisons/1/blocked_endpoint_average_first_minus_second_us",
+            "equals": -0.2719992771744728
+          }
+        },
+        {
+          "id": "retest-paired-2",
+          "statement": "Quarter-sparse -0.063999556us loss. Positive first-minus-second favors second; comparisons share24 triples and are not additive.",
+          "outcome": "negative",
+          "evidence": "sparse",
+          "selector": {
+            "json_pointer": "/comparisons/2/paired_median_first_minus_second_us",
+            "equals": -0.06399955600500107
+          }
+        },
+        {
+          "id": "retest-blocked-2",
+          "statement": "Blocked endpoint-average retains the signed first-minus-second effect from the same trial.",
+          "outcome": "negative",
+          "evidence": "sparse",
+          "selector": {
+            "json_pointer": "/comparisons/2/blocked_endpoint_average_first_minus_second_us",
+            "equals": -0.03200024366378784
+          }
+        },
+        {
+          "id": "profile-0-gpu__time_duration.sum",
+          "statement": "Exact-SO control: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/0/metrics/gpu__time_duration.sum",
+            "equals": {
+              "value": 22400.0,
+              "unit": "ns"
+            }
+          }
+        },
+        {
+          "id": "profile-0-dram__bytes_read.sum",
+          "statement": "Exact-SO control: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/0/metrics/dram__bytes_read.sum",
+            "equals": {
+              "value": 50998272.0,
+              "unit": "byte"
+            }
+          }
+        },
+        {
+          "id": "profile-0-smsp__inst_executed.sum",
+          "statement": "Exact-SO control: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/0/metrics/smsp__inst_executed.sum",
+            "equals": {
+              "value": 3223396.0,
+              "unit": "inst"
+            }
+          }
+        },
+        {
+          "id": "profile-0-smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+          "statement": "Exact-SO control: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/0/metrics/smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+            "equals": {
+              "value": 82.56,
+              "unit": "%"
+            }
+          }
+        },
+        {
+          "id": "profile-1-gpu__time_duration.sum",
+          "statement": "Exact-SO quarter: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/1/metrics/gpu__time_duration.sum",
+            "equals": {
+              "value": 21664.0,
+              "unit": "ns"
+            }
+          }
+        },
+        {
+          "id": "profile-1-dram__bytes_read.sum",
+          "statement": "Exact-SO quarter: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/1/metrics/dram__bytes_read.sum",
+            "equals": {
+              "value": 50999296.0,
+              "unit": "byte"
+            }
+          }
+        },
+        {
+          "id": "profile-1-smsp__inst_executed.sum",
+          "statement": "Exact-SO quarter: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/1/metrics/smsp__inst_executed.sum",
+            "equals": {
+              "value": 4404829.0,
+              "unit": "inst"
+            }
+          }
+        },
+        {
+          "id": "profile-1-smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+          "statement": "Exact-SO quarter: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/1/metrics/smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+            "equals": {
+              "value": 79.48,
+              "unit": "%"
+            }
+          }
+        },
+        {
+          "id": "profile-2-gpu__time_duration.sum",
+          "statement": "Exact-SO sparse: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/2/metrics/gpu__time_duration.sum",
+            "equals": {
+              "value": 21984.0,
+              "unit": "ns"
+            }
+          }
+        },
+        {
+          "id": "profile-2-dram__bytes_read.sum",
+          "statement": "Exact-SO sparse: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/2/metrics/dram__bytes_read.sum",
+            "equals": {
+              "value": 50998784.0,
+              "unit": "byte"
+            }
+          }
+        },
+        {
+          "id": "profile-2-smsp__inst_executed.sum",
+          "statement": "Exact-SO sparse: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/2/metrics/smsp__inst_executed.sum",
+            "equals": {
+              "value": 3751027.0,
+              "unit": "inst"
+            }
+          }
+        },
+        {
+          "id": "profile-2-smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+          "statement": "Exact-SO sparse: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/2/metrics/smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+            "equals": {
+              "value": 80.2,
+              "unit": "%"
+            }
+          }
+        },
+        {
+          "id": "cause",
+          "statement": "Profile durations rank quarter/sparse/control differently from clean timings; unchanged traffic plus increased instructions establishes a tradeoff, not causal allocation of loss.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/cause_confidence/clean_loss_cause",
+            "equals": "UNKNOWN: profile-durationranking differsclean; unchangedtraffic and more dynamicinstructions establish tradeoff, not lossallocation"
+          }
+        },
+        {
+          "id": "quarter-build",
+          "statement": "Quarter measured compile/load41.838135824s and run45.180085850s; do not substitute this cost into a controlled thin-ABI savings claim.",
+          "outcome": "neutral",
+          "evidence": "quarter",
+          "selector": {
+            "json_pointer": "/cost",
+            "equals": {
+              "compile_and_load_seconds": 41.83813582400035,
+              "task_weight_pack_seconds": 0.41592463199049234,
+              "run_elapsed_seconds": 45.18008584999188
+            }
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Moving first MMA earlier or skipping empty-unit headers is sufficient to improve this complete kernel.",
+          "status": "refuted",
+          "observation_ids": [
+            "quarter-paired_median_control_minus_new_us",
+            "retest-paired-1"
+          ]
+        },
+        {
+          "statement": "More executed instructions contribute to the clean loss.",
+          "status": "unproven",
+          "observation_ids": [
+            "cause"
+          ]
+        }
+      ],
+      "scope": "Measured fixed M8 pooler tuple and weights, clean quarter/sparse trials plus separately profiled exact binaries; no policy/official score win. Earlier first-MMA schedule is realized, whole-kernel benefit is not.",
+      "transfer_limits": [
+        "Quarter native first-MMA PRMT16 to4; sparse nonNOP462 to455 are static changes, not runtime savings.",
+        "Profile durations22400/21664/21984ns are not gains; profile ranking opposes clean timings.",
+        "Counters do not identify repair PC time, wall-time fractions or a proven bottleneck.",
+        "A losing version does not reject quarter/pipeline family; preserve mixed F1 and negative paired estimates."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Reopen with a changed load-stage/dependency mechanism that can separate added control cost from useful overlap; reuse exact binaries/proofs where valid, not unchanged broad profiling.",
+      "next_test": {
+        "question": "Reopen with a changed load-stage/dependency mechanism that can separate added control cost from useful overlap; reuse exact binaries/proofs where valid, not unchanged broad profiling.",
+        "controls": [
+          "Reuse unchanged proofs and frozen evidence within their assumptions."
+        ],
+        "discriminator": "Reopen with a changed load-stage/dependency mechanism that can separate added control cost from useful overlap; reuse exact binaries/proofs where valid, not unchanged broad profiling.",
+        "stop_rule": "No unchanged rerun or new broad campaign solely to populate learning.",
+        "required_gates": [
+          "Reuse existing scope-appropriate validity requirements; this learning proposal adds no gate."
+        ]
+      },
+      "related_queue_ids": [
+        "research.gv53.quarter.stream.fixed.01",
+        "research.gv53.quarter.sparse.fixed.01",
+        "research.gv53.exactso.counters.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "No kernel or official score gain is forecast; root owns any follow-up admission."
+        ]
+      },
+      "cost": {
+        "basis": "Quarter actual compile/load41.838135824s/run45.180085850s; exact-SO profile native builds0; no new execution requested.",
         "cpu_minutes": null,
         "gpu_seconds": null
       }
