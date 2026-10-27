@@ -1,5 +1,54 @@
 # Current iteration contract
 
+## Continuous coordinator loop
+
+Authority: explicit user instructions, reaffirmed 2026-10-27. Read this section
+on startup, takeover and context compaction. It governs coordination; the long
+historical LOOP.md log is evidence, not the current work queue.
+
+`profile -> measure -> hypothesis -> optimize/reimplement -> test -> validate -> stack -> submit measured gains -> generalize learning -> reprioritize -> repeat`
+
+- During active authorized optimization, keep coordinating after answering status
+  questions. A status answer is not a pause request. Do not end the turn merely
+  because a worker or agent is running. Deliberate idle waits are at most 10s;
+  inspect fresh state and perform useful work between waits. Tool/runtime
+  latency is distinct from a deliberate idle wait.
+- Every user-facing answer/update includes a compact restatement of this loop
+  and a link to this document. Carry this requirement into every handover and
+  context summary. A reminder is not evidence that coordination is running.
+- Each coordinator cycle: inspect worker health, active GPU work, READY/BACKLOG
+  and newly VALIDATING results; consume agent messages; validate completed
+  results promptly; unblock dependencies; admit reviewed work by expected ROI;
+  assign implementation/review/analysis concurrently. Poll mutation completion
+  and verify effects rather than assuming a tool succeeded.
+- Keep the GPU supplied with useful bounded work. A live polling worker with an
+  empty eligible queue is not GPU utilization. Distinguish queue state, physical
+  utilization, agent activity and coordinator activity in reports. If nothing
+  is eligible, diagnose the blocker and build the next useful experiment; do not
+  rerun unchanged work just to occupy the GPU.
+- Preserve every source/result and signed effect. Diagnose failed attempts,
+  repair and iterate; a losing version does not reject its family. Record facts,
+  causal hypothesis, scope, counterevidence, next falsifier and ROI implications.
+- Stack compatible changes explicitly and measure the actual combined package
+  against its parent and incumbent. Source inclusion, selected execution,
+  local gains and official gains are separate facts. Never add isolated gains
+  arithmetically or call parallel branches a cumulative stack.
+- Submit valid measured improvements within the authorized quota; no minimum
+  effect/significance gate. Preserve mixed estimates and prioritize finite quota.
+  Official claims require actual official receipts. See the promotion policy below.
+- User cancellation/pause, explicit limits and genuine external blockers still
+  apply. State an interruption honestly; never claim autonomous continuity after
+  a turn has ended or a process has stopped.
+
+Response reminder:
+`Loop: profile -> measure -> hypothesis -> optimize/reimplement -> test -> validate -> stack -> submit measured gains -> learn -> reprioritize -> repeat; idle <=10s. [Contract](ITERATION.md)`
+
+Queue details: [scheduling/OPERATIONS.md](scheduling/OPERATIONS.md) and
+[scheduling/CONTRACT.md](scheduling/CONTRACT.md). Learning:
+[LEARNING.md](LEARNING.md). Measured stack: [CURRENT_STACK.md](CURRENT_STACK.md).
+
+## Experiment iteration
+
 Authority: user2026-10-26 correction; supersedes historical family-wide
 `CLOSED/NO_RETRY/kill` language. Execution authority: results/proj-rsi/scheduler/events.jsonl; queue.json is historical experiment context. Official incumbent and
 score: protocol.json. Chronological measurements: LOOP.md and immutable artifacts.

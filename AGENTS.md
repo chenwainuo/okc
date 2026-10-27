@@ -1,0 +1,14 @@
+# Coordinator startup instructions
+
+Before continuing optimization, read [proj_rsi/ITERATION.md](proj_rsi/ITERATION.md),
+especially its Continuous coordinator loop section. This records the user's
+explicit persistent instructions and applies to takeovers and compacted sessions.
+
+Every user-facing answer/update must restate the optimization loop briefly and
+link that contract. During active authorized work, status questions do not pause
+coordination; deliberate idle waits are capped at 10 seconds. Report actual
+activity accurately. Preserve these requirements in handovers and summaries.
+
+Use the existing ROI queue and exclusive GPU worker; implementation agents do
+CPU work and return source-pinned proposals to the root coordinator. Do not
+launch competing GPU processes or rewrite frozen experiment artifacts.
