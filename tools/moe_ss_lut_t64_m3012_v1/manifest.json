@@ -1,0 +1,41 @@
+{
+  "state": "CPU_READY_M3012_T64_GPU_UNRUN_REVIEW_PENDING",
+  "files": {
+    "tools/moe_ss_lut_t64_m3012_v1/pilot.py": "7e10e50d8d8918e33d0f9bc6144f33acba8a703901c750c9f37d51decd70a776",
+    "serving/experiments/moe_rsi_20261027/ss_lut_t64_m3012_v1/kernel.cuh": "1d71a1dd82313668b3e0ad913b1defa8efe013bf7f005cb0545714dd985406aa",
+    "serving/experiments/moe_rsi_20261027/ss_lut_t64_m3012_v1/adapter.py": "6260f3b67729face502428ed63e48dadde8ee5660e7b28a892a2fad95de45425",
+    "serving/experiments/moe_rsi_20261027/ss_lut_t64_m3012_v1/extension_source.cu": "9b95749de7283e72445c46fc6991fe54c9a31d3b0eb005911b148112ac1e3834",
+    "serving/experiments/moe_rsi_20261027/ss_lut_t64_m3012_v1/serving_both.py": "76324f0b385150ce4db1adcb3bf8e4f3ce014d861123ff099d6b0dd82d219fd4",
+    "tools/moe_ss_lut_t64_m3012_v1/feasibility.json": "656b99e99eb61926ccd467547a1d8b13b5fd08439a7643f6f66b7b7aa09cecbf",
+    "tools/moe_ss_lut_t64_m3012_v1/cpu-readiness.json": "70b45098a0da414524eba953693beae40da3c2355cc6e71de947857952d0e8d5",
+    "tools/moe_ss_serving_pilot_v1/pilot.py": "d313e60ed27e053211bab0595c5c24e2f6b2d39dbe323588dbed7264262fe925",
+    "benchmarks/rsi_bundle.py": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25",
+    "benchmarks/rsi_worker.py": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/kernel.cuh": "09a7d995f687ecbc172927b811bc30773e90f103aea9c02f3114a0b733491e63",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/serving_both.py": "f443b2805bd7f1f7100d9b1e836e592ccb6d5ac4fa5d4e732003243c1c82162d"
+  },
+  "candidate_serving": "serving/experiments/moe_rsi_20261027/ss_lut_t64_m3012_v1/serving_both.py",
+  "candidate_extension_source": "serving/experiments/moe_rsi_20261027/ss_lut_t64_m3012_v1/extension_source.cu",
+  "original_result_sha256": "ad773dffe31f34fa1249800c2c9f975373e5da9f39dd03e041f4c07787ac6a9c",
+  "original_SO_sha256": "0c176fe07fe12c3f5fc7b8def5d2f05eb647f637daf846a7db80e6b7b67e4233",
+  "original_module_name": "ss_serving_cu130_05a899aaaac331a822ff",
+  "prior_archive_sha256": "e49a158ba0ce83875d12e6767bdac85fe6a429dc980518dbdc7e8c688317aa86",
+  "anchor_source_sha256": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5",
+  "scope": "ONE originalM3012normalEP8, actualwhole-serving2arms,64token tile; nofull14/3x/officialclaim",
+  "new_compiles": 1,
+  "new_functions": [
+    [
+      64,
+      1
+    ],
+    [
+      64,
+      8
+    ]
+  ],
+  "timing_calls": 25,
+  "guard": "E32,K4096,bm64;DIV8rows3012N8192 orDIV1rows24096N4096; sameunalteredservingmethod/routing/activation/finalizer",
+  "load_model": "existingmethod heuristic753selectsblock64; actualmappedlocalhist/average/utilizationrecordedfromeachGPUfixture, never753asactualmappedaverage",
+  "memory_budget": "32GiBfreepreflight/8GiBfreepostcapture/allocated<48GiB; runtimeallocated/reserved/peak/free saved; noassumptionNCUsharedconfig",
+  "precision": "ExactfullLUTv1kernelinverseonlynamespace; canonicalcastbeforeglobal retained; originalSS T64 untimedbitwisecontrol and originaltaskreferencealltimedoutputs"
+}

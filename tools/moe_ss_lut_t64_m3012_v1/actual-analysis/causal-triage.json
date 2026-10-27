@@ -1,0 +1,334 @@
+{
+  "state": "CPU_SOURCE_RESOURCE_ROUTING_TRIAGE_OF_ACTUAL_VALID_REGRESSION",
+  "case": "OnlyM3012normalEP8/busiestT64",
+  "actual_whole_slowdown_median_paired": 7.544031936169537,
+  "actual_utilization_range": [
+    0.7671654929577465,
+    0.8595266990291263
+  ],
+  "actual_mapped_local_average_range": [
+    108.9375,
+    177.0625
+  ],
+  "actual_local_blocks_range": [
+    71,
+    103
+  ],
+  "actual_resources": [
+    {
+      "T": 64,
+      "DIV": 1,
+      "dynamic_shared": 42016,
+      "binary_resources": {
+        "REG": 64,
+        "STACK": 0,
+        "SHARED": 1024,
+        "LOCAL": 0
+      },
+      "registers": 64,
+      "local": 0,
+      "user_static": 0,
+      "max_threads": 256,
+      "max_dynamic": 49152,
+      "occupancy": 4,
+      "preferred_shared_carveout": -1
+    },
+    {
+      "T": 64,
+      "DIV": 8,
+      "dynamic_shared": 42016,
+      "binary_resources": {
+        "REG": 62,
+        "STACK": 0,
+        "SHARED": 1024,
+        "LOCAL": 0
+      },
+      "registers": 62,
+      "local": 0,
+      "user_static": 0,
+      "max_threads": 256,
+      "max_dynamic": 49152,
+      "occupancy": 4,
+      "preferred_shared_carveout": -1
+    }
+  ],
+  "actual_static_SASS": [
+    {
+      "T": 64,
+      "DIV": 1,
+      "static_instructions": 1632,
+      "HGMMA": 20,
+      "LDS_U16": 32,
+      "LDG_U16": 13,
+      "STS": 28,
+      "WARPGROUP_wait0": 5,
+      "math_reader_barrier": 5,
+      "limit": "Staticcompiledinstructioncounts only, notdynamicissues/stalltime/PCsamples."
+    },
+    {
+      "T": 64,
+      "DIV": 8,
+      "static_instructions": 1496,
+      "HGMMA": 20,
+      "LDS_U16": 32,
+      "LDG_U16": 9,
+      "STS": 24,
+      "WARPGROUP_wait0": 5,
+      "math_reader_barrier": 5,
+      "limit": "Staticcompiledinstructioncounts only, notdynamicissues/stalltime/PCsamples."
+    }
+  ],
+  "source_cost_per_valid_CTA": {
+    "K64_publications_wait0_reader_handoffs": 64,
+    "weight_values_decoded": 262144,
+    "compressed_weight_scale_bytes": 147456,
+    "shared_LUT_read_payload_bytes": 524288,
+    "decoded_weight_shared_store_bytes": 524288,
+    "T64_input_gather_read_bytes_and_shared_store_bytes_each": 524288,
+    "T8_comparator_input_gather_read_bytes_and_shared_store_bytes_each": 65536,
+    "producer_input_elements_per_lane_per_K64_T64_vs_T8": [
+      32,
+      4
+    ],
+    "HGMMA_instruction_count": 256,
+    "HGMMA_opcode": "m64n64k16.f32.bf16.bf16",
+    "source_delta": "Nochangeddecoder/layout/lifetimes; T64selectsexistingtemplate changingBWfrom512to4096 andaccumulator4to32permaththread. No8/64tokenwasteclaim."
+  },
+  "per_seed_source_model": [
+    {
+      "seed": 7900,
+      "local_routes": 3973,
+      "mapped_local_avg": 124.15625,
+      "local_blocks": 79,
+      "real_token_column_utilization": 0.7857990506329114,
+      "positive_experts": 30,
+      "heaviest_expert_routes": 538,
+      "valid_CTAs_up_down_source_model": [
+        10112,
+        5056
+      ],
+      "compressed_weight_scale_bytes_source_model": 2236612608,
+      "LUT_global_init_bytes_source_model": 124256256,
+      "shared_weight_store_bytes_source_model": 7952400384,
+      "input_gather_read_and_shared_store_bytes_each_source_model": 7952400384,
+      "LUT_shared_read_payload_bytes_source_model": 7952400384,
+      "K64_groups_source_model": 970752,
+      "padded_WGMMA_FLOPs_source_model": 508953624576,
+      "capacity_waves_up_down_model": [
+        20,
+        10
+      ],
+      "source_model_limit": "Logicalbytes/work only; noactualHBM/L2transactions/bandwidth orhardwarewavesobserved. Gridalsoincludesfastreturnnonlocal/tailCTAs."
+    },
+    {
+      "seed": 7901,
+      "local_routes": 4264,
+      "mapped_local_avg": 133.25,
+      "local_blocks": 82,
+      "real_token_column_utilization": 0.8125,
+      "positive_experts": 29,
+      "heaviest_expert_routes": 1519,
+      "valid_CTAs_up_down_source_model": [
+        10496,
+        5248
+      ],
+      "compressed_weight_scale_bytes_source_model": 2321547264,
+      "LUT_global_init_bytes_source_model": 128974848,
+      "shared_weight_store_bytes_source_model": 8254390272,
+      "input_gather_read_and_shared_store_bytes_each_source_model": 8254390272,
+      "LUT_shared_read_payload_bytes_source_model": 8254390272,
+      "K64_groups_source_model": 1007616,
+      "padded_WGMMA_FLOPs_source_model": 528280977408,
+      "capacity_waves_up_down_model": [
+        20,
+        10
+      ],
+      "source_model_limit": "Logicalbytes/work only; noactualHBM/L2transactions/bandwidth orhardwarewavesobserved. Gridalsoincludesfastreturnnonlocal/tailCTAs."
+    },
+    {
+      "seed": 7902,
+      "local_routes": 3486,
+      "mapped_local_avg": 108.9375,
+      "local_blocks": 71,
+      "real_token_column_utilization": 0.7671654929577465,
+      "positive_experts": 28,
+      "heaviest_expert_routes": 634,
+      "valid_CTAs_up_down_source_model": [
+        9088,
+        4544
+      ],
+      "compressed_weight_scale_bytes_source_model": 2010120192,
+      "LUT_global_init_bytes_source_model": 111673344,
+      "shared_weight_store_bytes_source_model": 7147094016,
+      "input_gather_read_and_shared_store_bytes_each_source_model": 7147094016,
+      "LUT_shared_read_payload_bytes_source_model": 7147094016,
+      "K64_groups_source_model": 872448,
+      "padded_WGMMA_FLOPs_source_model": 457414017024,
+      "capacity_waves_up_down_model": [
+        18,
+        9
+      ],
+      "source_model_limit": "Logicalbytes/work only; noactualHBM/L2transactions/bandwidth orhardwarewavesobserved. Gridalsoincludesfastreturnnonlocal/tailCTAs."
+    },
+    {
+      "seed": 7903,
+      "local_routes": 3571,
+      "mapped_local_avg": 111.59375,
+      "local_blocks": 71,
+      "real_token_column_utilization": 0.7858714788732394,
+      "positive_experts": 29,
+      "heaviest_expert_routes": 574,
+      "valid_CTAs_up_down_source_model": [
+        9088,
+        4544
+      ],
+      "compressed_weight_scale_bytes_source_model": 2010120192,
+      "LUT_global_init_bytes_source_model": 111673344,
+      "shared_weight_store_bytes_source_model": 7147094016,
+      "input_gather_read_and_shared_store_bytes_each_source_model": 7147094016,
+      "LUT_shared_read_payload_bytes_source_model": 7147094016,
+      "K64_groups_source_model": 872448,
+      "padded_WGMMA_FLOPs_source_model": 457414017024,
+      "capacity_waves_up_down_model": [
+        18,
+        9
+      ],
+      "source_model_limit": "Logicalbytes/work only; noactualHBM/L2transactions/bandwidth orhardwarewavesobserved. Gridalsoincludesfastreturnnonlocal/tailCTAs."
+    },
+    {
+      "seed": 7904,
+      "local_routes": 3699,
+      "mapped_local_avg": 115.59375,
+      "local_blocks": 72,
+      "real_token_column_utilization": 0.802734375,
+      "positive_experts": 28,
+      "heaviest_expert_routes": 1013,
+      "valid_CTAs_up_down_source_model": [
+        9216,
+        4608
+      ],
+      "compressed_weight_scale_bytes_source_model": 2038431744,
+      "LUT_global_init_bytes_source_model": 113246208,
+      "shared_weight_store_bytes_source_model": 7247757312,
+      "input_gather_read_and_shared_store_bytes_each_source_model": 7247757312,
+      "LUT_shared_read_payload_bytes_source_model": 7247757312,
+      "K64_groups_source_model": 884736,
+      "padded_WGMMA_FLOPs_source_model": 463856467968,
+      "capacity_waves_up_down_model": [
+        18,
+        9
+      ],
+      "source_model_limit": "Logicalbytes/work only; noactualHBM/L2transactions/bandwidth orhardwarewavesobserved. Gridalsoincludesfastreturnnonlocal/tailCTAs."
+    },
+    {
+      "seed": 7905,
+      "local_routes": 5666,
+      "mapped_local_avg": 177.0625,
+      "local_blocks": 103,
+      "real_token_column_utilization": 0.8595266990291263,
+      "positive_experts": 30,
+      "heaviest_expert_routes": 618,
+      "valid_CTAs_up_down_source_model": [
+        13184,
+        6592
+      ],
+      "compressed_weight_scale_bytes_source_model": 2916089856,
+      "LUT_global_init_bytes_source_model": 162004992,
+      "shared_weight_store_bytes_source_model": 10368319488,
+      "input_gather_read_and_shared_store_bytes_each_source_model": 10368319488,
+      "LUT_shared_read_payload_bytes_source_model": 10368319488,
+      "K64_groups_source_model": 1265664,
+      "padded_WGMMA_FLOPs_source_model": 663572447232,
+      "capacity_waves_up_down_model": [
+        25,
+        13
+      ],
+      "source_model_limit": "Logicalbytes/work only; noactualHBM/L2transactions/bandwidth orhardwarewavesobserved. Gridalsoincludesfastreturnnonlocal/tailCTAs."
+    },
+    {
+      "seed": 7906,
+      "local_routes": 4490,
+      "mapped_local_avg": 140.3125,
+      "local_blocks": 89,
+      "real_token_column_utilization": 0.7882724719101124,
+      "positive_experts": 28,
+      "heaviest_expert_routes": 1414,
+      "valid_CTAs_up_down_source_model": [
+        11392,
+        5696
+      ],
+      "compressed_weight_scale_bytes_source_model": 2519728128,
+      "LUT_global_init_bytes_source_model": 139984896,
+      "shared_weight_store_bytes_source_model": 8959033344,
+      "input_gather_read_and_shared_store_bytes_each_source_model": 8959033344,
+      "LUT_shared_read_payload_bytes_source_model": 8959033344,
+      "K64_groups_source_model": 1093632,
+      "padded_WGMMA_FLOPs_source_model": 573378134016,
+      "capacity_waves_up_down_model": [
+        22,
+        11
+      ],
+      "source_model_limit": "Logicalbytes/work only; noactualHBM/L2transactions/bandwidth orhardwarewavesobserved. Gridalsoincludesfastreturnnonlocal/tailCTAs."
+    },
+    {
+      "seed": 7907,
+      "local_routes": 4767,
+      "mapped_local_avg": 148.96875,
+      "local_blocks": 89,
+      "real_token_column_utilization": 0.8369030898876404,
+      "positive_experts": 28,
+      "heaviest_expert_routes": 2037,
+      "valid_CTAs_up_down_source_model": [
+        11392,
+        5696
+      ],
+      "compressed_weight_scale_bytes_source_model": 2519728128,
+      "LUT_global_init_bytes_source_model": 139984896,
+      "shared_weight_store_bytes_source_model": 8959033344,
+      "input_gather_read_and_shared_store_bytes_each_source_model": 8959033344,
+      "LUT_shared_read_payload_bytes_source_model": 8959033344,
+      "K64_groups_source_model": 1093632,
+      "padded_WGMMA_FLOPs_source_model": 573378134016,
+      "capacity_waves_up_down_model": [
+        22,
+        11
+      ],
+      "source_model_limit": "Logicalbytes/work only; noactualHBM/L2transactions/bandwidth orhardwarewavesobserved. Gridalsoincludesfastreturnnonlocal/tailCTAs."
+    }
+  ],
+  "hypotheses_ranked": [
+    {
+      "question": "Doesproduceractivationgather/sharedservice dominateT64?",
+      "source_support": "Theproducer retains128threads while activationBWgrows8xT8toT64. Eachproducerlane nowgathers/scatters32BF16elements perK64 ratherthan4, with repeatedroute/capacityaddresswork. Weightdecode+sharedlookup traffic remainsunchangedperCTA.",
+      "counterevidence": "NoT64stagecounters/PCroleattribution collected; throughput/contention/schedulingcannotbeinferredfromsourceorM8profile.",
+      "smallest_next_falsifier_if_reopened": "Warm exactactualT64binary2stageup/downcountercapturewithsavedfixture/ownoutputs, beforeanysourcechange; profiletensor/DRAM/issue/eligible/sharedorrolePC onlyasreviewed. NoautomaticnewjoborM8rerun."
+    },
+    {
+      "question": "IsT64occupancy orschedule responsible?",
+      "source_support": "Actual4CTA/SM vsM8v1up6/down4; newmathaccumulatorsrequire32registers/thread. Validlocalblocks71..103meanmanyresidentwaves.",
+      "counterevidence": "Same4occupancydoesnotuniquelypredict7.54xloss; activecarveout andscheduledwavesunobserved; fullservingincludeszeroing/activation/finalizer.",
+      "smallest_next_falsifier_if_reopened": "Reuseactualstageevent/traceexposurebeforecounterorresourcevariant; do notassume lowerregs-alone improvesobservedsharedconfig."
+    },
+    {
+      "question": "Doesbadtokenpaddingalone explainprefillloss?",
+      "source_support": "ActualT64realcolumnutilizationrangeabout77..86%, versusM8sparseblocks often1/8. LargerMhasbetteractualutilizationyetstilllosesallpairs.",
+      "counterevidence": "Paddingstillcosts but improvedpaddingdoesnotrescuethisversion. M3012lossfalsifiesexpectationthatT64utilizationalonewillclosegap.",
+      "smallest_next_falsifier_if_reopened": "Noextravariantneededtoclosethisclaim; useactualhistogramalreadycollected."
+    },
+    {
+      "question": "AreHBM/tensorpipessaturatedatprefill?",
+      "source_support": "Logicalshared/read/write/workincreases; coulddifferfromM8whichhadlowDRAM/tensorpressure.",
+      "counterevidence": "NoT64hardwarecounterscollected. M8DRAM17/13%andtensor1.7/1.3%areotherworkloadscope andcannotbetransferred.",
+      "smallest_next_falsifier_if_reopened": "OnlywarmexactT64stagecounters2nodesifinformationvaluebeatsotheravailablework; cleanwholebenchmarkalreadydecisive."
+    }
+  ],
+  "ROI_decision": "Do not integrate thisT64version orrerununchangedwhole/full14. Retainoriginalanchor andallcustomsources/results. DeprioritizefurtherLUTSS tuningpendingoneconcreteprofile-supportedmechanism andcredibleimprovementbudget; useotherincumbenttracks. M8andM3012lossesdo notprovehardware/familyimpossibility orcoverM16384/allrouting.",
+  "no_speed_forecast": true,
+  "no_whole_stage_sum_claim": true,
+  "evidence_pins": {
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.lut.t64.m3012.whole.01/collection-1793135829470349551/logs/scheduler/moe-ss-lut-t64-m3012-whole-01/result.json": "90fd86a470cae3436bd8513498baea0e651e207569728782eedb08a9c7f565f3",
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.lut.t64.m3012.whole.01/collection-1793135829470349551/logs/scheduler/moe-ss-lut-t64-m3012-whole-01/actual_T64.sass": "84602dafdaf56a1ce09ddae02174fafdae14576a0b928556ef5c01872ea07c7c",
+    "tools/moe_ss_lut_t64_m3012_v1/actual-analysis/analysis.json": "0fd25a8bc1f26b8b871cf6cfc0766f3f2c9b1bae3905dbc99cba1ec05b6cc1ba"
+  },
+  "loop_contract": "profile->measure->hypothesis->optimize/reimplement->test->validate->stack->submit->learn->reprioritize->repeat; idle<=10s; proj_rsi/ITERATION.md"
+}

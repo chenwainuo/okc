@@ -1,0 +1,38 @@
+{
+  "parent_V2_sha256": "6945f41310e8e148a3bf1602ada312c5552a0f7eb7d89e0861a911fe4a2e4d29",
+  "highpatch_sha256": "071a03cb31041592ffc5e67c33b4575728525e1d309b3d500fb251fac764f10e",
+  "changes": [
+    {
+      "old": "  constexpr int FCAP = MT == 1 ? 32 : 48, FSLOT = 32 + FCAP * 2;\n  const uint32_t fs = (uint32_t)__cvta_generic_to_shared(smem) + L::SMEM;\n  static_assert(RT == 1 && NA == 1 && !L::BK && S == 1 && (ST == 1 || ST == 2), \"two-cell frontier scope\");\n",
+      "new": "  constexpr int FCAP=MT==1?32:48, RBYTES=FCAP*2;\n  constexpr int DBYTES=KU*32+16, WBYTES=DBYTES+ST*RBYTES;\n  const uint32_t fs=(uint32_t)__cvta_generic_to_shared(smem)+L::SMEM;\n  const uint32_t wd=fs+w*WBYTES;\n  uint32_t* const warp_desc=(uint32_t*)(smem+L::SMEM+w*WBYTES);\n  static_assert(RT==1&&NA==1&&!L::BK&&S==1&&(ST==1||ST==2)&&KU<=16,\"exact preloaded descriptor scope\");\n  const unsigned first_unit=(bx*WR+wr)*p.KC+c0;\n  // Every warp owns its KU*32B slab. No cross-warp publication or reuse.\n  if(lane<KU*2) {\n    asm volatile(\"cp.async.ca.shared.global [%0],[%1],16;\\n\" :: \"r\"(wd+lane*16),\"l\"(p.esc+(size_t)first_unit*8+lane*4));\n  }\n  // Only the next unit's first offset is needed; last matrix unit uses words.\n  if(lane==0) warp_desc[KU*8]=first_unit+KU<fp.units?__ldg(p.esc+(size_t)(first_unit+KU)*8):fp.words;\n  asm volatile(\"cp.async.commit_group;\\ncp.async.wait_group 0;\\n\" ::: \"memory\");\n  __syncwarp(); // both async descriptors and lane0's boundary are now visible\n"
+    },
+    {
+      "old": "    const uint32_t begin = __ldg(p.esc + (size_t)unit * 8);\n    const uint32_t finish = unit + 1 < fp.units ? __ldg(p.esc + (size_t)(unit + 1) * 8) : fp.words;\n    const uint32_t dest = fs + (w * ST + s) * FSLOT;\n    if (lane < 2) {\n      asm volatile(\"cp.async.ca.shared.global [%0], [%1], 16;\\n\" :: \"r\"(dest + lane * 16), \"l\"(p.esc + (size_t)unit * 8 + lane * 4));\n    }\n    if (lane >= 2 && lane < 2 + FCAP / 8 && (lane - 2) * 16 < (finish - begin) * 2) {\n      asm volatile(\"cp.async.ca.shared.global [%0], [%1], 16;\\n\" :: \"r\"(dest + 32 + (lane - 2) * 16), \"l\"(fp.records + (size_t)begin * 2 + (lane - 2) * 16));\n    }\n",
+      "new": "    const uint32_t begin=warp_desc[u*8],finish=warp_desc[(u+1)*8];\n    const uint32_t dest=wd+DBYTES+s*RBYTES;\n    if(lane<FCAP/8&&lane*16<(finish-begin)*2) {\n      asm volatile(\"cp.async.ca.shared.global [%0],[%1],16;\\n\" :: \"r\"(dest+lane*16),\"l\"(fp.records+(size_t)begin*2+lane*16));\n    }\n"
+    },
+    {
+      "old": "    const uint32_t* desc=(const uint32_t*)(smem+L::SMEM+(w*ST+s)*FSLOT);\n    const unsigned short* fixes=(const unsigned short*)(smem+L::SMEM+(w*ST+s)*FSLOT+32);",
+      "new": "    const uint32_t* desc=warp_desc+u*8;\n    const unsigned short* fixes=(const unsigned short*)(smem+L::SMEM+w*WBYTES+DBYTES+s*RBYTES);"
+    }
+  ],
+  "descriptor_slab_bytes_per_warp": {
+    "pooler": 272,
+    "unpooler": 528
+  },
+  "record_slots_bytes_per_warp": {
+    "pooler": 64,
+    "unpooler": 192
+  },
+  "extra_dynamic_bytes": {
+    "pooler": 10752,
+    "unpooler": 2880
+  },
+  "total_dynamic_bytes": {
+    "pooler": 28160,
+    "unpooler": 8000
+  },
+  "additional_boundary_source_bytes": {
+    "pooler": 16380,
+    "unpooler": 8188
+  }
+}

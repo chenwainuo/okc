@@ -66,7 +66,7 @@ class HistoryTests(unittest.TestCase):
   self.assertEqual(partial['archive_status'],'ARCHIVED_PARTIAL')
  def test_no_small_positive_threshold_and_no_duplicate_feature_inflation(self):
   cat=self.catalog;observations=cat['positive_observations']
-  self.assertEqual(len(cat['improvements']),68)
+  self.assertEqual(len(cat['improvements']),71)
   original=[r for r in observations if r['catalog_cohort']=='initial_45_job_audit']
   self.assertEqual(len(original),224)
   self.assertGreater(len(observations),224)
@@ -113,7 +113,7 @@ class HistoryTests(unittest.TestCase):
    self.assertEqual(row['score_tested_jobs'],[])
    self.assertIsNone(row['official_score_us'])
    self.assertTrue(all('sha256' in ref for ref in row['evidence']))
-  self.assertEqual(len(self.catalog['local_paired_observations']),483)
+  self.assertEqual(len(self.catalog['local_paired_observations']),894)
  def test_normalized_release_profile_discovered_without_candidate_directory(self):
   with tempfile.TemporaryDirectory() as directory:
    root=Path(directory);path=root/'results/proj-rsi/releases/frozen-v1/profiles/submission.pending.json'
@@ -144,8 +144,8 @@ class HistoryTests(unittest.TestCase):
   self.assertNotEqual(row['score_us'],3193.637501792908)
   self.assertEqual(row['tests'],9);self.assertEqual(len(row['actual_timed_profiles']),30)
   self.assertEqual(self.catalog['authority']['source_sha256'],'501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9')
-  self.assertEqual(self.catalog['authority']['board_row']['rank'],59)
-  self.assertEqual(self.catalog['authority']['board_row']['attempts'],18)
+  self.assertEqual(self.catalog['authority']['board_row']['rank'],62)
+  self.assertEqual(self.catalog['authority']['board_row']['attempts'],19)
   self.assertEqual(len(self.catalog['submissions']),19);self.assertEqual(len(self.catalog['checks']),49)
  def test_current_source_view_uses_scored_EH_flags_and_preserves_old_rs32_audit(self):
   view=json.loads((ROOT/'proj_rsi/audits/selected-hotpaths-pw38/current-stack-snapshot.json').read_text())
@@ -280,6 +280,32 @@ class HistoryTests(unittest.TestCase):
   self.assertEqual(findings['improvement.research.moe.ss.v1.up.counters.01']['classification'],'INVALID_SETUP_NO_COUNTER_COLLECTION')
   self.assertEqual(findings['improvement.research.moe.ss.v1.up.counters.v2.01']['classification'],'VALID_DIAGNOSTIC_NO_PERFORMANCE_ADMISSION')
   self.assertFalse(any('counters' in r['attempt_id'] for r in self.catalog['local_paired_observations']))
+ def test_latest_board_changes_rank_only_and_preserves_frozen_M3012_done(self):
+  self.assertEqual(self.catalog['authority']['best_job'],'9916d34357b745cf')
+  self.assertEqual(self.catalog['authority']['ranked_teams'],1173)
+  self.assertEqual(self.catalog['authority']['board_row']['rank'],62)
+  index=self.catalog['latest_completed_local_evidence']['m3012_supplement_index']
+  self.assertEqual(index['original_done']['sha256'],'6dd1b244a90c25a9025ea559d0239e654de3f057a0405c337fd21d197df3059e')
+  points=[r for r in self.catalog['local_paired_observations'] if r['attempt_id']=='research.moe.ss.lut.t64.m3012.whole.01']
+  self.assertEqual(len(points),9);self.assertTrue(all(r['gain_us']<0 and not r['shipping_gain'] for r in points))
+ def test_valid_preload_rescue_keeps_C12_losses_and_prior_cleanup_invalidity(self):
+  points=[r for r in self.catalog['local_paired_observations'] if r['attempt_id']=='research.gv.codec.frontier.preload.01']
+  self.assertEqual(len(points),150)
+  summaries=[r for r in points if r['pairs']==24]
+  current=[r for r in summaries if r['control']=='currentC12' and r['version']=='frontier']
+  rescued=[r for r in summaries if r['control']=='exact_v2_same_run']
+  self.assertTrue(all(r['gain_us']<0 and r['wins']==0 for r in current))
+  self.assertTrue(all(r['gain_us']>0 and r['wins']==24 and r['F1_before_gain_us'] is None for r in rescued))
+  old=[r for r in self.catalog['local_paired_observations'] if r['attempt_id']=='research.gv.codec.frontier.two-cell.01']
+  self.assertTrue(all(r['performance_admitted'] is False for r in old))
+ def test_shared_bank_normal_gain_never_erases_skewed_loss_or_estimator_scope(self):
+  points=[r for r in self.catalog['local_paired_observations'] if r['attempt_id']=='research.moe.original.marlin.sharedbank.01']
+  self.assertEqual(len(points),252)
+  normal=next(r for r in points if r['shape']=='normal.anchor_minus_contrast.interleaved.summary')
+  skewed=next(r for r in points if r['shape']=='skewed.anchor_minus_contrast.interleaved.summary')
+  self.assertGreater(normal['gain_us'],0);self.assertLess(skewed['gain_us'],0)
+  self.assertTrue(all(r['wins']+r['ties']+r['losses']==r['pairs'] for r in points))
+  self.assertTrue(all(not r['shipping_gain'] for r in points))
  def test_server_content_hash_not_claimed_equal_to_local_sha(self):
   row=next(r for r in self.catalog['submissions'] if r['candidate']=='rs32')
   self.assertNotEqual(row['source']['sha256'],row['api_content_hash'])
@@ -287,7 +313,7 @@ class HistoryTests(unittest.TestCase):
   self.assertTrue(all(r['causal_delta_vs_other_jobs_us'] is None for r in self.catalog['all_official_jobs']))
  def test_csv_roundtrip_preserves_all_rows_and_structured_evidence(self):
   outputs=render(self.catalog)
-  expected={'submissions':len(self.catalog['submissions']),'checks':len(self.catalog['checks']),'all_official_jobs':len(self.catalog['all_official_jobs']),'improvements':68,'positive_observations':len(self.catalog['positive_observations']),'local_observations':483,'candidates':self.catalog['counts']['candidates']}
+  expected={'submissions':len(self.catalog['submissions']),'checks':len(self.catalog['checks']),'all_official_jobs':len(self.catalog['all_official_jobs']),'improvements':71,'positive_observations':len(self.catalog['positive_observations']),'local_observations':894,'candidates':self.catalog['counts']['candidates']}
   for table,count in expected.items():
    rows=list(csv.DictReader(io.StringIO(outputs[f'proj_rsi/tables/{table}.csv'])))
    self.assertEqual(len(rows),count,table)

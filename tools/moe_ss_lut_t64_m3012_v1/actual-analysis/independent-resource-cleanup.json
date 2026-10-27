@@ -1,0 +1,93 @@
+{
+  "state": "INDEPENDENT_CPU_RESOURCE_CLEANUP_PASS_ACTUAL_VALID_REGRESSION",
+  "reviewer": "moe_result_repair",
+  "job_id": "research.moe.ss.lut.t64.m3012.whole.01",
+  "result_path": "results/proj-rsi/scheduler/artifacts/research.moe.ss.lut.t64.m3012.whole.01/collection-1793135829470349551/logs/scheduler/moe-ss-lut-t64-m3012-whole-01/result.json",
+  "result_sha256": "90fd86a470cae3436bd8513498baea0e651e207569728782eedb08a9c7f565f3",
+  "review_sha256": "14f87cd82556f2e48c07cd6d0b57670ec9aa96eb177d55f0a324c21ba81dbc8b",
+  "manifest_sha256": "1e89038a71e551e671ded24e1641ff19cd36be222527483b17976a09dd12a5b6",
+  "original18admitted_local_pins_match": true,
+  "actual_SO_sha256": "97ef50dde43375a4c7a5b28e7072e79cdd8440248f9bdc3e809049783dd14fa4",
+  "actual_physical2function_proof_recomputed": [
+    {
+      "T": 64,
+      "DIV": 1,
+      "static_K64_groups": 5,
+      "four_HGMMA_per_group": true,
+      "accumulator_lifetime_pass": true,
+      "math_reader_barriers": 5
+    },
+    {
+      "T": 64,
+      "DIV": 8,
+      "static_K64_groups": 5,
+      "four_HGMMA_per_group": true,
+      "accumulator_lifetime_pass": true,
+      "math_reader_barriers": 5
+    }
+  ],
+  "actual_resources": [
+    {
+      "T": 64,
+      "DIV": 1,
+      "dynamic_shared": 42016,
+      "binary_resources": {
+        "REG": 64,
+        "STACK": 0,
+        "SHARED": 1024,
+        "LOCAL": 0
+      },
+      "registers": 64,
+      "local": 0,
+      "user_static": 0,
+      "max_threads": 256,
+      "max_dynamic": 49152,
+      "occupancy": 4,
+      "preferred_shared_carveout": -1
+    },
+    {
+      "T": 64,
+      "DIV": 8,
+      "dynamic_shared": 42016,
+      "binary_resources": {
+        "REG": 62,
+        "STACK": 0,
+        "SHARED": 1024,
+        "LOCAL": 0
+      },
+      "registers": 62,
+      "local": 0,
+      "user_static": 0,
+      "max_threads": 256,
+      "max_dynamic": 49152,
+      "occupancy": 4,
+      "preferred_shared_carveout": -1
+    }
+  ],
+  "active_shared_configuration_and_driver_allocation": "UNKNOWN; preferredcarveout\u22121 is a preference attribute, not an observation of configured shared carveout",
+  "memory_actual": {
+    "allocated": 18276942336,
+    "reserved": 25128075264,
+    "free": 59093680128,
+    "peak_allocated": 23739794944
+  },
+  "all_correctness_records_pass": 39,
+  "same_unchanged_original_task_reference": true,
+  "graph_cleanup": "BothgraphresetpathscompletedbeforeVALID; successfulfinallylive listempty. Externalcontainer/process/GPUcleanup independentlyclean.",
+  "cleanup": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T21:15:40Z\nverify_existing_tree_and_frozen_anchor\none_actual_T64_compile_and_resource_lifetime_gate\n[1/3] ccache c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=ss_lut_t64_m3012_cu130_40986d9504df439da60f -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -fPIC -std=c++20 -c /root/.cache/torch_extensions/ss_lut_t64_m3012_cu130_40986d9504df439da60f/main.cpp -o main.o \n[2/3] ccache /usr/local/cuda/bin/nvcc -MD -MF cuda.cuda.o.d -DTORCH_EXTENSION_NAME=ss_lut_t64_m3012_cu130_40986d9504df439da60f -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options '-fPIC' -gencode=arch=compute_90a,code=sm_90a -O3 --expt-relaxed-constexpr -std=c++20 -c /root/.cache/torch_extensions/ss_lut_t64_m3012_cu130_40986d9504df439da60f/cuda.cu -o cuda.cuda.o \n/root/.cache/torch_extensions/ss_lut_t64_m3012_cu130_40986d9504df439da60f/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n/root/.cache/torch_extensions/ss_lut_t64_m3012_cu130_40986d9504df439da60f/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n[3/3] ccache c++ main.o cuda.cuda.o -shared -L/opt/sglang/lib/python3.12/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o ss_lut_t64_m3012_cu130_40986d9504df439da60f.so\nweights_one_original_prepare_shared_banks\nwhole_serving_eager_capture_current_fresh_empty\nfixed_same_fixture_F1_and_8_ABBA_pairs\nterminal_sources_immutability_and_graph_cleanup\nTRIAL_EXIT okc-proj-moe-ss-lut-t64-m3012-whole-01 0\n2026-10-27T21:16:54Z\n",
+    "terminal_exit": 0
+  },
+  "elapsed_seconds": 65.44970655441284,
+  "compile_seconds": 46.50204019800003,
+  "performance_direction": "0/8candidatewins; preserve actualVALID_REGRESSION, no incumbent/full14/3xpromotion",
+  "scope": "Focusedresource/cleanup/sourceidentity only; fulltiming/routinganalysis ownedmoe_pipeline_next",
+  "loop": "profile->measure->hypothesis->optimize/reimplement->test->validate->stack->submit measuredgains->learn->reprioritize->repeat; idle<=10s; proj_rsi/ITERATION.md"
+}

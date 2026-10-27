@@ -1,0 +1,85 @@
+{
+  "scope": "CPU actual-loaded-SO PC map supplement; no new measurement or frozen evidence mutation",
+  "source_sass": "results/proj-rsi/scheduler/artifacts/research.gv.codec.frontier.preload.01/collection-1793135941737689501/logs/scheduler/gv-codec-frontier-preload-01/run/actual.sass",
+  "source_sass_sha256": "2ec9d57668c5ce9fa306b57ad0b54110f2575afc9e7602239bb5bfd6c0b40be3",
+  "case": "poolerM1, same64regs, CTAcapacity1 both",
+  "control_function": "_Z10gv_predxorILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G",
+  "new_function": "_Z19gv_frontier_preloadILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G8Frontier",
+  "control_total_static_instructions": 360,
+  "new_total_static_instructions": 656,
+  "repair_loops": [
+    {
+      "start": "0xae0",
+      "end": "0xc80",
+      "static_instructions": 27,
+      "record_LDS": [
+        {
+          "PC": "0xb70",
+          "instruction": "@P1 LDS.U16 R35, [R40+0x4510]"
+        }
+      ],
+      "continuation_VOTE": [
+        {
+          "PC": "0xc40",
+          "instruction": "VOTE.ANY R32, PT, P0"
+        }
+      ]
+    },
+    {
+      "start": "0xed0",
+      "end": "0x1070",
+      "static_instructions": 27,
+      "record_LDS": [
+        {
+          "PC": "0xf60",
+          "instruction": "@P1 LDS.U16 R40, [R47+0x4510]"
+        }
+      ],
+      "continuation_VOTE": [
+        {
+          "PC": "0x1030",
+          "instruction": "VOTE.ANY R37, PT, P0"
+        }
+      ]
+    },
+    {
+      "start": "0x12d0",
+      "end": "0x1490",
+      "static_instructions": 29,
+      "record_LDS": [
+        {
+          "PC": "0x1360",
+          "instruction": "@P1 LDS.U16 R47, [R49+0x4510]"
+        }
+      ],
+      "continuation_VOTE": [
+        {
+          "PC": "0x1430",
+          "instruction": "VOTE.ANY R45, PT, P0"
+        }
+      ]
+    },
+    {
+      "start": "0x16c0",
+      "end": "0x1870",
+      "static_instructions": 28,
+      "record_LDS": [
+        {
+          "PC": "0x1750",
+          "instruction": "@P1 LDS.U16 R49, [R60+0x4510]"
+        }
+      ],
+      "continuation_VOTE": [
+        {
+          "PC": "0x1820",
+          "instruction": "VOTE.ANY R48, PT, P0"
+        }
+      ]
+    }
+  ],
+  "question": "Is new overhead dominated by shared-record/continuation dependency versus extra fixed decode/issue work?",
+  "counterfactual": "Preload/highpatch rescued2.192us versusv2 but remains3.216us slower than C12; no isolated-mechanism attribution",
+  "existing_recipe": "proj_rsi/audits/hotpath-fresh-counter-v2; actual GV optional profile succeeded on fresh-selected older source, not this fixed SO. Direct fixed-SO binding and independent scope review required.",
+  "priority": "Below actual incumbent GV loop and production Marlin work; current version parked pending justified focused diagnostic",
+  "no_inference": "Static PC spans are not dynamic loop counts, stall fractions, runtime shares or a GPU speed forecast. No new profiler run requested here."
+}

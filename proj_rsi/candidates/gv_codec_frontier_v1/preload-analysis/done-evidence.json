@@ -1,0 +1,176 @@
+{
+  "job_id": "research.gv.codec.frontier.preload.01",
+  "recommended_state": "DONE",
+  "recommended_disposition": "VALID_REGRESSION",
+  "scope": "Two fixed H100 cells, current C12 / exact v2 / preloaded-metadata+highpatch. No serving-policy or official score gain.",
+  "validation": {
+    "checks": 155,
+    "all_recorded_checks_pass": true,
+    "live_current_and_v2_native_controls_exact": true,
+    "raw_calls": 262,
+    "timed_calls": 232,
+    "warmups": 30,
+    "own_terminal_sites": 12,
+    "retained_graph_mutations": 30
+  },
+  "cells": {
+    "pooler": {
+      "F1_medians_us": {
+        "control_before": 21.183999255299568,
+        "v2": 26.784000918269157,
+        "new": 24.671999737620354,
+        "control_after": 22.143999114632607
+      },
+      "paired_medians_us": {
+        "control": 21.15200087428093,
+        "v2": 26.560000143945217,
+        "frontier": 24.31999985128641
+      },
+      "paired_control_minus_new_us": -3.216000273823738,
+      "paired_control_minus_v2_us": -5.216000601649284,
+      "paired_v2_minus_new_us": 2.191999927163124,
+      "F1_endpoint_average_control_minus_new_us": -3.0080005526542664,
+      "F1_conservative_min_control_minus_new_us": -3.4880004823207855,
+      "F1_endpoint_average_control_minus_v2_us": -5.12000173330307,
+      "wins_vs_current": 0,
+      "wins_vs_v2": 24,
+      "actual_resources": {
+        "control": [
+          64,
+          0,
+          0,
+          1024,
+          17408,
+          1
+        ],
+        "v2": [
+          64,
+          0,
+          0,
+          1024,
+          20480,
+          1
+        ],
+        "frontier": [
+          64,
+          0,
+          0,
+          1024,
+          28160,
+          1
+        ]
+      },
+      "C12_unique_bytes": 50855936,
+      "C11_unique_bytes": 48323952,
+      "V2_duplicate_boundary_word_bytes": 262140,
+      "new_duplicate_boundary_word_bytes": 16380,
+      "unique_byte_fraction_saved": 0.04978738371858893,
+      "new_source_word_ledger_fraction_saved": 0.049465297423687216,
+      "measured_HBM_bytes": "NOT_COLLECTED",
+      "scope": "Direct fixed-cell same-run comparison; no official score or policy gain"
+    },
+    "unpooler": {
+      "F1_medians_us": {
+        "control_before": 22.784000262618065,
+        "v2": 35.840000957250595,
+        "new": 31.39200061559677,
+        "control_after": 23.679999634623528
+      },
+      "paired_medians_us": {
+        "control": 22.975999861955643,
+        "v2": 35.631999373435974,
+        "frontier": 31.34400025010109
+      },
+      "paired_control_minus_new_us": -8.38400050997734,
+      "paired_control_minus_v2_us": -12.624000199139118,
+      "paired_v2_minus_new_us": 4.208001308143139,
+      "F1_endpoint_average_control_minus_new_us": -8.160000666975975,
+      "F1_conservative_min_control_minus_new_us": -8.608000352978706,
+      "F1_endpoint_average_control_minus_v2_us": -12.608001008629799,
+      "wins_vs_current": 0,
+      "wins_vs_v2": 24,
+      "actual_resources": {
+        "control": [
+          110,
+          0,
+          0,
+          128,
+          5120,
+          4
+        ],
+        "v2": [
+          108,
+          0,
+          0,
+          128,
+          6144,
+          4
+        ],
+        "frontier": [
+          96,
+          0,
+          0,
+          128,
+          8000,
+          5
+        ]
+      },
+      "C12_unique_bytes": 50593792,
+      "C11_unique_bytes": 49087008,
+      "V2_duplicate_boundary_word_bytes": 262140,
+      "new_duplicate_boundary_word_bytes": 8188,
+      "unique_byte_fraction_saved": 0.029781993806671014,
+      "new_source_word_ledger_fraction_saved": 0.029620155769308654,
+      "measured_HBM_bytes": "NOT_COLLECTED",
+      "scope": "Direct fixed-cell same-run comparison; no official score or policy gain"
+    }
+  },
+  "partial_rescue_preserved": true,
+  "incumbent_gains": false,
+  "promotion": "NONE; both cases lose to actual current C12 control",
+  "internal_cleanup": {
+    "allocated": 0,
+    "reserved": 0,
+    "all_run_aliases_released": true,
+    "before_blas_clear": {
+      "allocated": 33554432,
+      "reserved": 1566572544
+    },
+    "blas_cache_entries_workspace_bytes_entries_after": [
+      1,
+      33554432,
+      0
+    ],
+    "clear_error": null,
+    "clear_only_after_drain_and_scope_release": true
+  },
+  "external_cleanup": {
+    "terminal_exit": 0,
+    "cleanup_failed": false,
+    "container_exists": false,
+    "compute_pids": [],
+    "gpu_memory_mib": 0
+  },
+  "new_run_workspace_origin": {
+    "map_entries_before": 1,
+    "chosen_workspace_bytes": 33554432,
+    "map_entries_after": 0,
+    "remaining_allocation_before": 33554432,
+    "allocated_after": 0,
+    "reserved_after": 0,
+    "cache_clear_counts_match_freed_remaining_bytes": true,
+    "historical_scope": "This source/runtime evidence accounts for the new run only. Original v2 attempt remains INVALID_CLEANUP and its old timings are not retroactively admitted."
+  },
+  "report_path": "proj_rsi/candidates/gv_codec_frontier_v1/preload-analysis/actual-report.json",
+  "report_sha256": "f318d8f725912074c028da48a7bf5f65581df09614c7d5b5e969b18e49aa700b",
+  "analyzer_path": "proj_rsi/candidates/gv_codec_frontier_v1/preload-analysis/analyze.py",
+  "analyzer_sha256": "e3c86ff8c93e267c4b19ab2bbaffab0ad718425dc6e66b0c09d50aaf35e77429",
+  "raw_result_sha256": "f2488dfda383fe69e2044482b19915b1e19837ba83b9f37a6e650aa289365d1b",
+  "inventory_sha256": "f35a3aae34a6c719a95e72e6721c2a635ec011a542cc544a41910759e7cac88d",
+  "next_action": {
+    "version_state": "PARKED_PENDING_NARROW_DEPENDENCY_DIAGNOSTIC",
+    "family_state": "Not retired",
+    "question": "Does the remaining bitmap-rank/shared-record/continuation dependency dominate after descriptor preload, versus extra fixed C11 header work?",
+    "scope": "Prefer one focused current-C12/new-C11 stall/resource observation before another rewrite; no unchanged repeat and no broad codec search. Highpatch, preload and register-capacity changes are bundled, so the partial rescue is not uniquely attributable to one mechanism."
+  }
+}

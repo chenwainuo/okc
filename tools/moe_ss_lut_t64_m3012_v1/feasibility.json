@@ -1,0 +1,95 @@
+{
+  "state": "CPU_ONLY_M3012_T64_FEASIBLE_RUNTIME_UNMEASURED",
+  "source_delta": "Kernel namespace only relative to measured fullLUTv1; decoder/table/descriptor/math/K64producer-consumerprotocol/epilogue byteexact inverse. Host factory only selects64 and guards exact M3012EP8dimensions. Whole-serving method AST identical.",
+  "block_selection": {
+    "candidates": [
+      8,
+      16,
+      32,
+      48,
+      64
+    ],
+    "selected_block_m": 64,
+    "heuristic_unmapped_Mtopk_per_32local_experts": 753.0,
+    "uniform_mapped_local_average_before_busiest_rotation": 94.125,
+    "actual_mapped_average_and_histogram": "UNKNOWN until original GPUfixture; driver saves all256expertcounts,32localcounts,localrouteutilization andblocks separately for every seed. Heuristic753 is not actualmappedlocalaverage."
+  },
+  "alignment": {
+    "source_capacity": 40288,
+    "grid_rows": 630,
+    "up_grid": [
+      128,
+      630,
+      1
+    ],
+    "down_grid": [
+      64,
+      630,
+      1
+    ],
+    "tail": "capacity not64aligned; gridceil plus existingposition/tokencapacityguards retained",
+    "actual_post": "UNKNOWN until routingfixture; driver derives from actualhistogram without host-sync changing timedmethod"
+  },
+  "T64_resources": {
+    "offline_CUDA": "12.8 sm90a",
+    "registers_up_down": [
+      62,
+      64
+    ],
+    "spill_stack_bytes": 0,
+    "dynamic_shared": 42016,
+    "physical_gate": [
+      {
+        "T": 64,
+        "DIV": 8,
+        "static_K64_groups": 5,
+        "four_HGMMA_per_group": true,
+        "accumulator_lifetime_pass": true,
+        "math_reader_barriers": 5
+      },
+      {
+        "T": 64,
+        "DIV": 1,
+        "static_K64_groups": 5,
+        "four_HGMMA_per_group": true,
+        "accumulator_lifetime_pass": true,
+        "math_reader_barriers": 5
+      }
+    ],
+    "negative_rejections": [
+      "missing_wait0",
+      "missing_reader_barrier"
+    ],
+    "capacity_model": "rounded64registers with256threads permits at most4residentCTAs on65536regs; actualCUDA13occupancy+sharedcarveout queried beforemath. No actualresource/speedclaim."
+  },
+  "memory_model": {
+    "all256_raw_packed_plus_FP8_scales_bytes": 7247757312,
+    "local32_additional_SS_banks_bytes": 905969664,
+    "per_arm_cache13_bytes": 394788864,
+    "per_arm_cache2_bytes": 197394432,
+    "per_arm_output_bytes": 24674304,
+    "two_arm_graph_caches_plus_outputs_bytes": 1233715200,
+    "flush_bytes": 134217728,
+    "actual_memory": "Runtimefree/allocated/reserved/peak recorded; strictfree>=32GiBbeforeprepare, >=8GiBaftercapture andallocated<48GiB; totaldevice>=70GB. This is not exhaustive allocatorpeak proof."
+  },
+  "timing_contract": {
+    "case": "originalM3012EP8normal/busiest,weights5252",
+    "arms": [
+      "exact05ec9a8anchor",
+      "guardedT64LUTwhole-serving"
+    ],
+    "untimed_control": "oneoriginalcanonicalSS T64bitwise check, samealreadycompiledSSSO/banks; nooldSStiming arm",
+    "F1": "oneimmutableactualseed7904fixture,3anchor/3LUT/3anchor calls, everycurrentoutput andownblockterminal checked",
+    "paired": "8matchedseedpairs7900..7907, alternatingAB/BA4each, everycurrentoutput andownarmterminal checked",
+    "total_timed_calls": 25,
+    "new_compiles": 1,
+    "new_functions": 2,
+    "graph_and_oracles": "originalactualmethod/aligner/SwiGLU/finalizer+originaltaskcheck; freshX/routing replay, valid-to-emptyexactzero, inputs/weights/banks immutable; sourcepins andcleanup",
+    "bounds_inner_outer_seconds": [
+      180,
+      240
+    ],
+    "forecast": "UNKNOWN; generalization test only, nofull14/3x/officialclaim"
+  },
+  "loop_contract": "profile->measure->hypothesis->optimize/reimplement->test->validate->stack->submit->learn->reprioritize->repeat; idle<=10s; proj_rsi/ITERATION.md"
+}

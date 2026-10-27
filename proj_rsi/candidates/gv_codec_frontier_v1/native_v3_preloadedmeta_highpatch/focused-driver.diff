@@ -1,0 +1,188 @@
+--- proj_rsi/candidates/gv_codec_frontier_v1/native_v2_capacity32_48/driver.py
++++ proj_rsi/candidates/gv_codec_frontier_v1/native_v3_preloadedmeta_highpatch/driver.py
+@@ -1,12 +1,13 @@
+ """Two fixed GV53 cells, no full prepare/profiler/SASS campaign; root-only GPU run."""
+-import argparse,ast,hashlib,json,statistics,sys,time,traceback
++import argparse,ast,hashlib,itertools,json,os,statistics,sys,time,traceback
+ from pathlib import Path
+ D=Path(__file__).resolve().parent;ROOT=D.parents[3]
+ CAND=D
+-LABELS=('control','frontier')
++LABELS=('control','v2','frontier')
++CLEANUP_HOOK=None
+ CELLS=(('pooler',1,4096,8192,(1,1,1,2,16,8,1,1,0,3),32),
+        ('unpooler',16,8192,4096,(1,2,2,1,4,16,1,1,2,1),48))
+-DECL='std::vector<int64_t> frontier_info(int64_t,bool);\nvoid frontier_run(int64_t,bool,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,int64_t,int64_t);'
++DECL='std::vector<int64_t> frontier_info(int64_t,int64_t);\nvoid frontier_run(int64_t,int64_t,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,int64_t,int64_t);\nstd::vector<int64_t> frontier_clear_blas_cache();'
+ 
+ def sha_bytes(b):return hashlib.sha256(b).hexdigest()
+ def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+@@ -33,10 +34,11 @@
+ def schedule():
+     rows=[]
+     for arm in LABELS:rows += [dict(arm=arm,seed=91000,mode='warmup')for _ in range(5)]
+-    for arm in ('control','frontier','control'):rows += [dict(arm=arm,seed=91100+i,mode='F1')for i in range(11)]
++    for arm in ('control','v2','frontier','control'):rows += [dict(arm=arm,seed=91100+i,mode='F1')for i in range(11)]
++    orders=list(itertools.permutations(LABELS))
+     for i in range(24):
+-        rows += [dict(arm=arm,seed=91200+i,mode='paired',pair=i)for arm in (LABELS if i%2==0 else LABELS[::-1])]
+-    assert len(rows)==91
++        rows += [dict(arm=arm,seed=91200+i,mode='paired',pair=i)for arm in orders[i%6]]
++    assert len(rows)==131
+     return rows
+ 
+ def terminal(last,raw,oracle,integrity):
+@@ -49,12 +51,12 @@
+     integrity();return records
+ 
+ def cpu_check():
+-    m=verify();rows=schedule();assert sum(r['mode']!='warmup'for r in rows)==81
+-    blocks=[rows[43+2*i:45+2*i]for i in range(24)]
+-    assert sum(b[0]['arm']=='control'for b in blocks)==12
++    m=verify();rows=schedule();assert sum(r['mode']!='warmup'for r in rows)==116
++    blocks=[rows[59+3*i:62+3*i]for i in range(24)]
++    assert all(sum(b[pos]['arm']==arm for b in blocks)==8 for arm in LABELS for pos in range(3))
+     for b in blocks:assert len({r['seed']for r in b})==1
+-    raw=[dict(arm=a,seed=i,mode='F1')for i,a in enumerate(LABELS)];last=dict(zip(LABELS,range(2)))
+-    assert len(terminal(last,raw,lambda a,s:'PASS',lambda:None))==2
++    raw=[dict(arm=a,seed=i,mode='F1')for i,a in enumerate(LABELS)];last=dict(zip(LABELS,range(3)))
++    assert len(terminal(last,raw,lambda a,s:'PASS',lambda:None))==3
+     caught=[]
+     for name in ('stale_seed','missing_arm','invalid_output','counter_mutation'):
+         state=dict(last)
+@@ -73,9 +75,10 @@
+     for layer,m,n,k,tpl,cap in CELLS:
+         assert ','.join(map(str,tpl)) in selected
+         assert list(tpl[3:9])==stats[layer]['geo'] and stats[layer]['C11_max_unit_repairs']<=cap
+-    return {'state':'PASS_FOCUSED_HARNESS_CPU_GPU_UNRUN','pins_verified':True,'fixed_cells':2,'timed_calls':162,'warmup_calls':20,'own_terminal_sites':8,'mutations':20,'terminal_negatives':caught,'original_codec_AST_functions':5,'codec_literals':2,'profiler_calls':0,'full_prepare_calls':0}
++    return {'state':'PASS_FOCUSED_HARNESS_CPU_GPU_UNRUN','pins_verified':True,'fixed_cells':2,'timed_calls':232,'warmup_calls':30,'own_terminal_sites':12,'mutations':30,'balanced_positions_per_arm':8,'terminal_negatives':caught,'original_codec_AST_functions':5,'codec_literals':2,'profiler_calls':0,'full_prepare_calls':0}
+ 
+ def run(args):
++    global CLEANUP_HOOK
+     started=time.monotonic();verify();assert args.review.is_file(),'independent frozen review required'
+     args.output.mkdir(parents=True,exist_ok=False)
+     result={'state':'RUNNING_NO_PERFORMANCE_ADMISSION','review_sha256':sha(args.review),'source_sha256':sha(CAND/'native.cu'),'control_sha256':sha(ROOT/'proj_rsi/candidates/gv_predxor_pw45_v2/submission.py'),'fixed_cells':{},'started_at':time.time(),'cost':{},'profiler_calls':0,'full_prepare_calls':0}
+@@ -90,15 +93,16 @@
+         sys.path.insert(0,str(ROOT/'muse_bf16_proj'));import reference
+         props=torch.cuda.get_device_properties(torch.cuda.current_device())
+         assert props.major==9 and props.minor==0 and any(x in props.name.upper()for x in('H100','H200'))
+-        result['hardware']={'name':props.name,'SM_count':props.multi_processor_count,'cc':[props.major,props.minor],'UUID':str(getattr(props,'uuid','UNAVAILABLE'))}
+-        phase('compile_two_functions')
++        result['hardware']={'name':props.name,'SM_count':props.multi_processor_count,'cc':[props.major,props.minor],'UUID':str(getattr(props,'uuid','UNAVAILABLE')),'torch_version':torch.__version__,'cuda_version':torch.version.cuda,'CUBLAS_WORKSPACE_CONFIG':os.environ.get('CUBLAS_WORKSPACE_CONFIG')}
++        phase('compile_six_functions')
+         cu='#include <torch/extension.h>\n#include <ATen/cuda/CUDAContext.h>\n#include <c10/cuda/CUDAException.h>\n'+(D/'native.cu').read_text().replace('#include \"../parallel_fix.cuh\"',(D.parent/'parallel_fix.cuh').read_text())+'\n'+(D/'bindings.cuh').read_text()
+         (args.output/'actual.cu').write_text(cu)
+         digest=hashlib.sha256(cu.encode()).hexdigest();begin=time.monotonic()
+-        ext=load_inline(name='gv53_frontier_'+digest[:20],cpp_sources=DECL,cuda_sources=cu,functions=['frontier_run','frontier_info'],extra_cuda_cflags=['-O3','-lineinfo','-gencode=arch=compute_90a,code=sm_90a'],verbose=True)
++        ext=load_inline(name='gv53_frontier_'+digest[:20],cpp_sources=DECL,cuda_sources=cu,functions=['frontier_run','frontier_info','frontier_clear_blas_cache'],extra_cuda_cflags=['-O3','-lineinfo','-gencode=arch=compute_90a,code=sm_90a'],verbose=True)
++        CLEANUP_HOOK=ext.frontier_clear_blas_cache
+         result['cost']['compile_and_load_seconds']=time.monotonic()-begin
+         __import__('shutil').copy2(ext.__file__,args.output/'actual.so')
+-        result['build']={'CUDA_sha256':digest,'CPP_declarations_sha256':hashlib.sha256(DECL.encode()).hexdigest(),'SO_sha256':sha(ext.__file__),'CUDA_flags':['-O3','-lineinfo','-gencode=arch=compute_90a,code=sm_90a'],'native_symbols':['two exact selected predxor controls','two exact C11 candidates'],'field_query_calls':16}
++        result['build']={'CUDA_sha256':digest,'CPP_declarations_sha256':hashlib.sha256(DECL.encode()).hexdigest(),'SO_sha256':sha(ext.__file__),'CUDA_flags':['-O3','-lineinfo','-gencode=arch=compute_90a,code=sm_90a'],'native_symbols':['two exact selected predxor controls','two exact V2 predecessors','two preloaded-metadata/highpatch candidates'],'attribute_vectors':6}
+         # Exact compiler control identity is required before any launch/timing.
+         import subprocess,re
+         parser_nodes=[n for n in ast.parse((D/'verify_native.py').read_text()).body if isinstance(n,ast.FunctionDef)and n.name=='streams']
+@@ -108,8 +112,8 @@
+         native=pn['streams'](sass);expected=pn['streams']((D/'native.sass').read_text())
+         assert {symbol for symbol in native if 'gv_predxor' in symbol or 'gv_frontier' in symbol}==set(expected)
+         for symbol,rows in expected.items():
+-            if 'gv_predxor' in symbol:assert native[symbol]==rows,('actual control codegen drift',symbol)
+-        result['actual_control_native_identity']='EXACT_PC_PREDICATE_ENCODING'
++            if 'preload'not in symbol:assert native[symbol]==rows,('actual current/predecessor codegen drift',symbol)
++        result['actual_control_native_identity']='EXACT_C12_AND_V2_PC_PREDICATE_ENCODING'
+         phase('actual_task_weights')
+         begin=time.monotonic();weights=reference.generate_weights(reference.WEIGHTS_SEED)
+         env={'torch':torch};exec(compile(ast.Module(body=codec_nodes((ROOT/'proj_rsi/candidates/gv_predxor_pw45_v2/submission.py').read_text()),type_ignores=[]),'<exact-original-codec-AST>','exec'),env)
+@@ -125,12 +129,15 @@
+             geo=tpl[3:9]
+             phase('fixed_'+layer+'_M'+str(m));config={'layer':layer,'m':m,'n':n,'k':k}
+             entry=result['fixed_cells'][str(m)]={'config':config,'raw':[],'validation':{},'terminals':{},'mutations':[]};work={};arenas={}
+-            attributes={arm:list(map(int,ext.frontier_info(cell,arm=='frontier')))for arm in LABELS}
++            attributes={arm:list(map(int,ext.frontier_info(cell,LABELS.index(arm))))for arm in LABELS}
+             result.setdefault('raw_attributes',{})[layer]=attributes;save()
+             for arm,vals in attributes.items():
+                 regs,local,static,threads,dynamic,occupancy=vals
+-                assert regs==(64 if cell==0 else (110 if arm=='control' else 108)) and local==static==0 and threads==(1024 if cell==0 else 128) and occupancy>=1,(layer,arm,vals)
++                expected_reg=64 if cell==0 else {'control':110,'v2':108,'frontier':96}[arm]
++                expected_dynamic=({'control':17408,'v2':20480,'frontier':28160} if cell==0 else {'control':5120,'v2':6144,'frontier':8000})[arm]
++                assert regs==expected_reg and local==static==0 and threads==(1024 if cell==0 else 128) and dynamic==expected_dynamic and occupancy>=1,(layer,arm,vals)
+             assert attributes['frontier'][-1]>=attributes['control'][-1]
++            assert attributes['v2'][-1]>=attributes['control'][-1]
+             raw=weights[layer].cpu();assert sha_bytes(raw.view(torch.uint8).numpy().tobytes())==stats[layer]['weight_sha256']
+             cpu_fr=env['_pack'](raw).reshape(n//16,k//64,4,32,8)
+             physical=pkmod.pack(cpu_fr.view(torch.int16).numpy().view(np.uint16),stats[layer]['C11_base'],geo,capacity=capacity)
+@@ -148,6 +155,7 @@
+             packed=oldlow.to('cuda');escape=oldesc.to('cuda')
+             packages={'control':(packed,header,escape,records,oldtable,physical['words']),
+                       'frontier':(frontlow,header,frontdesc,records,physical['table'],physical['words'])}
++            packages['v2']=packages['frontier']
+             for label,tensor in [('packed',packed),('escape',escape),('low',frontlow),('header',header),('desc',frontdesc),('records',records)]:
+                 immutable.append((layer+'/'+label,tensor,tensor.clone()))
+             entry['pack']={'W_seed':reference.WEIGHTS_SEED,'actual_W_bit_reconstruction':'EXACT_BOTH_FORMATS',
+@@ -159,7 +167,7 @@
+                 ob=torch.full((m*n+32,),17.25,dtype=torch.bfloat16,device='cuda');out=ob[16:-16].reshape(m,n)
+                 cb=torch.full((65536+32,),0x19a75d3,dtype=torch.int32,device='cuda');wb=torch.full((65536+32,),17.25,dtype=torch.float32,device='cuda')
+                 arenas[arm]=(xb,ob,cb,wb,cb.clone(),wb.clone());work[arm]=(x,out)
+-            assert len({v[0].data_ptr()for v in work.values()})==2 and len({v[1].data_ptr()for v in work.values()})==2
++            assert len({v[0].data_ptr()for v in work.values()})==3 and len({v[1].data_ptr()for v in work.values()})==3
+             def integrity():
+                 immutables()
+                 for xb,ob,cb,wb,cb0,wb0 in arenas.values():
+@@ -169,7 +177,7 @@
+             def invoke(arm):
+                 x,out=work[arm];_,_,cb,wb,_,_=arenas[arm]
+                 low_,header_,desc_,records_,table_,words_=packages[arm]
+-                ext.frontier_run(cell,arm=='frontier',low_,header_,desc_,records_,x,out,wb[16:-16],cb[16:-16],table_,words_)
++                ext.frontier_run(cell,LABELS.index(arm),low_,header_,desc_,records_,x,out,wb[16:-16],cb[16:-16],table_,words_)
+             def oracle_x(arm,fresh):
+                 x,out=work[arm];assert torch.equal(x.view(torch.uint8),fresh.view(torch.uint8))
+                 ok,msg=reference.check_implementation({'x':fresh,'config':config},out,weights);assert ok and bool(torch.isfinite(out).all()),(arm,m,msg)
+@@ -195,7 +203,7 @@
+             integrity();last={}
+             def oracle(arm,seed):return oracle_x(arm,fixtures[seed])
+             for i,r in enumerate(schedule()):
+-                if i==43:entry['terminals']['F1']=terminal(last,entry['raw'],oracle,integrity);save()
++                if i==59:entry['terminals']['F1']=terminal(last,entry['raw'],oracle,integrity);save()
+                 arm=r['arm'];x,out=work[arm];x.copy_(fixtures[r['seed']]);torch.sum(flush,0,out=sink)
+                 a,b=torch.cuda.Event(enable_timing=True),torch.cuda.Event(enable_timing=True);a.record();live[arm].replay();b.record();torch.cuda.synchronize()
+                 us=a.elapsed_time(b)*1000;assert 0<us<float('inf')
+@@ -203,10 +211,10 @@
+                 with(args.output/'raw.jsonl').open('a')as f:f.write(json.dumps(dict(row,m=m))+'\n');f.flush()
+                 budget()
+             entry['terminals']['paired']=terminal(last,entry['raw'],oracle,integrity)
+-            f1=entry['raw'][10:43];med=[statistics.median(r['us']for r in f1[i*11:(i+1)*11])for i in range(3)]
+-            paired=[{r['arm']:r['us']for r in entry['raw'][43+2*i:45+2*i]}for i in range(24)]
+-            entry['F1_medians_us']=dict(zip(('control_before','frontier','control_after'),med));entry['paired']=paired
+-            entry['contrasts']={'paired_median_control_minus_new_us':statistics.median(r['control']-r['frontier']for r in paired),'F1_endpoint_average_control_minus_new_us':(med[0]+med[2])/2-med[1],'paired_new_wins':sum(r['control']>r['frontier']for r in paired)};save()
++            f1=entry['raw'][15:59];med=[statistics.median(r['us']for r in f1[i*11:(i+1)*11])for i in range(4)]
++            paired=[{r['arm']:r['us']for r in entry['raw'][59+3*i:62+3*i]}for i in range(24)]
++            entry['F1_medians_us']=dict(zip(('control_before','v2','frontier','control_after'),med));entry['paired']=paired
++            entry['contrasts']={'paired_median_control_minus_new_us':statistics.median(r['control']-r['frontier']for r in paired),'paired_median_control_minus_v2_us':statistics.median(r['control']-r['v2']for r in paired),'paired_median_v2_minus_new_us':statistics.median(r['v2']-r['frontier']for r in paired),'F1_endpoint_average_control_minus_new_us':(med[0]+med[3])/2-med[2],'F1_endpoint_average_control_minus_v2_us':(med[0]+med[3])/2-med[1],'paired_new_wins':sum(r['control']>r['frontier']for r in paired),'paired_new_wins_vs_v2':sum(r['v2']>r['frontier']for r in paired)};save()
+             probe=torch.zeros_like(fixtures[91000]);rr=torch.arange(m,device=probe.device);probe[rr,torch.tensor([basis_columns(k)[i]for i in range(m)],device=probe.device)]=8
+             mutations=[('zero',torch.zeros_like(probe)),('normal',reference.generate_input(m,layer,91401)['x']),('outliers',reference.generate_input(m,layer,91403,dist='outliers')['x']),('boundary_probes',probe),('fresh_normal',reference.generate_input(m,layer,91407)['x'])]
+             for kind,fresh in mutations:
+@@ -239,12 +247,19 @@
+     gc.collect()
+     torch=sys.modules.get('torch')
+     if torch is not None and torch.cuda.is_initialized():
+-        torch.cuda.synchronize();torch.cuda.empty_cache();torch.cuda.synchronize()
+-        cleanup={'allocated':torch.cuda.memory_allocated(),'reserved':torch.cuda.memory_reserved(),'all_run_aliases_released':True}
++        torch.cuda.synchronize()
++        before={'allocated':torch.cuda.memory_allocated(),'reserved':torch.cuda.memory_reserved()}
++        clear_evidence=None;clear_error=None
++        try:
++            if CLEANUP_HOOK is not None:clear_evidence=list(map(int,CLEANUP_HOOK()))
++        except BaseException as exc:clear_error=repr(exc)
++        gc.collect();torch.cuda.empty_cache();torch.cuda.synchronize()
++        cleanup={'allocated':torch.cuda.memory_allocated(),'reserved':torch.cuda.memory_reserved(),'all_run_aliases_released':True,'before_blas_clear':before,'blas_cache_entries_workspace_bytes_entries_after':clear_evidence,'clear_error':clear_error,'clear_only_after_drain_and_scope_release':True}
+         if (args.output/'result.json').exists():
+             result=json.loads((args.output/'result.json').read_text());result['post_scope_cleanup']=cleanup
+-            if cleanup['allocated']!=0:result['state']='INVALID_CLEANUP'
++            if cleanup['allocated']!=0 or clear_error is not None:result['state']='INVALID_CLEANUP'
+             dump(args.output/'result.json',result)
+-        assert cleanup['allocated']==0,cleanup
++        assert cleanup['allocated']==0 and clear_error is None,cleanup
++        if error is None:assert clear_evidence is not None and len(clear_evidence)==3 and clear_evidence[2]==0,cleanup
+     if error:raise RuntimeError(error)
+ if __name__=='__main__':main()

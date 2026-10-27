@@ -1,0 +1,45 @@
+{
+  "job_id": "research.moe.ss.lut.t64.m3012.whole.01",
+  "recommended_state": "DONE",
+  "recommended_disposition": "VALID_REGRESSION",
+  "observed_state": "VALID_M3012_T64_WHOLE_SERVING_TWO_ARM_ROOT_REVIEW_REQUIRED",
+  "scope": "Only actualM3012normalEP8/busiest whole-serving versus exact05ec9a8anchor, weights5252. Nofull14/M8/16384/holdout/official/model/3xclaim. No inference that failedM8versions are fixed.",
+  "paired": {
+    "paired_median_saving_us": -12867.60002374649,
+    "paired_median_anchor_over_LUT": 0.13255529868104127,
+    "paired_LUT_wins": 0
+  },
+  "F1": {
+    "F1_endpoint_average_saving_us": -11585.647642612457,
+    "F1_before_saving_us": -11582.239627838135,
+    "F1_after_saving_us": -11589.05565738678,
+    "F1_conservative_saving_us": -11589.05565738678
+  },
+  "positive_pairs_preserved": [],
+  "correctness_records": 39,
+  "all_current_timed_outputs_and_own_terminals_pass": true,
+  "source_binary_resources_gates_pass": true,
+  "raw_calls": 25,
+  "terminal_exit": 0,
+  "cleanup_verified": true,
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T21:15:40Z\nverify_existing_tree_and_frozen_anchor\none_actual_T64_compile_and_resource_lifetime_gate\n[1/3] ccache c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=ss_lut_t64_m3012_cu130_40986d9504df439da60f -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -fPIC -std=c++20 -c /root/.cache/torch_extensions/ss_lut_t64_m3012_cu130_40986d9504df439da60f/main.cpp -o main.o \n[2/3] ccache /usr/local/cuda/bin/nvcc -MD -MF cuda.cuda.o.d -DTORCH_EXTENSION_NAME=ss_lut_t64_m3012_cu130_40986d9504df439da60f -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options '-fPIC' -gencode=arch=compute_90a,code=sm_90a -O3 --expt-relaxed-constexpr -std=c++20 -c /root/.cache/torch_extensions/ss_lut_t64_m3012_cu130_40986d9504df439da60f/cuda.cu -o cuda.cuda.o \n/root/.cache/torch_extensions/ss_lut_t64_m3012_cu130_40986d9504df439da60f/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n/root/.cache/torch_extensions/ss_lut_t64_m3012_cu130_40986d9504df439da60f/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n[3/3] ccache c++ main.o cuda.cuda.o -shared -L/opt/sglang/lib/python3.12/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o ss_lut_t64_m3012_cu130_40986d9504df439da60f.so\nweights_one_original_prepare_shared_banks\nwhole_serving_eager_capture_current_fresh_empty\nfixed_same_fixture_F1_and_8_ABBA_pairs\nterminal_sources_immutability_and_graph_cleanup\nTRIAL_EXIT okc-proj-moe-ss-lut-t64-m3012-whole-01 0\n2026-10-27T21:16:54Z\n",
+    "terminal_exit": 0
+  },
+  "missing_artifacts": [],
+  "evidence_files": {
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.lut.t64.m3012.whole.01/collection-1793135829470349551/logs/scheduler/moe-ss-lut-t64-m3012-whole-01/result.json": "90fd86a470cae3436bd8513498baea0e651e207569728782eedb08a9c7f565f3",
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.lut.t64.m3012.whole.01/collection-1793135829470349551/inventory.json": "65a3b495f0385d3ff1e3cff5504754c11c53a9f8084dcac1888f8c02f1385925",
+    "tools/moe_ss_lut_t64_m3012_v1/actual-analysis/analysis.json": "684dfcc2f5f71698e286022a5b81b922924b23df81b4352fab0bd54d7be64bcd"
+  },
+  "root_action": "Rootindependentlyvalidatesscope/cleanupthentransitionsDONEwithsigneddisposition; noincumbent/official/quota assumption.",
+  "next_decision": "Retainvalidsignedlossesandanyindividualpositivepairs/F1. M8andthisM3012versiondo notestablishallshapeimpossibility; donotlaunchbroadrewriteorunchangedfull14. Useactualrouting/resources/results todeterminewhetheroneconcretecausalfollowupwarrantsROI; otherincumbentworkremainseligible.",
+  "loop_contract": "profile->measure->hypothesis->optimize/reimplement->test->validate->stack->submit->learn->reprioritize->repeat; idle<=10s; proj_rsi/ITERATION.md"
+}
