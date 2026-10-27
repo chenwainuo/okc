@@ -1,0 +1,64 @@
+{
+  "state": "CPU_SOURCE_COST_MODEL_NOT_A_GPU_MEASUREMENT",
+  "selected_V": 3,
+  "BK_selected": false,
+  "counterfactual_same_selected_geometry_BKflag": 11,
+  "parameters": {
+    "NW": 32,
+    "KU": 8,
+    "NL": 3,
+    "RT": 1,
+    "NA": 1,
+    "CU": 1,
+    "NS": 2
+  },
+  "bytes": {
+    "slot": 1536,
+    "ring": 98304,
+    "mbarriers": 512,
+    "reduction": 17408,
+    "total_shared": 116224,
+    "extra_shared_vs_selected": 98816,
+    "global_W_payload_unchanged": 50331648,
+    "shared_W_payload_written": 50331648,
+    "shared_W_payload_read": 50331648
+  },
+  "per_warp_KU8": {
+    "current_W_LDG128": 24,
+    "bulk_counterfactual_W_LDS128": 24,
+    "bulk_copy_issues_lane0": 8,
+    "arrive_expect_tx_lane0": 8,
+    "barrier_wait_episodes": 8,
+    "initial_barrier_inits_lane0": 2
+  },
+  "limits": "These are source-level operations and bytes; not compiled instruction counts, elapsedtime or dynamicsector/counter evidence. Bulk may overlapdelivery differently; no blanketbandwidth ceiling inferred.",
+  "past_evidence": [
+    {
+      "where": "proj_rsi/LOOP.md iteration10 lines350-357",
+      "official_CHECK": "f1e6a18689484451",
+      "tests": "9/9",
+      "score_us": 3374.4,
+      "same_run_prepare_us": {
+        "poolerM1_r6": 17.79,
+        "bulk_n4": 18.11,
+        "bulk_n8": 19.01,
+        "poolerM32_r6": 21.06,
+        "bulk_n4_M32": 21.86,
+        "bulk_n8_M32": 29.66,
+        "qkvM1_r6": 14.05,
+        "bulk_q_n4": 14.11,
+        "unpoolerM32_r6": 20.83,
+        "bulk_u_n4": 22.18
+      },
+      "lesson": "No bulk bakewinner in thatsource; oldheadroom claim mixedjudge andinprepare units andwas corrected. Historical context, not currentselectedGV53M8 proof orfamilyrejection."
+    },
+    {
+      "where": "proj_rsi/LOOP.md iteration12 lines376-379",
+      "poolerM32_Wonly": 16.93,
+      "bulk_ring_Wonly": 18.05,
+      "limit": "Oldgeometry/ladder/occupancy context; notdirectM8currentkernelcausality."
+    }
+  ],
+  "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+  "history_sha256": "d4ac0682eb49339980dde83379cccb84aae91c80fa381698a2b2e409c61a7820"
+}

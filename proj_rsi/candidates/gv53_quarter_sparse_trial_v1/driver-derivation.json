@@ -1,0 +1,103 @@
+{
+  "parent_driver": "/home/ubuntu/okc/proj_rsi/candidates/gv53_quarter_stream_trial_v1/driver.py",
+  "parent_sha256": "5a55b7d4f96b87d19624eb71e4137f054b8ef154071c863282b0e6adf73adf36",
+  "new_sha256": "dc64beca5e866a78d24f71fcddd00d92d2538e73b60737e2a3844bd947b82a52",
+  "exact_edits": [
+    {
+      "old": "One fixed M8 quarter-stream cell",
+      "new": "Threearm fixed M8 sparse-header cell"
+    },
+    {
+      "old": "import argparse,ast,hashlib,json,statistics,sys,time,traceback",
+      "new": "import argparse,ast,hashlib,importlib.util,itertools,json,statistics,sys,time,traceback"
+    },
+    {
+      "old": "CAND=D.parent/\"gv53_quarter_stream_v1\"",
+      "new": "CAND=D.parent/\"gv53_quarter_sparse_header_v1\"\nTRANSPORT=D.parent/\"gv53_quarter_stream_v1\"\nOLD_SO=ROOT/'results/proj-rsi/scheduler/artifacts/research.gv53.quarter.stream.fixed.01/collection-1793140874912701666/logs/scheduler/gv53-quarter-stream-01/run/actual.so'\nOLD_SO_SHA='4b85c059c953e91989f6d613e8148269cfbb8e0480ab120585abcac492c3e44c'\nOLD_INIT='gv53_quarter_607e6faec9d5b5e706ac'\nOLD_CUDA_SHA='607e6faec9d5b5e706ac3109c9a83af3ab8ba6e7b17e2bbea7a7de1fb7316038'"
+    },
+    {
+      "old": "LABELS=('control','quarter')",
+      "new": "LABELS=('control','quarter','sparse')\nCONTRASTS=(('control','quarter'),('control','sparse'),('quarter','sparse'))"
+    },
+    {
+      "old": "def schedule():\n    rows=[]\n    for arm in LABELS:rows += [dict(arm=arm,seed=91000,mode='warmup')for _ in range(5)]\n    for arm in ('control','quarter','control'):rows += [dict(arm=arm,seed=91100+i,mode='F1')for i in range(11)]\n    for i in range(24):\n        rows += [dict(arm=arm,seed=91200+i,mode='paired',pair=i)for arm in (LABELS if i%2==0 else LABELS[::-1])]\n    assert len(rows)==91\n    return rows\n",
+      "new": "def schedule():\n    rows=[]\n    for arm in LABELS:rows += [dict(arm=arm,seed=91000,mode='warmup')for _ in range(5)]\n    for block,arm in enumerate(('control','quarter','sparse','sparse','quarter','control')):\n        rows += [dict(arm=arm,seed=91100+i,mode='blocked',block=block)for i in range(7)]\n    orders=list(itertools.permutations(LABELS))\n    for i in range(24):\n        rows += [dict(arm=arm,seed=91200+i,mode='triple',triple=i,order=list(orders[i%6]))for arm in orders[i%6]]\n    assert len(rows)==129\n    return rows\n"
+    },
+    {
+      "old": "    m=verify();rows=schedule();assert sum(r['mode']!='warmup'for r in rows)==81\n    blocks=[rows[43+2*i:45+2*i]for i in range(24)]\n    assert sum(b[0]['arm']=='control'for b in blocks)==12\n    for b in blocks:assert len({r['seed']for r in b})==1\n    raw=[dict(arm=a,seed=i,mode='F1')for i,a in enumerate(LABELS)];last=dict(zip(LABELS,range(2)))\n    assert len(terminal(last,raw,lambda a,s:'PASS',lambda:None))==2\n    caught=[]\n    for name in ('stale_seed','missing_arm','invalid_output','counter_mutation'):\n        state=dict(last)\n        if name=='stale_seed':state['control']=99\n        if name=='missing_arm':state.pop('quarter')\n        def oracle(a,s):assert name!='invalid_output';return 'PASS'\n        def integrity():assert name!='counter_mutation'\n        try:terminal(state,raw,oracle,integrity)\n        except AssertionError:caught.append(name)\n        else:raise AssertionError(name)\n    assert len(codec_nodes((ROOT/'proj_rsi/candidates/gv_predxor_pw45_v2/submission.py').read_text()))==7\n    assert len(basis_columns())==8\n    return {'state':'PASS_FOCUSED_HARNESS_CPU_GPU_UNRUN','pins_verified':True,'fixed_cells':1,'timed_calls':81,'warmup_calls':10,'own_terminal_sites':4,'mutations':10,'terminal_negatives':caught,'original_codec_AST_functions':5,'codec_literals':2,'profiler_calls':0,'full_prepare_calls':0,'basis_columns_per_arm_cell':8,'resource_gate':'legal residency only; actual registers/local/static recorded'}\n",
+      "new": "    m=verify();rows=schedule();assert sum(r['mode']!='warmup'for r in rows)==114\n    triples=[rows[57+3*i:60+3*i]for i in range(24)]\n    for triple in triples:assert len({r['seed']for r in triple})==1 and set(r['arm']for r in triple)==set(LABELS)\n    for a,b in CONTRASTS:\n        assert sum([r['arm']for r in t].index(a)<[r['arm']for r in t].index(b)for t in triples)==12\n    for arm in LABELS:\n        assert all(sum(t[pos]['arm']==arm for t in triples)==8 for pos in range(3))\n    raw=[dict(arm=a,seed=i,mode='blocked')for i,a in enumerate(LABELS)];last=dict(zip(LABELS,range(3)))\n    assert len(terminal(last,raw,lambda a,s:'PASS',lambda:None))==3\n    caught=[]\n    for name in ('stale_seed','missing_arm','invalid_output','counter_mutation'):\n        state=dict(last)\n        if name=='stale_seed':state['control']=99\n        if name=='missing_arm':state.pop('quarter')\n        def oracle(a,s):assert name!='invalid_output';return 'PASS'\n        def integrity():assert name!='counter_mutation'\n        try:terminal(state,raw,oracle,integrity)\n        except AssertionError:caught.append(name)\n        else:raise AssertionError(name)\n    assert len(codec_nodes((ROOT/'proj_rsi/candidates/gv_predxor_pw45_v2/submission.py').read_text()))==7\n    assert len(basis_columns())==8\n    assert sha(OLD_SO)==OLD_SO_SHA\n    return {'state':'PASS_FOCUSED_HARNESS_CPU_GPU_UNRUN','pins_verified':True,'fixed_cells':1,'timed_calls':114,'warmup_calls':15,'own_terminal_sites':6,'mutations':15,'terminal_negatives':caught,'original_codec_AST_functions':5,'codec_literals':2,'profiler_calls':0,'full_prepare_calls':0,'basis_columns_per_arm_cell':8,'three_arm_triples':24,'all3pairwise_orders':{'first_before_second':12,'second_before_first':12},'each_arm_position_count':8,'predecessor_SO_sha_verified':True,'resource_gate':'legal residency only; actual registers/local/static recorded'}\n"
+    },
+    {
+      "old": "name='gv53_quarter_'+digest[:20]",
+      "new": "name='gv53_sparse_'+digest[:20]"
+    },
+    {
+      "old": "        CLEANUP_HOOK=ext.clear_blas_cache",
+      "new": "        CLEANUP_HOOK=ext.clear_blas_cache\n        assert sha(OLD_SO)==OLD_SO_SHA\n        predecessor_load_start=time.monotonic()\n        oldspec=importlib.util.spec_from_file_location(OLD_INIT,OLD_SO)\n        assert oldspec is not None and oldspec.loader is not None\n        oldext=importlib.util.module_from_spec(oldspec);oldspec.loader.exec_module(oldext)\n        assert sha(Path(oldext.__file__))==OLD_SO_SHA\n        result['cost']['predecessor_SO_load_seconds']=time.monotonic()-predecessor_load_start\n        modules={'control':(ext,0),'quarter':(oldext,1),'sparse':(ext,1)}\n        result['predecessor_SO']={'path':str(OLD_SO.relative_to(ROOT)),'SO_sha256':OLD_SO_SHA,'PyInit_module_name':OLD_INIT,'source_CUDA_sha256':OLD_CUDA_SHA,'loaded_without_compile':True,'native_arm':1,'expected_symbol':'gv_quarter<1,1,1,2,16,8,1,1,0,3>'}\n        result['arm_bindings']={arm:{'module':'collected_predecessor'if arm=='quarter'else'new_compile','native_arm':modules[arm][1]}for arm in LABELS}"
+    },
+    {
+      "old": "'native_symbols':['gv_predxor<1,1,1,2,16,8,1,1,0,3>','gv_quarter<1,1,1,2,16,8,1,1,0,3>'],'field_query_calls':16",
+      "new": "'native_symbols':['gv_predxor<1,1,1,2,16,8,1,1,0,3>','gv_sparse_quarter<1,1,1,2,16,8,1,1,0,3>'],'field_query_calls':24"
+    },
+    {
+      "old": "{arm:{key:int(ext.attrs(i,j+1))for j,key in enumerate(fields)}for i,arm in enumerate(LABELS)}",
+      "new": "{arm:{key:int(modules[arm][0].attrs(modules[arm][1],j+1))for j,key in enumerate(fields)}for arm in LABELS}"
+    },
+    {
+      "old": "a['arm_echo']==i",
+      "new": "a['arm_echo']==modules[arm][1]"
+    },
+    {
+      "old": "sys.path.insert(0,str(CAND));from transport import pack_bank,unpack_group",
+      "new": "sys.path.insert(0,str(TRANSPORT));from transport import pack_bank,unpack_group"
+    },
+    {
+      "old": "escapes={'control':escape,'quarter':quarter_escape}",
+      "new": "escapes={'control':escape,'quarter':quarter_escape,'sparse':quarter_escape}"
+    },
+    {
+      "old": "len({v[0].data_ptr()for v in work.values()})==2 and len({v[1].data_ptr()for v in work.values()})==2",
+      "new": "len({v[0].data_ptr()for v in work.values()})==3 and len({v[1].data_ptr()for v in work.values()})==3"
+    },
+    {
+      "old": "ext.run(LABELS.index(arm),packed,escapes[arm],x,out,wb[16:-16],cb[16:-16],table)",
+      "new": "modules[arm][0].run(modules[arm][1],packed,escapes[arm],x,out,wb[16:-16],cb[16:-16],table)"
+    },
+    {
+      "old": "if i==43:entry['terminals']['F1']=terminal(last,entry['raw'],oracle,integrity);save()",
+      "new": "if i==57:entry['terminals']['blocked']=terminal(last,entry['raw'],oracle,integrity);save()"
+    },
+    {
+      "old": "entry['terminals']['paired']=terminal(last,entry['raw'],oracle,integrity)",
+      "new": "entry['terminals']['triples']=terminal(last,entry['raw'],oracle,integrity)"
+    },
+    {
+      "old": "            f1=entry['raw'][10:43];med=[statistics.median(r['us']for r in f1[i*11:(i+1)*11])for i in range(3)]\n            paired=[{r['arm']:r['us']for r in entry['raw'][43+2*i:45+2*i]}for i in range(24)]\n            entry['F1_medians_us']=dict(zip(('control_before','quarter','control_after'),med));entry['paired']=paired\n            entry['contrasts']={'paired_median_control_minus_new_us':statistics.median(r['control']-r['quarter']for r in paired),'F1_endpoint_average_control_minus_new_us':(med[0]+med[2])/2-med[1],'paired_new_wins':sum(r['control']>r['quarter']for r in paired)};save()\n",
+      "new": "            blocked=entry['raw'][15:57]\n            med=[statistics.median(r['us']for r in blocked[i*7:(i+1)*7])for i in range(6)]\n            entry['blocked_medians_us']=[{'arm':a,'us':us,'block':i}for i,(a,us)in enumerate(zip(('control','quarter','sparse','sparse','quarter','control'),med))]\n            averages={'control':(med[0]+med[5])/2,'quarter':(med[1]+med[4])/2,'sparse':(med[2]+med[3])/2}\n            triples=[{r['arm']:r['us']for r in entry['raw'][57+3*i:60+3*i]}for i in range(24)]\n            entry['triples']=triples;entry['contrasts']={}\n            for a,b in CONTRASTS:\n                differences=[r[a]-r[b]for r in triples]\n                entry['contrasts'][a+'_minus_'+b]={'paired_median_us':statistics.median(differences),'blocked_endpoint_average_us':averages[a]-averages[b],'second_arm_wins':sum(x>0 for x in differences),'first_arm_wins':sum(x<0 for x in differences),'ties':sum(x==0 for x in differences)}\n            save()\n"
+    },
+    {
+      "old": "'ONE_FIXED_M8_CELL_COMPLETE_ROOT_REVIEW_REQUIRED'",
+      "new": "'THREE_ARM_FIXED_M8_CELL_COMPLETE_ROOT_REVIEW_REQUIRED'"
+    }
+  ],
+  "old_SO": "results/proj-rsi/scheduler/artifacts/research.gv53.quarter.stream.fixed.01/collection-1793140874912701666/logs/scheduler/gv53-quarter-stream-01/run/actual.so",
+  "old_SO_sha256": "4b85c059c953e91989f6d613e8148269cfbb8e0480ab120585abcac492c3e44c",
+  "PyInit_module_name": "gv53_quarter_607e6faec9d5b5e706ac",
+  "protocol_changes": [
+    "3privatearena/grapharms",
+    "collectedoldSOarm1forquarter",
+    "newcompilecontrol0/sparse1",
+    "6palindromic7sampleblocks",
+    "24triplesallsixordersrepeated4",
+    "3pairwisesignedcontrasts"
+  ],
+  "unchanged": [
+    "originalcodecAST",
+    "actualacceptedbankmapping",
+    "normal/outlier/zero/basisoracle",
+    "currentXguard/fullbackings",
+    "graphmutation",
+    "drainedpostscopecleanup"
+  ],
+  "no_GPU": true
+}

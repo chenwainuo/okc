@@ -1,0 +1,728 @@
+{
+  "state": "CPU_ADDRESS_ACCOUNTING_COMPLETE_NO_LAYOUT_COMPILE_JUSTIFIED_YET",
+  "target": {
+    "source": "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py",
+    "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "kernel": "_Z10gv_predxorILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G",
+    "m": 8,
+    "N": 4096,
+    "K": 8192,
+    "grid": [
+      1,
+      128,
+      1
+    ],
+    "block": 1024,
+    "WK": 16,
+    "WR": 2,
+    "KU": 8,
+    "ST": 1,
+    "codec_shape": "[N/16,K/64,3,32,16] uint8; p.W cast uint4",
+    "codec_bits_per_value": 12
+  },
+  "source_native": {
+    "SASS_path": "proj_rsi/audits/gv53-quarter-sparse-result-v1/actual.sass",
+    "SASS_sha256": "5ff810c5f75ecc42a52c1251e2e8129049e708ce3be66b897b3a7cd3dab59d82",
+    "payload_load_PCs": [
+      {
+        "pc": "0x3c0",
+        "instruction": "LDG.E.NA.128.CONSTANT R12, desc[UR14][R58.64]"
+      },
+      {
+        "pc": "0x3d0",
+        "instruction": "LDG.E.NA.128.CONSTANT R16, desc[UR14][R58.64+0x200]"
+      },
+      {
+        "pc": "0x3e0",
+        "instruction": "LDG.E.NA.128.CONSTANT R20, desc[UR14][R58.64+0x400]"
+      },
+      {
+        "pc": "0x770",
+        "instruction": "@!P0 LDG.E.NA.128.CONSTANT R12, desc[UR14][R50.64]"
+      },
+      {
+        "pc": "0x830",
+        "instruction": "@!P0 LDG.E.NA.128.CONSTANT R16, desc[UR14][R60.64]"
+      },
+      {
+        "pc": "0x870",
+        "instruction": "@!P0 LDG.E.NA.128.CONSTANT R20, desc[UR14][R60.64]"
+      }
+    ],
+    "prologue_plane_offsets_bytes": [
+      0,
+      512,
+      1024
+    ],
+    "dynamic_per_warp": "3prologue+7iterations*3prefetch=24 payloadLDG128 perKU8; finalprefetch predicatedoff",
+    "separate_X_PCs": [
+      "0x370",
+      "0x3a0",
+      "0x8a0",
+      "0x8b0"
+    ],
+    "escape_header_scalar_PC": "0x1e0"
+  },
+  "address_models_by_base_mod32": {
+    "0": {
+      "planar": {
+        "bytes": 1536,
+        "unique_32byte_sector_set_size": 48,
+        "sector_set_size_per_warp_load": [
+          16,
+          16,
+          16
+        ],
+        "sector_instruction_incidences": 48,
+        "payload_warp_LDG128_instructions": 3,
+        "note": "Sector address incidences only, not measured L1 requests/replays/L2/DRAM transactions."
+      },
+      "AoS48": {
+        "bytes": 1536,
+        "unique_32byte_sector_set_size": 48,
+        "sector_set_size_per_warp_load": [
+          32,
+          32,
+          32
+        ],
+        "sector_instruction_incidences": 96,
+        "payload_warp_LDG128_instructions": 3,
+        "note": "Sector address incidences only, not measured L1 requests/replays/L2/DRAM transactions."
+      }
+    },
+    "16": {
+      "planar": {
+        "bytes": 1536,
+        "unique_32byte_sector_set_size": 49,
+        "sector_set_size_per_warp_load": [
+          17,
+          17,
+          17
+        ],
+        "sector_instruction_incidences": 51,
+        "payload_warp_LDG128_instructions": 3,
+        "note": "Sector address incidences only, not measured L1 requests/replays/L2/DRAM transactions."
+      },
+      "AoS48": {
+        "bytes": 1536,
+        "unique_32byte_sector_set_size": 49,
+        "sector_set_size_per_warp_load": [
+          32,
+          32,
+          32
+        ],
+        "sector_instruction_incidences": 96,
+        "payload_warp_LDG128_instructions": 3,
+        "note": "Sector address incidences only, not measured L1 requests/replays/L2/DRAM transactions."
+      }
+    }
+  },
+  "whole_payload": {
+    "W_scalar_values": 33554432,
+    "compressed_bytes": 50331648,
+    "unique_rowtile_chunk_pairs": 32768,
+    "unique_payload_vector_addresses": 3145728,
+    "payload_warp_LDG128_instructions": 98304,
+    "32byte_sector_incidences_aligned32": 1572864,
+    "alignment_limit": "ActualWbase pointer not logged here. Relative offsets are exact; showboth0/16mod32 consistentwith16Bvectoralignment. No hiddenalignmentassumption or hardwaretransactionclaim."
+  },
+  "concrete_alternative": {
+    "name": "Per-lane48B AoS repack, directvectorread or cooperativeflatread",
+    "permutation_inverse_exact": true,
+    "direct_read": "Three16Breads perlane at48*lane+16*plane. Same1536unique bytes; aligned32 sector-incidences96 instead48. Repackingthisway is worse in this addressmodel.",
+    "cooperative_flat_read": "Threecontiguous512Bwarp loads retain48alignedsector-incidences, but destination(lane,plane) mustgather vectorindex3*lane+plane fromround=floor(index/32), sourcelane=index%32.",
+    "cross_lane_vectors": 92,
+    "cross_lane_scalar_words": 368,
+    "minimum_scalar_SHFL_instructions_given_original_operand_ownership": 12,
+    "shuffle_bound_limit": "Atleastone destinationrequires12remote32bitwords, eachscalarSHFLcanprovideone. Inputround multiplexing mayrequire moreSHFL/selects;12is lowerbound, notcompiledcount.",
+    "existing_planar_payload_gather_SHFL": 0,
+    "mapping": [
+      {
+        "destination_lane": 0,
+        "plane": 0,
+        "load_round": 0,
+        "source_lane": 0
+      },
+      {
+        "destination_lane": 0,
+        "plane": 1,
+        "load_round": 0,
+        "source_lane": 1
+      },
+      {
+        "destination_lane": 0,
+        "plane": 2,
+        "load_round": 0,
+        "source_lane": 2
+      },
+      {
+        "destination_lane": 1,
+        "plane": 0,
+        "load_round": 0,
+        "source_lane": 3
+      },
+      {
+        "destination_lane": 1,
+        "plane": 1,
+        "load_round": 0,
+        "source_lane": 4
+      },
+      {
+        "destination_lane": 1,
+        "plane": 2,
+        "load_round": 0,
+        "source_lane": 5
+      },
+      {
+        "destination_lane": 2,
+        "plane": 0,
+        "load_round": 0,
+        "source_lane": 6
+      },
+      {
+        "destination_lane": 2,
+        "plane": 1,
+        "load_round": 0,
+        "source_lane": 7
+      },
+      {
+        "destination_lane": 2,
+        "plane": 2,
+        "load_round": 0,
+        "source_lane": 8
+      },
+      {
+        "destination_lane": 3,
+        "plane": 0,
+        "load_round": 0,
+        "source_lane": 9
+      },
+      {
+        "destination_lane": 3,
+        "plane": 1,
+        "load_round": 0,
+        "source_lane": 10
+      },
+      {
+        "destination_lane": 3,
+        "plane": 2,
+        "load_round": 0,
+        "source_lane": 11
+      },
+      {
+        "destination_lane": 4,
+        "plane": 0,
+        "load_round": 0,
+        "source_lane": 12
+      },
+      {
+        "destination_lane": 4,
+        "plane": 1,
+        "load_round": 0,
+        "source_lane": 13
+      },
+      {
+        "destination_lane": 4,
+        "plane": 2,
+        "load_round": 0,
+        "source_lane": 14
+      },
+      {
+        "destination_lane": 5,
+        "plane": 0,
+        "load_round": 0,
+        "source_lane": 15
+      },
+      {
+        "destination_lane": 5,
+        "plane": 1,
+        "load_round": 0,
+        "source_lane": 16
+      },
+      {
+        "destination_lane": 5,
+        "plane": 2,
+        "load_round": 0,
+        "source_lane": 17
+      },
+      {
+        "destination_lane": 6,
+        "plane": 0,
+        "load_round": 0,
+        "source_lane": 18
+      },
+      {
+        "destination_lane": 6,
+        "plane": 1,
+        "load_round": 0,
+        "source_lane": 19
+      },
+      {
+        "destination_lane": 6,
+        "plane": 2,
+        "load_round": 0,
+        "source_lane": 20
+      },
+      {
+        "destination_lane": 7,
+        "plane": 0,
+        "load_round": 0,
+        "source_lane": 21
+      },
+      {
+        "destination_lane": 7,
+        "plane": 1,
+        "load_round": 0,
+        "source_lane": 22
+      },
+      {
+        "destination_lane": 7,
+        "plane": 2,
+        "load_round": 0,
+        "source_lane": 23
+      },
+      {
+        "destination_lane": 8,
+        "plane": 0,
+        "load_round": 0,
+        "source_lane": 24
+      },
+      {
+        "destination_lane": 8,
+        "plane": 1,
+        "load_round": 0,
+        "source_lane": 25
+      },
+      {
+        "destination_lane": 8,
+        "plane": 2,
+        "load_round": 0,
+        "source_lane": 26
+      },
+      {
+        "destination_lane": 9,
+        "plane": 0,
+        "load_round": 0,
+        "source_lane": 27
+      },
+      {
+        "destination_lane": 9,
+        "plane": 1,
+        "load_round": 0,
+        "source_lane": 28
+      },
+      {
+        "destination_lane": 9,
+        "plane": 2,
+        "load_round": 0,
+        "source_lane": 29
+      },
+      {
+        "destination_lane": 10,
+        "plane": 0,
+        "load_round": 0,
+        "source_lane": 30
+      },
+      {
+        "destination_lane": 10,
+        "plane": 1,
+        "load_round": 0,
+        "source_lane": 31
+      },
+      {
+        "destination_lane": 10,
+        "plane": 2,
+        "load_round": 1,
+        "source_lane": 0
+      },
+      {
+        "destination_lane": 11,
+        "plane": 0,
+        "load_round": 1,
+        "source_lane": 1
+      },
+      {
+        "destination_lane": 11,
+        "plane": 1,
+        "load_round": 1,
+        "source_lane": 2
+      },
+      {
+        "destination_lane": 11,
+        "plane": 2,
+        "load_round": 1,
+        "source_lane": 3
+      },
+      {
+        "destination_lane": 12,
+        "plane": 0,
+        "load_round": 1,
+        "source_lane": 4
+      },
+      {
+        "destination_lane": 12,
+        "plane": 1,
+        "load_round": 1,
+        "source_lane": 5
+      },
+      {
+        "destination_lane": 12,
+        "plane": 2,
+        "load_round": 1,
+        "source_lane": 6
+      },
+      {
+        "destination_lane": 13,
+        "plane": 0,
+        "load_round": 1,
+        "source_lane": 7
+      },
+      {
+        "destination_lane": 13,
+        "plane": 1,
+        "load_round": 1,
+        "source_lane": 8
+      },
+      {
+        "destination_lane": 13,
+        "plane": 2,
+        "load_round": 1,
+        "source_lane": 9
+      },
+      {
+        "destination_lane": 14,
+        "plane": 0,
+        "load_round": 1,
+        "source_lane": 10
+      },
+      {
+        "destination_lane": 14,
+        "plane": 1,
+        "load_round": 1,
+        "source_lane": 11
+      },
+      {
+        "destination_lane": 14,
+        "plane": 2,
+        "load_round": 1,
+        "source_lane": 12
+      },
+      {
+        "destination_lane": 15,
+        "plane": 0,
+        "load_round": 1,
+        "source_lane": 13
+      },
+      {
+        "destination_lane": 15,
+        "plane": 1,
+        "load_round": 1,
+        "source_lane": 14
+      },
+      {
+        "destination_lane": 15,
+        "plane": 2,
+        "load_round": 1,
+        "source_lane": 15
+      },
+      {
+        "destination_lane": 16,
+        "plane": 0,
+        "load_round": 1,
+        "source_lane": 16
+      },
+      {
+        "destination_lane": 16,
+        "plane": 1,
+        "load_round": 1,
+        "source_lane": 17
+      },
+      {
+        "destination_lane": 16,
+        "plane": 2,
+        "load_round": 1,
+        "source_lane": 18
+      },
+      {
+        "destination_lane": 17,
+        "plane": 0,
+        "load_round": 1,
+        "source_lane": 19
+      },
+      {
+        "destination_lane": 17,
+        "plane": 1,
+        "load_round": 1,
+        "source_lane": 20
+      },
+      {
+        "destination_lane": 17,
+        "plane": 2,
+        "load_round": 1,
+        "source_lane": 21
+      },
+      {
+        "destination_lane": 18,
+        "plane": 0,
+        "load_round": 1,
+        "source_lane": 22
+      },
+      {
+        "destination_lane": 18,
+        "plane": 1,
+        "load_round": 1,
+        "source_lane": 23
+      },
+      {
+        "destination_lane": 18,
+        "plane": 2,
+        "load_round": 1,
+        "source_lane": 24
+      },
+      {
+        "destination_lane": 19,
+        "plane": 0,
+        "load_round": 1,
+        "source_lane": 25
+      },
+      {
+        "destination_lane": 19,
+        "plane": 1,
+        "load_round": 1,
+        "source_lane": 26
+      },
+      {
+        "destination_lane": 19,
+        "plane": 2,
+        "load_round": 1,
+        "source_lane": 27
+      },
+      {
+        "destination_lane": 20,
+        "plane": 0,
+        "load_round": 1,
+        "source_lane": 28
+      },
+      {
+        "destination_lane": 20,
+        "plane": 1,
+        "load_round": 1,
+        "source_lane": 29
+      },
+      {
+        "destination_lane": 20,
+        "plane": 2,
+        "load_round": 1,
+        "source_lane": 30
+      },
+      {
+        "destination_lane": 21,
+        "plane": 0,
+        "load_round": 1,
+        "source_lane": 31
+      },
+      {
+        "destination_lane": 21,
+        "plane": 1,
+        "load_round": 2,
+        "source_lane": 0
+      },
+      {
+        "destination_lane": 21,
+        "plane": 2,
+        "load_round": 2,
+        "source_lane": 1
+      },
+      {
+        "destination_lane": 22,
+        "plane": 0,
+        "load_round": 2,
+        "source_lane": 2
+      },
+      {
+        "destination_lane": 22,
+        "plane": 1,
+        "load_round": 2,
+        "source_lane": 3
+      },
+      {
+        "destination_lane": 22,
+        "plane": 2,
+        "load_round": 2,
+        "source_lane": 4
+      },
+      {
+        "destination_lane": 23,
+        "plane": 0,
+        "load_round": 2,
+        "source_lane": 5
+      },
+      {
+        "destination_lane": 23,
+        "plane": 1,
+        "load_round": 2,
+        "source_lane": 6
+      },
+      {
+        "destination_lane": 23,
+        "plane": 2,
+        "load_round": 2,
+        "source_lane": 7
+      },
+      {
+        "destination_lane": 24,
+        "plane": 0,
+        "load_round": 2,
+        "source_lane": 8
+      },
+      {
+        "destination_lane": 24,
+        "plane": 1,
+        "load_round": 2,
+        "source_lane": 9
+      },
+      {
+        "destination_lane": 24,
+        "plane": 2,
+        "load_round": 2,
+        "source_lane": 10
+      },
+      {
+        "destination_lane": 25,
+        "plane": 0,
+        "load_round": 2,
+        "source_lane": 11
+      },
+      {
+        "destination_lane": 25,
+        "plane": 1,
+        "load_round": 2,
+        "source_lane": 12
+      },
+      {
+        "destination_lane": 25,
+        "plane": 2,
+        "load_round": 2,
+        "source_lane": 13
+      },
+      {
+        "destination_lane": 26,
+        "plane": 0,
+        "load_round": 2,
+        "source_lane": 14
+      },
+      {
+        "destination_lane": 26,
+        "plane": 1,
+        "load_round": 2,
+        "source_lane": 15
+      },
+      {
+        "destination_lane": 26,
+        "plane": 2,
+        "load_round": 2,
+        "source_lane": 16
+      },
+      {
+        "destination_lane": 27,
+        "plane": 0,
+        "load_round": 2,
+        "source_lane": 17
+      },
+      {
+        "destination_lane": 27,
+        "plane": 1,
+        "load_round": 2,
+        "source_lane": 18
+      },
+      {
+        "destination_lane": 27,
+        "plane": 2,
+        "load_round": 2,
+        "source_lane": 19
+      },
+      {
+        "destination_lane": 28,
+        "plane": 0,
+        "load_round": 2,
+        "source_lane": 20
+      },
+      {
+        "destination_lane": 28,
+        "plane": 1,
+        "load_round": 2,
+        "source_lane": 21
+      },
+      {
+        "destination_lane": 28,
+        "plane": 2,
+        "load_round": 2,
+        "source_lane": 22
+      },
+      {
+        "destination_lane": 29,
+        "plane": 0,
+        "load_round": 2,
+        "source_lane": 23
+      },
+      {
+        "destination_lane": 29,
+        "plane": 1,
+        "load_round": 2,
+        "source_lane": 24
+      },
+      {
+        "destination_lane": 29,
+        "plane": 2,
+        "load_round": 2,
+        "source_lane": 25
+      },
+      {
+        "destination_lane": 30,
+        "plane": 0,
+        "load_round": 2,
+        "source_lane": 26
+      },
+      {
+        "destination_lane": 30,
+        "plane": 1,
+        "load_round": 2,
+        "source_lane": 27
+      },
+      {
+        "destination_lane": 30,
+        "plane": 2,
+        "load_round": 2,
+        "source_lane": 28
+      },
+      {
+        "destination_lane": 31,
+        "plane": 0,
+        "load_round": 2,
+        "source_lane": 29
+      },
+      {
+        "destination_lane": 31,
+        "plane": 1,
+        "load_round": 2,
+        "source_lane": 30
+      },
+      {
+        "destination_lane": 31,
+        "plane": 2,
+        "load_round": 2,
+        "source_lane": 31
+      }
+    ]
+  },
+  "minimum": "Underexisting16B/lanevectorloadprimitive,1536B/(32lanes*16B)=3fullwarpLDG128 minimum. Existingplanarlayout already meetsbyte/sector/load-instruction lowerbounds; unchangedcodec/HMMA offers no payload-layout saving in this model.",
+  "not_established": [
+    "ActualL1 request/replay behavior or cache miss merging.",
+    "Actualbasepointer alignment and runtimebandwidth/issue bottleneck.",
+    "Load-address dependencies or header/X/escape traffic criticalpath.",
+    "Transportfamily-wide impossibility; dynamicprofile may expose a different cause."
+  ],
+  "smallest_falsifier": "CPUaddress/layout inverse and exactexistingSASS already falsify the proposed12-byte-stride/redundant-plane-load premise. Do notcompileanAoS/shufflevariant solelyforpayloadcoalescing. If dynamicprofile contradicts minimumsector expectations, firstbindper-PC W requests and actualbasealignment; thenconstruct exactlyonechangedload-stage prototype for thatcause.",
+  "GPU_API_SSH_queue_git_actions": 0,
+  "contract": "proj_rsi/ITERATION.md"
+}

@@ -1,0 +1,109 @@
+{
+  "id": "research.gv53.quarter.sparse.fixed.01",
+  "resource": "gpu",
+  "kind": "optimization",
+  "state": "HELD",
+  "author": "rq_lab_review",
+  "created_at": 1793141528.0879657,
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 1.4276230834061343,
+      "p_gain": 0.12,
+      "p_valid": 0.9
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "No separate information credit/unpriced follow-up; measure one actual M8 native prototype against incumbent fixed implementation."
+    },
+    "basis": "Sparseunitmask CPUmechanism realizes emptyheader/repair bypass, same64regs0spills,455nonNOPvs462quarter/348parent. Actualspeedunknown. Predecessorpaired\u2212.144us/F1+.256with1.152drift retained; matched3armtest distinguishes gainagainstincumbent andmaskrescue. Conditional0.1us completeM8gain1.427623scoreus, subjectivepriors only; no separate info credit.",
+    "confidence": "CPU_ONLY_UNMEASURED",
+    "evidence": [
+      "proj_rsi/candidates/gv53_quarter_sparse_header_v1/codegen.json",
+      "proj_rsi/candidates/gv53_quarter_sparse_header_v1/cpu-proof.json",
+      "proj_rsi/candidates/gv53_quarter_sparse_trial_v1/cpu-proof.json",
+      "proj_rsi/audits/gv53-quarter-stream-result-v1/done-evidence.json",
+      "proj_rsi/scheduling/reviews/gv53-quarter-sparse-header-v1-source.md"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 150,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 10
+  },
+  "files": {
+    "proj_rsi/candidates/gv53_quarter_sparse_trial_v1/driver.py": "dc64beca5e866a78d24f71fcddd00d92d2538e73b60737e2a3844bd947b82a52",
+    "proj_rsi/candidates/gv53_quarter_sparse_trial_v1/binding.cu": "fec24ec99c87c22a67cecedb851b28617d7c2c509a80f47469e2cf9f07da4e19",
+    "proj_rsi/candidates/gv53_quarter_sparse_header_v1/pilot.cu": "f1fa67927bf0ea43c64642934ea650da8f42b918e383c8e7b9e17ee52bb855da",
+    "proj_rsi/candidates/gv53_quarter_stream_v1/transport.py": "965d21022c14fb0ec7a4b68b1e54f6109443184ca0119dbe13b0adc75f6d3ab9",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/scheduling/reviews/gv53-quarter-sparse-header-v1-source.md": "e4c4571f5ed791d2f366844a2c46126f6ae6becf10c1cc5d7c7c4e4c234ae568",
+    "results/proj-rsi/scheduler/artifacts/research.gv53.quarter.stream.fixed.01/collection-1793140874912701666/logs/scheduler/gv53-quarter-stream-01/run/actual.so": "4b85c059c953e91989f6d613e8148269cfbb8e0480ab120585abcac492c3e44c",
+    "proj_rsi/candidates/gv53_quarter_sparse_trial_v1/manifest.json": "ff057ff78944e6264ce72e0dbbe4b3314dc18ad40afaac8001ea94990b06e842"
+  },
+  "review": null,
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-gv53-quarter-sparse-01",
+    "inner_seconds": 90,
+    "outer_seconds": 150,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/gv53_quarter_sparse_trial_v1/driver.py",
+      "--output",
+      "/okc/logs/scheduler/gv53-quarter-sparse-01/run",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/gv53-quarter-sparse-three-arm-01.md"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv53-quarter-sparse-01"
+    ]
+  },
+  "annotations": {
+    "state": "FROZEN_PROPOSAL_PENDING_FOCUSED_DRIVER_REVIEW",
+    "pending_review_path": "proj_rsi/scheduling/reviews/gv53-quarter-sparse-three-arm-01.md",
+    "scope": {
+      "fixed_cells": 1,
+      "m": 8,
+      "arms": [
+        "control",
+        "quarter",
+        "sparse"
+      ],
+      "timed_calls": 114,
+      "warmup_calls": 15,
+      "own_terminal_sites": 6,
+      "mutations": 15,
+      "boundary_columns_per_arm": 8,
+      "triples": 24,
+      "full_prepare": false,
+      "profiling": false
+    },
+    "source_sha256": "f1fa67927bf0ea43c64642934ea650da8f42b918e383c8e7b9e17ee52bb855da",
+    "native_source_GO_sha256": "e4c4571f5ed791d2f366844a2c46126f6ae6becf10c1cc5d7c7c4e4c234ae568",
+    "new_semantics": "Oneballot nonemptyunitmask skips quarterheaderbroadcast/repair; packet/decoder/accumulation/order unchanged",
+    "predecessor_SO": "ExactcollectedSHA/PyInit-bound oldquartermodule arm1; no recompile or silent fallback",
+    "runtime_resource_gate": "Record allrawactualattrs for3module/armbindings; legalresource/residency only",
+    "cleanup": "Same reviewed postdrain graphreset/run-scope release/ATenBLASclear strict0allocated",
+    "limits": "OneprospectiveW matched3arm fixedM8 only; preserveall3pairwise/raw/blocked/ordereffects; notpolicy/officialscoreclaim",
+    "loop": "proj_rsi/ITERATION.md",
+    "problem": "muse_bf16_proj"
+  },
+  "problem": "muse_bf16_proj"
+}

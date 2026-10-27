@@ -1,0 +1,29 @@
+2026-10-27T22:40:08Z
+torch_import_and_device
+compile_two_functions
+[1/3] c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=gv53_quarter_607e6faec9d5b5e706ac -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\"_gcc\" -DPYBIND11_STDLIB=\"_libstdcpp\" -DPYBIND11_BUILD_ABI=\"_cxxabi1018\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -fPIC -std=c++17 -c /root/.cache/torch_extensions/gv53_quarter_607e6faec9d5b5e706ac/main.cpp -o main.o 
+[2/3] /usr/local/cuda/bin/nvcc --generate-dependencies-with-compile --dependency-output cuda.cuda.o.d -DTORCH_EXTENSION_NAME=gv53_quarter_607e6faec9d5b5e706ac -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\"_gcc\" -DPYBIND11_STDLIB=\"_libstdcpp\" -DPYBIND11_BUILD_ABI=\"_cxxabi1018\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_90a,code=sm_90a --compiler-options '-fPIC' -O3 -lineinfo -gencode=arch=compute_90a,code=sm_90a -std=c++17 -c /root/.cache/torch_extensions/gv53_quarter_607e6faec9d5b5e706ac/cuda.cu -o cuda.cuda.o 
+/root/.cache/torch_extensions/gv53_quarter_607e6faec9d5b5e706ac/cuda.cu(1112): warning #177-D: variable "LDEC" was declared but never referenced
+    constexpr bool LX = LAD != 1, LDEC = LAD == 0 || LAD >= 3, LMMA = LAD == 0 || LAD == 4;
+                                  ^
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+/root/.cache/torch_extensions/gv53_quarter_607e6faec9d5b5e706ac/cuda.cu(1112): warning #177-D: variable "LMMA" was declared but never referenced
+    constexpr bool LX = LAD != 1, LDEC = LAD == 0 || LAD >= 3, LMMA = LAD == 0 || LAD == 4;
+                                                               ^
+
+/root/.cache/torch_extensions/gv53_quarter_607e6faec9d5b5e706ac/cuda.cu(1245): warning #177-D: variable "nx" was declared but never referenced
+    uint32_t e = ~0u, nx = ~0u;
+                      ^
+
+/root/.cache/torch_extensions/gv53_quarter_607e6faec9d5b5e706ac/cuda.cu(1246): warning #177-D: variable "ep" was declared but never referenced
+    int ep = 0;
+        ^
+
+[3/3] c++ main.o cuda.cuda.o -shared -L/opt/conda/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o gv53_quarter_607e6faec9d5b5e706ac.so
+actual_task_weight_and_pack
+fixed_pooler_M8
+complete
+TRIAL_EXIT okc-proj-gv53-quarter-stream-01 0
+2026-10-27T22:41:00Z

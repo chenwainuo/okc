@@ -1,0 +1,227 @@
+{
+  "job_id": "research.gv.unpool16.lanebase.01",
+  "source_state": "ONE_FIXED_UNPOOLER16_CELL_COMPLETE_ROOT_REVIEW_REQUIRED",
+  "phase": "complete",
+  "terminal_exit": 0,
+  "artifact_hashes_verified": 5,
+  "evidence": [
+    {
+      "path": "results/proj-rsi/scheduler/artifacts/research.gv.unpool16.lanebase.01/collection-1793140787388716214/inventory.json",
+      "sha256": "93ca284098051997e613fce9b46e9cf12759dd2aeef249b0d09ed1da1f518d84"
+    },
+    {
+      "path": "results/proj-rsi/scheduler/artifacts/research.gv.unpool16.lanebase.01/collection-1793140787388716214/logs/scheduler/gv-unpool16-lanebase-01/run/result.json",
+      "sha256": "e1f670f41800c5a200a56934bcc6ab25680dc5213ac40d78fac50387e0e7d861"
+    },
+    {
+      "path": "results/proj-rsi/scheduler/artifacts/research.gv.unpool16.lanebase.01/collection-1793140787388716214/logs/scheduler/gv-unpool16-lanebase-01/run/raw.jsonl",
+      "sha256": "047a639dba7286b79dbe644e2c8c7aaca9e9bf4e4f5e076f0e0bbecacc4c024f"
+    },
+    {
+      "path": "results/proj-rsi/scheduler/artifacts/research.gv.unpool16.lanebase.01/collection-1793140787388716214/logs/scheduler/research.gv.unpool16.lanebase.01.host.log",
+      "sha256": "640f6487745d2f7f76d1eeb02ff6e01a6f2b12b4605219e58ed43f3d31526951"
+    }
+  ],
+  "new_GPU_API_queue_git_calls": 0,
+  "state": "CPU_COLLECTED_FIXED_CELL_VALIDATED",
+  "disposition": "VALID_NO_GAIN",
+  "disposition_basis": "Primary paired point; signed F1 and every loss preserved, no significance/minimumgain gate.",
+  "source_sha256": "b1eb9b3cc056b3a431d897cbf5a42dacf0eb521219a19b0e2156a03ddc0e10d3",
+  "control_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+  "fixed_template": [
+    1,
+    2,
+    2,
+    1,
+    4,
+    16,
+    1,
+    1,
+    2,
+    1
+  ],
+  "hardware": {
+    "name": "NVIDIA H100 80GB HBM3",
+    "SM_count": 132,
+    "cc": [
+      9,
+      0
+    ],
+    "UUID": "54a7daab-fe3e-c7fc-7f7c-6fbc40145a22"
+  },
+  "actual_resources": {
+    "control": {
+      "registers": 110,
+      "local": 0,
+      "user_static": 0,
+      "max_dynamic": 5120,
+      "max_threads": 128,
+      "occupancy": 4,
+      "device_reserved": 1024,
+      "arm_echo": 0
+    },
+    "deltakey": {
+      "registers": 108,
+      "local": 0,
+      "user_static": 0,
+      "max_dynamic": 5120,
+      "max_threads": 128,
+      "occupancy": 4,
+      "device_reserved": 1024,
+      "arm_echo": 1
+    }
+  },
+  "pack": {
+    "W_seed": 5151,
+    "actual_W_bit_reconstruction": "EXACT",
+    "packed_bytes": 50331648,
+    "escape_words": 65536,
+    "geometry": [
+      1,
+      4,
+      16,
+      1,
+      1,
+      2
+    ],
+    "packing_functions": "Exact original source AST; prepare and extension factories not executed"
+  },
+  "timing": {
+    "sign": "control_minus_deltakey_us,positivefavorsnew",
+    "paired_delta_us": 0.0,
+    "paired_control_over_new_ratio": 1.0,
+    "win_tie_loss": [
+      10,
+      4,
+      10
+    ],
+    "delta_range_us": [
+      -1.2800004333257675,
+      2.2720005363225937
+    ],
+    "F1_medians_us": {
+      "control_before": 22.143999114632607,
+      "deltakey": 22.272000089287758,
+      "control_after": 23.360000923275948
+    },
+    "F1_before_minus_new_us": -0.12800097465515137,
+    "F1_after_minus_new_us": 1.0880008339881897,
+    "F1_endpoint_average_minus_new_us": 0.47999992966651917,
+    "paired_mean_control_minus_new_us": 0.01466670073568821,
+    "F1_control_after_minus_before_us": 1.216001808643341,
+    "F1_matched_same_seed_endpoint_medians_us": [
+      -0.09600073099136353,
+      1.0880008339881897
+    ],
+    "paired_control_first_median_us": 0.0,
+    "paired_new_first_median_us": 0.0959988683462143,
+    "paired_each_delta_us": [
+      2.2720005363225937,
+      -0.19199959933757782,
+      -1.2800004333257675,
+      0.15999935567378998,
+      0.0,
+      0.12800097465515137,
+      -0.5759987980127335,
+      -0.12800097465515137,
+      -0.6079990416765213,
+      -0.06400048732757568,
+      0.3200005739927292,
+      -0.6399992853403091,
+      -0.12799911201000214,
+      0.0959988683462143,
+      0.0,
+      0.3200005739927292,
+      0.0,
+      -0.03200024366378784,
+      0.15999935567378998,
+      0.31999871134757996,
+      0.0,
+      0.0959988683462143,
+      -0.0959988683462143,
+      0.22399984300136566
+    ]
+  },
+  "validation": {
+    "runtime_source_pins": 24,
+    "journal_rows": 91,
+    "clean_timing_calls": 81,
+    "warmups": 10,
+    "own_terminal_oracles": 4,
+    "retained_mutations": 10,
+    "task_FP64_checks_before_timing": 6,
+    "basis_columns_per_arm": 16,
+    "basis_launches_per_arm": 1,
+    "counter_scratch_input_weight_contracts": "Frozen source successful invoked full-backing S1/input/weight assertions; finalindividualbytevalues notarchived.",
+    "post_scope_cleanup": {
+      "allocated": 0,
+      "reserved": 0,
+      "before_blas_clear": {
+        "allocated": 33554432,
+        "reserved": 1308622848
+      },
+      "blas_map_entries_workspace_bytes_after": [
+        1,
+        33554432,
+        0
+      ],
+      "clear_error": null,
+      "after_run_scope_and_drain": true
+    },
+    "external_cleanup": {
+      "cleanup_failed": false,
+      "compute_pids": [],
+      "container_exists": false,
+      "containers": [],
+      "gpu_memory_mib": 0,
+      "guard_pids": [],
+      "host_log_exists": true,
+      "terminal_exit": 0
+    }
+  },
+  "cost": {
+    "compile_and_load_seconds": 42.614424128012615,
+    "task_weight_pack_seconds": 0.2926659599906998,
+    "run_elapsed_seconds": 45.87903018700308
+  },
+  "limits": [
+    "FixedexactH200selectedgeometry comparison, freshservingprepare may selectanotherpath.",
+    "Directeventtimingisnotcalibratedofficialscore orprofiler duration.",
+    "Static120instruction/2register reduction isnotdynamicrepairtime fraction orspeedprediction.",
+    "No full30/official gain or additivecompositionclaim; sourcecompatiblepackage mustbe measured."
+  ],
+  "actual_binary": {
+    "SO_sha256": "fab0a543cfae62c9fa4522903c27df6fe6034db981402bae9fa25550738ab820",
+    "CU_sha256": "cf823aaaaa3269be476498b288892120ce369b78ad8c7ca5f50dbddecab99546",
+    "full_PC_predicate_128bit_encoding_equals_CPU_pilot": true,
+    "arms": {
+      "new": {
+        "instructions": 1960,
+        "S2R": 5,
+        "NOP": 31,
+        "SHFL": 17,
+        "HMMA": 128,
+        "P2R": 16,
+        "LDG": 113
+      },
+      "control": {
+        "instructions": 2080,
+        "S2R": 5,
+        "NOP": 30,
+        "SHFL": 17,
+        "HMMA": 128,
+        "P2R": 16,
+        "LDG": 113
+      }
+    }
+  },
+  "cause_audit": {
+    "implementation_mechanism": "PROVEN: actualS2R5/native1960 identicalCPU; intended rematerialization removal executed",
+    "correctness_setup_currentinput_cleanup": "PASS observed; not proof of absence of every possible bug",
+    "resource": "PROVEN runtime occupancy4 for both; local0/108vs110registers",
+    "performance_cause": "UNKNOWN; no GV16 hardware counters; cannot infer bandwidth or criticalstall from staticcode",
+    "F1_drift": "PROVEN control-after minus control-before +1.216001809us; effect cause UNKNOWN; average F1 is mixed endpoint evidence, not stablewin",
+    "cross_job": "Prior713c \u2212.080singleW/\u2212.064robustpaired not causal same-window comparators for newhoist"
+  },
+  "next_falsifier": "Optional exactSO twoarm sampledPC/counter capture if rootprioritizes: identify issuedrepair/longshortscoreboard/mathpipe waits; not unchangedtimingrerun. Park thisversion integration on tie, preserve family and positiveF1endpoint. Larger projection ROI first."
+}

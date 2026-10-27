@@ -1,0 +1,67 @@
+{
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T22:38:29Z\ntorch_import_and_device\ncompile_two_functions\n[1/3] c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=gv_unpool16_lanebase_cf823aaaaa3269be4764 -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -fPIC -std=c++17 -c /root/.cache/torch_extensions/gv_unpool16_lanebase_cf823aaaaa3269be4764/main.cpp -o main.o \n[2/3] /usr/local/cuda/bin/nvcc --generate-dependencies-with-compile --dependency-output cuda.cuda.o.d -DTORCH_EXTENSION_NAME=gv_unpool16_lanebase_cf823aaaaa3269be4764 -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_90a,code=sm_90a --compiler-options '-fPIC' -O3 -lineinfo -gencode=arch=compute_90a,code=sm_90a -std=c++17 -c /root/.cache/torch_extensions/gv_unpool16_lanebase_cf823aaaaa3269be4764/cuda.cu -o cuda.cuda.o \n[3/3] c++ main.o cuda.cuda.o -shared -L/opt/conda/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o gv_unpool16_lanebase_cf823aaaaa3269be4764.so\nactual_task_weight_and_pack\nfixed_unpooler_M16\ncomplete\nTRIAL_EXIT okc-proj-gv-unpool16-lanebase-01 0\n2026-10-27T22:39:22Z\n",
+    "terminal_exit": 0
+  },
+  "collected_at": 1793140788.3593435,
+  "dispatch": {
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv-unpool16-lanebase-01"
+    ],
+    "claimed_at": 1793140699.4637256,
+    "container": "okc-proj-gv-unpool16-lanebase-01",
+    "controller_owner": "root",
+    "guard_pid": 602785,
+    "host": "root@107.170.6.60",
+    "host_log": "/root/okc/logs/scheduler/research.gv.unpool16.lanebase.01.host.log",
+    "job_id": "research.gv.unpool16.lanebase.01",
+    "launch_requested_at": 1793140708.9637144,
+    "phase": "RUNNING",
+    "remote_repo": "/root/okc",
+    "source_pins": {
+      "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+      "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+      "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/README.md": "717ffe40e8860376b8ca9f50baa20a382e7e16c47ea7a9dd093d88498ba08fa4",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/binding-compile-proof.json": "404ee2ee65f14dfacaba0aeb8de2aead04fd16d96456dcd3b99b155d9f564165",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/binding.cu": "6143e7477b58d4578aa61e9041c4cbf599245c3bc7c1057b18da8a384c05d963",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/driver-delta.json": "d578f0b477e2082f41c44e5888f02296fed78c11b555e781cd99016917b3efb9",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/driver.py": "2b1598520ee759c336b129398f6584b57695f500bed8977b0432a8196223cd27",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/harness-cpu-proof.json": "54bafa2714f6062c25715bf83376ea6729eff0e754d0994e5d79a42abdc5973f",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/helper.cuh": "208d2c5a2cf436d085aece1d0dd5a577bb5c48119cb18d24a66ced3e47920b29",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/pilot.cu": "9e27698d8284249a03f5f27b78052f1447067c3a5663266ee83e20926840f671",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/proof.json": "9c87b4bc9770d75c4963e5f6854d9eb3815248c955b951dda568bf4b0ab9dc61",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/submission.py": "713c46b37e50f71410ef4c7116f7fcb94bea71bd7b64c7f33d2a9e0d93e24f6c",
+      "proj_rsi/candidates/gv_unpool16_lanebase_v1/README.md": "88f192996ce60b2bba903b47e3c7c8cb7dce02a0b7854bc76d378285f0ffc781",
+      "proj_rsi/candidates/gv_unpool16_lanebase_v1/binding.cu": "6143e7477b58d4578aa61e9041c4cbf599245c3bc7c1057b18da8a384c05d963",
+      "proj_rsi/candidates/gv_unpool16_lanebase_v1/codegen.json": "1b173845a85bb5c6bf37df03122f9a9f9a4cbb3b14b124409b32d1c3ce5ae8f7",
+      "proj_rsi/candidates/gv_unpool16_lanebase_v1/driver.py": "e9a8d28a1640c4a43cd6f36ffd6ce8f6bbbf6fed7c7101ca58661a51d0a6ed8a",
+      "proj_rsi/candidates/gv_unpool16_lanebase_v1/manifest.json": "17adb85e3acf5ea2a4d765368caa830d9003b8976956c8d7357ba4b7d43d04f6",
+      "proj_rsi/candidates/gv_unpool16_lanebase_v1/pilot.cu": "6e604f10b9aa79ffe40156cf6102a0e3fd5d97890f2ee0baa39326530ca333d9",
+      "proj_rsi/candidates/gv_unpool16_lanebase_v1/proof.json": "8865809463b736c577ef6a0e6cc33bc0a8bd8020f35c53759683ee8ff8381595",
+      "proj_rsi/candidates/gv_unpool16_lanebase_v1/submission.py": "b1eb9b3cc056b3a431d897cbf5a42dacf0eb521219a19b0e2156a03ddc0e10d3",
+      "proj_rsi/scheduling/reviews/gv-unpool16-lanebase-01.md": "0842188e932e1ddbef399f8049fe39c03af2aebd6182c34bef2b8c3c586564c1",
+      "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+      "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5"
+    }
+  },
+  "files": {
+    "logs/scheduler/gv-unpool16-lanebase-01/run/actual.cu": "cf823aaaaa3269be476498b288892120ce369b78ad8c7ca5f50dbddecab99546",
+    "logs/scheduler/gv-unpool16-lanebase-01/run/actual.so": "fab0a543cfae62c9fa4522903c27df6fe6034db981402bae9fa25550738ab820",
+    "logs/scheduler/gv-unpool16-lanebase-01/run/raw.jsonl": "047a639dba7286b79dbe644e2c8c7aaca9e9bf4e4f5e076f0e0bbecacc4c024f",
+    "logs/scheduler/gv-unpool16-lanebase-01/run/result.json": "e1f670f41800c5a200a56934bcc6ab25680dc5213ac40d78fac50387e0e7d861",
+    "logs/scheduler/research.gv.unpool16.lanebase.01.host.log": "640f6487745d2f7f76d1eeb02ff6e01a6f2b12b4605219e58ed43f3d31526951"
+  },
+  "job_id": "research.gv.unpool16.lanebase.01",
+  "missing": [],
+  "symlinks_not_followed_or_materialized": {},
+  "terminal_exit": 0,
+  "validation": "ROOT_VALIDATION_REQUIRED_NO_PERFORMANCE_ADMISSION"
+}

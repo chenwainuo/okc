@@ -1,0 +1,48 @@
+{
+  "state": "PASS_CPU_NATIVE_SPARSE_HEADER_MECHANISM",
+  "control_PC_predicate_encoding_exact": true,
+  "new_symbol": "_Z17gv_sparse_quarterILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G",
+  "slots": 464,
+  "nonNOP": 455,
+  "registers": 64,
+  "stack_local_spill_bytes": 0,
+  "static_reserved_shared_bytes": 1024,
+  "expected_launch_dynamic_shared_bytes": 17408,
+  "PRMT_before_first_HMMA": 4,
+  "HMMA_PC": [
+    "0xab0",
+    "0xdb0",
+    "0x10b0",
+    "0x13c0"
+  ],
+  "ballot_instructions": [
+    [
+      "0x4b0",
+      "VOTEU.ANY UR12, UPT, P0"
+    ]
+  ],
+  "SHFL_static_count": 5,
+  "empty_unit_header_and_first_repair_bypass": [
+    [
+      "0x820",
+      "@!P1 BRA 0x860"
+    ],
+    [
+      "0x840",
+      "SHFL.IDX PT, R56, R0, R57, 0x1f"
+    ],
+    [
+      "0x860",
+      "@!P1 BRA 0xab0"
+    ]
+  ],
+  "branch_interpretation": "P1 is the same ballotmask unitbit in every lane; !P1 jumps over headerSHFL then repair directly tofirstMMA. Laterquarterrepair has same mask gate.",
+  "actual_GPU_speedup": "UNKNOWN",
+  "bounds_from_prior_4759records_4096groups": {
+    "ballots": 4096,
+    "header_broadcasts_upper_bound": 4759,
+    "predecessor_header_broadcasts": 32768,
+    "record_broadcasts_unchanged": 4759
+  },
+  "counterevidence": "Oneballot plus predicates/branches added; unchangedregisters and largercodevsparent; sourcelevelbroadcastcounts are not cycles/hardwarecounters."
+}

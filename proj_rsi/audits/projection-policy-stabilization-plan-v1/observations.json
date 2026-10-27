@@ -1,0 +1,595 @@
+{
+  "state": "ARCHIVED_DESCRIPTIVE_NOT_CAUSAL",
+  "route_comparisons": {
+    "71a76a2c3fcd431f": {
+      "displayed_changed_routes": 14,
+      "outside_native_change_domains": 11,
+      "changed_rows": [
+        {
+          "case": {
+            "load": "decode 1",
+            "layer": "pooler",
+            "m": 1
+          },
+          "native_change_domain": true,
+          "old": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "new": [
+            "void gv_predxor<1, 1, 2, 1, 8, 16, 1, 1, 0, 1>(G)"
+          ]
+        },
+        {
+          "case": {
+            "load": "decode 1",
+            "layer": "unpooler",
+            "m": 1
+          },
+          "native_change_domain": false,
+          "old": [
+            "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+          ],
+          "new": [
+            "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+          ]
+        },
+        {
+          "case": {
+            "load": "decode 16",
+            "layer": "router",
+            "m": 16
+          },
+          "native_change_domain": false,
+          "old": [
+            "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+          ],
+          "new": [
+            "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+          ]
+        },
+        {
+          "case": {
+            "load": "decode 32",
+            "layer": "o",
+            "m": 32
+          },
+          "native_change_domain": false,
+          "old": [
+            "void rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)"
+          ],
+          "new": [
+            "nvjet_sm90_tst_64x32_64x16_2x1_v_bz_TNT"
+          ]
+        },
+        {
+          "case": {
+            "load": "decode 32",
+            "layer": "unpooler",
+            "m": 32
+          },
+          "native_change_domain": true,
+          "old": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "new": [
+            "void rq<32, 6, 1, 0, 0, 0, 131107>(RqP, RqTmap, RqTmap)"
+          ]
+        },
+        {
+          "case": {
+            "load": "verify 1",
+            "layer": "pooler",
+            "m": 8
+          },
+          "native_change_domain": true,
+          "old": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "new": [
+            "void gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ]
+        },
+        {
+          "case": {
+            "load": "verify 1",
+            "layer": "unpooler",
+            "m": 8
+          },
+          "native_change_domain": false,
+          "old": [
+            "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+          ],
+          "new": [
+            "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+          ]
+        },
+        {
+          "case": {
+            "load": "verify 16",
+            "layer": "qkv_gate",
+            "m": 128
+          },
+          "native_change_domain": false,
+          "old": [
+            "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+          ],
+          "new": [
+            "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+          ]
+        },
+        {
+          "case": {
+            "load": "verify 16",
+            "layer": "o",
+            "m": 128
+          },
+          "native_change_domain": false,
+          "old": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN"
+          ],
+          "new": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT"
+          ]
+        },
+        {
+          "case": {
+            "load": "verify 16",
+            "layer": "pooler",
+            "m": 128
+          },
+          "native_change_domain": false,
+          "old": [
+            "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+          ],
+          "new": [
+            "void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)"
+          ]
+        },
+        {
+          "case": {
+            "load": "verify 16",
+            "layer": "unpooler",
+            "m": 128
+          },
+          "native_change_domain": false,
+          "old": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT"
+          ],
+          "new": [
+            "void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)"
+          ]
+        },
+        {
+          "case": {
+            "load": "verify 32",
+            "layer": "o",
+            "m": 256
+          },
+          "native_change_domain": false,
+          "old": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN"
+          ],
+          "new": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+          ]
+        },
+        {
+          "case": {
+            "load": "verify 32",
+            "layer": "pooler",
+            "m": 256
+          },
+          "native_change_domain": false,
+          "old": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+          ],
+          "new": [
+            "nvjet_sm90_tst_64x128_64x8_1x1_v_bz_NNT"
+          ]
+        },
+        {
+          "case": {
+            "load": "verify 32",
+            "layer": "unpooler",
+            "m": 256
+          },
+          "native_change_domain": false,
+          "old": [
+            "nvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN"
+          ],
+          "new": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+          ]
+        }
+      ]
+    },
+    "fe5c45197ca041bb": {
+      "displayed_changed_routes": 15,
+      "outside_native_change_domains": 14,
+      "changed_rows": [
+        {
+          "case": {
+            "layer": "qkv_gate",
+            "load": "decode 1",
+            "m": 1,
+            "seed": 3593563357603754008,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "new": [
+            "void gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)"
+          ]
+        },
+        {
+          "case": {
+            "layer": "pooler",
+            "load": "decode 1",
+            "m": 1,
+            "seed": 3594073606437089723,
+            "weight": 62
+          },
+          "native_change_domain": true,
+          "old": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "new": [
+            "void gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ]
+        },
+        {
+          "case": {
+            "layer": "unpooler",
+            "load": "decode 1",
+            "m": 1,
+            "seed": 3594328730853757582,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+          ],
+          "new": [
+            "void gv<1, 1, 2, 1, 16, 4, 1, 1, 0, 0>(G)"
+          ]
+        },
+        {
+          "case": {
+            "layer": "router",
+            "load": "decode 1",
+            "m": 1,
+            "seed": 3594583855270425442,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+          ],
+          "new": [
+            "void rr<1, 2, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+          ]
+        },
+        {
+          "case": {
+            "layer": "o",
+            "load": "decode 16",
+            "m": 16,
+            "seed": 3595094104103761165,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "new": [
+            "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 0>(G)"
+          ]
+        },
+        {
+          "case": {
+            "layer": "o",
+            "load": "decode 32",
+            "m": 32,
+            "seed": 3596369726187100490,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "void rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)"
+          ],
+          "new": [
+            "nvjet_sm90_tst_64x32_64x16_2x1_v_bz_TNT"
+          ]
+        },
+        {
+          "case": {
+            "layer": "unpooler",
+            "load": "decode 32",
+            "m": 32,
+            "seed": 3596879975020436227,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "new": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ]
+        },
+        {
+          "case": {
+            "layer": "router",
+            "load": "decode 32",
+            "m": 32,
+            "seed": 3597135099437104097,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)"
+          ],
+          "new": [
+            "void gv<2, 4, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+          ]
+        },
+        {
+          "case": {
+            "layer": "unpooler",
+            "load": "verify 1",
+            "m": 8,
+            "seed": 3598155597103775587,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+          ],
+          "new": [
+            "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+          ]
+        },
+        {
+          "case": {
+            "layer": "qkv_gate",
+            "load": "verify 16",
+            "m": 128,
+            "seed": 3598665845937111338,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+          ],
+          "new": [
+            "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+          ]
+        },
+        {
+          "case": {
+            "layer": "o",
+            "load": "verify 16",
+            "m": 128,
+            "seed": 3598920970353779215,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN"
+          ],
+          "new": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT"
+          ]
+        },
+        {
+          "case": {
+            "layer": "unpooler",
+            "load": "verify 16",
+            "m": 128,
+            "seed": 3599431219187114972,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT"
+          ],
+          "new": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_coopB_NNN"
+          ]
+        },
+        {
+          "case": {
+            "layer": "router",
+            "load": "verify 16",
+            "m": 128,
+            "seed": 3599686343603782852,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "new": [
+            "void rtk<256, 4, 128, 128, 1, 4>(RtMap, RtMap, RtMap, flo..."
+          ]
+        },
+        {
+          "case": {
+            "layer": "o",
+            "load": "verify 32",
+            "m": 256,
+            "seed": 3600196592437118615,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN"
+          ],
+          "new": [
+            "nvjet_sm90_tst_128x128_64x6_1x1_h_bz_coopA_NNN"
+          ]
+        },
+        {
+          "case": {
+            "layer": "pooler",
+            "load": "verify 32",
+            "m": 256,
+            "seed": 3600451716853786498,
+            "weight": 62
+          },
+          "native_change_domain": false,
+          "old": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+          ],
+          "new": [
+            "nvjet_sm90_tst_64x128_64x8_1x1_v_bz_NNT"
+          ]
+        }
+      ]
+    }
+  },
+  "actual_log_receipts": {
+    "9916d34357b745cf": {
+      "prepare_receipts": [
+        {
+          "line": 192,
+          "text": "PREP done in 166s"
+        }
+      ],
+      "budget_skip_lines": [],
+      "target_and_unrelated_bake_receipts": [
+        {
+          "line": 16,
+          "text": "gv pooler m1 v12 19.78 best 1.1.1.2.16.8.1.1.0.3 12.96"
+        },
+        {
+          "line": 18,
+          "text": "gv pooler m8 v12 19.58 best 1.1.1.2.16.8.1.1.0.3 12.83"
+        },
+        {
+          "line": 149,
+          "text": "BAKE unpooler m=32 rq:t32s5hze-k2 19.39 (ok 2.4e-03) at 127s"
+        },
+        {
+          "line": 150,
+          "text": "BAKE unpooler m=32 rq:t32s6hze-k2 19.30 (ok 2.4e-03) at 127s"
+        },
+        {
+          "line": 151,
+          "text": "BAKE unpooler m=32 rq:t32s6hz-k2 19.65 (ok 2.4e-03) at 127s"
+        },
+        {
+          "line": 153,
+          "text": "PICK unpooler m=32 rq:t32s6hze-k2 19.30"
+        },
+        {
+          "line": 184,
+          "text": "PICK router m=128 rt64k32b3x2z 11.81"
+        },
+        {
+          "line": 190,
+          "text": "PICK router m=256 rt64k32b3x2z 13.06"
+        }
+      ]
+    },
+    "71a76a2c3fcd431f": {
+      "prepare_receipts": [
+        {
+          "line": 193,
+          "text": "PREP done in 163s"
+        }
+      ],
+      "budget_skip_lines": [],
+      "target_and_unrelated_bake_receipts": [
+        {
+          "line": 16,
+          "text": "gv pooler m1 v12 19.62 best 1.1.2.1.8.16.1.1.0.1 12.96"
+        },
+        {
+          "line": 18,
+          "text": "gv pooler m8 v12 19.52 best 1.1.1.2.16.8.1.1.0.3 13.02"
+        },
+        {
+          "line": 149,
+          "text": "BAKE unpooler m=32 rq:t32s5hze-k2 19.39 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 150,
+          "text": "BAKE unpooler m=32 rq:t32s6hze-k2 19.33 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 151,
+          "text": "BAKE unpooler m=32 rq:t32s6hz-k2 19.26 (ok 2.5e-03) at 125s"
+        },
+        {
+          "line": 152,
+          "text": "BAKE unpooler m=32 rq:t32s6hze_offset_unpool-k2 19.20 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 154,
+          "text": "PICK unpooler m=32 rq:t32s6hze_offset_unpool-k2 19.20"
+        },
+        {
+          "line": 185,
+          "text": "PICK router m=128 rt64k32b3x2z 11.78"
+        },
+        {
+          "line": 191,
+          "text": "PICK router m=256 rt64k32b3x2z 13.28"
+        }
+      ]
+    },
+    "fe5c45197ca041bb": {
+      "prepare_receipts": [
+        {
+          "line": 177,
+          "text": "PREP done in 165s"
+        }
+      ],
+      "budget_skip_lines": [],
+      "target_and_unrelated_bake_receipts": [
+        {
+          "line": 2,
+          "text": "gv pooler m8 v12 18.53 best 1.1.1.2.16.8.1.1.0.3 12.80"
+        },
+        {
+          "line": 132,
+          "text": "BAKE unpooler m=32 rq:t32s5hze-k2 18.78 (ok 2.4e-03) at 127s"
+        },
+        {
+          "line": 133,
+          "text": "BAKE unpooler m=32 rq:t32s6hze-k2 18.78 (ok 2.4e-03) at 127s"
+        },
+        {
+          "line": 134,
+          "text": "BAKE unpooler m=32 rq:t32s6hz-k2 19.01 (ok 2.4e-03) at 127s"
+        },
+        {
+          "line": 136,
+          "text": "PICK unpooler m=32 rq:t32s5hze-k2 18.78"
+        },
+        {
+          "line": 167,
+          "text": "PICK router m=128 rt64k32b4z 11.55"
+        },
+        {
+          "line": 173,
+          "text": "PICK router m=256 rt64k32b3x2z 13.31"
+        }
+      ]
+    }
+  },
+  "scores": {
+    "9916d34357b745cf": 3157.0384036526784,
+    "71a76a2c3fcd431f": 3182.3487733684065,
+    "fe5c45197ca041bb": 3196.414179553723
+  },
+  "all30_benchmark_seeds_changed": "Both comparisons30/30 per pinned prior analyses; none is a same-input experiment.",
+  "limits": [
+    "Profile label changes are lower-bound visible routes, not full binary/algorithm-plan equality.",
+    "Different route identity is observed; noise, fixture, thermals, clock, compilation and elapsed-time causal shares are UNKNOWN.",
+    "Prepare receipts within240s contradict blanket deadline-exhaustion; no new timing or performance inference."
+  ]
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "old": "  e = p.esc[((size_t)(by * GX + bx) * NW + w) * 32 + lane];",
+    "new": "  e = p.esc[((size_t)(by * GX + bx) * NW + w) * 32 + lane];\n  const uint32_t emask=__ballot_sync(~0u,lane<KU && ((e>>24)&63)!=(e&63));"
+  },
+  {
+    "old": "    const uint32_t header=__shfl_sync(~0u,e,u);",
+    "new": "    const bool has_esc=((emask>>u)&1)!=0;\n    uint32_t header=0;\n    if(has_esc) header=__shfl_sync(~0u,e,u);"
+  },
+  {
+    "old": "      const int begin=(header>>(6*q))&63, end=(header>>(6*(q+1)))&63;\n#pragma unroll 1\n      for (int ep4=begin;ep4<end;ep4++) {\n        const uint32_t pair=__shfl_sync(~0u,e,KU+(ep4>>1));\n        const uint32_t r16=(pair>>(16*(ep4&1)))&65535u;\n        const uint32_t xr=(r16&127u)<<(8+16*((r16>>7)&1));\n        gv_fix_quarter(A4,(r16>>9)&3,xr,lane,r16>>11,(r16>>8)&1);\n      }",
+    "new": "      if(has_esc) {\n      const int begin=(header>>(6*q))&63, end=(header>>(6*(q+1)))&63;\n#pragma unroll 1\n      for (int ep4=begin;ep4<end;ep4++) {\n        const uint32_t pair=__shfl_sync(~0u,e,KU+(ep4>>1));\n        const uint32_t r16=(pair>>(16*(ep4&1)))&65535u;\n        const uint32_t xr=(r16&127u)<<(8+16*((r16>>7)&1));\n        gv_fix_quarter(A4,(r16>>9)&3,xr,lane,r16>>11,(r16>>8)&1);\n      }\n      }"
+  }
+]

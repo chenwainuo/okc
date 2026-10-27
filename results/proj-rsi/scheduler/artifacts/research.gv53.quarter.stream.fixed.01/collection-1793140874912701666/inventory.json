@@ -1,0 +1,55 @@
+{
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T22:40:08Z\ntorch_import_and_device\ncompile_two_functions\n[1/3] c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=gv53_quarter_607e6faec9d5b5e706ac -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -fPIC -std=c++17 -c /root/.cache/torch_extensions/gv53_quarter_607e6faec9d5b5e706ac/main.cpp -o main.o \n[2/3] /usr/local/cuda/bin/nvcc --generate-dependencies-with-compile --dependency-output cuda.cuda.o.d -DTORCH_EXTENSION_NAME=gv53_quarter_607e6faec9d5b5e706ac -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_90a,code=sm_90a --compiler-options '-fPIC' -O3 -lineinfo -gencode=arch=compute_90a,code=sm_90a -std=c++17 -c /root/.cache/torch_extensions/gv53_quarter_607e6faec9d5b5e706ac/cuda.cu -o cuda.cuda.o \n/root/.cache/torch_extensions/gv53_quarter_607e6faec9d5b5e706ac/cuda.cu(1112): warning #177-D: variable \"LDEC\" was declared but never referenced\n    constexpr bool LX = LAD != 1, LDEC = LAD == 0 || LAD >= 3, LMMA = LAD == 0 || LAD == 4;\n                                  ^\n\nRemark: The warnings can be suppressed with \"-diag-suppress <warning-number>\"\n\n/root/.cache/torch_extensions/gv53_quarter_607e6faec9d5b5e706ac/cuda.cu(1112): warning #177-D: variable \"LMMA\" was declared but never referenced\n    constexpr bool LX = LAD != 1, LDEC = LAD == 0 || LAD >= 3, LMMA = LAD == 0 || LAD == 4;\n                                                               ^\n\n/root/.cache/torch_extensions/gv53_quarter_607e6faec9d5b5e706ac/cuda.cu(1245): warning #177-D: variable \"nx\" was declared but never referenced\n    uint32_t e = ~0u, nx = ~0u;\n                      ^\n\n/root/.cache/torch_extensions/gv53_quarter_607e6faec9d5b5e706ac/cuda.cu(1246): warning #177-D: variable \"ep\" was declared but never referenced\n    int ep = 0;\n        ^\n\n[3/3] c++ main.o cuda.cuda.o -shared -L/opt/conda/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o gv53_quarter_607e6faec9d5b5e706ac.so\nactual_task_weight_and_pack\nfixed_pooler_M8\ncomplete\nTRIAL_EXIT okc-proj-gv53-quarter-stream-01 0\n2026-10-27T22:41:00Z\n",
+    "terminal_exit": 0
+  },
+  "collected_at": 1793140875.8644671,
+  "dispatch": {
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv53-quarter-stream-01"
+    ],
+    "claimed_at": 1793140798.3383477,
+    "container": "okc-proj-gv53-quarter-stream-01",
+    "controller_owner": "root",
+    "guard_pid": 604179,
+    "host": "root@107.170.6.60",
+    "host_log": "/root/okc/logs/scheduler/research.gv53.quarter.stream.fixed.01.host.log",
+    "job_id": "research.gv53.quarter.stream.fixed.01",
+    "launch_requested_at": 1793140807.6192937,
+    "phase": "RUNNING",
+    "remote_repo": "/root/okc",
+    "source_pins": {
+      "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+      "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+      "proj_rsi/candidates/gv53_quarter_stream_trial_v1/binding.cu": "39e5c37fb8f883c92aacf0b6e3431e1e9b762ed44a1c344f876dedc8e27ac596",
+      "proj_rsi/candidates/gv53_quarter_stream_trial_v1/driver.py": "5a55b7d4f96b87d19624eb71e4137f054b8ef154071c863282b0e6adf73adf36",
+      "proj_rsi/candidates/gv53_quarter_stream_trial_v1/manifest.json": "ba674f0027d67ce8e74457d84d330cf1a1f54267a23cfb71f8116ce7d842fa9c",
+      "proj_rsi/candidates/gv53_quarter_stream_v1/pilot.cu": "b7c8fccd8a92c57387872f41e164aefb86d70f5756ebef6ba5ae6b8a2bc7a7fb",
+      "proj_rsi/candidates/gv53_quarter_stream_v1/transport.py": "965d21022c14fb0ec7a4b68b1e54f6109443184ca0119dbe13b0adc75f6d3ab9",
+      "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+      "proj_rsi/scheduling/reviews/gv53-quarter-stream-fixed-01.md": "78193b1460dbb651286c0cf6320b8648a968ebb3a2d9c877c263fb6648a7421c",
+      "proj_rsi/scheduling/reviews/gv53-quarter-stream-v1-source.md": "4715b328a56e4e2958b7cde5b004a34cf7d3850038a452028f388b29455eef2b",
+      "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+      "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5"
+    }
+  },
+  "files": {
+    "logs/scheduler/gv53-quarter-stream-01/run/actual.cu": "607e6faec9d5b5e706ac3109c9a83af3ab8ba6e7b17e2bbea7a7de1fb7316038",
+    "logs/scheduler/gv53-quarter-stream-01/run/actual.so": "4b85c059c953e91989f6d613e8148269cfbb8e0480ab120585abcac492c3e44c",
+    "logs/scheduler/gv53-quarter-stream-01/run/raw.jsonl": "ff6880b5e579ee7308f7f75f8903efa94a93dc3d042dc7e3cdc80fb370c8c1b6",
+    "logs/scheduler/gv53-quarter-stream-01/run/result.json": "086924ff747791e46d458168fd99e7ab446e312afc4f96d714090f6ff3816878",
+    "logs/scheduler/research.gv53.quarter.stream.fixed.01.host.log": "24dfb2a51a7d1c98851a45e27935dda57aeda74c0412178a5b1b04cba78c75c4"
+  },
+  "job_id": "research.gv53.quarter.stream.fixed.01",
+  "missing": [],
+  "symlinks_not_followed_or_materialized": {},
+  "terminal_exit": 0,
+  "validation": "ROOT_VALIDATION_REQUIRED_NO_PERFORMANCE_ADMISSION"
+}

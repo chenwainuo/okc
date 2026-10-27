@@ -1,0 +1,463 @@
+{
+  "state": "VALID_WEIGHT_STATISTICS_ENCODING_INSUFFICIENT_NO_PERFORMANCE_CLAIM",
+  "job_id": "research.gv.top8.exponent.stats.01",
+  "result_path": "results/proj-rsi/scheduler/artifacts/research.gv.top8.exponent.stats.01/collection-1793141535590853612/logs/scheduler/gv-top8-exponent-stats-01/stats.json",
+  "result_sha256": "3fcfd7bce6514294496e8a026d3e0c27ebd4ed263dbb6d59a1046777adf64e21",
+  "inventory_sha256": "1d336c5819763770e1911cbce28451c3a22ce6d16998547770fa7706c9e89725",
+  "source_manifest_sha256": "67e2e9378b4570cf0ebfdc593db4e24fc7adf9126cb64d232f2bfc011c398213",
+  "review_sha256": "0a32f2c28d24343834793d4c5a3b447d9c2a2bc353fe809a91e5af6871197848",
+  "all8_launchpins_verified": true,
+  "independent_checks": "Full256histmass/top8rank/rangechoices/escapecomplement/groupmass/weightedtail/overflowcounts/bytes/old5151weight+fragmentSHA recomputed onCPU. Original reviewed production group mapping executed by successful source; tensors not archived for new offline recount.",
+  "runtime": {
+    "torch": "2.8.0+cu128",
+    "cuda": "12.8",
+    "device": "NVIDIA H100 80GB HBM3",
+    "generation_order": [
+      "qkv_gate",
+      "o",
+      "pooler",
+      "unpooler",
+      "router"
+    ]
+  },
+  "elapsed_seconds": 8.807076377997873,
+  "seeds": [
+    5151,
+    60631
+  ],
+  "scope": "Two actual CUDA generated seeds; pooler incumbentM1/M8 geometry and unpooler incumbentM16 geometry only. Not allweightdistributions or all selectable geometries. No activation/output/JIT/prepare/nativecodec/performance measurement.",
+  "rows": [
+    {
+      "seed": 5151,
+      "layer": "pooler",
+      "shape": [
+        4096,
+        8192
+      ],
+      "raw_weight_sha256": "b56f76d32015a8552987feb0cee8a3ffe9de968f8d87604ad89c4325d1aa2b72",
+      "fragment_sha256": "5a860d3d91483a14c3cd593033e9b3bcc10d47829e970f16344851cf75d216f1",
+      "geometry": [
+        2,
+        16,
+        8,
+        1,
+        1,
+        0
+      ],
+      "codebooks": {
+        "aligned_C11_range": {
+          "table": [
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121
+          ],
+          "repairs": 454059,
+          "repair_fraction": 0.013532012701034546,
+          "groups": 4096,
+          "min": 69,
+          "p50": 111,
+          "p95": 128,
+          "p99": 136,
+          "max": 147,
+          "groups_over32": 4096,
+          "groups_over64": 4096,
+          "all_fit128B": false,
+          "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46661640,
+          "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1291948
+        },
+        "best_contiguous_exp8": {
+          "table": [
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121
+          ],
+          "repairs": 454059,
+          "repair_fraction": 0.013532012701034546,
+          "groups": 4096,
+          "min": 69,
+          "p50": 111,
+          "p95": 128,
+          "p99": 136,
+          "max": 147,
+          "groups_over32": 4096,
+          "groups_over64": 4096,
+          "all_fit128B": false,
+          "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46661640,
+          "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1291948
+        },
+        "global_top8_exp8": {
+          "table": [
+            120,
+            119,
+            121,
+            118,
+            117,
+            116,
+            115,
+            114
+          ],
+          "repairs": 454059,
+          "repair_fraction": 0.013532012701034546,
+          "groups": 4096,
+          "min": 69,
+          "p50": 111,
+          "p95": 128,
+          "p99": 136,
+          "max": 147,
+          "groups_over32": 4096,
+          "groups_over64": 4096,
+          "all_fit128B": false,
+          "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46661640,
+          "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1291948
+        }
+      },
+      "top8_is_contiguous_and_equals_best_affine": true,
+      "dictionary_coverage_gain_vs_best_affine": 0,
+      "old_aligned_to_best_affine_repair_reduction": 0,
+      "seed5151_reconnects_exact_old_weight_and_fragment_sha": true
+    },
+    {
+      "seed": 5151,
+      "layer": "unpooler",
+      "shape": [
+        8192,
+        4096
+      ],
+      "raw_weight_sha256": "338355267153132d6043b093498d2171c05560d97a1c90cf7d7f27f3f60b84d2",
+      "fragment_sha256": "d43b30a84c74db09fdafc409943981b38fe66977aee50b9b559134f49f5a34c9",
+      "geometry": [
+        1,
+        4,
+        16,
+        1,
+        1,
+        2
+      ],
+      "codebooks": {
+        "aligned_C11_range": {
+          "table": [
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123
+          ],
+          "repairs": 835544,
+          "repair_fraction": 0.024901151657104492,
+          "groups": 2048,
+          "min": 346,
+          "p50": 408,
+          "p95": 441,
+          "p99": 456,
+          "max": 468,
+          "groups_over32": 2048,
+          "groups_over64": 2048,
+          "all_fit128B": false,
+          "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46399496,
+          "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 3080032
+        },
+        "best_contiguous_exp8": {
+          "table": [
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122
+          ],
+          "repairs": 420145,
+          "repair_fraction": 0.012521296739578247,
+          "groups": 2048,
+          "min": 159,
+          "p50": 205,
+          "p95": 228,
+          "p99": 240,
+          "max": 258,
+          "groups_over32": 2048,
+          "groups_over64": 2048,
+          "all_fit128B": false,
+          "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46399496,
+          "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1418436
+        },
+        "global_top8_exp8": {
+          "table": [
+            120,
+            121,
+            119,
+            118,
+            117,
+            122,
+            116,
+            115
+          ],
+          "repairs": 420145,
+          "repair_fraction": 0.012521296739578247,
+          "groups": 2048,
+          "min": 159,
+          "p50": 205,
+          "p95": 228,
+          "p99": 240,
+          "max": 258,
+          "groups_over32": 2048,
+          "groups_over64": 2048,
+          "all_fit128B": false,
+          "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46399496,
+          "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1418436
+        }
+      },
+      "top8_is_contiguous_and_equals_best_affine": true,
+      "dictionary_coverage_gain_vs_best_affine": 0,
+      "old_aligned_to_best_affine_repair_reduction": 415399,
+      "seed5151_reconnects_exact_old_weight_and_fragment_sha": true
+    },
+    {
+      "seed": 60631,
+      "layer": "pooler",
+      "shape": [
+        4096,
+        8192
+      ],
+      "raw_weight_sha256": "be29ffd5880406c920c854be02b5c20890d0771740012e091a31e987911da4d9",
+      "fragment_sha256": "dedbb08efc558d5f701b1bada14c9320885593d96af42948fbe786e30b5f1783",
+      "geometry": [
+        2,
+        16,
+        8,
+        1,
+        1,
+        0
+      ],
+      "codebooks": {
+        "aligned_C11_range": {
+          "table": [
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121
+          ],
+          "repairs": 455150,
+          "repair_fraction": 0.013564527034759521,
+          "groups": 4096,
+          "min": 76,
+          "p50": 111,
+          "p95": 129,
+          "p99": 136,
+          "max": 154,
+          "groups_over32": 4096,
+          "groups_over64": 4096,
+          "all_fit128B": false,
+          "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46661640,
+          "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1296312
+        },
+        "best_contiguous_exp8": {
+          "table": [
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121
+          ],
+          "repairs": 455150,
+          "repair_fraction": 0.013564527034759521,
+          "groups": 4096,
+          "min": 76,
+          "p50": 111,
+          "p95": 129,
+          "p99": 136,
+          "max": 154,
+          "groups_over32": 4096,
+          "groups_over64": 4096,
+          "all_fit128B": false,
+          "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46661640,
+          "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1296312
+        },
+        "global_top8_exp8": {
+          "table": [
+            120,
+            119,
+            121,
+            118,
+            117,
+            116,
+            115,
+            114
+          ],
+          "repairs": 455150,
+          "repair_fraction": 0.013564527034759521,
+          "groups": 4096,
+          "min": 76,
+          "p50": 111,
+          "p95": 129,
+          "p99": 136,
+          "max": 154,
+          "groups_over32": 4096,
+          "groups_over64": 4096,
+          "all_fit128B": false,
+          "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46661640,
+          "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1296312
+        }
+      },
+      "top8_is_contiguous_and_equals_best_affine": true,
+      "dictionary_coverage_gain_vs_best_affine": 0,
+      "old_aligned_to_best_affine_repair_reduction": 0
+    },
+    {
+      "seed": 60631,
+      "layer": "unpooler",
+      "shape": [
+        8192,
+        4096
+      ],
+      "raw_weight_sha256": "cf8489a2d8bcefaddf4d6232878b2c4751ba164ddedd14cbd60eab5b2055e0d8",
+      "fragment_sha256": "7dfaacda3d2b8befed0ebeb44f225e83ae3aae9daa2d7e7282a466509b9367df",
+      "geometry": [
+        1,
+        4,
+        16,
+        1,
+        1,
+        2
+      ],
+      "codebooks": {
+        "aligned_C11_range": {
+          "table": [
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123
+          ],
+          "repairs": 835275,
+          "repair_fraction": 0.024893134832382202,
+          "groups": 2048,
+          "min": 336,
+          "p50": 408,
+          "p95": 441,
+          "p99": 455,
+          "max": 480,
+          "groups_over32": 2048,
+          "groups_over64": 2048,
+          "all_fit128B": false,
+          "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46399496,
+          "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 3078956
+        },
+        "best_contiguous_exp8": {
+          "table": [
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122
+          ],
+          "repairs": 419979,
+          "repair_fraction": 0.01251634955406189,
+          "groups": 2048,
+          "min": 150,
+          "p50": 205,
+          "p95": 228,
+          "p99": 239,
+          "max": 252,
+          "groups_over32": 2048,
+          "groups_over64": 2048,
+          "all_fit128B": false,
+          "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46399496,
+          "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1417772
+        },
+        "global_top8_exp8": {
+          "table": [
+            120,
+            121,
+            119,
+            118,
+            117,
+            122,
+            116,
+            115
+          ],
+          "repairs": 419979,
+          "repair_fraction": 0.01251634955406189,
+          "groups": 2048,
+          "min": 150,
+          "p50": 205,
+          "p95": 228,
+          "p99": 239,
+          "max": 252,
+          "groups_over32": 2048,
+          "groups_over64": 2048,
+          "all_fit128B": false,
+          "nominal_fixed_11bit_bytes_UNREPRESENTABLE": 46399496,
+          "minimum_extra_old32bit_overflow_bytes_ignoring_index_padding": 1417772
+        }
+      },
+      "top8_is_contiguous_and_equals_best_affine": true,
+      "dictionary_coverage_gain_vs_best_affine": 0,
+      "old_aligned_to_best_affine_repair_reduction": 415296
+    }
+  ],
+  "conclusions": [
+    "All four globaltop8 codebooks are contiguous sets and exactly match bestunrestrictedaffine8. Arbitrarydictionary provides zero additionalcoverage in these observedfixtures.",
+    "Pooler gets nochange versusoldalignedwindow. Unpooler oddbase115 instead of116 nearlyhalvesrepaircount, but everygroup stilloverflows32 AND64recordbudgets forbothseeds.",
+    "Therefore an encoding-onlyfixed8/11bit swap cannot use the original128B/32word escape representation on anyobservedgroup. This is a measuredrepresentationfeasibilityfailure, not a numeric/kernel/performancefailure or a familyrejection.",
+    "46.40\u201346.66MBnominalfixedpayload+header figures are NOT representablepackedstreams. Extraoverflowstorage/index/alignment/transportwork must beaccounted before claimingbytesaved.",
+    "No8entrylookup needed iftheseobservedsets areused: simple full-expbaseoffsetrepresents thesame8values. Runtimecost and transfer tootherfixtures remainUNKNOWN."
+  ],
+  "precise_next": {
+    "do_not_build": "No arbitrarytop8 nativecodec/table prototype justified by thesefixtures; it gives no coveragegain overbaseaddition and leaves everygroup overcapacity.",
+    "if_C11_family_reopened": "Use odd-base full-expwindow forunpooler ONLY as an encoding simplification, plus a genuinelychanged exceptiontransport that handles measured252\u2013258maxgrouprepairs withouttruncation and avoids oldglobaldescriptor\u2192recordcopydependency. Accountalloverflow/index/padding andactualdecodecriticalpath. ExistingC11frontier already implementedexternalrepairs andlostcurrentC12, so a capacityincrease alone is not a performancehypothesis.",
+    "smallest_next_falsifier": "First concreteCPUlayout/budget for allrecordcounts and exactlosslessbitmapping, reusingoldpackproof. Onlyif a newtransport mechanism is actuallyimplemented, one matched currentC12target control againstthatnewnativepath; not another weightstat rerun or an unchangedC11 remeasurement. No extra gate onotherusefulwork.",
+    "priority": "Continue separatelyreviewed C12quarter-stream work; no autoGPU followup from thisdiagnostic.",
+    "forecast": "UNKNOWN; bookedscoregain0"
+  },
+  "old_counterevidence": {
+    "path": "proj_rsi/candidates/gv_codec_frontier_v1/preload-analysis/actual-report.json",
+    "current_control_loss_us": {
+      "pooler": 3.216000273823738,
+      "unpooler": 8.38400050997734
+    },
+    "scope": "OldpreloadedC11 loss is retained, not a causal diagnosis of anynewtransport."
+  },
+  "cleanup": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T22:51:40Z\nTRIAL_EXIT okc-proj-gv-top8-exponent-stats-01 0\n2026-10-27T22:51:55Z\n",
+    "terminal_exit": 0
+  },
+  "internal_cleanup": {
+    "allocated": 0,
+    "reserved": 0
+  },
+  "loop": "profile->measure->hypothesis->optimize/reimplement->test->validate->stack->submit measuredgains->learn->reprioritize->repeat;idle<=10s;proj_rsi/ITERATION.md"
+}

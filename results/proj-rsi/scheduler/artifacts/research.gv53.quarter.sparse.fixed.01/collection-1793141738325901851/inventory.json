@@ -1,0 +1,56 @@
+{
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T22:54:25Z\ntorch_import_and_device\ncompile_two_functions\n[1/3] c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=gv53_sparse_0e17b3c566c46a7b6981 -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -fPIC -std=c++17 -c /root/.cache/torch_extensions/gv53_sparse_0e17b3c566c46a7b6981/main.cpp -o main.o \n[2/3] /usr/local/cuda/bin/nvcc --generate-dependencies-with-compile --dependency-output cuda.cuda.o.d -DTORCH_EXTENSION_NAME=gv53_sparse_0e17b3c566c46a7b6981 -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_90a,code=sm_90a --compiler-options '-fPIC' -O3 -lineinfo -gencode=arch=compute_90a,code=sm_90a -std=c++17 -c /root/.cache/torch_extensions/gv53_sparse_0e17b3c566c46a7b6981/cuda.cu -o cuda.cuda.o \n/root/.cache/torch_extensions/gv53_sparse_0e17b3c566c46a7b6981/cuda.cu(1112): warning #177-D: variable \"LDEC\" was declared but never referenced\n    constexpr bool LX = LAD != 1, LDEC = LAD == 0 || LAD >= 3, LMMA = LAD == 0 || LAD == 4;\n                                  ^\n\nRemark: The warnings can be suppressed with \"-diag-suppress <warning-number>\"\n\n/root/.cache/torch_extensions/gv53_sparse_0e17b3c566c46a7b6981/cuda.cu(1112): warning #177-D: variable \"LMMA\" was declared but never referenced\n    constexpr bool LX = LAD != 1, LDEC = LAD == 0 || LAD >= 3, LMMA = LAD == 0 || LAD == 4;\n                                                               ^\n\n/root/.cache/torch_extensions/gv53_sparse_0e17b3c566c46a7b6981/cuda.cu(1245): warning #177-D: variable \"nx\" was declared but never referenced\n    uint32_t e = ~0u, nx = ~0u;\n                      ^\n\n/root/.cache/torch_extensions/gv53_sparse_0e17b3c566c46a7b6981/cuda.cu(1246): warning #177-D: variable \"ep\" was declared but never referenced\n    int ep = 0;\n        ^\n\n[3/3] c++ main.o cuda.cuda.o -shared -L/opt/conda/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o gv53_sparse_0e17b3c566c46a7b6981.so\nactual_task_weight_and_pack\nfixed_pooler_M8\ncomplete\nTRIAL_EXIT okc-proj-gv53-quarter-sparse-01 0\n2026-10-27T22:55:18Z\n",
+    "terminal_exit": 0
+  },
+  "collected_at": 1793141739.268451,
+  "dispatch": {
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv53-quarter-sparse-01"
+    ],
+    "claimed_at": 1793141655.533098,
+    "container": "okc-proj-gv53-quarter-sparse-01",
+    "controller_owner": "root",
+    "guard_pid": 608124,
+    "host": "root@107.170.6.60",
+    "host_log": "/root/okc/logs/scheduler/research.gv53.quarter.sparse.fixed.01.host.log",
+    "job_id": "research.gv53.quarter.sparse.fixed.01",
+    "launch_requested_at": 1793141665.0407455,
+    "phase": "RUNNING",
+    "remote_repo": "/root/okc",
+    "source_pins": {
+      "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+      "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+      "proj_rsi/candidates/gv53_quarter_sparse_header_v1/pilot.cu": "f1fa67927bf0ea43c64642934ea650da8f42b918e383c8e7b9e17ee52bb855da",
+      "proj_rsi/candidates/gv53_quarter_sparse_trial_v1/binding.cu": "fec24ec99c87c22a67cecedb851b28617d7c2c509a80f47469e2cf9f07da4e19",
+      "proj_rsi/candidates/gv53_quarter_sparse_trial_v1/driver.py": "dc64beca5e866a78d24f71fcddd00d92d2538e73b60737e2a3844bd947b82a52",
+      "proj_rsi/candidates/gv53_quarter_sparse_trial_v1/manifest.json": "ff057ff78944e6264ce72e0dbbe4b3314dc18ad40afaac8001ea94990b06e842",
+      "proj_rsi/candidates/gv53_quarter_stream_v1/transport.py": "965d21022c14fb0ec7a4b68b1e54f6109443184ca0119dbe13b0adc75f6d3ab9",
+      "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+      "proj_rsi/scheduling/reviews/gv53-quarter-sparse-header-v1-source.md": "e4c4571f5ed791d2f366844a2c46126f6ae6becf10c1cc5d7c7c4e4c234ae568",
+      "proj_rsi/scheduling/reviews/gv53-quarter-sparse-three-arm-01.md": "ae1cf02d5e1e5b591d0989d61508379f183404b744a02930f8fe3fdaeb9a072b",
+      "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+      "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+      "results/proj-rsi/scheduler/artifacts/research.gv53.quarter.stream.fixed.01/collection-1793140874912701666/logs/scheduler/gv53-quarter-stream-01/run/actual.so": "4b85c059c953e91989f6d613e8148269cfbb8e0480ab120585abcac492c3e44c"
+    }
+  },
+  "files": {
+    "logs/scheduler/gv53-quarter-sparse-01/run/actual.cu": "0e17b3c566c46a7b6981135a5aadf49a88e454ed1cd3fa1c07e60e56c50d6aa1",
+    "logs/scheduler/gv53-quarter-sparse-01/run/actual.so": "2eb511c0af3c4ce5bd3990e45d376c64d12016b876a2109ac0f263eafc8c17a7",
+    "logs/scheduler/gv53-quarter-sparse-01/run/raw.jsonl": "f26b4fa60c3dd52996b6b490c3654325220c1579fd04853141ab817ea5d68207",
+    "logs/scheduler/gv53-quarter-sparse-01/run/result.json": "81e2e007a5a7bb20f306589c2c96cafa8c01b9f38cbfd30ae97dd005802b53db",
+    "logs/scheduler/research.gv53.quarter.sparse.fixed.01.host.log": "c6d981b6208d9c6cf4fa2524a5feb6062af9543da0d8da8874f15638b118b3ec"
+  },
+  "job_id": "research.gv53.quarter.sparse.fixed.01",
+  "missing": [],
+  "symlinks_not_followed_or_materialized": {},
+  "terminal_exit": 0,
+  "validation": "ROOT_VALIDATION_REQUIRED_NO_PERFORMANCE_ADMISSION"
+}

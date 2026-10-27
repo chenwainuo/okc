@@ -1,0 +1,648 @@
+{
+  "new": {
+    "symbol": "_Z20gv_unpool16_deltakeyILi1ELi2ELi2ELi1ELi4ELi16ELi1ELi1ELi2ELi1EEv1G",
+    "instructions": 1992,
+    "opcodes": {
+      "LDC": 3,
+      "S2R": 20,
+      "ULDC": 18,
+      "IMAD.MOV.U32": 20,
+      "ULDC.64": 5,
+      "SHF.R.U32.HI": 37,
+      "IMAD": 24,
+      "IMAD.SHL.U32": 22,
+      "IMAD.WIDE": 4,
+      "SHF.R.S32.HI": 14,
+      "SHF.L.U64.HI": 2,
+      "LOP3.LUT": 495,
+      "LEA": 12,
+      "IMAD.WIDE.U32": 7,
+      "LEA.HI.X": 9,
+      "IMAD.IADD": 25,
+      "VIMNMX": 3,
+      "LDG.E": 1,
+      "VIADD": 153,
+      "LDG.E.NA.128.CONSTANT": 48,
+      "VIADDMNMX": 1,
+      "USHF.R.S32.HI": 2,
+      "LDG.E.128.CONSTANT": 64,
+      "SHFL.IDX": 17,
+      "SHF.R.W.U32": 64,
+      "PRMT": 262,
+      "BRA": 54,
+      "SHF.L.U32": 16,
+      "ISETP.GT.U32.AND": 1,
+      "ISETP.NE.U32.AND": 256,
+      "P2R": 16,
+      "ISETP.NE.AND": 46,
+      "HMMA.16816.F32.BF16": 128,
+      "ISETP.GT.AND": 16,
+      "NOP": 18,
+      "S2UR": 2,
+      "UMOV": 1,
+      "ULEA": 1,
+      "STS.128": 2,
+      "BAR.SYNC.DEFER_BLOCKING": 1,
+      "EXIT": 3,
+      "BSSY": 4,
+      "IADD3": 3,
+      "LDC.64": 1,
+      "LEA.HI": 9,
+      "ISETP.GE.AND": 7,
+      "LDS.128": 12,
+      "FADD": 36,
+      "F2FP.BF16.F32.PACK_AB": 9,
+      "STG.E.U16": 12,
+      "BSYNC": 4,
+      "IMAD.X": 2
+    },
+    "first_repair": [
+      {
+        "pc": "0730",
+        "predicate": null,
+        "text": "SHF.R.U32.HI R7, RZ, 0x6, R3.reuse"
+      },
+      {
+        "pc": "0740",
+        "predicate": null,
+        "text": "LOP3.LUT R24, R3, 0x7f, RZ, 0xc0, !PT"
+      },
+      {
+        "pc": "0750",
+        "predicate": null,
+        "text": "LOP3.LUT R7, R7, 0x10, RZ, 0xc0, !PT"
+      },
+      {
+        "pc": "0760",
+        "predicate": null,
+        "text": "SHF.R.U32.HI R3, RZ, 0x9, R3"
+      },
+      {
+        "pc": "0770",
+        "predicate": null,
+        "text": "LOP3.LUT R7, R7, 0x8, RZ, 0xfc, !PT"
+      },
+      {
+        "pc": "0780",
+        "predicate": null,
+        "text": "LOP3.LUT R3, R3, 0x7fd, RZ, 0xc0, !PT"
+      },
+      {
+        "pc": "0790",
+        "predicate": null,
+        "text": "SHF.L.U32 R24, R24, R7, RZ"
+      },
+      {
+        "pc": "07a0",
+        "predicate": null,
+        "text": "ISETP.GT.U32.AND P6, PT, R2, 0x1e, PT"
+      },
+      {
+        "pc": "07b0",
+        "predicate": null,
+        "text": "IMAD R7, R0, -0x40, R3"
+      },
+      {
+        "pc": "07c0",
+        "predicate": null,
+        "text": "VIADD R2, R2, 0x1"
+      },
+      {
+        "pc": "07d0",
+        "predicate": null,
+        "text": "IMAD.MOV.U32 R3, RZ, RZ, -0x1"
+      },
+      {
+        "pc": "07e0",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P2, PT, R7.reuse, RZ, PT"
+      },
+      {
+        "pc": "07f0",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P3, PT, R7, 0x4, PT"
+      },
+      {
+        "pc": "0800",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P4, PT, R7.reuse, 0x8, PT"
+      },
+      {
+        "pc": "0810",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P5, PT, R7.reuse, 0xc, PT"
+      },
+      {
+        "pc": "0820",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P0, PT, R7.reuse, 0x10, PT"
+      },
+      {
+        "pc": "0830",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P1, PT, R7, 0x14, PT"
+      },
+      {
+        "pc": "0840",
+        "predicate": "@!P2",
+        "text": "LOP3.LUT R72, R72, R24.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0850",
+        "predicate": "@!P3",
+        "text": "LOP3.LUT R73, R73, R24.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0860",
+        "predicate": "@!P4",
+        "text": "LOP3.LUT R74, R74, R24, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0870",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P2, PT, R7.reuse, 0x18, PT"
+      },
+      {
+        "pc": "0880",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P3, PT, R7.reuse, 0x1c, PT"
+      },
+      {
+        "pc": "0890",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P4, PT, R7, 0x20, PT"
+      },
+      {
+        "pc": "08a0",
+        "predicate": "@!P5",
+        "text": "LOP3.LUT R75, R75, R24.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "08b0",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P5, PT, R7, 0x24, PT"
+      },
+      {
+        "pc": "08c0",
+        "predicate": "@!P0",
+        "text": "LOP3.LUT R68, R68, R24.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "08d0",
+        "predicate": null,
+        "text": "P2R R25, PR, RZ, 0x20"
+      },
+      {
+        "pc": "08e0",
+        "predicate": "@!P1",
+        "text": "LOP3.LUT R69, R69, R24.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "08f0",
+        "predicate": "@!P2",
+        "text": "LOP3.LUT R70, R70, R24, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0900",
+        "predicate": "@!P3",
+        "text": "LOP3.LUT R71, R71, R24.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0910",
+        "predicate": "@!P4",
+        "text": "LOP3.LUT R76, R76, R24, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0920",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P0, PT, R7.reuse, 0x28, PT"
+      },
+      {
+        "pc": "0930",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P1, PT, R7.reuse, 0x2c, PT"
+      },
+      {
+        "pc": "0940",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P2, PT, R7.reuse, 0x30, PT"
+      },
+      {
+        "pc": "0950",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P3, PT, R7, 0x34, PT"
+      },
+      {
+        "pc": "0960",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P4, PT, R7.reuse, 0x38, PT"
+      },
+      {
+        "pc": "0970",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P5, PT, R7, 0x3c, PT"
+      },
+      {
+        "pc": "0980",
+        "predicate": "@P6",
+        "text": "BRA 0x9a0"
+      },
+      {
+        "pc": "0990",
+        "predicate": null,
+        "text": "SHFL.IDX PT, R3, R5, R2, 0x1f"
+      },
+      {
+        "pc": "09a0",
+        "predicate": null,
+        "text": "ISETP.NE.AND P6, PT, R25, RZ, PT"
+      },
+      {
+        "pc": "09b0",
+        "predicate": "@!P0",
+        "text": "LOP3.LUT R78, R78, R24.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "09c0",
+        "predicate": "@!P1",
+        "text": "LOP3.LUT R79, R79, R24.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "09d0",
+        "predicate": "@!P2",
+        "text": "LOP3.LUT R96, R96, R24.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "09e0",
+        "predicate": "@!P3",
+        "text": "LOP3.LUT R97, R97, R24.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "09f0",
+        "predicate": "@!P4",
+        "text": "LOP3.LUT R98, R98, R24, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0a00",
+        "predicate": "@!P5",
+        "text": "LOP3.LUT R99, R99, R24.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0a10",
+        "predicate": "@!P6",
+        "text": "LOP3.LUT R77, R77, R24, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0a20",
+        "predicate": null,
+        "text": "LOP3.LUT P6, RZ, R3, 0xfff00000, RZ, 0xc0, !PT"
+      },
+      {
+        "pc": "0a30",
+        "predicate": "@!P6",
+        "text": "BRA 0x730"
+      }
+    ]
+  },
+  "control": {
+    "symbol": "_Z10gv_predxorILi1ELi2ELi2ELi1ELi4ELi16ELi1ELi1ELi2ELi1EEv1G",
+    "instructions": 2080,
+    "opcodes": {
+      "LDC": 3,
+      "S2R": 5,
+      "ULDC": 18,
+      "IMAD.MOV.U32": 64,
+      "ULDC.64": 5,
+      "SHF.R.U32.HI": 68,
+      "LOP3.LUT": 511,
+      "IMAD": 23,
+      "IMAD.SHL.U32": 6,
+      "IMAD.WIDE": 4,
+      "SHF.R.S32.HI": 14,
+      "SHF.L.U64.HI": 2,
+      "LEA": 12,
+      "IMAD.WIDE.U32": 7,
+      "LEA.HI.X": 9,
+      "IMAD.IADD": 10,
+      "VIMNMX": 3,
+      "LDG.E": 1,
+      "VIADD": 153,
+      "LDG.E.NA.128.CONSTANT": 48,
+      "VIADDMNMX": 1,
+      "USHF.R.S32.HI": 2,
+      "LDG.E.128.CONSTANT": 64,
+      "SHFL.IDX": 17,
+      "SHF.R.W.U32": 64,
+      "PRMT": 262,
+      "BRA": 54,
+      "ISETP.NE.U32.AND": 16,
+      "ISETP.EQ.U32.AND": 272,
+      "SHF.L.U32": 16,
+      "P2R": 16,
+      "ISETP.GT.U32.AND": 1,
+      "ISETP.NE.AND": 46,
+      "HMMA.16816.F32.BF16": 128,
+      "ISETP.GT.AND": 16,
+      "NOP": 30,
+      "S2UR": 2,
+      "UMOV": 1,
+      "ULEA": 1,
+      "STS.128": 2,
+      "BAR.SYNC.DEFER_BLOCKING": 1,
+      "EXIT": 3,
+      "BSSY": 4,
+      "IADD3": 3,
+      "LDC.64": 1,
+      "LEA.HI": 9,
+      "ISETP.GE.AND": 7,
+      "LDS.128": 12,
+      "FADD": 36,
+      "F2FP.BF16.F32.PACK_AB": 9,
+      "STG.E.U16": 12,
+      "BSYNC": 4,
+      "IMAD.X": 2
+    },
+    "first_repair": [
+      {
+        "pc": "0730",
+        "predicate": null,
+        "text": "SHF.R.U32.HI R20, RZ, 0xf, R3.reuse"
+      },
+      {
+        "pc": "0740",
+        "predicate": null,
+        "text": "SHF.R.U32.HI R0, RZ, 0x9, R3.reuse"
+      },
+      {
+        "pc": "0750",
+        "predicate": null,
+        "text": "LOP3.LUT R23, R20, 0x1f, RZ, 0xc0, !PT"
+      },
+      {
+        "pc": "0760",
+        "predicate": null,
+        "text": "LOP3.LUT R20, R0, 0x1, RZ, 0xc0, !PT"
+      },
+      {
+        "pc": "0770",
+        "predicate": null,
+        "text": "ISETP.NE.U32.AND P5, PT, R100, R23, PT"
+      },
+      {
+        "pc": "0780",
+        "predicate": null,
+        "text": "SHF.R.U32.HI R0, RZ, 0xb, R3"
+      },
+      {
+        "pc": "0790",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P5, PT, R20, RZ, !P5"
+      },
+      {
+        "pc": "07a0",
+        "predicate": null,
+        "text": "LOP3.LUT R0, R0, 0xf, RZ, 0xc0, !PT"
+      },
+      {
+        "pc": "07b0",
+        "predicate": null,
+        "text": "SHF.R.U32.HI R21, RZ, 0x6, R3"
+      },
+      {
+        "pc": "07c0",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P6, PT, R0.reuse, 0x3, P5"
+      },
+      {
+        "pc": "07d0",
+        "predicate": null,
+        "text": "LOP3.LUT R21, R21, 0x10, RZ, 0xc0, !PT"
+      },
+      {
+        "pc": "07e0",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P2, PT, R0, RZ, P5"
+      },
+      {
+        "pc": "07f0",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P3, PT, R0.reuse, 0x1, P5"
+      },
+      {
+        "pc": "0800",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P4, PT, R0.reuse, 0x2, P5"
+      },
+      {
+        "pc": "0810",
+        "predicate": null,
+        "text": "LOP3.LUT R20, R3, 0x7f, RZ, 0xc0, !PT"
+      },
+      {
+        "pc": "0820",
+        "predicate": null,
+        "text": "IMAD.MOV.U32 R3, RZ, RZ, -0x1"
+      },
+      {
+        "pc": "0830",
+        "predicate": null,
+        "text": "LOP3.LUT R21, R21, 0x8, RZ, 0xfc, !PT"
+      },
+      {
+        "pc": "0840",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P0, PT, R0, 0x4, P5"
+      },
+      {
+        "pc": "0850",
+        "predicate": null,
+        "text": "SHF.L.U32 R20, R20, R21, RZ"
+      },
+      {
+        "pc": "0860",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P1, PT, R0.reuse, 0x5, P5"
+      },
+      {
+        "pc": "0870",
+        "predicate": "@P6",
+        "text": "LOP3.LUT R79, R79, R20.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0880",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P6, PT, R0, 0x9, P5"
+      },
+      {
+        "pc": "0890",
+        "predicate": "@P2",
+        "text": "LOP3.LUT R76, R76, R20.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "08a0",
+        "predicate": "@P3",
+        "text": "LOP3.LUT R77, R77, R20.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "08b0",
+        "predicate": "@P4",
+        "text": "LOP3.LUT R78, R78, R20, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "08c0",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P2, PT, R0.reuse, 0x6, P5"
+      },
+      {
+        "pc": "08d0",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P3, PT, R0.reuse, 0x7, P5"
+      },
+      {
+        "pc": "08e0",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P4, PT, R0, 0x8, P5"
+      },
+      {
+        "pc": "08f0",
+        "predicate": null,
+        "text": "P2R R21, PR, RZ, 0x40"
+      },
+      {
+        "pc": "0900",
+        "predicate": null,
+        "text": "ISETP.GT.U32.AND P6, PT, R2, 0x1e, PT"
+      },
+      {
+        "pc": "0910",
+        "predicate": "@P0",
+        "text": "LOP3.LUT R68, R68, R20, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0920",
+        "predicate": "@P1",
+        "text": "LOP3.LUT R69, R69, R20.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0930",
+        "predicate": "@P2",
+        "text": "LOP3.LUT R70, R70, R20.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0940",
+        "predicate": "@P3",
+        "text": "LOP3.LUT R71, R71, R20.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0950",
+        "predicate": "@P4",
+        "text": "LOP3.LUT R64, R64, R20, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0960",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P0, PT, R0.reuse, 0xa, P5"
+      },
+      {
+        "pc": "0970",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P1, PT, R0, 0xb, P5"
+      },
+      {
+        "pc": "0980",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P2, PT, R0.reuse, 0xc, P5"
+      },
+      {
+        "pc": "0990",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P3, PT, R0.reuse, 0xd, P5"
+      },
+      {
+        "pc": "09a0",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P4, PT, R0.reuse, 0xe, P5"
+      },
+      {
+        "pc": "09b0",
+        "predicate": null,
+        "text": "ISETP.EQ.U32.AND P5, PT, R0, 0xf, P5"
+      },
+      {
+        "pc": "09c0",
+        "predicate": null,
+        "text": "VIADD R0, R2, 0x1"
+      },
+      {
+        "pc": "09d0",
+        "predicate": "@P6",
+        "text": "BRA 0x9f0"
+      },
+      {
+        "pc": "09e0",
+        "predicate": null,
+        "text": "SHFL.IDX PT, R3, R5, R0, 0x1f"
+      },
+      {
+        "pc": "09f0",
+        "predicate": null,
+        "text": "ISETP.NE.AND P6, PT, R21, RZ, PT"
+      },
+      {
+        "pc": "0a00",
+        "predicate": null,
+        "text": "IMAD.MOV.U32 R2, RZ, RZ, R0"
+      },
+      {
+        "pc": "0a10",
+        "predicate": "@P0",
+        "text": "LOP3.LUT R66, R66, R20.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0a20",
+        "predicate": "@P1",
+        "text": "LOP3.LUT R67, R67, R20.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0a30",
+        "predicate": "@P2",
+        "text": "LOP3.LUT R92, R92, R20.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0a40",
+        "predicate": "@P3",
+        "text": "LOP3.LUT R93, R93, R20.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0a50",
+        "predicate": "@P4",
+        "text": "LOP3.LUT R94, R94, R20, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0a60",
+        "predicate": "@P5",
+        "text": "LOP3.LUT R95, R95, R20.reuse, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0a70",
+        "predicate": "@P6",
+        "text": "LOP3.LUT R65, R65, R20, RZ, 0x3c, !PT"
+      },
+      {
+        "pc": "0a80",
+        "predicate": null,
+        "text": "LOP3.LUT P6, R21, R3, 0xfff00000, RZ, 0xc0, !PT"
+      },
+      {
+        "pc": "0a90",
+        "predicate": "@!P6",
+        "text": "BRA 0x730"
+      },
+      {
+        "pc": "0aa0",
+        "predicate": null,
+        "text": "IMAD.MOV.U32 R2, RZ, RZ, R21"
+      }
+    ]
+  }
+}

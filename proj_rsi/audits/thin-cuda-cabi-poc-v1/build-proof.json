@@ -1,0 +1,52 @@
+{
+  "state": "CPU_COMPILE_LINK_ONLY_GPU_UNRUN",
+  "source_pilot": "proj_rsi/candidates/gv53_keyed_half_v1/pilot.cu",
+  "source_pilot_sha256": "f79c659ff30e548c51482a6b132c3f48ff5ee81bf7ad6802edfe679bd43be65d",
+  "stages": [
+    {
+      "name": "native_compile",
+      "argv": [
+        "/usr/local/cuda-12.8/bin/nvcc",
+        "-c",
+        "-std=c++17",
+        "-arch=sm_90a",
+        "-O3",
+        "-lineinfo",
+        "-Xptxas=-v",
+        "-Xcompiler",
+        "-fPIC",
+        "/home/ubuntu/okc/proj_rsi/audits/thin-cuda-cabi-poc-v1/target.cu",
+        "-o",
+        "/home/ubuntu/okc/proj_rsi/audits/thin-cuda-cabi-poc-v1/target.o"
+      ],
+      "seconds": 1.541179582476616,
+      "exit": 0
+    },
+    {
+      "name": "host_link",
+      "argv": [
+        "/usr/local/cuda-12.8/bin/nvcc",
+        "-shared",
+        "-cudart",
+        "shared",
+        "-Xcompiler",
+        "-fPIC",
+        "/home/ubuntu/okc/proj_rsi/audits/thin-cuda-cabi-poc-v1/target.o",
+        "-o",
+        "/home/ubuntu/okc/proj_rsi/audits/thin-cuda-cabi-poc-v1/libgv53_thin.so"
+      ],
+      "seconds": 0.06448234245181084,
+      "exit": 0
+    }
+  ],
+  "total_compile_link_seconds": 1.6056619249284267,
+  "CUDA_version": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Feb_21_20:23:50_PST_2025\nCuda compilation tools, release 12.8, V12.8.93\nBuild cuda_12.8.r12.8/compiler.35583870_0\n",
+  "shared_library_sha256": "2219e2a4d1fbd144b594110ed4ca24a7cc3135c113699e6bbf883b2b2ec322d8",
+  "Torch_headers_or_libraries_used": false,
+  "CUDA_DSO_loaded": false,
+  "GPU_calls": 0,
+  "limits": [
+    "LocalCUDA12.8 CPU compile/link; targetimage launch/ABI/graph capture/numerics/occupancy untested.",
+    "Not a paired build comparison with remote Torch load_inline; savings unknown."
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "id": "research.gv.top8.exponent.stats.01",
+  "resource": "gpu",
+  "kind": "diagnostic",
+  "state": "BACKLOG",
+  "author": "moe_result_repair",
+  "created_at": 1793132964.9584455,
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 0
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "Does arbitrary8 full exponents lower actual repair tails enough for old128B/32record groups versus aligned and unrestricted affine8? Weight statistics only."
+    },
+    "basis": "No native codec/runtime implementation or gain forecast. Existing high7hist is insufficient; weight-only data can falsify capacity cheaply.",
+    "confidence": "unknown",
+    "evidence": [
+      "proj_rsi/candidates/gv_codec_frontier_v1/stats-descriptor.json",
+      "proj_rsi/candidates/gv_codec_frontier_v1/stats-cpu-proof.txt"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 120,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 10
+  },
+  "files": {
+    "proj_rsi/candidates/gv_top8_exponent_stats_v1/stats.py": "ff04b84167fb412f5339c4f2ca02f3c117bed36abecf6863c437ba23401cc096",
+    "proj_rsi/candidates/gv_codec_frontier_v1/cuda_weight_stats.py": "abc260909c0b6ac174bd60f92ffaedfea2c519b7b424978979ab538622cd0d7e",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/candidates/gv_top8_exponent_stats_v1/manifest.json": "67e2e9378b4570cf0ebfdc593db4e24fc7adf9126cb64d232f2bfc011c398213",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/scheduling/reviews/gv-top8-exponent-stats-01.md": "0a32f2c28d24343834793d4c5a3b447d9c2a2bc353fe809a91e5af6871197848"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-gv-top8-exponent-stats-01",
+    "inner_seconds": 90,
+    "outer_seconds": 120,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/gv_top8_exponent_stats_v1/stats.py",
+      "--output",
+      "/okc/logs/scheduler/gv-top8-exponent-stats-01/stats.json",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/gv-top8-exponent-stats-01.md",
+      "--review-sha256",
+      "0a32f2c28d24343834793d4c5a3b447d9c2a2bc353fe809a91e5af6871197848"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv-top8-exponent-stats-01"
+    ]
+  },
+  "annotations": {
+    "scope": "Global per-matrix8entry FULL8bit exponent codebook; original productionGVgroup capacity. Not per-group adaptive dictionaries or high7top8.",
+    "seeds": "5151 known actualfixture plus60631 prospective; oldhashmatch recorded, not imposed. CUDA RNG only; CPUproxy cannot establish actual tails.",
+    "no_native_work": "No prepare/JIT/nativecodec/activation/output/performance tuning. Only actual reference CUDA W generation andCPU pack/capacity statistics.",
+    "budget": "75s internal checks;90inner120outer covers2seeds. Existing exclusive worker/cleanup unchanged.",
+    "status": "BACKLOG_FOCUSED_GO_GPU_UNRUN",
+    "bytes": "11bitpayload +128B/group+8Bmatrix table prospective only; overflows nevertruncate. New decoder/stream notimplemented.",
+    "review_binding": "Independent weight-only source/geometry/cleanup GO; root prices and admits."
+  },
+  "problem": "muse_bf16_proj",
+  "review": {
+    "actor": "measurement_contract_audit",
+    "path": "proj_rsi/scheduling/reviews/gv-top8-exponent-stats-01.md",
+    "sha256": "0a32f2c28d24343834793d4c5a3b447d9c2a2bc353fe809a91e5af6871197848",
+    "decision": "GO"
+  }
+}
