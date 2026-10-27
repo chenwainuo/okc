@@ -1,0 +1,9 @@
+{
+  "status": "CPU_CHECKER_ONLY_FAILURE_RETAINED",
+  "candidate_source_sha256": "a4ef0edd258dc46834f56c5453256dd270a33738feadf961b2d8717cd6171907",
+  "initial_check": "New-vs-old pre-Dwait0 instructions compared after normalizing only absolute CALL target operands",
+  "first_mismatch": {"PC": "0x880", "old": "@P2 BRA 0x3a50", "private_barrier_control": "@P2 BRA 0x3a60"},
+  "cause": "The producer branch target after the longer private-output epilogue moves16B. The corresponding core instruction/predicate is unchanged. No kernel or source repair was made.",
+  "repair": "Explicitly record only control-flow operand relocations whose destination is outside the compared core prefix. Preserve exact comparisons of every other prefix instruction and all19old full PC/predicate/instruction streams; future actual new JIT gate must use exact new canonical SASS, never this normalized diagnostic.",
+  "scope": "Checker failure, not GPU/kernel failure and not a measured outcome. No CUDA execution."
+}

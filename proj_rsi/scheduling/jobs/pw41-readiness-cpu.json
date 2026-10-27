@@ -1,0 +1,78 @@
+{
+  "id": "research.pw41.readiness.01",
+  "resource": "cpu",
+  "kind": "implementation",
+  "state": "BACKLOG",
+  "author": "sol17",
+  "created_at": 1793082021.7807422,
+  "depends_on": [],
+  "write_paths": [
+    "proj_rsi/candidates/pw41"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 32.144327774818066,
+      "p_gain": 0.1,
+      "p_valid": 0.8
+    },
+    "information": {
+      "scenario_score_us": 32.144327774818066,
+      "p_resolve": 0.7,
+      "p_followup_gain": 0.1,
+      "unblocks": [
+        "research.pw41.gpu.01"
+      ],
+      "decision": "Move only P1 epoch-ticket allocation off the W/X launch prologue; first actual source/proof/cost discriminator, then reviewed serving measurement."
+    },
+    "basis": "LOW-CONFIDENCE CONDITIONAL BUDGET SCENARIO, not measured/forecast speed: hypothetical0.5us cut on each named current-serving target, exact current a3f score arithmetic; equal subjective .1gain/.8validity reference priors. CPU envelope from author upfront quote; downstreamGPUcharged conservative quoted reservation/cap, actual duration/H200 costs unknown.",
+    "confidence": "low; current-source mechanism, no runtime evidence",
+    "evidence": [
+      "proj_rsi/audits/pw38-next-roi-opportunities.json",
+      "proj_rsi/learning_archive/registry-v3-43ede5d0.json",
+      "proj_rsi/CURRENT_STACK.md"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 4440,
+    "cpu_minutes": 60
+  },
+  "annotations": {
+    "variant": "pw41",
+    "parent": "PW38 source29e557 /score3198.6175079817267",
+    "scope": [
+      [
+        "router",
+        8
+      ],
+      [
+        "router",
+        16
+      ],
+      [
+        "router",
+        32
+      ],
+      [
+        "unpooler",
+        1
+      ],
+      [
+        "unpooler",
+        8
+      ]
+    ],
+    "source_brief_id": "pw38.next.p1-late-ticket",
+    "lessons_to_query": [
+      "counter-contract-not-name@1",
+      "composition-not-additivity@1"
+    ],
+    "hypothesis": "For the existing selected z/x P1 instances, move the even-word atomicAdd ticket allocation from the prologue to immediately before its first epoch/acquire wait. Keep the zeroer, odd-word release publication, acquire poll, bounded trap, reduction, S and grid unchanged. On a single ordered CUDA stream each completed launch still consumes exactly S tickets/tile and one flag increment; prove this rather than reset counters.",
+    "falsifier": "Ticket issue already overlaps all useful work, moving it delays the final acquire critical path, any epoch/alias test fails, or paired complete-kernel delta loses. Old midstream flag-prefetch no-gain evidence is not counted as support.",
+    "first_action": "CPU readiness/proof/cost quote only; implement no shipping change or GPU launch until exact version independently reviewed.",
+    "conditional_budget_only": true,
+    "actual_GPU_runtime_seconds": null,
+    "official_H200_cost": null,
+    "no_GPU_admission": "AuthorCPUfreeze+independentreview+literalguardpins+actualcostreview required later; no shipping code or performance claim now"
+  }
+}

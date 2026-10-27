@@ -1,0 +1,163 @@
+{
+  "state": "CPU_CSR_MAPPING_SENTINEL_AND_BIT_REPAIR_PASS",
+  "actual_encoder": "_gvesc_EXACT_PARENT_FUNCTION_CPU_TENSORS_ONLY",
+  "geometry_groups": 2304,
+  "tilechunk_bijection": 18432,
+  "per_tilechunk_BF16": 1024,
+  "total_weight_BF16": 18874368,
+  "scenarios": [
+    {
+      "WR": 1,
+      "length": 0,
+      "stats": {
+        "groups": 2304,
+        "payload_entries": 0,
+        "empty_groups": 2304,
+        "full32_groups": 0
+      }
+    },
+    {
+      "WR": 1,
+      "length": 1,
+      "stats": {
+        "groups": 2304,
+        "payload_entries": 1,
+        "empty_groups": 2303,
+        "full32_groups": 0
+      }
+    },
+    {
+      "WR": 1,
+      "length": 2,
+      "stats": {
+        "groups": 2304,
+        "payload_entries": 2,
+        "empty_groups": 2303,
+        "full32_groups": 0
+      }
+    },
+    {
+      "WR": 1,
+      "length": 15,
+      "stats": {
+        "groups": 2304,
+        "payload_entries": 15,
+        "empty_groups": 2303,
+        "full32_groups": 0
+      }
+    },
+    {
+      "WR": 1,
+      "length": 31,
+      "stats": {
+        "groups": 2304,
+        "payload_entries": 31,
+        "empty_groups": 2303,
+        "full32_groups": 0
+      }
+    },
+    {
+      "WR": 1,
+      "length": 32,
+      "stats": {
+        "groups": 2304,
+        "payload_entries": 32,
+        "empty_groups": 2303,
+        "full32_groups": 1
+      }
+    },
+    {
+      "WR": 1,
+      "length": 33,
+      "overflow": "REJECT_NONE"
+    },
+    {
+      "WR": 2,
+      "length": 0,
+      "stats": {
+        "groups": 2304,
+        "payload_entries": 0,
+        "empty_groups": 2304,
+        "full32_groups": 0
+      }
+    },
+    {
+      "WR": 2,
+      "length": 1,
+      "stats": {
+        "groups": 2304,
+        "payload_entries": 1,
+        "empty_groups": 2303,
+        "full32_groups": 0
+      }
+    },
+    {
+      "WR": 2,
+      "length": 2,
+      "stats": {
+        "groups": 2304,
+        "payload_entries": 2,
+        "empty_groups": 2303,
+        "full32_groups": 0
+      }
+    },
+    {
+      "WR": 2,
+      "length": 15,
+      "stats": {
+        "groups": 2304,
+        "payload_entries": 15,
+        "empty_groups": 2303,
+        "full32_groups": 0
+      }
+    },
+    {
+      "WR": 2,
+      "length": 31,
+      "stats": {
+        "groups": 2304,
+        "payload_entries": 31,
+        "empty_groups": 2303,
+        "full32_groups": 0
+      }
+    },
+    {
+      "WR": 2,
+      "length": 32,
+      "stats": {
+        "groups": 2304,
+        "payload_entries": 32,
+        "empty_groups": 2303,
+        "full32_groups": 1
+      }
+    },
+    {
+      "WR": 2,
+      "length": 33,
+      "overflow": "REJECT_NONE"
+    }
+  ],
+  "negative_controls": {
+    "sentinel_hole": "payload after sentinel/hole",
+    "unsorted": "unsorted or out-of-domain sequence",
+    "reserved_sequence": "unsorted or out-of-domain sequence",
+    "out_of_unit_sequence": "unsorted or out-of-domain sequence",
+    "matrix_h1": "reserved C12/matrix bits set",
+    "reserved_bit8": "reserved C12/matrix bits set",
+    "zero_xor": "zero XOR payload is not emitted by exact out-of-window encoder",
+    "forced_empty_on_nonempty": "DETECTED_CHANGED_WEIGHT_BITS"
+  },
+  "full32_end": "ep32 yields sentinel withoutload33",
+  "warp_uniform": "all32lanes receive lane0 exactentry_e via fullmask shfl beforebranch",
+  "all65536_BF16_storage_bits": "UNCHANGED_CODEC_CPU_RECONSTRUCTION_PASS_NOT_PREVALENCE",
+  "odd_M": [
+    1,
+    2,
+    3,
+    5,
+    7,
+    8
+  ],
+  "generic_and_nonempty": "same correction order; XOR everylistedentryonce before sameMMA",
+  "limits": "No real CUDA weights queried; actual empty prevalence unknown and must be counted from authorized prepared CUDA metadata before timing"
+}

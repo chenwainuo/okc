@@ -1,0 +1,67 @@
+{
+  "id": "research.pw42.readiness.01",
+  "resource": "cpu",
+  "kind": "implementation",
+  "state": "BACKLOG",
+  "author": "sol12",
+  "created_at": 1793082035.5282233,
+  "depends_on": [],
+  "write_paths": [
+    "proj_rsi/candidates/pw42"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 14.631009688068389,
+      "p_gain": 0.1,
+      "p_valid": 0.8
+    },
+    "information": {
+      "scenario_score_us": 14.631009688068389,
+      "p_resolve": 0.7,
+      "p_followup_gain": 0.1,
+      "unblocks": [
+        "research.pw42.gpu.01"
+      ],
+      "decision": "Weight-derived empty-escape specialization on current QKV GV1/GV8; first actual source/proof/cost discriminator, then reviewed serving measurement."
+    },
+    "basis": "LOW-CONFIDENCE CONDITIONAL BUDGET SCENARIO, not measured/forecast speed: hypothetical0.5us cut on each named current-serving target, exact current a3f score arithmetic; equal subjective .1gain/.8validity reference priors. CPU envelope from author upfront quote; downstreamGPUcharged conservative quoted reservation/cap, actual duration/H200 costs unknown.",
+    "confidence": "low; current-source mechanism, no runtime evidence",
+    "evidence": [
+      "proj_rsi/audits/pw38-next-roi-opportunities.json",
+      "proj_rsi/learning_archive/registry-v3-43ede5d0.json",
+      "proj_rsi/CURRENT_STACK.md"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 3720,
+    "cpu_minutes": 90
+  },
+  "annotations": {
+    "variant": "pw42",
+    "parent": "PW38 source29e557 /score3198.6175079817267",
+    "scope": [
+      [
+        "qkv_gate",
+        1
+      ],
+      [
+        "qkv_gate",
+        8
+      ]
+    ],
+    "source_brief_id": "pw38.next.gv-empty-escape-specialization",
+    "lessons_to_query": [
+      "counter-contract-not-name@1",
+      "rq11-full-residency-ledger@2",
+      "prepare-selection-is-experiment@2"
+    ],
+    "hypothesis": "At entry, use the existing warp-uniform first escape sentinel to choose a templated escape-free step loop or the exact old escape loop. Empty-list warps execute identical12-bit decode/MMA/load ordering without the per-unit next-sequence test; nonempty lists preserve every correction. Do not change geometry, W depth, cache policy or arithmetic. Existing SASS already interleaves dec1 operations, so merely reordering four dec1 calls is NOT the proposal.",
+    "falsifier": "Actual empty lists are rare, generated SASS already hoists the test equivalently, resource/code-size cost dominates, or complete current-policy F1 and paired signed deltas do not improve. Keep every small signed observation.",
+    "first_action": "CPU readiness/proof/cost quote only; implement no shipping change or GPU launch until exact version independently reviewed.",
+    "conditional_budget_only": true,
+    "actual_GPU_runtime_seconds": null,
+    "official_H200_cost": null,
+    "no_GPU_admission": "AuthorCPUfreeze+independentreview+literalguardpins+actualcostreview required later; no shipping code or performance claim now"
+  }
+}

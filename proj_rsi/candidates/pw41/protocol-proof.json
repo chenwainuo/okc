@@ -1,0 +1,99 @@
+{
+  "status": "CPU_ORDERED_P1_EPOCH_AND_STORAGE_PASS_GPU_UNRUN",
+  "exhaustive_cases": [
+    {
+      "S": 2,
+      "extra_zeroer": false,
+      "late_ticket": false,
+      "states": 58
+    },
+    {
+      "S": 2,
+      "extra_zeroer": false,
+      "late_ticket": true,
+      "states": 61
+    },
+    {
+      "S": 2,
+      "extra_zeroer": true,
+      "late_ticket": false,
+      "states": 97
+    },
+    {
+      "S": 2,
+      "extra_zeroer": true,
+      "late_ticket": true,
+      "states": 97
+    },
+    {
+      "S": 3,
+      "extra_zeroer": false,
+      "late_ticket": false,
+      "states": 358
+    },
+    {
+      "S": 3,
+      "extra_zeroer": false,
+      "late_ticket": true,
+      "states": 391
+    },
+    {
+      "S": 3,
+      "extra_zeroer": true,
+      "late_ticket": false,
+      "states": 535
+    },
+    {
+      "S": 3,
+      "extra_zeroer": true,
+      "late_ticket": true,
+      "states": 535
+    },
+    {
+      "S": 4,
+      "extra_zeroer": false,
+      "late_ticket": false,
+      "states": 2314
+    },
+    {
+      "S": 4,
+      "extra_zeroer": false,
+      "late_ticket": true,
+      "states": 2593
+    },
+    {
+      "S": 4,
+      "extra_zeroer": true,
+      "late_ticket": false,
+      "states": 3169
+    },
+    {
+      "S": 4,
+      "extra_zeroer": true,
+      "late_ticket": true,
+      "states": 3169
+    }
+  ],
+  "total_states": 13377,
+  "randomized_complete_schedules": 1536,
+  "repeated_epoch_checks": 96,
+  "ticket_theorem": "For arbitrary CTA ticket permutation k=0..S-1 in one ordered launch, floor((E*S+k)/S)+1=E+1. Placement changes no epoch, S tickets or one odd publication.",
+  "happens_before": "all zero stores -> per-writer fence -> zeroer rendezvous -> odd publication -> successful acquire -> CTA barrier -> first GLOBAL reduction/output write",
+  "shared_partial_note": "Private CTA red[] shared stores remain before acquire, as in parent; no external p.ws write is enabled in these P1 branches.",
+  "baseline_contract": "At completed launch boundaries even=E*S, odd=E; active+dormant+alias/fullallocation identity exact; no harness reset; signed int32 wrap excluded.",
+  "negative_controls": {
+    "removed_acquire": "GLOBAL_WRITE_BEFORE_ZERO_ACQUIRE_BARRIER",
+    "flag_before_zero_release": "GLOBAL_WRITE_BEFORE_ZERO_ACQUIRE_BARRIER",
+    "misaligned_ticket_epoch": "HOLD: unknown epoch/overflow/concurrent state ownership/progress precondition",
+    "odd_epoch_mismatch": "HOLD: unknown epoch/overflow/concurrent state ownership/progress precondition",
+    "int32_ticket_wrap": "HOLD: unknown epoch/overflow/concurrent state ownership/progress precondition",
+    "shared_state_concurrent_streams": "HOLD: unknown epoch/overflow/concurrent state ownership/progress precondition",
+    "unknown_residency_progress": "HOLD: unknown epoch/overflow/concurrent state ownership/progress precondition"
+  },
+  "full_storage_cases": 9,
+  "storage_mutations_rejected": 54,
+  "ragged_zero_tiling_cases": 112,
+  "progress": "Zeroer has finite bounded work; abstract wait does not block ready zeroer. Hardware all-block residency/fair progress and retained 2^24 poll trap require actual runtime validation; model is not a GPU scheduler proof.",
+  "unsupported": "Concurrent launches/graphs/streams sharing one prepared counter/output state HOLD. Parent also requires this; no host-maintained replay epoch or new reset is introduced.",
+  "arithmetic": "Exact parent partial computation/order retained in source. Cross-CTA floating reduction arrival order may vary and must pass fresh task/FP64/one-hot runtime gates."
+}

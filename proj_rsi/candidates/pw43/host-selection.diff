@@ -1,0 +1,151 @@
+--- results/proj-rsi/releases/pw38-v1-29e557ea53f3/submission.py
++++ proj_rsi/candidates/pw43/submission.py
+@@ -2256,7 +2256,21 @@
+             if best[1] >= 0:
+                 st["lt"][(layer, m)] = best[1]
+             continue
+-        st["lt"][(layer, m)] = _ltsearch(ext, layer, m, n, K, f32, ok, run, torch_fn, flush, t0)
++        heldout = None
++        if m == 256 and not f32:
++            def heldout(fixture):
++                # Private generator: confirmation cannot perturb subsequent prepare RNG.
++                gen = torch.Generator(device=dev).manual_seed(4300 + fixture)
++                xx = torch.randn((m, K), generator=gen, device=dev).to(torch.bfloat16)
++                yy = torch.empty((m, n), dtype=dt, device=dev)
++                rr = torch.mm(xx.float(), W[:n].float().T)
++                def valid(code):
++                    return ext.lt_mm(xx, W, Wt, yy, n, code) == 0 and _close(yy, rr)
++                def timed(code):
++                    fn = (lambda: torch.mm(xx, W[:n].T)) if code < 0 else (lambda: ext.lt_mm(xx, W, Wt, yy, n, code))
++                    return _tm(fn, flush, 3)
++                return valid, timed
++        st["lt"][(layer, m)] = _ltsearch(ext, layer, m, n, K, f32, ok, run, torch_fn, flush, t0, heldout)
+ 
+ 
+ LTSEARCH = True
+@@ -2276,7 +2290,63 @@
+     return bool(torch.isfinite(out).all()) and float((out.float() - ref).norm() / ref.norm()) < 1e-2
+ 
+ 
+-def _ltsearch(ext, layer, m, n, K, f32, ok, run, torch_fn, flush, t0):
++def _lt43confirm(codes, factory, deadline, clock):
++    """Two fresh fixtures, AB/BA brackets; no cross-run minima or effect-size cutoff.
++    Complete all finalists before selection. Any nonpositive paired delta rejects
++    that finalist. This is selection evidence, never an official score claim.
++    """
++    import math
++    record = {"status": "incomplete", "rows": [], "deltas": {}, "reason": None}
++    codes = list(dict.fromkeys(codes))[:2]
++    last_clock = [None]
++    def live():
++        now = clock()
++        good = math.isfinite(now) and math.isfinite(deadline) and now < deadline and (last_clock[0] is None or now >= last_clock[0])
++        last_clock[0] = now
++        return good
++    if not codes:
++        record["reason"] = "no_legal_finalists"
++        return None, record
++    for fixture in range(2):
++        if not live():
++            record["reason"] = "deadline_before_fixture"
++            return None, record
++        valid, timed = factory(fixture)
++        if not live():
++            record["reason"] = "deadline_after_fixture"
++            return None, record
++        for code in codes:
++            if not live() or not valid(code) or not live():
++                record["reason"] = "deadline_or_invalid_finalist"
++                return None, record
++        for round_id in range(2):
++            for code in (codes if round_id == 0 else list(reversed(codes))):
++                row = {"fixture": fixture, "round": round_id, "code": code, "times_ms": []}
++                record["rows"].append(row)
++                for which in (-1, code, -1):
++                    if not live():
++                        record["reason"] = "deadline_before_timing"
++                        return None, record
++                    value = timed(which)
++                    # Preserve invalid observations in JSON without permitting NaN.
++                    row["times_ms"].append(value if isinstance(value, (int, float)) and math.isfinite(value) else None)
++                    if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value) or value <= 0:
++                        record["reason"] = "invalid_timing"
++                        return None, record
++                    if not live():
++                        record["reason"] = "deadline_after_timing"
++                        return None, record
++                a, b, c = row["times_ms"]
++                delta = (a + c) / 2 - b
++                record["deltas"].setdefault(str(code), []).append(delta)
++    eligible = [(sum(record["deltas"][str(c)]) / 4, c) for c in codes
++                if len(record["deltas"].get(str(c), [])) == 4 and min(record["deltas"][str(c)]) > 0]
++    chosen = max(eligible, key=lambda pair: (pair[0], -codes.index(pair[1])))[1] if eligible else None
++    record.update(status="complete", reason="consistent_positive" if chosen is not None else "equivocal_or_loss")
++    return chosen, record
++
++
++def _ltsearch(ext, layer, m, n, K, f32, ok, run, torch_fn, flush, t0, heldout=None):
+     """heuristic algorithms of all four layouts + seeds + an algo-66 (sm90 nvjet) sweep over tile / stages / cluster, then
+     split-K / custom option / cluster / stages refinement of the leaders; all checked numerically and timed (judge timer)"""
+     if not _LTDONE and not _LT0:
+@@ -2286,14 +2356,33 @@
+     wsum = sum(LTW[l] for l, _ in order)
+     dl = t0 + LTBUDGET * sum(LTW[l] for l, mm in order[:order.index((layer, m)) + 1]) / wsum  # cumulative, weighted
+     njob = wsum / LTW[layer]
++    target = heldout is not None and m == 256 and not f32
++    observations = []
++    # Translate existing absolute wall deadline once; never restart either budget.
++    remaining = min(dl, _T0 + PREPARE_BUDGET_S) - time.time() if target else 0.0
++    end = time.monotonic() + max(0.0, remaining)
++    explore_end = time.monotonic() + max(0.0, remaining) * 0.55
++    def explore_live():
++        return not target or time.monotonic() < explore_end
+     tried, res = set(), []
+     def tryc(code):
+-        if code < 0 or code in tried:
++        if code < 0 or code in tried or not explore_live():
+             return
+         tried.add(code)
+-        if ok(code):
+-            res.append((_tm(lambda: run(code), flush, 5), code))
++        valid = ok(code)
++        observation = {"code": code, "valid": bool(valid), "time_ms": None}
++        if target:
++            observations.append(observation)
++        if valid and explore_live():
++            value = _tm(lambda: run(code), flush, 5)
++            finite = __import__("math").isfinite(value) and value > 0
++            observation["time_ms"] = value if finite else None
++            observation["within_exploration_deadline"] = explore_live()
++            if (not target or finite) and explore_live():
++                res.append((value, code))
+     def addc(lay, cfg):
++        if not explore_live():
++            return
+         c = ext.lt_add(m, n, K, f32, lay, cfg)
+         if c >= 0:
+             cfg2 = tuple(ext.lt_cfg(m, n, K, f32, c))
+@@ -2302,7 +2391,7 @@
+             seen.add((lay, cfg2))
+             tryc(c)
+     seen = set()
+-    t_torch = _tm(torch_fn, flush, 9)
++    t_torch = _tm(torch_fn, flush, 9) if explore_live() else float("inf")
+     for lay in range(4):
+         for i in range(min(ext.lt_algos(m, n, K, f32, lay), 8)):
+             seen.add((lay, tuple(ext.lt_cfg(m, n, K, f32, lay * 100000 + i))))
+@@ -2340,6 +2429,14 @@
+                     break
+                 addc(lay, cfg[:6] + [sg] + cfg[7:])
+     res.sort()
++    if target:
++        codes = [code for _, code in res[:2]]
++        chosen, record = _lt43confirm(codes, heldout, end, time.monotonic)
++        record.update(layer=layer, m=m, tried=len(tried), exploration_ms=res, exploration_observations=observations, selected=chosen,
++                      configs={str(c): [c // 100000, list(ext.lt_cfg(m, n, K, f32, c))] for c in codes})
++        print("PW43_LT " + __import__("json").dumps(record, allow_nan=False), flush=True)
++        _LTDONE.append((layer, m))
++        return chosen
+     best = (t_torch, -1)
+     for _, code in res[:3]:  # re-time the leaders against torch's default
+         a = _tm(lambda: run(code), flush, 15)

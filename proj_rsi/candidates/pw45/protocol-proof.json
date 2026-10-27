@@ -1,0 +1,220 @@
+{
+  "layout": {
+    "state": "PASS_EXACT_HALF_FULLK_BIJECTIONS",
+    "weight_BF16_values": 8388608,
+    "weight_bytes_original": 16777216,
+    "packed_W_bytes": 12582912,
+    "per_CTA_half_W_bytes_per_stage": 6144,
+    "output_BF16_values": 262144,
+    "output_tiles": 128,
+    "output_tile_shape": [
+      32,
+      64
+    ],
+    "fullK_stages": 16,
+    "KS": 1,
+    "partial_workspace_bytes": 0,
+    "global_reduce_or_zero_protocol": "NONE_PLAIN_TMA_STORE",
+    "CSR_lists": 512,
+    "CSR_field_extreme_cases": 65536,
+    "actual_CSR_CAP": "UNKNOWN_UNTIL_REAL_GPU_WEIGHT_PREPARE",
+    "CAP_rule": "strict nextmultiple32 above actual max list, plus32guard words; no truncation",
+    "padding": 0,
+    "weight_encoding": "EXACT_PARENT_CODEC_BYTES_NO_NEW_CODEC",
+    "source_tensormap_box": [
+      64,
+      32
+    ],
+    "scope": "Finite coordinate/byte ownership proof; numerical GPU WGMMA execution unrun."
+  },
+  "protocol": {
+    "state": "PASS_BOUNDED_HALF4READER_PHASE_LIFETIME",
+    "cases": [
+      {
+        "ST": 4,
+        "KCS": 1,
+        "states": 7
+      },
+      {
+        "ST": 4,
+        "KCS": 2,
+        "states": 21
+      },
+      {
+        "ST": 4,
+        "KCS": 3,
+        "states": 47
+      },
+      {
+        "ST": 4,
+        "KCS": 4,
+        "states": 92
+      },
+      {
+        "ST": 4,
+        "KCS": 5,
+        "states": 130
+      },
+      {
+        "ST": 4,
+        "KCS": 6,
+        "states": 168
+      },
+      {
+        "ST": 4,
+        "KCS": 7,
+        "states": 208
+      },
+      {
+        "ST": 4,
+        "KCS": 8,
+        "states": 248
+      },
+      {
+        "ST": 4,
+        "KCS": 9,
+        "states": 288
+      },
+      {
+        "ST": 4,
+        "KCS": 10,
+        "states": 328
+      },
+      {
+        "ST": 4,
+        "KCS": 11,
+        "states": 368
+      },
+      {
+        "ST": 4,
+        "KCS": 12,
+        "states": 408
+      },
+      {
+        "ST": 4,
+        "KCS": 13,
+        "states": 448
+      },
+      {
+        "ST": 4,
+        "KCS": 14,
+        "states": 488
+      },
+      {
+        "ST": 4,
+        "KCS": 15,
+        "states": 528
+      },
+      {
+        "ST": 4,
+        "KCS": 16,
+        "states": 568
+      },
+      {
+        "ST": 4,
+        "KCS": 17,
+        "states": 608
+      },
+      {
+        "ST": 5,
+        "KCS": 1,
+        "states": 7
+      },
+      {
+        "ST": 5,
+        "KCS": 2,
+        "states": 21
+      },
+      {
+        "ST": 5,
+        "KCS": 3,
+        "states": 47
+      },
+      {
+        "ST": 5,
+        "KCS": 4,
+        "states": 92
+      },
+      {
+        "ST": 5,
+        "KCS": 5,
+        "states": 162
+      },
+      {
+        "ST": 5,
+        "KCS": 6,
+        "states": 224
+      },
+      {
+        "ST": 5,
+        "KCS": 7,
+        "states": 287
+      },
+      {
+        "ST": 5,
+        "KCS": 8,
+        "states": 353
+      },
+      {
+        "ST": 5,
+        "KCS": 9,
+        "states": 419
+      },
+      {
+        "ST": 5,
+        "KCS": 10,
+        "states": 485
+      },
+      {
+        "ST": 5,
+        "KCS": 11,
+        "states": 551
+      },
+      {
+        "ST": 5,
+        "KCS": 12,
+        "states": 617
+      },
+      {
+        "ST": 5,
+        "KCS": 13,
+        "states": 683
+      },
+      {
+        "ST": 5,
+        "KCS": 14,
+        "states": 749
+      },
+      {
+        "ST": 5,
+        "KCS": 15,
+        "states": 815
+      },
+      {
+        "ST": 5,
+        "KCS": 16,
+        "states": 881
+      },
+      {
+        "ST": 5,
+        "KCS": 17,
+        "states": 947
+      }
+    ],
+    "total_states": 12293,
+    "source_fullK_KCS": 16,
+    "full_count": 2,
+    "Wempty_Xempty_count": 4,
+    "EARLY_startup": "min(ST,KCS) W+X beforeCTAbarrier",
+    "Wrelease": "all4 LDS+syncwarp beforeoverwrite",
+    "Xrelease": "afterwait1 coverspriorgroup or finalwait0",
+    "D": "never genericwritten whileasync; firstK16scaleD0 and allsubsequentK16scaleD1",
+    "A_banks": "two16word paritybanks; twoqueuedgroups and wait1 retireprevious before bankreuse",
+    "negative_controls": {
+      "missing_Xfull": "READ_BEFORE_BOTH_FULL_CONTRIBUTORS",
+      "early_Xreuse": "X_REUSE_BEFORE_WGMMA_RETIRE",
+      "only3_readers": "W_REUSE_BEFORE_ALL4_WARP_READS"
+    },
+    "limits": "Finite completion/order source model, fourwarp reads aggregated into one all-reader event. Assumes eventual TMA/WGMMA progress, not arbitrary compiled-CFG proof."
+  }
+}

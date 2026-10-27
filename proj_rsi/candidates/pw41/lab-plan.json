@@ -1,0 +1,251 @@
+{
+  "status": "CPU_VALIDATED_NARROW_TEST_PLAN_NOT_EXECUTABLE_GPU_WRAPPER_PENDING_REVIEW",
+  "source_sha256": "a77f785b06d3b9cdbf9fe3870505bd15f4e68c46807fa61dc6c3b9756dbe199f",
+  "cases": [
+    {
+      "layer": "router",
+      "m": 8,
+      "n": 256,
+      "k": 8192,
+      "early_args": [
+        2,
+        1,
+        1,
+        1,
+        8,
+        1,
+        16,
+        1,
+        0,
+        536870912
+      ],
+      "late_args": [
+        2,
+        1,
+        1,
+        1,
+        8,
+        1,
+        16,
+        1,
+        0,
+        1610612736
+      ],
+      "early_index": 88,
+      "late_index": 95,
+      "tiles": 16,
+      "S": 16,
+      "grid_CTAs": 272,
+      "counter_delta_per_completed_launch": {
+        "even_per_tile": 16,
+        "odd_per_tile": 1,
+        "all_other_storage": "UNCHANGED"
+      },
+      "scope": "AFFECTED_SCORED_P1_CASE; local actual selection must be recorded, not assumed"
+    },
+    {
+      "layer": "router",
+      "m": 16,
+      "n": 256,
+      "k": 8192,
+      "early_args": [
+        2,
+        2,
+        1,
+        1,
+        8,
+        1,
+        16,
+        1,
+        0,
+        134217728
+      ],
+      "late_args": [
+        2,
+        2,
+        1,
+        1,
+        8,
+        1,
+        16,
+        1,
+        0,
+        1207959552
+      ],
+      "early_index": 86,
+      "late_index": 96,
+      "tiles": 16,
+      "S": 16,
+      "grid_CTAs": 256,
+      "counter_delta_per_completed_launch": {
+        "even_per_tile": 16,
+        "odd_per_tile": 1,
+        "all_other_storage": "UNCHANGED"
+      },
+      "scope": "AFFECTED_SCORED_P1_CASE; local actual selection must be recorded, not assumed"
+    },
+    {
+      "layer": "router",
+      "m": 32,
+      "n": 256,
+      "k": 8192,
+      "early_args": [
+        2,
+        4,
+        2,
+        1,
+        8,
+        2,
+        8,
+        1,
+        0,
+        134217728
+      ],
+      "late_args": [
+        2,
+        4,
+        2,
+        1,
+        8,
+        2,
+        8,
+        1,
+        0,
+        1207959552
+      ],
+      "early_index": 84,
+      "late_index": 97,
+      "tiles": 16,
+      "S": 8,
+      "grid_CTAs": 128,
+      "counter_delta_per_completed_launch": {
+        "even_per_tile": 8,
+        "odd_per_tile": 1,
+        "all_other_storage": "UNCHANGED"
+      },
+      "scope": "AFFECTED_SCORED_P1_CASE; local actual selection must be recorded, not assumed"
+    },
+    {
+      "layer": "unpooler",
+      "m": 1,
+      "n": 1024,
+      "k": 4096,
+      "early_args": [
+        1,
+        1,
+        2,
+        1,
+        8,
+        2,
+        4,
+        1,
+        0,
+        536870913
+      ],
+      "late_args": [
+        1,
+        1,
+        2,
+        1,
+        8,
+        2,
+        4,
+        1,
+        0,
+        1610612737
+      ],
+      "early_index": 93,
+      "late_index": 98,
+      "tiles": 64,
+      "S": 4,
+      "grid_CTAs": 320,
+      "counter_delta_per_completed_launch": {
+        "even_per_tile": 4,
+        "odd_per_tile": 1,
+        "all_other_storage": "UNCHANGED"
+      },
+      "scope": "AFFECTED_SCORED_P1_CASE; local actual selection must be recorded, not assumed"
+    },
+    {
+      "layer": "unpooler",
+      "m": 8,
+      "n": 1024,
+      "k": 4096,
+      "early_args": [
+        1,
+        1,
+        2,
+        1,
+        8,
+        2,
+        4,
+        1,
+        0,
+        536870913
+      ],
+      "late_args": [
+        1,
+        1,
+        2,
+        1,
+        8,
+        2,
+        4,
+        1,
+        0,
+        1610612737
+      ],
+      "early_index": 93,
+      "late_index": 98,
+      "tiles": 64,
+      "S": 4,
+      "grid_CTAs": 320,
+      "counter_delta_per_completed_launch": {
+        "even_per_tile": 4,
+        "odd_per_tile": 1,
+        "all_other_storage": "UNCHANGED"
+      },
+      "scope": "AFFECTED_SCORED_P1_CASE; local actual selection must be recorded, not assumed"
+    }
+  ],
+  "arms": [
+    "Actual full prepared PW38 kernel_fn policy",
+    "Fixed geometry early-ticket original kernel",
+    "Same fixed geometry late-ticket kernel"
+  ],
+  "allocation_control": "For the fixed early/late causal comparison use the SAME source-bound counter storage/output/workspace roles, one ordered stream and no counter reset; swap/match pointer roles in a separately frozen harness if needed. Actual selected policy remains a distinct pipeline control.",
+  "semantics": "Fixed-arm progress is mechanism evidence only. If local prepare selects a different path, retain that fact; never relabel fixed-arm improvement as actual-incumbent or cumulative-policy gain.",
+  "admission": [
+    "Independent source + exact executable wrapper review and complete immutable closure before registration",
+    "Before BOTH parent and candidate prepare, not merely after selection: actual SM90 H100/H200 identity and at least128SMs; exact-symbol resources/local0 and actual gvocc full-grid eligibility before any P1 launch. Register/thread capacity calculations are upper bounds, never guaranteed occupancy.",
+    "Retain every actual loaded SO/hash/PC stream and all95old controls/4new canonical target streams; do not accept missing modules",
+    "AllKbasis and random FP64/task checks for all four fixed types, normal/outlier/probe and odd-m liveness; preserve FP32 router hi+lo precision",
+    "Exact per-call full-storage counter/offset/stride/dtype/physical alias deltas, nonzero dormant baselines and all W/packed/CSR/input immutability; no harness reset",
+    "Fresh original-X retained graphs, output/float scratch NaN overwrite, zero/outlier/all-row probe mutations; classify unknown persistent workspace HOLD",
+    "Balanced same-fixture F1 and paired complete-pipeline timing, every signed raw call retained, own-fixture actual last outputs checked BEFORE any replay/input mutation at both boundaries",
+    "One owner/ordered stream for shared P1 state; reject concurrent-state streams and int32 wrap; physical cleanup and independent terminal analysis"
+  ],
+  "falsifiers": [
+    "Actual SASS hoists ticket back before useful loads/math",
+    "Late atomic stalls final acquire or increases burst contention enough to lose",
+    "Any epoch/publication/alias/resource/numeric/graph/current-input gate fails",
+    "A fixed-arm gain disappears under matched pointers or does not improve actual PW38 selected pipeline"
+  ],
+  "forecast": {
+    "attainable_gain_us": null,
+    "minimum_gain_cutoff": null,
+    "family_rejection_after_one_failure": false
+  },
+  "cost": {
+    "expected_CPU_implementation_minutes": 45,
+    "expected_CPU_independent_review_minutes": 15,
+    "expected_CPU_analysis_minutes": 15,
+    "total_expected_CPU_minutes": 75,
+    "provisional_narrow_GPU_full_reservation_seconds": 1020,
+    "conditional_cumulative_GPU_followup_seconds": 3420,
+    "total_local_GPU_chain_seconds_if_both_stages": 4440,
+    "official_H200_cost": null,
+    "common_budget_scenario": "The ROI scan90CPUmin/300narrow/3420cumulative caps are comparison scenarios. This provisional narrow quote exceeds300s; rerank or redesign before runtime admission. No extra authorization follows from either number."
+  },
+  "rationale": "A correct reusable P1 GPU harness needs source-bound monotone/dormant alias and matched-allocation controls. This package does not pretend an unreviewed ad-hoc runner meets those gates; the full fixed-arm/current-policy executable wrapper is intentionally a separate bounded artifact."
+}

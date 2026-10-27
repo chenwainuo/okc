@@ -1,0 +1,330 @@
+{
+  "id": "pw38.next.p1-late-ticket",
+  "title": "Move only P1 epoch-ticket allocation off the W/X launch prologue",
+  "scope": [
+    [
+      "router",
+      8
+    ],
+    [
+      "router",
+      16
+    ],
+    [
+      "router",
+      32
+    ],
+    [
+      "unpooler",
+      1
+    ],
+    [
+      "unpooler",
+      8
+    ]
+  ],
+  "source_lines": [
+    790,
+    803,
+    1079,
+    1090
+  ],
+  "mechanism": "For the existing selected z/x P1 instances, move the even-word atomicAdd ticket allocation from the prologue to immediately before its first epoch/acquire wait. Keep the zeroer, odd-word release publication, acquire poll, bounded trap, reduction, S and grid unchanged. On a single ordered CUDA stream each completed launch still consumes exactly S tickets/tile and one flag increment; prove this rather than reset counters.",
+  "why_current": "Actual scored router8 is x/S16, router16 z/S16, router32 z/S8; unpooler1/8 use x/S4. The matched PW38 router8 SASS has ticket ATOMG at0x350 before X/W LDG0x410/0x460 and later acquire waits. Static PC order is not timing proof; this is a placement experiment, not an atomic-count reduction.",
+  "cpu_discriminator": "State-machine proof for arbitrary CTA arrival order and repeated graph launches, source-bound physical alias/counter transitions, then one new compile-time placement bit at fixed selected geometries. Explicitly model unsupported concurrent-state streams and hold them rather than assume one epoch.",
+  "falsifier": "Ticket issue already overlaps all useful work, moving it delays the final acquire critical path, any epoch/alias test fails, or paired complete-kernel delta loses. Old midstream flag-prefetch no-gain evidence is not counted as support.",
+  "lesson_refs": [
+    "counter-contract-not-name@1",
+    "composition-not-additivity@1"
+  ],
+  "historical_evidence": [
+    "proj_rsi/audits/p1-h100.md"
+  ],
+  "jit": "P1_ROUTER8",
+  "new_proof": "Exact per-launch counter deltas and zero-before-reduction ordering must remain identical. No speculative output, removed acquire, extra graph node or host-maintained replay epoch.",
+  "score_scenarios": [
+    {
+      "per_target_cut_us": 0.1,
+      "load_sum_cuts_us": {
+        "decode 1": 0.1,
+        "decode 16": 0.1,
+        "decode 32": 0.1,
+        "verify 1": 0.2,
+        "verify 16": 0.0,
+        "verify 32": 0.0
+      },
+      "hypothetical_score_us": 3192.210555820864,
+      "conditional_score_reduction_us": 6.406952160862147
+    },
+    {
+      "per_target_cut_us": 0.5,
+      "load_sum_cuts_us": {
+        "decode 1": 0.5,
+        "decode 16": 0.5,
+        "decode 32": 0.5,
+        "verify 1": 1.0,
+        "verify 16": 0.0,
+        "verify 32": 0.0
+      },
+      "hypothetical_score_us": 3166.473180206908,
+      "conditional_score_reduction_us": 32.144327774818066
+    },
+    {
+      "per_target_cut_us": 1.0,
+      "load_sum_cuts_us": {
+        "decode 1": 1.0,
+        "decode 16": 1.0,
+        "decode 32": 1.0,
+        "verify 1": 2.0,
+        "verify 16": 0.0,
+        "verify 32": 0.0
+      },
+      "hypothetical_score_us": 3134.0477447700296,
+      "conditional_score_reduction_us": 64.56976321169668
+    }
+  ],
+  "actual_selected_routes": [
+    {
+      "layer": "router",
+      "m": 8,
+      "load": "verify 1",
+      "family": "gv",
+      "median_us": 4.470568823516361,
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.4 \u00b5s 100.0%      1\ntotal                                                              3.4 \u00b5s",
+      "prepare_pick": {
+        "layer": "router",
+        "m": 8,
+        "selected": "rk-s16w8x",
+        "bake_us": 8.9,
+        "line": 112
+      }
+    },
+    {
+      "layer": "router",
+      "m": 16,
+      "load": "decode 16",
+      "family": "gv",
+      "median_us": 5.104216820829146,
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s",
+      "prepare_pick": {
+        "layer": "router",
+        "m": 16,
+        "selected": "rk-s16w8z",
+        "bake_us": 9.09,
+        "line": 119
+      }
+    },
+    {
+      "layer": "router",
+      "m": 32,
+      "load": "decode 32",
+      "family": "gv",
+      "median_us": 5.508452070055779,
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.1 \u00b5s 100.0%      1\ntotal                                                              4.1 \u00b5s",
+      "prepare_pick": {
+        "layer": "router",
+        "m": 32,
+        "selected": "rk-s8z",
+        "bake_us": 9.66,
+        "line": 124
+      }
+    },
+    {
+      "layer": "unpooler",
+      "m": 1,
+      "load": "decode 1",
+      "family": "gv",
+      "median_us": 4.256898893461422,
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.4 \u00b5s 100.0%      1\ntotal                                                              3.4 \u00b5s",
+      "prepare_pick": {
+        "layer": "unpooler",
+        "m": 1,
+        "selected": "uk-s4x",
+        "bake_us": 8.58,
+        "line": 99
+      }
+    },
+    {
+      "layer": "unpooler",
+      "m": 8,
+      "load": "verify 1",
+      "family": "gv",
+      "median_us": 4.267541010622022,
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.5 \u00b5s 100.0%      1\ntotal                                                              3.5 \u00b5s",
+      "prepare_pick": {
+        "layer": "unpooler",
+        "m": 8,
+        "selected": "uk-s4x",
+        "bake_us": 8.58,
+        "line": 105
+      }
+    }
+  ],
+  "history_positive_observation_pointers": [
+    "/positive_observations/22",
+    "/positive_observations/23",
+    "/positive_observations/24",
+    "/positive_observations/25",
+    "/positive_observations/26",
+    "/positive_observations/27",
+    "/positive_observations/28",
+    "/positive_observations/29",
+    "/positive_observations/30",
+    "/positive_observations/31",
+    "/positive_observations/32",
+    "/positive_observations/33",
+    "/positive_observations/38",
+    "/positive_observations/39",
+    "/positive_observations/40",
+    "/positive_observations/41",
+    "/positive_observations/42",
+    "/positive_observations/43",
+    "/positive_observations/44",
+    "/positive_observations/45",
+    "/positive_observations/46",
+    "/positive_observations/47",
+    "/positive_observations/48",
+    "/positive_observations/49",
+    "/positive_observations/50",
+    "/positive_observations/51",
+    "/positive_observations/61",
+    "/positive_observations/62",
+    "/positive_observations/63",
+    "/positive_observations/64",
+    "/positive_observations/65",
+    "/positive_observations/66",
+    "/positive_observations/67",
+    "/positive_observations/68",
+    "/positive_observations/69",
+    "/positive_observations/70",
+    "/positive_observations/71",
+    "/positive_observations/72",
+    "/positive_observations/73",
+    "/positive_observations/74",
+    "/positive_observations/81",
+    "/positive_observations/82",
+    "/positive_observations/83",
+    "/positive_observations/84",
+    "/positive_observations/85",
+    "/positive_observations/86",
+    "/positive_observations/87",
+    "/positive_observations/88",
+    "/positive_observations/89",
+    "/positive_observations/94",
+    "/positive_observations/95",
+    "/positive_observations/96",
+    "/positive_observations/97",
+    "/positive_observations/98",
+    "/positive_observations/99",
+    "/positive_observations/100",
+    "/positive_observations/101",
+    "/positive_observations/102",
+    "/positive_observations/103",
+    "/positive_observations/104",
+    "/positive_observations/105",
+    "/positive_observations/125",
+    "/positive_observations/126",
+    "/positive_observations/127",
+    "/positive_observations/128",
+    "/positive_observations/129",
+    "/positive_observations/130",
+    "/positive_observations/131",
+    "/positive_observations/132",
+    "/positive_observations/133",
+    "/positive_observations/134",
+    "/positive_observations/135",
+    "/positive_observations/136",
+    "/positive_observations/150",
+    "/positive_observations/151",
+    "/positive_observations/152",
+    "/positive_observations/153",
+    "/positive_observations/154",
+    "/positive_observations/155",
+    "/positive_observations/156",
+    "/positive_observations/157",
+    "/positive_observations/158",
+    "/positive_observations/159",
+    "/positive_observations/160",
+    "/positive_observations/161",
+    "/positive_observations/162",
+    "/positive_observations/163",
+    "/positive_observations/190",
+    "/positive_observations/191",
+    "/positive_observations/192",
+    "/positive_observations/193",
+    "/positive_observations/194",
+    "/positive_observations/195",
+    "/positive_observations/196",
+    "/positive_observations/197",
+    "/positive_observations/198",
+    "/positive_observations/199",
+    "/positive_observations/200",
+    "/positive_observations/201",
+    "/positive_observations/202",
+    "/positive_observations/203",
+    "/positive_observations/235",
+    "/positive_observations/236",
+    "/positive_observations/237",
+    "/positive_observations/238",
+    "/positive_observations/239",
+    "/positive_observations/240",
+    "/positive_observations/241",
+    "/positive_observations/242",
+    "/positive_observations/243",
+    "/positive_observations/244",
+    "/positive_observations/245",
+    "/positive_observations/246",
+    "/positive_observations/247",
+    "/positive_observations/280",
+    "/positive_observations/281",
+    "/positive_observations/282",
+    "/positive_observations/283",
+    "/positive_observations/284",
+    "/positive_observations/285",
+    "/positive_observations/286",
+    "/positive_observations/287",
+    "/positive_observations/288",
+    "/positive_observations/289",
+    "/positive_observations/290",
+    "/positive_observations/291",
+    "/positive_observations/292"
+  ],
+  "cost": {
+    "expected_cpu_implementation_minutes": null,
+    "expected_cpu_independent_review_minutes": null,
+    "expected_cpu_analysis_minutes": null,
+    "expected_local_gpu_discriminator_seconds": null,
+    "expected_cumulative_local_gpu_seconds": null,
+    "expected_official_h200_cost": null,
+    "expected_end_to_end_cost": null,
+    "scheduler_rankable": false,
+    "reason": "No author has quoted the new implementation/proof/runtime chain. Unknown costs are not zero; no executable descriptor or live priority is created."
+  },
+  "conditional_budget_scenario": {
+    "meaning": "COMMON CONDITIONAL RESERVATION SCENARIO ONLY, not an expected-cost forecast or authorized launch. Re-rank after author quotes full costs.",
+    "CPU_implementation_cap_minutes": 45,
+    "CPU_independent_review_cap_minutes": 30,
+    "CPU_analysis_cap_minutes": 15,
+    "total_CPU_cap_minutes": 90,
+    "narrow_local_GPU_reservation_seconds": 300,
+    "cumulative_local_GPU_reservation_seconds": 3420,
+    "total_local_GPU_seconds": 3720,
+    "local_GPU_cost_USD": 5.166666666666667,
+    "cumulative_cap_basis": "Existing reviewed PW39 fullscope outer guard3420s; narrow300s is existing normal guard cap. This conservatively counts both stages, not only kernel time.",
+    "official_H200_cost": null
+  },
+  "comparison_prior": {
+    "p_gain": 0.1,
+    "p_valid": 0.8,
+    "meaning": "Equal subjective reference priors solely to expose scope/cost arithmetic; not calibrated probabilities or measured forecasts."
+  },
+  "conditional_expected_score_us": 2.5715462219854457,
+  "conditional_GPU_ROI_score_us_per_USD": 0.49771862361008623,
+  "conditional_CPU_ROI_score_us_per_minute": 0.028572735799838284,
+  "execution_status": "CPU_BRIEF_ONLY_UNKNOWN_COST_NO_SOURCE_GO_NO_QUEUE_CHANGE",
+  "retention_rule": "No fixed0.3/0.5us cutoff; preserve every signed raw result and independent validity. Parent progress is not current-incumbent gain.",
+  "first_queue_action": "CPU readiness/proof/cost quote only; implement no shipping change or GPU launch until exact version independently reviewed.",
+  "lesson_scope_notes": "Apply invariant, comparator, pipeline and experiment-design lessons only. Different kernels/hardware/scopes do not transfer measured deltas or latency fractions.",
+  "conditional_budget_rank": 1,
+  "live_scheduler_rank": null
+}

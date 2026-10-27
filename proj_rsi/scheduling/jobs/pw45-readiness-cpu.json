@@ -1,0 +1,64 @@
+{
+  "id": "research.pw45.readiness.01",
+  "resource": "cpu",
+  "kind": "implementation",
+  "state": "BACKLOG",
+  "author": "sol18",
+  "created_at": 1793082075.3947961,
+  "depends_on": [],
+  "write_paths": [
+    "proj_rsi/candidates/pw45"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 4.98580731066977,
+      "p_gain": 0.1,
+      "p_valid": 0.8
+    },
+    "information": {
+      "scenario_score_us": 4.98580731066977,
+      "p_resolve": 0.7,
+      "p_followup_gain": 0.1,
+      "unblocks": [
+        "research.pw45.gpu.01"
+      ],
+      "decision": "HALF+EARLY full-K plain-store o32, against its actual ST6/KS2 RQ; first actual source/proof/cost discriminator, then reviewed serving measurement."
+    },
+    "basis": "LOW-CONFIDENCE CONDITIONAL BUDGET SCENARIO, not measured/forecast speed: hypothetical0.5us cut on each named current-serving target, exact current a3f score arithmetic; equal subjective .1gain/.8validity reference priors. CPU envelope from author upfront quote; downstreamGPUcharged conservative quoted reservation/cap, actual duration/H200 costs unknown.",
+    "confidence": "low; current-source mechanism, no runtime evidence",
+    "evidence": [
+      "proj_rsi/audits/pw38-next-roi-opportunities.json",
+      "proj_rsi/learning_archive/registry-v3-43ede5d0.json",
+      "proj_rsi/CURRENT_STACK.md"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 3720,
+    "cpu_minutes": 65
+  },
+  "annotations": {
+    "variant": "pw45",
+    "parent": "PW38 source29e557 /score3198.6175079817267",
+    "scope": [
+      [
+        "o",
+        32
+      ]
+    ],
+    "source_brief_id": "pw38.next.o32-half-fullk-early",
+    "lessons_to_query": [
+      "prepare-selection-is-experiment@2",
+      "counter-contract-not-name@1",
+      "composition-not-additivity@1",
+      "qkv-split4-full-pipeline-regression@1"
+    ],
+    "hypothesis": "Add one narrowly legal NT32/ST5/HALF+plain-store+EARLY instantiation (FL52, optional separately labelled HINT53) at KS1. Reuse the existing HALF and EARLY source paths rather than create a native-X prototype. N8192 gives2*NB=128 64-row CTAs, comparable grid count to current64*KS2=128; remove the current cross-CTA output zero/poll/reduce protocol by writing disjoint output tiles.",
+    "falsifier": "One-WG longer compute chain outweighs zero/reduce removal, resource occupancy deteriorates, actual single-main output/JIT/probe gates fail, or it loses the current complete o32 route. Keep a positive0.1us result even if below old status thresholds.",
+    "first_action": "CPU readiness/proof/cost quote only; implement no shipping change or GPU launch until exact version independently reviewed.",
+    "conditional_budget_only": true,
+    "actual_GPU_runtime_seconds": null,
+    "official_H200_cost": null,
+    "no_GPU_admission": "AuthorCPUfreeze+independentreview+literalguardpins+actualcostreview required later; no shipping code or performance claim now"
+  }
+}

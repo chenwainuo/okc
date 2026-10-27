@@ -1,0 +1,54 @@
+def _lt43confirm(codes, factory, deadline, clock):
+    """Two fresh fixtures, AB/BA brackets; no cross-run minima or effect-size cutoff.
+    Complete all finalists before selection. Any nonpositive paired delta rejects
+    that finalist. This is selection evidence, never an official score claim.
+    """
+    import math
+    record = {"status": "incomplete", "rows": [], "deltas": {}, "reason": None}
+    codes = list(dict.fromkeys(codes))[:2]
+    last_clock = [None]
+    def live():
+        now = clock()
+        good = math.isfinite(now) and math.isfinite(deadline) and now < deadline and (last_clock[0] is None or now >= last_clock[0])
+        last_clock[0] = now
+        return good
+    if not codes:
+        record["reason"] = "no_legal_finalists"
+        return None, record
+    for fixture in range(2):
+        if not live():
+            record["reason"] = "deadline_before_fixture"
+            return None, record
+        valid, timed = factory(fixture)
+        if not live():
+            record["reason"] = "deadline_after_fixture"
+            return None, record
+        for code in codes:
+            if not live() or not valid(code) or not live():
+                record["reason"] = "deadline_or_invalid_finalist"
+                return None, record
+        for round_id in range(2):
+            for code in (codes if round_id == 0 else list(reversed(codes))):
+                row = {"fixture": fixture, "round": round_id, "code": code, "times_ms": []}
+                record["rows"].append(row)
+                for which in (-1, code, -1):
+                    if not live():
+                        record["reason"] = "deadline_before_timing"
+                        return None, record
+                    value = timed(which)
+                    # Preserve invalid observations in JSON without permitting NaN.
+                    row["times_ms"].append(value if isinstance(value, (int, float)) and math.isfinite(value) else None)
+                    if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value) or value <= 0:
+                        record["reason"] = "invalid_timing"
+                        return None, record
+                    if not live():
+                        record["reason"] = "deadline_after_timing"
+                        return None, record
+                a, b, c = row["times_ms"]
+                delta = (a + c) / 2 - b
+                record["deltas"].setdefault(str(code), []).append(delta)
+    eligible = [(sum(record["deltas"][str(c)]) / 4, c) for c in codes
+                if len(record["deltas"].get(str(c), [])) == 4 and min(record["deltas"][str(c)]) > 0]
+    chosen = max(eligible, key=lambda pair: (pair[0], -codes.index(pair[1])))[1] if eligible else None
+    record.update(status="complete", reason="consistent_positive" if chosen is not None else "equivocal_or_loss")
+    return chosen, record

@@ -1,0 +1,16 @@
+{
+  "status": "INVALID_SELECTED_PROFILE_NO_COUNTER_ADMISSION",
+  "source_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+  "JIT": [],
+  "jit_errors": [],
+  "cases": {},
+  "profile_order": [
+    "router8",
+    "qkv1",
+    "pooler256",
+    "pooler128",
+    "o32"
+  ],
+  "failure": "Traceback (most recent call last):\n  File \"/okc/proj_rsi/tools/pw38_selected_profile.py\", line 110, in capture\n    result['hardware']=inspector.hardware();save()\n                       ^^^^^^^^^^^^^^^^^^^^\n  File \"/okc/proj_rsi/candidates/pw38_selected_profile_trial/graph_metadata.py\", line 28, in hardware\n    device=C.c_int();self.call('cuCtxGetDevice',C.byref(device))\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/okc/proj_rsi/candidates/pw38_selected_profile_trial/graph_metadata.py\", line 26, in call\n    rc=int(self.functions[name](*args));assert rc==0,(name,'CUDA metadata query',rc)\n                                               ^^^^^\nAssertionError: ('cuCtxGetDevice', 'CUDA metadata query', 201)\n",
+  "graph_cleanup": []
+}

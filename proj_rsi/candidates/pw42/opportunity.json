@@ -1,0 +1,138 @@
+{
+  "id": "pw38.next.gv-empty-escape-specialization",
+  "title": "Weight-derived empty-escape specialization on current QKV GV1/GV8",
+  "scope": [
+    [
+      "qkv_gate",
+      1
+    ],
+    [
+      "qkv_gate",
+      8
+    ]
+  ],
+  "source_lines": [
+    1908,
+    1925,
+    1015,
+    1030
+  ],
+  "mechanism": "At entry, use the existing warp-uniform first escape sentinel to choose a templated escape-free step loop or the exact old escape loop. Empty-list warps execute identical12-bit decode/MMA/load ordering without the per-unit next-sequence test; nonempty lists preserve every correction. Do not change geometry, W depth, cache policy or arithmetic. Existing SASS already interleaves dec1 operations, so merely reordering four dec1 calls is NOT the proposal.",
+  "why_current": "Scored QKV1 is GV(1,1,1,2,16,8,1,1,2,1),64registers; QKV8 is GV(1,1,1,1,16,8,1,1,2,8193). Current _gvesc emits32-entry sentinel lists; step checks nx on every K-unit. Exact CUDA empty-list prevalence is not archived and is the first discriminator.",
+  "cpu_discriminator": "Prove sentinel-uniform branch and identical corrections/math for both paths, including adversarial nonempty escapes and odd M. Compile only these two existing geometries; reject if64-register/two-CTA eligibility is lost or instruction-cache expansion removes the saved path. Count actual prepared empty lists in the next authorized trial before timing.",
+  "falsifier": "Actual empty lists are rare, generated SASS already hoists the test equivalently, resource/code-size cost dominates, or complete current-policy F1 and paired signed deltas do not improve. Keep every small signed observation.",
+  "lesson_refs": [
+    "counter-contract-not-name@1",
+    "rq11-full-residency-ledger@2",
+    "prepare-selection-is-experiment@2"
+  ],
+  "historical_evidence": [
+    "proj_rsi/audits/p2-h100.md"
+  ],
+  "jit": "GV_QKV1",
+  "new_proof": "No escape may be omitted based on sampled frequency; sentinel is exact weight-derived metadata. Both warp paths rendezvous through the existing CTA reduction unchanged.",
+  "score_scenarios": [
+    {
+      "per_target_cut_us": 0.1,
+      "load_sum_cuts_us": {
+        "decode 1": 0.1,
+        "decode 16": 0.0,
+        "decode 32": 0.0,
+        "verify 1": 0.1,
+        "verify 16": 0.0,
+        "verify 32": 0.0
+      },
+      "hypothetical_score_us": 3195.7020156811313,
+      "conditional_score_reduction_us": 2.915492300594906
+    },
+    {
+      "per_target_cut_us": 0.5,
+      "load_sum_cuts_us": {
+        "decode 1": 0.5,
+        "decode 16": 0.0,
+        "decode 32": 0.0,
+        "verify 1": 0.5,
+        "verify 16": 0.0,
+        "verify 32": 0.0
+      },
+      "hypothetical_score_us": 3183.986498293658,
+      "conditional_score_reduction_us": 14.631009688068389
+    },
+    {
+      "per_target_cut_us": 1.0,
+      "load_sum_cuts_us": {
+        "decode 1": 1.0,
+        "decode 16": 0.0,
+        "decode 32": 0.0,
+        "verify 1": 1.0,
+        "verify 16": 0.0,
+        "verify 32": 0.0
+      },
+      "hypothetical_score_us": 3169.21975143914,
+      "conditional_score_reduction_us": 29.397756542586194
+    }
+  ],
+  "actual_selected_routes": [
+    {
+      "layer": "qkv_gate",
+      "m": 1,
+      "load": "decode 1",
+      "family": "gv",
+      "median_us": 8.998907245198474,
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.4 \u00b5s 100.0%      1\ntotal                                                              9.4 \u00b5s",
+      "prepare_pick": null
+    },
+    {
+      "layer": "qkv_gate",
+      "m": 8,
+      "load": "verify 1",
+      "family": "gv",
+      "median_us": 9.34395620057617,
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)                       9.1 \u00b5s 100.0%      1\ntotal                                                              9.1 \u00b5s",
+      "prepare_pick": null
+    }
+  ],
+  "history_positive_observation_pointers": [
+    "/positive_observations/0",
+    "/positive_observations/7",
+    "/positive_observations/8"
+  ],
+  "cost": {
+    "expected_cpu_implementation_minutes": null,
+    "expected_cpu_independent_review_minutes": null,
+    "expected_cpu_analysis_minutes": null,
+    "expected_local_gpu_discriminator_seconds": null,
+    "expected_cumulative_local_gpu_seconds": null,
+    "expected_official_h200_cost": null,
+    "expected_end_to_end_cost": null,
+    "scheduler_rankable": false,
+    "reason": "No author has quoted the new implementation/proof/runtime chain. Unknown costs are not zero; no executable descriptor or live priority is created."
+  },
+  "conditional_budget_scenario": {
+    "meaning": "COMMON CONDITIONAL RESERVATION SCENARIO ONLY, not an expected-cost forecast or authorized launch. Re-rank after author quotes full costs.",
+    "CPU_implementation_cap_minutes": 45,
+    "CPU_independent_review_cap_minutes": 30,
+    "CPU_analysis_cap_minutes": 15,
+    "total_CPU_cap_minutes": 90,
+    "narrow_local_GPU_reservation_seconds": 300,
+    "cumulative_local_GPU_reservation_seconds": 3420,
+    "total_local_GPU_seconds": 3720,
+    "local_GPU_cost_USD": 5.166666666666667,
+    "cumulative_cap_basis": "Existing reviewed PW39 fullscope outer guard3420s; narrow300s is existing normal guard cap. This conservatively counts both stages, not only kernel time.",
+    "official_H200_cost": null
+  },
+  "comparison_prior": {
+    "p_gain": 0.1,
+    "p_valid": 0.8,
+    "meaning": "Equal subjective reference priors solely to expose scope/cost arithmetic; not calibrated probabilities or measured forecasts."
+  },
+  "conditional_expected_score_us": 1.1704807750454713,
+  "conditional_GPU_ROI_score_us_per_USD": 0.22654466613783314,
+  "conditional_CPU_ROI_score_us_per_minute": 0.013005341944949681,
+  "execution_status": "CPU_BRIEF_ONLY_UNKNOWN_COST_NO_SOURCE_GO_NO_QUEUE_CHANGE",
+  "retention_rule": "No fixed0.3/0.5us cutoff; preserve every signed raw result and independent validity. Parent progress is not current-incumbent gain.",
+  "first_queue_action": "CPU readiness/proof/cost quote only; implement no shipping change or GPU launch until exact version independently reviewed.",
+  "lesson_scope_notes": "Apply invariant, comparator, pipeline and experiment-design lessons only. Different kernels/hardware/scopes do not transfer measured deltas or latency fractions.",
+  "conditional_budget_rank": 2,
+  "live_scheduler_rank": null
+}

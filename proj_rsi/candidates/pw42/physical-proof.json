@@ -1,0 +1,59 @@
+{
+  "state": "PASS_PHYSICAL_EMPTY_PATH_AND_COMMON_REDUCTION_GATE",
+  "kernels": [
+    {
+      "args": [
+        1,
+        1,
+        1,
+        1,
+        16,
+        8,
+        1,
+        1,
+        2,
+        8193
+      ],
+      "entry_broadcast_PC": 752,
+      "entry_sentinel_branch_PC": 784,
+      "empty_start_PC": 16112,
+      "common_join_PC": 22160,
+      "CTA_reduction_barrier_PC": 22272,
+      "repair_instructions": 957,
+      "empty_instructions": 378,
+      "HMMA_each_path": 32,
+      "repair_SHFL": 8,
+      "empty_SHFL": 0,
+      "common_reduction": "All16/32warps rejoin common shared reduction and single CTA barrier; no CTAbarrier in either compute path",
+      "static_code_bytes": 24448,
+      "limits": "Fixed canonical CUDA12.8artifact gate; actual loaded SO must match everymainPC/instruction before runtime admission"
+    },
+    {
+      "args": [
+        1,
+        1,
+        1,
+        2,
+        16,
+        8,
+        1,
+        1,
+        2,
+        1
+      ],
+      "entry_broadcast_PC": 800,
+      "entry_sentinel_branch_PC": 832,
+      "empty_start_PC": 16160,
+      "common_join_PC": 22208,
+      "CTA_reduction_barrier_PC": 22320,
+      "repair_instructions": 957,
+      "empty_instructions": 378,
+      "HMMA_each_path": 32,
+      "repair_SHFL": 8,
+      "empty_SHFL": 0,
+      "common_reduction": "All16/32warps rejoin common shared reduction and single CTA barrier; no CTAbarrier in either compute path",
+      "static_code_bytes": 24576,
+      "limits": "Fixed canonical CUDA12.8artifact gate; actual loaded SO must match everymainPC/instruction before runtime admission"
+    }
+  ]
+}

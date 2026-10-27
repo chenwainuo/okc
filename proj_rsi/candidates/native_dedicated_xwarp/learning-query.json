@@ -1,0 +1,102 @@
+[
+  {
+    "kind": "lessons",
+    "id": "native-x-parent-progress",
+    "version": 1,
+    "title": "Native-X improves DP/DS while losing the actual incumbent",
+    "score": 23,
+    "transfer": "unproven; inspect linked scope",
+    "scope": "U128/N8192/K4096 complete local graphs: DP/DS fresh pack+main versus original-X native single-main, with actual PW36 selected comparator.",
+    "hardware": {
+      "kind": "GPU",
+      "model": "H100 local"
+    },
+    "lesson_refs": [],
+    "negative_evidence": [
+      "Paired incumbent minus native-X gain is negative."
+    ],
+    "next_test": {
+      "question": "Which native shared-X handoff cost can explain the remaining incumbent gap?",
+      "controls": [
+        "actual PW36",
+        "DP",
+        "DS",
+        "frozen native-X"
+      ],
+      "discriminator": "Use the existing native profile ROI to compare isolated producer wait/read-completion intervals under identical stages; retain full graphs and distinguish phase evidence from elapsed-time attribution.",
+      "stop_rule": "If phase attribution cannot be made without changing math or source identity, retain uncertainty and do not forecast saved time.",
+      "required_gates": [
+        "frozen source/evidence hashes",
+        "actual selected comparator and same-run declared scope",
+        "full correctness/ownership/counter/cleanup gates before gain admission",
+        "retain all raw signed outcomes; independent validation"
+      ]
+    }
+  },
+  {
+    "kind": "lessons",
+    "id": "composition-not-additivity",
+    "version": 1,
+    "title": "Commuting X4/STMatrix source edits give mixed marginal timings",
+    "score": 15,
+    "transfer": "unproven; inspect linked scope",
+    "scope": "One five-arm H100 run; all414 calls retained with source-commutativity and numeric/JIT gates.",
+    "hardware": {
+      "kind": "GPU",
+      "model": "H100 local"
+    },
+    "lesson_refs": [],
+    "negative_evidence": [
+      "Combo loses the conservative F1 comparison against X4.",
+      "Combo remains slower than actual incumbent."
+    ],
+    "next_test": {
+      "question": "Do X4 depth and producer STMatrix interact beyond timing variability?",
+      "controls": [
+        "native-X2",
+        "X4 only",
+        "STMatrix only",
+        "X4+STMatrix",
+        "actual PW36"
+      ],
+      "discriminator": "Reuse all four cells and compute per-seed interaction (native-combo)-(native-X4)-(native-STMatrix), with repeated independently frozen trials; report the interaction distribution and F1 signs rather than adding marginal medians.",
+      "stop_rule": "If the interaction and single-effect intervals span both signs, retain the mixed result and avoid integration solely on tiny paired medians.",
+      "required_gates": [
+        "frozen source/evidence hashes",
+        "actual selected comparator and same-run declared scope",
+        "full correctness/ownership/counter/cleanup gates before gain admission",
+        "retain all raw signed outcomes; independent validation"
+      ]
+    }
+  },
+  {
+    "kind": "ideas",
+    "id": "idea.native-handoff-discriminator",
+    "version": 1,
+    "title": "Which native shared-X handoff cost can explain the remaining incumbent gap?",
+    "score": 7,
+    "transfer": "unproven; inspect linked scope",
+    "scope": null,
+    "hardware": null,
+    "lesson_refs": [
+      "native-x-parent-progress@1"
+    ],
+    "negative_evidence": [],
+    "next_test": "Use the existing native profile ROI to compare isolated producer wait/read-completion intervals under identical stages; retain full graphs and distinguish phase evidence from elapsed-time attribution."
+  },
+  {
+    "kind": "ideas",
+    "id": "idea.native-factorial-interaction",
+    "version": 1,
+    "title": "Do X4 depth and producer STMatrix interact beyond timing variability?",
+    "score": 6,
+    "transfer": "unproven; inspect linked scope",
+    "scope": null,
+    "hardware": null,
+    "lesson_refs": [
+      "composition-not-additivity@1"
+    ],
+    "negative_evidence": [],
+    "next_test": "Reuse all four cells and compute per-seed interaction (native-combo)-(native-X4)-(native-STMatrix), with repeated independently frozen trials; report the interaction distribution and F1 signs rather than adding marginal medians."
+  }
+]

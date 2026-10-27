@@ -1,0 +1,49 @@
+{
+  "version": "pw44_v1_private_EH_slabs",
+  "parent_source_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+  "parent_manifest_sha256": "48b697b288e71617bdf5e688325c17e90d6541d140153acfb73a464e01dbc89b",
+  "edits": [
+    {
+      "id": "private-layout",
+      "region": "kernel.layout",
+      "before": "  static constexpr int SMEM = 1024 + ST * (XB + WB) + 24 * ST + 16;",
+      "after": "  // PW44 bit18: two 16KiB output slabs beyond rings/barriers. Bit19 removes only the alias-protecting pre-store barrier.\n  static constexpr int OUT = ((ST * (XB + WB) + 24 * ST + 16 + 1023) / 1024) * 1024;\n  static constexpr int SMEM = (FL & 262144) ? 1024 + OUT + 2 * XB : 1024 + ST * (XB + WB) + 24 * ST + 16;"
+    },
+    {
+      "id": "private-flags",
+      "region": "kernel.static-admission",
+      "before": "(FL == 65538 || FL == 65539)), \"EH backport approved M128/ST5/selfzero full-output variants only\");",
+      "after": "(FL == 65538 || FL == 65539 || FL == 327682 || FL == 327683 || FL == 851970 || FL == 851971)), \"EH backport approved M128/ST5/selfzero full-output variants only\");\n  static_assert(!(FL & 262144) || (FL & 65536), \"PW44 private requires EH\");\n  static_assert(!(FL & 524288) || (FL & 262144), \"PW44 barrier removal requires private slabs\");"
+    },
+    {
+      "id": "private-EH-branch",
+      "region": "kernel.epilogue",
+      "before": "    if constexpr (FL & 65536) {\n",
+      "after": "    if constexpr (FL & 262144) {\n    const unsigned long long ce0 = INS ? clock64() : 0;\n    unsigned long long ce[5] = {0, 0, 0, 0, 0};\n    if constexpr (!(FL & 524288)) { asm volatile(\"bar.sync 1, %0;\\n\" :: \"r\"(NW * 32) : \"memory\");  // both WGs retired every wgmma: the x ring is free\n    }\n    if (INS) ce[0] = clock64() - ce0;\n    const uint32_t slab = sbase + C::OUT + g * XB;\n    const int j = lane >> 3, rr = lane & 7;\n    // rs128b FL bit 16 (EH): two token halves per warpgroup slab, the first half's reduce-add issued before the second\n    // half's stmatrix (the TMA read of half 0 overlaps the stmatrix of half 1); the out map's box is NT / 2 tokens.\n    // FL bit 17 (EP): the issuing thread polls the zero flag before its stmatrix instead of after the slab barrier.\n    constexpr bool EH = (FL & 65536) != 0, EP = false;  // EH only: historical EP is deliberately unported\n    const bool issuer = (w == 0 && lane == 0);\n    auto zpoll = [&]() {\n      if (ZI) {  // the block's zeroing is complete (flag set by warp 10 long before; bounded spin, trap on timeout)\n        uint32_t f = 0;\n        for (int it = 0; it < (1 << 24) && !f; it++) asm volatile(\"ld.acquire.cta.shared.u32 %0, [%1];\\n\" : \"=r\"(f) : \"r\"(zflag) : \"memory\");\n        if (!f) asm volatile(\"trap;\");\n        asm volatile(\"fence.proxy.async.global;\\n\" ::: \"memory\");\n      }\n    };\n    if (EP && issuer) zpoll();\n    auto stsm = [&](int pp) {\n      const int i0 = 2 * pp, i = i0 + (j >> 1), ch = 2 * w + (j & 1), tok = 8 * i + rr;\n      const uint32_t a = slab + tok * 128 + ((ch ^ rr) << 4);\n      const uint32_t r0 = rq_pk(D[4 * i0], D[4 * i0 + 1]), r1 = rq_pk(D[4 * i0 + 2], D[4 * i0 + 3]);\n      const uint32_t r2 = rq_pk(D[4 * i0 + 4], D[4 * i0 + 5]), r3 = rq_pk(D[4 * i0 + 6], D[4 * i0 + 7]);\n      asm volatile(\"stmatrix.sync.aligned.m8n8.x4.trans.shared.b16 [%0], {%1, %2, %3, %4};\\n\" :: \"r\"(a), \"r\"(r0), \"r\"(r1), \"r\"(r2), \"r\"(r3) : \"memory\");\n    };\n    auto issue = [&](int tok0, uint32_t src) {\n      if (FL & 4) asm volatile(\"cp.async.bulk.tensor.2d.global.shared::cta.bulk_group [%0, {%1, %2}], [%3];\\n\"\n                               :: \"l\"((unsigned long long)&to), \"r\"(cb + 64 * g), \"r\"(tok0), \"r\"(src) : \"memory\");\n      else if (!(FL & 8)) asm volatile(\"cp.reduce.async.bulk.tensor.2d.global.shared::cta.add.tile.bulk_group [%0, {%1, %2}], [%3];\\n\"\n                                       :: \"l\"((unsigned long long)&to), \"r\"(cb + 64 * g), \"r\"(tok0), \"r\"(src) : \"memory\");\n    };\n    if (EH) {\n#pragma unroll\n      for (int pp = 0; pp < NT / 32; pp++) stsm(pp);\n      asm volatile(\"fence.proxy.async.shared::cta;\\n\" ::: \"memory\");\n      asm volatile(\"bar.sync %0, 128;\\n\" :: \"r\"(2 + g) : \"memory\");\n      if (issuer) {\n        if (!EP) zpoll();\n        issue(0, slab);\n        asm volatile(\"cp.async.bulk.commit_group;\\n\" ::: \"memory\");\n      }\n#pragma unroll\n      for (int pp = NT / 32; pp < NT / 16; pp++) stsm(pp);\n      asm volatile(\"fence.proxy.async.shared::cta;\\n\" ::: \"memory\");\n      asm volatile(\"bar.sync %0, 128;\\n\" :: \"r\"(2 + g) : \"memory\");\n      if (INS) ce[1] = clock64() - ce0;\n      if (issuer) {\n        if (INS) ce[2] = clock64() - ce0;\n        issue(NT / 2, slab + (NT / 2) * 128);\n        asm volatile(\"cp.async.bulk.commit_group;\\n\" ::: \"memory\");\n        if (INS) ce[3] = clock64() - ce0;\n        asm volatile(\"cp.async.bulk.wait_group.read 0;\\n\" ::: \"memory\");\n        if (INS) ce[4] = clock64() - ce0;\n      }\n    } else {\n#pragma unroll\n      for (int pp = 0; pp < NT / 16; pp++) stsm(pp);\n      asm volatile(\"fence.proxy.async.shared::cta;\\n\" ::: \"memory\");\n      asm volatile(\"bar.sync %0, 128;\\n\" :: \"r\"(2 + g) : \"memory\");\n      if (INS) ce[1] = clock64() - ce0;\n      if (issuer) {\n        if (!EP) zpoll();\n        if (INS) ce[2] = clock64() - ce0;\n        issue(0, slab);\n        asm volatile(\"cp.async.bulk.commit_group;\\n\" ::: \"memory\");\n        if (INS) ce[3] = clock64() - ce0;\n        asm volatile(\"cp.async.bulk.wait_group.read 0;\\n\" ::: \"memory\");\n        if (INS) ce[4] = clock64() - ce0;\n      }\n    }\n    RQ_T1(8);\n    if (INS && g == 0 && w == 0 && lane == 0) {\n#pragma unroll\n      for (int i = 0; i < 5; i++) p.prof[cta * 32 + 26 + i] = ce[i];\n    }\n    } else if constexpr (FL & 65536) {\n"
+    },
+    {
+      "id": "private-launch-co-residency",
+      "region": "host.new-variant-prelaunch",
+      "before": "  k<<<dim3(p.NB * ((FL & 16) ? 2 : 1), KS), dim3(384), C::SMEM, at::cuda::getCurrentCUDAStream()>>>(p, tx, to);",
+      "after": "  if constexpr (FL & 262144) {\n    if (p.m != 128 || !((p.N == 2304 && KS == 7) || (p.N == 4096 && KS == 4))) return -40;\n    int dev = 0, major = 0, minor = 0, sms = 0, resident = 0;\n    if (cudaGetDevice(&dev) != cudaSuccess ||\n        cudaDeviceGetAttribute(&major, cudaDevAttrComputeCapabilityMajor, dev) != cudaSuccess ||\n        cudaDeviceGetAttribute(&minor, cudaDevAttrComputeCapabilityMinor, dev) != cudaSuccess ||\n        cudaDeviceGetAttribute(&sms, cudaDevAttrMultiProcessorCount, dev) != cudaSuccess) return -41;\n    if (major != 9 || minor != 0) return -42;\n    if (cudaOccupancyMaxActiveBlocksPerMultiprocessor(&resident, k, 384, C::SMEM) != cudaSuccess) return -43;\n    if (resident < 1 || (long long)sms * resident < (long long)p.NB * KS) return -44;\n  }\n  k<<<dim3(p.NB * ((FL & 16) ? 2 : 1), KS), dim3(384), C::SMEM, at::cuda::getCurrentCUDAStream()>>>(p, tx, to);"
+    },
+    {
+      "id": "optional-private-catalog",
+      "region": "host.catalog",
+      "before": "    (\"s4s5hzEH\", 128, 5, 1, 0, 0, 0, 65539),\n",
+      "after": "    (\"s4s5hzEH\", 128, 5, 1, 0, 0, 0, 65539),\n    (\"ehpriv_z_bar\", 128, 5, 1, 0, 0, 0, 327682),\n    (\"ehpriv_hz_bar\", 128, 5, 1, 0, 0, 0, 327683),\n    (\"ehpriv_z_free\", 128, 5, 1, 0, 0, 0, 851970),\n    (\"ehpriv_hz_free\", 128, 5, 1, 0, 0, 0, 851971),\n"
+    },
+    {
+      "id": "compile-private-arms",
+      "region": "host.compile-catalog",
+      "before": "RQPROD = [\"s4s5z\", \"s4s5hz\", \"s4hz\", \"n256s4hz\", \"n256s5hz\", \"n256s5z\", \"s4s5zEH\", \"s4s5hzEH\"]",
+      "after": "RQPROD = [\"s4s5z\", \"s4s5hz\", \"s4hz\", \"n256s4hz\", \"n256s5hz\", \"n256s5z\", \"s4s5zEH\", \"s4s5hzEH\", 'ehpriv_z_bar', 'ehpriv_hz_bar', 'ehpriv_z_free', 'ehpriv_hz_free']"
+    },
+    {
+      "id": "two-targets-only-optional-bake",
+      "region": "host.bake-enumeration",
+      "before": "            for nm in RQBAKE[m]:",
+      "after": "            for nm in RQBAKE[m] + (['ehpriv_z_bar', 'ehpriv_hz_bar', 'ehpriv_z_free', 'ehpriv_hz_free'] if layer in (\"qkv_gate\", \"pooler\") and m == 128 else []):"
+    }
+  ]
+}

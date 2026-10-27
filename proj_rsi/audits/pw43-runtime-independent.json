@@ -1,0 +1,1906 @@
+{
+  "state": "PASS_SCOPED_LOCAL_VALIDATION_REGRESSION_NOT_PROMOTION",
+  "inventory_sha256": "c5ac814d3d083a25f147aa0e46d2cc220a3a9102b02af80f4237dbe27babd799",
+  "result_sha256": "f95e12ebe21062ee0cdceed8de3f01487577aaf94578cb5550dd76ec386076e4",
+  "inventory_files": 48,
+  "normal_checks": 195,
+  "task_official_style_checks": 27,
+  "terminal_oracles": 180,
+  "mutations": 360,
+  "raw_samples": 4350,
+  "actual_RQ_functions": {
+    "rs32": 17,
+    "pw38": 19,
+    "pw43": 19
+  },
+  "prepare": {
+    "rs32": {
+      "wall_seconds": 61.364384174346924,
+      "import_clock_elapsed": 61.62548899650574,
+      "budget_clock_reset": false,
+      "serving_CPU_fallback": false,
+      "build_threads_joined": 2
+    },
+    "pw38": {
+      "wall_seconds": 62.906351804733276,
+      "import_clock_elapsed": 62.909565925598145,
+      "budget_clock_reset": false,
+      "serving_CPU_fallback": false,
+      "build_threads_joined": 2
+    },
+    "pw43": {
+      "wall_seconds": 49.117151737213135,
+      "import_clock_elapsed": 49.13144850730896,
+      "budget_clock_reset": false,
+      "serving_CPU_fallback": false,
+      "build_threads_joined": 2
+    }
+  },
+  "Lt_actual_confirmation": [
+    {
+      "layer": "qkv_gate",
+      "remaining_seconds": 3.1301286220550537,
+      "returned": 54,
+      "status": "complete",
+      "reason": "consistent_positive",
+      "codes": [
+        54,
+        100000
+      ],
+      "rows": 8,
+      "deltas_ms": {
+        "54": [
+          0.001120000146329403,
+          0.0012960005551576614,
+          0.0006079990416765213,
+          0.002208000048995018
+        ],
+        "100000": [
+          -8.00006091594696e-05,
+          0.0,
+          -0.0013279989361763,
+          0.0007199998944997787
+        ]
+      },
+      "timers": 75
+    },
+    {
+      "layer": "o",
+      "remaining_seconds": -1.9278666973114014,
+      "returned": null,
+      "status": "incomplete",
+      "reason": "no_legal_finalists",
+      "codes": [],
+      "rows": 0,
+      "deltas_ms": {},
+      "timers": 0
+    },
+    {
+      "layer": "pooler",
+      "remaining_seconds": -0.7344620227813721,
+      "returned": null,
+      "status": "incomplete",
+      "reason": "no_legal_finalists",
+      "codes": [],
+      "rows": 0,
+      "deltas_ms": {},
+      "timers": 0
+    },
+    {
+      "layer": "unpooler",
+      "remaining_seconds": -0.5815730094909668,
+      "returned": null,
+      "status": "incomplete",
+      "reason": "no_legal_finalists",
+      "codes": [],
+      "rows": 0,
+      "deltas_ms": {},
+      "timers": 0
+    }
+  ],
+  "six_load_component_sums_us": {
+    "paired_pw38": {
+      "decode1": 58.911999920383096,
+      "decode16": 76.56000088900328,
+      "decode32": 77.95200031250715,
+      "verify1": 59.8719990812242,
+      "verify16": 88.2239998318255,
+      "verify32": 106.0320008546114
+    },
+    "paired_pw43": {
+      "decode1": 58.91200061887503,
+      "decode16": 76.52799971401691,
+      "decode32": 78.04800011217594,
+      "verify1": 60.22400036454201,
+      "verify16": 87.56799949333072,
+      "verify32": 108.01600012928247
+    },
+    "paired_rs32": {
+      "decode1": 59.11999964155257,
+      "decode16": 76.52800064533949,
+      "decode32": 78.12799979001284,
+      "verify1": 60.17600046470761,
+      "verify16": 88.59199937433004,
+      "verify32": 108.64000208675861
+    },
+    "F1_pw38": {
+      "decode1": 58.767999755218625,
+      "decode16": 75.69599989801645,
+      "decode32": 77.72800046950579,
+      "verify1": 59.58399944938719,
+      "verify16": 86.76800038665533,
+      "verify32": 103.9199992083013
+    },
+    "F1_pw43": {
+      "decode1": 58.78400010988116,
+      "decode16": 75.61600022017956,
+      "decode32": 77.85599958151579,
+      "verify1": 60.00000052154064,
+      "verify16": 87.32799906283617,
+      "verify32": 106.33599851280451
+    }
+  },
+  "conditional_local_score_estimates_us": {
+    "paired_pw38": 4698.695044507964,
+    "paired_pw43": 4712.6157246088715,
+    "paired_rs32": 4729.24743110497,
+    "F1_pw38": 4653.293804355058,
+    "F1_pw43": 4682.2599633156
+  },
+  "pw38_minus_pw43_local_score_estimate_us": {
+    "paired": -13.920680100907703,
+    "F1": -28.96615896054209
+  },
+  "all_shape_signed_contrasts": [
+    {
+      "shape": "decode1/qkv_gate",
+      "paired_pw38_minus_pw43_us": 0.06399955600500107,
+      "F1_bracket_pw38_minus_pw43_us": 0.19200053066015244,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 5,
+          "variant": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            2,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 6,
+          "variant": [
+            1,
+            1,
+            1,
+            1,
+            16,
+            8,
+            1,
+            1,
+            2,
+            8193
+          ],
+          "origin": "gv"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 6,
+          "variant": [
+            1,
+            1,
+            1,
+            1,
+            16,
+            8,
+            1,
+            1,
+            2,
+            8193
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    {
+      "shape": "decode1/o",
+      "paired_pw38_minus_pw43_us": 0.01600012183189392,
+      "F1_bracket_pw38_minus_pw43_us": -0.09599979966878891,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 29,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 29,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 29,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    {
+      "shape": "decode1/pooler",
+      "paired_pw38_minus_pw43_us": 0.0,
+      "F1_bracket_pw38_minus_pw43_us": -0.04800129681825638,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 51,
+          "variant": [
+            1,
+            1,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 51,
+          "variant": [
+            1,
+            1,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 51,
+          "variant": [
+            1,
+            1,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    {
+      "shape": "decode1/unpooler",
+      "paired_pw38_minus_pw43_us": 0.0,
+      "F1_bracket_pw38_minus_pw43_us": -0.07999991066753864,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 92,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            4,
+            1,
+            0,
+            134217729
+          ],
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 93,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            4,
+            1,
+            0,
+            536870913
+          ],
+          "origin": "sel"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 92,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            4,
+            1,
+            0,
+            134217729
+          ],
+          "origin": "sel"
+        }
+      }
+    },
+    {
+      "shape": "decode1/router",
+      "paired_pw38_minus_pw43_us": -0.015999889001250267,
+      "F1_bracket_pw38_minus_pw43_us": 0.01600012183189392,
+      "picks": {
+        "rs32": {
+          "family": "RR",
+          "id": 1007,
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "RR",
+          "id": 1006,
+          "origin": "gv"
+        },
+        "pw43": {
+          "family": "RR",
+          "id": 1007,
+          "origin": "gv"
+        }
+      }
+    },
+    {
+      "shape": "decode16/qkv_gate",
+      "paired_pw38_minus_pw43_us": 0.09599979966878891,
+      "F1_bracket_pw38_minus_pw43_us": 0.3519994206726551,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 15,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 15,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 15,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    {
+      "shape": "decode16/o",
+      "paired_pw38_minus_pw43_us": 0.0800001434981823,
+      "F1_bracket_pw38_minus_pw43_us": 0.12800004333257675,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 33,
+          "variant": [
+            1,
+            2,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            0
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 34,
+          "variant": [
+            1,
+            2,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 34,
+          "variant": [
+            1,
+            2,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    {
+      "shape": "decode16/pooler",
+      "paired_pw38_minus_pw43_us": 0.01600012183189392,
+      "F1_bracket_pw38_minus_pw43_us": -0.14399923384189606,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 15,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 15,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 15,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    {
+      "shape": "decode16/unpooler",
+      "paired_pw38_minus_pw43_us": -0.06400048732757568,
+      "F1_bracket_pw38_minus_pw43_us": -0.20800065249204636,
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "t16s5hze",
+          "variant": [
+            "t16s5hze",
+            16,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            72840
+          ]
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 64,
+          "variant": [
+            1,
+            2,
+            2,
+            1,
+            4,
+            16,
+            1,
+            1,
+            2,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 63,
+          "variant": [
+            1,
+            2,
+            2,
+            1,
+            4,
+            16,
+            1,
+            1,
+            2,
+            0
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    {
+      "shape": "decode16/router",
+      "paired_pw38_minus_pw43_us": -0.12799957767128944,
+      "F1_bracket_pw38_minus_pw43_us": -0.047999899834394455,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 89,
+          "variant": [
+            2,
+            2,
+            1,
+            1,
+            8,
+            1,
+            16,
+            1,
+            0,
+            536870912
+          ],
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 89,
+          "variant": [
+            2,
+            2,
+            1,
+            1,
+            8,
+            1,
+            16,
+            1,
+            0,
+            536870912
+          ],
+          "origin": "sel"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 83,
+          "variant": [
+            2,
+            2,
+            2,
+            1,
+            8,
+            2,
+            8,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        }
+      }
+    },
+    {
+      "shape": "decode32/qkv_gate",
+      "paired_pw38_minus_pw43_us": -0.1759999431669712,
+      "F1_bracket_pw38_minus_pw43_us": -0.15999982133507729,
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "t32s6hze",
+          "variant": [
+            "t32s6hze",
+            32,
+            6,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 6,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            99488
+          ]
+        },
+        "pw38": {
+          "family": "RQ",
+          "name": "t32s6hze",
+          "variant": [
+            "t32s6hze",
+            32,
+            6,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 6,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            99488
+          ]
+        },
+        "pw43": {
+          "family": "RQ",
+          "name": "t32s5hz",
+          "variant": [
+            "t32s5hz",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 6,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        }
+      }
+    },
+    {
+      "shape": "decode32/o",
+      "paired_pw38_minus_pw43_us": 0.01600012183189392,
+      "F1_bracket_pw38_minus_pw43_us": 0.09599979966878891,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 45,
+          "variant": [
+            1,
+            4,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 45,
+          "variant": [
+            1,
+            4,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 46,
+          "variant": [
+            1,
+            4,
+            1,
+            1,
+            4,
+            4,
+            1,
+            1,
+            2,
+            0
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    {
+      "shape": "decode32/pooler",
+      "paired_pw38_minus_pw43_us": 0.12800004333257675,
+      "F1_bracket_pw38_minus_pw43_us": 0.671999529004097,
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        },
+        "pw38": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        },
+        "pw43": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        }
+      }
+    },
+    {
+      "shape": "decode32/unpooler",
+      "paired_pw38_minus_pw43_us": 0.0,
+      "F1_bracket_pw38_minus_pw43_us": -0.6879987195134163,
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        },
+        "pw38": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        },
+        "pw43": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        }
+      }
+    },
+    {
+      "shape": "decode32/router",
+      "paired_pw38_minus_pw43_us": -0.03200024366378784,
+      "F1_bracket_pw38_minus_pw43_us": -0.047999899834394455,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 84,
+          "variant": [
+            2,
+            4,
+            2,
+            1,
+            8,
+            2,
+            8,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 84,
+          "variant": [
+            2,
+            4,
+            2,
+            1,
+            8,
+            2,
+            8,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 84,
+          "variant": [
+            2,
+            4,
+            2,
+            1,
+            8,
+            2,
+            8,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        }
+      }
+    },
+    {
+      "shape": "verify1/qkv_gate",
+      "paired_pw38_minus_pw43_us": 0.12800004333257675,
+      "F1_bracket_pw38_minus_pw43_us": 0.0800001434981823,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 6,
+          "variant": [
+            1,
+            1,
+            1,
+            1,
+            16,
+            8,
+            1,
+            1,
+            2,
+            8193
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 5,
+          "variant": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            2,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 5,
+          "variant": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            2,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    {
+      "shape": "verify1/o",
+      "paired_pw38_minus_pw43_us": -0.06399955600500107,
+      "F1_bracket_pw38_minus_pw43_us": 0.15999935567378998,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 28,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            0
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 29,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 29,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    {
+      "shape": "verify1/pooler",
+      "paired_pw38_minus_pw43_us": -0.30399952083826065,
+      "F1_bracket_pw38_minus_pw43_us": -0.3200005739927292,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 51,
+          "variant": [
+            1,
+            1,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 51,
+          "variant": [
+            1,
+            1,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 0,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    {
+      "shape": "verify1/unpooler",
+      "paired_pw38_minus_pw43_us": 0.09599979966878891,
+      "F1_bracket_pw38_minus_pw43_us": -0.1279998105019331,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 93,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            4,
+            1,
+            0,
+            536870913
+          ],
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 93,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            4,
+            1,
+            0,
+            536870913
+          ],
+          "origin": "sel"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 93,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            4,
+            1,
+            0,
+            536870913
+          ],
+          "origin": "sel"
+        }
+      }
+    },
+    {
+      "shape": "verify1/router",
+      "paired_pw38_minus_pw43_us": -0.11199992150068283,
+      "F1_bracket_pw38_minus_pw43_us": -0.20800018683075905,
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 85,
+          "variant": [
+            2,
+            1,
+            1,
+            1,
+            8,
+            1,
+            16,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 88,
+          "variant": [
+            2,
+            1,
+            1,
+            1,
+            8,
+            1,
+            16,
+            1,
+            0,
+            536870912
+          ],
+          "origin": "sel"
+        },
+        "pw43": {
+          "family": "GV",
+          "id": 85,
+          "variant": [
+            2,
+            1,
+            1,
+            1,
+            8,
+            1,
+            16,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        }
+      }
+    },
+    {
+      "shape": "verify16/qkv_gate",
+      "paired_pw38_minus_pw43_us": 0.01600012183189392,
+      "F1_bracket_pw38_minus_pw43_us": -0.5599996075034142,
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "s4s5hz",
+          "variant": [
+            "s4s5hz",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 7,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        },
+        "pw38": {
+          "family": "RQ",
+          "name": "s4s5hzEH",
+          "variant": [
+            "s4s5hzEH",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            65539
+          ],
+          "KS": 7,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        },
+        "pw43": {
+          "family": "RQ",
+          "name": "s4s5hzEH",
+          "variant": [
+            "s4s5hzEH",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            65539
+          ],
+          "KS": 7,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        }
+      }
+    },
+    {
+      "shape": "verify16/o",
+      "paired_pw38_minus_pw43_us": -0.07999967783689499,
+      "F1_bracket_pw38_minus_pw43_us": 0.20799972116947174,
+      "picks": {
+        "rs32": {
+          "family": "LT",
+          "lt": 200017,
+          "external_library_identity": {
+            "dispatch": "ext.lt_mm",
+            "algorithm_code": 200017,
+            "layout": 2,
+            "configuration": "UNPROBED_NOT_QUERIED_BY_SOURCE",
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        },
+        "pw38": {
+          "family": "LT",
+          "lt": 200024,
+          "external_library_identity": {
+            "dispatch": "ext.lt_mm",
+            "algorithm_code": 200024,
+            "layout": 2,
+            "configuration": "UNPROBED_NOT_QUERIED_BY_SOURCE",
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        },
+        "pw43": {
+          "family": "LT",
+          "lt": 200036,
+          "external_library_identity": {
+            "dispatch": "ext.lt_mm",
+            "algorithm_code": 200036,
+            "layout": 2,
+            "configuration": "UNPROBED_NOT_QUERIED_BY_SOURCE",
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        }
+      }
+    },
+    {
+      "shape": "verify16/pooler",
+      "paired_pw38_minus_pw43_us": 0.3359997645020485,
+      "F1_bracket_pw38_minus_pw43_us": 0.0800006091594696,
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "s4s5hz",
+          "variant": [
+            "s4s5hz",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        },
+        "pw38": {
+          "family": "RQ",
+          "name": "s4s5hzEH",
+          "variant": [
+            "s4s5hzEH",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            65539
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        },
+        "pw43": {
+          "family": "RQ",
+          "name": "s4s5hzEH",
+          "variant": [
+            "s4s5hzEH",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            65539
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        }
+      }
+    },
+    {
+      "shape": "verify16/unpooler",
+      "paired_pw38_minus_pw43_us": 0.31999964267015457,
+      "F1_bracket_pw38_minus_pw43_us": -0.2719992771744728,
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "s4s5hz",
+          "variant": [
+            "s4s5hz",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        },
+        "pw38": {
+          "family": "RQ",
+          "name": "s4s5hz",
+          "variant": [
+            "s4s5hz",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        },
+        "pw43": {
+          "family": "RQ",
+          "name": "s4s5hz",
+          "variant": [
+            "s4s5hz",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        }
+      }
+    },
+    {
+      "shape": "verify16/router",
+      "paired_pw38_minus_pw43_us": 0.0,
+      "F1_bracket_pw38_minus_pw43_us": -0.01600012183189392,
+      "picks": {
+        "rs32": {
+          "family": "router",
+          "variant": -7,
+          "id": 126,
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "router",
+          "variant": -7,
+          "id": 201,
+          "origin": "sel"
+        },
+        "pw43": {
+          "family": "router",
+          "variant": -7,
+          "id": 201,
+          "origin": "sel"
+        }
+      }
+    },
+    {
+      "shape": "verify32/qkv_gate",
+      "paired_pw38_minus_pw43_us": -0.5440004169940948,
+      "F1_bracket_pw38_minus_pw43_us": -0.23999996483325958,
+      "picks": {
+        "rs32": {
+          "family": "LT",
+          "lt": 11,
+          "external_library_identity": {
+            "dispatch": "ext.lt_mm",
+            "algorithm_code": 11,
+            "layout": 0,
+            "configuration": [
+              66,
+              124,
+              1,
+              0,
+              0,
+              0,
+              35,
+              0,
+              3
+            ],
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        },
+        "pw38": {
+          "family": "LT",
+          "lt": 27,
+          "external_library_identity": {
+            "dispatch": "ext.lt_mm",
+            "algorithm_code": 27,
+            "layout": 0,
+            "configuration": [
+              66,
+              124,
+              1,
+              0,
+              0,
+              0,
+              35,
+              0,
+              3
+            ],
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        },
+        "pw43": {
+          "family": "LT",
+          "lt": 54,
+          "external_library_identity": {
+            "dispatch": "ext.lt_mm",
+            "algorithm_code": 54,
+            "layout": 0,
+            "configuration": [
+              66,
+              124,
+              1,
+              0,
+              0,
+              0,
+              35,
+              0,
+              2
+            ],
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        }
+      }
+    },
+    {
+      "shape": "verify32/o",
+      "paired_pw38_minus_pw43_us": -0.2720002084970474,
+      "F1_bracket_pw38_minus_pw43_us": -0.4160008393228054,
+      "picks": {
+        "rs32": {
+          "family": "LT",
+          "lt": 200008,
+          "external_library_identity": {
+            "dispatch": "ext.lt_mm",
+            "algorithm_code": 200008,
+            "layout": 2,
+            "configuration": [
+              66,
+              17,
+              1,
+              0,
+              0,
+              0,
+              35,
+              0,
+              2
+            ],
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        },
+        "pw38": {
+          "family": "LT",
+          "lt": 300012,
+          "external_library_identity": {
+            "dispatch": "ext.lt_mm",
+            "algorithm_code": 300012,
+            "layout": 3,
+            "configuration": [
+              66,
+              20,
+              1,
+              0,
+              0,
+              4,
+              35,
+              0,
+              2
+            ],
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        },
+        "pw43": {
+          "family": "LT",
+          "lt": null,
+          "external_library_identity": {
+            "dispatch": "torch.mm",
+            "algorithm_code": null,
+            "layout": null,
+            "configuration": "UNPROBED_NOT_QUERIED_BY_SOURCE",
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        }
+      }
+    },
+    {
+      "shape": "verify32/pooler",
+      "paired_pw38_minus_pw43_us": 0.4479996860027313,
+      "F1_bracket_pw38_minus_pw43_us": 0.17600040882825851,
+      "picks": {
+        "rs32": {
+          "family": "LT",
+          "lt": 200014,
+          "external_library_identity": {
+            "dispatch": "ext.lt_mm",
+            "algorithm_code": 200014,
+            "layout": 2,
+            "configuration": [
+              66,
+              18,
+              1,
+              0,
+              0,
+              4,
+              35,
+              0,
+              2
+            ],
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        },
+        "pw38": {
+          "family": "LT",
+          "lt": 200018,
+          "external_library_identity": {
+            "dispatch": "ext.lt_mm",
+            "algorithm_code": 200018,
+            "layout": 2,
+            "configuration": [
+              66,
+              17,
+              1,
+              0,
+              0,
+              0,
+              35,
+              0,
+              2
+            ],
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        },
+        "pw43": {
+          "family": "RQ",
+          "name": "n256s4hz",
+          "variant": [
+            "n256s4hz",
+            256,
+            4,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            181360
+          ]
+        }
+      }
+    },
+    {
+      "shape": "verify32/unpooler",
+      "paired_pw38_minus_pw43_us": -1.9520008936524391,
+      "F1_bracket_pw38_minus_pw43_us": -1.871999353170395,
+      "picks": {
+        "rs32": {
+          "family": "LT",
+          "lt": 300008,
+          "external_library_identity": {
+            "dispatch": "ext.lt_mm",
+            "algorithm_code": 300008,
+            "layout": 3,
+            "configuration": [
+              66,
+              20,
+              1,
+              0,
+              0,
+              4,
+              35,
+              0,
+              2
+            ],
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        },
+        "pw38": {
+          "family": "LT",
+          "lt": 300012,
+          "external_library_identity": {
+            "dispatch": "ext.lt_mm",
+            "algorithm_code": 300012,
+            "layout": 3,
+            "configuration": [
+              66,
+              20,
+              1,
+              0,
+              0,
+              4,
+              35,
+              0,
+              2
+            ],
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        },
+        "pw43": {
+          "family": "LT",
+          "lt": null,
+          "external_library_identity": {
+            "dispatch": "torch.mm",
+            "algorithm_code": null,
+            "layout": null,
+            "configuration": "UNPROBED_NOT_QUERIED_BY_SOURCE",
+            "CUDA_kernel_names": "UNPROBED_EXTERNAL_CUBLAS",
+            "graph_kernel_node_count": "UNPROBED",
+            "SASS": "UNPROBED_EXTERNAL_CUBLAS"
+          }
+        }
+      }
+    },
+    {
+      "shape": "verify32/router",
+      "paired_pw38_minus_pw43_us": 0.09600026533007622,
+      "F1_bracket_pw38_minus_pw43_us": -0.06399955600500107,
+      "picks": {
+        "rs32": {
+          "family": "router",
+          "variant": -7,
+          "id": 107,
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "router",
+          "variant": -7,
+          "id": 200,
+          "origin": "sel"
+        },
+        "pw43": {
+          "family": "router",
+          "variant": -7,
+          "id": 200,
+          "origin": "sel"
+        }
+      }
+    }
+  ],
+  "limits": [
+    "One full prepare per source, not repeat-prepare selection frequency/regret evidence.",
+    "External Lt kernels, graph node counts and SASS explicitly UNPROBED; reviewed normal-serving scope permits this library boundary.",
+    "Loaded SO hashes recorded by runtime; SO bytes are not collected, so independent rehash covers CU/SASS/resource artifacts, not SO bytes.",
+    "Normal allK/full-basis coverage is exactly the frozen lab checks, not a new exhaustive numerical oracle.",
+    "Runtime counter/immutability passes are source-bound assertions in the frozen lab; raw before/after counter arrays are not retained in this result, so this audit cannot separately reconstruct each physical transition.",
+    "No official H200 score/gain or family rejection inferred."
+  ],
+  "lessons": [
+    {
+      "id": "pw43-weighted-deadline-fallback-actual",
+      "scope": "PW43v1 one H100 fullprepare, fourBF16M256",
+      "observation": "Only qkv confirmation completed; laterthree searches started with expired weighted deadlines and nofinalists, triggering torch defaults and later poolerRQ selection.",
+      "next_test": "Account descriptor initialization/reference fixture and search admission costs within each slice before proposing another selector; compare repeated actual policies on disjoint evaluation.",
+      "transfer": "Bounded tuning changes fallback policy as well as winner selection; earlier local wins do not justify forcing a candidate."
+    }
+  ],
+  "GPU_calls_by_this_validator": 0
+}

@@ -1,7 +1,7 @@
 # Current iteration contract
 
 Authority: user2026-10-26 correction; supersedes historical family-wide
-`CLOSED/NO_RETRY/kill` language. Current state: queue.json. Official incumbent and
+`CLOSED/NO_RETRY/kill` language. Execution authority: results/proj-rsi/scheduler/events.jsonl; queue.json is historical experiment context. Official incumbent and
 score: protocol.json. Chronological measurements: LOOP.md and immutable artifacts.
 
 `family != version != measurement_attempt`.
@@ -60,3 +60,5 @@ Version sources freeze during a run. New source gets a new version/hash; old
 outputs stay attached to their actual source, environment, comparator and attempt.
 Tests and profiling remain focused and bounded; those bounds control resource use
 and measurement validity, rather than forbidding evidence-driven follow-ups.
+
+User promotion policy: retain every measured positive; no minimum-size or statistical-significance gate for submission. Record uncertainty. Whole-source rewrites are allowed; exact old-control SASS identity is required only where the specific narrow experiment depends on that matched control.

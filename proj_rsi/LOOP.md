@@ -2,7 +2,7 @@
 
 Current head: Codex /root; up to ten Sol6.1 medium subagents plus head, one GPU slot. One candidate directory per implementer; independent critic.
 Current iteration authority: [ITERATION.md](ITERATION.md). User expects failures to be diagnosed and iterated. Historical family-wide CLOSE/NO_RETRY wording below is superseded; performance bars gate promotion of versions.
-Goal: official board under3000us. Current official best PW38/job`a3f0ebf25a754c01`,3198.6175079817267us,9/9 (previous RS32/job`fb548b5dc6f04696`,3200.6150084373335us retained). Execution queue: `results/proj-rsi/scheduler/events.jsonl`; operations:`proj_rsi/scheduling/OPERATIONS.md`; handover:`handover_folder/12-codex-takeover.json`.
+Projection milestone: official board under3000us. Full active thread goal remains 3x the frozen expert benchmark in docs/threefold-target.json; the projection milestone does not complete it. Current official best PW38/job`a3f0ebf25a754c01`,3198.6175079817267us,9/9 (previous RS32/job`fb548b5dc6f04696`,3200.6150084373335us retained). Execution queue: `results/proj-rsi/scheduler/events.jsonl`; operations:`proj_rsi/scheduling/OPERATIONS.md`; handover:`handover_folder/12-codex-takeover.json`.
 Exactscore=4830.8/geomean(SGLang_load_sum/ours_load_sum) fromsamejob;62*geomean(ours) elsewhereinhistoryisapproximate, nottheofficialarithmetic. Historicalmodelroles/boardvaluesbelowarechronologicalevidence, notcurrentstate.
 Tools: `python3 -m proj_rsi {board,check,wait,result,status,lint,cpu-check,quota}`. Protocol: `proj_rsi/protocol.json`.
 History before this loop: `proj_rsi/archive/fable-LOG-2026-10-25.md` and `proj_rsi/submission/NOTE.md` (another session's summary).

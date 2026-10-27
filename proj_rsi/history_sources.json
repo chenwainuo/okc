@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 5,
-  "active_jobs_snapshot": "pw38-scored-complete-a3f0ebf25a754c01",
+  "revision": 7,
+  "active_jobs_snapshot": "pw40-check-complete-6c4eff6d63784f90",
   "jobs_snapshots": [
     {
       "id": "pre-pw38-50-jobs",
@@ -27,6 +27,16 @@
       "id": "pw38-scored-complete-a3f0ebf25a754c01",
       "path": "results/proj-rsi/releases/pw38-v1-29e557ea53f3/live-jobs-after-scored-complete.json",
       "sha256": "63b3c1ae6befe89e309bd9fc6cb0e80817b4524230fcaca097af0902ee7b78be"
+    },
+    {
+      "id": "pw39-complete-pw40-check-accepted-6c4eff6d63784f90",
+      "path": "results/proj-rsi/releases/pw40-v1-3bc0df52d96f/live-jobs-after-check-submit.json",
+      "sha256": "916ff9d9742c82be71221455f9820229ed46c1588bb5d4a5e9089db08194cd4e"
+    },
+    {
+      "id": "pw40-check-complete-6c4eff6d63784f90",
+      "path": "results/proj-rsi/releases/pw40-v1-3bc0df52d96f/live-jobs-after-check-complete.json",
+      "sha256": "3c7a133312d0f36830f9bff5e837b11a7c05a16cf36f49a174437c32ff7ea387"
     }
   ],
   "job_source_associations": {
@@ -69,6 +79,36 @@
         }
       ],
       "association": "Frozen PW38 release bytes associated with accepted and completed scored job by root submit/completion attestations; opaque server content hash remains separate."
+    },
+    "49d4063f97c14250": {
+      "candidate": "pw39",
+      "source": {
+        "path": "results/proj-rsi/releases/pw39-v1-8a13389137ad/submission.py",
+        "sha256": "8a13389137add37b6d363685bfec98a7c83d48704cab2a72444129efc0c5520a"
+      },
+      "attestation": {
+        "path": "results/proj-rsi/releases/pw39-v1-8a13389137ad/attestation.json",
+        "sha256": "d7f497f0c561a17627940caba040db76ba1162bd10676ccb3a7be42baeccb2aa"
+      },
+      "association": "Root frozen release source and submitted/local-validation attestation associated with official CHECK; server payload hash remains opaque."
+    },
+    "6c4eff6d63784f90": {
+      "candidate": "pw40",
+      "source": {
+        "path": "results/proj-rsi/releases/pw40-v1-3bc0df52d96f/submission.py",
+        "sha256": "3bc0df52d96f62479c3d5c19ab2717c7a9f4d18c1dd087fb786e2f9f080f0278"
+      },
+      "attestation": {
+        "path": "results/proj-rsi/releases/pw40-v1-3bc0df52d96f/submitted-attestation.json",
+        "sha256": "52daf6145c0238a6f8c4e45c501cfbb7c0b9caaa6daf6a9e6d5b9b918ceccb80"
+      },
+      "association": "Root frozen release source and submitted/local-validation attestation associated with official CHECK; server payload hash remains opaque.",
+      "additional_attestations": [
+        {
+          "path": "results/proj-rsi/releases/pw40-v1-3bc0df52d96f/completed-attestation.json",
+          "sha256": "f484792792cb6d7777d1df67738664f5e9d4ab89411400d60b09af1629ff91b2"
+        }
+      ]
     }
   },
   "preservation": "Never overwrite earlier API snapshots. Append a new snapshot ID/path/SHA and advance active pointer/revision after collecting a fresh read-only API response. Checks never enter submissions unless mode=run.",

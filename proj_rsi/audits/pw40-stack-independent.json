@@ -1,0 +1,2514 @@
+{
+  "status": "INDEPENDENT_FULL_SCOPE_VALIDITY_PASS",
+  "job_id": "pw40.stack.fullscope.01",
+  "inventory_sha256": "19dfb1116ab28dd3afd74f42aa42f01c7065b6c4f897be46a8b45dceee96703f",
+  "result_sha256": "63479b50f78aad64190565a72e3708a0b7d99fcdc624d9d7cf5b2dc39adaadec",
+  "inventory_files": 63,
+  "source_pins": 127,
+  "checks": 222,
+  "raw_calls": 4350,
+  "terminal_oracles": 180,
+  "mutations": 360,
+  "actual_JIT_records": 15,
+  "RQ_gates_reexecuted": {
+    "rs32:rq32_e12ac7eb": [],
+    "rs32:rq128_847c179a": [
+      2,
+      3
+    ],
+    "pw38:rq32_de4c4d9d": [],
+    "pw38:rq128_fee88c0a": [
+      2,
+      3,
+      65538,
+      65539
+    ],
+    "pw40:rq32_6fcbe238": [],
+    "pw40:rq128_a57d65d2": [
+      2,
+      3,
+      65538,
+      65539
+    ]
+  },
+  "EH_selected": [
+    "verify16/qkv_gate",
+    "verify16/pooler",
+    "verify16/unpooler"
+  ],
+  "Wring_selected": [],
+  "Wring_prepare_attempts": 70,
+  "actual_RQ_functions": {
+    "rs32": 17,
+    "pw38": 19,
+    "pw40": 20
+  },
+  "Wring_runtime": [
+    {
+      "attrs": {
+        "regs": 168,
+        "local": 0,
+        "smem": 148656,
+        "occupancy": 1,
+        "max_dynamic": 148656,
+        "max_threads": 384
+      },
+      "SM_count": 132,
+      "ZI_grid_CTAs": 126,
+      "before_first_prepare_math": true
+    }
+  ],
+  "PW40_device": {
+    "name": "NVIDIA H100 80GB HBM3",
+    "UUID": "54a7daab-fe3e-c7fc-7f7c-6fbc40145a22",
+    "SM_count": 132,
+    "compute_capability": [
+      9,
+      0
+    ],
+    "device_index": 0,
+    "source": "3bc0df52d96f62479c3d5c19ab2717c7a9f4d18c1dd087fb786e2f9f080f0278",
+    "before_candidate_import_and_prepare": true
+  },
+  "prepare": {
+    "rs32": {
+      "wall_seconds": 60.08720636367798,
+      "import_clock_elapsed": 60.296401023864746,
+      "budget_clock_reset": false,
+      "serving_CPU_fallback": false,
+      "build_threads_joined": 2
+    },
+    "pw38": {
+      "wall_seconds": 63.186410903930664,
+      "import_clock_elapsed": 63.18684411048889,
+      "budget_clock_reset": false,
+      "serving_CPU_fallback": false,
+      "build_threads_joined": 2
+    },
+    "pw40": {
+      "wall_seconds": 63.37095308303833,
+      "import_clock_elapsed": 63.3712797164917,
+      "budget_clock_reset": false,
+      "serving_CPU_fallback": false,
+      "build_threads_joined": 2
+    }
+  },
+  "paired_policy_medians_us": {
+    "decode1/qkv_gate": {
+      "rs32": 14.336000196635723,
+      "pw38": 14.336000196635723,
+      "pw40": 14.399999752640724
+    },
+    "decode1/o": {
+      "rs32": 8.975999895483255,
+      "pw38": 8.927999995648861,
+      "pw40": 8.848000317811966
+    },
+    "decode1/pooler": {
+      "rs32": 21.43999934196472,
+      "pw38": 21.63200080394745,
+      "pw40": 21.43999934196472
+    },
+    "decode1/unpooler": {
+      "rs32": 7.631999906152487,
+      "pw38": 7.2639998979866505,
+      "pw40": 7.280000019818544
+    },
+    "decode1/router": {
+      "rs32": 7.087999954819679,
+      "pw38": 7.071999832987785,
+      "pw40": 7.055999943986535
+    },
+    "decode16/qkv_gate": {
+      "rs32": 14.895999804139137,
+      "pw38": 14.864000026136637,
+      "pw40": 15.00799972563982
+    },
+    "decode16/o": {
+      "rs32": 9.007999673485756,
+      "pw38": 9.088000282645226,
+      "pw40": 9.056000038981438
+    },
+    "decode16/pooler": {
+      "rs32": 21.743999794125557,
+      "pw38": 21.95199951529503,
+      "pw40": 21.887999959290028
+    },
+    "decode16/unpooler": {
+      "rs32": 22.943999618291855,
+      "pw38": 23.136000148952007,
+      "pw40": 23.16799946129322
+    },
+    "decode16/router": {
+      "rs32": 8.1599997356534,
+      "pw38": 8.128000423312187,
+      "pw40": 8.128000423312187
+    },
+    "decode32/qkv_gate": {
+      "rs32": 15.584000386297703,
+      "pw38": 15.696000307798386,
+      "pw40": 15.39199985563755
+    },
+    "decode32/o": {
+      "rs32": 9.855999611318111,
+      "pw38": 9.855999611318111,
+      "pw40": 9.855999611318111
+    },
+    "decode32/pooler": {
+      "rs32": 22.223999723792076,
+      "pw38": 22.336000576615334,
+      "pw40": 22.512000054121017
+    },
+    "decode32/unpooler": {
+      "rs32": 23.168000392615795,
+      "pw38": 23.024000227451324,
+      "pw40": 23.120000027120113
+    },
+    "decode32/router": {
+      "rs32": 8.128000423312187,
+      "pw38": 8.191999979317188,
+      "pw40": 8.191999979317188
+    },
+    "verify1/qkv_gate": {
+      "rs32": 14.592000283300877,
+      "pw38": 14.607999939471483,
+      "pw40": 14.688000082969666
+    },
+    "verify1/o": {
+      "rs32": 9.200000204145908,
+      "pw38": 9.088000282645226,
+      "pw40": 9.056000038981438
+    },
+    "verify1/pooler": {
+      "rs32": 21.71199955046177,
+      "pw38": 21.920000202953815,
+      "pw40": 21.695999428629875
+    },
+    "verify1/unpooler": {
+      "rs32": 7.23200011998415,
+      "pw38": 7.408000063151121,
+      "pw40": 7.391999941319227
+    },
+    "verify1/router": {
+      "rs32": 7.919999770820141,
+      "pw38": 7.85600021481514,
+      "pw40": 7.88799999281764
+    },
+    "verify16/qkv_gate": {
+      "rs32": 17.632000148296356,
+      "pw38": 17.5199992954731,
+      "pw40": 17.551999539136887
+    },
+    "verify16/o": {
+      "rs32": 11.231999844312668,
+      "pw38": 11.296000331640244,
+      "pw40": 11.103999800980091
+    },
+    "verify16/pooler": {
+      "rs32": 24.4159996509552,
+      "pw38": 24.383999407291412,
+      "pw40": 24.464000016450882
+    },
+    "verify16/unpooler": {
+      "rs32": 24.288000538945198,
+      "pw38": 24.383999407291412,
+      "pw40": 23.96799996495247
+    },
+    "verify16/router": {
+      "rs32": 11.744000017642975,
+      "pw38": 10.65600011497736,
+      "pw40": 10.607999749481678
+    },
+    "verify32/qkv_gate": {
+      "rs32": 21.888000890612602,
+      "pw38": 21.967999637126923,
+      "pw40": 21.663999184966087
+    },
+    "verify32/o": {
+      "rs32": 11.711999773979187,
+      "pw38": 11.903999838978052,
+      "pw40": 11.776000261306763
+    },
+    "verify32/pooler": {
+      "rs32": 29.69600073993206,
+      "pw38": 29.53599952161312,
+      "pw40": 29.32799980044365
+    },
+    "verify32/unpooler": {
+      "rs32": 28.07999961078167,
+      "pw38": 28.12799997627735,
+      "pw40": 27.952000498771667
+    },
+    "verify32/router": {
+      "rs32": 15.296000055968761,
+      "pw38": 13.535999692976475,
+      "pw40": 13.60000018030405
+    }
+  },
+  "comparison": {
+    "decode1/qkv_gate": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.0800001434981823,
+        "pw38": 0.0
+      },
+      "paired_ratio": {
+        "rs32": 0.9944243720602266,
+        "pw38": 1.0
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.03200024366378784,
+        "pw38": -0.1600002869963646
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          14,
+          0,
+          16
+        ],
+        "pw38": [
+          13,
+          3,
+          14
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 6,
+          "variant": [
+            1,
+            1,
+            1,
+            1,
+            16,
+            8,
+            1,
+            1,
+            2,
+            8193
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 6,
+          "variant": [
+            1,
+            1,
+            1,
+            1,
+            16,
+            8,
+            1,
+            1,
+            2,
+            8193
+          ],
+          "origin": "gv"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 6,
+          "variant": [
+            1,
+            1,
+            1,
+            1,
+            16,
+            8,
+            1,
+            1,
+            2,
+            8193
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    "decode1/o": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.1600002869963646,
+        "pw38": 0.09599979966878891
+      },
+      "paired_ratio": {
+        "rs32": 1.018116926397297,
+        "pw38": 1.0110091880570442
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.12800004333257675,
+        "pw38": 0.09599979966878891
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          21,
+          0,
+          9
+        ],
+        "pw38": [
+          21,
+          5,
+          4
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 29,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 28,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            0
+          ],
+          "origin": "gv"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 29,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    "decode1/pooler": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -9.313225746154785e-07,
+        "pw38": 0.1600002869963646
+      },
+      "paired_ratio": {
+        "rs32": 1.0000021907376806,
+        "pw38": 1.0074349946776717
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 1.024000346660614,
+        "pw38": 0.512000173330307
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          15,
+          0,
+          15
+        ],
+        "pw38": [
+          17,
+          1,
+          12
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 51,
+          "variant": [
+            1,
+            1,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 50,
+          "variant": [
+            1,
+            1,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            0
+          ],
+          "origin": "gv"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 51,
+          "variant": [
+            1,
+            1,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    "decode1/unpooler": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.3519998863339424,
+        "pw38": -0.03200001083314419
+      },
+      "paired_ratio": {
+        "rs32": 1.0473295423013025,
+        "pw38": 0.9956140017759718
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.47999992966651917,
+        "pw38": 0.15999982133507729
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          27,
+          0,
+          3
+        ],
+        "pw38": [
+          13,
+          1,
+          16
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 58,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            16,
+            4,
+            1,
+            1,
+            0,
+            0
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 93,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            4,
+            1,
+            0,
+            536870913
+          ],
+          "origin": "sel"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 93,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            4,
+            1,
+            0,
+            536870913
+          ],
+          "origin": "sel"
+        }
+      }
+    },
+    "decode1/router": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.0,
+        "pw38": 0.03200001083314419
+      },
+      "paired_ratio": {
+        "rs32": 1.0,
+        "pw38": 1.004494406188018
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.09600026533007622,
+        "pw38": 0.0
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          14,
+          3,
+          13
+        ],
+        "pw38": [
+          17,
+          0,
+          13
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "RR",
+          "id": 1006,
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "RR",
+          "id": 1006,
+          "origin": "gv"
+        },
+        "pw40": {
+          "family": "RR",
+          "id": 1006,
+          "origin": "gv"
+        }
+      }
+    },
+    "decode16/qkv_gate": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.07999967783689499,
+        "pw38": -0.15999982133507729
+      },
+      "paired_ratio": {
+        "rs32": 0.9947212993740782,
+        "pw38": 0.9893115777774071
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.09599979966878891,
+        "pw38": -0.03200024366378784
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          7,
+          3,
+          20
+        ],
+        "pw38": [
+          8,
+          0,
+          22
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 15,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 15,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 15,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    "decode16/o": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.03200024366378784,
+        "pw38": 0.047999899834394455
+      },
+      "paired_ratio": {
+        "rs32": 0.9964601019866074,
+        "pw38": 1.0053132305657715
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.09599979966878891,
+        "pw38": 0.0
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          12,
+          0,
+          18
+        ],
+        "pw38": [
+          17,
+          0,
+          13
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 34,
+          "variant": [
+            1,
+            2,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 34,
+          "variant": [
+            1,
+            2,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 34,
+          "variant": [
+            1,
+            2,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    "decode16/pooler": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.12800004333257675,
+        "pw38": 0.14400016516447067
+      },
+      "paired_ratio": {
+        "rs32": 0.9941477385336825,
+        "pw38": 1.0065995379945836
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.0959988683462143,
+        "pw38": 0.06400048732757568
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          9,
+          2,
+          19
+        ],
+        "pw38": [
+          18,
+          0,
+          12
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 15,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 54,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            0
+          ],
+          "origin": "gv"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 15,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    "decode16/unpooler": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.30399952083826065,
+        "pw38": -0.07999967783689499
+      },
+      "paired_ratio": {
+        "rs32": 0.9865813645849015,
+        "pw38": 0.996479722097104
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.0959988683462143,
+        "pw38": 0.06400048732757568
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          6,
+          1,
+          23
+        ],
+        "pw38": [
+          14,
+          0,
+          16
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 64,
+          "variant": [
+            1,
+            2,
+            2,
+            1,
+            4,
+            16,
+            1,
+            1,
+            2,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 64,
+          "variant": [
+            1,
+            2,
+            2,
+            1,
+            4,
+            16,
+            1,
+            1,
+            2,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 64,
+          "variant": [
+            1,
+            2,
+            2,
+            1,
+            4,
+            16,
+            1,
+            1,
+            2,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    "decode16/router": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.031999778002500534,
+        "pw38": 0.047999899834394455
+      },
+      "paired_ratio": {
+        "rs32": 1.0039846059439754,
+        "pw38": 1.0058673230738315
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.06400048732757568,
+        "pw38": -0.1600002869963646
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          17,
+          0,
+          13
+        ],
+        "pw38": [
+          16,
+          5,
+          9
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 86,
+          "variant": [
+            2,
+            2,
+            1,
+            1,
+            8,
+            1,
+            16,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 86,
+          "variant": [
+            2,
+            2,
+            1,
+            1,
+            8,
+            1,
+            16,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 86,
+          "variant": [
+            2,
+            2,
+            1,
+            1,
+            8,
+            1,
+            16,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        }
+      }
+    },
+    "decode32/qkv_gate": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.2720002084970474,
+        "pw38": 0.3359997645020485
+      },
+      "paired_ratio": {
+        "rs32": 1.0177824403439975,
+        "pw38": 1.0216261355755147
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.28799939900636673,
+        "pw38": 0.19199959933757782
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          20,
+          0,
+          10
+        ],
+        "pw38": [
+          25,
+          1,
+          4
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 7,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        },
+        "pw38": {
+          "family": "RQ",
+          "name": "t32s6hze",
+          "variant": [
+            "t32s6hze",
+            32,
+            6,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 6,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            99488
+          ]
+        },
+        "pw40": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 6,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        }
+      }
+    },
+    "decode32/o": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.03200024366378784,
+        "pw38": 0.0
+      },
+      "paired_ratio": {
+        "rs32": 0.9968253727738574,
+        "pw38": 1.0
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.03200024366378784,
+        "pw38": 0.03200024366378784
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          14,
+          1,
+          15
+        ],
+        "pw38": [
+          14,
+          2,
+          14
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "t32s6hze",
+          "variant": [
+            "t32s6hze",
+            32,
+            6,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            99488
+          ]
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 45,
+          "variant": [
+            1,
+            4,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 45,
+          "variant": [
+            1,
+            4,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    "decode32/pooler": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.17600040882825851,
+        "pw38": -0.15999935567378998
+      },
+      "paired_ratio": {
+        "rs32": 0.9921792616673588,
+        "pw38": 0.9929646479770811
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.5119983106851578,
+        "pw38": -0.5439985543489456
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          9,
+          1,
+          20
+        ],
+        "pw38": [
+          10,
+          0,
+          20
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        },
+        "pw38": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        },
+        "pw40": {
+          "family": "RQ",
+          "name": "t32s5hz",
+          "variant": [
+            "t32s5hz",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        }
+      }
+    },
+    "decode32/unpooler": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.03200024366378784,
+        "pw38": 0.03199838101863861
+      },
+      "paired_ratio": {
+        "rs32": 1.0014598651791564,
+        "pw38": 1.001362391462454
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.0959988683462143,
+        "pw38": 0.06399862468242645
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          15,
+          1,
+          14
+        ],
+        "pw38": [
+          16,
+          1,
+          13
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        },
+        "pw38": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        },
+        "pw40": {
+          "family": "RQ",
+          "name": "t32s5hze",
+          "variant": [
+            "t32s5hze",
+            32,
+            5,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            83080
+          ]
+        }
+      }
+    },
+    "decode32/router": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.015999656170606613,
+        "pw38": 0.0
+      },
+      "paired_ratio": {
+        "rs32": 0.998054459946732,
+        "pw38": 1.0
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.03200024366378784,
+        "pw38": -0.22399984300136566
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          11,
+          4,
+          15
+        ],
+        "pw38": [
+          14,
+          3,
+          13
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 84,
+          "variant": [
+            2,
+            4,
+            2,
+            1,
+            8,
+            2,
+            8,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 84,
+          "variant": [
+            2,
+            4,
+            2,
+            1,
+            8,
+            2,
+            8,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 84,
+          "variant": [
+            2,
+            4,
+            2,
+            1,
+            8,
+            2,
+            8,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        }
+      }
+    },
+    "verify1/qkv_gate": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.06400002166628838,
+        "pw38": -0.09599979966878891
+      },
+      "paired_ratio": {
+        "rs32": 0.9956187062634496,
+        "pw38": 0.9934635695592983
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.09599979966878891,
+        "pw38": -0.19199959933757782
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          9,
+          2,
+          19
+        ],
+        "pw38": [
+          11,
+          1,
+          18
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 5,
+          "variant": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            2,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 5,
+          "variant": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            2,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 6,
+          "variant": [
+            1,
+            1,
+            1,
+            1,
+            16,
+            8,
+            1,
+            1,
+            2,
+            8193
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    "verify1/o": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.12800004333257675,
+        "pw38": 0.0
+      },
+      "paired_ratio": {
+        "rs32": 1.0141593413146341,
+        "pw38": 1.0
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.0,
+        "pw38": 0.06399955600500107
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          21,
+          0,
+          9
+        ],
+        "pw38": [
+          14,
+          3,
+          13
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 28,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            0
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 29,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 29,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    "verify1/pooler": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.06400048732757568,
+        "pw38": 0.17600040882825851
+      },
+      "paired_ratio": {
+        "rs32": 0.9970081627390649,
+        "pw38": 1.0077634405446305
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.22399984300136566,
+        "pw38": 0.03200024366378784
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          11,
+          2,
+          17
+        ],
+        "pw38": [
+          23,
+          1,
+          6
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 51,
+          "variant": [
+            1,
+            1,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 51,
+          "variant": [
+            1,
+            1,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 51,
+          "variant": [
+            1,
+            1,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        }
+      }
+    },
+    "verify1/unpooler": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.16000005416572094,
+        "pw38": 0.0
+      },
+      "paired_ratio": {
+        "rs32": 0.9784937216239257,
+        "pw38": 1.0
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.09600026533007622,
+        "pw38": 0.03200024366378784
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          5,
+          1,
+          24
+        ],
+        "pw38": [
+          13,
+          3,
+          14
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 93,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            4,
+            1,
+            0,
+            536870913
+          ],
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 93,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            4,
+            1,
+            0,
+            536870913
+          ],
+          "origin": "sel"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 93,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            4,
+            1,
+            0,
+            536870913
+          ],
+          "origin": "sel"
+        }
+      }
+    },
+    "verify1/router": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.06399978883564472,
+        "pw38": -0.06400002166628838
+      },
+      "paired_ratio": {
+        "rs32": 0.991933411407426,
+        "pw38": 0.9919016076097473
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.0,
+        "pw38": -0.06400002166628838
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          12,
+          1,
+          17
+        ],
+        "pw38": [
+          8,
+          4,
+          18
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "GV",
+          "id": 85,
+          "variant": [
+            2,
+            1,
+            1,
+            1,
+            8,
+            1,
+            16,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "GV",
+          "id": 85,
+          "variant": [
+            2,
+            1,
+            1,
+            1,
+            8,
+            1,
+            16,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        },
+        "pw40": {
+          "family": "GV",
+          "id": 85,
+          "variant": [
+            2,
+            1,
+            1,
+            1,
+            8,
+            1,
+            16,
+            1,
+            0,
+            134217728
+          ],
+          "origin": "sel"
+        }
+      }
+    },
+    "verify16/qkv_gate": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.031999312341213226,
+        "pw38": -0.01600012183189392
+      },
+      "paired_ratio": {
+        "rs32": 1.0018331426930263,
+        "pw38": 0.9990958340157559
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.35200081765651703,
+        "pw38": 0.06399862468242645
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          16,
+          0,
+          14
+        ],
+        "pw38": [
+          14,
+          1,
+          15
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "s4s5hz",
+          "variant": [
+            "s4s5hz",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 7,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        },
+        "pw38": {
+          "family": "RQ",
+          "name": "s4s5hz",
+          "variant": [
+            "s4s5hz",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 7,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        },
+        "pw40": {
+          "family": "RQ",
+          "name": "s4s5hzEH",
+          "variant": [
+            "s4s5hzEH",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            65539
+          ],
+          "KS": 7,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        }
+      }
+    },
+    "verify16/o": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.09600073099136353,
+        "pw38": 0.19200053066015244
+      },
+      "paired_ratio": {
+        "rs32": 1.0086705865995025,
+        "pw38": 1.017316101733109
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.1600002869963646,
+        "pw38": 0.03200024366378784
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          22,
+          1,
+          7
+        ],
+        "pw38": [
+          28,
+          0,
+          2
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "LT",
+          "lt": 300009
+        },
+        "pw38": {
+          "family": "LT",
+          "lt": 200018
+        },
+        "pw40": {
+          "family": "RQ",
+          "name": "h128s8e",
+          "variant": [
+            "h128s8e",
+            128,
+            8,
+            1,
+            0,
+            0,
+            0,
+            52
+          ],
+          "KS": 1,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            181456
+          ]
+        }
+      }
+    },
+    "verify16/pooler": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.04800036549568176,
+        "pw38": 0.07999967783689499
+      },
+      "paired_ratio": {
+        "rs32": 1.0019573995179183,
+        "pw38": 1.0032851762445425
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.3519989550113678,
+        "pw38": -0.15999935567378998
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          16,
+          0,
+          14
+        ],
+        "pw38": [
+          15,
+          1,
+          14
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "s4s5hz",
+          "variant": [
+            "s4s5hz",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        },
+        "pw38": {
+          "family": "RQ",
+          "name": "s4s5hzEH",
+          "variant": [
+            "s4s5hzEH",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            65539
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        },
+        "pw40": {
+          "family": "RQ",
+          "name": "s4s5hzEH",
+          "variant": [
+            "s4s5hzEH",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            65539
+          ],
+          "KS": 4,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        }
+      }
+    },
+    "verify16/unpooler": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.28799939900636673,
+        "pw38": 0.44800061732530594
+      },
+      "paired_ratio": {
+        "rs32": 1.012064404512342,
+        "pw38": 1.0186421343023127
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.09600073099136353,
+        "pw38": -0.3200005739927292
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          23,
+          0,
+          7
+        ],
+        "pw38": [
+          24,
+          0,
+          6
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "RQ",
+          "name": "s4s5hz",
+          "variant": [
+            "s4s5hz",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        },
+        "pw38": {
+          "family": "RQ",
+          "name": "s4s5hz",
+          "variant": [
+            "s4s5hz",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        },
+        "pw40": {
+          "family": "RQ",
+          "name": "s4s5hzEH",
+          "variant": [
+            "s4s5hzEH",
+            128,
+            5,
+            1,
+            0,
+            0,
+            0,
+            65539
+          ],
+          "KS": 2,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            144520
+          ]
+        }
+      }
+    },
+    "verify16/router": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 1.1680000461637974,
+        "pw38": 0.06400002166628838
+      },
+      "paired_ratio": {
+        "rs32": 1.1106060175783603,
+        "pw38": 1.0059882843264762
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.9920001029968262,
+        "pw38": 0.03200024366378784
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          29,
+          0,
+          1
+        ],
+        "pw38": [
+          18,
+          2,
+          10
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "router",
+          "variant": -7,
+          "id": 126,
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "router",
+          "variant": -7,
+          "id": 201,
+          "origin": "sel"
+        },
+        "pw40": {
+          "family": "router",
+          "variant": -7,
+          "id": 201,
+          "origin": "sel"
+        }
+      }
+    },
+    "verify32/qkv_gate": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.1759994775056839,
+        "pw38": 0.28799939900636673
+      },
+      "paired_ratio": {
+        "rs32": 1.0081258855463744,
+        "pw38": 1.0129432543959749
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": -0.06400048732757568,
+        "pw38": -0.0959988683462143
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          20,
+          0,
+          10
+        ],
+        "pw38": [
+          23,
+          0,
+          7
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "LT",
+          "lt": 11
+        },
+        "pw38": {
+          "family": "LT",
+          "lt": 40
+        },
+        "pw40": {
+          "family": "RQ",
+          "name": "n256s4hz",
+          "variant": [
+            "n256s4hz",
+            256,
+            4,
+            1,
+            0,
+            0,
+            0,
+            3
+          ],
+          "KS": 7,
+          "actual_regs_local_shared": [
+            168,
+            0,
+            181360
+          ]
+        }
+      }
+    },
+    "verify32/o": {
+      "paired_control_minus_pw40_us": {
+        "rs32": -0.01600012183189392,
+        "pw38": 0.1759994775056839
+      },
+      "paired_ratio": {
+        "rs32": 0.9986486383379416,
+        "pw38": 1.0150236570658508
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.0,
+        "pw38": 0.12800004333257675
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          11,
+          4,
+          15
+        ],
+        "pw38": [
+          20,
+          2,
+          8
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "LT",
+          "lt": 300008
+        },
+        "pw38": {
+          "family": "LT",
+          "lt": 300012
+        },
+        "pw40": {
+          "family": "LT",
+          "lt": 300016
+        }
+      }
+    },
+    "verify32/pooler": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.38400012999773026,
+        "pw38": 0.2560000866651535
+      },
+      "paired_ratio": {
+        "rs32": 1.0131724059620184,
+        "pw38": 1.008796651895544
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.5759987980127335,
+        "pw38": 0.31999871134757996
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          18,
+          0,
+          12
+        ],
+        "pw38": [
+          18,
+          1,
+          11
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "LT",
+          "lt": 200014
+        },
+        "pw38": {
+          "family": "LT",
+          "lt": 200018
+        },
+        "pw40": {
+          "family": "LT",
+          "lt": 200028
+        }
+      }
+    },
+    "verify32/unpooler": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 0.031999312341213226,
+        "pw38": 0.17600040882825851
+      },
+      "paired_ratio": {
+        "rs32": 1.0010977031870643,
+        "pw38": 1.0063100040350572
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 0.0,
+        "pw38": 0.2560000866651535
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          15,
+          1,
+          14
+        ],
+        "pw38": [
+          20,
+          1,
+          9
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "LT",
+          "lt": 300008
+        },
+        "pw38": {
+          "family": "LT",
+          "lt": 300012
+        },
+        "pw40": {
+          "family": "LT",
+          "lt": 300016
+        }
+      }
+    },
+    "verify32/router": {
+      "paired_control_minus_pw40_us": {
+        "rs32": 1.711999997496605,
+        "pw38": 0.01600012183189392
+      },
+      "paired_ratio": {
+        "rs32": 1.1258449861764688,
+        "pw38": 1.001193326540124
+      },
+      "F1_conservative_control_minus_pw40_us": {
+        "rs32": 2.3360000923275948,
+        "pw38": 0.38399919867515564
+      },
+      "paired_win_tie_loss": {
+        "rs32": [
+          30,
+          0,
+          0
+        ],
+        "pw38": [
+          15,
+          1,
+          14
+        ]
+      },
+      "picks": {
+        "rs32": {
+          "family": "router",
+          "variant": -7,
+          "id": 107,
+          "origin": "sel"
+        },
+        "pw38": {
+          "family": "router",
+          "variant": -7,
+          "id": 201,
+          "origin": "sel"
+        },
+        "pw40": {
+          "family": "router",
+          "variant": -7,
+          "id": 200,
+          "origin": "sel"
+        }
+      }
+    }
+  },
+  "local_load_sums_of_shape_medians_us": {
+    "decode1": {
+      "rs32": 59.471999295055866,
+      "pw38": 59.23200072720647,
+      "pw40": 59.02399937622249
+    },
+    "decode16": {
+      "rs32": 76.7519986256957,
+      "pw38": 77.16800039634109,
+      "pw40": 77.2479996085167
+    },
+    "decode32": {
+      "rs32": 78.96000053733587,
+      "pw38": 79.10400070250034,
+      "pw40": 79.07199952751398
+    },
+    "verify1": {
+      "rs32": 60.655999928712845,
+      "pw38": 60.880000703036785,
+      "pw40": 60.719999484717846
+    },
+    "verify16": {
+      "rs32": 89.3120002001524,
+      "pw38": 88.23999855667353,
+      "pw40": 87.695999071002
+    },
+    "verify32": {
+      "rs32": 106.67200107127428,
+      "pw38": 105.07199866697192,
+      "pw40": 104.31999992579222
+    }
+  },
+  "local_geomean_control_over_pw40_load_ratio": {
+    "rs32": 1.0065552403677742,
+    "pw38": 1.0031524075112948
+  },
+  "local_F1_load_sums_conservative_shape_brackets_us": {
+    "decode1": {
+      "rs32": 60.12800009921193,
+      "pw38": 59.231999795883894,
+      "pw40": 58.624000288546085
+    },
+    "decode16": {
+      "rs32": 75.4559999331832,
+      "pw38": 75.64800046384335,
+      "pw40": 75.71200001984835
+    },
+    "decode32": {
+      "rs32": 77.31200009584427,
+      "pw38": 76.96000020951033,
+      "pw40": 77.44000013917685
+    },
+    "verify1": {
+      "rs32": 60.41600042954087,
+      "pw38": 60.06400054320693,
+      "pw40": 60.19200012087822
+    },
+    "verify16": {
+      "rs32": 87.42400072515011,
+      "pw38": 87.04000059515238,
+      "pw40": 87.3920014128089
+    },
+    "verify32": {
+      "rs32": 105.98399955779314,
+      "pw38": 104.12800032645464,
+      "pw40": 103.13600115478039
+    }
+  },
+  "local_F1_geomean_control_over_pw40_load_ratio": {
+    "rs32": 1.008638844266225,
+    "pw38": 1.0011109673097403
+  },
+  "aggregate_limit": "Local H100 full-policy screening using per-shape paired medians in separate windows; not official SGLang/H200 score, not isolated Wring contribution. Wring unselected; no isolated Wring gain claim.",
+  "cleanup": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "terminal_exit": 0
+  },
+  "official_score": "UNMEASURED",
+  "next_official_unscored_check_readiness": "GO_EXACT_SOURCE_3bc0df52d96f62479c3d5c19ab2717c7a9f4d18c1dd087fb786e2f9f080f0278",
+  "independent_negative_controls_rejected": [
+    "terminal_seed",
+    "declared_gain",
+    "Wring_status",
+    "device_SM",
+    "function_set",
+    "false_Wring_selection",
+    "Wring_occupancy",
+    "production_source"
+  ],
+  "evidence_limits": [
+    "Fifteen extension-build records contain17/19/20 actual RQ functions acrossRS32/PW38/PW40, respectively;20 refers to PW40 RQ functions, not20 extension builds.",
+    "Collected SASS/resources/CUDA dumps are inventory-hash validated and CPU gates rerun; recordedSO hashes are structurally checked. Shared objects themselves are not in this collection and were not independently redumped.",
+    "GPU tensor outputs are not recollected/recomputed by this CPU review; strict terminal oracle evidence and exact reviewed hooks/order/source closure are checked.",
+    "Seventy Wring preparation calls are recorded, all rc0; the initial80-call summary was incorrect.",
+    "Wring unselected: timing is prepared full-policy behavior and does not isolate Wring contribution or selection robustness."
+  ]
+}

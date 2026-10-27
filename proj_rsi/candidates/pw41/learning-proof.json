@@ -1,0 +1,102 @@
+{
+  "registry_version": 3,
+  "registry_sha256": "43ede5d008cb47aed5fdfdd3e09bc548d32032b4b0ffc466c07c12caba1bc4db",
+  "applied": [
+    {
+      "ref": "counter-contract-not-name@1",
+      "record_sha256": "6f1e6d119171812e56085416a87607ee67be4f690c7988c2de166b1331a4a872",
+      "scope": "Pinned dispatch/source-bound active RQ and dormant storage, including offset aliases; unknown active protocols remain HOLD.",
+      "negative_observations": [
+        {
+          "id": "invalid",
+          "statement": "V2 failed before admissible timings; the exact original failing tensor remains unknown.",
+          "outcome": "invalid",
+          "evidence": "repair",
+          "selector": {
+            "contains": "Exact failing tensor remains UNKNOWN."
+          }
+        },
+        {
+          "id": "repro",
+          "statement": "The later valid run reproduces how the old blanket rule would reject legitimate prepared state.",
+          "outcome": "negative",
+          "evidence": "valid",
+          "selector": {
+            "contains": "Reapplying the old v2 all-cnt-zero condition to this\nnew actual preparation would first fail at pw36/p1cnt/92"
+          }
+        }
+      ],
+      "transfer_limits": [
+        "Do not weaken active reset0 or permit dormant changes.",
+        "The original unnamed failure is not retroactively identified as P1; invalid timings are never imported into v3."
+      ],
+      "next_test": {
+        "question": "Can every future selected counter protocol be classified without weakening active or alias checks?",
+        "controls": [
+          "active reset0",
+          "nonzero dormant unchanged",
+          "offset alias",
+          "unknown persistent protocol HOLD"
+        ],
+        "discriminator": "Add a source-bound protocol fixture before admitting a new selected path, then mutate active, dormant and offset-only words and require rejection; record the first failing allocation with full baseline/final values.",
+        "stop_rule": "HOLD unknown active protocols instead of zeroing state or admitting a guessed reset contract.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      }
+    },
+    {
+      "ref": "composition-not-additivity@1",
+      "record_sha256": "0e3ae3fc3b9be194f5afb595c0b3bd065aeafeccfdcd3f4f344d401b59404ee0",
+      "scope": "One five-arm H100 run; all414 calls retained with source-commutativity and numeric/JIT gates.",
+      "negative_observations": [
+        {
+          "id": "x4f1",
+          "statement": "Combo loses the conservative F1 comparison against X4.",
+          "outcome": "negative",
+          "evidence": "composition",
+          "selector": {
+            "json_pointer": "/F1_new_gain_us/x4",
+            "equals": -0.06400048732757568
+          }
+        },
+        {
+          "id": "inc",
+          "statement": "Combo remains slower than actual incumbent.",
+          "outcome": "negative",
+          "evidence": "composition",
+          "selector": {
+            "json_pointer": "/paired_new_median_gain_us/incumbent",
+            "equals": -7.087999954819679
+          }
+        }
+      ],
+      "transfer_limits": [
+        "Do not add gains from separate runs or source edit commutativity.",
+        "Paired/F1 sign disagreement remains evidence, not a reason to select the favorable statistic."
+      ],
+      "next_test": {
+        "question": "Do X4 depth and producer STMatrix interact beyond timing variability?",
+        "controls": [
+          "native-X2",
+          "X4 only",
+          "STMatrix only",
+          "X4+STMatrix",
+          "actual PW36"
+        ],
+        "discriminator": "Reuse all four cells and compute per-seed interaction (native-combo)-(native-X4)-(native-STMatrix), with repeated independently frozen trials; report the interaction distribution and F1 signs rather than adding marginal medians.",
+        "stop_rule": "If the interaction and single-effect intervals span both signs, retain the mixed result and avoid integration solely on tiny paired medians.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      }
+    }
+  ],
+  "performance_transfer": "NONE; only counter and experiment-design invariants apply"
+}

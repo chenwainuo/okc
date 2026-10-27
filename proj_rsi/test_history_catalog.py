@@ -23,6 +23,16 @@ class HistoryTests(unittest.TestCase):
   self.assertEqual(cat['submissions'][0]['candidate'],'r6-c12')
   self.assertEqual(cat['submissions'][0]['score_us'],3427.959139938749)
   self.assertTrue(all(r['tests_passed']==r['tests']==9 for r in cat['submissions'] if r['status']=='done' and r['passed'] is True))
+ def test_pw43_local_and_profile_failures_never_create_official_jobs(self):
+  cat=self.catalog;rows=[r for r in cat['local_paired_observations'] if r['version']=='pw43']
+  self.assertEqual(len(rows),30);self.assertEqual(sum(r['gain_us']>0 for r in rows),14)
+  self.assertEqual(sum(r['gain_us']<0 for r in rows),12)
+  self.assertTrue(all(r['shipping_gain'] is False for r in rows))
+  self.assertFalse(any(r['candidate']=='pw43' for r in cat['all_official_jobs']))
+  finding=next(r for r in cat['improvements'] if r['immutable_id']=='improvement.pw43.stack.fullscope.01')
+  self.assertEqual(finding['score_tested_jobs'],[])
+  profile=next(r for r in cat['improvements'] if r['immutable_id']=='improvement.pw38.selected.profile.context.01')
+  self.assertIn('INVALID_PROFILE',profile['classification']);self.assertEqual(profile['score_tested_jobs'],[])
  def test_failed_unarchived_checks_are_not_deleted_or_assigned_sources(self):
   rows=[r for r in self.catalog['all_official_jobs'] if r['passed'] is False]
   self.assertEqual(len(rows),5)
@@ -33,7 +43,7 @@ class HistoryTests(unittest.TestCase):
   self.assertEqual(partial['archive_status'],'ARCHIVED_PARTIAL')
  def test_no_small_positive_threshold_and_no_duplicate_feature_inflation(self):
   cat=self.catalog;observations=cat['positive_observations']
-  self.assertEqual(len(cat['improvements']),37)
+  self.assertEqual(len(cat['improvements']),41)
   original=[r for r in observations if r['catalog_cohort']=='initial_45_job_audit']
   self.assertEqual(len(original),224)
   self.assertGreater(len(observations),224)
@@ -80,7 +90,7 @@ class HistoryTests(unittest.TestCase):
    self.assertEqual(row['score_tested_jobs'],[])
    self.assertIsNone(row['official_score_us'])
    self.assertTrue(all('sha256' in ref for ref in row['evidence']))
-  self.assertEqual(len(self.catalog['local_paired_observations']),10)
+  self.assertEqual(len(self.catalog['local_paired_observations']),160)
  def test_normalized_release_profile_discovered_without_candidate_directory(self):
   with tempfile.TemporaryDirectory() as directory:
    root=Path(directory);path=root/'results/proj-rsi/releases/frozen-v1/profiles/submission.pending.json'
@@ -113,7 +123,7 @@ class HistoryTests(unittest.TestCase):
   self.assertEqual(self.catalog['authority']['source_sha256'],'29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e')
   self.assertEqual(self.catalog['authority']['board_row']['rank'],108)
   self.assertEqual(self.catalog['authority']['board_row']['attempts'],11)
-  self.assertEqual(len(self.catalog['submissions']),11);self.assertEqual(len(self.catalog['checks']),41)
+  self.assertEqual(len(self.catalog['submissions']),11);self.assertEqual(len(self.catalog['checks']),43)
  def test_current_source_view_uses_scored_EH_flags_and_preserves_old_rs32_audit(self):
   view=self.catalog['current_stack_view']
   self.assertEqual(view['official_job_id'],'a3f0ebf25a754c01')
@@ -124,6 +134,27 @@ class HistoryTests(unittest.TestCase):
   self.assertEqual(pooler['actual_prepare_pick']['selected'],'rq:s4s5zEH')
   self.assertTrue(all(binding['source_sha256']==view['source']['sha256'] for r in view['routes'] for binding in r['bindings']))
   self.assertEqual(self.catalog['historical_rs32_source_map']['path'],'proj_rsi/audits/current-leaderboard-stack-source.json')
+ def test_pw39_and_pw40_official_regressions_do_not_replace_best(self):
+  checks={r['job_id']:r for r in self.catalog['checks']}
+  previous=checks['49d4063f97c14250'];completed=checks['6c4eff6d63784f90']
+  self.assertEqual(previous['score_us'],3212.6810592521706);self.assertEqual(previous['tests_passed'],9)
+  self.assertEqual(previous['candidate'],'pw39');self.assertEqual(completed['candidate'],'pw40')
+  self.assertEqual(completed['score_us'],3252.054799599241);self.assertEqual(completed['archive_status'],'ARCHIVED_30_SHAPES')
+  self.assertEqual(completed['tests_passed'],9)
+  finding=next(r for r in self.catalog['improvements'] if r['id']=='PW40 full-policy local validation + official check')
+  self.assertEqual(finding['official_prepare']['total_seconds'],161)
+  self.assertFalse(finding['official_prepare']['RQ_budget_skip_present'])
+  self.assertEqual(finding['official_prepare']['QKV128_screen_us']['rq:wring_x6w4hz'],17.12)
+  self.assertEqual(finding['official_prepare']['actual_QKV128_pick']['selected'],'rq:s4s5hz')
+  self.assertEqual(finding['score_tested_jobs'],[])
+  self.assertEqual(self.catalog['authority']['best_job'],'a3f0ebf25a754c01')
+  self.assertEqual(len(self.catalog['all_official_jobs']),54)
+  self.assertEqual(len(self.catalog['submissions']),11)
+  observations=[r for r in self.catalog['local_paired_observations'] if r['version'] in ('pw39','pw40')]
+  self.assertEqual(len(observations),120)
+  self.assertTrue(any(r['gain_us']>0 and r['F1_gain_us']<0 for r in observations))
+  self.assertTrue(any(r['gain_us']<0 for r in observations))
+  self.assertEqual(self.catalog['pw40_latest_local']['Wring_selected'],[])
  def test_server_content_hash_not_claimed_equal_to_local_sha(self):
   row=next(r for r in self.catalog['submissions'] if r['candidate']=='rs32')
   self.assertNotEqual(row['source']['sha256'],row['api_content_hash'])
@@ -131,7 +162,7 @@ class HistoryTests(unittest.TestCase):
   self.assertTrue(all(r['causal_delta_vs_other_jobs_us'] is None for r in self.catalog['all_official_jobs']))
  def test_csv_roundtrip_preserves_all_rows_and_structured_evidence(self):
   outputs=render(self.catalog)
-  expected={'submissions':len(self.catalog['submissions']),'checks':len(self.catalog['checks']),'all_official_jobs':len(self.catalog['all_official_jobs']),'improvements':37,'positive_observations':len(self.catalog['positive_observations']),'local_observations':10,'candidates':self.catalog['counts']['candidates']}
+  expected={'submissions':len(self.catalog['submissions']),'checks':len(self.catalog['checks']),'all_official_jobs':len(self.catalog['all_official_jobs']),'improvements':41,'positive_observations':len(self.catalog['positive_observations']),'local_observations':160,'candidates':self.catalog['counts']['candidates']}
   for table,count in expected.items():
    rows=list(csv.DictReader(io.StringIO(outputs[f'proj_rsi/tables/{table}.csv'])))
    self.assertEqual(len(rows),count,table)

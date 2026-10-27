@@ -1,0 +1,638 @@
+{
+  "verdict": "GO_SOURCE_CPU_ONLY_RUNTIME_UNPROVEN",
+  "source_sha256": "a4ef0edd258dc46834f56c5453256dd270a33738feadf961b2d8717cd6171907",
+  "manifest_sha256": "9add0a2ad776d77e68c8a6869d81d71865422bb3694bf179364f696db80990e8",
+  "closure": {
+    "state": "PW44_FROZEN_CPU_CLOSURE_PASS_GPU_UNRUN",
+    "source_sha256": "a4ef0edd258dc46834f56c5453256dd270a33738feadf961b2d8717cd6171907",
+    "files": 66,
+    "external_pins": 5,
+    "GPU_calls": 0,
+    "production_imports": 0,
+    "NVCC_calls": 0
+  },
+  "independent_seven_edit_byte_inverse": true,
+  "pure_device_sources_exact": true,
+  "retained_cubins_redumped_exact": true,
+  "old19_full_streams_and_resources_exact": true,
+  "independent_output_coordinates": 16384,
+  "private_half_slabs_disjoint": 4,
+  "dynamic_shared": 178176,
+  "static_shared": 1024,
+  "total_shared": 179200,
+  "registers": 168,
+  "threads": 384,
+  "register_pool": 64512,
+  "source": {
+    "status": "PASS_STRICT_FULL_PARENT_INVERSE",
+    "parent_source": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+    "source": "a4ef0edd258dc46834f56c5453256dd270a33738feadf961b2d8717cd6171907",
+    "changed_AST": [
+      "RQCU",
+      "RQPROD",
+      "RQV",
+      "_rqbake"
+    ],
+    "optional_choices": [
+      {
+        "layer": "pooler",
+        "m": 128,
+        "candidates": [
+          "s4s5z",
+          "s4s5hz",
+          "s4hz",
+          "s4s5zEH",
+          "s4s5hzEH",
+          "ehpriv_z_bar",
+          "ehpriv_hz_bar",
+          "ehpriv_z_free",
+          "ehpriv_hz_free"
+        ],
+        "KS": 4
+      },
+      {
+        "layer": "pooler",
+        "m": 256,
+        "candidates": [
+          "n256s4hz",
+          "n256s5hz",
+          "n256s5z"
+        ],
+        "KS": 4
+      },
+      {
+        "layer": "qkv_gate",
+        "m": 128,
+        "candidates": [
+          "s4s5z",
+          "s4s5hz",
+          "s4hz",
+          "s4s5zEH",
+          "s4s5hzEH",
+          "ehpriv_z_bar",
+          "ehpriv_hz_bar",
+          "ehpriv_z_free",
+          "ehpriv_hz_free"
+        ],
+        "KS": 7
+      },
+      {
+        "layer": "qkv_gate",
+        "m": 256,
+        "candidates": [
+          "n256s4hz",
+          "n256s5hz",
+          "n256s5z"
+        ],
+        "KS": 7
+      },
+      {
+        "layer": "unpooler",
+        "m": 128,
+        "candidates": [
+          "s4s5z",
+          "s4s5hz",
+          "s4hz",
+          "s4s5zEH",
+          "s4s5hzEH"
+        ],
+        "KS": 2
+      },
+      {
+        "layer": "unpooler",
+        "m": 256,
+        "candidates": [
+          "n256s4hz",
+          "n256s5hz",
+          "n256s5z"
+        ],
+        "KS": 2
+      },
+      {
+        "layer": "o",
+        "m": 128,
+        "candidates": [
+          "s4s5z",
+          "s4s5hz",
+          "s4hz",
+          "s4s5zEH",
+          "s4s5hzEH"
+        ],
+        "KS": 2
+      },
+      {
+        "layer": "o",
+        "m": 256,
+        "candidates": [
+          "n256s4hz",
+          "n256s5hz",
+          "n256s5z"
+        ],
+        "KS": 2
+      }
+    ],
+    "negative_duplicate_anchors": [
+      "private-layout",
+      "private-flags",
+      "private-EH-branch",
+      "private-launch-co-residency",
+      "optional-private-catalog",
+      "compile-private-arms",
+      "two-targets-only-optional-bake"
+    ],
+    "old_EH_body_literal_exact": true,
+    "math_producer_codec_zero_trap_counter_Dwait0_core": "BYTE_EXACT_AFTER_LAYOUT_ASSERT_INVERSE",
+    "lint": {
+      "path": "/home/ubuntu/okc/proj_rsi/candidates/pw44/submission.py",
+      "ok": true,
+      "findings": [
+        {
+          "severity": "warning",
+          "rule": "sm_90a",
+          "detail": "several load_inline builds: confirm the one holding wgmma/setmaxnreg/multicast gets the sm_90a flags"
+        }
+      ]
+    }
+  },
+  "codegen": {
+    "old19_resources_exact": true,
+    "old19_full_PC_predicate_instruction_streams_exact_no_normalization": true,
+    "new_core": {
+      "327682": {
+        "math_LDS_barrier_opcode_counts_exact": true,
+        "pre_Dwait0_instructions_exact_except_listed_external_targets": true,
+        "listed_external_control_targets": [
+          {
+            "PC": 272,
+            "old": "CALL.REL.NOINC 0x6740",
+            "new": "CALL.REL.NOINC 0x6750",
+            "scope": "target outside pre-Dwait0 core prefix"
+          },
+          {
+            "PC": 800,
+            "old": "CALL.REL.NOINC 0x6740",
+            "new": "CALL.REL.NOINC 0x6750",
+            "scope": "target outside pre-Dwait0 core prefix"
+          },
+          {
+            "PC": 2176,
+            "old": "@P2 BRA 0x3a50",
+            "new": "@P2 BRA 0x3a60",
+            "scope": "target outside pre-Dwait0 core prefix"
+          },
+          {
+            "PC": 2672,
+            "old": "@!P1 BRA 0x6600",
+            "new": "@!P1 BRA 0x6610",
+            "scope": "target outside pre-Dwait0 core prefix"
+          },
+          {
+            "PC": 4976,
+            "old": "@!P1 BRA 0x6630",
+            "new": "@!P1 BRA 0x6640",
+            "scope": "target outside pre-Dwait0 core prefix"
+          },
+          {
+            "PC": 7616,
+            "old": "@!P1 BRA 0x6660",
+            "new": "@!P1 BRA 0x6670",
+            "scope": "target outside pre-Dwait0 core prefix"
+          },
+          {
+            "PC": 10224,
+            "old": "@!P1 BRA 0x6690",
+            "new": "@!P1 BRA 0x66a0",
+            "scope": "target outside pre-Dwait0 core prefix"
+          }
+        ],
+        "new_smem_dynamic": 178176,
+        "compiler_static_shared": 1024,
+        "total_shared": 179200,
+        "regs": 168,
+        "local": 0,
+        "stack": 0
+      },
+      "327683": {
+        "math_LDS_barrier_opcode_counts_exact": true,
+        "pre_Dwait0_instructions_exact_except_listed_external_targets": true,
+        "listed_external_control_targets": [
+          {
+            "PC": 272,
+            "old": "CALL.REL.NOINC 0x69c0",
+            "new": "CALL.REL.NOINC 0x69d0",
+            "scope": "target outside pre-Dwait0 core prefix"
+          },
+          {
+            "PC": 800,
+            "old": "CALL.REL.NOINC 0x69c0",
+            "new": "CALL.REL.NOINC 0x69d0",
+            "scope": "target outside pre-Dwait0 core prefix"
+          },
+          {
+            "PC": 2176,
+            "old": "@P2 BRA 0x3a50",
+            "new": "@P2 BRA 0x3a60",
+            "scope": "target outside pre-Dwait0 core prefix"
+          },
+          {
+            "PC": 2672,
+            "old": "@!P1 BRA 0x6880",
+            "new": "@!P1 BRA 0x6890",
+            "scope": "target outside pre-Dwait0 core prefix"
+          },
+          {
+            "PC": 4976,
+            "old": "@!P1 BRA 0x68b0",
+            "new": "@!P1 BRA 0x68c0",
+            "scope": "target outside pre-Dwait0 core prefix"
+          },
+          {
+            "PC": 7616,
+            "old": "@!P1 BRA 0x68e0",
+            "new": "@!P1 BRA 0x68f0",
+            "scope": "target outside pre-Dwait0 core prefix"
+          },
+          {
+            "PC": 10224,
+            "old": "@!P1 BRA 0x6910",
+            "new": "@!P1 BRA 0x6920",
+            "scope": "target outside pre-Dwait0 core prefix"
+          }
+        ],
+        "new_smem_dynamic": 178176,
+        "compiler_static_shared": 1024,
+        "total_shared": 179200,
+        "regs": 168,
+        "local": 0,
+        "stack": 0
+      },
+      "851970": {
+        "math_LDS_barrier_opcode_counts_exact": true,
+        "pre_Dwait0_instructions_exact_except_listed_external_targets": true,
+        "listed_external_control_targets": [],
+        "new_smem_dynamic": 178176,
+        "compiler_static_shared": 1024,
+        "total_shared": 179200,
+        "regs": 168,
+        "local": 0,
+        "stack": 0
+      },
+      "851971": {
+        "math_LDS_barrier_opcode_counts_exact": true,
+        "pre_Dwait0_instructions_exact_except_listed_external_targets": true,
+        "listed_external_control_targets": [],
+        "new_smem_dynamic": 178176,
+        "compiler_static_shared": 1024,
+        "total_shared": 179200,
+        "regs": 168,
+        "local": 0,
+        "stack": 0
+      }
+    },
+    "new_physical_negatives_rejected": [
+      "missing_shared_proxy",
+      "missing_poststore_bar",
+      "missing_read_drain"
+    ],
+    "limit": "The listed external-target diagnostic is only new-vs-old source-scope support; it is not whole-new-kernel canonical identity. New epilogue scheduling differs and is not isolated intrinsic barrier latency. Future actual JIT must exactly match all new canonical streams."
+  },
+  "protocol": {
+    "status": "CPU_PRIVATE_EH_STORAGE_AND_DAG_PASS_GPU_UNRUN",
+    "OUT": 144384,
+    "SMEM": 178176,
+    "old_SMEM": 144520,
+    "extra_bytes_with_alignment": 33656,
+    "regions": {
+      "X": [
+        0,
+        81920
+      ],
+      "W": [
+        81920,
+        143360
+      ],
+      "barriers": [
+        143360,
+        143480
+      ],
+      "zflag": [
+        143480,
+        143484
+      ],
+      "output0": [
+        144384,
+        160768
+      ],
+      "output1": [
+        160768,
+        177152
+      ]
+    },
+    "bitmap": {
+      "bf16_outputs_once": 16384,
+      "unique_physical_bf16": 16384,
+      "half_slabs": [
+        {
+          "WG": 0,
+          "half": 0,
+          "byte_range": [
+            144384,
+            152576
+          ],
+          "TMA_box": [
+            64,
+            64
+          ],
+          "aligned_1024": true
+        },
+        {
+          "WG": 0,
+          "half": 1,
+          "byte_range": [
+            152576,
+            160768
+          ],
+          "TMA_box": [
+            64,
+            64
+          ],
+          "aligned_1024": true
+        },
+        {
+          "WG": 1,
+          "half": 0,
+          "byte_range": [
+            160768,
+            168960
+          ],
+          "TMA_box": [
+            64,
+            64
+          ],
+          "aligned_1024": true
+        },
+        {
+          "WG": 1,
+          "half": 1,
+          "byte_range": [
+            168960,
+            177152
+          ],
+          "TMA_box": [
+            64,
+            64
+          ],
+          "aligned_1024": true
+        }
+      ],
+      "first_TMA_read_vs_second_STSM": "DISJOINT_8192B_PER_WG"
+    },
+    "DAGs": {
+      "private_barrier_control": {
+        "nodes": 72,
+        "edges": 88,
+        "topological_order": [
+          "g0.w0.last_WGMMA",
+          "g0.w0.Dwait0",
+          "g0.w1.last_WGMMA",
+          "g0.w1.Dwait0",
+          "g0.w2.last_WGMMA",
+          "g0.w2.Dwait0",
+          "g0.w3.last_WGMMA",
+          "g0.w3.Dwait0",
+          "g0.zeroers.publish",
+          "g1.w0.last_WGMMA",
+          "g1.w0.Dwait0",
+          "g1.w1.last_WGMMA",
+          "g1.w1.Dwait0",
+          "g1.w2.last_WGMMA",
+          "g1.w2.Dwait0",
+          "g1.w3.last_WGMMA",
+          "g1.w3.Dwait0",
+          "crossbar256",
+          "g0.w0.store0",
+          "g0.w0.proxy0",
+          "g0.w1.store0",
+          "g0.w1.proxy0",
+          "g0.w2.store0",
+          "g0.w2.proxy0",
+          "g0.w3.store0",
+          "g0.w3.proxy0",
+          "g0.bar128.0",
+          "g0.w0.store1",
+          "g0.w0.proxy1",
+          "g0.w1.store1",
+          "g0.w1.proxy1",
+          "g0.w2.store1",
+          "g0.w2.proxy1",
+          "g0.w3.store1",
+          "g0.w3.proxy1",
+          "g0.bar128.1",
+          "g0.zpoll.acquire",
+          "g0.global_proxy",
+          "g0.issue0",
+          "g0.commit0",
+          "g0.issue1",
+          "g0.commit1",
+          "g0.read_drain0",
+          "g0.issuer_exit",
+          "g1.w0.store0",
+          "g1.w0.proxy0",
+          "g1.w1.store0",
+          "g1.w1.proxy0",
+          "g1.w2.store0",
+          "g1.w2.proxy0",
+          "g1.w3.store0",
+          "g1.w3.proxy0",
+          "g1.bar128.0",
+          "g1.w0.store1",
+          "g1.w0.proxy1",
+          "g1.w1.store1",
+          "g1.w1.proxy1",
+          "g1.w2.store1",
+          "g1.w2.proxy1",
+          "g1.w3.store1",
+          "g1.w3.proxy1",
+          "g1.bar128.1",
+          "g1.zeroers.publish",
+          "g1.zpoll.acquire",
+          "g1.global_proxy",
+          "g1.issue0",
+          "g1.commit0",
+          "g1.issue1",
+          "g1.commit1",
+          "g1.read_drain0",
+          "g1.issuer_exit",
+          "CTA_exit"
+        ],
+        "crossWG_barrier": true,
+        "per_warp_D_completion_and_both_128thread_publications_read_drain": "PASS",
+        "other_WG_wait_not_needed_for_private_range": false
+      },
+      "private_no_crossWG_barrier": {
+        "nodes": 71,
+        "edges": 80,
+        "topological_order": [
+          "g0.w0.last_WGMMA",
+          "g0.w0.Dwait0",
+          "g0.w0.store0",
+          "g0.w0.proxy0",
+          "g0.w1.last_WGMMA",
+          "g0.w1.Dwait0",
+          "g0.w1.store0",
+          "g0.w1.proxy0",
+          "g0.w2.last_WGMMA",
+          "g0.w2.Dwait0",
+          "g0.w2.store0",
+          "g0.w2.proxy0",
+          "g0.w3.last_WGMMA",
+          "g0.w3.Dwait0",
+          "g0.w3.store0",
+          "g0.w3.proxy0",
+          "g0.bar128.0",
+          "g0.w0.store1",
+          "g0.w0.proxy1",
+          "g0.w1.store1",
+          "g0.w1.proxy1",
+          "g0.w2.store1",
+          "g0.w2.proxy1",
+          "g0.w3.store1",
+          "g0.w3.proxy1",
+          "g0.bar128.1",
+          "g0.zeroers.publish",
+          "g0.zpoll.acquire",
+          "g0.global_proxy",
+          "g0.issue0",
+          "g0.commit0",
+          "g0.issue1",
+          "g0.commit1",
+          "g0.read_drain0",
+          "g0.issuer_exit",
+          "g1.w0.last_WGMMA",
+          "g1.w0.Dwait0",
+          "g1.w0.store0",
+          "g1.w0.proxy0",
+          "g1.w1.last_WGMMA",
+          "g1.w1.Dwait0",
+          "g1.w1.store0",
+          "g1.w1.proxy0",
+          "g1.w2.last_WGMMA",
+          "g1.w2.Dwait0",
+          "g1.w2.store0",
+          "g1.w2.proxy0",
+          "g1.w3.last_WGMMA",
+          "g1.w3.Dwait0",
+          "g1.w3.store0",
+          "g1.w3.proxy0",
+          "g1.bar128.0",
+          "g1.w0.store1",
+          "g1.w0.proxy1",
+          "g1.w1.store1",
+          "g1.w1.proxy1",
+          "g1.w2.store1",
+          "g1.w2.proxy1",
+          "g1.w3.store1",
+          "g1.w3.proxy1",
+          "g1.bar128.1",
+          "g1.zeroers.publish",
+          "g1.zpoll.acquire",
+          "g1.global_proxy",
+          "g1.issue0",
+          "g1.commit0",
+          "g1.issue1",
+          "g1.commit1",
+          "g1.read_drain0",
+          "g1.issuer_exit",
+          "CTA_exit"
+        ],
+        "crossWG_barrier": false,
+        "per_warp_D_completion_and_both_128thread_publications_read_drain": "PASS",
+        "other_WG_wait_not_needed_for_private_range": true
+      }
+    },
+    "partitions": [
+      {
+        "N": 2304,
+        "KS": 7,
+        "K64_partitions": [
+          [
+            0,
+            18
+          ],
+          [
+            18,
+            36
+          ],
+          [
+            36,
+            54
+          ],
+          [
+            54,
+            73
+          ],
+          [
+            73,
+            91
+          ],
+          [
+            91,
+            109
+          ],
+          [
+            109,
+            128
+          ]
+        ],
+        "ZI_grid_CTAs": 126,
+        "runtime_required_resident_capacity": 126,
+        "static_reg_pool": 64512,
+        "dynamic_pool": 64512
+      },
+      {
+        "N": 4096,
+        "KS": 4,
+        "K64_partitions": [
+          [
+            0,
+            32
+          ],
+          [
+            32,
+            64
+          ],
+          [
+            64,
+            96
+          ],
+          [
+            96,
+            128
+          ]
+        ],
+        "ZI_grid_CTAs": 128,
+        "runtime_required_resident_capacity": 128,
+        "static_reg_pool": 64512,
+        "dynamic_pool": 64512
+      }
+    ],
+    "negative_controls_rejected": [
+      "missing_Dwait0",
+      "missing_proxy",
+      "missing_postbar",
+      "missing_read_drain",
+      "private_output_aliases_X",
+      "reused_X_without_crossWG_barrier_has_legal_slow_WG_stage15_alias"
+    ],
+    "tail_and_producer_scope": "All old producer, A buffers, mainloop waits/retirement and zeroer code remain byte-identical; output ranges are disjoint from their entire shared address domain even if another WG/producer lags. No assumed cross-WG convergence is used.",
+    "CTA_lifetime": "Each issuer retains both TMA read-drain0 before it exits; CTA shared allocation survives until all threads including both issuers/producers exit."
+  },
+  "guard": {
+    "exact_extracted_guard_sha256": "35073f2c62db2f227c4cfbcd98f7424313bd45035198ccb731b16463c994deef",
+    "fake_runtime_assertions": 25,
+    "scope": "C++17 exact branch with fake CUDA APIs; not an occupancy measurement or CUDA runtime test."
+  },
+  "GPU": "UNRUN",
+  "occupancy": "UNMEASURED",
+  "performance_forecast": "NONE"
+}

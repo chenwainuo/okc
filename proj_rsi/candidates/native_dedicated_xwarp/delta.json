@@ -1,0 +1,23 @@
+{
+  "version": "native_dedicated_xwarp_v1",
+  "parent_manifest_sha256": "92fbe73d6ed0bbe5d9b6165cfd0e9956494e1e97b48f6f38221739df584d60d2",
+  "parent_source_sha256": "45fbc8b600c6054c43e725b6b5f33b9194b61f5b602c583a7b9bb825ab325170",
+  "edits": [
+    {
+      "before": "rq_tma_x_async(",
+      "after": "rq_dedicated_x("
+    },
+    {
+      "before": "ec=warp>=8?",
+      "after": "ec=warp>=8&&warp<15?"
+    },
+    {
+      "before": "  uint32_t q0[16]",
+      "after": "  uint32_t ec3=warp==12?__ldg(p.esc+(size_t)(nb*8+4*half+3)*p.ecap+lane):0u;\n  uint32_t q0[16]"
+    },
+    {
+      "before": "  if(warp>=8){\n    const int owner=(warp-8)/4;\n    const uint32_t* el=p.esc+(size_t)(nb*8+4*half+w)*p.ecap;\n    uint32_t nx=__shfl_sync(0xffffffffu,ec,0),nxs=nx>>17;int ei=0;\n#pragma unroll 1\n    for(int s=owner;s<KC;s+=2){\n      // One elected thread owns this parity's Xslot; acquire before overwrite.\n      if(tid==256+128*owner && s+2<KC){\n        rq_wait(xempty+8*(s&1),(s/2)&1);\n        rq_expect(xfull+8*(s&1),16384);\n        rq_tile(xring+(s&1)*16384,&tx,(s+2)*64,0,xfull+8*(s&1));\n      }\n      rq_wait(wfull+8*(s%WST),(s/WST)&1);\n      if(s>=BST)rq_wait(bempty+8*(s%BST),((s/BST)&1)^1);\n      uint32_t a[16],wa=base+(s%WST)*WB+w*1536+lane*16;\n      uint4 x0=rq_lds(wa),x1=rq_lds(wa+512),x2=rq_lds(wa+1024);\n      rq_unit(x0,x1,x2,p.Tb,a);\n      // Each independent warp cursor skips the other producer's earlier stages.\n      while(nxs<(uint32_t)s){\n        ++ei;if((ei&31)==0)ec=__ldg(el+ei+lane);\n        nx=__shfl_sync(0xffffffffu,ec,ei&31);nxs=nx>>17;\n      }\n      rq_fix(a,s,nx,nxs,ei,ec,el,lane);\n#pragma unroll\n      for(int k=0;k<4;++k)\n#pragma unroll\n        for(int i=0;i<4;++i){\n          int row=16*w+8*(i%2)+g;\n          uint32_t dst=bring+(s%BST)*BB+row*128+(((2*k+i/2)^(row&7))*16)+4*t;\n          asm volatile(\"st.shared.u32 [%0],%1;\\n\"::\"r\"(dst),\"r\"(a[k*4+i]):\"memory\");\n        }\n      asm volatile(\"fence.proxy.async.shared::cta;\\n\":::\"memory\");\n      if(owner==0)asm volatile(\"bar.sync 3,128;\\n\":::\"memory\");\n      else asm volatile(\"bar.sync 4,128;\\n\":::\"memory\");\n      if(tid==256+128*owner){\n        rq_arrive(bfull+8*(s%BST));\n        if(s+WST<KC){\n          rq_expect(wfull+8*(s%WST),WB);\n          rq_bulk(base+(s%WST)*WB,p.W+((size_t)nb*KC+s+WST)*12288+half*WB,WB,wfull+8*(s%WST));\n        }\n      }\n    }\n    return;\n  }\n",
+      "after": "  if(warp==15){\n    // Dedicated X issuer never waits for Wfull or Bempty/publication.\n    if(lane==0){\n#pragma unroll 1\n      for(int s=0;s<KC-2;++s){\n        rq_wait(xempty+8*(s&1),(s/2)&1);\n        rq_expect(xfull+8*(s&1),16384);\n        rq_tile(xring+(s&1)*16384,&tx,(s+2)*64,0,xfull+8*(s&1));\n      }\n    }\n    return;\n  }\n  if(warp>=8){\n    const int owner=(warp-8)/4;\n    const uint32_t* el=p.esc+(size_t)(nb*8+4*half+w)*p.ecap;\n    const uint32_t* el3=p.esc+(size_t)(nb*8+4*half+3)*p.ecap;\n    uint32_t nx=__shfl_sync(0xffffffffu,ec,0),nxs=nx>>17;int ei=0;\n    uint32_t nx3=__shfl_sync(0xffffffffu,ec3,0),nxs3=nx3>>17;int ei3=0;\n    auto decode_store=[&](int s,int tile,uint32_t& nx,uint32_t& nxs,int& ei,uint32_t& ec,const uint32_t* el){\n      uint32_t a[16],wa=base+(s%WST)*WB+tile*1536+lane*16;\n      uint4 x0=rq_lds(wa),x1=rq_lds(wa+512),x2=rq_lds(wa+1024);\n      rq_unit(x0,x1,x2,p.Tb,a);\n      while(nxs<(uint32_t)s){\n        ++ei;if((ei&31)==0)ec=__ldg(el+ei+lane);\n        nx=__shfl_sync(0xffffffffu,ec,ei&31);nxs=nx>>17;\n      }\n      rq_fix(a,s,nx,nxs,ei,ec,el,lane);\n#pragma unroll\n      for(int k=0;k<4;++k)\n#pragma unroll\n        for(int i=0;i<4;++i){\n          int row=16*tile+8*(i%2)+g;\n          uint32_t dst=bring+(s%BST)*BB+row*128+(((2*k+i/2)^(row&7))*16)+4*t;\n          asm volatile(\"st.shared.u32 [%0],%1;\\n\"::\"r\"(dst),\"r\"(a[k*4+i]):\"memory\");\n        }\n    };\n#pragma unroll 1\n    for(int s=owner;s<KC;s+=2){\n      rq_wait(wfull+8*(s%WST),(s/WST)&1);\n      if(s>=BST)rq_wait(bempty+8*(s%BST),((s/BST)&1)^1);\n      decode_store(s,w,nx,nxs,ei,ec,el);\n      // Odd-owner warp0 also covers removed warp3, with its own CSR window.\n      if(warp==12)decode_store(s,3,nx3,nxs3,ei3,ec3,el3);\n      asm volatile(\"fence.proxy.async.shared::cta;\\n\":::\"memory\");\n      if(owner==0)asm volatile(\"bar.sync 3,128;\\n\":::\"memory\");\n      else asm volatile(\"bar.sync 4,96;\\n\":::\"memory\");\n      if(tid==256+128*owner){\n        rq_arrive(bfull+8*(s%BST));\n        if(s+WST<KC){\n          rq_expect(wfull+8*(s%WST),WB);\n          rq_bulk(base+(s%WST)*WB,p.W+((size_t)nb*KC+s+WST)*12288+half*WB,WB,wfull+8*(s%WST));\n        }\n      }\n    }\n    return;\n  }\n"
+    }
+  ]
+}

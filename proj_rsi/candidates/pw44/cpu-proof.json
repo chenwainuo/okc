@@ -1,0 +1,288 @@
+{
+  "state": "CPU_PW44_SOURCE_CODEGEN_PASS_GPU_UNRUN_LIFETIME_REVIEW_REQUIRED",
+  "source_proof": {
+    "status": "PASS_STRICT_FULL_PARENT_INVERSE",
+    "parent_source": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+    "source": "a4ef0edd258dc46834f56c5453256dd270a33738feadf961b2d8717cd6171907",
+    "changed_AST": [
+      "RQCU",
+      "RQPROD",
+      "RQV",
+      "_rqbake"
+    ],
+    "optional_choices": [
+      {
+        "layer": "pooler",
+        "m": 128,
+        "candidates": [
+          "s4s5z",
+          "s4s5hz",
+          "s4hz",
+          "s4s5zEH",
+          "s4s5hzEH",
+          "ehpriv_z_bar",
+          "ehpriv_hz_bar",
+          "ehpriv_z_free",
+          "ehpriv_hz_free"
+        ],
+        "KS": 4
+      },
+      {
+        "layer": "pooler",
+        "m": 256,
+        "candidates": [
+          "n256s4hz",
+          "n256s5hz",
+          "n256s5z"
+        ],
+        "KS": 4
+      },
+      {
+        "layer": "qkv_gate",
+        "m": 128,
+        "candidates": [
+          "s4s5z",
+          "s4s5hz",
+          "s4hz",
+          "s4s5zEH",
+          "s4s5hzEH",
+          "ehpriv_z_bar",
+          "ehpriv_hz_bar",
+          "ehpriv_z_free",
+          "ehpriv_hz_free"
+        ],
+        "KS": 7
+      },
+      {
+        "layer": "qkv_gate",
+        "m": 256,
+        "candidates": [
+          "n256s4hz",
+          "n256s5hz",
+          "n256s5z"
+        ],
+        "KS": 7
+      },
+      {
+        "layer": "unpooler",
+        "m": 128,
+        "candidates": [
+          "s4s5z",
+          "s4s5hz",
+          "s4hz",
+          "s4s5zEH",
+          "s4s5hzEH"
+        ],
+        "KS": 2
+      },
+      {
+        "layer": "unpooler",
+        "m": 256,
+        "candidates": [
+          "n256s4hz",
+          "n256s5hz",
+          "n256s5z"
+        ],
+        "KS": 2
+      },
+      {
+        "layer": "o",
+        "m": 128,
+        "candidates": [
+          "s4s5z",
+          "s4s5hz",
+          "s4hz",
+          "s4s5zEH",
+          "s4s5hzEH"
+        ],
+        "KS": 2
+      },
+      {
+        "layer": "o",
+        "m": 256,
+        "candidates": [
+          "n256s4hz",
+          "n256s5hz",
+          "n256s5z"
+        ],
+        "KS": 2
+      }
+    ],
+    "negative_duplicate_anchors": [
+      "private-layout",
+      "private-flags",
+      "private-EH-branch",
+      "private-launch-co-residency",
+      "optional-private-catalog",
+      "compile-private-arms",
+      "two-targets-only-optional-bake"
+    ],
+    "old_EH_body_literal_exact": true,
+    "math_producer_codec_zero_trap_counter_Dwait0_core": "BYTE_EXACT_AFTER_LAYOUT_ASSERT_INVERSE",
+    "lint": {
+      "path": "/home/ubuntu/okc/proj_rsi/candidates/pw44/submission.py",
+      "ok": true,
+      "findings": [
+        {
+          "severity": "warning",
+          "rule": "sm_90a",
+          "detail": "several load_inline builds: confirm the one holding wgmma/setmaxnreg/multicast gets the sm_90a flags"
+        }
+      ]
+    }
+  },
+  "old_19_control_SASS_PC_predicate_instructions": "EXACT",
+  "physical": [
+    {
+      "flag": 851971,
+      "prestore_crossWG_barrier": [],
+      "STSM": [
+        13472,
+        13568,
+        13648,
+        13696,
+        14368,
+        14448,
+        14528,
+        14560
+      ],
+      "TMA_reduce": [
+        14160,
+        14848
+      ],
+      "Dwait0": 12944,
+      "TMA_read_drain": 14896,
+      "all_poststore_publication_and_read_retirement": "PASS"
+    },
+    {
+      "flag": 851970,
+      "prestore_crossWG_barrier": [],
+      "STSM": [
+        13472,
+        13568,
+        13648,
+        13696,
+        14368,
+        14448,
+        14528,
+        14560
+      ],
+      "TMA_reduce": [
+        14160,
+        14848
+      ],
+      "Dwait0": 12944,
+      "TMA_read_drain": 14896,
+      "all_poststore_publication_and_read_retirement": "PASS"
+    },
+    {
+      "flag": 327683,
+      "prestore_crossWG_barrier": [
+        [
+          13456,
+          "BAR.SYNC.DEFER_BLOCKING 0x1, 0x100"
+        ]
+      ],
+      "STSM": [
+        13664,
+        13680,
+        13696,
+        13712,
+        14384,
+        14464,
+        14544,
+        14576
+      ],
+      "TMA_reduce": [
+        14176,
+        14864
+      ],
+      "Dwait0": 12944,
+      "TMA_read_drain": 14912,
+      "all_poststore_publication_and_read_retirement": "PASS"
+    },
+    {
+      "flag": 327682,
+      "prestore_crossWG_barrier": [
+        [
+          13456,
+          "BAR.SYNC.DEFER_BLOCKING 0x1, 0x100"
+        ]
+      ],
+      "STSM": [
+        13664,
+        13680,
+        13696,
+        13712,
+        14384,
+        14464,
+        14544,
+        14576
+      ],
+      "TMA_reduce": [
+        14176,
+        14864
+      ],
+      "Dwait0": 12944,
+      "TMA_read_drain": 14912,
+      "all_poststore_publication_and_read_retirement": "PASS"
+    }
+  ],
+  "resources": {
+    "device": {
+      "32,6,1,0,0,0,3": 168,
+      "16,5,1,0,0,0,3": 168,
+      "128,5,1,0,0,0,20": 168,
+      "128,8,1,0,0,0,52": 168,
+      "16,6,1,0,0,0,35": 168,
+      "32,5,1,0,0,0,34": 168,
+      "16,5,1,0,0,0,34": 168,
+      "16,5,1,0,0,0,35": 168,
+      "32,6,1,0,0,0,35": 168,
+      "32,5,1,0,0,0,3": 168,
+      "32,5,1,0,0,0,35": 168,
+      "128,5,1,0,0,0,851971": 168,
+      "128,5,1,0,0,0,851970": 168,
+      "128,5,1,0,0,0,327683": 168,
+      "128,5,1,0,0,0,327682": 168,
+      "128,5,1,0,0,0,65539": 168,
+      "128,5,1,0,0,0,65538": 168,
+      "256,5,1,0,0,0,2": 168,
+      "256,5,1,0,0,0,3": 168,
+      "256,4,1,0,0,0,3": 168,
+      "128,8,1,0,0,0,3": 168,
+      "128,5,1,0,0,0,3": 168,
+      "128,5,1,0,0,0,2": 168
+    },
+    "control": {
+      "32,6,1,0,0,0,3": 168,
+      "16,5,1,0,0,0,3": 168,
+      "128,5,1,0,0,0,20": 168,
+      "128,8,1,0,0,0,52": 168,
+      "16,6,1,0,0,0,35": 168,
+      "32,5,1,0,0,0,34": 168,
+      "16,5,1,0,0,0,34": 168,
+      "16,5,1,0,0,0,35": 168,
+      "32,6,1,0,0,0,35": 168,
+      "32,5,1,0,0,0,3": 168,
+      "32,5,1,0,0,0,35": 168,
+      "128,5,1,0,0,0,65539": 168,
+      "128,5,1,0,0,0,65538": 168,
+      "256,5,1,0,0,0,2": 168,
+      "256,5,1,0,0,0,3": 168,
+      "256,4,1,0,0,0,3": 168,
+      "128,8,1,0,0,0,3": 168,
+      "128,5,1,0,0,0,3": 168,
+      "128,5,1,0,0,0,2": 168
+    }
+  },
+  "old_instances": 19,
+  "new_instances": 4,
+  "new_dynamic_shared": 178176,
+  "old_dynamic_shared": 144520,
+  "register_pool": 64512,
+  "threads": 384,
+  "guard_host_compiled": true,
+  "CUDA_calls": 0,
+  "production_imports": 0
+}

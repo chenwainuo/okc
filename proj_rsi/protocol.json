@@ -15,7 +15,14 @@
     },
     "floor_us": 2384.0,
     "log_gain_needed": 0.38838415684847727,
-    "note": "Exactscore=4830.8/geomean(SGLang_load_sum/ours_load_sum), sixequallyweightedloads. Holdsamejob SGLangvectorfixedforwhatif. 62*geomean(ours) isnotexactboardscore. floor_us isahistoricalprojectionfrompublisheduncompressedfloors, notauniversalboundwithlosslessweightcompression."
+    "note": "Exactscore=4830.8/geomean(SGLang_load_sum/ours_load_sum), sixequallyweightedloads. Holdsamejob SGLangvectorfixedforwhatif. 62*geomean(ours) isnotexactboardscore. floor_us isahistoricalprojectionfrompublisheduncompressedfloors, notauniversalboundwithlosslessweightcompression.",
+    "active_thread_objective": {
+      "objective": "3x the current benchmark",
+      "authority": "active goal + docs/threefold-target.json",
+      "anchor_commit": "861333f",
+      "scope": "Original full expert benchmark suite and independent holdouts; serving validation remains separate",
+      "projection_board_3000us": "Intermediate projection challenge milestone, not completion of the full threefold objective"
+    }
   },
   "roles": {
     "head": {
@@ -76,16 +83,17 @@
   "candidate_contract": {
     "first_line": "# okc: problem=muse_bf16_proj",
     "self_validation": "Every fast path proves itself in prepare() on the probe shapes (one-hot columns exact, random rows within tolerance) before it is enabled; a failing path is disabled, not shipped.",
-    "bake_off": "prepare() times each candidate path against the fallback under CUDA-graph replay with a cold L2 (read-only flush > 60 MB) and keeps the faster one with a 1% margin. The table is printed as 'BAKE <layer> m=<m> <path> <us>' lines so the log tail carries every variant's time, not just the winner.",
+    "bake_off": "Validate and time actual candidates against applicable controls under graph replay with cold L2. Preserve all raw measurements and actual selections. Existing frozen sources may retain historical selection margins; new experiments need not impose a minimum gain. Whole-stack and official measurements decide promotion.",
     "fallback": "cuBLAS/torch for BF16; FP32 matmul at m<=8 and the BF16 hi+lo pair above for the router. Odd m (5, 7, 9, 33, 130, 512, 1000) must go to a path that is correct; usually the fallback.",
     "prepare_budget_s": 240,
     "log_budget_chars": 14000,
-    "no_regression": "A path is only selected for a scored shape when it beats the fallback on that shape in the bake-off."
+    "no_regression": "A path is only selected for a scored shape when it beats the fallback on that shape in the bake-off.",
+    "rewrite_scope": "Whole-kernel or stack redesigns are permitted. Byte-identical old SASS is a useful matched-control gate for narrow changes, not a universal requirement; broad rewrites compare to the immutable old source and must prove full correctness and measured final behavior."
   },
   "gates": {
     "lint": "python3 -m proj_rsi lint <file> has no errors",
     "check": "okc check passes 9/9 and the 30 timed shapes",
-    "promote_to_scored": "score_us from the check is below incumbent_board.score_us by more than the half-width of the 95% interval; then okc submit the identical file",
+    "promote_to_scored": "After correctness/source/quota validation, submit the identical source when its official check point score is below the actual incumbent. User explicitly accepts every measured positive; no minimum effect-size or confidence-interval significance gate. Preserve uncertainty and all signed regressions.",
     "per_shape_win": "yours_us below the incumbent's yours_us on that shape; losses on any scored shape are reported and the path reverts to the incumbent's choice in the next stitch"
   },
   "budget": {

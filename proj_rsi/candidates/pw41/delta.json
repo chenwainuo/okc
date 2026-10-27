@@ -1,0 +1,105 @@
+{
+  "parent_source_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+  "source_sha256": "a77f785b06d3b9cdbf9fe3870505bd15f4e68c46807fa61dc6c3b9756dbe199f",
+  "edits": [
+    {
+      "id": "compile-time-selected-domain",
+      "region": "kernel.compile-time-domain",
+      "before": "  constexpr bool XZ = ((V >> 29) & 1) != 0;  // P1 (V bit 29): grid.z plane 0 = zeroer CTAs (one per tile), the K splits follow\n",
+      "after": "  constexpr bool XZ = ((V >> 29) & 1) != 0;  // P1 (V bit 29): grid.z plane 0 = zeroer CTAs (one per tile), the K splits follow\n  constexpr bool P1_LATE_TICKET = ((V >> 30) & 1) != 0;\n  static_assert(!P1_LATE_TICKET || (WR == 1 && WK == 8 && RT == 1 && XS == 0 && (\n    (FMT == 2 && MT == 1 && ST == 1 && KU == 1 && S == 16 && (V & ~(1 << 30)) == (1 << 29)) ||\n    (FMT == 2 && MT == 2 && ST == 1 && KU == 1 && S == 16 && (V & ~(1 << 30)) == (1 << 27)) ||\n    (FMT == 2 && MT == 4 && ST == 2 && KU == 2 && S == 8 && (V & ~(1 << 30)) == (1 << 27)) ||\n    (FMT == 1 && MT == 1 && ST == 2 && KU == 2 && S == 4 && (V & ~(1 << 30)) == ((1 << 29) | 1))\n  )), \"PW41 late ticket only four selected P1 geometry/types; no PDL/cluster/codec/other flags\");\n"
+    },
+    {
+      "id": "old-prologue-only-for-old-variant",
+      "region": "kernel.ticket-placement",
+      "before": "      if (lane == 0) tk = atomicAdd(p.cnt + 2 * tile, 1);",
+      "after": "      if constexpr (!P1_LATE_TICKET) { if (lane == 0) tk = atomicAdd(p.cnt + 2 * tile, 1); }"
+    },
+    {
+      "id": "late-ticket-immediately-before-first-acquire",
+      "region": "kernel.ticket-placement",
+      "before": "    if (threadIdx.x == 0) {\n      const int* fl = p.cnt + 2 * (bz * GX + bx) + 1, tgt = tk / S + 1;",
+      "after": "    if (threadIdx.x == 0) {\n      if constexpr (P1_LATE_TICKET) tk = atomicAdd(p.cnt + 2 * (bz * GX + bx), 1);\n      const int* fl = p.cnt + 2 * (bz * GX + bx) + 1, tgt = tk / S + 1;"
+    },
+    {
+      "id": "append-only-optional-catalog",
+      "region": "host.catalog",
+      "before": "_gvmod = None\n",
+      "after": "# PW41: append four optional ticket-placement instances AFTER the old GVI\n# inventory, so every old selector/counter identity remains at its original index.\n_P1LT = 1 << 30\nP1LATE = [\n    (\"rk-s16w8xLT\", \"router\", (8,), (2, 1, 8, 1, 16, 1, 0, 1), _XZ | _P1LT),\n    (\"rk-s16w8zLT\", \"router\", (16,), (2, 1, 8, 1, 16, 1, 0, 1), _ZF | _P1LT),\n    (\"rk-s8zLT\", \"router\", (32,), (2, 1, 8, 2, 8, 1, 0, 2), _ZF | _P1LT),\n    (\"uk-s4xLT\", \"unpooler\", (1, 8), (1, 1, 8, 2, 4, 1, 0, 2), 1 | _XZ | _P1LT),\n]\nGVI += list(dict.fromkeys(_gxinst(g, v, bm) for _, _, ms, g, v in P1LATE for bm in ms))\nGXP += P1LATE\n\n_gvmod = None\n"
+    }
+  ],
+  "old_GVI_count": 95,
+  "new_GVI_count": 99,
+  "targets": [
+    [
+      2,
+      1,
+      1,
+      1,
+      8,
+      1,
+      16,
+      1,
+      0,
+      536870912
+    ],
+    [
+      2,
+      2,
+      1,
+      1,
+      8,
+      1,
+      16,
+      1,
+      0,
+      134217728
+    ],
+    [
+      2,
+      4,
+      2,
+      1,
+      8,
+      2,
+      8,
+      1,
+      0,
+      134217728
+    ],
+    [
+      1,
+      1,
+      2,
+      1,
+      8,
+      2,
+      4,
+      1,
+      0,
+      536870913
+    ]
+  ],
+  "scope": [
+    [
+      "router",
+      8
+    ],
+    [
+      "router",
+      16
+    ],
+    [
+      "router",
+      32
+    ],
+    [
+      "unpooler",
+      1
+    ],
+    [
+      "unpooler",
+      8
+    ]
+  ],
+  "semantics": "Only optional ticket issue placement; exactly same per-tile S even tickets and one odd flag. No forced selection/no counter reset/no removed acquire."
+}

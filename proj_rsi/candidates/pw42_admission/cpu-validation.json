@@ -1,0 +1,37 @@
+{
+  "state": "PASS_AUTHOR_CPU_LOCAL_ADMISSION_VALIDATION_PENDING_ROOT_STATE_TRANSITION",
+  "job_id": "pw42.emptyescape.gpu.01",
+  "descriptor_sha256": "40be141560cb9cceb8b43c76607e5a06a7b5d5c49bca0d39e09a4d50c708692e",
+  "candidate_manifest_sha256": "1ec7785a698bfc7636f80348943e1892888e9d041308f5095f9f38c6ca4eeecc",
+  "review": {
+    "actor": "sol07",
+    "path": "proj_rsi/audits/pw42-source-lab-independent.md",
+    "sha256": "4a8b5faa96c8f60b1bc3c3e83a962c30f56408d77d1b883ded013244389ca56c",
+    "decision": "GO"
+  },
+  "source_pins": 162,
+  "model": "PASS_FOR_ADMISSION",
+  "dispatch": "PASS_PURE_LOCAL_INERT_STORE",
+  "monitor": "APPROVED_WITH_SIMULATED_CPU_PASS_AND_BLOCKED_WITH_SIMULATED_RUNNING; NOT_ACTUAL_JOB_STATE",
+  "negative_controls": {
+    "wrong_source_hash": "local source/review hash mismatch: proj_rsi/candidates/pw42/submission.py",
+    "same_author_review": "independent GO review required",
+    "missing_guard": "hardware guard and container runner must be source-pinned",
+    "deadline": "invalid bounded guard deadlines",
+    "shell_launch": "only literal Python or explicit NCU launch permitted",
+    "wrong_review_hash": "conflicting review hash",
+    "diagnostic_direct_gain": "REJECT_MODEL"
+  },
+  "readonly_candidate_proof": {
+    "state": "PASS_READONLY_PW42_FROZEN",
+    "source_sha256": "c32828243c00009287cf1c744018b9f7935551f344f3455ae786726e300865c7",
+    "generic_controls_exact": 2,
+    "guarded_64reg_zero_spill": 2,
+    "CSR": "PASS",
+    "metadata": "ACTUAL_FIRSTSENTINEL_ELIGIBILITY",
+    "GPU": "UNRUN"
+  },
+  "GPU": "UNRUN_NO_CONTEXT_NO_EXTENSION_NO_PREPARE",
+  "scheduler": "NO_PERSISTENT_STORE_OR_QUEUE_MUTATION",
+  "CPU_disposition": "ROOT_MUST_MARK_research.pw42.readiness.01_CPU_PASS_AFTER_INDEPENDENT_GO"
+}

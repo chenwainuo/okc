@@ -1,0 +1,6845 @@
+{
+  "layout": {
+    "status": "PASS",
+    "shared_bf16": 8192,
+    "register_words_per_stage": 4096,
+    "stages": 64,
+    "global_bf16": 524288,
+    "all_coordinates_once": true,
+    "primary_ldmatrix": "PTX8.7 section9.7.14.5.15 Figure103",
+    "primary_wgmma": "PTX8.7 section9.7.15.5.1.1.1 Figure147"
+  },
+  "source": {
+    "status": "PASS_STRICT_BODY_AND_FULL_CUDA_PARENT_INVERSE",
+    "parent_source_sha256": "45fbc8b600c6054c43e725b6b5f33b9194b61f5b602c583a7b9bb825ab325170",
+    "unchanged": "entiremath/A4/FP32/WGMMA/codec/epilogue, mathXprefetch/release, initialX/W/barrierinit, hostdescriptor/launch"
+  },
+  "stores": {
+    "status": "PASS_ALL64_STAGES_SAME_PARENT_DECODED_BYTES",
+    "stage_bytes": 8192,
+    "total_store_bytes": 524288,
+    "odd_tiles": [
+      [
+        12,
+        0
+      ],
+      [
+        12,
+        3
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        14,
+        2
+      ]
+    ],
+    "even_tiles": [
+      [
+        8,
+        0
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        10,
+        2
+      ],
+      [
+        11,
+        3
+      ]
+    ],
+    "named_barrier_threads": {
+      "3": [
+        256,
+        257,
+        258,
+        259,
+        260,
+        261,
+        262,
+        263,
+        264,
+        265,
+        266,
+        267,
+        268,
+        269,
+        270,
+        271,
+        272,
+        273,
+        274,
+        275,
+        276,
+        277,
+        278,
+        279,
+        280,
+        281,
+        282,
+        283,
+        284,
+        285,
+        286,
+        287,
+        288,
+        289,
+        290,
+        291,
+        292,
+        293,
+        294,
+        295,
+        296,
+        297,
+        298,
+        299,
+        300,
+        301,
+        302,
+        303,
+        304,
+        305,
+        306,
+        307,
+        308,
+        309,
+        310,
+        311,
+        312,
+        313,
+        314,
+        315,
+        316,
+        317,
+        318,
+        319,
+        320,
+        321,
+        322,
+        323,
+        324,
+        325,
+        326,
+        327,
+        328,
+        329,
+        330,
+        331,
+        332,
+        333,
+        334,
+        335,
+        336,
+        337,
+        338,
+        339,
+        340,
+        341,
+        342,
+        343,
+        344,
+        345,
+        346,
+        347,
+        348,
+        349,
+        350,
+        351,
+        352,
+        353,
+        354,
+        355,
+        356,
+        357,
+        358,
+        359,
+        360,
+        361,
+        362,
+        363,
+        364,
+        365,
+        366,
+        367,
+        368,
+        369,
+        370,
+        371,
+        372,
+        373,
+        374,
+        375,
+        376,
+        377,
+        378,
+        379,
+        380,
+        381,
+        382,
+        383
+      ],
+      "4": [
+        384,
+        385,
+        386,
+        387,
+        388,
+        389,
+        390,
+        391,
+        392,
+        393,
+        394,
+        395,
+        396,
+        397,
+        398,
+        399,
+        400,
+        401,
+        402,
+        403,
+        404,
+        405,
+        406,
+        407,
+        408,
+        409,
+        410,
+        411,
+        412,
+        413,
+        414,
+        415,
+        416,
+        417,
+        418,
+        419,
+        420,
+        421,
+        422,
+        423,
+        424,
+        425,
+        426,
+        427,
+        428,
+        429,
+        430,
+        431,
+        432,
+        433,
+        434,
+        435,
+        436,
+        437,
+        438,
+        439,
+        440,
+        441,
+        442,
+        443,
+        444,
+        445,
+        446,
+        447,
+        448,
+        449,
+        450,
+        451,
+        452,
+        453,
+        454,
+        455,
+        456,
+        457,
+        458,
+        459,
+        460,
+        461,
+        462,
+        463,
+        464,
+        465,
+        466,
+        467,
+        468,
+        469,
+        470,
+        471,
+        472,
+        473,
+        474,
+        475,
+        476,
+        477,
+        478,
+        479
+      ]
+    },
+    "total_W_warps": 7,
+    "dedicated_X_warp": 15,
+    "Bempty_count": 8,
+    "Xempty_count": 8,
+    "counts": "Publication bars count producer threads128/96; Bempty/Xempty count8 mathwarp arrivals. There is no universal 7-arrival replacement."
+  },
+  "CSR": {
+    "status": "PASS_INDEPENDENT_ENCODED32LANE_CURSOR_WINDOWS",
+    "density_cases": 9,
+    "stage_tile_cases": 2304,
+    "boundary_reload": "31/32/33 and63/64 crossings tested; sentinel32767; skip oppositeparity retained",
+    "independent_warp12_tile0_tile3": true,
+    "negative_shared_cursor": "REJECTED",
+    "negative_missing_skip": "REJECTED"
+  },
+  "DAG": {
+    "status": "PASS_FULL_X_W_B_A4_DAG",
+    "nodes": 835,
+    "edges": 2743,
+    "topological_order": [
+      "INIT",
+      "W0",
+      "W1",
+      "W2",
+      "W3",
+      "W4",
+      "W5",
+      "XI0",
+      "XI1",
+      "D0/tile0/warp8",
+      "D0/tile1/warp9",
+      "D0/tile2/warp10",
+      "D0/tile3/warp11",
+      "D1/tile0/warp12",
+      "D1/tile1/warp13",
+      "D1/tile2/warp14",
+      "X0",
+      "X1",
+      "B0",
+      "D1/tile3/warp12",
+      "C0/WG0",
+      "C0/WG1",
+      "D2/tile0/warp8",
+      "D2/tile1/warp9",
+      "D2/tile2/warp10",
+      "D2/tile3/warp11",
+      "W6",
+      "B1",
+      "C1/WG0",
+      "C1/WG1",
+      "EMPTY0",
+      "B2",
+      "D3/tile0/warp12",
+      "D3/tile1/warp13",
+      "D3/tile2/warp14",
+      "W7",
+      "EMPTY1",
+      "XI2",
+      "D4/tile0/warp8",
+      "D4/tile1/warp9",
+      "D4/tile2/warp10",
+      "D4/tile3/warp11",
+      "W8",
+      "D3/tile3/warp12",
+      "X2",
+      "XI3",
+      "B4",
+      "B3",
+      "C2/WG0",
+      "C2/WG1",
+      "X3",
+      "D6/tile0/warp8",
+      "D6/tile1/warp9",
+      "D6/tile2/warp10",
+      "D6/tile3/warp11",
+      "W10",
+      "D5/tile0/warp12",
+      "D5/tile1/warp13",
+      "D5/tile2/warp14",
+      "W9",
+      "EMPTY2",
+      "C3/WG0",
+      "C3/WG1",
+      "B6",
+      "D5/tile3/warp12",
+      "XI4",
+      "M0/WG0",
+      "EMPTY3",
+      "M0/WG1",
+      "W12",
+      "B5",
+      "X4",
+      "M1/WG0",
+      "XI5",
+      "M1/WG1",
+      "D7/tile0/warp12",
+      "D7/tile1/warp13",
+      "D7/tile2/warp14",
+      "W11",
+      "C4/WG0",
+      "X5",
+      "C4/WG1",
+      "D8/tile0/warp8",
+      "D8/tile1/warp9",
+      "D8/tile2/warp10",
+      "D8/tile3/warp11",
+      "D7/tile3/warp12",
+      "M2/WG0",
+      "EMPTY4",
+      "M2/WG1",
+      "B8",
+      "B7",
+      "C5/WG0",
+      "XI6",
+      "C5/WG1",
+      "W14",
+      "D9/tile0/warp12",
+      "D9/tile1/warp13",
+      "D9/tile2/warp14",
+      "W13",
+      "M3/WG0",
+      "X6",
+      "EMPTY5",
+      "M3/WG1",
+      "D9/tile3/warp12",
+      "C6/WG0",
+      "XI7",
+      "C6/WG1",
+      "D10/tile0/warp8",
+      "D10/tile1/warp9",
+      "D10/tile2/warp10",
+      "D10/tile3/warp11",
+      "B9",
+      "M4/WG0",
+      "X7",
+      "EMPTY6",
+      "M4/WG1",
+      "B10",
+      "W15",
+      "C7/WG0",
+      "XI8",
+      "C7/WG1",
+      "D11/tile0/warp12",
+      "D11/tile1/warp13",
+      "D11/tile2/warp14",
+      "W16",
+      "M5/WG0",
+      "X8",
+      "EMPTY7",
+      "M5/WG1",
+      "D11/tile3/warp12",
+      "C8/WG0",
+      "XI9",
+      "C8/WG1",
+      "D12/tile0/warp8",
+      "D12/tile1/warp9",
+      "D12/tile2/warp10",
+      "D12/tile3/warp11",
+      "B11",
+      "M6/WG0",
+      "X9",
+      "EMPTY8",
+      "M6/WG1",
+      "B12",
+      "W17",
+      "C9/WG0",
+      "XI10",
+      "C9/WG1",
+      "D13/tile0/warp12",
+      "D13/tile1/warp13",
+      "D13/tile2/warp14",
+      "W18",
+      "M7/WG0",
+      "X10",
+      "EMPTY9",
+      "M7/WG1",
+      "D13/tile3/warp12",
+      "C10/WG0",
+      "XI11",
+      "C10/WG1",
+      "D14/tile0/warp8",
+      "D14/tile1/warp9",
+      "D14/tile2/warp10",
+      "D14/tile3/warp11",
+      "B13",
+      "M8/WG0",
+      "X11",
+      "EMPTY10",
+      "M8/WG1",
+      "B14",
+      "W19",
+      "C11/WG0",
+      "XI12",
+      "C11/WG1",
+      "D15/tile0/warp12",
+      "D15/tile1/warp13",
+      "D15/tile2/warp14",
+      "W20",
+      "M9/WG0",
+      "X12",
+      "EMPTY11",
+      "M9/WG1",
+      "D15/tile3/warp12",
+      "C12/WG0",
+      "XI13",
+      "C12/WG1",
+      "D16/tile0/warp8",
+      "D16/tile1/warp9",
+      "D16/tile2/warp10",
+      "D16/tile3/warp11",
+      "B15",
+      "M10/WG0",
+      "X13",
+      "EMPTY12",
+      "M10/WG1",
+      "B16",
+      "W21",
+      "C13/WG0",
+      "XI14",
+      "C13/WG1",
+      "D17/tile0/warp12",
+      "D17/tile1/warp13",
+      "D17/tile2/warp14",
+      "W22",
+      "M11/WG0",
+      "X14",
+      "EMPTY13",
+      "M11/WG1",
+      "D17/tile3/warp12",
+      "C14/WG0",
+      "XI15",
+      "C14/WG1",
+      "D18/tile0/warp8",
+      "D18/tile1/warp9",
+      "D18/tile2/warp10",
+      "D18/tile3/warp11",
+      "B17",
+      "M12/WG0",
+      "X15",
+      "EMPTY14",
+      "M12/WG1",
+      "B18",
+      "W23",
+      "C15/WG0",
+      "XI16",
+      "C15/WG1",
+      "D19/tile0/warp12",
+      "D19/tile1/warp13",
+      "D19/tile2/warp14",
+      "W24",
+      "M13/WG0",
+      "X16",
+      "EMPTY15",
+      "M13/WG1",
+      "D19/tile3/warp12",
+      "C16/WG0",
+      "XI17",
+      "C16/WG1",
+      "D20/tile0/warp8",
+      "D20/tile1/warp9",
+      "D20/tile2/warp10",
+      "D20/tile3/warp11",
+      "B19",
+      "M14/WG0",
+      "X17",
+      "EMPTY16",
+      "M14/WG1",
+      "B20",
+      "W25",
+      "C17/WG0",
+      "XI18",
+      "C17/WG1",
+      "D21/tile0/warp12",
+      "D21/tile1/warp13",
+      "D21/tile2/warp14",
+      "W26",
+      "M15/WG0",
+      "X18",
+      "EMPTY17",
+      "M15/WG1",
+      "D21/tile3/warp12",
+      "C18/WG0",
+      "XI19",
+      "C18/WG1",
+      "D22/tile0/warp8",
+      "D22/tile1/warp9",
+      "D22/tile2/warp10",
+      "D22/tile3/warp11",
+      "B21",
+      "M16/WG0",
+      "X19",
+      "EMPTY18",
+      "M16/WG1",
+      "B22",
+      "W27",
+      "C19/WG0",
+      "XI20",
+      "C19/WG1",
+      "D23/tile0/warp12",
+      "D23/tile1/warp13",
+      "D23/tile2/warp14",
+      "W28",
+      "M17/WG0",
+      "X20",
+      "EMPTY19",
+      "M17/WG1",
+      "D23/tile3/warp12",
+      "C20/WG0",
+      "XI21",
+      "C20/WG1",
+      "D24/tile0/warp8",
+      "D24/tile1/warp9",
+      "D24/tile2/warp10",
+      "D24/tile3/warp11",
+      "B23",
+      "M18/WG0",
+      "X21",
+      "EMPTY20",
+      "M18/WG1",
+      "B24",
+      "W29",
+      "C21/WG0",
+      "XI22",
+      "C21/WG1",
+      "D25/tile0/warp12",
+      "D25/tile1/warp13",
+      "D25/tile2/warp14",
+      "W30",
+      "M19/WG0",
+      "X22",
+      "EMPTY21",
+      "M19/WG1",
+      "D25/tile3/warp12",
+      "C22/WG0",
+      "XI23",
+      "C22/WG1",
+      "D26/tile0/warp8",
+      "D26/tile1/warp9",
+      "D26/tile2/warp10",
+      "D26/tile3/warp11",
+      "B25",
+      "M20/WG0",
+      "X23",
+      "EMPTY22",
+      "M20/WG1",
+      "B26",
+      "W31",
+      "C23/WG0",
+      "XI24",
+      "C23/WG1",
+      "D27/tile0/warp12",
+      "D27/tile1/warp13",
+      "D27/tile2/warp14",
+      "W32",
+      "M21/WG0",
+      "X24",
+      "EMPTY23",
+      "M21/WG1",
+      "D27/tile3/warp12",
+      "C24/WG0",
+      "XI25",
+      "C24/WG1",
+      "D28/tile0/warp8",
+      "D28/tile1/warp9",
+      "D28/tile2/warp10",
+      "D28/tile3/warp11",
+      "B27",
+      "M22/WG0",
+      "X25",
+      "EMPTY24",
+      "M22/WG1",
+      "B28",
+      "W33",
+      "C25/WG0",
+      "XI26",
+      "C25/WG1",
+      "D29/tile0/warp12",
+      "D29/tile1/warp13",
+      "D29/tile2/warp14",
+      "W34",
+      "M23/WG0",
+      "X26",
+      "EMPTY25",
+      "M23/WG1",
+      "D29/tile3/warp12",
+      "C26/WG0",
+      "XI27",
+      "C26/WG1",
+      "D30/tile0/warp8",
+      "D30/tile1/warp9",
+      "D30/tile2/warp10",
+      "D30/tile3/warp11",
+      "B29",
+      "M24/WG0",
+      "X27",
+      "EMPTY26",
+      "M24/WG1",
+      "B30",
+      "W35",
+      "C27/WG0",
+      "XI28",
+      "C27/WG1",
+      "D31/tile0/warp12",
+      "D31/tile1/warp13",
+      "D31/tile2/warp14",
+      "W36",
+      "M25/WG0",
+      "X28",
+      "EMPTY27",
+      "M25/WG1",
+      "D31/tile3/warp12",
+      "C28/WG0",
+      "XI29",
+      "C28/WG1",
+      "D32/tile0/warp8",
+      "D32/tile1/warp9",
+      "D32/tile2/warp10",
+      "D32/tile3/warp11",
+      "B31",
+      "M26/WG0",
+      "X29",
+      "EMPTY28",
+      "M26/WG1",
+      "B32",
+      "W37",
+      "C29/WG0",
+      "XI30",
+      "C29/WG1",
+      "D33/tile0/warp12",
+      "D33/tile1/warp13",
+      "D33/tile2/warp14",
+      "W38",
+      "M27/WG0",
+      "X30",
+      "EMPTY29",
+      "M27/WG1",
+      "D33/tile3/warp12",
+      "C30/WG0",
+      "XI31",
+      "C30/WG1",
+      "D34/tile0/warp8",
+      "D34/tile1/warp9",
+      "D34/tile2/warp10",
+      "D34/tile3/warp11",
+      "B33",
+      "M28/WG0",
+      "X31",
+      "EMPTY30",
+      "M28/WG1",
+      "B34",
+      "W39",
+      "C31/WG0",
+      "XI32",
+      "C31/WG1",
+      "D35/tile0/warp12",
+      "D35/tile1/warp13",
+      "D35/tile2/warp14",
+      "W40",
+      "M29/WG0",
+      "X32",
+      "EMPTY31",
+      "M29/WG1",
+      "D35/tile3/warp12",
+      "C32/WG0",
+      "XI33",
+      "C32/WG1",
+      "D36/tile0/warp8",
+      "D36/tile1/warp9",
+      "D36/tile2/warp10",
+      "D36/tile3/warp11",
+      "B35",
+      "M30/WG0",
+      "X33",
+      "EMPTY32",
+      "M30/WG1",
+      "B36",
+      "W41",
+      "C33/WG0",
+      "XI34",
+      "C33/WG1",
+      "D37/tile0/warp12",
+      "D37/tile1/warp13",
+      "D37/tile2/warp14",
+      "W42",
+      "M31/WG0",
+      "X34",
+      "EMPTY33",
+      "M31/WG1",
+      "D37/tile3/warp12",
+      "C34/WG0",
+      "XI35",
+      "C34/WG1",
+      "D38/tile0/warp8",
+      "D38/tile1/warp9",
+      "D38/tile2/warp10",
+      "D38/tile3/warp11",
+      "B37",
+      "M32/WG0",
+      "X35",
+      "EMPTY34",
+      "M32/WG1",
+      "B38",
+      "W43",
+      "C35/WG0",
+      "XI36",
+      "C35/WG1",
+      "D39/tile0/warp12",
+      "D39/tile1/warp13",
+      "D39/tile2/warp14",
+      "W44",
+      "M33/WG0",
+      "X36",
+      "EMPTY35",
+      "M33/WG1",
+      "D39/tile3/warp12",
+      "C36/WG0",
+      "XI37",
+      "C36/WG1",
+      "D40/tile0/warp8",
+      "D40/tile1/warp9",
+      "D40/tile2/warp10",
+      "D40/tile3/warp11",
+      "B39",
+      "M34/WG0",
+      "X37",
+      "EMPTY36",
+      "M34/WG1",
+      "B40",
+      "W45",
+      "C37/WG0",
+      "XI38",
+      "C37/WG1",
+      "D41/tile0/warp12",
+      "D41/tile1/warp13",
+      "D41/tile2/warp14",
+      "W46",
+      "M35/WG0",
+      "X38",
+      "EMPTY37",
+      "M35/WG1",
+      "D41/tile3/warp12",
+      "C38/WG0",
+      "XI39",
+      "C38/WG1",
+      "D42/tile0/warp8",
+      "D42/tile1/warp9",
+      "D42/tile2/warp10",
+      "D42/tile3/warp11",
+      "B41",
+      "M36/WG0",
+      "X39",
+      "EMPTY38",
+      "M36/WG1",
+      "B42",
+      "W47",
+      "C39/WG0",
+      "XI40",
+      "C39/WG1",
+      "D43/tile0/warp12",
+      "D43/tile1/warp13",
+      "D43/tile2/warp14",
+      "W48",
+      "M37/WG0",
+      "X40",
+      "EMPTY39",
+      "M37/WG1",
+      "D43/tile3/warp12",
+      "C40/WG0",
+      "XI41",
+      "C40/WG1",
+      "D44/tile0/warp8",
+      "D44/tile1/warp9",
+      "D44/tile2/warp10",
+      "D44/tile3/warp11",
+      "B43",
+      "M38/WG0",
+      "X41",
+      "EMPTY40",
+      "M38/WG1",
+      "B44",
+      "W49",
+      "C41/WG0",
+      "XI42",
+      "C41/WG1",
+      "D45/tile0/warp12",
+      "D45/tile1/warp13",
+      "D45/tile2/warp14",
+      "W50",
+      "M39/WG0",
+      "X42",
+      "EMPTY41",
+      "M39/WG1",
+      "D45/tile3/warp12",
+      "C42/WG0",
+      "XI43",
+      "C42/WG1",
+      "D46/tile0/warp8",
+      "D46/tile1/warp9",
+      "D46/tile2/warp10",
+      "D46/tile3/warp11",
+      "B45",
+      "M40/WG0",
+      "X43",
+      "EMPTY42",
+      "M40/WG1",
+      "B46",
+      "W51",
+      "C43/WG0",
+      "XI44",
+      "C43/WG1",
+      "D47/tile0/warp12",
+      "D47/tile1/warp13",
+      "D47/tile2/warp14",
+      "W52",
+      "M41/WG0",
+      "X44",
+      "EMPTY43",
+      "M41/WG1",
+      "D47/tile3/warp12",
+      "C44/WG0",
+      "XI45",
+      "C44/WG1",
+      "D48/tile0/warp8",
+      "D48/tile1/warp9",
+      "D48/tile2/warp10",
+      "D48/tile3/warp11",
+      "B47",
+      "M42/WG0",
+      "X45",
+      "EMPTY44",
+      "M42/WG1",
+      "B48",
+      "W53",
+      "C45/WG0",
+      "XI46",
+      "C45/WG1",
+      "D49/tile0/warp12",
+      "D49/tile1/warp13",
+      "D49/tile2/warp14",
+      "W54",
+      "M43/WG0",
+      "X46",
+      "EMPTY45",
+      "M43/WG1",
+      "D49/tile3/warp12",
+      "C46/WG0",
+      "XI47",
+      "C46/WG1",
+      "D50/tile0/warp8",
+      "D50/tile1/warp9",
+      "D50/tile2/warp10",
+      "D50/tile3/warp11",
+      "B49",
+      "M44/WG0",
+      "X47",
+      "EMPTY46",
+      "M44/WG1",
+      "B50",
+      "W55",
+      "C47/WG0",
+      "XI48",
+      "C47/WG1",
+      "D51/tile0/warp12",
+      "D51/tile1/warp13",
+      "D51/tile2/warp14",
+      "W56",
+      "M45/WG0",
+      "X48",
+      "EMPTY47",
+      "M45/WG1",
+      "D51/tile3/warp12",
+      "C48/WG0",
+      "XI49",
+      "C48/WG1",
+      "D52/tile0/warp8",
+      "D52/tile1/warp9",
+      "D52/tile2/warp10",
+      "D52/tile3/warp11",
+      "B51",
+      "M46/WG0",
+      "X49",
+      "EMPTY48",
+      "M46/WG1",
+      "B52",
+      "W57",
+      "C49/WG0",
+      "XI50",
+      "C49/WG1",
+      "D53/tile0/warp12",
+      "D53/tile1/warp13",
+      "D53/tile2/warp14",
+      "W58",
+      "M47/WG0",
+      "X50",
+      "EMPTY49",
+      "M47/WG1",
+      "D53/tile3/warp12",
+      "C50/WG0",
+      "XI51",
+      "C50/WG1",
+      "D54/tile0/warp8",
+      "D54/tile1/warp9",
+      "D54/tile2/warp10",
+      "D54/tile3/warp11",
+      "B53",
+      "M48/WG0",
+      "X51",
+      "EMPTY50",
+      "M48/WG1",
+      "B54",
+      "W59",
+      "C51/WG0",
+      "XI52",
+      "C51/WG1",
+      "D55/tile0/warp12",
+      "D55/tile1/warp13",
+      "D55/tile2/warp14",
+      "W60",
+      "M49/WG0",
+      "X52",
+      "EMPTY51",
+      "M49/WG1",
+      "D55/tile3/warp12",
+      "C52/WG0",
+      "XI53",
+      "C52/WG1",
+      "D56/tile0/warp8",
+      "D56/tile1/warp9",
+      "D56/tile2/warp10",
+      "D56/tile3/warp11",
+      "B55",
+      "M50/WG0",
+      "X53",
+      "EMPTY52",
+      "M50/WG1",
+      "B56",
+      "W61",
+      "C53/WG0",
+      "XI54",
+      "C53/WG1",
+      "D57/tile0/warp12",
+      "D57/tile1/warp13",
+      "D57/tile2/warp14",
+      "W62",
+      "M51/WG0",
+      "X54",
+      "EMPTY53",
+      "M51/WG1",
+      "D57/tile3/warp12",
+      "C54/WG0",
+      "XI55",
+      "C54/WG1",
+      "D58/tile0/warp8",
+      "D58/tile1/warp9",
+      "D58/tile2/warp10",
+      "D58/tile3/warp11",
+      "B57",
+      "M52/WG0",
+      "X55",
+      "EMPTY54",
+      "M52/WG1",
+      "B58",
+      "W63",
+      "C55/WG0",
+      "XI56",
+      "C55/WG1",
+      "D59/tile0/warp12",
+      "D59/tile1/warp13",
+      "D59/tile2/warp14",
+      "M53/WG0",
+      "X56",
+      "EMPTY55",
+      "M53/WG1",
+      "D59/tile3/warp12",
+      "C56/WG0",
+      "XI57",
+      "C56/WG1",
+      "D60/tile0/warp8",
+      "D60/tile1/warp9",
+      "D60/tile2/warp10",
+      "D60/tile3/warp11",
+      "B59",
+      "M54/WG0",
+      "X57",
+      "EMPTY56",
+      "M54/WG1",
+      "B60",
+      "C57/WG0",
+      "XI58",
+      "C57/WG1",
+      "D61/tile0/warp12",
+      "D61/tile1/warp13",
+      "D61/tile2/warp14",
+      "M55/WG0",
+      "X58",
+      "EMPTY57",
+      "M55/WG1",
+      "D61/tile3/warp12",
+      "C58/WG0",
+      "XI59",
+      "C58/WG1",
+      "D62/tile0/warp8",
+      "D62/tile1/warp9",
+      "D62/tile2/warp10",
+      "D62/tile3/warp11",
+      "B61",
+      "M56/WG0",
+      "X59",
+      "EMPTY58",
+      "M56/WG1",
+      "B62",
+      "C59/WG0",
+      "XI60",
+      "C59/WG1",
+      "D63/tile0/warp12",
+      "D63/tile1/warp13",
+      "D63/tile2/warp14",
+      "M57/WG0",
+      "X60",
+      "EMPTY59",
+      "M57/WG1",
+      "D63/tile3/warp12",
+      "C60/WG0",
+      "XI61",
+      "C60/WG1",
+      "B63",
+      "M58/WG0",
+      "X61",
+      "EMPTY60",
+      "M58/WG1",
+      "C61/WG0",
+      "XI62",
+      "C61/WG1",
+      "M59/WG0",
+      "X62",
+      "EMPTY61",
+      "M59/WG1",
+      "C62/WG0",
+      "XI63",
+      "C62/WG1",
+      "M60/WG0",
+      "X63",
+      "EMPTY62",
+      "M60/WG1",
+      "C63/WG0",
+      "C63/WG1",
+      "M61/WG0",
+      "EMPTY63",
+      "M61/WG1",
+      "M62/WG0",
+      "M62/WG1",
+      "M63/WG0",
+      "M63/WG1",
+      "DRAIN",
+      "OUTPUT"
+    ],
+    "dependencies": {
+      "XI0": [
+        "INIT"
+      ],
+      "X0": [
+        "XI0"
+      ],
+      "C0/WG0": [
+        "X0"
+      ],
+      "M0/WG0": [
+        "B0",
+        "C0/WG0",
+        "C3/WG0"
+      ],
+      "C0/WG1": [
+        "X0"
+      ],
+      "M0/WG1": [
+        "B0",
+        "C0/WG1",
+        "C3/WG1"
+      ],
+      "EMPTY0": [
+        "C0/WG0",
+        "C0/WG1"
+      ],
+      "W0": [
+        "INIT"
+      ],
+      "B0": [
+        "D0/tile0/warp8",
+        "D0/tile1/warp9",
+        "D0/tile2/warp10",
+        "D0/tile3/warp11",
+        "W0"
+      ],
+      "D0/tile0/warp8": [
+        "W0"
+      ],
+      "D0/tile1/warp9": [
+        "W0"
+      ],
+      "D0/tile2/warp10": [
+        "W0"
+      ],
+      "D0/tile3/warp11": [
+        "W0"
+      ],
+      "XI1": [
+        "INIT"
+      ],
+      "X1": [
+        "XI1"
+      ],
+      "C1/WG0": [
+        "C0/WG0",
+        "X1"
+      ],
+      "M1/WG0": [
+        "B1",
+        "C1/WG0",
+        "C3/WG0",
+        "M0/WG0"
+      ],
+      "C1/WG1": [
+        "C0/WG1",
+        "X1"
+      ],
+      "M1/WG1": [
+        "B1",
+        "C1/WG1",
+        "C3/WG1",
+        "M0/WG1"
+      ],
+      "EMPTY1": [
+        "C1/WG0",
+        "C1/WG1"
+      ],
+      "W1": [
+        "INIT"
+      ],
+      "B1": [
+        "D1/tile0/warp12",
+        "D1/tile1/warp13",
+        "D1/tile2/warp14",
+        "D1/tile3/warp12",
+        "W1"
+      ],
+      "D1/tile0/warp12": [
+        "W1"
+      ],
+      "D1/tile3/warp12": [
+        "D1/tile0/warp12",
+        "W1"
+      ],
+      "D1/tile1/warp13": [
+        "W1"
+      ],
+      "D1/tile2/warp14": [
+        "W1"
+      ],
+      "XI2": [
+        "EMPTY0",
+        "XI1"
+      ],
+      "X2": [
+        "XI2"
+      ],
+      "C2/WG0": [
+        "C1/WG0",
+        "X2"
+      ],
+      "M2/WG0": [
+        "B2",
+        "C2/WG0",
+        "C4/WG0",
+        "M1/WG0"
+      ],
+      "C2/WG1": [
+        "C1/WG1",
+        "X2"
+      ],
+      "M2/WG1": [
+        "B2",
+        "C2/WG1",
+        "C4/WG1",
+        "M1/WG1"
+      ],
+      "EMPTY2": [
+        "C2/WG0",
+        "C2/WG1"
+      ],
+      "W2": [
+        "INIT"
+      ],
+      "B2": [
+        "B0",
+        "D2/tile0/warp8",
+        "D2/tile1/warp9",
+        "D2/tile2/warp10",
+        "D2/tile3/warp11",
+        "W2"
+      ],
+      "D2/tile0/warp8": [
+        "B0",
+        "W2"
+      ],
+      "D2/tile1/warp9": [
+        "B0",
+        "W2"
+      ],
+      "D2/tile2/warp10": [
+        "B0",
+        "W2"
+      ],
+      "D2/tile3/warp11": [
+        "B0",
+        "W2"
+      ],
+      "XI3": [
+        "EMPTY1",
+        "XI2"
+      ],
+      "X3": [
+        "XI3"
+      ],
+      "C3/WG0": [
+        "C2/WG0",
+        "X3"
+      ],
+      "M3/WG0": [
+        "B3",
+        "C3/WG0",
+        "C5/WG0",
+        "M2/WG0"
+      ],
+      "C3/WG1": [
+        "C2/WG1",
+        "X3"
+      ],
+      "M3/WG1": [
+        "B3",
+        "C3/WG1",
+        "C5/WG1",
+        "M2/WG1"
+      ],
+      "EMPTY3": [
+        "C3/WG0",
+        "C3/WG1"
+      ],
+      "W3": [
+        "INIT"
+      ],
+      "B3": [
+        "B1",
+        "D3/tile0/warp12",
+        "D3/tile1/warp13",
+        "D3/tile2/warp14",
+        "D3/tile3/warp12",
+        "W3"
+      ],
+      "D3/tile0/warp12": [
+        "B1",
+        "W3"
+      ],
+      "D3/tile3/warp12": [
+        "B1",
+        "D3/tile0/warp12",
+        "W3"
+      ],
+      "D3/tile1/warp13": [
+        "B1",
+        "W3"
+      ],
+      "D3/tile2/warp14": [
+        "B1",
+        "W3"
+      ],
+      "XI4": [
+        "EMPTY2",
+        "XI3"
+      ],
+      "X4": [
+        "XI4"
+      ],
+      "C4/WG0": [
+        "C3/WG0",
+        "M1/WG0",
+        "X4"
+      ],
+      "M4/WG0": [
+        "B4",
+        "C4/WG0",
+        "C6/WG0",
+        "M3/WG0"
+      ],
+      "C4/WG1": [
+        "C3/WG1",
+        "M1/WG1",
+        "X4"
+      ],
+      "M4/WG1": [
+        "B4",
+        "C4/WG1",
+        "C6/WG1",
+        "M3/WG1"
+      ],
+      "EMPTY4": [
+        "C4/WG0",
+        "C4/WG1"
+      ],
+      "W4": [
+        "INIT"
+      ],
+      "B4": [
+        "B2",
+        "D4/tile0/warp8",
+        "D4/tile1/warp9",
+        "D4/tile2/warp10",
+        "D4/tile3/warp11",
+        "W4"
+      ],
+      "D4/tile0/warp8": [
+        "B2",
+        "W4"
+      ],
+      "D4/tile1/warp9": [
+        "B2",
+        "W4"
+      ],
+      "D4/tile2/warp10": [
+        "B2",
+        "W4"
+      ],
+      "D4/tile3/warp11": [
+        "B2",
+        "W4"
+      ],
+      "XI5": [
+        "EMPTY3",
+        "XI4"
+      ],
+      "X5": [
+        "XI5"
+      ],
+      "C5/WG0": [
+        "C4/WG0",
+        "M2/WG0",
+        "X5"
+      ],
+      "M5/WG0": [
+        "B5",
+        "C5/WG0",
+        "C7/WG0",
+        "M4/WG0"
+      ],
+      "C5/WG1": [
+        "C4/WG1",
+        "M2/WG1",
+        "X5"
+      ],
+      "M5/WG1": [
+        "B5",
+        "C5/WG1",
+        "C7/WG1",
+        "M4/WG1"
+      ],
+      "EMPTY5": [
+        "C5/WG0",
+        "C5/WG1"
+      ],
+      "W5": [
+        "INIT"
+      ],
+      "B5": [
+        "B3",
+        "D5/tile0/warp12",
+        "D5/tile1/warp13",
+        "D5/tile2/warp14",
+        "D5/tile3/warp12",
+        "W5"
+      ],
+      "D5/tile0/warp12": [
+        "B3",
+        "W5"
+      ],
+      "D5/tile3/warp12": [
+        "B3",
+        "D5/tile0/warp12",
+        "W5"
+      ],
+      "D5/tile1/warp13": [
+        "B3",
+        "W5"
+      ],
+      "D5/tile2/warp14": [
+        "B3",
+        "W5"
+      ],
+      "XI6": [
+        "EMPTY4",
+        "XI5"
+      ],
+      "X6": [
+        "XI6"
+      ],
+      "C6/WG0": [
+        "C5/WG0",
+        "M3/WG0",
+        "X6"
+      ],
+      "M6/WG0": [
+        "B6",
+        "C6/WG0",
+        "C8/WG0",
+        "M5/WG0"
+      ],
+      "C6/WG1": [
+        "C5/WG1",
+        "M3/WG1",
+        "X6"
+      ],
+      "M6/WG1": [
+        "B6",
+        "C6/WG1",
+        "C8/WG1",
+        "M5/WG1"
+      ],
+      "EMPTY6": [
+        "C6/WG0",
+        "C6/WG1"
+      ],
+      "W6": [
+        "B0"
+      ],
+      "B6": [
+        "B4",
+        "D6/tile0/warp8",
+        "D6/tile1/warp9",
+        "D6/tile2/warp10",
+        "D6/tile3/warp11",
+        "W6"
+      ],
+      "D6/tile0/warp8": [
+        "B4",
+        "W6"
+      ],
+      "D6/tile1/warp9": [
+        "B4",
+        "W6"
+      ],
+      "D6/tile2/warp10": [
+        "B4",
+        "W6"
+      ],
+      "D6/tile3/warp11": [
+        "B4",
+        "W6"
+      ],
+      "XI7": [
+        "EMPTY5",
+        "XI6"
+      ],
+      "X7": [
+        "XI7"
+      ],
+      "C7/WG0": [
+        "C6/WG0",
+        "M4/WG0",
+        "X7"
+      ],
+      "M7/WG0": [
+        "B7",
+        "C7/WG0",
+        "C9/WG0",
+        "M6/WG0"
+      ],
+      "C7/WG1": [
+        "C6/WG1",
+        "M4/WG1",
+        "X7"
+      ],
+      "M7/WG1": [
+        "B7",
+        "C7/WG1",
+        "C9/WG1",
+        "M6/WG1"
+      ],
+      "EMPTY7": [
+        "C7/WG0",
+        "C7/WG1"
+      ],
+      "W7": [
+        "B1"
+      ],
+      "B7": [
+        "B5",
+        "D7/tile0/warp12",
+        "D7/tile1/warp13",
+        "D7/tile2/warp14",
+        "D7/tile3/warp12",
+        "W7"
+      ],
+      "D7/tile0/warp12": [
+        "B5",
+        "W7"
+      ],
+      "D7/tile3/warp12": [
+        "B5",
+        "D7/tile0/warp12",
+        "W7"
+      ],
+      "D7/tile1/warp13": [
+        "B5",
+        "W7"
+      ],
+      "D7/tile2/warp14": [
+        "B5",
+        "W7"
+      ],
+      "XI8": [
+        "EMPTY6",
+        "XI7"
+      ],
+      "X8": [
+        "XI8"
+      ],
+      "C8/WG0": [
+        "C7/WG0",
+        "M5/WG0",
+        "X8"
+      ],
+      "M8/WG0": [
+        "B8",
+        "C10/WG0",
+        "C8/WG0",
+        "M7/WG0"
+      ],
+      "C8/WG1": [
+        "C7/WG1",
+        "M5/WG1",
+        "X8"
+      ],
+      "M8/WG1": [
+        "B8",
+        "C10/WG1",
+        "C8/WG1",
+        "M7/WG1"
+      ],
+      "EMPTY8": [
+        "C8/WG0",
+        "C8/WG1"
+      ],
+      "W8": [
+        "B2"
+      ],
+      "B8": [
+        "B6",
+        "D8/tile0/warp8",
+        "D8/tile1/warp9",
+        "D8/tile2/warp10",
+        "D8/tile3/warp11",
+        "M1/WG0",
+        "M1/WG1",
+        "W8"
+      ],
+      "D8/tile0/warp8": [
+        "B6",
+        "M1/WG0",
+        "M1/WG1",
+        "W8"
+      ],
+      "D8/tile1/warp9": [
+        "B6",
+        "M1/WG0",
+        "M1/WG1",
+        "W8"
+      ],
+      "D8/tile2/warp10": [
+        "B6",
+        "M1/WG0",
+        "M1/WG1",
+        "W8"
+      ],
+      "D8/tile3/warp11": [
+        "B6",
+        "M1/WG0",
+        "M1/WG1",
+        "W8"
+      ],
+      "XI9": [
+        "EMPTY7",
+        "XI8"
+      ],
+      "X9": [
+        "XI9"
+      ],
+      "C9/WG0": [
+        "C8/WG0",
+        "M6/WG0",
+        "X9"
+      ],
+      "M9/WG0": [
+        "B9",
+        "C11/WG0",
+        "C9/WG0",
+        "M8/WG0"
+      ],
+      "C9/WG1": [
+        "C8/WG1",
+        "M6/WG1",
+        "X9"
+      ],
+      "M9/WG1": [
+        "B9",
+        "C11/WG1",
+        "C9/WG1",
+        "M8/WG1"
+      ],
+      "EMPTY9": [
+        "C9/WG0",
+        "C9/WG1"
+      ],
+      "W9": [
+        "B3"
+      ],
+      "B9": [
+        "B7",
+        "D9/tile0/warp12",
+        "D9/tile1/warp13",
+        "D9/tile2/warp14",
+        "D9/tile3/warp12",
+        "M2/WG0",
+        "M2/WG1",
+        "W9"
+      ],
+      "D9/tile0/warp12": [
+        "B7",
+        "M2/WG0",
+        "M2/WG1",
+        "W9"
+      ],
+      "D9/tile3/warp12": [
+        "B7",
+        "D9/tile0/warp12",
+        "M2/WG0",
+        "M2/WG1",
+        "W9"
+      ],
+      "D9/tile1/warp13": [
+        "B7",
+        "M2/WG0",
+        "M2/WG1",
+        "W9"
+      ],
+      "D9/tile2/warp14": [
+        "B7",
+        "M2/WG0",
+        "M2/WG1",
+        "W9"
+      ],
+      "XI10": [
+        "EMPTY8",
+        "XI9"
+      ],
+      "X10": [
+        "XI10"
+      ],
+      "C10/WG0": [
+        "C9/WG0",
+        "M7/WG0",
+        "X10"
+      ],
+      "M10/WG0": [
+        "B10",
+        "C10/WG0",
+        "C12/WG0",
+        "M9/WG0"
+      ],
+      "C10/WG1": [
+        "C9/WG1",
+        "M7/WG1",
+        "X10"
+      ],
+      "M10/WG1": [
+        "B10",
+        "C10/WG1",
+        "C12/WG1",
+        "M9/WG1"
+      ],
+      "EMPTY10": [
+        "C10/WG0",
+        "C10/WG1"
+      ],
+      "W10": [
+        "B4"
+      ],
+      "B10": [
+        "B8",
+        "D10/tile0/warp8",
+        "D10/tile1/warp9",
+        "D10/tile2/warp10",
+        "D10/tile3/warp11",
+        "M3/WG0",
+        "M3/WG1",
+        "W10"
+      ],
+      "D10/tile0/warp8": [
+        "B8",
+        "M3/WG0",
+        "M3/WG1",
+        "W10"
+      ],
+      "D10/tile1/warp9": [
+        "B8",
+        "M3/WG0",
+        "M3/WG1",
+        "W10"
+      ],
+      "D10/tile2/warp10": [
+        "B8",
+        "M3/WG0",
+        "M3/WG1",
+        "W10"
+      ],
+      "D10/tile3/warp11": [
+        "B8",
+        "M3/WG0",
+        "M3/WG1",
+        "W10"
+      ],
+      "XI11": [
+        "EMPTY9",
+        "XI10"
+      ],
+      "X11": [
+        "XI11"
+      ],
+      "C11/WG0": [
+        "C10/WG0",
+        "M8/WG0",
+        "X11"
+      ],
+      "M11/WG0": [
+        "B11",
+        "C11/WG0",
+        "C13/WG0",
+        "M10/WG0"
+      ],
+      "C11/WG1": [
+        "C10/WG1",
+        "M8/WG1",
+        "X11"
+      ],
+      "M11/WG1": [
+        "B11",
+        "C11/WG1",
+        "C13/WG1",
+        "M10/WG1"
+      ],
+      "EMPTY11": [
+        "C11/WG0",
+        "C11/WG1"
+      ],
+      "W11": [
+        "B5"
+      ],
+      "B11": [
+        "B9",
+        "D11/tile0/warp12",
+        "D11/tile1/warp13",
+        "D11/tile2/warp14",
+        "D11/tile3/warp12",
+        "M4/WG0",
+        "M4/WG1",
+        "W11"
+      ],
+      "D11/tile0/warp12": [
+        "B9",
+        "M4/WG0",
+        "M4/WG1",
+        "W11"
+      ],
+      "D11/tile3/warp12": [
+        "B9",
+        "D11/tile0/warp12",
+        "M4/WG0",
+        "M4/WG1",
+        "W11"
+      ],
+      "D11/tile1/warp13": [
+        "B9",
+        "M4/WG0",
+        "M4/WG1",
+        "W11"
+      ],
+      "D11/tile2/warp14": [
+        "B9",
+        "M4/WG0",
+        "M4/WG1",
+        "W11"
+      ],
+      "XI12": [
+        "EMPTY10",
+        "XI11"
+      ],
+      "X12": [
+        "XI12"
+      ],
+      "C12/WG0": [
+        "C11/WG0",
+        "M9/WG0",
+        "X12"
+      ],
+      "M12/WG0": [
+        "B12",
+        "C12/WG0",
+        "C14/WG0",
+        "M11/WG0"
+      ],
+      "C12/WG1": [
+        "C11/WG1",
+        "M9/WG1",
+        "X12"
+      ],
+      "M12/WG1": [
+        "B12",
+        "C12/WG1",
+        "C14/WG1",
+        "M11/WG1"
+      ],
+      "EMPTY12": [
+        "C12/WG0",
+        "C12/WG1"
+      ],
+      "W12": [
+        "B6"
+      ],
+      "B12": [
+        "B10",
+        "D12/tile0/warp8",
+        "D12/tile1/warp9",
+        "D12/tile2/warp10",
+        "D12/tile3/warp11",
+        "M5/WG0",
+        "M5/WG1",
+        "W12"
+      ],
+      "D12/tile0/warp8": [
+        "B10",
+        "M5/WG0",
+        "M5/WG1",
+        "W12"
+      ],
+      "D12/tile1/warp9": [
+        "B10",
+        "M5/WG0",
+        "M5/WG1",
+        "W12"
+      ],
+      "D12/tile2/warp10": [
+        "B10",
+        "M5/WG0",
+        "M5/WG1",
+        "W12"
+      ],
+      "D12/tile3/warp11": [
+        "B10",
+        "M5/WG0",
+        "M5/WG1",
+        "W12"
+      ],
+      "XI13": [
+        "EMPTY11",
+        "XI12"
+      ],
+      "X13": [
+        "XI13"
+      ],
+      "C13/WG0": [
+        "C12/WG0",
+        "M10/WG0",
+        "X13"
+      ],
+      "M13/WG0": [
+        "B13",
+        "C13/WG0",
+        "C15/WG0",
+        "M12/WG0"
+      ],
+      "C13/WG1": [
+        "C12/WG1",
+        "M10/WG1",
+        "X13"
+      ],
+      "M13/WG1": [
+        "B13",
+        "C13/WG1",
+        "C15/WG1",
+        "M12/WG1"
+      ],
+      "EMPTY13": [
+        "C13/WG0",
+        "C13/WG1"
+      ],
+      "W13": [
+        "B7"
+      ],
+      "B13": [
+        "B11",
+        "D13/tile0/warp12",
+        "D13/tile1/warp13",
+        "D13/tile2/warp14",
+        "D13/tile3/warp12",
+        "M6/WG0",
+        "M6/WG1",
+        "W13"
+      ],
+      "D13/tile0/warp12": [
+        "B11",
+        "M6/WG0",
+        "M6/WG1",
+        "W13"
+      ],
+      "D13/tile3/warp12": [
+        "B11",
+        "D13/tile0/warp12",
+        "M6/WG0",
+        "M6/WG1",
+        "W13"
+      ],
+      "D13/tile1/warp13": [
+        "B11",
+        "M6/WG0",
+        "M6/WG1",
+        "W13"
+      ],
+      "D13/tile2/warp14": [
+        "B11",
+        "M6/WG0",
+        "M6/WG1",
+        "W13"
+      ],
+      "XI14": [
+        "EMPTY12",
+        "XI13"
+      ],
+      "X14": [
+        "XI14"
+      ],
+      "C14/WG0": [
+        "C13/WG0",
+        "M11/WG0",
+        "X14"
+      ],
+      "M14/WG0": [
+        "B14",
+        "C14/WG0",
+        "C16/WG0",
+        "M13/WG0"
+      ],
+      "C14/WG1": [
+        "C13/WG1",
+        "M11/WG1",
+        "X14"
+      ],
+      "M14/WG1": [
+        "B14",
+        "C14/WG1",
+        "C16/WG1",
+        "M13/WG1"
+      ],
+      "EMPTY14": [
+        "C14/WG0",
+        "C14/WG1"
+      ],
+      "W14": [
+        "B8"
+      ],
+      "B14": [
+        "B12",
+        "D14/tile0/warp8",
+        "D14/tile1/warp9",
+        "D14/tile2/warp10",
+        "D14/tile3/warp11",
+        "M7/WG0",
+        "M7/WG1",
+        "W14"
+      ],
+      "D14/tile0/warp8": [
+        "B12",
+        "M7/WG0",
+        "M7/WG1",
+        "W14"
+      ],
+      "D14/tile1/warp9": [
+        "B12",
+        "M7/WG0",
+        "M7/WG1",
+        "W14"
+      ],
+      "D14/tile2/warp10": [
+        "B12",
+        "M7/WG0",
+        "M7/WG1",
+        "W14"
+      ],
+      "D14/tile3/warp11": [
+        "B12",
+        "M7/WG0",
+        "M7/WG1",
+        "W14"
+      ],
+      "XI15": [
+        "EMPTY13",
+        "XI14"
+      ],
+      "X15": [
+        "XI15"
+      ],
+      "C15/WG0": [
+        "C14/WG0",
+        "M12/WG0",
+        "X15"
+      ],
+      "M15/WG0": [
+        "B15",
+        "C15/WG0",
+        "C17/WG0",
+        "M14/WG0"
+      ],
+      "C15/WG1": [
+        "C14/WG1",
+        "M12/WG1",
+        "X15"
+      ],
+      "M15/WG1": [
+        "B15",
+        "C15/WG1",
+        "C17/WG1",
+        "M14/WG1"
+      ],
+      "EMPTY15": [
+        "C15/WG0",
+        "C15/WG1"
+      ],
+      "W15": [
+        "B9"
+      ],
+      "B15": [
+        "B13",
+        "D15/tile0/warp12",
+        "D15/tile1/warp13",
+        "D15/tile2/warp14",
+        "D15/tile3/warp12",
+        "M8/WG0",
+        "M8/WG1",
+        "W15"
+      ],
+      "D15/tile0/warp12": [
+        "B13",
+        "M8/WG0",
+        "M8/WG1",
+        "W15"
+      ],
+      "D15/tile3/warp12": [
+        "B13",
+        "D15/tile0/warp12",
+        "M8/WG0",
+        "M8/WG1",
+        "W15"
+      ],
+      "D15/tile1/warp13": [
+        "B13",
+        "M8/WG0",
+        "M8/WG1",
+        "W15"
+      ],
+      "D15/tile2/warp14": [
+        "B13",
+        "M8/WG0",
+        "M8/WG1",
+        "W15"
+      ],
+      "XI16": [
+        "EMPTY14",
+        "XI15"
+      ],
+      "X16": [
+        "XI16"
+      ],
+      "C16/WG0": [
+        "C15/WG0",
+        "M13/WG0",
+        "X16"
+      ],
+      "M16/WG0": [
+        "B16",
+        "C16/WG0",
+        "C18/WG0",
+        "M15/WG0"
+      ],
+      "C16/WG1": [
+        "C15/WG1",
+        "M13/WG1",
+        "X16"
+      ],
+      "M16/WG1": [
+        "B16",
+        "C16/WG1",
+        "C18/WG1",
+        "M15/WG1"
+      ],
+      "EMPTY16": [
+        "C16/WG0",
+        "C16/WG1"
+      ],
+      "W16": [
+        "B10"
+      ],
+      "B16": [
+        "B14",
+        "D16/tile0/warp8",
+        "D16/tile1/warp9",
+        "D16/tile2/warp10",
+        "D16/tile3/warp11",
+        "M9/WG0",
+        "M9/WG1",
+        "W16"
+      ],
+      "D16/tile0/warp8": [
+        "B14",
+        "M9/WG0",
+        "M9/WG1",
+        "W16"
+      ],
+      "D16/tile1/warp9": [
+        "B14",
+        "M9/WG0",
+        "M9/WG1",
+        "W16"
+      ],
+      "D16/tile2/warp10": [
+        "B14",
+        "M9/WG0",
+        "M9/WG1",
+        "W16"
+      ],
+      "D16/tile3/warp11": [
+        "B14",
+        "M9/WG0",
+        "M9/WG1",
+        "W16"
+      ],
+      "XI17": [
+        "EMPTY15",
+        "XI16"
+      ],
+      "X17": [
+        "XI17"
+      ],
+      "C17/WG0": [
+        "C16/WG0",
+        "M14/WG0",
+        "X17"
+      ],
+      "M17/WG0": [
+        "B17",
+        "C17/WG0",
+        "C19/WG0",
+        "M16/WG0"
+      ],
+      "C17/WG1": [
+        "C16/WG1",
+        "M14/WG1",
+        "X17"
+      ],
+      "M17/WG1": [
+        "B17",
+        "C17/WG1",
+        "C19/WG1",
+        "M16/WG1"
+      ],
+      "EMPTY17": [
+        "C17/WG0",
+        "C17/WG1"
+      ],
+      "W17": [
+        "B11"
+      ],
+      "B17": [
+        "B15",
+        "D17/tile0/warp12",
+        "D17/tile1/warp13",
+        "D17/tile2/warp14",
+        "D17/tile3/warp12",
+        "M10/WG0",
+        "M10/WG1",
+        "W17"
+      ],
+      "D17/tile0/warp12": [
+        "B15",
+        "M10/WG0",
+        "M10/WG1",
+        "W17"
+      ],
+      "D17/tile3/warp12": [
+        "B15",
+        "D17/tile0/warp12",
+        "M10/WG0",
+        "M10/WG1",
+        "W17"
+      ],
+      "D17/tile1/warp13": [
+        "B15",
+        "M10/WG0",
+        "M10/WG1",
+        "W17"
+      ],
+      "D17/tile2/warp14": [
+        "B15",
+        "M10/WG0",
+        "M10/WG1",
+        "W17"
+      ],
+      "XI18": [
+        "EMPTY16",
+        "XI17"
+      ],
+      "X18": [
+        "XI18"
+      ],
+      "C18/WG0": [
+        "C17/WG0",
+        "M15/WG0",
+        "X18"
+      ],
+      "M18/WG0": [
+        "B18",
+        "C18/WG0",
+        "C20/WG0",
+        "M17/WG0"
+      ],
+      "C18/WG1": [
+        "C17/WG1",
+        "M15/WG1",
+        "X18"
+      ],
+      "M18/WG1": [
+        "B18",
+        "C18/WG1",
+        "C20/WG1",
+        "M17/WG1"
+      ],
+      "EMPTY18": [
+        "C18/WG0",
+        "C18/WG1"
+      ],
+      "W18": [
+        "B12"
+      ],
+      "B18": [
+        "B16",
+        "D18/tile0/warp8",
+        "D18/tile1/warp9",
+        "D18/tile2/warp10",
+        "D18/tile3/warp11",
+        "M11/WG0",
+        "M11/WG1",
+        "W18"
+      ],
+      "D18/tile0/warp8": [
+        "B16",
+        "M11/WG0",
+        "M11/WG1",
+        "W18"
+      ],
+      "D18/tile1/warp9": [
+        "B16",
+        "M11/WG0",
+        "M11/WG1",
+        "W18"
+      ],
+      "D18/tile2/warp10": [
+        "B16",
+        "M11/WG0",
+        "M11/WG1",
+        "W18"
+      ],
+      "D18/tile3/warp11": [
+        "B16",
+        "M11/WG0",
+        "M11/WG1",
+        "W18"
+      ],
+      "XI19": [
+        "EMPTY17",
+        "XI18"
+      ],
+      "X19": [
+        "XI19"
+      ],
+      "C19/WG0": [
+        "C18/WG0",
+        "M16/WG0",
+        "X19"
+      ],
+      "M19/WG0": [
+        "B19",
+        "C19/WG0",
+        "C21/WG0",
+        "M18/WG0"
+      ],
+      "C19/WG1": [
+        "C18/WG1",
+        "M16/WG1",
+        "X19"
+      ],
+      "M19/WG1": [
+        "B19",
+        "C19/WG1",
+        "C21/WG1",
+        "M18/WG1"
+      ],
+      "EMPTY19": [
+        "C19/WG0",
+        "C19/WG1"
+      ],
+      "W19": [
+        "B13"
+      ],
+      "B19": [
+        "B17",
+        "D19/tile0/warp12",
+        "D19/tile1/warp13",
+        "D19/tile2/warp14",
+        "D19/tile3/warp12",
+        "M12/WG0",
+        "M12/WG1",
+        "W19"
+      ],
+      "D19/tile0/warp12": [
+        "B17",
+        "M12/WG0",
+        "M12/WG1",
+        "W19"
+      ],
+      "D19/tile3/warp12": [
+        "B17",
+        "D19/tile0/warp12",
+        "M12/WG0",
+        "M12/WG1",
+        "W19"
+      ],
+      "D19/tile1/warp13": [
+        "B17",
+        "M12/WG0",
+        "M12/WG1",
+        "W19"
+      ],
+      "D19/tile2/warp14": [
+        "B17",
+        "M12/WG0",
+        "M12/WG1",
+        "W19"
+      ],
+      "XI20": [
+        "EMPTY18",
+        "XI19"
+      ],
+      "X20": [
+        "XI20"
+      ],
+      "C20/WG0": [
+        "C19/WG0",
+        "M17/WG0",
+        "X20"
+      ],
+      "M20/WG0": [
+        "B20",
+        "C20/WG0",
+        "C22/WG0",
+        "M19/WG0"
+      ],
+      "C20/WG1": [
+        "C19/WG1",
+        "M17/WG1",
+        "X20"
+      ],
+      "M20/WG1": [
+        "B20",
+        "C20/WG1",
+        "C22/WG1",
+        "M19/WG1"
+      ],
+      "EMPTY20": [
+        "C20/WG0",
+        "C20/WG1"
+      ],
+      "W20": [
+        "B14"
+      ],
+      "B20": [
+        "B18",
+        "D20/tile0/warp8",
+        "D20/tile1/warp9",
+        "D20/tile2/warp10",
+        "D20/tile3/warp11",
+        "M13/WG0",
+        "M13/WG1",
+        "W20"
+      ],
+      "D20/tile0/warp8": [
+        "B18",
+        "M13/WG0",
+        "M13/WG1",
+        "W20"
+      ],
+      "D20/tile1/warp9": [
+        "B18",
+        "M13/WG0",
+        "M13/WG1",
+        "W20"
+      ],
+      "D20/tile2/warp10": [
+        "B18",
+        "M13/WG0",
+        "M13/WG1",
+        "W20"
+      ],
+      "D20/tile3/warp11": [
+        "B18",
+        "M13/WG0",
+        "M13/WG1",
+        "W20"
+      ],
+      "XI21": [
+        "EMPTY19",
+        "XI20"
+      ],
+      "X21": [
+        "XI21"
+      ],
+      "C21/WG0": [
+        "C20/WG0",
+        "M18/WG0",
+        "X21"
+      ],
+      "M21/WG0": [
+        "B21",
+        "C21/WG0",
+        "C23/WG0",
+        "M20/WG0"
+      ],
+      "C21/WG1": [
+        "C20/WG1",
+        "M18/WG1",
+        "X21"
+      ],
+      "M21/WG1": [
+        "B21",
+        "C21/WG1",
+        "C23/WG1",
+        "M20/WG1"
+      ],
+      "EMPTY21": [
+        "C21/WG0",
+        "C21/WG1"
+      ],
+      "W21": [
+        "B15"
+      ],
+      "B21": [
+        "B19",
+        "D21/tile0/warp12",
+        "D21/tile1/warp13",
+        "D21/tile2/warp14",
+        "D21/tile3/warp12",
+        "M14/WG0",
+        "M14/WG1",
+        "W21"
+      ],
+      "D21/tile0/warp12": [
+        "B19",
+        "M14/WG0",
+        "M14/WG1",
+        "W21"
+      ],
+      "D21/tile3/warp12": [
+        "B19",
+        "D21/tile0/warp12",
+        "M14/WG0",
+        "M14/WG1",
+        "W21"
+      ],
+      "D21/tile1/warp13": [
+        "B19",
+        "M14/WG0",
+        "M14/WG1",
+        "W21"
+      ],
+      "D21/tile2/warp14": [
+        "B19",
+        "M14/WG0",
+        "M14/WG1",
+        "W21"
+      ],
+      "XI22": [
+        "EMPTY20",
+        "XI21"
+      ],
+      "X22": [
+        "XI22"
+      ],
+      "C22/WG0": [
+        "C21/WG0",
+        "M19/WG0",
+        "X22"
+      ],
+      "M22/WG0": [
+        "B22",
+        "C22/WG0",
+        "C24/WG0",
+        "M21/WG0"
+      ],
+      "C22/WG1": [
+        "C21/WG1",
+        "M19/WG1",
+        "X22"
+      ],
+      "M22/WG1": [
+        "B22",
+        "C22/WG1",
+        "C24/WG1",
+        "M21/WG1"
+      ],
+      "EMPTY22": [
+        "C22/WG0",
+        "C22/WG1"
+      ],
+      "W22": [
+        "B16"
+      ],
+      "B22": [
+        "B20",
+        "D22/tile0/warp8",
+        "D22/tile1/warp9",
+        "D22/tile2/warp10",
+        "D22/tile3/warp11",
+        "M15/WG0",
+        "M15/WG1",
+        "W22"
+      ],
+      "D22/tile0/warp8": [
+        "B20",
+        "M15/WG0",
+        "M15/WG1",
+        "W22"
+      ],
+      "D22/tile1/warp9": [
+        "B20",
+        "M15/WG0",
+        "M15/WG1",
+        "W22"
+      ],
+      "D22/tile2/warp10": [
+        "B20",
+        "M15/WG0",
+        "M15/WG1",
+        "W22"
+      ],
+      "D22/tile3/warp11": [
+        "B20",
+        "M15/WG0",
+        "M15/WG1",
+        "W22"
+      ],
+      "XI23": [
+        "EMPTY21",
+        "XI22"
+      ],
+      "X23": [
+        "XI23"
+      ],
+      "C23/WG0": [
+        "C22/WG0",
+        "M20/WG0",
+        "X23"
+      ],
+      "M23/WG0": [
+        "B23",
+        "C23/WG0",
+        "C25/WG0",
+        "M22/WG0"
+      ],
+      "C23/WG1": [
+        "C22/WG1",
+        "M20/WG1",
+        "X23"
+      ],
+      "M23/WG1": [
+        "B23",
+        "C23/WG1",
+        "C25/WG1",
+        "M22/WG1"
+      ],
+      "EMPTY23": [
+        "C23/WG0",
+        "C23/WG1"
+      ],
+      "W23": [
+        "B17"
+      ],
+      "B23": [
+        "B21",
+        "D23/tile0/warp12",
+        "D23/tile1/warp13",
+        "D23/tile2/warp14",
+        "D23/tile3/warp12",
+        "M16/WG0",
+        "M16/WG1",
+        "W23"
+      ],
+      "D23/tile0/warp12": [
+        "B21",
+        "M16/WG0",
+        "M16/WG1",
+        "W23"
+      ],
+      "D23/tile3/warp12": [
+        "B21",
+        "D23/tile0/warp12",
+        "M16/WG0",
+        "M16/WG1",
+        "W23"
+      ],
+      "D23/tile1/warp13": [
+        "B21",
+        "M16/WG0",
+        "M16/WG1",
+        "W23"
+      ],
+      "D23/tile2/warp14": [
+        "B21",
+        "M16/WG0",
+        "M16/WG1",
+        "W23"
+      ],
+      "XI24": [
+        "EMPTY22",
+        "XI23"
+      ],
+      "X24": [
+        "XI24"
+      ],
+      "C24/WG0": [
+        "C23/WG0",
+        "M21/WG0",
+        "X24"
+      ],
+      "M24/WG0": [
+        "B24",
+        "C24/WG0",
+        "C26/WG0",
+        "M23/WG0"
+      ],
+      "C24/WG1": [
+        "C23/WG1",
+        "M21/WG1",
+        "X24"
+      ],
+      "M24/WG1": [
+        "B24",
+        "C24/WG1",
+        "C26/WG1",
+        "M23/WG1"
+      ],
+      "EMPTY24": [
+        "C24/WG0",
+        "C24/WG1"
+      ],
+      "W24": [
+        "B18"
+      ],
+      "B24": [
+        "B22",
+        "D24/tile0/warp8",
+        "D24/tile1/warp9",
+        "D24/tile2/warp10",
+        "D24/tile3/warp11",
+        "M17/WG0",
+        "M17/WG1",
+        "W24"
+      ],
+      "D24/tile0/warp8": [
+        "B22",
+        "M17/WG0",
+        "M17/WG1",
+        "W24"
+      ],
+      "D24/tile1/warp9": [
+        "B22",
+        "M17/WG0",
+        "M17/WG1",
+        "W24"
+      ],
+      "D24/tile2/warp10": [
+        "B22",
+        "M17/WG0",
+        "M17/WG1",
+        "W24"
+      ],
+      "D24/tile3/warp11": [
+        "B22",
+        "M17/WG0",
+        "M17/WG1",
+        "W24"
+      ],
+      "XI25": [
+        "EMPTY23",
+        "XI24"
+      ],
+      "X25": [
+        "XI25"
+      ],
+      "C25/WG0": [
+        "C24/WG0",
+        "M22/WG0",
+        "X25"
+      ],
+      "M25/WG0": [
+        "B25",
+        "C25/WG0",
+        "C27/WG0",
+        "M24/WG0"
+      ],
+      "C25/WG1": [
+        "C24/WG1",
+        "M22/WG1",
+        "X25"
+      ],
+      "M25/WG1": [
+        "B25",
+        "C25/WG1",
+        "C27/WG1",
+        "M24/WG1"
+      ],
+      "EMPTY25": [
+        "C25/WG0",
+        "C25/WG1"
+      ],
+      "W25": [
+        "B19"
+      ],
+      "B25": [
+        "B23",
+        "D25/tile0/warp12",
+        "D25/tile1/warp13",
+        "D25/tile2/warp14",
+        "D25/tile3/warp12",
+        "M18/WG0",
+        "M18/WG1",
+        "W25"
+      ],
+      "D25/tile0/warp12": [
+        "B23",
+        "M18/WG0",
+        "M18/WG1",
+        "W25"
+      ],
+      "D25/tile3/warp12": [
+        "B23",
+        "D25/tile0/warp12",
+        "M18/WG0",
+        "M18/WG1",
+        "W25"
+      ],
+      "D25/tile1/warp13": [
+        "B23",
+        "M18/WG0",
+        "M18/WG1",
+        "W25"
+      ],
+      "D25/tile2/warp14": [
+        "B23",
+        "M18/WG0",
+        "M18/WG1",
+        "W25"
+      ],
+      "XI26": [
+        "EMPTY24",
+        "XI25"
+      ],
+      "X26": [
+        "XI26"
+      ],
+      "C26/WG0": [
+        "C25/WG0",
+        "M23/WG0",
+        "X26"
+      ],
+      "M26/WG0": [
+        "B26",
+        "C26/WG0",
+        "C28/WG0",
+        "M25/WG0"
+      ],
+      "C26/WG1": [
+        "C25/WG1",
+        "M23/WG1",
+        "X26"
+      ],
+      "M26/WG1": [
+        "B26",
+        "C26/WG1",
+        "C28/WG1",
+        "M25/WG1"
+      ],
+      "EMPTY26": [
+        "C26/WG0",
+        "C26/WG1"
+      ],
+      "W26": [
+        "B20"
+      ],
+      "B26": [
+        "B24",
+        "D26/tile0/warp8",
+        "D26/tile1/warp9",
+        "D26/tile2/warp10",
+        "D26/tile3/warp11",
+        "M19/WG0",
+        "M19/WG1",
+        "W26"
+      ],
+      "D26/tile0/warp8": [
+        "B24",
+        "M19/WG0",
+        "M19/WG1",
+        "W26"
+      ],
+      "D26/tile1/warp9": [
+        "B24",
+        "M19/WG0",
+        "M19/WG1",
+        "W26"
+      ],
+      "D26/tile2/warp10": [
+        "B24",
+        "M19/WG0",
+        "M19/WG1",
+        "W26"
+      ],
+      "D26/tile3/warp11": [
+        "B24",
+        "M19/WG0",
+        "M19/WG1",
+        "W26"
+      ],
+      "XI27": [
+        "EMPTY25",
+        "XI26"
+      ],
+      "X27": [
+        "XI27"
+      ],
+      "C27/WG0": [
+        "C26/WG0",
+        "M24/WG0",
+        "X27"
+      ],
+      "M27/WG0": [
+        "B27",
+        "C27/WG0",
+        "C29/WG0",
+        "M26/WG0"
+      ],
+      "C27/WG1": [
+        "C26/WG1",
+        "M24/WG1",
+        "X27"
+      ],
+      "M27/WG1": [
+        "B27",
+        "C27/WG1",
+        "C29/WG1",
+        "M26/WG1"
+      ],
+      "EMPTY27": [
+        "C27/WG0",
+        "C27/WG1"
+      ],
+      "W27": [
+        "B21"
+      ],
+      "B27": [
+        "B25",
+        "D27/tile0/warp12",
+        "D27/tile1/warp13",
+        "D27/tile2/warp14",
+        "D27/tile3/warp12",
+        "M20/WG0",
+        "M20/WG1",
+        "W27"
+      ],
+      "D27/tile0/warp12": [
+        "B25",
+        "M20/WG0",
+        "M20/WG1",
+        "W27"
+      ],
+      "D27/tile3/warp12": [
+        "B25",
+        "D27/tile0/warp12",
+        "M20/WG0",
+        "M20/WG1",
+        "W27"
+      ],
+      "D27/tile1/warp13": [
+        "B25",
+        "M20/WG0",
+        "M20/WG1",
+        "W27"
+      ],
+      "D27/tile2/warp14": [
+        "B25",
+        "M20/WG0",
+        "M20/WG1",
+        "W27"
+      ],
+      "XI28": [
+        "EMPTY26",
+        "XI27"
+      ],
+      "X28": [
+        "XI28"
+      ],
+      "C28/WG0": [
+        "C27/WG0",
+        "M25/WG0",
+        "X28"
+      ],
+      "M28/WG0": [
+        "B28",
+        "C28/WG0",
+        "C30/WG0",
+        "M27/WG0"
+      ],
+      "C28/WG1": [
+        "C27/WG1",
+        "M25/WG1",
+        "X28"
+      ],
+      "M28/WG1": [
+        "B28",
+        "C28/WG1",
+        "C30/WG1",
+        "M27/WG1"
+      ],
+      "EMPTY28": [
+        "C28/WG0",
+        "C28/WG1"
+      ],
+      "W28": [
+        "B22"
+      ],
+      "B28": [
+        "B26",
+        "D28/tile0/warp8",
+        "D28/tile1/warp9",
+        "D28/tile2/warp10",
+        "D28/tile3/warp11",
+        "M21/WG0",
+        "M21/WG1",
+        "W28"
+      ],
+      "D28/tile0/warp8": [
+        "B26",
+        "M21/WG0",
+        "M21/WG1",
+        "W28"
+      ],
+      "D28/tile1/warp9": [
+        "B26",
+        "M21/WG0",
+        "M21/WG1",
+        "W28"
+      ],
+      "D28/tile2/warp10": [
+        "B26",
+        "M21/WG0",
+        "M21/WG1",
+        "W28"
+      ],
+      "D28/tile3/warp11": [
+        "B26",
+        "M21/WG0",
+        "M21/WG1",
+        "W28"
+      ],
+      "XI29": [
+        "EMPTY27",
+        "XI28"
+      ],
+      "X29": [
+        "XI29"
+      ],
+      "C29/WG0": [
+        "C28/WG0",
+        "M26/WG0",
+        "X29"
+      ],
+      "M29/WG0": [
+        "B29",
+        "C29/WG0",
+        "C31/WG0",
+        "M28/WG0"
+      ],
+      "C29/WG1": [
+        "C28/WG1",
+        "M26/WG1",
+        "X29"
+      ],
+      "M29/WG1": [
+        "B29",
+        "C29/WG1",
+        "C31/WG1",
+        "M28/WG1"
+      ],
+      "EMPTY29": [
+        "C29/WG0",
+        "C29/WG1"
+      ],
+      "W29": [
+        "B23"
+      ],
+      "B29": [
+        "B27",
+        "D29/tile0/warp12",
+        "D29/tile1/warp13",
+        "D29/tile2/warp14",
+        "D29/tile3/warp12",
+        "M22/WG0",
+        "M22/WG1",
+        "W29"
+      ],
+      "D29/tile0/warp12": [
+        "B27",
+        "M22/WG0",
+        "M22/WG1",
+        "W29"
+      ],
+      "D29/tile3/warp12": [
+        "B27",
+        "D29/tile0/warp12",
+        "M22/WG0",
+        "M22/WG1",
+        "W29"
+      ],
+      "D29/tile1/warp13": [
+        "B27",
+        "M22/WG0",
+        "M22/WG1",
+        "W29"
+      ],
+      "D29/tile2/warp14": [
+        "B27",
+        "M22/WG0",
+        "M22/WG1",
+        "W29"
+      ],
+      "XI30": [
+        "EMPTY28",
+        "XI29"
+      ],
+      "X30": [
+        "XI30"
+      ],
+      "C30/WG0": [
+        "C29/WG0",
+        "M27/WG0",
+        "X30"
+      ],
+      "M30/WG0": [
+        "B30",
+        "C30/WG0",
+        "C32/WG0",
+        "M29/WG0"
+      ],
+      "C30/WG1": [
+        "C29/WG1",
+        "M27/WG1",
+        "X30"
+      ],
+      "M30/WG1": [
+        "B30",
+        "C30/WG1",
+        "C32/WG1",
+        "M29/WG1"
+      ],
+      "EMPTY30": [
+        "C30/WG0",
+        "C30/WG1"
+      ],
+      "W30": [
+        "B24"
+      ],
+      "B30": [
+        "B28",
+        "D30/tile0/warp8",
+        "D30/tile1/warp9",
+        "D30/tile2/warp10",
+        "D30/tile3/warp11",
+        "M23/WG0",
+        "M23/WG1",
+        "W30"
+      ],
+      "D30/tile0/warp8": [
+        "B28",
+        "M23/WG0",
+        "M23/WG1",
+        "W30"
+      ],
+      "D30/tile1/warp9": [
+        "B28",
+        "M23/WG0",
+        "M23/WG1",
+        "W30"
+      ],
+      "D30/tile2/warp10": [
+        "B28",
+        "M23/WG0",
+        "M23/WG1",
+        "W30"
+      ],
+      "D30/tile3/warp11": [
+        "B28",
+        "M23/WG0",
+        "M23/WG1",
+        "W30"
+      ],
+      "XI31": [
+        "EMPTY29",
+        "XI30"
+      ],
+      "X31": [
+        "XI31"
+      ],
+      "C31/WG0": [
+        "C30/WG0",
+        "M28/WG0",
+        "X31"
+      ],
+      "M31/WG0": [
+        "B31",
+        "C31/WG0",
+        "C33/WG0",
+        "M30/WG0"
+      ],
+      "C31/WG1": [
+        "C30/WG1",
+        "M28/WG1",
+        "X31"
+      ],
+      "M31/WG1": [
+        "B31",
+        "C31/WG1",
+        "C33/WG1",
+        "M30/WG1"
+      ],
+      "EMPTY31": [
+        "C31/WG0",
+        "C31/WG1"
+      ],
+      "W31": [
+        "B25"
+      ],
+      "B31": [
+        "B29",
+        "D31/tile0/warp12",
+        "D31/tile1/warp13",
+        "D31/tile2/warp14",
+        "D31/tile3/warp12",
+        "M24/WG0",
+        "M24/WG1",
+        "W31"
+      ],
+      "D31/tile0/warp12": [
+        "B29",
+        "M24/WG0",
+        "M24/WG1",
+        "W31"
+      ],
+      "D31/tile3/warp12": [
+        "B29",
+        "D31/tile0/warp12",
+        "M24/WG0",
+        "M24/WG1",
+        "W31"
+      ],
+      "D31/tile1/warp13": [
+        "B29",
+        "M24/WG0",
+        "M24/WG1",
+        "W31"
+      ],
+      "D31/tile2/warp14": [
+        "B29",
+        "M24/WG0",
+        "M24/WG1",
+        "W31"
+      ],
+      "XI32": [
+        "EMPTY30",
+        "XI31"
+      ],
+      "X32": [
+        "XI32"
+      ],
+      "C32/WG0": [
+        "C31/WG0",
+        "M29/WG0",
+        "X32"
+      ],
+      "M32/WG0": [
+        "B32",
+        "C32/WG0",
+        "C34/WG0",
+        "M31/WG0"
+      ],
+      "C32/WG1": [
+        "C31/WG1",
+        "M29/WG1",
+        "X32"
+      ],
+      "M32/WG1": [
+        "B32",
+        "C32/WG1",
+        "C34/WG1",
+        "M31/WG1"
+      ],
+      "EMPTY32": [
+        "C32/WG0",
+        "C32/WG1"
+      ],
+      "W32": [
+        "B26"
+      ],
+      "B32": [
+        "B30",
+        "D32/tile0/warp8",
+        "D32/tile1/warp9",
+        "D32/tile2/warp10",
+        "D32/tile3/warp11",
+        "M25/WG0",
+        "M25/WG1",
+        "W32"
+      ],
+      "D32/tile0/warp8": [
+        "B30",
+        "M25/WG0",
+        "M25/WG1",
+        "W32"
+      ],
+      "D32/tile1/warp9": [
+        "B30",
+        "M25/WG0",
+        "M25/WG1",
+        "W32"
+      ],
+      "D32/tile2/warp10": [
+        "B30",
+        "M25/WG0",
+        "M25/WG1",
+        "W32"
+      ],
+      "D32/tile3/warp11": [
+        "B30",
+        "M25/WG0",
+        "M25/WG1",
+        "W32"
+      ],
+      "XI33": [
+        "EMPTY31",
+        "XI32"
+      ],
+      "X33": [
+        "XI33"
+      ],
+      "C33/WG0": [
+        "C32/WG0",
+        "M30/WG0",
+        "X33"
+      ],
+      "M33/WG0": [
+        "B33",
+        "C33/WG0",
+        "C35/WG0",
+        "M32/WG0"
+      ],
+      "C33/WG1": [
+        "C32/WG1",
+        "M30/WG1",
+        "X33"
+      ],
+      "M33/WG1": [
+        "B33",
+        "C33/WG1",
+        "C35/WG1",
+        "M32/WG1"
+      ],
+      "EMPTY33": [
+        "C33/WG0",
+        "C33/WG1"
+      ],
+      "W33": [
+        "B27"
+      ],
+      "B33": [
+        "B31",
+        "D33/tile0/warp12",
+        "D33/tile1/warp13",
+        "D33/tile2/warp14",
+        "D33/tile3/warp12",
+        "M26/WG0",
+        "M26/WG1",
+        "W33"
+      ],
+      "D33/tile0/warp12": [
+        "B31",
+        "M26/WG0",
+        "M26/WG1",
+        "W33"
+      ],
+      "D33/tile3/warp12": [
+        "B31",
+        "D33/tile0/warp12",
+        "M26/WG0",
+        "M26/WG1",
+        "W33"
+      ],
+      "D33/tile1/warp13": [
+        "B31",
+        "M26/WG0",
+        "M26/WG1",
+        "W33"
+      ],
+      "D33/tile2/warp14": [
+        "B31",
+        "M26/WG0",
+        "M26/WG1",
+        "W33"
+      ],
+      "XI34": [
+        "EMPTY32",
+        "XI33"
+      ],
+      "X34": [
+        "XI34"
+      ],
+      "C34/WG0": [
+        "C33/WG0",
+        "M31/WG0",
+        "X34"
+      ],
+      "M34/WG0": [
+        "B34",
+        "C34/WG0",
+        "C36/WG0",
+        "M33/WG0"
+      ],
+      "C34/WG1": [
+        "C33/WG1",
+        "M31/WG1",
+        "X34"
+      ],
+      "M34/WG1": [
+        "B34",
+        "C34/WG1",
+        "C36/WG1",
+        "M33/WG1"
+      ],
+      "EMPTY34": [
+        "C34/WG0",
+        "C34/WG1"
+      ],
+      "W34": [
+        "B28"
+      ],
+      "B34": [
+        "B32",
+        "D34/tile0/warp8",
+        "D34/tile1/warp9",
+        "D34/tile2/warp10",
+        "D34/tile3/warp11",
+        "M27/WG0",
+        "M27/WG1",
+        "W34"
+      ],
+      "D34/tile0/warp8": [
+        "B32",
+        "M27/WG0",
+        "M27/WG1",
+        "W34"
+      ],
+      "D34/tile1/warp9": [
+        "B32",
+        "M27/WG0",
+        "M27/WG1",
+        "W34"
+      ],
+      "D34/tile2/warp10": [
+        "B32",
+        "M27/WG0",
+        "M27/WG1",
+        "W34"
+      ],
+      "D34/tile3/warp11": [
+        "B32",
+        "M27/WG0",
+        "M27/WG1",
+        "W34"
+      ],
+      "XI35": [
+        "EMPTY33",
+        "XI34"
+      ],
+      "X35": [
+        "XI35"
+      ],
+      "C35/WG0": [
+        "C34/WG0",
+        "M32/WG0",
+        "X35"
+      ],
+      "M35/WG0": [
+        "B35",
+        "C35/WG0",
+        "C37/WG0",
+        "M34/WG0"
+      ],
+      "C35/WG1": [
+        "C34/WG1",
+        "M32/WG1",
+        "X35"
+      ],
+      "M35/WG1": [
+        "B35",
+        "C35/WG1",
+        "C37/WG1",
+        "M34/WG1"
+      ],
+      "EMPTY35": [
+        "C35/WG0",
+        "C35/WG1"
+      ],
+      "W35": [
+        "B29"
+      ],
+      "B35": [
+        "B33",
+        "D35/tile0/warp12",
+        "D35/tile1/warp13",
+        "D35/tile2/warp14",
+        "D35/tile3/warp12",
+        "M28/WG0",
+        "M28/WG1",
+        "W35"
+      ],
+      "D35/tile0/warp12": [
+        "B33",
+        "M28/WG0",
+        "M28/WG1",
+        "W35"
+      ],
+      "D35/tile3/warp12": [
+        "B33",
+        "D35/tile0/warp12",
+        "M28/WG0",
+        "M28/WG1",
+        "W35"
+      ],
+      "D35/tile1/warp13": [
+        "B33",
+        "M28/WG0",
+        "M28/WG1",
+        "W35"
+      ],
+      "D35/tile2/warp14": [
+        "B33",
+        "M28/WG0",
+        "M28/WG1",
+        "W35"
+      ],
+      "XI36": [
+        "EMPTY34",
+        "XI35"
+      ],
+      "X36": [
+        "XI36"
+      ],
+      "C36/WG0": [
+        "C35/WG0",
+        "M33/WG0",
+        "X36"
+      ],
+      "M36/WG0": [
+        "B36",
+        "C36/WG0",
+        "C38/WG0",
+        "M35/WG0"
+      ],
+      "C36/WG1": [
+        "C35/WG1",
+        "M33/WG1",
+        "X36"
+      ],
+      "M36/WG1": [
+        "B36",
+        "C36/WG1",
+        "C38/WG1",
+        "M35/WG1"
+      ],
+      "EMPTY36": [
+        "C36/WG0",
+        "C36/WG1"
+      ],
+      "W36": [
+        "B30"
+      ],
+      "B36": [
+        "B34",
+        "D36/tile0/warp8",
+        "D36/tile1/warp9",
+        "D36/tile2/warp10",
+        "D36/tile3/warp11",
+        "M29/WG0",
+        "M29/WG1",
+        "W36"
+      ],
+      "D36/tile0/warp8": [
+        "B34",
+        "M29/WG0",
+        "M29/WG1",
+        "W36"
+      ],
+      "D36/tile1/warp9": [
+        "B34",
+        "M29/WG0",
+        "M29/WG1",
+        "W36"
+      ],
+      "D36/tile2/warp10": [
+        "B34",
+        "M29/WG0",
+        "M29/WG1",
+        "W36"
+      ],
+      "D36/tile3/warp11": [
+        "B34",
+        "M29/WG0",
+        "M29/WG1",
+        "W36"
+      ],
+      "XI37": [
+        "EMPTY35",
+        "XI36"
+      ],
+      "X37": [
+        "XI37"
+      ],
+      "C37/WG0": [
+        "C36/WG0",
+        "M34/WG0",
+        "X37"
+      ],
+      "M37/WG0": [
+        "B37",
+        "C37/WG0",
+        "C39/WG0",
+        "M36/WG0"
+      ],
+      "C37/WG1": [
+        "C36/WG1",
+        "M34/WG1",
+        "X37"
+      ],
+      "M37/WG1": [
+        "B37",
+        "C37/WG1",
+        "C39/WG1",
+        "M36/WG1"
+      ],
+      "EMPTY37": [
+        "C37/WG0",
+        "C37/WG1"
+      ],
+      "W37": [
+        "B31"
+      ],
+      "B37": [
+        "B35",
+        "D37/tile0/warp12",
+        "D37/tile1/warp13",
+        "D37/tile2/warp14",
+        "D37/tile3/warp12",
+        "M30/WG0",
+        "M30/WG1",
+        "W37"
+      ],
+      "D37/tile0/warp12": [
+        "B35",
+        "M30/WG0",
+        "M30/WG1",
+        "W37"
+      ],
+      "D37/tile3/warp12": [
+        "B35",
+        "D37/tile0/warp12",
+        "M30/WG0",
+        "M30/WG1",
+        "W37"
+      ],
+      "D37/tile1/warp13": [
+        "B35",
+        "M30/WG0",
+        "M30/WG1",
+        "W37"
+      ],
+      "D37/tile2/warp14": [
+        "B35",
+        "M30/WG0",
+        "M30/WG1",
+        "W37"
+      ],
+      "XI38": [
+        "EMPTY36",
+        "XI37"
+      ],
+      "X38": [
+        "XI38"
+      ],
+      "C38/WG0": [
+        "C37/WG0",
+        "M35/WG0",
+        "X38"
+      ],
+      "M38/WG0": [
+        "B38",
+        "C38/WG0",
+        "C40/WG0",
+        "M37/WG0"
+      ],
+      "C38/WG1": [
+        "C37/WG1",
+        "M35/WG1",
+        "X38"
+      ],
+      "M38/WG1": [
+        "B38",
+        "C38/WG1",
+        "C40/WG1",
+        "M37/WG1"
+      ],
+      "EMPTY38": [
+        "C38/WG0",
+        "C38/WG1"
+      ],
+      "W38": [
+        "B32"
+      ],
+      "B38": [
+        "B36",
+        "D38/tile0/warp8",
+        "D38/tile1/warp9",
+        "D38/tile2/warp10",
+        "D38/tile3/warp11",
+        "M31/WG0",
+        "M31/WG1",
+        "W38"
+      ],
+      "D38/tile0/warp8": [
+        "B36",
+        "M31/WG0",
+        "M31/WG1",
+        "W38"
+      ],
+      "D38/tile1/warp9": [
+        "B36",
+        "M31/WG0",
+        "M31/WG1",
+        "W38"
+      ],
+      "D38/tile2/warp10": [
+        "B36",
+        "M31/WG0",
+        "M31/WG1",
+        "W38"
+      ],
+      "D38/tile3/warp11": [
+        "B36",
+        "M31/WG0",
+        "M31/WG1",
+        "W38"
+      ],
+      "XI39": [
+        "EMPTY37",
+        "XI38"
+      ],
+      "X39": [
+        "XI39"
+      ],
+      "C39/WG0": [
+        "C38/WG0",
+        "M36/WG0",
+        "X39"
+      ],
+      "M39/WG0": [
+        "B39",
+        "C39/WG0",
+        "C41/WG0",
+        "M38/WG0"
+      ],
+      "C39/WG1": [
+        "C38/WG1",
+        "M36/WG1",
+        "X39"
+      ],
+      "M39/WG1": [
+        "B39",
+        "C39/WG1",
+        "C41/WG1",
+        "M38/WG1"
+      ],
+      "EMPTY39": [
+        "C39/WG0",
+        "C39/WG1"
+      ],
+      "W39": [
+        "B33"
+      ],
+      "B39": [
+        "B37",
+        "D39/tile0/warp12",
+        "D39/tile1/warp13",
+        "D39/tile2/warp14",
+        "D39/tile3/warp12",
+        "M32/WG0",
+        "M32/WG1",
+        "W39"
+      ],
+      "D39/tile0/warp12": [
+        "B37",
+        "M32/WG0",
+        "M32/WG1",
+        "W39"
+      ],
+      "D39/tile3/warp12": [
+        "B37",
+        "D39/tile0/warp12",
+        "M32/WG0",
+        "M32/WG1",
+        "W39"
+      ],
+      "D39/tile1/warp13": [
+        "B37",
+        "M32/WG0",
+        "M32/WG1",
+        "W39"
+      ],
+      "D39/tile2/warp14": [
+        "B37",
+        "M32/WG0",
+        "M32/WG1",
+        "W39"
+      ],
+      "XI40": [
+        "EMPTY38",
+        "XI39"
+      ],
+      "X40": [
+        "XI40"
+      ],
+      "C40/WG0": [
+        "C39/WG0",
+        "M37/WG0",
+        "X40"
+      ],
+      "M40/WG0": [
+        "B40",
+        "C40/WG0",
+        "C42/WG0",
+        "M39/WG0"
+      ],
+      "C40/WG1": [
+        "C39/WG1",
+        "M37/WG1",
+        "X40"
+      ],
+      "M40/WG1": [
+        "B40",
+        "C40/WG1",
+        "C42/WG1",
+        "M39/WG1"
+      ],
+      "EMPTY40": [
+        "C40/WG0",
+        "C40/WG1"
+      ],
+      "W40": [
+        "B34"
+      ],
+      "B40": [
+        "B38",
+        "D40/tile0/warp8",
+        "D40/tile1/warp9",
+        "D40/tile2/warp10",
+        "D40/tile3/warp11",
+        "M33/WG0",
+        "M33/WG1",
+        "W40"
+      ],
+      "D40/tile0/warp8": [
+        "B38",
+        "M33/WG0",
+        "M33/WG1",
+        "W40"
+      ],
+      "D40/tile1/warp9": [
+        "B38",
+        "M33/WG0",
+        "M33/WG1",
+        "W40"
+      ],
+      "D40/tile2/warp10": [
+        "B38",
+        "M33/WG0",
+        "M33/WG1",
+        "W40"
+      ],
+      "D40/tile3/warp11": [
+        "B38",
+        "M33/WG0",
+        "M33/WG1",
+        "W40"
+      ],
+      "XI41": [
+        "EMPTY39",
+        "XI40"
+      ],
+      "X41": [
+        "XI41"
+      ],
+      "C41/WG0": [
+        "C40/WG0",
+        "M38/WG0",
+        "X41"
+      ],
+      "M41/WG0": [
+        "B41",
+        "C41/WG0",
+        "C43/WG0",
+        "M40/WG0"
+      ],
+      "C41/WG1": [
+        "C40/WG1",
+        "M38/WG1",
+        "X41"
+      ],
+      "M41/WG1": [
+        "B41",
+        "C41/WG1",
+        "C43/WG1",
+        "M40/WG1"
+      ],
+      "EMPTY41": [
+        "C41/WG0",
+        "C41/WG1"
+      ],
+      "W41": [
+        "B35"
+      ],
+      "B41": [
+        "B39",
+        "D41/tile0/warp12",
+        "D41/tile1/warp13",
+        "D41/tile2/warp14",
+        "D41/tile3/warp12",
+        "M34/WG0",
+        "M34/WG1",
+        "W41"
+      ],
+      "D41/tile0/warp12": [
+        "B39",
+        "M34/WG0",
+        "M34/WG1",
+        "W41"
+      ],
+      "D41/tile3/warp12": [
+        "B39",
+        "D41/tile0/warp12",
+        "M34/WG0",
+        "M34/WG1",
+        "W41"
+      ],
+      "D41/tile1/warp13": [
+        "B39",
+        "M34/WG0",
+        "M34/WG1",
+        "W41"
+      ],
+      "D41/tile2/warp14": [
+        "B39",
+        "M34/WG0",
+        "M34/WG1",
+        "W41"
+      ],
+      "XI42": [
+        "EMPTY40",
+        "XI41"
+      ],
+      "X42": [
+        "XI42"
+      ],
+      "C42/WG0": [
+        "C41/WG0",
+        "M39/WG0",
+        "X42"
+      ],
+      "M42/WG0": [
+        "B42",
+        "C42/WG0",
+        "C44/WG0",
+        "M41/WG0"
+      ],
+      "C42/WG1": [
+        "C41/WG1",
+        "M39/WG1",
+        "X42"
+      ],
+      "M42/WG1": [
+        "B42",
+        "C42/WG1",
+        "C44/WG1",
+        "M41/WG1"
+      ],
+      "EMPTY42": [
+        "C42/WG0",
+        "C42/WG1"
+      ],
+      "W42": [
+        "B36"
+      ],
+      "B42": [
+        "B40",
+        "D42/tile0/warp8",
+        "D42/tile1/warp9",
+        "D42/tile2/warp10",
+        "D42/tile3/warp11",
+        "M35/WG0",
+        "M35/WG1",
+        "W42"
+      ],
+      "D42/tile0/warp8": [
+        "B40",
+        "M35/WG0",
+        "M35/WG1",
+        "W42"
+      ],
+      "D42/tile1/warp9": [
+        "B40",
+        "M35/WG0",
+        "M35/WG1",
+        "W42"
+      ],
+      "D42/tile2/warp10": [
+        "B40",
+        "M35/WG0",
+        "M35/WG1",
+        "W42"
+      ],
+      "D42/tile3/warp11": [
+        "B40",
+        "M35/WG0",
+        "M35/WG1",
+        "W42"
+      ],
+      "XI43": [
+        "EMPTY41",
+        "XI42"
+      ],
+      "X43": [
+        "XI43"
+      ],
+      "C43/WG0": [
+        "C42/WG0",
+        "M40/WG0",
+        "X43"
+      ],
+      "M43/WG0": [
+        "B43",
+        "C43/WG0",
+        "C45/WG0",
+        "M42/WG0"
+      ],
+      "C43/WG1": [
+        "C42/WG1",
+        "M40/WG1",
+        "X43"
+      ],
+      "M43/WG1": [
+        "B43",
+        "C43/WG1",
+        "C45/WG1",
+        "M42/WG1"
+      ],
+      "EMPTY43": [
+        "C43/WG0",
+        "C43/WG1"
+      ],
+      "W43": [
+        "B37"
+      ],
+      "B43": [
+        "B41",
+        "D43/tile0/warp12",
+        "D43/tile1/warp13",
+        "D43/tile2/warp14",
+        "D43/tile3/warp12",
+        "M36/WG0",
+        "M36/WG1",
+        "W43"
+      ],
+      "D43/tile0/warp12": [
+        "B41",
+        "M36/WG0",
+        "M36/WG1",
+        "W43"
+      ],
+      "D43/tile3/warp12": [
+        "B41",
+        "D43/tile0/warp12",
+        "M36/WG0",
+        "M36/WG1",
+        "W43"
+      ],
+      "D43/tile1/warp13": [
+        "B41",
+        "M36/WG0",
+        "M36/WG1",
+        "W43"
+      ],
+      "D43/tile2/warp14": [
+        "B41",
+        "M36/WG0",
+        "M36/WG1",
+        "W43"
+      ],
+      "XI44": [
+        "EMPTY42",
+        "XI43"
+      ],
+      "X44": [
+        "XI44"
+      ],
+      "C44/WG0": [
+        "C43/WG0",
+        "M41/WG0",
+        "X44"
+      ],
+      "M44/WG0": [
+        "B44",
+        "C44/WG0",
+        "C46/WG0",
+        "M43/WG0"
+      ],
+      "C44/WG1": [
+        "C43/WG1",
+        "M41/WG1",
+        "X44"
+      ],
+      "M44/WG1": [
+        "B44",
+        "C44/WG1",
+        "C46/WG1",
+        "M43/WG1"
+      ],
+      "EMPTY44": [
+        "C44/WG0",
+        "C44/WG1"
+      ],
+      "W44": [
+        "B38"
+      ],
+      "B44": [
+        "B42",
+        "D44/tile0/warp8",
+        "D44/tile1/warp9",
+        "D44/tile2/warp10",
+        "D44/tile3/warp11",
+        "M37/WG0",
+        "M37/WG1",
+        "W44"
+      ],
+      "D44/tile0/warp8": [
+        "B42",
+        "M37/WG0",
+        "M37/WG1",
+        "W44"
+      ],
+      "D44/tile1/warp9": [
+        "B42",
+        "M37/WG0",
+        "M37/WG1",
+        "W44"
+      ],
+      "D44/tile2/warp10": [
+        "B42",
+        "M37/WG0",
+        "M37/WG1",
+        "W44"
+      ],
+      "D44/tile3/warp11": [
+        "B42",
+        "M37/WG0",
+        "M37/WG1",
+        "W44"
+      ],
+      "XI45": [
+        "EMPTY43",
+        "XI44"
+      ],
+      "X45": [
+        "XI45"
+      ],
+      "C45/WG0": [
+        "C44/WG0",
+        "M42/WG0",
+        "X45"
+      ],
+      "M45/WG0": [
+        "B45",
+        "C45/WG0",
+        "C47/WG0",
+        "M44/WG0"
+      ],
+      "C45/WG1": [
+        "C44/WG1",
+        "M42/WG1",
+        "X45"
+      ],
+      "M45/WG1": [
+        "B45",
+        "C45/WG1",
+        "C47/WG1",
+        "M44/WG1"
+      ],
+      "EMPTY45": [
+        "C45/WG0",
+        "C45/WG1"
+      ],
+      "W45": [
+        "B39"
+      ],
+      "B45": [
+        "B43",
+        "D45/tile0/warp12",
+        "D45/tile1/warp13",
+        "D45/tile2/warp14",
+        "D45/tile3/warp12",
+        "M38/WG0",
+        "M38/WG1",
+        "W45"
+      ],
+      "D45/tile0/warp12": [
+        "B43",
+        "M38/WG0",
+        "M38/WG1",
+        "W45"
+      ],
+      "D45/tile3/warp12": [
+        "B43",
+        "D45/tile0/warp12",
+        "M38/WG0",
+        "M38/WG1",
+        "W45"
+      ],
+      "D45/tile1/warp13": [
+        "B43",
+        "M38/WG0",
+        "M38/WG1",
+        "W45"
+      ],
+      "D45/tile2/warp14": [
+        "B43",
+        "M38/WG0",
+        "M38/WG1",
+        "W45"
+      ],
+      "XI46": [
+        "EMPTY44",
+        "XI45"
+      ],
+      "X46": [
+        "XI46"
+      ],
+      "C46/WG0": [
+        "C45/WG0",
+        "M43/WG0",
+        "X46"
+      ],
+      "M46/WG0": [
+        "B46",
+        "C46/WG0",
+        "C48/WG0",
+        "M45/WG0"
+      ],
+      "C46/WG1": [
+        "C45/WG1",
+        "M43/WG1",
+        "X46"
+      ],
+      "M46/WG1": [
+        "B46",
+        "C46/WG1",
+        "C48/WG1",
+        "M45/WG1"
+      ],
+      "EMPTY46": [
+        "C46/WG0",
+        "C46/WG1"
+      ],
+      "W46": [
+        "B40"
+      ],
+      "B46": [
+        "B44",
+        "D46/tile0/warp8",
+        "D46/tile1/warp9",
+        "D46/tile2/warp10",
+        "D46/tile3/warp11",
+        "M39/WG0",
+        "M39/WG1",
+        "W46"
+      ],
+      "D46/tile0/warp8": [
+        "B44",
+        "M39/WG0",
+        "M39/WG1",
+        "W46"
+      ],
+      "D46/tile1/warp9": [
+        "B44",
+        "M39/WG0",
+        "M39/WG1",
+        "W46"
+      ],
+      "D46/tile2/warp10": [
+        "B44",
+        "M39/WG0",
+        "M39/WG1",
+        "W46"
+      ],
+      "D46/tile3/warp11": [
+        "B44",
+        "M39/WG0",
+        "M39/WG1",
+        "W46"
+      ],
+      "XI47": [
+        "EMPTY45",
+        "XI46"
+      ],
+      "X47": [
+        "XI47"
+      ],
+      "C47/WG0": [
+        "C46/WG0",
+        "M44/WG0",
+        "X47"
+      ],
+      "M47/WG0": [
+        "B47",
+        "C47/WG0",
+        "C49/WG0",
+        "M46/WG0"
+      ],
+      "C47/WG1": [
+        "C46/WG1",
+        "M44/WG1",
+        "X47"
+      ],
+      "M47/WG1": [
+        "B47",
+        "C47/WG1",
+        "C49/WG1",
+        "M46/WG1"
+      ],
+      "EMPTY47": [
+        "C47/WG0",
+        "C47/WG1"
+      ],
+      "W47": [
+        "B41"
+      ],
+      "B47": [
+        "B45",
+        "D47/tile0/warp12",
+        "D47/tile1/warp13",
+        "D47/tile2/warp14",
+        "D47/tile3/warp12",
+        "M40/WG0",
+        "M40/WG1",
+        "W47"
+      ],
+      "D47/tile0/warp12": [
+        "B45",
+        "M40/WG0",
+        "M40/WG1",
+        "W47"
+      ],
+      "D47/tile3/warp12": [
+        "B45",
+        "D47/tile0/warp12",
+        "M40/WG0",
+        "M40/WG1",
+        "W47"
+      ],
+      "D47/tile1/warp13": [
+        "B45",
+        "M40/WG0",
+        "M40/WG1",
+        "W47"
+      ],
+      "D47/tile2/warp14": [
+        "B45",
+        "M40/WG0",
+        "M40/WG1",
+        "W47"
+      ],
+      "XI48": [
+        "EMPTY46",
+        "XI47"
+      ],
+      "X48": [
+        "XI48"
+      ],
+      "C48/WG0": [
+        "C47/WG0",
+        "M45/WG0",
+        "X48"
+      ],
+      "M48/WG0": [
+        "B48",
+        "C48/WG0",
+        "C50/WG0",
+        "M47/WG0"
+      ],
+      "C48/WG1": [
+        "C47/WG1",
+        "M45/WG1",
+        "X48"
+      ],
+      "M48/WG1": [
+        "B48",
+        "C48/WG1",
+        "C50/WG1",
+        "M47/WG1"
+      ],
+      "EMPTY48": [
+        "C48/WG0",
+        "C48/WG1"
+      ],
+      "W48": [
+        "B42"
+      ],
+      "B48": [
+        "B46",
+        "D48/tile0/warp8",
+        "D48/tile1/warp9",
+        "D48/tile2/warp10",
+        "D48/tile3/warp11",
+        "M41/WG0",
+        "M41/WG1",
+        "W48"
+      ],
+      "D48/tile0/warp8": [
+        "B46",
+        "M41/WG0",
+        "M41/WG1",
+        "W48"
+      ],
+      "D48/tile1/warp9": [
+        "B46",
+        "M41/WG0",
+        "M41/WG1",
+        "W48"
+      ],
+      "D48/tile2/warp10": [
+        "B46",
+        "M41/WG0",
+        "M41/WG1",
+        "W48"
+      ],
+      "D48/tile3/warp11": [
+        "B46",
+        "M41/WG0",
+        "M41/WG1",
+        "W48"
+      ],
+      "XI49": [
+        "EMPTY47",
+        "XI48"
+      ],
+      "X49": [
+        "XI49"
+      ],
+      "C49/WG0": [
+        "C48/WG0",
+        "M46/WG0",
+        "X49"
+      ],
+      "M49/WG0": [
+        "B49",
+        "C49/WG0",
+        "C51/WG0",
+        "M48/WG0"
+      ],
+      "C49/WG1": [
+        "C48/WG1",
+        "M46/WG1",
+        "X49"
+      ],
+      "M49/WG1": [
+        "B49",
+        "C49/WG1",
+        "C51/WG1",
+        "M48/WG1"
+      ],
+      "EMPTY49": [
+        "C49/WG0",
+        "C49/WG1"
+      ],
+      "W49": [
+        "B43"
+      ],
+      "B49": [
+        "B47",
+        "D49/tile0/warp12",
+        "D49/tile1/warp13",
+        "D49/tile2/warp14",
+        "D49/tile3/warp12",
+        "M42/WG0",
+        "M42/WG1",
+        "W49"
+      ],
+      "D49/tile0/warp12": [
+        "B47",
+        "M42/WG0",
+        "M42/WG1",
+        "W49"
+      ],
+      "D49/tile3/warp12": [
+        "B47",
+        "D49/tile0/warp12",
+        "M42/WG0",
+        "M42/WG1",
+        "W49"
+      ],
+      "D49/tile1/warp13": [
+        "B47",
+        "M42/WG0",
+        "M42/WG1",
+        "W49"
+      ],
+      "D49/tile2/warp14": [
+        "B47",
+        "M42/WG0",
+        "M42/WG1",
+        "W49"
+      ],
+      "XI50": [
+        "EMPTY48",
+        "XI49"
+      ],
+      "X50": [
+        "XI50"
+      ],
+      "C50/WG0": [
+        "C49/WG0",
+        "M47/WG0",
+        "X50"
+      ],
+      "M50/WG0": [
+        "B50",
+        "C50/WG0",
+        "C52/WG0",
+        "M49/WG0"
+      ],
+      "C50/WG1": [
+        "C49/WG1",
+        "M47/WG1",
+        "X50"
+      ],
+      "M50/WG1": [
+        "B50",
+        "C50/WG1",
+        "C52/WG1",
+        "M49/WG1"
+      ],
+      "EMPTY50": [
+        "C50/WG0",
+        "C50/WG1"
+      ],
+      "W50": [
+        "B44"
+      ],
+      "B50": [
+        "B48",
+        "D50/tile0/warp8",
+        "D50/tile1/warp9",
+        "D50/tile2/warp10",
+        "D50/tile3/warp11",
+        "M43/WG0",
+        "M43/WG1",
+        "W50"
+      ],
+      "D50/tile0/warp8": [
+        "B48",
+        "M43/WG0",
+        "M43/WG1",
+        "W50"
+      ],
+      "D50/tile1/warp9": [
+        "B48",
+        "M43/WG0",
+        "M43/WG1",
+        "W50"
+      ],
+      "D50/tile2/warp10": [
+        "B48",
+        "M43/WG0",
+        "M43/WG1",
+        "W50"
+      ],
+      "D50/tile3/warp11": [
+        "B48",
+        "M43/WG0",
+        "M43/WG1",
+        "W50"
+      ],
+      "XI51": [
+        "EMPTY49",
+        "XI50"
+      ],
+      "X51": [
+        "XI51"
+      ],
+      "C51/WG0": [
+        "C50/WG0",
+        "M48/WG0",
+        "X51"
+      ],
+      "M51/WG0": [
+        "B51",
+        "C51/WG0",
+        "C53/WG0",
+        "M50/WG0"
+      ],
+      "C51/WG1": [
+        "C50/WG1",
+        "M48/WG1",
+        "X51"
+      ],
+      "M51/WG1": [
+        "B51",
+        "C51/WG1",
+        "C53/WG1",
+        "M50/WG1"
+      ],
+      "EMPTY51": [
+        "C51/WG0",
+        "C51/WG1"
+      ],
+      "W51": [
+        "B45"
+      ],
+      "B51": [
+        "B49",
+        "D51/tile0/warp12",
+        "D51/tile1/warp13",
+        "D51/tile2/warp14",
+        "D51/tile3/warp12",
+        "M44/WG0",
+        "M44/WG1",
+        "W51"
+      ],
+      "D51/tile0/warp12": [
+        "B49",
+        "M44/WG0",
+        "M44/WG1",
+        "W51"
+      ],
+      "D51/tile3/warp12": [
+        "B49",
+        "D51/tile0/warp12",
+        "M44/WG0",
+        "M44/WG1",
+        "W51"
+      ],
+      "D51/tile1/warp13": [
+        "B49",
+        "M44/WG0",
+        "M44/WG1",
+        "W51"
+      ],
+      "D51/tile2/warp14": [
+        "B49",
+        "M44/WG0",
+        "M44/WG1",
+        "W51"
+      ],
+      "XI52": [
+        "EMPTY50",
+        "XI51"
+      ],
+      "X52": [
+        "XI52"
+      ],
+      "C52/WG0": [
+        "C51/WG0",
+        "M49/WG0",
+        "X52"
+      ],
+      "M52/WG0": [
+        "B52",
+        "C52/WG0",
+        "C54/WG0",
+        "M51/WG0"
+      ],
+      "C52/WG1": [
+        "C51/WG1",
+        "M49/WG1",
+        "X52"
+      ],
+      "M52/WG1": [
+        "B52",
+        "C52/WG1",
+        "C54/WG1",
+        "M51/WG1"
+      ],
+      "EMPTY52": [
+        "C52/WG0",
+        "C52/WG1"
+      ],
+      "W52": [
+        "B46"
+      ],
+      "B52": [
+        "B50",
+        "D52/tile0/warp8",
+        "D52/tile1/warp9",
+        "D52/tile2/warp10",
+        "D52/tile3/warp11",
+        "M45/WG0",
+        "M45/WG1",
+        "W52"
+      ],
+      "D52/tile0/warp8": [
+        "B50",
+        "M45/WG0",
+        "M45/WG1",
+        "W52"
+      ],
+      "D52/tile1/warp9": [
+        "B50",
+        "M45/WG0",
+        "M45/WG1",
+        "W52"
+      ],
+      "D52/tile2/warp10": [
+        "B50",
+        "M45/WG0",
+        "M45/WG1",
+        "W52"
+      ],
+      "D52/tile3/warp11": [
+        "B50",
+        "M45/WG0",
+        "M45/WG1",
+        "W52"
+      ],
+      "XI53": [
+        "EMPTY51",
+        "XI52"
+      ],
+      "X53": [
+        "XI53"
+      ],
+      "C53/WG0": [
+        "C52/WG0",
+        "M50/WG0",
+        "X53"
+      ],
+      "M53/WG0": [
+        "B53",
+        "C53/WG0",
+        "C55/WG0",
+        "M52/WG0"
+      ],
+      "C53/WG1": [
+        "C52/WG1",
+        "M50/WG1",
+        "X53"
+      ],
+      "M53/WG1": [
+        "B53",
+        "C53/WG1",
+        "C55/WG1",
+        "M52/WG1"
+      ],
+      "EMPTY53": [
+        "C53/WG0",
+        "C53/WG1"
+      ],
+      "W53": [
+        "B47"
+      ],
+      "B53": [
+        "B51",
+        "D53/tile0/warp12",
+        "D53/tile1/warp13",
+        "D53/tile2/warp14",
+        "D53/tile3/warp12",
+        "M46/WG0",
+        "M46/WG1",
+        "W53"
+      ],
+      "D53/tile0/warp12": [
+        "B51",
+        "M46/WG0",
+        "M46/WG1",
+        "W53"
+      ],
+      "D53/tile3/warp12": [
+        "B51",
+        "D53/tile0/warp12",
+        "M46/WG0",
+        "M46/WG1",
+        "W53"
+      ],
+      "D53/tile1/warp13": [
+        "B51",
+        "M46/WG0",
+        "M46/WG1",
+        "W53"
+      ],
+      "D53/tile2/warp14": [
+        "B51",
+        "M46/WG0",
+        "M46/WG1",
+        "W53"
+      ],
+      "XI54": [
+        "EMPTY52",
+        "XI53"
+      ],
+      "X54": [
+        "XI54"
+      ],
+      "C54/WG0": [
+        "C53/WG0",
+        "M51/WG0",
+        "X54"
+      ],
+      "M54/WG0": [
+        "B54",
+        "C54/WG0",
+        "C56/WG0",
+        "M53/WG0"
+      ],
+      "C54/WG1": [
+        "C53/WG1",
+        "M51/WG1",
+        "X54"
+      ],
+      "M54/WG1": [
+        "B54",
+        "C54/WG1",
+        "C56/WG1",
+        "M53/WG1"
+      ],
+      "EMPTY54": [
+        "C54/WG0",
+        "C54/WG1"
+      ],
+      "W54": [
+        "B48"
+      ],
+      "B54": [
+        "B52",
+        "D54/tile0/warp8",
+        "D54/tile1/warp9",
+        "D54/tile2/warp10",
+        "D54/tile3/warp11",
+        "M47/WG0",
+        "M47/WG1",
+        "W54"
+      ],
+      "D54/tile0/warp8": [
+        "B52",
+        "M47/WG0",
+        "M47/WG1",
+        "W54"
+      ],
+      "D54/tile1/warp9": [
+        "B52",
+        "M47/WG0",
+        "M47/WG1",
+        "W54"
+      ],
+      "D54/tile2/warp10": [
+        "B52",
+        "M47/WG0",
+        "M47/WG1",
+        "W54"
+      ],
+      "D54/tile3/warp11": [
+        "B52",
+        "M47/WG0",
+        "M47/WG1",
+        "W54"
+      ],
+      "XI55": [
+        "EMPTY53",
+        "XI54"
+      ],
+      "X55": [
+        "XI55"
+      ],
+      "C55/WG0": [
+        "C54/WG0",
+        "M52/WG0",
+        "X55"
+      ],
+      "M55/WG0": [
+        "B55",
+        "C55/WG0",
+        "C57/WG0",
+        "M54/WG0"
+      ],
+      "C55/WG1": [
+        "C54/WG1",
+        "M52/WG1",
+        "X55"
+      ],
+      "M55/WG1": [
+        "B55",
+        "C55/WG1",
+        "C57/WG1",
+        "M54/WG1"
+      ],
+      "EMPTY55": [
+        "C55/WG0",
+        "C55/WG1"
+      ],
+      "W55": [
+        "B49"
+      ],
+      "B55": [
+        "B53",
+        "D55/tile0/warp12",
+        "D55/tile1/warp13",
+        "D55/tile2/warp14",
+        "D55/tile3/warp12",
+        "M48/WG0",
+        "M48/WG1",
+        "W55"
+      ],
+      "D55/tile0/warp12": [
+        "B53",
+        "M48/WG0",
+        "M48/WG1",
+        "W55"
+      ],
+      "D55/tile3/warp12": [
+        "B53",
+        "D55/tile0/warp12",
+        "M48/WG0",
+        "M48/WG1",
+        "W55"
+      ],
+      "D55/tile1/warp13": [
+        "B53",
+        "M48/WG0",
+        "M48/WG1",
+        "W55"
+      ],
+      "D55/tile2/warp14": [
+        "B53",
+        "M48/WG0",
+        "M48/WG1",
+        "W55"
+      ],
+      "XI56": [
+        "EMPTY54",
+        "XI55"
+      ],
+      "X56": [
+        "XI56"
+      ],
+      "C56/WG0": [
+        "C55/WG0",
+        "M53/WG0",
+        "X56"
+      ],
+      "M56/WG0": [
+        "B56",
+        "C56/WG0",
+        "C58/WG0",
+        "M55/WG0"
+      ],
+      "C56/WG1": [
+        "C55/WG1",
+        "M53/WG1",
+        "X56"
+      ],
+      "M56/WG1": [
+        "B56",
+        "C56/WG1",
+        "C58/WG1",
+        "M55/WG1"
+      ],
+      "EMPTY56": [
+        "C56/WG0",
+        "C56/WG1"
+      ],
+      "W56": [
+        "B50"
+      ],
+      "B56": [
+        "B54",
+        "D56/tile0/warp8",
+        "D56/tile1/warp9",
+        "D56/tile2/warp10",
+        "D56/tile3/warp11",
+        "M49/WG0",
+        "M49/WG1",
+        "W56"
+      ],
+      "D56/tile0/warp8": [
+        "B54",
+        "M49/WG0",
+        "M49/WG1",
+        "W56"
+      ],
+      "D56/tile1/warp9": [
+        "B54",
+        "M49/WG0",
+        "M49/WG1",
+        "W56"
+      ],
+      "D56/tile2/warp10": [
+        "B54",
+        "M49/WG0",
+        "M49/WG1",
+        "W56"
+      ],
+      "D56/tile3/warp11": [
+        "B54",
+        "M49/WG0",
+        "M49/WG1",
+        "W56"
+      ],
+      "XI57": [
+        "EMPTY55",
+        "XI56"
+      ],
+      "X57": [
+        "XI57"
+      ],
+      "C57/WG0": [
+        "C56/WG0",
+        "M54/WG0",
+        "X57"
+      ],
+      "M57/WG0": [
+        "B57",
+        "C57/WG0",
+        "C59/WG0",
+        "M56/WG0"
+      ],
+      "C57/WG1": [
+        "C56/WG1",
+        "M54/WG1",
+        "X57"
+      ],
+      "M57/WG1": [
+        "B57",
+        "C57/WG1",
+        "C59/WG1",
+        "M56/WG1"
+      ],
+      "EMPTY57": [
+        "C57/WG0",
+        "C57/WG1"
+      ],
+      "W57": [
+        "B51"
+      ],
+      "B57": [
+        "B55",
+        "D57/tile0/warp12",
+        "D57/tile1/warp13",
+        "D57/tile2/warp14",
+        "D57/tile3/warp12",
+        "M50/WG0",
+        "M50/WG1",
+        "W57"
+      ],
+      "D57/tile0/warp12": [
+        "B55",
+        "M50/WG0",
+        "M50/WG1",
+        "W57"
+      ],
+      "D57/tile3/warp12": [
+        "B55",
+        "D57/tile0/warp12",
+        "M50/WG0",
+        "M50/WG1",
+        "W57"
+      ],
+      "D57/tile1/warp13": [
+        "B55",
+        "M50/WG0",
+        "M50/WG1",
+        "W57"
+      ],
+      "D57/tile2/warp14": [
+        "B55",
+        "M50/WG0",
+        "M50/WG1",
+        "W57"
+      ],
+      "XI58": [
+        "EMPTY56",
+        "XI57"
+      ],
+      "X58": [
+        "XI58"
+      ],
+      "C58/WG0": [
+        "C57/WG0",
+        "M55/WG0",
+        "X58"
+      ],
+      "M58/WG0": [
+        "B58",
+        "C58/WG0",
+        "C60/WG0",
+        "M57/WG0"
+      ],
+      "C58/WG1": [
+        "C57/WG1",
+        "M55/WG1",
+        "X58"
+      ],
+      "M58/WG1": [
+        "B58",
+        "C58/WG1",
+        "C60/WG1",
+        "M57/WG1"
+      ],
+      "EMPTY58": [
+        "C58/WG0",
+        "C58/WG1"
+      ],
+      "W58": [
+        "B52"
+      ],
+      "B58": [
+        "B56",
+        "D58/tile0/warp8",
+        "D58/tile1/warp9",
+        "D58/tile2/warp10",
+        "D58/tile3/warp11",
+        "M51/WG0",
+        "M51/WG1",
+        "W58"
+      ],
+      "D58/tile0/warp8": [
+        "B56",
+        "M51/WG0",
+        "M51/WG1",
+        "W58"
+      ],
+      "D58/tile1/warp9": [
+        "B56",
+        "M51/WG0",
+        "M51/WG1",
+        "W58"
+      ],
+      "D58/tile2/warp10": [
+        "B56",
+        "M51/WG0",
+        "M51/WG1",
+        "W58"
+      ],
+      "D58/tile3/warp11": [
+        "B56",
+        "M51/WG0",
+        "M51/WG1",
+        "W58"
+      ],
+      "XI59": [
+        "EMPTY57",
+        "XI58"
+      ],
+      "X59": [
+        "XI59"
+      ],
+      "C59/WG0": [
+        "C58/WG0",
+        "M56/WG0",
+        "X59"
+      ],
+      "M59/WG0": [
+        "B59",
+        "C59/WG0",
+        "C61/WG0",
+        "M58/WG0"
+      ],
+      "C59/WG1": [
+        "C58/WG1",
+        "M56/WG1",
+        "X59"
+      ],
+      "M59/WG1": [
+        "B59",
+        "C59/WG1",
+        "C61/WG1",
+        "M58/WG1"
+      ],
+      "EMPTY59": [
+        "C59/WG0",
+        "C59/WG1"
+      ],
+      "W59": [
+        "B53"
+      ],
+      "B59": [
+        "B57",
+        "D59/tile0/warp12",
+        "D59/tile1/warp13",
+        "D59/tile2/warp14",
+        "D59/tile3/warp12",
+        "M52/WG0",
+        "M52/WG1",
+        "W59"
+      ],
+      "D59/tile0/warp12": [
+        "B57",
+        "M52/WG0",
+        "M52/WG1",
+        "W59"
+      ],
+      "D59/tile3/warp12": [
+        "B57",
+        "D59/tile0/warp12",
+        "M52/WG0",
+        "M52/WG1",
+        "W59"
+      ],
+      "D59/tile1/warp13": [
+        "B57",
+        "M52/WG0",
+        "M52/WG1",
+        "W59"
+      ],
+      "D59/tile2/warp14": [
+        "B57",
+        "M52/WG0",
+        "M52/WG1",
+        "W59"
+      ],
+      "XI60": [
+        "EMPTY58",
+        "XI59"
+      ],
+      "X60": [
+        "XI60"
+      ],
+      "C60/WG0": [
+        "C59/WG0",
+        "M57/WG0",
+        "X60"
+      ],
+      "M60/WG0": [
+        "B60",
+        "C60/WG0",
+        "C62/WG0",
+        "M59/WG0"
+      ],
+      "C60/WG1": [
+        "C59/WG1",
+        "M57/WG1",
+        "X60"
+      ],
+      "M60/WG1": [
+        "B60",
+        "C60/WG1",
+        "C62/WG1",
+        "M59/WG1"
+      ],
+      "EMPTY60": [
+        "C60/WG0",
+        "C60/WG1"
+      ],
+      "W60": [
+        "B54"
+      ],
+      "B60": [
+        "B58",
+        "D60/tile0/warp8",
+        "D60/tile1/warp9",
+        "D60/tile2/warp10",
+        "D60/tile3/warp11",
+        "M53/WG0",
+        "M53/WG1",
+        "W60"
+      ],
+      "D60/tile0/warp8": [
+        "B58",
+        "M53/WG0",
+        "M53/WG1",
+        "W60"
+      ],
+      "D60/tile1/warp9": [
+        "B58",
+        "M53/WG0",
+        "M53/WG1",
+        "W60"
+      ],
+      "D60/tile2/warp10": [
+        "B58",
+        "M53/WG0",
+        "M53/WG1",
+        "W60"
+      ],
+      "D60/tile3/warp11": [
+        "B58",
+        "M53/WG0",
+        "M53/WG1",
+        "W60"
+      ],
+      "XI61": [
+        "EMPTY59",
+        "XI60"
+      ],
+      "X61": [
+        "XI61"
+      ],
+      "C61/WG0": [
+        "C60/WG0",
+        "M58/WG0",
+        "X61"
+      ],
+      "M61/WG0": [
+        "B61",
+        "C61/WG0",
+        "C63/WG0",
+        "M60/WG0"
+      ],
+      "C61/WG1": [
+        "C60/WG1",
+        "M58/WG1",
+        "X61"
+      ],
+      "M61/WG1": [
+        "B61",
+        "C61/WG1",
+        "C63/WG1",
+        "M60/WG1"
+      ],
+      "EMPTY61": [
+        "C61/WG0",
+        "C61/WG1"
+      ],
+      "W61": [
+        "B55"
+      ],
+      "B61": [
+        "B59",
+        "D61/tile0/warp12",
+        "D61/tile1/warp13",
+        "D61/tile2/warp14",
+        "D61/tile3/warp12",
+        "M54/WG0",
+        "M54/WG1",
+        "W61"
+      ],
+      "D61/tile0/warp12": [
+        "B59",
+        "M54/WG0",
+        "M54/WG1",
+        "W61"
+      ],
+      "D61/tile3/warp12": [
+        "B59",
+        "D61/tile0/warp12",
+        "M54/WG0",
+        "M54/WG1",
+        "W61"
+      ],
+      "D61/tile1/warp13": [
+        "B59",
+        "M54/WG0",
+        "M54/WG1",
+        "W61"
+      ],
+      "D61/tile2/warp14": [
+        "B59",
+        "M54/WG0",
+        "M54/WG1",
+        "W61"
+      ],
+      "XI62": [
+        "EMPTY60",
+        "XI61"
+      ],
+      "X62": [
+        "XI62"
+      ],
+      "C62/WG0": [
+        "C61/WG0",
+        "M59/WG0",
+        "X62"
+      ],
+      "M62/WG0": [
+        "B62",
+        "C62/WG0",
+        "M61/WG0"
+      ],
+      "C62/WG1": [
+        "C61/WG1",
+        "M59/WG1",
+        "X62"
+      ],
+      "M62/WG1": [
+        "B62",
+        "C62/WG1",
+        "M61/WG1"
+      ],
+      "EMPTY62": [
+        "C62/WG0",
+        "C62/WG1"
+      ],
+      "W62": [
+        "B56"
+      ],
+      "B62": [
+        "B60",
+        "D62/tile0/warp8",
+        "D62/tile1/warp9",
+        "D62/tile2/warp10",
+        "D62/tile3/warp11",
+        "M55/WG0",
+        "M55/WG1",
+        "W62"
+      ],
+      "D62/tile0/warp8": [
+        "B60",
+        "M55/WG0",
+        "M55/WG1",
+        "W62"
+      ],
+      "D62/tile1/warp9": [
+        "B60",
+        "M55/WG0",
+        "M55/WG1",
+        "W62"
+      ],
+      "D62/tile2/warp10": [
+        "B60",
+        "M55/WG0",
+        "M55/WG1",
+        "W62"
+      ],
+      "D62/tile3/warp11": [
+        "B60",
+        "M55/WG0",
+        "M55/WG1",
+        "W62"
+      ],
+      "XI63": [
+        "EMPTY61",
+        "XI62"
+      ],
+      "X63": [
+        "XI63"
+      ],
+      "C63/WG0": [
+        "C62/WG0",
+        "M60/WG0",
+        "X63"
+      ],
+      "M63/WG0": [
+        "B63",
+        "C63/WG0",
+        "M62/WG0"
+      ],
+      "C63/WG1": [
+        "C62/WG1",
+        "M60/WG1",
+        "X63"
+      ],
+      "M63/WG1": [
+        "B63",
+        "C63/WG1",
+        "M62/WG1"
+      ],
+      "EMPTY63": [
+        "C63/WG0",
+        "C63/WG1"
+      ],
+      "W63": [
+        "B57"
+      ],
+      "B63": [
+        "B61",
+        "D63/tile0/warp12",
+        "D63/tile1/warp13",
+        "D63/tile2/warp14",
+        "D63/tile3/warp12",
+        "M56/WG0",
+        "M56/WG1",
+        "W63"
+      ],
+      "D63/tile0/warp12": [
+        "B61",
+        "M56/WG0",
+        "M56/WG1",
+        "W63"
+      ],
+      "D63/tile3/warp12": [
+        "B61",
+        "D63/tile0/warp12",
+        "M56/WG0",
+        "M56/WG1",
+        "W63"
+      ],
+      "D63/tile1/warp13": [
+        "B61",
+        "M56/WG0",
+        "M56/WG1",
+        "W63"
+      ],
+      "D63/tile2/warp14": [
+        "B61",
+        "M56/WG0",
+        "M56/WG1",
+        "W63"
+      ],
+      "DRAIN": [
+        "M63/WG0",
+        "M63/WG1"
+      ],
+      "OUTPUT": [
+        "DRAIN"
+      ],
+      "INIT": []
+    },
+    "X_issues": 64,
+    "dedicated_refills": 62,
+    "Xempty_arrivals": 512,
+    "X_DAG": "XI(s+2) issue depends on previousXI andbothWGC(s); X(s) completion depends onlyXI(s), allowing crossslot completion reordering. NoWdecode/publication dependency.",
+    "W_DAG": "Wrefill(s+6) afterBpublish(s); Bempty(s-8) released atM(s-7)wait1; sameparity owners sequential",
+    "startup": "C0/1\u2192EMPTY0/1\u2192X2/3\u2192C2/3\u2192M0; W0/1decode independent fromempty/TMAissuer",
+    "tail": "Xwarp exits afterissuing63, noX64/65; all8math readers consume62/63; finalwait0 beforeoutput"
+  },
+  "physical": {
+    "A4": {
+      "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+      "binaries": [
+        {
+          "status": "PASS_PHYSICAL_A4_RETIREMENT",
+          "iterations": 2,
+          "groups": 8,
+          "A_register_sets": [
+            [
+              56,
+              57,
+              58,
+              59,
+              60,
+              61,
+              62,
+              63,
+              64,
+              65,
+              66,
+              67,
+              68,
+              69,
+              70,
+              71
+            ],
+            [
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87
+            ],
+            [
+              88,
+              89,
+              90,
+              91,
+              92,
+              93,
+              94,
+              95,
+              96,
+              97,
+              98,
+              99,
+              100,
+              101,
+              102,
+              103
+            ],
+            [
+              104,
+              105,
+              106,
+              107,
+              108,
+              109,
+              110,
+              111,
+              112,
+              113,
+              114,
+              115,
+              116,
+              117,
+              118,
+              119
+            ]
+          ],
+          "payload_or_conservative_A_writes_checked": 32,
+          "outlined_wait_paths_no_A_writes": [
+            18176,
+            18224,
+            18272,
+            18320,
+            18368,
+            18416,
+            18464,
+            18512
+          ],
+          "retirement_events": [
+            {
+              "iteration": 0,
+              "PC": 4912,
+              "retired_groups": 0
+            },
+            {
+              "iteration": 0,
+              "PC": 5840,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 0,
+              "PC": 6688,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 0,
+              "PC": 7408,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 4912,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 5840,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 6688,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 7408,
+              "retired_groups": 1
+            }
+          ],
+          "final": "wait0 retires lastgroup before epilogue",
+          "loop_PC_range": [
+            4384,
+            7840
+          ],
+          "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+        }
+      ]
+    },
+    "role_PCs": {
+      "math": [
+        "0xbe0",
+        "0xbf0",
+        "0xc00",
+        "0xc10",
+        "0xc20",
+        "0xc30",
+        "0xc40",
+        "0xc50",
+        "0xc60",
+        "0xc70",
+        "0xc80",
+        "0xc90",
+        "0xca0",
+        "0xcb0",
+        "0xcc0",
+        "0xcd0",
+        "0xce0",
+        "0xcf0",
+        "0xd00",
+        "0xd10",
+        "0xd20",
+        "0xd30",
+        "0xd40",
+        "0xd50",
+        "0xd60",
+        "0xd70",
+        "0xd80",
+        "0xd90",
+        "0xda0",
+        "0xdb0",
+        "0xdc0",
+        "0xdd0",
+        "0xde0",
+        "0xdf0",
+        "0xe00",
+        "0xe10",
+        "0xe20",
+        "0xe30",
+        "0xe40",
+        "0xe50",
+        "0xe60",
+        "0xe70",
+        "0xe80",
+        "0xe90",
+        "0xea0",
+        "0xeb0",
+        "0xec0",
+        "0xed0",
+        "0xee0",
+        "0xef0",
+        "0xf00",
+        "0xf10",
+        "0xf20",
+        "0xf30",
+        "0xf40",
+        "0xf50",
+        "0xf60",
+        "0xf70",
+        "0xf80",
+        "0xf90",
+        "0xfa0",
+        "0xfb0",
+        "0xfc0",
+        "0xfd0",
+        "0xfe0",
+        "0xff0",
+        "0x1000",
+        "0x1010",
+        "0x1020",
+        "0x1030",
+        "0x1040",
+        "0x1050",
+        "0x1060",
+        "0x1070",
+        "0x1080",
+        "0x1090",
+        "0x10a0",
+        "0x10b0",
+        "0x10c0",
+        "0x10d0",
+        "0x10e0",
+        "0x10f0",
+        "0x1100",
+        "0x1110",
+        "0x1120",
+        "0x1130",
+        "0x1140",
+        "0x1150",
+        "0x1160",
+        "0x1170",
+        "0x1180",
+        "0x1190",
+        "0x11a0",
+        "0x11b0",
+        "0x11c0",
+        "0x11d0",
+        "0x11e0",
+        "0x11f0",
+        "0x1200",
+        "0x1210",
+        "0x1220",
+        "0x1230",
+        "0x1240",
+        "0x1250",
+        "0x1260",
+        "0x1270",
+        "0x1280",
+        "0x1290",
+        "0x12a0",
+        "0x12b0",
+        "0x12c0",
+        "0x12d0",
+        "0x12e0",
+        "0x12f0",
+        "0x1300",
+        "0x1310",
+        "0x1320",
+        "0x1330",
+        "0x1340",
+        "0x1350",
+        "0x1360",
+        "0x1370",
+        "0x1380",
+        "0x1390",
+        "0x13a0",
+        "0x13b0",
+        "0x13c0",
+        "0x13d0",
+        "0x13e0",
+        "0x13f0",
+        "0x1400",
+        "0x1410",
+        "0x1420",
+        "0x1430",
+        "0x1440",
+        "0x1450",
+        "0x1460",
+        "0x1470",
+        "0x1480",
+        "0x1490",
+        "0x14a0",
+        "0x14b0",
+        "0x14c0",
+        "0x14d0",
+        "0x14e0",
+        "0x14f0",
+        "0x1500",
+        "0x1510",
+        "0x1520",
+        "0x1530",
+        "0x1540",
+        "0x1550",
+        "0x1560",
+        "0x1570",
+        "0x1580",
+        "0x1590",
+        "0x15a0",
+        "0x15b0",
+        "0x15c0",
+        "0x15d0",
+        "0x15e0",
+        "0x15f0",
+        "0x1600",
+        "0x1610",
+        "0x1620",
+        "0x1630",
+        "0x1640",
+        "0x1650",
+        "0x1660",
+        "0x1670",
+        "0x1680",
+        "0x1690",
+        "0x16a0",
+        "0x16b0",
+        "0x16c0",
+        "0x16d0",
+        "0x16e0",
+        "0x16f0",
+        "0x1700",
+        "0x1710",
+        "0x1720",
+        "0x1730",
+        "0x1740",
+        "0x1750",
+        "0x1760",
+        "0x1770",
+        "0x1780",
+        "0x1790",
+        "0x17a0",
+        "0x17b0",
+        "0x17c0",
+        "0x17d0",
+        "0x17e0",
+        "0x17f0",
+        "0x1800",
+        "0x1810",
+        "0x1820",
+        "0x1830",
+        "0x1840",
+        "0x1850",
+        "0x1860",
+        "0x1870",
+        "0x1880",
+        "0x1890",
+        "0x18a0",
+        "0x18b0",
+        "0x18c0",
+        "0x18d0",
+        "0x18e0",
+        "0x18f0",
+        "0x1900",
+        "0x1910",
+        "0x1920",
+        "0x1930",
+        "0x1940",
+        "0x1950",
+        "0x1960",
+        "0x1970",
+        "0x1980",
+        "0x1990",
+        "0x19a0",
+        "0x19b0",
+        "0x19c0",
+        "0x19d0",
+        "0x19e0",
+        "0x19f0",
+        "0x1a00",
+        "0x1a10",
+        "0x1a20",
+        "0x1a30",
+        "0x1a40",
+        "0x1a50",
+        "0x1a60",
+        "0x1a70",
+        "0x1a80",
+        "0x1a90",
+        "0x1aa0",
+        "0x1ab0",
+        "0x1ac0",
+        "0x1ad0",
+        "0x1ae0",
+        "0x1af0",
+        "0x1b00",
+        "0x1b10",
+        "0x1b20",
+        "0x1b30",
+        "0x1b40",
+        "0x1b50",
+        "0x1b60",
+        "0x1b70",
+        "0x1b80",
+        "0x1b90",
+        "0x1ba0",
+        "0x1bb0",
+        "0x1bc0",
+        "0x1bd0",
+        "0x1be0",
+        "0x1bf0",
+        "0x1c00",
+        "0x1c10",
+        "0x1c20",
+        "0x1c30",
+        "0x1c40",
+        "0x1c50",
+        "0x1c60",
+        "0x1c70",
+        "0x1c80",
+        "0x1c90",
+        "0x1ca0",
+        "0x1cb0",
+        "0x1cc0",
+        "0x1cd0",
+        "0x1ce0",
+        "0x1cf0",
+        "0x1d00",
+        "0x1d10",
+        "0x1d20",
+        "0x1d30",
+        "0x1d40",
+        "0x1d50",
+        "0x1d60",
+        "0x1d70",
+        "0x1d80",
+        "0x1d90",
+        "0x1da0",
+        "0x1db0",
+        "0x1dc0",
+        "0x1dd0",
+        "0x1de0",
+        "0x1df0",
+        "0x1e00",
+        "0x1e10",
+        "0x1e20",
+        "0x1e30",
+        "0x1e40",
+        "0x1e50",
+        "0x1e60",
+        "0x1e70",
+        "0x1e80",
+        "0x1e90",
+        "0x1ea0",
+        "0x1eb0",
+        "0x1ec0",
+        "0x1ed0",
+        "0x1ee0",
+        "0x1ef0",
+        "0x1f00",
+        "0x1f10",
+        "0x1f20",
+        "0x1f30",
+        "0x1f40",
+        "0x1f50",
+        "0x1f60",
+        "0x1f70",
+        "0x1f80",
+        "0x1f90",
+        "0x1fa0",
+        "0x1fb0",
+        "0x1fc0",
+        "0x1fd0",
+        "0x1fe0",
+        "0x1ff0",
+        "0x2000",
+        "0x2010",
+        "0x2020",
+        "0x2030",
+        "0x2040",
+        "0x2050",
+        "0x2060",
+        "0x2070",
+        "0x2080",
+        "0x2090",
+        "0x20a0",
+        "0x20b0",
+        "0x20c0",
+        "0x20d0",
+        "0x20e0",
+        "0x20f0",
+        "0x2100",
+        "0x2110",
+        "0x2120",
+        "0x2130",
+        "0x2140",
+        "0x2150",
+        "0x2160",
+        "0x2170",
+        "0x2180",
+        "0x2190",
+        "0x21a0",
+        "0x21b0",
+        "0x21c0",
+        "0x21d0",
+        "0x21e0",
+        "0x21f0",
+        "0x2200",
+        "0x2210",
+        "0x2220",
+        "0x2230",
+        "0x2240",
+        "0x2250",
+        "0x2260",
+        "0x2270",
+        "0x2280",
+        "0x2290",
+        "0x22a0",
+        "0x22b0",
+        "0x22c0",
+        "0x22d0",
+        "0x22e0",
+        "0x22f0",
+        "0x2300",
+        "0x2310",
+        "0x2320",
+        "0x2330",
+        "0x2340",
+        "0x2350",
+        "0x4630",
+        "0x4640",
+        "0x4650",
+        "0x4660",
+        "0x4670",
+        "0x4680",
+        "0x4690",
+        "0x46a0",
+        "0x46b0",
+        "0x46c0",
+        "0x46d0",
+        "0x46e0",
+        "0x46f0",
+        "0x4700",
+        "0x4710",
+        "0x4720",
+        "0x4730",
+        "0x4740",
+        "0x4750",
+        "0x4760",
+        "0x4770",
+        "0x4780",
+        "0x4790",
+        "0x47a0",
+        "0x47b0",
+        "0x47c0",
+        "0x47d0",
+        "0x47e0",
+        "0x47f0",
+        "0x4800",
+        "0x4810",
+        "0x4820",
+        "0x4830",
+        "0x4840",
+        "0x4850",
+        "0x4860",
+        "0x4870"
+      ],
+      "Wproducer": [
+        "0x2360",
+        "0x2370",
+        "0x2380",
+        "0x2390",
+        "0x23a0",
+        "0x23b0",
+        "0x23c0",
+        "0x23d0",
+        "0x23e0",
+        "0x23f0",
+        "0x2400",
+        "0x2410",
+        "0x2420",
+        "0x2430",
+        "0x2440",
+        "0x2450",
+        "0x2460",
+        "0x2470",
+        "0x2480",
+        "0x2490",
+        "0x24a0",
+        "0x24b0",
+        "0x24c0",
+        "0x24d0",
+        "0x24e0",
+        "0x24f0",
+        "0x2500",
+        "0x2510",
+        "0x2520",
+        "0x2530",
+        "0x2540",
+        "0x2550",
+        "0x2560",
+        "0x2570",
+        "0x2580",
+        "0x2590",
+        "0x25a0",
+        "0x25b0",
+        "0x25c0",
+        "0x25d0",
+        "0x25e0",
+        "0x25f0",
+        "0x2600",
+        "0x2610",
+        "0x2620",
+        "0x2630",
+        "0x2640",
+        "0x2650",
+        "0x2660",
+        "0x2670",
+        "0x2680",
+        "0x2690",
+        "0x26a0",
+        "0x26b0",
+        "0x26c0",
+        "0x26d0",
+        "0x26e0",
+        "0x26f0",
+        "0x2700",
+        "0x2710",
+        "0x2720",
+        "0x2730",
+        "0x2740",
+        "0x2750",
+        "0x2760",
+        "0x2770",
+        "0x2780",
+        "0x2790",
+        "0x27a0",
+        "0x27b0",
+        "0x27c0",
+        "0x27d0",
+        "0x27e0",
+        "0x27f0",
+        "0x2800",
+        "0x2810",
+        "0x2820",
+        "0x2830",
+        "0x2840",
+        "0x2850",
+        "0x2860",
+        "0x2870",
+        "0x2880",
+        "0x2890",
+        "0x28a0",
+        "0x28b0",
+        "0x28c0",
+        "0x28d0",
+        "0x28e0",
+        "0x28f0",
+        "0x2900",
+        "0x2910",
+        "0x2920",
+        "0x2930",
+        "0x2940",
+        "0x2950",
+        "0x2960",
+        "0x2970",
+        "0x2980",
+        "0x2990",
+        "0x29a0",
+        "0x29b0",
+        "0x29c0",
+        "0x29d0",
+        "0x29e0",
+        "0x29f0",
+        "0x2a00",
+        "0x2a10",
+        "0x2a20",
+        "0x2a30",
+        "0x2a40",
+        "0x2a50",
+        "0x2a60",
+        "0x2a70",
+        "0x2a80",
+        "0x2a90",
+        "0x2aa0",
+        "0x2ab0",
+        "0x2ac0",
+        "0x2ad0",
+        "0x2ae0",
+        "0x2af0",
+        "0x2b00",
+        "0x2b10",
+        "0x2b20",
+        "0x2b30",
+        "0x2b40",
+        "0x2b50",
+        "0x2b60",
+        "0x2b70",
+        "0x2b80",
+        "0x2b90",
+        "0x2ba0",
+        "0x2bb0",
+        "0x2bc0",
+        "0x2bd0",
+        "0x2be0",
+        "0x2bf0",
+        "0x2c00",
+        "0x2c10",
+        "0x2c20",
+        "0x2c30",
+        "0x2c40",
+        "0x2c50",
+        "0x2c60",
+        "0x2c70",
+        "0x2c80",
+        "0x2c90",
+        "0x2ca0",
+        "0x2cb0",
+        "0x2cc0",
+        "0x2cd0",
+        "0x2ce0",
+        "0x2cf0",
+        "0x2d00",
+        "0x2d10",
+        "0x2d20",
+        "0x2d30",
+        "0x2d40",
+        "0x2d50",
+        "0x2d60",
+        "0x2d70",
+        "0x2d80",
+        "0x2d90",
+        "0x2da0",
+        "0x2db0",
+        "0x2dc0",
+        "0x2dd0",
+        "0x2de0",
+        "0x2df0",
+        "0x2e00",
+        "0x2e10",
+        "0x2e20",
+        "0x2e30",
+        "0x2e40",
+        "0x2e50",
+        "0x2e60",
+        "0x2e70",
+        "0x2e80",
+        "0x2e90",
+        "0x2ea0",
+        "0x2eb0",
+        "0x2ec0",
+        "0x2ed0",
+        "0x2ee0",
+        "0x2ef0",
+        "0x2f00",
+        "0x2f10",
+        "0x2f20",
+        "0x2f30",
+        "0x2f40",
+        "0x2f50",
+        "0x2f60",
+        "0x2f70",
+        "0x2f80",
+        "0x2f90",
+        "0x2fa0",
+        "0x2fb0",
+        "0x2fc0",
+        "0x2fd0",
+        "0x2fe0",
+        "0x2ff0",
+        "0x3000",
+        "0x3010",
+        "0x3020",
+        "0x3030",
+        "0x3040",
+        "0x3050",
+        "0x3060",
+        "0x3070",
+        "0x3080",
+        "0x3090",
+        "0x30a0",
+        "0x30b0",
+        "0x30c0",
+        "0x30d0",
+        "0x30e0",
+        "0x30f0",
+        "0x3100",
+        "0x3110",
+        "0x3120",
+        "0x3130",
+        "0x3140",
+        "0x3150",
+        "0x3160",
+        "0x3170",
+        "0x3180",
+        "0x3190",
+        "0x31a0",
+        "0x31b0",
+        "0x31c0",
+        "0x31d0",
+        "0x31e0",
+        "0x31f0",
+        "0x3200",
+        "0x3210",
+        "0x3220",
+        "0x3230",
+        "0x3240",
+        "0x3250",
+        "0x3260",
+        "0x3270",
+        "0x3280",
+        "0x3290",
+        "0x32a0",
+        "0x32b0",
+        "0x32c0",
+        "0x32d0",
+        "0x32e0",
+        "0x32f0",
+        "0x3300",
+        "0x3310",
+        "0x3320",
+        "0x3330",
+        "0x3340",
+        "0x3350",
+        "0x3360",
+        "0x3370",
+        "0x3380",
+        "0x3390",
+        "0x33a0",
+        "0x33b0",
+        "0x33c0",
+        "0x33d0",
+        "0x33e0",
+        "0x33f0",
+        "0x3400",
+        "0x3410",
+        "0x3420",
+        "0x3430",
+        "0x3440",
+        "0x3450",
+        "0x3460",
+        "0x3470",
+        "0x3480",
+        "0x3490",
+        "0x34a0",
+        "0x34b0",
+        "0x34c0",
+        "0x34d0",
+        "0x34e0",
+        "0x34f0",
+        "0x3500",
+        "0x3510",
+        "0x3520",
+        "0x3530",
+        "0x3540",
+        "0x3550",
+        "0x3560",
+        "0x3570",
+        "0x3580",
+        "0x3590",
+        "0x35a0",
+        "0x35b0",
+        "0x35c0",
+        "0x35d0",
+        "0x35e0",
+        "0x35f0",
+        "0x3600",
+        "0x3610",
+        "0x3620",
+        "0x3630",
+        "0x3640",
+        "0x3650",
+        "0x3660",
+        "0x3670",
+        "0x3680",
+        "0x3690",
+        "0x36a0",
+        "0x36b0",
+        "0x36c0",
+        "0x36d0",
+        "0x36e0",
+        "0x36f0",
+        "0x3700",
+        "0x3710",
+        "0x3720",
+        "0x3730",
+        "0x3740",
+        "0x3750",
+        "0x3760",
+        "0x3770",
+        "0x3780",
+        "0x3790",
+        "0x37a0",
+        "0x37b0",
+        "0x37c0",
+        "0x37d0",
+        "0x37e0",
+        "0x37f0",
+        "0x3800",
+        "0x3810",
+        "0x3820",
+        "0x3830",
+        "0x3840",
+        "0x3850",
+        "0x3860",
+        "0x3870",
+        "0x3880",
+        "0x3890",
+        "0x38a0",
+        "0x38b0",
+        "0x38c0",
+        "0x38d0",
+        "0x38e0",
+        "0x38f0",
+        "0x3900",
+        "0x3910",
+        "0x3920",
+        "0x3930",
+        "0x3940",
+        "0x3950",
+        "0x3960",
+        "0x3970",
+        "0x3980",
+        "0x3990",
+        "0x39a0",
+        "0x39b0",
+        "0x39c0",
+        "0x39d0",
+        "0x39e0",
+        "0x39f0",
+        "0x3a00",
+        "0x3a10",
+        "0x3a20",
+        "0x3a30",
+        "0x3a40",
+        "0x3a50",
+        "0x3a60",
+        "0x3a70",
+        "0x3a80",
+        "0x3a90",
+        "0x3aa0",
+        "0x3ab0",
+        "0x3ac0",
+        "0x3ad0",
+        "0x3ae0",
+        "0x3af0",
+        "0x3b00",
+        "0x3b10",
+        "0x3b20",
+        "0x3b30",
+        "0x3b40",
+        "0x3b50",
+        "0x3b60",
+        "0x3b70",
+        "0x3b80",
+        "0x3b90",
+        "0x3ba0",
+        "0x3bb0",
+        "0x3bc0",
+        "0x3bd0",
+        "0x3be0",
+        "0x3bf0",
+        "0x3c00",
+        "0x3c10",
+        "0x3c20",
+        "0x3c30",
+        "0x3c40",
+        "0x3c50",
+        "0x3c60",
+        "0x3c70",
+        "0x3c80",
+        "0x3c90",
+        "0x3ca0",
+        "0x3cb0",
+        "0x3cc0",
+        "0x3cd0",
+        "0x3ce0",
+        "0x3cf0",
+        "0x3d00",
+        "0x3d10",
+        "0x3d20",
+        "0x3d30",
+        "0x3d40",
+        "0x3d50",
+        "0x3d60",
+        "0x3d70",
+        "0x3d80",
+        "0x3d90",
+        "0x3da0",
+        "0x3db0",
+        "0x3dc0",
+        "0x3dd0",
+        "0x3de0",
+        "0x3df0",
+        "0x3e00",
+        "0x3e10",
+        "0x3e20",
+        "0x3e30",
+        "0x3e40",
+        "0x3e50",
+        "0x3e60",
+        "0x3e70",
+        "0x3e80",
+        "0x3e90",
+        "0x3ea0",
+        "0x3eb0",
+        "0x3ec0",
+        "0x3ed0",
+        "0x3ee0",
+        "0x3ef0",
+        "0x3f00",
+        "0x3f10",
+        "0x3f20",
+        "0x3f30",
+        "0x3f40",
+        "0x3f50",
+        "0x3f60",
+        "0x3f70",
+        "0x3f80",
+        "0x3f90",
+        "0x3fa0",
+        "0x3fb0",
+        "0x3fc0",
+        "0x3fd0",
+        "0x3fe0",
+        "0x3ff0",
+        "0x4000",
+        "0x4010",
+        "0x4020",
+        "0x4030",
+        "0x4040",
+        "0x4050",
+        "0x4060",
+        "0x4070",
+        "0x4080",
+        "0x4090",
+        "0x40a0",
+        "0x40b0",
+        "0x40c0",
+        "0x40d0",
+        "0x40e0",
+        "0x40f0",
+        "0x4100",
+        "0x4110",
+        "0x4120",
+        "0x4130",
+        "0x4140",
+        "0x4150",
+        "0x4160",
+        "0x4170",
+        "0x4180",
+        "0x4190",
+        "0x41a0",
+        "0x41b0",
+        "0x41c0",
+        "0x41d0",
+        "0x41e0",
+        "0x41f0",
+        "0x4200",
+        "0x4210",
+        "0x4220",
+        "0x4230",
+        "0x4240",
+        "0x4250",
+        "0x4260",
+        "0x4270",
+        "0x4280",
+        "0x4290",
+        "0x42a0",
+        "0x42b0",
+        "0x42c0",
+        "0x42d0",
+        "0x42e0",
+        "0x42f0",
+        "0x4300",
+        "0x4310",
+        "0x4320",
+        "0x4330",
+        "0x4340",
+        "0x4350",
+        "0x4880",
+        "0x4890",
+        "0x48a0",
+        "0x48b0",
+        "0x48c0",
+        "0x48d0",
+        "0x48e0",
+        "0x48f0",
+        "0x4900",
+        "0x4910",
+        "0x4920",
+        "0x4930",
+        "0x4940",
+        "0x4950",
+        "0x4960",
+        "0x4970",
+        "0x4980",
+        "0x4990",
+        "0x49a0",
+        "0x49b0",
+        "0x49c0",
+        "0x49d0",
+        "0x49e0",
+        "0x49f0",
+        "0x4a00",
+        "0x4a10",
+        "0x4a20",
+        "0x4a30",
+        "0x4a40",
+        "0x4a50",
+        "0x4a60",
+        "0x4a70",
+        "0x4a80",
+        "0x4a90",
+        "0x4aa0",
+        "0x4ab0",
+        "0x4ac0",
+        "0x4ad0",
+        "0x4ae0",
+        "0x4af0",
+        "0x4b00",
+        "0x4b10",
+        "0x4b20",
+        "0x4b30",
+        "0x4b40",
+        "0x4b50",
+        "0x4b60",
+        "0x4b70",
+        "0x4b80",
+        "0x4b90",
+        "0x4ba0",
+        "0x4bb0",
+        "0x4bc0",
+        "0x4bd0",
+        "0x4be0",
+        "0x4bf0",
+        "0x4c00",
+        "0x4c10",
+        "0x4c20",
+        "0x4c30",
+        "0x4c40",
+        "0x4c50",
+        "0x4c60",
+        "0x4c70",
+        "0x4c80"
+      ],
+      "Xissuer": [
+        "0x4360",
+        "0x4370",
+        "0x4380",
+        "0x4390",
+        "0x43a0",
+        "0x43b0",
+        "0x43c0",
+        "0x43d0",
+        "0x43e0",
+        "0x43f0",
+        "0x4400",
+        "0x4410",
+        "0x4420",
+        "0x4430",
+        "0x4440",
+        "0x4450",
+        "0x4460",
+        "0x4470",
+        "0x4480",
+        "0x4490",
+        "0x44a0",
+        "0x44b0",
+        "0x44c0",
+        "0x44d0",
+        "0x44e0",
+        "0x44f0",
+        "0x4500",
+        "0x4510",
+        "0x4520",
+        "0x4530",
+        "0x4540",
+        "0x4550",
+        "0x4560",
+        "0x4570",
+        "0x4580",
+        "0x4590",
+        "0x45a0",
+        "0x45b0",
+        "0x45c0",
+        "0x45d0",
+        "0x45e0",
+        "0x45f0",
+        "0x4600",
+        "0x4610",
+        "0x4620",
+        "0x4c90",
+        "0x4ca0",
+        "0x4cb0",
+        "0x4cc0"
+      ]
+    },
+    "W_static_STS": 32,
+    "W_publication_bars": [
+      "@P3 BAR.SYNC.DEFER_BLOCKING 0x4, 0x60",
+      "@!P3 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80"
+    ],
+    "dedicated_TMA_static": 1,
+    "Xempty_math_handoffs": [
+      {
+        "LDSM": "0xdd0",
+        "MEMBAR": "0xde0",
+        "FENCE": "0xdf0",
+        "Xempty_arrive": "0xe10"
+      },
+      {
+        "LDSM": "0xe70",
+        "MEMBAR": "0xe80",
+        "FENCE": "0xe90",
+        "Xempty_arrive": "0xeb0"
+      },
+      {
+        "LDSM": "0xf30",
+        "MEMBAR": "0xf40",
+        "FENCE": "0xf50",
+        "Xempty_arrive": "0xf70"
+      },
+      {
+        "LDSM": "0x1060",
+        "MEMBAR": "0x10a0",
+        "FENCE": "0x10b0",
+        "Xempty_arrive": "0x1110"
+      },
+      {
+        "LDSM": "0x14d0",
+        "MEMBAR": "0x14e0",
+        "FENCE": "0x14f0",
+        "Xempty_arrive": "0x1510"
+      },
+      {
+        "LDSM": "0x1800",
+        "MEMBAR": "0x1810",
+        "FENCE": "0x1820",
+        "Xempty_arrive": "0x1840"
+      },
+      {
+        "LDSM": "0x1b50",
+        "MEMBAR": "0x1b60",
+        "FENCE": "0x1b70",
+        "Xempty_arrive": "0x1b90"
+      },
+      {
+        "LDSM": "0x1e30",
+        "MEMBAR": "0x1e40",
+        "FENCE": "0x1e50",
+        "Xempty_arrive": "0x1e70"
+      }
+    ],
+    "math_TMA": 0,
+    "math_bar5": 0,
+    "compiler": "source__syncwarp iselided as validatedparent; convergedLDSM/MEMBAR/FENCE/lane0arrive retained;actualJITregate required",
+    "limits": "FixedlocalCUDA12.8cubin. No generalSASSaddress-dataflow verifier or GPUcorrectness/occupancyquery claim."
+  },
+  "shared_regions": {
+    "W": [
+      0,
+      36864
+    ],
+    "B": [
+      36864,
+      102400
+    ],
+    "metadata": [
+      102400,
+      102576
+    ],
+    "X": [
+      103424,
+      136192
+    ],
+    "Xfull": [
+      136192,
+      136208
+    ],
+    "Xempty": [
+      136208,
+      136224
+    ]
+  },
+  "dynamic_shared_bytes": 137248,
+  "lifetime": "Dedicatedwarp onlyrecyclesXafter8mathwarparrivals; outputscratchB reusedafterallWGMMAwait0 and mathbar1; noX/Wregionoverlap"
+}

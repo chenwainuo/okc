@@ -78,3 +78,28 @@ It also appends the independently validated W-ring lesson and a seventh proposed
 matched-context test: a tiny selected-policy gain coexists with a negative
 equal-depth barrier contrast and mixed split-versus-coupled timing. These distinct
 causal contrasts remain separate rather than being averaged into a mechanism win.
+
+## Registry revision4: PW43 and selected-profile failures
+
+Revision4 appends two lessons and two proposed discriminators to the unchanged
+v3 lesson/idea prefixes; frozen consumer snapshots and v1-v3 archives remain
+untouched. Reproduce with `PYTHONPATH=. python3 proj_rsi/audits/build-learning-v4.py`.
+The resulting archive is `learning_archive/registry-v4-9e7d3bf8.json`.
+
+PW43 is locally valid but regresses actual independently prepared PW38 under
+both descriptive aggregate estimators: PW38-minus-PW43 is−13.920680us paired and
+−28.966159us F1. All30 signed contrasts remain in canonical local observations,
+including14 positives/12 negatives/4 ties. Later M256 confirmation cells expired;
+only qkv completed. The next discriminator separates admission accounting from
+comparison policy, using the immutable refinement brief and actual PW38 control.
+A standalone production incumbent derived from search remains a proxy.
+
+Selected profiler source revision2/jobv1 failed context metadata before prepare.
+Revision3/jobv2 establishes a real context and completes unchanged73.931256s
+prepare, then fails GV cluster launch with capture rc9. Actual GV S2/V0 follows
+DSM cluster barriers, not a global-counter last-arriver route. Missing retained
+postrange oracles/counter/cleanup means no profile row is admitted, including
+router rows that completed collection. Hardware-only metrics versus broad
+sections are a proposed recipe discriminator; no cause, gain, transfer, new ROI
+or future job ID is fabricated. The archive binds actual raw collections and
+the independent source-bound diagnosis by SHA256.

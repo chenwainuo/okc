@@ -1,0 +1,961 @@
+{
+  "state": "CPU_PW45_HALF_EARLY_PASS_GPU_UNRUN_REVIEW_REQUIRED",
+  "source": {
+    "state": "PASS_STRICT_DELTA_AND_ALL_EXISTING_AST_CONTROLS",
+    "parent_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+    "new_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+    "changed_AST": [
+      "RQCU",
+      "RQSBAKE",
+      "RQV",
+      "_rqsbake"
+    ],
+    "kernel_body_codec_math_EH_unchanged": true,
+    "all_other_shapes_and_existing_o32_choices_preserved": true,
+    "actual_bake_enumerations": [
+      {
+        "layer": "qkv_gate",
+        "m": 32,
+        "choices": [
+          [
+            "t32s5hze",
+            6
+          ],
+          [
+            "t32s5hze",
+            7
+          ],
+          [
+            "t32s5hz",
+            6
+          ],
+          [
+            "t32s6hze",
+            6
+          ]
+        ]
+      },
+      {
+        "layer": "qkv_gate",
+        "m": 16,
+        "choices": [
+          [
+            "t16s5hze",
+            6
+          ],
+          [
+            "t16s5ze",
+            6
+          ],
+          [
+            "t16s5hze",
+            7
+          ],
+          [
+            "t16s5ze",
+            7
+          ]
+        ]
+      },
+      {
+        "layer": "o",
+        "m": 32,
+        "choices": [
+          [
+            "t32s5hze",
+            2
+          ],
+          [
+            "t32s6hze",
+            2
+          ],
+          [
+            "t32s5ze",
+            2
+          ],
+          [
+            "h32s4e",
+            1
+          ],
+          [
+            "h32s5e",
+            1
+          ]
+        ]
+      },
+      {
+        "layer": "o",
+        "m": 16,
+        "choices": [
+          [
+            "t16s5hze",
+            2
+          ],
+          [
+            "t16s6hze",
+            2
+          ],
+          [
+            "t16s5ze",
+            2
+          ]
+        ]
+      },
+      {
+        "layer": "o",
+        "m": 128,
+        "choices": [
+          [
+            "h128s8e",
+            1
+          ],
+          [
+            "h128s5",
+            1
+          ]
+        ]
+      },
+      {
+        "layer": "pooler",
+        "m": 32,
+        "choices": [
+          [
+            "t32s5hze",
+            4
+          ],
+          [
+            "t32s6hze",
+            4
+          ],
+          [
+            "t32s5hz",
+            4
+          ]
+        ]
+      },
+      {
+        "layer": "pooler",
+        "m": 16,
+        "choices": [
+          [
+            "t16s5hze",
+            4
+          ],
+          [
+            "t16s6hze",
+            4
+          ],
+          [
+            "t16s5hz",
+            4
+          ]
+        ]
+      },
+      {
+        "layer": "unpooler",
+        "m": 32,
+        "choices": [
+          [
+            "t32s5hze",
+            2
+          ],
+          [
+            "t32s6hze",
+            2
+          ],
+          [
+            "t32s6hz",
+            2
+          ]
+        ]
+      },
+      {
+        "layer": "unpooler",
+        "m": 16,
+        "choices": [
+          [
+            "t16s5hze",
+            2
+          ],
+          [
+            "t16s6hze",
+            2
+          ],
+          [
+            "t16s5hz",
+            2
+          ]
+        ]
+      }
+    ],
+    "strict_anchor_negative_controls": [
+      "two-optional-half-early-types",
+      "o32-only-append-options-preserve-controls",
+      "new-types-exact-shape-fullK-only",
+      "bounded-five-only-o32-keep-original-budget"
+    ],
+    "lint": {
+      "path": "/home/ubuntu/okc/proj_rsi/candidates/pw45/submission.py",
+      "ok": true,
+      "findings": [
+        {
+          "severity": "warning",
+          "rule": "sm_90a",
+          "detail": "several load_inline builds: confirm the one holding wgmma/setmaxnreg/multicast gets the sm_90a flags"
+        }
+      ]
+    }
+  },
+  "compile": {
+    "existing_control_streams": 19,
+    "equality": "ALL_PC_PREDICATE_INSTRUCTION_OPERAND_BRANCH_TARGETS",
+    "registers": {
+      "device": {
+        "32,6,1,0,0,0,3": 168,
+        "16,5,1,0,0,0,3": 168,
+        "128,5,1,0,0,0,20": 168,
+        "128,8,1,0,0,0,52": 168,
+        "16,6,1,0,0,0,35": 168,
+        "32,5,1,0,0,0,52": 168,
+        "32,4,1,0,0,0,52": 168,
+        "32,5,1,0,0,0,34": 168,
+        "16,5,1,0,0,0,34": 168,
+        "16,5,1,0,0,0,35": 168,
+        "32,6,1,0,0,0,35": 168,
+        "32,5,1,0,0,0,3": 168,
+        "32,5,1,0,0,0,35": 168,
+        "128,5,1,0,0,0,65539": 168,
+        "128,5,1,0,0,0,65538": 168,
+        "256,5,1,0,0,0,2": 168,
+        "256,5,1,0,0,0,3": 168,
+        "256,4,1,0,0,0,3": 168,
+        "128,8,1,0,0,0,3": 168,
+        "128,5,1,0,0,0,3": 168,
+        "128,5,1,0,0,0,2": 168
+      },
+      "control": {
+        "32,6,1,0,0,0,3": 168,
+        "16,5,1,0,0,0,3": 168,
+        "128,5,1,0,0,0,20": 168,
+        "128,8,1,0,0,0,52": 168,
+        "16,6,1,0,0,0,35": 168,
+        "32,5,1,0,0,0,34": 168,
+        "16,5,1,0,0,0,34": 168,
+        "16,5,1,0,0,0,35": 168,
+        "32,6,1,0,0,0,35": 168,
+        "32,5,1,0,0,0,3": 168,
+        "32,5,1,0,0,0,35": 168,
+        "128,5,1,0,0,0,65539": 168,
+        "128,5,1,0,0,0,65538": 168,
+        "256,5,1,0,0,0,2": 168,
+        "256,5,1,0,0,0,3": 168,
+        "256,4,1,0,0,0,3": 168,
+        "128,8,1,0,0,0,3": 168,
+        "128,5,1,0,0,0,3": 168,
+        "128,5,1,0,0,0,2": 168
+      }
+    }
+  },
+  "proofs": {
+    "host_admission": {
+      "state": "PASS_ACTUAL_ISOLATED_CXX_GUARD",
+      "new_legal_types": 2,
+      "negative_cases": 9,
+      "old_selected_ST6_KS2_admission_unchanged": true,
+      "scope": "Exact isolated host guard compiled and executed on CPU; full Torch/CUDA wrapper linking and runtime attributes remain unrun.",
+      "GPU_calls": 0
+    },
+    "logical_payload": {
+      "old_ST6_KS2_X_bytes": 4194304,
+      "new_HALF_KS1_X_bytes": 8388608,
+      "old_W_bytes": 12582912,
+      "new_W_bytes": 12582912,
+      "output_bytes": 524288,
+      "scope": "Source logical transaction payload only, not measured DRAM/cache traffic/time or claimed speed."
+    },
+    "protocol": {
+      "state": "PASS_BOUNDED_HALF4READER_PHASE_LIFETIME",
+      "cases": [
+        {
+          "ST": 4,
+          "KCS": 1,
+          "states": 7
+        },
+        {
+          "ST": 4,
+          "KCS": 2,
+          "states": 21
+        },
+        {
+          "ST": 4,
+          "KCS": 3,
+          "states": 47
+        },
+        {
+          "ST": 4,
+          "KCS": 4,
+          "states": 92
+        },
+        {
+          "ST": 4,
+          "KCS": 5,
+          "states": 130
+        },
+        {
+          "ST": 4,
+          "KCS": 6,
+          "states": 168
+        },
+        {
+          "ST": 4,
+          "KCS": 7,
+          "states": 208
+        },
+        {
+          "ST": 4,
+          "KCS": 8,
+          "states": 248
+        },
+        {
+          "ST": 4,
+          "KCS": 9,
+          "states": 288
+        },
+        {
+          "ST": 4,
+          "KCS": 10,
+          "states": 328
+        },
+        {
+          "ST": 4,
+          "KCS": 11,
+          "states": 368
+        },
+        {
+          "ST": 4,
+          "KCS": 12,
+          "states": 408
+        },
+        {
+          "ST": 4,
+          "KCS": 13,
+          "states": 448
+        },
+        {
+          "ST": 4,
+          "KCS": 14,
+          "states": 488
+        },
+        {
+          "ST": 4,
+          "KCS": 15,
+          "states": 528
+        },
+        {
+          "ST": 4,
+          "KCS": 16,
+          "states": 568
+        },
+        {
+          "ST": 4,
+          "KCS": 17,
+          "states": 608
+        },
+        {
+          "ST": 5,
+          "KCS": 1,
+          "states": 7
+        },
+        {
+          "ST": 5,
+          "KCS": 2,
+          "states": 21
+        },
+        {
+          "ST": 5,
+          "KCS": 3,
+          "states": 47
+        },
+        {
+          "ST": 5,
+          "KCS": 4,
+          "states": 92
+        },
+        {
+          "ST": 5,
+          "KCS": 5,
+          "states": 162
+        },
+        {
+          "ST": 5,
+          "KCS": 6,
+          "states": 224
+        },
+        {
+          "ST": 5,
+          "KCS": 7,
+          "states": 287
+        },
+        {
+          "ST": 5,
+          "KCS": 8,
+          "states": 353
+        },
+        {
+          "ST": 5,
+          "KCS": 9,
+          "states": 419
+        },
+        {
+          "ST": 5,
+          "KCS": 10,
+          "states": 485
+        },
+        {
+          "ST": 5,
+          "KCS": 11,
+          "states": 551
+        },
+        {
+          "ST": 5,
+          "KCS": 12,
+          "states": 617
+        },
+        {
+          "ST": 5,
+          "KCS": 13,
+          "states": 683
+        },
+        {
+          "ST": 5,
+          "KCS": 14,
+          "states": 749
+        },
+        {
+          "ST": 5,
+          "KCS": 15,
+          "states": 815
+        },
+        {
+          "ST": 5,
+          "KCS": 16,
+          "states": 881
+        },
+        {
+          "ST": 5,
+          "KCS": 17,
+          "states": 947
+        }
+      ],
+      "total_states": 12293,
+      "source_fullK_KCS": 16,
+      "full_count": 2,
+      "Wempty_Xempty_count": 4,
+      "EARLY_startup": "min(ST,KCS) W+X beforeCTAbarrier",
+      "Wrelease": "all4 LDS+syncwarp beforeoverwrite",
+      "Xrelease": "afterwait1 coverspriorgroup or finalwait0",
+      "D": "never genericwritten whileasync; firstK16scaleD0 and allsubsequentK16scaleD1",
+      "A_banks": "two16word paritybanks; twoqueuedgroups and wait1 retireprevious before bankreuse",
+      "negative_controls": {
+        "missing_Xfull": "READ_BEFORE_BOTH_FULL_CONTRIBUTORS",
+        "early_Xreuse": "X_REUSE_BEFORE_WGMMA_RETIRE",
+        "only3_readers": "W_REUSE_BEFORE_ALL4_WARP_READS"
+      },
+      "limits": "Finite completion/order source model, fourwarp reads aggregated into one all-reader event. Assumes eventual TMA/WGMMA progress, not arbitrary compiled-CFG proof."
+    },
+    "layout": {
+      "state": "PASS_EXACT_HALF_FULLK_BIJECTIONS",
+      "weight_BF16_values": 8388608,
+      "weight_bytes_original": 16777216,
+      "packed_W_bytes": 12582912,
+      "per_CTA_half_W_bytes_per_stage": 6144,
+      "output_BF16_values": 262144,
+      "output_tiles": 128,
+      "output_tile_shape": [
+        32,
+        64
+      ],
+      "fullK_stages": 16,
+      "KS": 1,
+      "partial_workspace_bytes": 0,
+      "global_reduce_or_zero_protocol": "NONE_PLAIN_TMA_STORE",
+      "CSR_lists": 512,
+      "CSR_field_extreme_cases": 65536,
+      "actual_CSR_CAP": "UNKNOWN_UNTIL_REAL_GPU_WEIGHT_PREPARE",
+      "CAP_rule": "strict nextmultiple32 above actual max list, plus32guard words; no truncation",
+      "padding": 0,
+      "weight_encoding": "EXACT_PARENT_CODEC_BYTES_NO_NEW_CODEC",
+      "source_tensormap_box": [
+        64,
+        32
+      ],
+      "scope": "Finite coordinate/byte ownership proof; numerical GPU WGMMA execution unrun."
+    },
+    "physical": [
+      {
+        "args": [
+          32,
+          5,
+          1,
+          0,
+          0,
+          0,
+          52
+        ],
+        "shared_bytes": 52360,
+        "STSM": 2,
+        "plain_TMA_store": 1,
+        "TMA_reduce": 0,
+        "zero_poll_trap": 0,
+        "final_Dwait0_before_output": "PASS",
+        "publication_and_TMA_read_drain": "PASS",
+        "physical_retirement": {
+          "state": "PASS_FIXED_PHYSICAL_A_D_FULLK16",
+          "groups": 16,
+          "A_register_sets": [
+            [
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48,
+              49,
+              50,
+              51,
+              52,
+              53,
+              54,
+              55
+            ],
+            [
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87
+            ],
+            [
+              56,
+              57,
+              58,
+              59,
+              60,
+              61,
+              62,
+              63,
+              64,
+              65,
+              66,
+              67,
+              68,
+              69,
+              70,
+              71
+            ],
+            [
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87
+            ]
+          ],
+          "D_registers": [
+            24,
+            39
+          ],
+          "loop_PC_range": [
+            8096,
+            13312
+          ],
+          "loop_iterations": 7,
+          "generic_destination_writes_checked": 1707,
+          "retirement_events": [
+            {
+              "PC": 7968,
+              "wait_keep": 1,
+              "retired_groups": 0
+            },
+            {
+              "PC": 10672,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 13200,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 10672,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 13200,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 10672,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 13200,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 10672,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 13200,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 10672,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 13200,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 10672,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 13200,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 10672,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 13200,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 15696,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 15760,
+              "wait_keep": 0,
+              "retired_groups": 1
+            }
+          ],
+          "outlined_wait_blocks": 5,
+          "limits": "Exact compiled GS1/WM0/fullK16 bounded trace with conservatively executed predicate writes and safe outlined waits, not general SASS CFG/address proof."
+        }
+      },
+      {
+        "args": [
+          32,
+          4,
+          1,
+          0,
+          0,
+          0,
+          52
+        ],
+        "shared_bytes": 42096,
+        "STSM": 2,
+        "plain_TMA_store": 1,
+        "TMA_reduce": 0,
+        "zero_poll_trap": 0,
+        "final_Dwait0_before_output": "PASS",
+        "publication_and_TMA_read_drain": "PASS",
+        "physical_retirement": {
+          "state": "PASS_FIXED_PHYSICAL_A_D_FULLK16",
+          "groups": 16,
+          "A_register_sets": [
+            [
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48,
+              49,
+              50,
+              51,
+              52,
+              53,
+              54,
+              55
+            ],
+            [
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87
+            ],
+            [
+              56,
+              57,
+              58,
+              59,
+              60,
+              61,
+              62,
+              63,
+              64,
+              65,
+              66,
+              67,
+              68,
+              69,
+              70,
+              71
+            ],
+            [
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87
+            ]
+          ],
+          "D_registers": [
+            24,
+            39
+          ],
+          "loop_PC_range": [
+            7600,
+            12896
+          ],
+          "loop_iterations": 7,
+          "generic_destination_writes_checked": 1727,
+          "retirement_events": [
+            {
+              "PC": 7472,
+              "wait_keep": 1,
+              "retired_groups": 0
+            },
+            {
+              "PC": 10176,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 12768,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 10176,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 12768,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 10176,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 12768,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 10176,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 12768,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 10176,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 12768,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 10176,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 12768,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 10176,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 12768,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 15232,
+              "wait_keep": 1,
+              "retired_groups": 1
+            },
+            {
+              "PC": 15296,
+              "wait_keep": 0,
+              "retired_groups": 1
+            }
+          ],
+          "outlined_wait_blocks": 5,
+          "limits": "Exact compiled GS1/WM0/fullK16 bounded trace with conservatively executed predicate writes and safe outlined waits, not general SASS CFG/address proof."
+        }
+      }
+    ],
+    "learning": {
+      "state": "PASS_APPLIED_HASHED_LESSONS",
+      "applied": [
+        {
+          "ref": "prepare-selection-is-experiment@2",
+          "record_sha256": "78c2ea94c607aa37547436c8f5120e7a84d31a83723cbba68750922797b10317",
+          "applied": "Keep actual PW38 serving/prepare comparator separate from fixed o32 mechanism arms, preserve all controls/EH/counter storage semantics and all tiny signed outcomes; source composition/grid/resource changes are not measured/additive speed gains."
+        },
+        {
+          "ref": "counter-contract-not-name@1",
+          "record_sha256": "6f1e6d119171812e56085416a87607ee67be4f690c7988c2de166b1331a4a872",
+          "applied": "Keep actual PW38 serving/prepare comparator separate from fixed o32 mechanism arms, preserve all controls/EH/counter storage semantics and all tiny signed outcomes; source composition/grid/resource changes are not measured/additive speed gains."
+        },
+        {
+          "ref": "composition-not-additivity@1",
+          "record_sha256": "0e3ae3fc3b9be194f5afb595c0b3bd065aeafeccfdcd3f4f344d401b59404ee0",
+          "applied": "Keep actual PW38 serving/prepare comparator separate from fixed o32 mechanism arms, preserve all controls/EH/counter storage semantics and all tiny signed outcomes; source composition/grid/resource changes are not measured/additive speed gains."
+        },
+        {
+          "ref": "eh-tiny-context-bound@1",
+          "record_sha256": "6b58697000771856c5c3ef11cbc68049f172bcaa898e63e3e8fadfbb5f8cd8f9",
+          "applied": "Keep actual PW38 serving/prepare comparator separate from fixed o32 mechanism arms, preserve all controls/EH/counter storage semantics and all tiny signed outcomes; source composition/grid/resource changes are not measured/additive speed gains."
+        },
+        {
+          "ref": "wring-mechanism-policy-separation@1",
+          "record_sha256": "8aed17de00967041aa8d8f3de9d75ba2adf3f9f8cadb3a2315c610cc2067b3ab",
+          "applied": "Keep actual PW38 serving/prepare comparator separate from fixed o32 mechanism arms, preserve all controls/EH/counter storage semantics and all tiny signed outcomes; source composition/grid/resource changes are not measured/additive speed gains."
+        },
+        {
+          "ref": "qkv-split4-full-pipeline-regression@1",
+          "record_sha256": "bcaa4eb02fee33e1b88859a0d7d0d7185a701b0c5f4eb925a3dedc30fcf11f18",
+          "applied": "Keep actual PW38 serving/prepare comparator separate from fixed o32 mechanism arms, preserve all controls/EH/counter storage semantics and all tiny signed outcomes; source composition/grid/resource changes are not measured/additive speed gains."
+        }
+      ],
+      "counter_contract": "New fullK plain-store path does not touch counters; compare entire inactive storage to actual prepare baseline rather than demand unrelated zeros. Original ZI control active/dormant semantics stay unchanged.",
+      "evidence_transfer": "Only invariants and experiment design transfer; no old latency or CPU-to-GPU/H100-to-H200 speed assumption.",
+      "runtime": "UNRUN_NO_SOURCE_PROMOTION"
+    },
+    "new_resources": {
+      "4": {
+        "registers": 168,
+        "threads": 384,
+        "uniform_rounded_register_pool": 64512,
+        "dynamic_worst_case_pool": 64512,
+        "dynamic_shared_bytes": 42096,
+        "stack_spills_local": 0,
+        "actual_GPU_occupancy": null,
+        "static_upper_bound_under_65536_register_SM": 1,
+        "runtime_gate": "Before candidate math query actual numRegs/local/shared/max_dynamic/occupancy; require supported allocation and occupancy>=1. HALF exit does not prove twoCTAs/SM.",
+        "counter_protocol": "INACTIVE_ALL_STORAGE_UNCHANGED"
+      },
+      "5": {
+        "registers": 168,
+        "threads": 384,
+        "uniform_rounded_register_pool": 64512,
+        "dynamic_worst_case_pool": 64512,
+        "dynamic_shared_bytes": 52360,
+        "stack_spills_local": 0,
+        "actual_GPU_occupancy": null,
+        "static_upper_bound_under_65536_register_SM": 1,
+        "runtime_gate": "Before candidate math query actual numRegs/local/shared/max_dynamic/occupancy; require supported allocation and occupancy>=1. HALF exit does not prove twoCTAs/SM.",
+        "counter_protocol": "INACTIVE_ALL_STORAGE_UNCHANGED"
+      }
+    },
+    "physical_negative_controls": {
+      "remove_wait1": "REJECTED",
+      "plain_store_to_reduce": "REJECTED",
+      "wrong_reader_barrier": "REJECTED"
+    },
+    "invalid_new_shape_controls": 6
+  },
+  "GPU_calls": 0,
+  "prepare_calls": 0,
+  "API_calls": 0,
+  "queue_changes": 0
+}

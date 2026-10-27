@@ -1,0 +1,1748 @@
+{
+  "schema_version": 1,
+  "registry_version": 2,
+  "lessons": [
+    {
+      "id": "native-x-parent-progress",
+      "version": 1,
+      "supersedes": null,
+      "title": "Native-X improves DP/DS while losing the actual incumbent",
+      "tags": [
+        "native",
+        "TMA",
+        "DP",
+        "incumbent",
+        "overlap"
+      ],
+      "context": {
+        "experiment_id": "native-x-01",
+        "family": "native-X",
+        "parents": [
+          "operand_reverse_dual_producer@97dd5613f9dfe859c87bb62f21e6d9543c10cdc7fc7310c2e87e40246fb1cf3b"
+        ],
+        "comparators": [
+          "actual PW36",
+          "DP",
+          "DS",
+          "frozen native-X"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_REGRESSION",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/reverse_tma_x/extension_source.cu",
+            "role": "measured native-X source",
+            "sha256": "ffd30a15ec5c1b5cc6fc1d550f7da512783f006f8a34cc37093ea18269d7e377"
+          },
+          {
+            "path": "proj_rsi/candidates/operand_reverse_dual_producer/extension_source.cu",
+            "role": "DP predecessor",
+            "sha256": "97dd5613f9dfe859c87bb62f21e6d9543c10cdc7fc7310c2e87e40246fb1cf3b"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "native",
+          "path": "proj_rsi/audits/native-x-01/analysis.json",
+          "sha256": "12072f62ed7f994000e8031739708dd9d50de5cdbe53a96038bb0478003fc604"
+        }
+      ],
+      "observations": [
+        {
+          "id": "dp",
+          "statement": "Paired DP minus native-X gain is positive.",
+          "outcome": "positive",
+          "evidence": "native",
+          "selector": {
+            "json_pointer": "/paired_new_median_gain_us/dp",
+            "equals": 2.208000048995018
+          }
+        },
+        {
+          "id": "inc",
+          "statement": "Paired incumbent minus native-X gain is negative.",
+          "outcome": "negative",
+          "evidence": "native",
+          "selector": {
+            "json_pointer": "/paired_new_median_gain_us/incumbent",
+            "equals": -7.952000014483929
+          }
+        },
+        {
+          "id": "ds",
+          "statement": "Native-X beats DS in every declared paired round.",
+          "outcome": "positive",
+          "evidence": "native",
+          "selector": {
+            "json_pointer": "/paired_new_wins/ds",
+            "equals": 32
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Removing the pack node/global native-A loads may help DP, while shared delivery or the remaining math pipeline limits incumbent competitiveness.",
+          "status": "unproven",
+          "observation_ids": [
+            "dp",
+            "inc",
+            "ds"
+          ]
+        }
+      ],
+      "scope": "U128/N8192/K4096 complete local graphs: DP/DS fresh pack+main versus original-X native single-main, with actual PW36 selected comparator.",
+      "transfer_limits": [
+        "Same-run DP progress is not an incumbent win.",
+        "No H200 or official aggregate transfer; raw native mover storage-bit roundtrip remains unprobed."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "A same-source diagnostic that removes the suspected shared handoff cost without a whole-pipeline change does not improve the parent.",
+      "next_test": {
+        "question": "Which native shared-X handoff cost can explain the remaining incumbent gap?",
+        "controls": [
+          "actual PW36",
+          "DP",
+          "DS",
+          "frozen native-X"
+        ],
+        "discriminator": "Use the existing native profile ROI to compare isolated producer wait/read-completion intervals under identical stages; retain full graphs and distinguish phase evidence from elapsed-time attribution.",
+        "stop_rule": "If phase attribution cannot be made without changing math or source identity, retain uncertainty and do not forecast saved time.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      },
+      "related_queue_ids": [
+        "native.profile.v1.01",
+        "native.x4.v1.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Only if the named discriminator succeeds inside the declared scope.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Proposed diagnostic scope; no new GPU reservation approved.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "2ea2fc9fb5c85b2f95988d02fc416222a3bef44fc3a2559228410484901f701d"
+    },
+    {
+      "id": "composition-not-additivity",
+      "version": 1,
+      "supersedes": null,
+      "title": "Commuting X4/STMatrix source edits give mixed marginal timings",
+      "tags": [
+        "composition",
+        "X4",
+        "STMatrix",
+        "additivity",
+        "noise"
+      ],
+      "context": {
+        "experiment_id": "native.x4.stmatrix.v1.01",
+        "family": "native-X-composition",
+        "parents": [
+          "reverse_tma_x@ffd30a15ec5c1b5cc6fc1d550f7da512783f006f8a34cc37093ea18269d7e377",
+          "reverse_tma_x4@d47ed1663eac87f5bcc05b5f17df8fa62e7c9e91780a13d02ce9b95ac0f05c8a(manifest)",
+          "reverse_tma_x_stmatrix@2c132b82a854e476f433335462b2122f21bc3cb490dec6f2b691c01cd9775045(manifest)"
+        ],
+        "comparators": [
+          "native-X2",
+          "X4 only",
+          "STMatrix only",
+          "X4+STMatrix",
+          "actual PW36"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/reverse_tma_x4_stmatrix/extension_source.cu",
+            "role": "measured composition source",
+            "sha256": "61aad6a1d26ee56492c2b0a87b5b1e6c12c434fc166a0aad6e958a555becbf15"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "composition",
+          "path": "proj_rsi/audits/native-x4-stmatrix-01/analysis.json",
+          "sha256": "8572d728ba753513f545aa69a4f141855ef759fc6fbc136d98c22797bd736784"
+        },
+        {
+          "id": "composition-report",
+          "path": "proj_rsi/audits/native-x4-stmatrix-01/report.md",
+          "sha256": "2cb123e9d21257eb0ce65aec49bbc049e1bf9a912bc6a8295e24cc1e58c33a40"
+        }
+      ],
+      "observations": [
+        {
+          "id": "native",
+          "statement": "Combo has positive paired gain against native-X2.",
+          "outcome": "positive",
+          "evidence": "composition",
+          "selector": {
+            "json_pointer": "/paired_new_median_gain_us/native",
+            "equals": 0.23999810218811035
+          }
+        },
+        {
+          "id": "x4f1",
+          "statement": "Combo loses the conservative F1 comparison against X4.",
+          "outcome": "negative",
+          "evidence": "composition",
+          "selector": {
+            "json_pointer": "/F1_new_gain_us/x4",
+            "equals": -0.06400048732757568
+          }
+        },
+        {
+          "id": "inc",
+          "statement": "Combo remains slower than actual incumbent.",
+          "outcome": "negative",
+          "evidence": "composition",
+          "selector": {
+            "json_pointer": "/paired_new_median_gain_us/incumbent",
+            "equals": -7.087999954819679
+          }
+        },
+        {
+          "id": "commutes",
+          "statement": "Exact source composition and both inverses pass; this is not speed additivity.",
+          "outcome": "neutral",
+          "evidence": "composition-report",
+          "selector": {
+            "contains": "This establishes finite source composition, not GPU speed additivity."
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "The two source changes may act on overlapping bottlenecks, or their marginal differences may be timing variability.",
+          "status": "unproven",
+          "observation_ids": [
+            "native",
+            "x4f1",
+            "inc",
+            "commutes"
+          ]
+        }
+      ],
+      "scope": "One five-arm H100 run; all414 calls retained with source-commutativity and numeric/JIT gates.",
+      "transfer_limits": [
+        "Do not add gains from separate runs or source edit commutativity.",
+        "Paired/F1 sign disagreement remains evidence, not a reason to select the favorable statistic."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "A preregistered same-run factorial interaction estimate is consistently near zero across independent repetitions while both single effects remain positive.",
+      "next_test": {
+        "question": "Do X4 depth and producer STMatrix interact beyond timing variability?",
+        "controls": [
+          "native-X2",
+          "X4 only",
+          "STMatrix only",
+          "X4+STMatrix",
+          "actual PW36"
+        ],
+        "discriminator": "Reuse all four cells and compute per-seed interaction (native-combo)-(native-X4)-(native-STMatrix), with repeated independently frozen trials; report the interaction distribution and F1 signs rather than adding marginal medians.",
+        "stop_rule": "If the interaction and single-effect intervals span both signs, retain the mixed result and avoid integration solely on tiny paired medians.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      },
+      "related_queue_ids": [
+        "native.x4.stmatrix.v1.01",
+        "native.stmatrix.v1.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Only if the named discriminator succeeds inside the declared scope.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Proposed repetition; cost remains unknown until a concrete root-reviewed descriptor.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "0e3ae3fc3b9be194f5afb595c0b3bd065aeafeccfdcd3f4f344d401b59404ee0"
+    },
+    {
+      "id": "eh-tiny-context-bound",
+      "version": 1,
+      "supersedes": null,
+      "title": "Tiny EH gains survive recovery; official bake and fixed geometry answer different questions",
+      "tags": [
+        "EH",
+        "epilogue",
+        "tiny",
+        "official",
+        "bake",
+        "uncertainty"
+      ],
+      "context": {
+        "experiment_id": "official-check:a3ed4ce5886a4415 + research.eh.samegeometry.gpu.01",
+        "family": "EH",
+        "parents": [
+          "PW36@2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf"
+        ],
+        "comparators": [
+          "same-geometry FL3",
+          "EH65539",
+          "actual selected serving policies"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "official CHECK plus H100 local fixed trial"
+        },
+        "validity": "VALID_OFFICIAL_CHECK",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/pw38/submission.py",
+            "role": "official CHECK source",
+            "sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "official",
+          "path": "proj_rsi/audits/pw38-official-check-author.json",
+          "sha256": "21ce139c67dbcaa176fa4c2028c1195f0bf98698e03eb45eba81b4582208d3cc"
+        },
+        {
+          "id": "fixed",
+          "path": "proj_rsi/audits/eh-same-geometry-01/report.md",
+          "sha256": "8cf0d7f16e3ede067a170e25f24e6045fb851a3c98e09992542250aec05057ea"
+        }
+      ],
+      "observations": [
+        {
+          "id": "pooler",
+          "statement": "Official CHECK same-job prepare prints about0.13us pooler EH gain.",
+          "outcome": "positive",
+          "evidence": "official",
+          "selector": {
+            "json_pointer": "/same_job_component_bakes/0/printed_control_minus_EH_us",
+            "equals": 0.129999999999999
+          }
+        },
+        {
+          "id": "qkv",
+          "statement": "Official CHECK prepare prints about0.42us QKV hinted EH gain.",
+          "outcome": "positive",
+          "evidence": "official",
+          "selector": {
+            "json_pointer": "/same_job_component_bakes/1/printed_control_minus_EH_us",
+            "equals": 0.41999999999999815
+          }
+        },
+        {
+          "id": "unpool",
+          "statement": "Official hinted unpooler EH bake regresses and remains unselected.",
+          "outcome": "negative",
+          "evidence": "official",
+          "selector": {
+            "json_pointer": "/same_job_component_bakes/2/printed_control_minus_EH_us",
+            "equals": -0.16000000000000014
+          }
+        },
+        {
+          "id": "mixed",
+          "statement": "Fixed geometry remains mixed, without a minimum tiny-gain filter.",
+          "outcome": "mixed",
+          "evidence": "fixed",
+          "selector": {
+            "contains": "This is three both-estimator-positive EH3 observations, one both-estimator-negative EH2 observation, and four sign disagreements."
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "EH may offer a small shape/flag-dependent benefit, but sequential bake medians also contain selection and timing context.",
+          "status": "unproven",
+          "observation_ids": [
+            "pooler",
+            "qkv",
+            "unpool",
+            "mixed"
+          ]
+        }
+      ],
+      "scope": "Official CHECK component prepare observations versus a separate four-shape matched local trial; CHECK is not a leaderboard submission.",
+      "transfer_limits": [
+        "Sequential official prepare differences are not balanced causal estimates or whole-score improvements.",
+        "Do not substitute EH2 for selected EH3 or transfer a fixed full-width o result to selected HALF/LT."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Matched actual-selected EH3 repeats fail to preserve even directional pooler benefit after counterbalanced order and fresh inputs.",
+      "next_test": {
+        "question": "Does bounded confirmation retain useful EH choices without forcing EH on mixed shapes?",
+        "controls": [
+          "same-geometry FL3",
+          "EH65539",
+          "actual selected serving policies"
+        ],
+        "discriminator": "Confirm close EH3 finalists against their actual selected comparator using balanced fresh-fixture rounds inside a fixed prepare budget; preserve QKV sign disagreement and unselected negative EH alternatives.",
+        "stop_rule": "Do not enable universally; decline selection changes if budget or correctness gates fail, without deleting tiny positive observations.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      },
+      "related_queue_ids": [
+        "research.eh.samegeometry.gpu.01",
+        "pw38.stack.fullscope.01",
+        "research.prepare.selection.pw39.readiness.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Only if the named discriminator succeeds inside the declared scope.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Existing fixed-geometry root bound600s is evidence of a past reservation, not permission for this proposed test.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "6b58697000771856c5c3ef11cbc68049f172bcaa898e63e3e8fadfbb5f8cd8f9"
+    },
+    {
+      "id": "counter-contract-not-name",
+      "version": 1,
+      "supersedes": null,
+      "title": "Counter validity follows selected physical storage semantics, not a cnt name",
+      "tags": [
+        "counter",
+        "invariant",
+        "dormant",
+        "alias",
+        "validity"
+      ],
+      "context": {
+        "experiment_id": "smallm-v2 failure + smallm.cursor.v3.all5.01",
+        "family": "measurement-counter-contract",
+        "parents": [
+          "smallm v2 driver@5f1534620d3e62d017fbd8a167b7763aed0d8656ac938bcca8411572c778a308"
+        ],
+        "comparators": [
+          "active reset0",
+          "nonzero dormant unchanged",
+          "offset alias",
+          "unknown persistent protocol HOLD"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local with CPU contract proof"
+        },
+        "validity": "VALIDATED_DIAGNOSIS",
+        "disposition": "INVALID_SETUP",
+        "sources": [
+          {
+            "path": "proj_rsi/tools/smallm_increment_lab_v3.py",
+            "role": "validated v3 measurement contract",
+            "sha256": "bdc7cb89f1d0afa1604bc855601ceb6fe46f0c5237de5025f18800ba67062f2f"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "repair",
+          "path": "proj_rsi/audits/sol13-counter-repair.md",
+          "sha256": "ba570c39b8fa7379fb09ea3f53f6ade86bd6ceca070cd08f7d998f8b7e66fa3d"
+        },
+        {
+          "id": "valid",
+          "path": "proj_rsi/audits/smallm-v3-01/report.md",
+          "sha256": "8e529093da2347b0d97f6c37da62b4a5254b8c1b57761c7a1cf284a6696dafce"
+        }
+      ],
+      "observations": [
+        {
+          "id": "invalid",
+          "statement": "V2 failed before admissible timings; the exact original failing tensor remains unknown.",
+          "outcome": "invalid",
+          "evidence": "repair",
+          "selector": {
+            "contains": "Exact failing tensor remains UNKNOWN."
+          }
+        },
+        {
+          "id": "repair",
+          "statement": "V3 preserves full dormant prepare baselines and requires active reset0.",
+          "outcome": "positive",
+          "evidence": "repair",
+          "selector": {
+            "contains": "All otherwise\ndormant counter storage must exactly match the full prepare baseline"
+          }
+        },
+        {
+          "id": "repro",
+          "statement": "The later valid run reproduces how the old blanket rule would reject legitimate prepared state.",
+          "outcome": "negative",
+          "evidence": "valid",
+          "selector": {
+            "contains": "Reapplying the old v2 all-cnt-zero condition to this\nnew actual preparation would first fail at pw36/p1cnt/92"
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "A blanket zero rule can invalidate a measurement harness even when dormant monotonic state is semantically valid; this does not prove which tensor caused the original failure.",
+          "status": "unproven",
+          "observation_ids": [
+            "invalid",
+            "repair",
+            "repro"
+          ]
+        }
+      ],
+      "scope": "Pinned dispatch/source-bound active RQ and dormant storage, including offset aliases; unknown active protocols remain HOLD.",
+      "transfer_limits": [
+        "Do not weaken active reset0 or permit dormant changes.",
+        "The original unnamed failure is not retroactively identified as P1; invalid timings are never imported into v3."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "An active alias can mutate or a dormant allocation can change while the repaired contract still accepts it.",
+      "next_test": {
+        "question": "Can every future selected counter protocol be classified without weakening active or alias checks?",
+        "controls": [
+          "active reset0",
+          "nonzero dormant unchanged",
+          "offset alias",
+          "unknown persistent protocol HOLD"
+        ],
+        "discriminator": "Add a source-bound protocol fixture before admitting a new selected path, then mutate active, dormant and offset-only words and require rejection; record the first failing allocation with full baseline/final values.",
+        "stop_rule": "HOLD unknown active protocols instead of zeroing state or admitting a guessed reset contract.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      },
+      "related_queue_ids": [
+        "smallm.cursor.v3.all5.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Only if the named discriminator succeeds inside the declared scope.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "CPU adversarial contract tests first; any GPU follow-up requires its own admitted descriptor.",
+        "cpu_minutes": 15,
+        "gpu_seconds": 0
+      },
+      "record_sha256": "6f1e6d119171812e56085416a87607ee67be4f690c7988c2de166b1331a4a872"
+    },
+    {
+      "id": "rq11-full-residency-ledger",
+      "version": 1,
+      "supersedes": null,
+      "title": "RQ11 payload savings can reverse when retained escape metadata is charged",
+      "tags": [
+        "RQ11",
+        "codec",
+        "escape",
+        "residency",
+        "bytes",
+        "CPU"
+      ],
+      "context": {
+        "experiment_id": "rq11 actual CPU reference v2",
+        "family": "lossless-weight-codec",
+        "parents": [
+          "rs32 stock lossless RQ12@a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad"
+        ],
+        "comparators": [
+          "RQ12 complete residency",
+          "RQ11 complete residency",
+          "same actual task weight bits",
+          "esc6 retained versus safely released"
+        ],
+        "hardware": {
+          "kind": "CPU",
+          "model": "CPU reference weights only"
+        },
+        "validity": "CPU_VALIDATED",
+        "disposition": "CPU_ACCOUNTING",
+        "sources": [
+          {
+            "path": "proj_rsi/tools/rq11_actualescape.py",
+            "role": "CPU reference ledger implementation",
+            "sha256": "b27e1cd5f815efc50c5dd393fa4d437ccdc6e778596d904550176af69c78cf52"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "bytes",
+          "path": "proj_rsi/candidates/rq11_actualescape/selected-geometry-summary.json",
+          "sha256": "594e6cb615163d498b83a4820e733a6f7eb65f5f09a18df248fdb902354d70e8"
+        },
+        {
+          "id": "scope",
+          "path": "proj_rsi/candidates/rq11_actualescape/README.md",
+          "sha256": "9fa8cb9098fee992a410dc8c94f31a59cee422a317bd297d4655866384abdcb5"
+        }
+      ],
+      "observations": [
+        {
+          "id": "packed",
+          "statement": "CPU QKV packed+ESC allocation saves bytes.",
+          "outcome": "positive",
+          "evidence": "bytes",
+          "selector": {
+            "json_pointer": "/selected_geometry_rows/0/net_bytes_saved",
+            "equals": 1069056
+          }
+        },
+        {
+          "id": "residency",
+          "statement": "CPU QKV residency including stock esc6 cache grows despite packed savings.",
+          "outcome": "negative",
+          "evidence": "bytes",
+          "selector": {
+            "json_pointer": "/selected_geometry_rows/0/net_residency_bytes_saved_with_stock_cache",
+            "equals": -11085360
+          }
+        },
+        {
+          "id": "transfer",
+          "statement": "CUDA fixture bit identity is explicitly unknown.",
+          "outcome": "neutral",
+          "evidence": "bytes",
+          "selector": {
+            "json_pointer": "/GPU_fixture_bit_identity",
+            "equals": "UNKNOWN_NOT_CLAIMED"
+          }
+        },
+        {
+          "id": "scope",
+          "statement": "CPU accounting must not become a GPU compression or speed claim.",
+          "outcome": "neutral",
+          "evidence": "scope",
+          "selector": {
+            "contains": "These numbers must not be relabelled as actual H100/H200 weight compression ratios or serving speed measurements."
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Retaining unneeded esc6 metadata may erase representation savings; reducing bytes may still lose to increased escape/decode work.",
+          "status": "unproven",
+          "observation_ids": [
+            "packed",
+            "residency",
+            "transfer",
+            "scope"
+          ]
+        }
+      ],
+      "scope": "Exact CPU reference matrices and complete payload/header/CSR/padding/cache ledger, not CUDA RNG-identical weights or execution.",
+      "transfer_limits": [
+        "No CPU-to-CUDA distribution transfer or bytes-to-time prediction.",
+        "Packed allocation, source-requested loads and retained residency are distinct ledgers; FP32 router is excluded."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Actual CUDA-weight full residency is not smaller after all retained metadata and equivalent lifetime requirements are charged.",
+      "next_test": {
+        "question": "Does RQ11 retain an actual GPU-fixture byte advantage after removing only provably dead preparation metadata?",
+        "controls": [
+          "RQ12 complete residency",
+          "RQ11 complete residency",
+          "same actual task weight bits",
+          "esc6 retained versus safely released"
+        ],
+        "discriminator": "Use the queued actual-escape accounting ROI to measure real CUDA-weight histograms/CAP and live allocations after prepare; separately test source-requested mover bytes and resident decode/escape costs only if net residency remains favorable.",
+        "stop_rule": "If total residency or requested-byte advantage vanishes, do not infer speed from raw11/12; retain the negative ledger and test another format.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      },
+      "related_queue_ids": [
+        "research.rq11.actualescape.readiness.01",
+        "research.rq11.actualescape.gpu.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Only if the named discriminator succeeds inside the declared scope.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "CPU full-byte audit precedes any GPU accounting reservation; new execution cost unknown.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "beb2ae179281131b431f90e312ed7cdcadcf8aa3a215ced146e418d28dcdf753"
+    },
+    {
+      "id": "prepare-selection-is-experiment",
+      "version": 1,
+      "supersedes": null,
+      "title": "Unchanged kernels with changed picks motivate bounded PW39 selection confirmation",
+      "tags": [
+        "prepare",
+        "selection",
+        "PW39",
+        "noise",
+        "bake",
+        "regression"
+      ],
+      "context": {
+        "experiment_id": "pw38.stack.fullscope.01 + smallm.cursor.v3.all5.01",
+        "family": "prepare-selection",
+        "parents": [
+          "PW38@29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+          "PW36@2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf"
+        ],
+        "comparators": [
+          "unchanged PW38 fullprepare",
+          "new PW39 confirmation",
+          "same kernel bodies",
+          "independent held-out fixtures"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/pw38/submission.py",
+            "role": "unchanged kernel/prepare parent",
+            "sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e"
+          },
+          {
+            "path": "proj_rsi/candidates/pw36/submission.py",
+            "role": "actual local comparator",
+            "sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "selection",
+          "path": "proj_rsi/audits/pw38-stack-01/report.md",
+          "sha256": "9a2824e75a7d35f6ee1d1dc5b7a1f0a037462cc78f7a25a1574be7880de9909d"
+        },
+        {
+          "id": "smallm",
+          "path": "proj_rsi/audits/smallm-v3-01/report.md",
+          "sha256": "8e529093da2347b0d97f6c37da62b4a5254b8c1b57761c7a1cf284a6696dafce"
+        }
+      ],
+      "observations": [
+        {
+          "id": "pooler",
+          "statement": "PW38 full policy regresses pooler32 through an existing non-EARLY choice.",
+          "outcome": "negative",
+          "evidence": "selection",
+          "selector": {
+            "contains": "It loses0.240us paired/0.192us F1 versus RS32 and0.128/0.128us versus PW36."
+          }
+        },
+        {
+          "id": "unchanged",
+          "statement": "A small positive observation can occur on an unchanged path and is not cursor evidence.",
+          "outcome": "positive",
+          "evidence": "smallm",
+          "selector": {
+            "contains": "all\nthree serve the unchanged GV15 kernel"
+          }
+        },
+        {
+          "id": "confound",
+          "statement": "Selected ST5/ST6 differences confound recurrence attribution.",
+          "outcome": "mixed",
+          "evidence": "smallm",
+          "selector": {
+            "contains": "the run establishes complete prepared-policy behavior, not isolated recurrence\nlatency."
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Close bake finalist selection variability may contribute to regressions even when common kernel instructions are unchanged; the specific noise source is unmeasured.",
+          "status": "unproven",
+          "observation_ids": [
+            "pooler",
+            "unchanged",
+            "confound"
+          ]
+        }
+      ],
+      "scope": "Actual full prepared policies and picks, not a forced-kernel code effect or proof of deterministic selector improvement.",
+      "transfer_limits": [
+        "Do not relabel unchanged-path wins as code gains or subtract cross-run minima.",
+        "PW39 is a new queued CPU/readiness idea, not a measured improvement; original prepare budget and full-stack validation remain required."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Repeated bounded confirmation selects the same or worse held-out serving policy, or consumes the prepare deadline advantage.",
+      "next_test": {
+        "question": "Does the actual PW39 bounded close-finalist confirmation reduce held-out selection regret within the existing prepare budget?",
+        "controls": [
+          "unchanged PW38 fullprepare",
+          "new PW39 confirmation",
+          "same kernel bodies",
+          "independent held-out fixtures"
+        ],
+        "discriminator": "Reference research.prepare.selection.pw39.readiness.01: freeze finalist lists and decision samples, confirm only close finalists, evaluate actual selected outputs on disjoint balanced fixtures, and report selection frequencies/regret plus full prepare wall time across repetitions.",
+        "stop_rule": "Reject a selector version if it exceeds budget or worsens held-out full-policy regret; never force the best observed kernel or reset prepare clocks to obtain a win.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      },
+      "related_queue_ids": [
+        "research.prepare.selection.pw39.readiness.01",
+        "pw38.stack.fullscope.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Only if the named discriminator succeeds inside the declared scope.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Existing PW39 readiness plan:60CPU minutes and600s follow-up GPU scenario, not new authorization.",
+        "cpu_minutes": 60,
+        "gpu_seconds": 600
+      },
+      "record_sha256": "57cd30c4cc101e897da3d2662fb23bfc2fbdf134308fb18aed785b6ff06c62e8"
+    },
+    {
+      "id": "prepare-selection-is-experiment",
+      "version": 2,
+      "supersedes": "57cd30c4cc101e897da3d2662fb23bfc2fbdf134308fb18aed785b6ff06c62e8",
+      "title": "Unchanged kernels with changed picks motivate bounded PW39 selection confirmation",
+      "tags": [
+        "prepare",
+        "selection",
+        "PW39",
+        "noise",
+        "bake",
+        "regression"
+      ],
+      "context": {
+        "experiment_id": "pw38.stack.fullscope.01 + smallm.cursor.v3.all5.01",
+        "family": "prepare-selection",
+        "parents": [
+          "PW38@29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+          "PW36@2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf"
+        ],
+        "comparators": [
+          "actual PW38 prepared policy",
+          "actual PW36 prepared policy",
+          "actual RS32 prepared policy",
+          "smallm-v3 actual prepared policy"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/pw38/submission.py",
+            "role": "unchanged kernel/prepare parent",
+            "sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e"
+          },
+          {
+            "path": "proj_rsi/candidates/pw36/submission.py",
+            "role": "actual local comparator",
+            "sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "selection",
+          "path": "proj_rsi/audits/pw38-stack-01/report.md",
+          "sha256": "9a2824e75a7d35f6ee1d1dc5b7a1f0a037462cc78f7a25a1574be7880de9909d"
+        },
+        {
+          "id": "smallm",
+          "path": "proj_rsi/audits/smallm-v3-01/report.md",
+          "sha256": "8e529093da2347b0d97f6c37da62b4a5254b8c1b57761c7a1cf284a6696dafce"
+        }
+      ],
+      "observations": [
+        {
+          "id": "pooler",
+          "statement": "PW38 full policy regresses pooler32 through an existing non-EARLY choice.",
+          "outcome": "negative",
+          "evidence": "selection",
+          "selector": {
+            "contains": "It loses0.240us paired/0.192us F1 versus RS32 and0.128/0.128us versus PW36."
+          }
+        },
+        {
+          "id": "unchanged",
+          "statement": "A small positive observation can occur on an unchanged path and is not cursor evidence.",
+          "outcome": "positive",
+          "evidence": "smallm",
+          "selector": {
+            "contains": "all\nthree serve the unchanged GV15 kernel"
+          }
+        },
+        {
+          "id": "confound",
+          "statement": "Selected ST5/ST6 differences confound recurrence attribution.",
+          "outcome": "mixed",
+          "evidence": "smallm",
+          "selector": {
+            "contains": "the run establishes complete prepared-policy behavior, not isolated recurrence\nlatency."
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Close bake finalist selection variability may contribute to regressions even when common kernel instructions are unchanged; the specific noise source is unmeasured.",
+          "status": "unproven",
+          "observation_ids": [
+            "pooler",
+            "unchanged",
+            "confound"
+          ]
+        }
+      ],
+      "scope": "Metadata correction of v1 context.comparators: PW39 confirmation and held-out fixtures are proposed next-test controls, not measured comparators. Actual full prepared policies and picks, not a forced-kernel code effect or proof of deterministic selector improvement.",
+      "transfer_limits": [
+        "Do not relabel unchanged-path wins as code gains or subtract cross-run minima.",
+        "PW39 is a new queued CPU/readiness idea, not a measured improvement; original prepare budget and full-stack validation remain required."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Repeated bounded confirmation selects the same or worse held-out serving policy, or consumes the prepare deadline advantage.",
+      "next_test": {
+        "question": "Does the actual PW39 bounded close-finalist confirmation reduce held-out selection regret within the existing prepare budget?",
+        "controls": [
+          "unchanged PW38 fullprepare",
+          "new PW39 confirmation",
+          "same kernel bodies",
+          "independent held-out fixtures"
+        ],
+        "discriminator": "Reference research.prepare.selection.pw39.readiness.01: freeze finalist lists and decision samples, confirm only close finalists, evaluate actual selected outputs on disjoint balanced fixtures, and report selection frequencies/regret plus full prepare wall time across repetitions.",
+        "stop_rule": "Reject a selector version if it exceeds budget or worsens held-out full-policy regret; never force the best observed kernel or reset prepare clocks to obtain a win.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      },
+      "related_queue_ids": [
+        "research.prepare.selection.pw39.readiness.01",
+        "pw38.stack.fullscope.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Only if the named discriminator succeeds inside the declared scope.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Existing PW39 readiness plan:60CPU minutes and600s follow-up GPU scenario, not new authorization.",
+        "cpu_minutes": 60,
+        "gpu_seconds": 600
+      },
+      "record_sha256": "78c2ea94c607aa37547436c8f5120e7a84d31a83723cbba68750922797b10317"
+    },
+    {
+      "id": "rq11-full-residency-ledger",
+      "version": 2,
+      "supersedes": "beb2ae179281131b431f90e312ed7cdcadcf8aa3a215ced146e418d28dcdf753",
+      "title": "RQ11 payload savings can reverse when retained escape metadata is charged",
+      "tags": [
+        "RQ11",
+        "codec",
+        "escape",
+        "residency",
+        "bytes",
+        "CPU"
+      ],
+      "context": {
+        "experiment_id": "rq11 actual CPU reference v2",
+        "family": "lossless-weight-codec",
+        "parents": [
+          "rs32 stock lossless RQ12@a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad"
+        ],
+        "comparators": [
+          "RQ12 exact CPU reference ledger",
+          "RQ11 exact CPU reference ledger",
+          "payload+ESC allocation versus retained esc6 residency accounting"
+        ],
+        "hardware": {
+          "kind": "CPU",
+          "model": "CPU reference weights only"
+        },
+        "validity": "CPU_VALIDATED",
+        "disposition": "CPU_ACCOUNTING",
+        "sources": [
+          {
+            "path": "proj_rsi/tools/rq11_actualescape.py",
+            "role": "CPU reference ledger implementation",
+            "sha256": "b27e1cd5f815efc50c5dd393fa4d437ccdc6e778596d904550176af69c78cf52"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "bytes",
+          "path": "proj_rsi/candidates/rq11_actualescape/selected-geometry-summary.json",
+          "sha256": "594e6cb615163d498b83a4820e733a6f7eb65f5f09a18df248fdb902354d70e8"
+        },
+        {
+          "id": "scope",
+          "path": "proj_rsi/candidates/rq11_actualescape/README.md",
+          "sha256": "9fa8cb9098fee992a410dc8c94f31a59cee422a317bd297d4655866384abdcb5"
+        }
+      ],
+      "observations": [
+        {
+          "id": "packed",
+          "statement": "CPU QKV packed+ESC allocation saves bytes.",
+          "outcome": "positive",
+          "evidence": "bytes",
+          "selector": {
+            "json_pointer": "/selected_geometry_rows/0/net_bytes_saved",
+            "equals": 1069056
+          }
+        },
+        {
+          "id": "residency",
+          "statement": "CPU QKV residency including stock esc6 cache grows despite packed savings.",
+          "outcome": "negative",
+          "evidence": "bytes",
+          "selector": {
+            "json_pointer": "/selected_geometry_rows/0/net_residency_bytes_saved_with_stock_cache",
+            "equals": -11085360
+          }
+        },
+        {
+          "id": "transfer",
+          "statement": "CUDA fixture bit identity is explicitly unknown.",
+          "outcome": "neutral",
+          "evidence": "bytes",
+          "selector": {
+            "json_pointer": "/GPU_fixture_bit_identity",
+            "equals": "UNKNOWN_NOT_CLAIMED"
+          }
+        },
+        {
+          "id": "scope",
+          "statement": "CPU accounting must not become a GPU compression or speed claim.",
+          "outcome": "neutral",
+          "evidence": "scope",
+          "selector": {
+            "contains": "These numbers must not be relabelled as actual H100/H200 weight compression ratios or serving speed measurements."
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Retaining unneeded esc6 metadata may erase representation savings; reducing bytes may still lose to increased escape/decode work.",
+          "status": "unproven",
+          "observation_ids": [
+            "packed",
+            "residency",
+            "transfer",
+            "scope"
+          ]
+        }
+      ],
+      "scope": "Metadata correction of v1 context.comparators: safe esc6 release and actual CUDA-weight comparison are future tests, not performed experiments. Exact CPU reference matrices and complete payload/header/CSR/padding/cache ledger, not CUDA RNG-identical weights or execution.",
+      "transfer_limits": [
+        "No CPU-to-CUDA distribution transfer or bytes-to-time prediction.",
+        "Packed allocation, source-requested loads and retained residency are distinct ledgers; FP32 router is excluded."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Actual CUDA-weight full residency is not smaller after all retained metadata and equivalent lifetime requirements are charged.",
+      "next_test": {
+        "question": "Does RQ11 retain an actual GPU-fixture byte advantage after removing only provably dead preparation metadata?",
+        "controls": [
+          "RQ12 complete residency",
+          "RQ11 complete residency",
+          "same actual task weight bits",
+          "esc6 retained versus safely released"
+        ],
+        "discriminator": "Use the queued actual-escape accounting ROI to measure real CUDA-weight histograms/CAP and live allocations after prepare; separately test source-requested mover bytes and resident decode/escape costs only if net residency remains favorable.",
+        "stop_rule": "If total residency or requested-byte advantage vanishes, do not infer speed from raw11/12; retain the negative ledger and test another format.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      },
+      "related_queue_ids": [
+        "research.rq11.actualescape.readiness.01",
+        "research.rq11.actualescape.gpu.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Only if the named discriminator succeeds inside the declared scope.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "CPU full-byte audit precedes any GPU accounting reservation; new execution cost unknown.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "d89e8697c8f14d26ac1cfe31c157491930ff211e3aa3c10fdc2f8de56cb5ee9e"
+    },
+    {
+      "id": "wring-mechanism-policy-separation",
+      "version": 1,
+      "supersedes": null,
+      "title": "W-ring tiny selected-policy gain coexists with negative equal-depth mechanism contrast",
+      "tags": [
+        "Wring",
+        "QKV128",
+        "barriers",
+        "lifetime",
+        "counter",
+        "incumbent",
+        "mixed",
+        "tiny-gain"
+      ],
+      "context": {
+        "experiment_id": "research.wring.rebase.gpu.01",
+        "family": "separate-W-ring",
+        "parents": [
+          "PW36 frozen2a067",
+          "historical rs128b mechanism only"
+        ],
+        "comparators": [
+          "actual LOCAL PW36 selected s4s5hz KS7",
+          "coupledX5W5",
+          "independentX5W5",
+          "independentX6W4"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/pw36/submission.py",
+            "role": "actual selected policy parent",
+            "sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf"
+          },
+          {
+            "path": "proj_rsi/candidates/pw36_wring_rebase/extension_source.cu",
+            "role": "three measured fixed arms",
+            "sha256": "1a614dcd721c6431900d25cc46fa3545110cfbed2d6dede6c940d5ad8c458443"
+          },
+          {
+            "path": "proj_rsi/tools/wring_rebase_lab.py",
+            "role": "frozen measurement and validity gates",
+            "sha256": "fd43d83540e2469be8bcd0d5c676b2a96c1ccbeab0e440b767603bcabd594924"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "analysis",
+          "path": "proj_rsi/audits/wring-rebase-01/analysis.json",
+          "sha256": "fbbfefe3a34c2e37a9fd23f888e280c07426478bbc2b004ba12e5e81d7f675eb"
+        },
+        {
+          "id": "report",
+          "path": "proj_rsi/audits/wring-rebase-01/report.md",
+          "sha256": "181466216a4dc9562e2a7b8d82616a97cbadfd286d75daf7c31cb5b71856708e"
+        }
+      ],
+      "observations": [
+        {
+          "id": "selected-policy-gain",
+          "statement": "Split versus actual selected PW36 is positive in both local F1 and paired estimators; gain is tiny and not robustness or transfer evidence.",
+          "outcome": "positive",
+          "evidence": "analysis",
+          "selector": {
+            "json_pointer": "/comparisons/incumbent_minus_split",
+            "equals": {
+              "F1_gain_us": 0.22399984300136566,
+              "paired_median_gain_us": 0.1759994775056839,
+              "paired_wins": 23
+            }
+          }
+        },
+        {
+          "id": "equal-depth-regression",
+          "statement": "Equal-depth independent full barriers plus40Bmetadata regress coupled at this configuration in both estimators.",
+          "outcome": "negative",
+          "evidence": "analysis",
+          "selector": {
+            "json_pointer": "/comparisons/coupled_minus_equal",
+            "equals": {
+              "F1_gain_us": -0.22399984300136566,
+              "paired_median_gain_us": -0.2400008961558342,
+              "paired_wins": 10
+            }
+          }
+        },
+        {
+          "id": "split-coupled-conflict",
+          "statement": "Split versus coupled reverses sign between F1 and paired; depth/footprint and barrier changes are coupled.",
+          "outcome": "mixed",
+          "evidence": "analysis",
+          "selector": {
+            "json_pointer": "/comparisons/coupled_minus_split",
+            "equals": {
+              "F1_gain_us": -0.03199838101863861,
+              "paired_median_gain_us": 0.19199959933757782,
+              "paired_wins": 26
+            }
+          }
+        },
+        {
+          "id": "same-main-context",
+          "statement": "Actual incumbent and coupled share exact main instruction stream yet show estimator-dependent context gap.",
+          "outcome": "mixed",
+          "evidence": "analysis",
+          "selector": {
+            "json_pointer": "/comparisons/incumbent_minus_coupled",
+            "equals": {
+              "F1_gain_us": 0.2559982240200043,
+              "paired_median_gain_us": 0.015999190509319305,
+              "paired_wins": 16
+            }
+          }
+        },
+        {
+          "id": "depth-comparison",
+          "statement": "Split beats equal in both estimators but changes both ring depths and shared-memory footprint.",
+          "outcome": "positive",
+          "evidence": "analysis",
+          "selector": {
+            "json_pointer": "/comparisons/equal_minus_split",
+            "equals": {
+              "F1_gain_us": 0.19200146198272705,
+              "paired_median_gain_us": 0.4479996860027313,
+              "paired_wins": 25
+            }
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Barrier separation alone may add synchronization/address cost at equal depth; depth rebalance might compensate, while pointer/allocation/capture context or order may explain some tiny gaps. These causal explanations remain unproven.",
+          "status": "unproven",
+          "observation_ids": [
+            "selected-policy-gain",
+            "equal-depth-regression",
+            "split-coupled-conflict",
+            "same-main-context",
+            "depth-comparison"
+          ]
+        }
+      ],
+      "scope": "QKV M128/N2304/K8192/KS7 complete single-main graphs on local H100. Equal-minus-coupled tests independent full barriers plus40Bmetadata at equal5/5depth. Split-minus-equal changes both depths and shared footprint. Actual-policy and mechanism contrasts are separate facts.",
+      "transfer_limits": [
+        "No H100-to-H200, component-to-whole-score, cross-run minimum or historicalgain addition.",
+        "No automatic serving selection/integration from fixed-arm graph timings; original prepare selection and budget remain separate gates.",
+        "Exact same main stream does not guarantee identical allocation/cache/capture context; no causal or robustness claim from32pairs.",
+        "Protocol is bounded two-WG source model with finite engine progress; archived output/counter arrays and SO are not retained for independent rerun."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "The selected-policy hypothesis weakens if split gains disappear/reverse under matched context and alternating order, or identical-main incumbent/coupled controls retain a systematic gap sufficient to explain the observation.",
+      "next_test": {
+        "question": "Does split retain a signed gain over actual selected PW36 after matching fixed-arm pointer/allocation roles and diagnosing identical-main control context?",
+        "controls": [
+          "actual original PW36 kernel_fn selection",
+          "coupledX5W5 and identical-main comparator with matched pointer roles",
+          "equalX5W5",
+          "splitX6W4"
+        ],
+        "discriminator": "Predeclare balanced same-fixture complete-graph timing with swapped matched pointer/allocation roles; retain identical-main context gap and all six causal contrasts, then compare split sign versus actual policy and coupled separately.",
+        "stop_rule": "Abort validity failure without timing admission; retain every tiny signed contrast and estimator conflict. A persistent same-main context gap requires harness diagnosis before attributing a mechanism win; no family retirement.",
+        "required_gates": [
+          "new frozen reviewed source if harness changes",
+          "exact actual JIT/graph identity and selected no-fallback policy",
+          "resource/co-resident-grid/protocol lifetime",
+          "basis FP64 and task probes",
+          "counter fullstorage identity active/dormant/guards",
+          "own-fixture terminal outputs before replay",
+          "all raw balanced timing samples and cleanup"
+        ]
+      },
+      "related_queue_ids": [
+        "research.wring.rebase.readiness.01",
+        "research.wring.rebase.review.01",
+        "research.wring.rebase.gpu.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "A separately admitted matched-context confirmation distinguishes mechanism from policy/context effects.",
+          "No extrapolated score or attainable speed gain is known."
+        ]
+      },
+      "cost": {
+        "basis": "Future matched-context source/review/runtime cost unknown; prior trial hardcaps240sinner/300souter are not a new reservation.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "8aed17de00967041aa8d8f3de9d75ba2adf3f9f8cadb3a2315c610cc2067b3ab"
+    }
+  ],
+  "ideas": [
+    {
+      "id": "idea.native-handoff-discriminator",
+      "version": 1,
+      "supersedes": null,
+      "title": "Which native shared-X handoff cost can explain the remaining incumbent gap?",
+      "tags": [
+        "native",
+        "TMA",
+        "DP",
+        "incumbent",
+        "overlap"
+      ],
+      "lesson_refs": [
+        "native-x-parent-progress@1"
+      ],
+      "existing_roi_ids": [
+        "native.profile.v1.01",
+        "native.x4.v1.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Separate observed parent progress from hypotheses about barrier/producer overlap; no traffic-to-time conversion.",
+      "discriminator": "Use the existing native profile ROI to compare isolated producer wait/read-completion intervals under identical stages; retain full graphs and distinguish phase evidence from elapsed-time attribution.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Measured benefit is unknown until this proposed test and all validity gates pass.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Proposed diagnostic scope; no new GPU reservation approved.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "fcfc6efd8d168db172e82f8a981c841a27b11a191affdf633fdd5484148a85e1"
+    },
+    {
+      "id": "idea.native-factorial-interaction",
+      "version": 1,
+      "supersedes": null,
+      "title": "Do X4 depth and producer STMatrix interact beyond timing variability?",
+      "tags": [
+        "composition",
+        "X4",
+        "STMatrix",
+        "additivity",
+        "noise"
+      ],
+      "lesson_refs": [
+        "composition-not-additivity@1"
+      ],
+      "existing_roi_ids": [
+        "native.x4.stmatrix.v1.01",
+        "native.stmatrix.v1.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Treat composition as a measured factorial question, not a source-level performance theorem.",
+      "discriminator": "Reuse all four cells and compute per-seed interaction (native-combo)-(native-X4)-(native-STMatrix), with repeated independently frozen trials; report the interaction distribution and F1 signs rather than adding marginal medians.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Measured benefit is unknown until this proposed test and all validity gates pass.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Proposed repetition; cost remains unknown until a concrete root-reviewed descriptor.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "5cb292c758374228f247819398d97fda6e3be181cd4c8d05b1696a7efeada8ce"
+    },
+    {
+      "id": "idea.eh-selected-confirmation",
+      "version": 1,
+      "supersedes": null,
+      "title": "Does bounded confirmation retain useful EH choices without forcing EH on mixed shapes?",
+      "tags": [
+        "EH",
+        "epilogue",
+        "tiny",
+        "official",
+        "bake",
+        "uncertainty"
+      ],
+      "lesson_refs": [
+        "eh-tiny-context-bound@1"
+      ],
+      "existing_roi_ids": [
+        "research.eh.samegeometry.gpu.01",
+        "pw38.stack.fullscope.01",
+        "research.prepare.selection.pw39.readiness.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Use scope-specific confirmation instead of a fixed tiny-gain kill bar.",
+      "discriminator": "Confirm close EH3 finalists against their actual selected comparator using balanced fresh-fixture rounds inside a fixed prepare budget; preserve QKV sign disagreement and unselected negative EH alternatives.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Measured benefit is unknown until this proposed test and all validity gates pass.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Existing fixed-geometry root bound600s is evidence of a past reservation, not permission for this proposed test.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "15263d006ed99fce903ac15e34cbc4ad59211b7c3177b3aa9305ec5e124d1ec5"
+    },
+    {
+      "id": "idea.counter-contract-admission",
+      "version": 1,
+      "supersedes": null,
+      "title": "Can every future selected counter protocol be classified without weakening active or alias checks?",
+      "tags": [
+        "counter",
+        "invariant",
+        "dormant",
+        "alias",
+        "validity"
+      ],
+      "lesson_refs": [
+        "counter-contract-not-name@1"
+      ],
+      "existing_roi_ids": [
+        "smallm.cursor.v3.all5.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Make counter semantics a reusable pre-measurement contract with physical allocation identity.",
+      "discriminator": "Add a source-bound protocol fixture before admitting a new selected path, then mutate active, dormant and offset-only words and require rejection; record the first failing allocation with full baseline/final values.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Measured benefit is unknown until this proposed test and all validity gates pass.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "CPU adversarial contract tests first; any GPU follow-up requires its own admitted descriptor.",
+        "cpu_minutes": 15,
+        "gpu_seconds": 0
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "8c388bbc435bbb450d63b5584ec9808e185748dd6aade4a0eb3d90ff6d621dd3"
+    },
+    {
+      "id": "idea.rq11-live-residency-bound",
+      "version": 1,
+      "supersedes": null,
+      "title": "Does RQ11 retain an actual GPU-fixture byte advantage after removing only provably dead preparation metadata?",
+      "tags": [
+        "RQ11",
+        "codec",
+        "escape",
+        "residency",
+        "bytes",
+        "CPU"
+      ],
+      "lesson_refs": [
+        "rq11-full-residency-ledger@1"
+      ],
+      "existing_roi_ids": [
+        "research.rq11.actualescape.readiness.01",
+        "research.rq11.actualescape.gpu.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Separate dead-metadata lifetime cleanup, transfer reduction and escape decode cost before a fused kernel.",
+      "discriminator": "Use the queued actual-escape accounting ROI to measure real CUDA-weight histograms/CAP and live allocations after prepare; separately test source-requested mover bytes and resident decode/escape costs only if net residency remains favorable.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Measured benefit is unknown until this proposed test and all validity gates pass.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "CPU full-byte audit precedes any GPU accounting reservation; new execution cost unknown.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "a5beedb5455a3481853dee4c50108a51ef2ab00c0c7adf2c0b73e8ee46719a56"
+    },
+    {
+      "id": "idea.pw39-heldout-regret",
+      "version": 1,
+      "supersedes": null,
+      "title": "Does the actual PW39 bounded close-finalist confirmation reduce held-out selection regret within the existing prepare budget?",
+      "tags": [
+        "prepare",
+        "selection",
+        "PW39",
+        "noise",
+        "bake",
+        "regression"
+      ],
+      "lesson_refs": [
+        "prepare-selection-is-experiment@1"
+      ],
+      "existing_roi_ids": [
+        "research.prepare.selection.pw39.readiness.01",
+        "pw38.stack.fullscope.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Make bake selection itself the controlled experiment, with held-out policy evaluation.",
+      "discriminator": "Reference research.prepare.selection.pw39.readiness.01: freeze finalist lists and decision samples, confirm only close finalists, evaluate actual selected outputs on disjoint balanced fixtures, and report selection frequencies/regret plus full prepare wall time across repetitions.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Measured benefit is unknown until this proposed test and all validity gates pass.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Existing PW39 readiness plan:60CPU minutes and600s follow-up GPU scenario, not new authorization.",
+        "cpu_minutes": 60,
+        "gpu_seconds": 600
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "bbf731cfb0da9c387e24255854bf04840760e83933e14bfcb7db76747b45e226"
+    },
+    {
+      "id": "idea.wring-matched-context",
+      "version": 1,
+      "supersedes": null,
+      "title": "Does split retain a signed gain over actual selected PW36 after matching fixed-arm pointer/allocation roles and diagnosing identical-main control context?",
+      "tags": [
+        "Wring",
+        "QKV128",
+        "barriers",
+        "lifetime",
+        "counter",
+        "incumbent",
+        "mixed",
+        "tiny-gain"
+      ],
+      "lesson_refs": [
+        "wring-mechanism-policy-separation@1"
+      ],
+      "existing_roi_ids": [
+        "research.wring.rebase.readiness.01",
+        "research.wring.rebase.review.01",
+        "research.wring.rebase.gpu.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Separate equal-depth barrier mechanism, depth/resource rebalance and actual selected-policy context with identical-main controls.",
+      "discriminator": "Predeclare balanced same-fixture complete-graph timing with swapped matched pointer/allocation roles; retain identical-main context gap and all six causal contrasts, then compare split sign versus actual policy and coupled separately.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "A separately admitted matched-context confirmation distinguishes mechanism from policy/context effects.",
+          "No extrapolated score or attainable speed gain is known."
+        ]
+      },
+      "cost": {
+        "basis": "Future matched-context source/review/runtime cost unknown; prior trial hardcaps240sinner/300souter are not a new reservation.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "9def88e9560e050a99bd9488b347718264b754eaedcfe8c1fe5653dd7214d5a3"
+    },
+    {
+      "id": "idea.pw39-heldout-regret",
+      "version": 2,
+      "supersedes": "bbf731cfb0da9c387e24255854bf04840760e83933e14bfcb7db76747b45e226",
+      "title": "Does the actual PW39 bounded close-finalist confirmation reduce held-out selection regret within the existing prepare budget?",
+      "tags": [
+        "prepare",
+        "selection",
+        "PW39",
+        "noise",
+        "bake",
+        "regression"
+      ],
+      "lesson_refs": [
+        "prepare-selection-is-experiment@2"
+      ],
+      "existing_roi_ids": [
+        "research.prepare.selection.pw39.readiness.01",
+        "pw38.stack.fullscope.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Make bake selection itself the controlled experiment, with held-out policy evaluation.",
+      "discriminator": "Reference research.prepare.selection.pw39.readiness.01: freeze finalist lists and decision samples, confirm only close finalists, evaluate actual selected outputs on disjoint balanced fixtures, and report selection frequencies/regret plus full prepare wall time across repetitions.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Measured benefit is unknown until this proposed test and all validity gates pass.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Existing PW39 readiness plan:60CPU minutes and600s follow-up GPU scenario, not new authorization.",
+        "cpu_minutes": 60,
+        "gpu_seconds": 600
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "f013caae4f77c69b6dbacd1c1f3b83af9557f6928acb92aa3fb921742e851f52"
+    },
+    {
+      "id": "idea.rq11-live-residency-bound",
+      "version": 2,
+      "supersedes": "a5beedb5455a3481853dee4c50108a51ef2ab00c0c7adf2c0b73e8ee46719a56",
+      "title": "Does RQ11 retain an actual GPU-fixture byte advantage after removing only provably dead preparation metadata?",
+      "tags": [
+        "RQ11",
+        "codec",
+        "escape",
+        "residency",
+        "bytes",
+        "CPU"
+      ],
+      "lesson_refs": [
+        "rq11-full-residency-ledger@2"
+      ],
+      "existing_roi_ids": [
+        "research.rq11.actualescape.readiness.01",
+        "research.rq11.actualescape.gpu.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Separate dead-metadata lifetime cleanup, transfer reduction and escape decode cost before a fused kernel.",
+      "discriminator": "Use the queued actual-escape accounting ROI to measure real CUDA-weight histograms/CAP and live allocations after prepare; separately test source-requested mover bytes and resident decode/escape costs only if net residency remains favorable.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Measured benefit is unknown until this proposed test and all validity gates pass.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "CPU full-byte audit precedes any GPU accounting reservation; new execution cost unknown.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "f7347ba09f7a11a4fcdef7dbf830b0018b8965fbc2398b795f40e327069dbfcb"
+    }
+  ]
+}

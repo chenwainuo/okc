@@ -28,6 +28,11 @@ INPUTS={
  'native_x4':'proj_rsi/audits/native-x4-01/analysis.json',
  'pw38_local':'proj_rsi/audits/pw38-stack-01/analysis.json',
  'native_combo':'proj_rsi/audits/native-x4-stmatrix-01/analysis.json',
+ 'pw39_local':'proj_rsi/audits/pw39-stack-01/analysis.json',
+ 'pw40_local':'proj_rsi/audits/pw40-stack-01/analysis.json',
+ 'pw43_local':'proj_rsi/audits/pw43-runtime-independent.json',
+ 'pw43_brief':'proj_rsi/audits/pw43-refinement-brief.json',
+ 'pw38_profile_failure':'proj_rsi/audits/pw38-selected-profile-02/analysis.json',
 }
 # Curated source ancestry, supported by the source-map/official audit references.
 # Per-job selected routes are always parsed from that job, not copied from this map.
@@ -48,6 +53,8 @@ VERSION_STACKS={
  'rs32':('pw34 + rq16/32',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL,'pw34 + rq16/32; retains old RW router; no PW35 RTK'),
  'pw36':('pw35 + rs32 small-M branch',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK,'rs32 small-M branch + PW35 RTK router'),
  'pw37':('pw36 + smallm cursor',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK+['smallm_cursor'],'PW36 + cursor source only; NOT SCORED; cursor v3 has regressions'),
+ 'pw39':('pw38 + bounded prepare confirmation',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK+['optional_EH_bit16_no_cursor','bounded_prepare_confirmation'],'PW38 + bounded host prepare confirmation; kernel bodies unchanged; local paired/F1 conflict and official CHECK regression, REFINE not scored'),
+ 'pw40':('pw38 + narrow QKV W-ring contender',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK+['optional_EH_bit16_no_cursor','optional_QKV_wring_x6w4hz'],'PW38 + optional QKV128 X6/W4 contender, no PW39 confirmation; W-ring validated locally but selected nowhere; official CHECK is separate, not scored'),
  'pw38':('pw36 + rs32_eh_backport',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK+['optional_EH_bit16_no_cursor'],'PW36 + optional EH bit65536; excludes cursor; CPU only, NOT SCORED'),
 }
 
@@ -277,6 +284,51 @@ def build(root=ROOT):
     if best['job_id'] not in feature['score_tested_jobs']:feature['score_tested_jobs'].append(best['job_id'])
     if best['job_id'] not in feature['stack_tested_jobs']:feature['stack_tested_jobs'].append(best['job_id'])
    if feature['id']=='pw22/pw23/pw29h router128 progression':feature['currently_included']='Code retained as controls/fallback; RTK supersedes old selected RW at128/256 in current scored PW38.'
+ for version,jid in [('pw39','49d4063f97c14250'),('pw40','6c4eff6d63784f90')]:
+  data=inputs[version+'_local'];record=next((r for r in jobs if r['job_id']==jid),None)
+  folder=version+'-stack-01';aggregate=data['local_descriptive_geomean_control_over_'+version]['pw38']
+  finding={'id':version.upper()+' full-policy local validation + official check','immutable_id':'improvement.'+version+'.stack.fullscope.01','classification':'LOCAL_VALID_WITH_MIXED_SELECTION_EVIDENCE_OFFICIAL_CHECK_'+str(record['status'] if record else 'UNKNOWN').upper()+'_NOT_SCORED',
+   'in_rs32':'No','currently_included':'No; current scored best remains PW38','scope':'Local H100 full30-shape comparison plus distinct official CHECK, never a scored submission',
+   'finding':f"Local all4350 raw calls/30shapes/222 task checks/180 strict terminal oracles/360 mutations validated. Versus PW38, descriptive paired six-load GM control/candidate={aggregate['paired_marginal_median_sums_us']:.9f}; conservative F1 GM={aggregate['F1_conservative_sum_us']:.9f}. Every small shape win, tie, loss and both estimators are preserved below; ratios are local summaries, not official-score forecasts.",
+   'verification':'Source-bound complete local artifact reanalysis/independent review; actual prepare/JIT/counter/current-X/cleanup evidence retained.',
+   'evidence':[ref(root,p) for p in [paths[version+'_local'],'proj_rsi/audits/'+folder+'/report.md','proj_rsi/audits/'+version+'-stack-independent.json','proj_rsi/scheduling/validations/'+folder+'.json']],
+   'stacked_versions':[version],'stack_tested_jobs':[jid] if record and record['passed'] else [],'score_tested_jobs':[],'local_tested_attempt':data['job_id'],'official_check_jobs':[jid],
+   'official_check_status':record['status'] if record else None,'official_check_score_us':record['score_us'] if record else None,'missing_reason':'Official CHECK is distinct from scored release; pending/completed status does not establish isolated mechanism benefit.'}
+  if version=='pw39':
+   finding['classification']='VALID_LOCAL_PAIRED_GAIN_F1_LOSS_OFFICIAL_CHECK_REGRESSION_REFINE_NOT_SCORED'
+   finding['finding']+=' Bounded confirmation actually ran, but no serving-kernel source changed. Official CHECK49d4063f97c14250 passes9/9 at3212.6810592521706us, above PW38 best3198.6175079817267us. Root decision REFINE/not scored; this version is not a family kill.'
+   finding['next_action']='Retain opposite F1 result and official regression; diagnose selection/confirmation context with a new immutable version, do not score the losing check or retire the family.'
+  else:
+   finding['finding']+=' W-ring received70 successful host calls and runtime/JIT validation, but was SELECTED NOWHERE. QKV128 screen17.09us beats old nonEH17.15 by0.06 but loses actual EH16.83 by0.26. Whole-policy positive point estimates cannot be attributed to serving W-ring; no PW39 confirmation included.'
+   finding['next_action']='Await existing official CHECK6c4eff6d63784f90; do not copy local ratios into H200 score or infer W-ring causal gain. Preserve unselected contender and actual prepared policy.'
+   if record and record['status']=='done' and record['score_us'] is not None:
+    finding['classification']='VALID_LOCAL_POLICY_POINT_GAINS_WRING_UNSELECTED_OFFICIAL_CHECK_REGRESSION_REFINE_NOT_SCORED'
+    log_text=(root/record['log']['path']).read_text() if record['log'] else ''
+    import re
+    screen={match[1]:float(match[2]) for match in re.finditer(r'BAKE qkv_gate m=128 (rq:[^ ]+) ([0-9.]+)',log_text)}
+    done=re.search(r'PREP done in (\d+)s',log_text)
+    finding['official_prepare']={'total_seconds':int(done[1]) if done else None,'RQ_budget_skip_present':'skipped-budget' in log_text,'QKV128_screen_us':screen,'actual_QKV128_pick':next((p for p in record['actual_picks'] if p['layer']=='qkv_gate' and p['m']==128),None)}
+    finding['finding']+=' Official CHECK6c4eff6d63784f90 completed9/9 at '+str(record['score_us'])+'us, above PW38best3198.6175079817267us. All prepare phases completed; total '+str(finding['official_prepare']['total_seconds'])+'s, no RQ budget skip. H200 QKV128 W-ring17.12us loses old hinted nonEH16.67us; actual selection stays old hinted RQ. Root decision REFINE/not scored, not family retirement.'
+    finding['next_action']='Preserve full local positives, unselected W-ring, and official regression. Diagnose actual source/selection/phase costs in a new immutable version; no scoring of this losing check, no family kill.'
+  if record:
+   finding['evidence']+=[r for r in (record['raw'],record['log'],record['release_attestation']) if r]
+   finding['official_check_picks']=record['actual_picks']
+  findings.append(finding)
+  for shape in data['all_shapes']:
+   for control,comparison in shape['comparisons'].items():
+    gain=comparison['paired_control_minus_'+version+'_us'];f1=comparison['F1_control_minus_'+version+'_us'];wtl=comparison[version.upper()+'_wins_ties_losses']
+    local_observations.append({'observation_id':'paired.'+data['job_id']+'.'+shape['shape']+'.'+control,'attempt_id':data['job_id'],'version':version,'shape':shape['shape'],'control':control,'gain_us':gain,'F1_gain_us':f1,'paired_ratio':comparison['paired_median_control_over_'+version],'wins':wtl[0],'ties':wtl[1],'losses':wtl[2],'pairs':sum(wtl),'same_selected_plan':comparison['same_selected_plan_as_'+version],'hardware':'H100','result_sha256':data['result_sha256'],'evidence':ref(root,paths[version+'_local']),'shipping_gain':False})
+ # Local PW43 is not an official job; retain every signed shape contrast.
+ pw43=inputs['pw43_local']
+ findings.append({'id':'PW43 full-policy weighted Lt local regression','immutable_id':'improvement.pw43.stack.fullscope.01','classification':'VALID_LOCAL_FULL_POLICY_REGRESSION_NOT_SHIPPED','in_rs32':'No','currently_included':'No; NOT SHIPPED','scope':'Actual H100 local fullprepare against PW38; no official submission',
+  'finding':'4350 raw samples/30 shapes,222 numerical checks,180 terminal oracles and360 mutations validated. PW38 minus PW43 descriptive conditional local score: paired '+str(pw43['pw38_minus_pw43_local_score_estimate_us']['paired'])+'us; F1 '+str(pw43['pw38_minus_pw43_local_score_estimate_us']['F1'])+'us. Both regress; positive/tiny shape observations remain below. Only qkv256 confirmation completed; later cells expired. Not an official H200 score or isolated source causality.',
+  'verification':'Independent complete local validity audit; one prepare per source; repeat-prepare frequency/regret unknown; loaded SO bytes absent from collection.', 'stacked_versions':['pw43'],'stack_tested_jobs':['pw43.stack.fullscope.01'],'score_tested_jobs':[],'missing_reason':'Actual-incumbent fullpolicy regression; no official run invented.','next_action':'Use immutable PW43 refinement brief two-by-two accounting/comparator experiment; preserve actual-incumbent versus proxy distinction, unchanged original budgets and every raw sign.',
+  'evidence':[ref(root,paths['pw43_local']),ref(root,paths['pw43_brief']),ref(root,'proj_rsi/audits/pw43-runtime-independent.md')]})
+ for shape in pw43['all_shape_signed_contrasts']:
+  local_observations.append({'observation_id':'paired.pw43.stack.fullscope.01.'+shape['shape']+'.pw38','attempt_id':'pw43.stack.fullscope.01','version':'pw43','shape':shape['shape'],'control':'pw38','gain_us':shape['paired_pw38_minus_pw43_us'],'F1_gain_us':shape['F1_bracket_pw38_minus_pw43_us'],'paired_ratio':None,'wins':None,'ties':None,'losses':None,'pairs':None,'same_selected_plan':shape['picks']['pw38']==shape['picks']['pw43'],'hardware':'H100','result_sha256':pw43['result_sha256'],'evidence':ref(root,paths['pw43_local']),'shipping_gain':False})
+ findings.append({'id':'PW38 selected profile context repair and GV cluster failure','immutable_id':'improvement.pw38.selected.profile.context.01','classification':'INVALID_PROFILE_DIAGNOSIS_NO_COUNTER_OR_LATENCY_ADMISSION','in_rs32':'No','currently_included':'No serving change','scope':'H100 selected profile attempts; informational setup diagnosis only',
+  'finding':'Source revision2/jobv1 failed CUDA context metadata before prepare. Revision3/jobv2 repaired actual context and completed unchanged prepare73.931256s, then capture rc9/GV clusterLaunchFailed. Actual QKV1 S2/V0 uses SM90 DSM cluster barriers, not global-counter waiting. Missing postrange terminal/counter/cleanup fields invalidate all profile rows, including completed router rows. No admitted counter, latency gain or actual cause inferred.',
+  'verification':'Source-bound raw collection and independent CPU diagnosis; context repair is observed, recipe/replay/instrumentation cause remains hypothesis.','stacked_versions':[],'stack_tested_jobs':['pw38.selected.profile.v1.01','pw38.selected.profile.v2.02'],'score_tested_jobs':[],'missing_reason':'Incomplete strict terminal oracles; all exported counters diagnostic only.','next_action':'Review hardware-only metrics versus broad sections with same five actual graph nodes and all terminal gates; success implicates removed recipe without proving software-patch versus replay mechanism.', 'evidence':[ref(root,paths['pw38_profile_failure'])]})
  # Maintain observation IDs independent of row position and keep all tiny records.
  observations=[]
  for r in inputs['completeness']['positive_bake_samples_no_killbar_filter']:
@@ -318,6 +370,10 @@ def build(root=ROOT):
    'new_since_completeness_snapshot':name not in historical,'actual_serving_evidence':'Per-job actual picks/profiles; never infer selection from source presence.'}
   if name=='pw37':candidate['status']='CPU_SOURCE_STACK_NOT_SCORED; cursor v3 is not a demonstrated incremental win'
   if name=='pw38':candidate['status']=('PW38_SCORED_SUBMISSION_'+pw38_run['status'].upper()) if pw38_run else 'PW36_PLUS_OPTIONAL_EH_VALIDATED_LOCAL_OFFICIAL_CHECK_'+('PENDING' if check_pending else 'COMPLETED')+'_NOT_SCORED'
+  if name=='pw39':candidate['status']='OFFICIAL_CHECK_VALID_REGRESSION_REFINE_NOT_SCORED'
+  if name=='pw40':
+   official40=next((j for j in jobs if j['job_id']=='6c4eff6d63784f90'),None)
+   candidate['status']='OFFICIAL_CHECK_VALID_REGRESSION_REFINE_NOT_SCORED' if official40 and official40['status']=='done' else 'LOCAL_VALID_POLICY_POINT_GAINS_WRING_UNSELECTED_CHECK_PENDING_NOT_SCORED'
   if name=='pw38':candidate['description']='PW36 + optional EH, no cursor; full30-shape local validation complete with mixed observations; accepted official check is separate from leaderboard scoring.'
   candidate['review_and_manifest_refs']=[ref(root,str(p.relative_to(root))) for p in sorted(d.glob('*')) if p.is_file() and p.name in ('manifest.json','PROVENANCE.md','hypothesis.json','RESULTS.md')]
   candidate['named_source_components']=source_nodes(root/d/'submission.py') if (d/'submission.py').exists() else []
@@ -331,7 +387,7 @@ def build(root=ROOT):
   'history_sources_config':ref(root,'proj_rsi/history_sources.json'),'active_jobs_snapshot':source_config['active_jobs_snapshot'],'preserved_jobs_snapshots':source_config['jobs_snapshots'],'active_board_snapshot':source_config.get('active_board_snapshot'),'preserved_board_snapshots':source_config.get('board_snapshots',[]),'input_provenance':{k:ref(root,v) for k,v in paths.items()},'additional_evidence':[ref(root,p) for p in ['proj_rsi/audits/smallm-v3-01/report.md','proj_rsi/audits/native-stmatrix-01/report.md','proj_rsi/audits/native-x4-01/report.md']],
   'counts':{'active_API_snapshot_rows':active_snapshot_row_count,'all_official_jobs':len(jobs),'leaderboard_submissions':len(submissions),'checks':len(checks),'archived_jobs':len(jobs)-len(missing),'complete_profile_jobs':sum(r['archive_status']=='ARCHIVED_30_SHAPES' for r in jobs),'partial_profile_jobs':sum(r['archive_status']=='ARCHIVED_PARTIAL' for r in jobs),'no_archive_jobs':len(missing),'pending_no_archive_jobs':len(pending),'failed_no_archive_jobs':len(failed_missing),'feature_findings':len(findings),'positive_observations':len(observations),'preserved_original_positive_observations':224,'new_official_positive_observations':len(observations)-224,'new_official_positive_observations_by_job':{j['job_id']:sum(r['job']==j['job_id'] for r in observations) for j in jobs if any(r['job']==j['job_id'] and r['catalog_cohort']!='initial_45_job_audit' for r in observations)},'local_paired_observations':len(local_observations),'pending_scored_submissions':sum(r['status'] not in ('done','failed','cancelled') for r in submissions),'selected_positive_observations':len(selected_observations),'below_0_3us':sum(r['positive_bake_difference_us']<.3 for r in observations),'below_0_5us':sum(r['positive_bake_difference_us']<.5 for r in observations),'candidates':len(candidates)},
   'submissions':submissions,'checks':checks,'all_official_jobs':jobs,'improvements':findings,'positive_observations':observations,'selected_positive_observations':selected_observations,'local_paired_observations':local_observations,'candidates':candidates,
-  'pw38_latest_local':local,'native_composition_latest':combo,'cursor_v3_latest':inputs['cursor_v3'],'version_source_ancestry_comparisons':inputs['source_map']['named_AST_comparisons'],'historical_rs32_source_map':ref(root,paths['source_map']),'current_stack_view':current_view(root,best,inputs['source_map']),'current_exact_source_components':current_view(root,best,inputs['source_map'])['components'],'current_exact_selected_routes':current_view(root,best,inputs['source_map'])['routes'],
+  'pw39_latest_local':inputs['pw39_local'],'pw40_latest_local':inputs['pw40_local'],'pw38_latest_local':local,'native_composition_latest':combo,'cursor_v3_latest':inputs['cursor_v3'],'version_source_ancestry_comparisons':inputs['source_map']['named_AST_comparisons'],'historical_rs32_source_map':ref(root,paths['source_map']),'current_stack_view':current_view(root,best,inputs['source_map']),'current_exact_source_components':current_view(root,best,inputs['source_map'])['components'],'current_exact_selected_routes':current_view(root,best,inputs['source_map'])['routes'],
   'coverage_gaps':inputs['completeness']['coverage']['gaps']+['Failed check jobs without raw/source archive remain UNKNOWN: '+', '.join(failed_missing),'Pending accepted jobs awaiting archive remain separate: '+', '.join(pending),'Older PW34 current file hash does not establish exact historical bytes of each prepare-guard version.','The completeness cursor attempt01 finding is superseded by retained latest valid v3 result; both are preserved.']}
 
 def source_nodes(path):
@@ -396,7 +452,7 @@ def render(catalog):
  'proj_rsi/tables/all_official_jobs.csv':csv_text(catalog['all_official_jobs'],jobfields),
  'proj_rsi/tables/improvements.csv':csv_text(catalog['improvements'],['immutable_id','id','classification','currently_included','scope','finding','verification','stacked_versions','stack_tested_jobs','score_tested_jobs','missing_reason','next_action','evidence']),
  'proj_rsi/tables/positive_observations.csv':csv_text(catalog['positive_observations'],['observation_id','job','candidate','layer','m','mode','candidate_bake_us','logged_r6_control_us','positive_bake_difference_us','below_legacy_0_3us','below_legacy_0_5us','actual_final_pick','log','line','control_line','classification','feature_level','catalog_cohort']),
- 'proj_rsi/tables/local_observations.csv':csv_text(catalog['local_paired_observations'],['observation_id','attempt_id','version','control','gain_us','F1_gain_us','wins','pairs','hardware','result_sha256','shipping_gain','evidence']),
+ 'proj_rsi/tables/local_observations.csv':csv_text(catalog['local_paired_observations'],['observation_id','attempt_id','version','shape','control','gain_us','F1_gain_us','paired_ratio','wins','ties','losses','pairs','same_selected_plan','hardware','result_sha256','shipping_gain','evidence']),
  'proj_rsi/tables/candidates.csv':csv_text(catalog['candidates'],['immutable_id','candidate','parent','source','compiled_or_available_features','official_jobs','leaderboard_submitted','status','description','historical_summary_paths','new_since_completeness_snapshot']),
  }
  counts=catalog['counts']

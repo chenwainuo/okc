@@ -8,6 +8,7 @@ from contextlib import contextmanager
 from copy import deepcopy
 import fcntl
 import hashlib
+import hmac
 import json
 import os
 from pathlib import Path
@@ -48,10 +49,12 @@ def _sync_directory(path):
         os.close(fd)
 
 
-def _atomic(path, content):
+def _atomic(path, content, *, mode=None):
     temporary = path.with_name(path.name + '.tmp.' + uuid.uuid4().hex)
     try:
         with open(temporary, 'xb') as handle:
+            if mode is not None:
+                os.fchmod(handle.fileno(), mode)
             handle.write(content)
             handle.flush()
             os.fsync(handle.fileno())
@@ -79,6 +82,9 @@ class QueueStore:
         self.lock_path = self.directory / '.lock'
         self.wal_path = self.directory / 'events.jsonl'
         self.checkpoint_path = self.directory / 'checkpoint.json'
+        self.cache_path = self.directory / 'replay-cache.json'
+        self.cache_key_path = self.directory / '.replay-cache.key'
+        self._verified_prefix = None
         # Never unlink the lock inode, including during restart/recovery.
         self.lock_path.touch(exist_ok=True)
 
@@ -91,38 +97,154 @@ class QueueStore:
             finally:
                 fcntl.flock(handle, fcntl.LOCK_UN)
 
+    def _complete_wal(self):
+        """Preserve the original torn-tail recovery, before validating any record."""
+        size = self.wal_path.stat().st_size
+        if not size:
+            return 0
+        with self.wal_path.open('rb') as handle:
+            handle.seek(size - 1)
+            if handle.read(1) == b'\n':
+                return size
+            end = size
+            complete = 0
+            while end:
+                start = max(0, end - (1 << 16))
+                handle.seek(start)
+                block = handle.read(end - start)
+                index = block.rfind(b'\n')
+                if index >= 0:
+                    complete = start + index + 1
+                    break
+                end = start
+            handle.seek(complete)
+            tail = handle.read(size - complete)
+        evidence = self.directory / ('torn-final-' + hashlib.sha256(tail).hexdigest() + '.bin')
+        if not evidence.exists():
+            _atomic(evidence, tail)
+        with self.wal_path.open('r+b') as handle:
+            handle.truncate(complete)
+            handle.flush()
+            os.fsync(handle.fileno())
+        return complete
+
+    @staticmethod
+    def _record(line, sequence, number):
+        """The original authoritative per-event checksum/sequence/envelope checks."""
+        try:
+            entry = json.loads(line)
+            payload = entry['payload']
+            if hashlib.sha256(_json(payload)).hexdigest() != entry['sha256']:
+                raise ValueError('checksum mismatch')
+            if payload['sequence'] != sequence + 1:
+                raise ValueError('non-contiguous sequence')
+            candidate = payload['snapshot']
+            if candidate['version'] != 1 or candidate['sequence'] != payload['sequence'] or not isinstance(candidate['jobs'], dict):
+                raise ValueError('invalid snapshot envelope')
+            return candidate
+        except (ValueError, TypeError, KeyError) as error:
+            raise CorruptWAL('WAL record %d is corrupt; execution refused: %s' % (number, error)) from error
+
+    def _cache_key(self, *, create=False):
+        try:
+            with self.cache_key_path.open('rb') as handle:
+                key = handle.read(33)
+            if len(key) == 32:
+                return key
+        except OSError:
+            pass
+        if not create:
+            return None
+        key = os.urandom(32)
+        _atomic(self.cache_key_path, key, mode=0o600)
+        return key
+
+    def _cached_prefix(self, handle, size):
+        """Authenticate prior validation, rehash every prefix byte, bind actual last event.
+
+        The seal is a local cache attestation, not authentication against a malicious
+        queue-directory owner (who can also rewrite valid WAL events). Neither the
+        checkpoint nor a cache-supplied snapshot is ever used as authoritative state.
+        """
+        try:
+            with self.cache_path.open('rb') as cached:
+                raw = cached.read(4097)
+            if len(raw) > 4096:
+                return None
+            envelope = json.loads(raw)
+            if set(envelope) != {'payload', 'hmac_sha256'}:
+                return None
+            payload = envelope['payload']
+            key = self._cache_key()
+            if key is None or not hmac.compare_digest(hmac.new(key, _json(payload), hashlib.sha256).hexdigest(), envelope['hmac_sha256']):
+                return None
+            if set(payload) != {'version', 'bytes', 'sha256', 'sequence', 'last_start', 'last_sha256'} or payload['version'] != 1:
+                return None
+            offset, last, sequence = payload['bytes'], payload['last_start'], payload['sequence']
+            if not all(type(v) is int for v in (offset, last, sequence)) or not (0 <= last < offset <= size and sequence >= 1):
+                return None
+            handle.seek(0)
+            digest = hashlib.sha256()
+            remaining = offset
+            while remaining:
+                block = handle.read(min(1 << 20, remaining))
+                if not block:
+                    return None
+                digest.update(block)
+                remaining -= len(block)
+            if digest.hexdigest() != payload['sha256']:
+                return None
+            handle.seek(last)
+            line = handle.read(offset - last)
+            if not line.endswith(b'\n') or b'\n' in line[:-1] or hashlib.sha256(line).hexdigest() != payload['last_sha256']:
+                return None
+            state = self._record(line, sequence - 1, sequence)
+            handle.seek(offset)
+            return state, digest, offset, last, payload['last_sha256']
+        except (OSError, ValueError, TypeError, KeyError, AttributeError, RecursionError):
+            return None  # An optional cache never suppresses authoritative replay.
+
+    def _publish_prefix(self):
+        prefix = self._verified_prefix
+        if not prefix or not prefix['sequence']:
+            return
+        payload = {'version': 1, 'bytes': prefix['bytes'], 'sha256': prefix['digest'].hexdigest(),
+                   'sequence': prefix['sequence'], 'last_start': prefix['last_start'], 'last_sha256': prefix['last_sha256']}
+        try:
+            key = self._cache_key(create=True)
+            envelope = {'payload': payload, 'hmac_sha256': hmac.new(key, _json(payload), hashlib.sha256).hexdigest()}
+            _atomic(self.cache_path, _json(envelope) + b'\n')
+        except OSError:
+            pass  # WAL/checkpoint durability and operation results do not depend on cache writes.
+
     def _read(self):
         state = {'version': 1, 'sequence': 0, 'jobs': {}}
+        self._verified_prefix = None
         if not self.wal_path.exists():
+            self._verified_prefix = {'bytes': 0, 'digest': hashlib.sha256(), 'sequence': 0,
+                                     'last_start': 0, 'last_sha256': None}
             return state
-        raw = self.wal_path.read_bytes()
-        complete = raw.rfind(b'\n') + 1
-        if complete != len(raw):
-            tail = raw[complete:]
-            digest = hashlib.sha256(tail).hexdigest()
-            evidence = self.directory / ('torn-final-' + digest + '.bin')
-            if not evidence.exists():
-                _atomic(evidence, tail)
-            # Preserve first, then truncate only the incomplete final record.
-            with open(self.wal_path, 'r+b') as handle:
-                handle.truncate(complete)
-                handle.flush()
-                os.fsync(handle.fileno())
-            raw = raw[:complete]
-        for number, line in enumerate(raw.splitlines(), 1):
-            try:
-                entry = json.loads(line)
-                payload = entry['payload']
-                if hashlib.sha256(_json(payload)).hexdigest() != entry['sha256']:
-                    raise ValueError('checksum mismatch')
-                if payload['sequence'] != state['sequence'] + 1:
-                    raise ValueError('non-contiguous sequence')
-                candidate = payload['snapshot']
-                if candidate['version'] != 1 or candidate['sequence'] != payload['sequence'] or not isinstance(candidate['jobs'], dict):
-                    raise ValueError('invalid snapshot envelope')
-                state = candidate
-            except (ValueError, TypeError, KeyError) as error:
-                raise CorruptWAL('WAL record %d is corrupt; execution refused: %s' % (number, error)) from error
+        size = self._complete_wal()
+        with self.wal_path.open('rb') as handle:
+            cached = self._cached_prefix(handle, size)
+            if cached is None:
+                handle.seek(0)
+                digest, offset, last, last_sha = hashlib.sha256(), 0, 0, None
+            else:
+                state, digest, offset, last, last_sha = cached
+            starting_offset = offset
+            while offset < size:
+                line = handle.readline(size - offset)
+                if not line.endswith(b'\n'):
+                    raise CorruptWAL('WAL changed during locked replay; execution refused')
+                state = self._record(line, state['sequence'], state['sequence'] + 1)
+                last, last_sha = offset, hashlib.sha256(line).hexdigest()
+                digest.update(line)
+                offset += len(line)
+            self._verified_prefix = {'bytes': offset, 'digest': digest, 'sequence': state['sequence'],
+                                     'last_start': last, 'last_sha256': last_sha}
+        if cached is None or offset != starting_offset:
+            self._publish_prefix()
         return state
 
     def _commit(self, state, action, *, actor='controller', reason='', data=None):
@@ -131,6 +253,7 @@ class QueueStore:
                    'actor': actor, 'reason': reason, 'data': data, 'snapshot': state}
         record = _json({'payload': payload, 'sha256': hashlib.sha256(_json(payload)).hexdigest()}) + b'\n'
         new_file = not self.wal_path.exists()
+        previous_size = self.wal_path.stat().st_size if not new_file else 0
         with open(self.wal_path, 'ab') as handle:
             handle.write(record)
             handle.flush()
@@ -138,6 +261,23 @@ class QueueStore:
         if new_file:
             _sync_directory(self.directory)
         _atomic(self.checkpoint_path, _json(state) + b'\n')
+        prefix = self._verified_prefix
+        if prefix and prefix['bytes'] == previous_size and prefix['sequence'] == state['sequence'] - 1:
+            # Only strictly valid new events may extend an attested prefix, even
+            # if a private caller supplied a malformed snapshot to _commit.
+            try:
+                self._record(record, prefix['sequence'], state['sequence'])
+            except CorruptWAL:
+                self._verified_prefix = None
+                return
+            digest = prefix['digest'].copy()
+            digest.update(record)
+            self._verified_prefix = {'bytes': previous_size + len(record), 'digest': digest,
+                                     'sequence': state['sequence'], 'last_start': previous_size,
+                                     'last_sha256': hashlib.sha256(record).hexdigest()}
+            self._publish_prefix()
+        else:
+            self._verified_prefix = None
 
     def snapshot(self):
         with self._locked():

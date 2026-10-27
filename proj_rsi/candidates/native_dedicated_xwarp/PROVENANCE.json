@@ -1,0 +1,78 @@
+{
+  "id": "native_dedicated_xwarp.v1",
+  "status": "CPU_FEASIBILITY_PASS_GPU_UNRUN",
+  "scope": {
+    "hardware": "H100 sm90a target only",
+    "M": 128,
+    "N": 8192,
+    "K": 4096,
+    "KS": 1,
+    "variant": [
+      128,
+      8,
+      1,
+      0,
+      0,
+      0,
+      20
+    ]
+  },
+  "learning_snapshot_sha256": "86617478ad3d82b318d181abe240b5e84547a415497e13ee6912aa5687eaf906",
+  "learning_query_sha256": "6ca6c8e9c39d7d653d25ec4ff0546977f9f7518566a9cec07cd8160d23352126",
+  "applied_learning": [
+    {
+      "id": "native-x-parent-progress@1",
+      "use": "Retain actual incumbent comparison; improvement over DP/DS alone is not promotion.",
+      "transfer_limits": "Local shape and hardware; no H200 or official aggregate inference; hardware raw mover bit roundtrip UNPROBED."
+    },
+    {
+      "id": "composition-not-additivity@1",
+      "use": "Source commutation and CPU proof do not establish additive performance.",
+      "transfer_limits": "No performance claim from resource fit or inverse."
+    },
+    {
+      "id": "idea.native-handoff-discriminator@1",
+      "use": "Proposed experiment separates refill scheduling from Wdecode; benefit/cost unknown.",
+      "status": "PROPOSED_UNEXECUTED"
+    }
+  ],
+  "facts": {
+    "prior_async_paired_us": 35.584,
+    "prior_native_paired_us": 31.76,
+    "prior_actual_incumbent_paired_us": 24.0,
+    "prior_async_vs_native_gain_us": -3.76,
+    "profile_math_Xfull_qualified_window_sample_percent": 38.41,
+    "profile_math_bar5_sample_percent": 13.09,
+    "profile_producer_Bempty_sample_percent": 43.68,
+    "profile_qualification": "PC sample shares are not microseconds or causal stall attribution. Xfull window includes interleaved arithmetic; per-node cache-all replay differs from normal pipeline."
+  },
+  "hypothesis": "W-producer Xempty waits can delay Wdecode; a dedicated issuer may remove that dependency while seven W warps preserve logical work.",
+  "discriminator": "Compare the whole current-X one-node pipeline against frozen async parent, native parent, and actual selected incumbent under the same strict terminal and balanced timing controls.",
+  "costs": [
+    "Warp12 serially decodes tile0 and tile3 on odd stages.",
+    "Warp12 preloads two independent CSR streams during startup.",
+    "Seven W warps and the dedicated X issuer may worsen producer balance despite decoupling."
+  ],
+  "distinct_unimplemented_alternatives": [
+    "Per-WG X half-rings/descriptors replacing mathbar5",
+    "Address preparation before Xfull wait"
+  ],
+  "external_evidence": {
+    "proj_rsi/candidates/rs32/submission.py": "a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad",
+    "proj_rsi/candidates/reverse_tma_x_async_refill/manifest.json": "92fbe73d6ed0bbe5d9b6165cfd0e9956494e1e97b48f6f38221739df584d60d2",
+    "proj_rsi/candidates/reverse_tma_x_async_refill/extension_source.cu": "45fbc8b600c6054c43e725b6b5f33b9194b61f5b602c583a7b9bb825ab325170",
+    "proj_rsi/candidates/reverse_tma_x_async_refill/kernel_body.cuh": "8707bc11b0c59dd8a188c6b49995b5d228d967330b78c4ae24d3bc980740a0b3",
+    "proj_rsi/candidates/reverse_tma_x/proofs.py": "2062c01afe73b7932154d257ea39d92b55dc32318461c56a312f38e8180e34dc",
+    "proj_rsi/candidates/operand_reverse_packed_x/preflight.py": "a0e154236f66fc9d8194261c17310d20e0aeb1d1ef453cfe2f9306d0569cd67b",
+    "proj_rsi/audits/async-refill-01/report.md": "4327ff0c15ffdbeab3b3344e7a01fa9de9c7fce4c733438dd1fb237e0529059f",
+    "proj_rsi/audits/native-profile-01/counter-report.md": "36f85203ebc486cc4bcb03aff6a69cb189fdacd2d82817230dd0baed608668e0",
+    "proj_rsi/audits/native-profile-01/counter-analysis.json": "9513ee3738b7f8f34b8de7545728543ab71afc91afb233a54fdc27913de9be51"
+  },
+  "runtime_gates_unrun": [
+    "actual extension JIT/canonical SASS",
+    "live CUDA attributes and occupancy",
+    "all numerical/current-W/basis/FP64/mutation/raw-bit/graph/counter/reset/immutability gates",
+    "balanced whole-pipeline paired/F1 comparisons",
+    "terminal timeout and cleanup"
+  ]
+}

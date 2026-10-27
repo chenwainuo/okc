@@ -1,0 +1,17 @@
+{
+  "version": "pw42-v1-loop-join-FAIL_RETAINED",
+  "state": "CPU_RESOURCE_FAILURE_GPU_UNRUN",
+  "source_sha256": "a9e97b0d7cd3a7d5fa0a64fe2b79f1de9190db86ca2f27cc2b41c11fdec962bb",
+  "files": {
+    "preflight.py": "c11564ad1b578d86f9df0923cdf7baa7f3d32dbd2adc27a11d44dec544637e1c",
+    "device.sm90a.cubin": "b04f0f7f1a27d24bc6b4cc2a4d3ed62e9d79690efbbb9ef857520eb3f18d088b",
+    "submission.py": "a9e97b0d7cd3a7d5fa0a64fe2b79f1de9190db86ca2f27cc2b41c11fdec962bb",
+    "build_patch.py": "8ac6a912f0bf551cb57cd479c9b556b310a7a7fa0fd77c67131a5e86e158a8f7",
+    "sass.txt": "ee157613e4fd364ec42f71a2c96a70ed43de3bdd00ef31843f984bd926711302",
+    "preflight.json": "a0dca1071eecff1abe83083035d858c88aca35efb92d817cc756edddc6e94102",
+    "device-resource.log": "a818e761123f2ca7c742df7f2bc7c49ff03feb9a1a58c9d425f7a62b72305562",
+    "delta.json": "0277a110d63bd55aab8c217db4e0ddbf4f1d08c95ded66a6d5046cd3b5721b17",
+    "device_source.cu": "e02da6847154e2ee4ec3a37f1b3c567024488d5db1da8288b8e3d607a1ef00ae"
+  },
+  "diagnosis": "Both guarded twins compile at64regs but8B stack,8B spillstores,56B spillloads; original generic arms have zero spill. New loop join extends address liveness; next version scopes startup/loop state inside branches and rejoins4float outputs. No timing admission or family rejection."
+}

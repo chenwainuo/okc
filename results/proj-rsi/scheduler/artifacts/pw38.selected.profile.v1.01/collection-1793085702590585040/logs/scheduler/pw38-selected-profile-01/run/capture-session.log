@@ -1,0 +1,21 @@
+==WARNING== Note: Running with unmodified GPU clocks. If not controlled otherwise, profiling results may be inconsistent.
+==PROF== Connected to process 21 (/opt/conda/bin/python3.11)
+Traceback (most recent call last):
+  File "/okc/proj_rsi/tools/pw38_selected_profile.py", line 328, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/okc/proj_rsi/tools/pw38_selected_profile.py", line 326, in main
+    if args.capture:capture(args)
+                    ^^^^^^^^^^^^^
+  File "/okc/proj_rsi/tools/pw38_selected_profile.py", line 110, in capture
+    result['hardware']=inspector.hardware();save()
+                       ^^^^^^^^^^^^^^^^^^^^
+  File "/okc/proj_rsi/candidates/pw38_selected_profile_trial/graph_metadata.py", line 28, in hardware
+    device=C.c_int();self.call('cuCtxGetDevice',C.byref(device))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/okc/proj_rsi/candidates/pw38_selected_profile_trial/graph_metadata.py", line 26, in call
+    rc=int(self.functions[name](*args));assert rc==0,(name,'CUDA metadata query',rc)
+                                               ^^^^^
+AssertionError: ('cuCtxGetDevice', 'CUDA metadata query', 201)
+==PROF== Disconnected from process 21
+==ERROR== The application returned an error code (1).

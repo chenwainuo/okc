@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "registry_version": 3,
+  "registry_version": 4,
   "lessons": [
     {
       "id": "native-x-parent-progress",
@@ -2207,6 +2207,318 @@
         "cpu_minutes": null,
         "gpu_seconds": null
       }
+    },
+    {
+      "id": "pw43-weighted-deadline-fallback-actual",
+      "version": 1,
+      "supersedes": null,
+      "title": "Whole prepare admission must preserve the actual incumbent, not just beat torch",
+      "tags": [
+        "prepare-selection",
+        "actual-control",
+        "validity",
+        "local"
+      ],
+      "context": {
+        "experiment_id": "pw43.stack.fullscope.01",
+        "family": "prepare-selection",
+        "parents": [
+          "scored PW38 source29e557ea53f3"
+        ],
+        "comparators": [
+          "actual independently prepared PW38",
+          "preserved earlier attempt where applicable"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local132SM"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_REGRESSION",
+        "sources": [
+          {
+            "path": "proj_rsi/audits/pw43-runtime-independent.json",
+            "sha256": "64ea22006a78b9c4737bcdec97d4e18fc80fe689a3041f5785a6e1de732c9bec",
+            "role": "immutable outcome/source-bound independent audit"
+          },
+          {
+            "path": "proj_rsi/audits/pw43-refinement-brief.json",
+            "sha256": "ca2399efc0040bfcec7d1b7033f104c43977b47a7d8c1cc572c991edc3aad35c",
+            "role": "immutable outcome/source-bound independent audit"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "pw43",
+          "path": "proj_rsi/audits/pw43-runtime-independent.json",
+          "sha256": "64ea22006a78b9c4737bcdec97d4e18fc80fe689a3041f5785a6e1de732c9bec"
+        },
+        {
+          "id": "brief",
+          "path": "proj_rsi/audits/pw43-refinement-brief.json",
+          "sha256": "ca2399efc0040bfcec7d1b7033f104c43977b47a7d8c1cc572c991edc3aad35c"
+        }
+      ],
+      "observations": [
+        {
+          "id": "paired",
+          "statement": "PW38 minus PW43 descriptive paired local score is negative; retain the regression.",
+          "outcome": "negative",
+          "evidence": "pw43",
+          "selector": {
+            "json_pointer": "/pw38_minus_pw43_local_score_estimate_us/paired",
+            "equals": -13.920680100907703
+          }
+        },
+        {
+          "id": "f1",
+          "statement": "F1 descriptive local aggregate also regresses.",
+          "outcome": "negative",
+          "evidence": "pw43",
+          "selector": {
+            "json_pointer": "/pw38_minus_pw43_local_score_estimate_us/F1",
+            "equals": -28.96615896054209
+          }
+        },
+        {
+          "id": "scope",
+          "statement": "4350 raw calls retained across30 shapes.",
+          "outcome": "neutral",
+          "evidence": "pw43",
+          "selector": {
+            "json_pointer": "/raw_samples",
+            "equals": 4350
+          }
+        },
+        {
+          "id": "expired",
+          "statement": "O confirmation actually had negative remaining time and returned incomplete.",
+          "outcome": "negative",
+          "evidence": "pw43",
+          "selector": {
+            "json_pointer": "/Lt_actual_confirmation/1/status",
+            "equals": "incomplete"
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Weighted admission consumed later-cell time; weak fallback versus torch may contribute, but selected-policy and timing changes are not isolated causal proof.",
+          "status": "unproven",
+          "observation_ids": [
+            "paired",
+            "f1",
+            "scope",
+            "expired"
+          ]
+        }
+      ],
+      "scope": "Local H100 only; no H200 forecast or official submission inferred.",
+      "transfer_limits": [
+        "No official run or H200 transfer established.",
+        "Do not convert profile samples or conditional local aggregate estimates into saved official time."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Use the immutable refinement brief two-by-two admission accounting x confirmation comparator arms, plus separately prepared actual PW38; charge all costly work to the original whole-Lt budget, preserve all signs and proxy-vs-actual differences.",
+      "next_test": {
+        "question": "Whole prepare admission must preserve the actual incumbent, not just beat torch",
+        "controls": [
+          "Frozen actual PW38 full prepare and source",
+          "Same selected graph nodes and strict validity gates"
+        ],
+        "discriminator": "Use the immutable refinement brief two-by-two admission accounting x confirmation comparator arms, plus separately prepared actual PW38; charge all costly work to the original whole-Lt budget, preserve all signs and proxy-vs-actual differences.",
+        "stop_rule": "Retain uncertainty on incomplete or conflicting evidence; no forced winner or family rejection.",
+        "required_gates": [
+          "Source/JIT identity and all numerical/terminal/current-input/counter/cleanup checks",
+          "Independent review and root hardware authorization before execution"
+        ]
+      },
+      "related_queue_ids": [
+        "pw43.stack.fullscope.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "No measured future gain or hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Future test not quoted or scheduled by this backfill.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "903e1be2e65c065db21b8a96b8378af65c262d206e52c3c8072d1fd71f2a3e6d"
+    },
+    {
+      "id": "selected-profile-context-cluster-failure",
+      "version": 1,
+      "supersedes": null,
+      "title": "A repaired CUDA metadata context does not validate a failed clustered profile",
+      "tags": [
+        "selected-profile",
+        "actual-control",
+        "validity",
+        "local"
+      ],
+      "context": {
+        "experiment_id": "pw38.selected.profile.v1.01 + pw38.selected.profile.v2.02",
+        "family": "selected-profile",
+        "parents": [
+          "scored PW38 source29e557ea53f3"
+        ],
+        "comparators": [
+          "actual independently prepared PW38",
+          "preserved earlier attempt where applicable"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local132SM"
+        },
+        "validity": "VALIDATED_DIAGNOSIS",
+        "disposition": "INVALID_SETUP",
+        "sources": [
+          {
+            "path": "results/proj-rsi/scheduler/artifacts/pw38.selected.profile.v1.01/collection-1793085702590585040/logs/scheduler/pw38-selected-profile-01/run/capture.json",
+            "sha256": "d85f4c5e3f7ad90b293bdf40ff4da96a726bd5c41552e5a1dc7e9b829d945d6e",
+            "role": "immutable outcome/source-bound independent audit"
+          },
+          {
+            "path": "proj_rsi/audits/pw38-selected-profile-02/analysis.json",
+            "sha256": "701f9211e470b681ab01acfc12b040a20b3bc435abfeec42777561dca636d077",
+            "role": "immutable outcome/source-bound independent audit"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "old",
+          "path": "results/proj-rsi/scheduler/artifacts/pw38.selected.profile.v1.01/collection-1793085702590585040/logs/scheduler/pw38-selected-profile-01/run/capture.json",
+          "sha256": "d85f4c5e3f7ad90b293bdf40ff4da96a726bd5c41552e5a1dc7e9b829d945d6e"
+        },
+        {
+          "id": "profile",
+          "path": "proj_rsi/audits/pw38-selected-profile-02/analysis.json",
+          "sha256": "701f9211e470b681ab01acfc12b040a20b3bc435abfeec42777561dca636d077"
+        }
+      ],
+      "observations": [
+        {
+          "id": "old-invalid",
+          "statement": "Source revision2/jobv1 failed before prepare and admitted no profile.",
+          "outcome": "invalid",
+          "evidence": "old",
+          "selector": {
+            "json_pointer": "/status",
+            "equals": "INVALID_SELECTED_PROFILE_NO_COUNTER_ADMISSION"
+          }
+        },
+        {
+          "id": "context",
+          "statement": "Revision3/jobv2 completed actual unchanged prepare73.931s after explicit context establishment.",
+          "outcome": "positive",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/prepare/wall_seconds",
+            "equals": 73.93125629425049
+          }
+        },
+        {
+          "id": "capture",
+          "statement": "Capture failed rc9; no counter or latency admission.",
+          "outcome": "invalid",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/capture_returncode",
+            "equals": 9
+          }
+        },
+        {
+          "id": "terminal",
+          "statement": "All profile terminal oracle/counter/cleanup fields are missing, including router; raw rows remain diagnostic only.",
+          "outcome": "invalid",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/missing_terminal_fields",
+            "equals": [
+              "actual_post_range_oracles",
+              "post_range_counter_contract",
+              "graph_cleanup"
+            ]
+          }
+        },
+        {
+          "id": "route",
+          "statement": "Actual qkv1 is S2/V0 SM90 DSM cluster reduction, not global-counter waiting.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/source_bound_qkv1/route",
+            "equals": "SM90 two-CTA cluster DSM reduction; no gvcnt last-arriver protocol"
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Unknown. Cluster launch/replay/instrumentation/resource incompatibility is a hypothesis. No evidence proves software-patch reduced residency; no global counter wait exists in the selected route.",
+          "status": "unproven",
+          "observation_ids": [
+            "old-invalid",
+            "context",
+            "capture",
+            "terminal",
+            "route"
+          ]
+        }
+      ],
+      "scope": "Local H100 only; no H200 forecast or official submission inferred.",
+      "transfer_limits": [
+        "No official run or H200 transfer established.",
+        "Do not convert profile samples or conditional local aggregate estimates into saved official time."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Replace broad sections with reviewed explicit launch attributes and hardware-counter metrics only; keep five selected direct graph nodes, kernel replay, original prepare and all terminal/current-X/counter/cleanup gates unchanged. All-five success localizes failure to removed collection recipe without uniquely proving software patching versus pass schedule; continued GV failure motivates isolated-case capture and graph/cluster replay support investigation.",
+      "next_test": {
+        "question": "A repaired CUDA metadata context does not validate a failed clustered profile",
+        "controls": [
+          "Frozen actual PW38 full prepare and source",
+          "Same selected graph nodes and strict validity gates"
+        ],
+        "discriminator": "Replace broad sections with reviewed explicit launch attributes and hardware-counter metrics only; keep five selected direct graph nodes, kernel replay, original prepare and all terminal/current-X/counter/cleanup gates unchanged. All-five success localizes failure to removed collection recipe without uniquely proving software patching versus pass schedule; continued GV failure motivates isolated-case capture and graph/cluster replay support investigation.",
+        "stop_rule": "Retain uncertainty on incomplete or conflicting evidence; no forced winner or family rejection.",
+        "required_gates": [
+          "Source/JIT identity and all numerical/terminal/current-input/counter/cleanup checks",
+          "Independent review and root hardware authorization before execution"
+        ]
+      },
+      "related_queue_ids": [
+        "pw38.selected.profile.v1.01",
+        "pw38.selected.profile.v2.02"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "No measured future gain or hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Future test not quoted or scheduled by this backfill.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "0b1412086eb2fda600b31e1b097055023a0400907a82d9d03db458567d44c702"
     }
   ],
   "ideas": [
@@ -2725,6 +3037,79 @@
       },
       "transfer_status": "unproven",
       "record_sha256": "72224594a99f848a6e3c95e0a206f259573f4dca8d67734af8214947fc14efdd"
+    },
+    {
+      "id": "idea.pw43-weighted-deadline-fallback-actual",
+      "version": 1,
+      "supersedes": null,
+      "title": "Whole prepare admission must preserve the actual incumbent, not just beat torch",
+      "tags": [
+        "prepare-selection",
+        "actual-control",
+        "validity",
+        "local"
+      ],
+      "lesson_refs": [
+        "pw43-weighted-deadline-fallback-actual@1"
+      ],
+      "existing_roi_ids": [
+        "pw43.stack.fullscope.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Weighted admission consumed later-cell time; weak fallback versus torch may contribute, but selected-policy and timing changes are not isolated causal proof.",
+      "discriminator": "Use the immutable refinement brief two-by-two admission accounting x confirmation comparator arms, plus separately prepared actual PW38; charge all costly work to the original whole-Lt budget, preserve all signs and proxy-vs-actual differences.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "No measured future gain or hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Future test not quoted or scheduled by this backfill.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "d92bcdc6f076d44c47dcab20fa003ac6c96fb869333167566322a3c8ec763946"
+    },
+    {
+      "id": "idea.selected-profile-context-cluster-failure",
+      "version": 1,
+      "supersedes": null,
+      "title": "A repaired CUDA metadata context does not validate a failed clustered profile",
+      "tags": [
+        "selected-profile",
+        "actual-control",
+        "validity",
+        "local"
+      ],
+      "lesson_refs": [
+        "selected-profile-context-cluster-failure@1"
+      ],
+      "existing_roi_ids": [
+        "pw38.selected.profile.v1.01",
+        "pw38.selected.profile.v2.02"
+      ],
+      "status": "proposed",
+      "mechanism": "Unknown. Cluster launch/replay/instrumentation/resource incompatibility is a hypothesis. No evidence proves software-patch reduced residency; no global counter wait exists in the selected route.",
+      "discriminator": "Replace broad sections with reviewed explicit launch attributes and hardware-counter metrics only; keep five selected direct graph nodes, kernel replay, original prepare and all terminal/current-X/counter/cleanup gates unchanged. All-five success localizes failure to removed collection recipe without uniquely proving software patching versus pass schedule; continued GV failure motivates isolated-case capture and graph/cluster replay support investigation.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "No measured future gain or hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Future test not quoted or scheduled by this backfill.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "03eb057d03096d361a98805961ee9ab11316c4573bd71b828c89e78443c4c131"
     }
   ]
 }
