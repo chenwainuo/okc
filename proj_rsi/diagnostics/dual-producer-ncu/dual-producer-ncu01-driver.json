@@ -1,0 +1,326 @@
+{
+  "status": "COUNTERS_CAPTURE_COMPLETE_EXPORT_REVIEW_REQUIRED",
+  "purpose": "COUNTERS_PC_ONLY_NO_PERFORMANCE_CLAIM",
+  "math_launches_started": true,
+  "phase": "IMMEDIATE_ORACLES_PASSED",
+  "source_sha256": "97dd5613f9dfe859c87bb62f21e6d9543c10cdc7fc7310c2e87e40246fb1cf3b",
+  "manifest_sha256": "281ff5a3ccc787ddeec466722d899f4b217c4d44248de0493188fb9b04718241",
+  "JIT_artifact": "/okc/logs/dual-producer-ncu01-driver.jit.sass",
+  "JIT_sha256": "bebe472634172ceb69c0a8d3df2c3555c70f89f421693b4d12dee847b2e7e746",
+  "physical_A4_gate": {
+    "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+    "binaries": [
+      {
+        "status": "PASS_PHYSICAL_A4_RETIREMENT",
+        "iterations": 2,
+        "groups": 8,
+        "A_register_sets": [
+          [
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119
+          ],
+          [
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103
+          ],
+          [
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87
+          ],
+          [
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71
+          ]
+        ],
+        "payload_or_conservative_A_writes_checked": 32,
+        "outlined_wait_paths_no_A_writes": [
+          12560,
+          12624,
+          12688,
+          12752
+        ],
+        "retirement_events": [
+          {
+            "iteration": 0,
+            "PC": 3712,
+            "retired_groups": 0
+          },
+          {
+            "iteration": 0,
+            "PC": 4592,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 0,
+            "PC": 5312,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 0,
+            "PC": 6064,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 3712,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 4592,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 5312,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 6064,
+            "retired_groups": 1
+          }
+        ],
+        "final": "wait0 retires lastgroup before epilogue",
+        "loop_PC_range": [
+          2992,
+          6288
+        ],
+        "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+      }
+    ]
+  },
+  "Bfull_and_role_PC_map": [
+    {
+      "function": "_Z8rq_px_dpILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_",
+      "math_warps": [
+        0,
+        7
+      ],
+      "producer_warps": [
+        8,
+        15
+      ],
+      "math_Bfull_waits": [
+        {
+          "fast_try_PC": "0xc80",
+          "fast_try": "SYNCS.PHASECHK.TRANS64.TRYWAIT P0, [R7+URZ+0x19030], R14",
+          "failed_entry_branch_PC": "0xcc0",
+          "failed_entry_branch": "@!P0 BRA 0x3110",
+          "outlined_target_PC": "0x3110",
+          "slow_try_PC": "0x3120",
+          "slow_try": "SYNCS.PHASECHK.TRANS64.TRYWAIT P0, [R7+URZ+0x19030], R14",
+          "failed_retry_branch_PC": "0x3130",
+          "failed_retry_branch": "@!P0 BRA 0x3110",
+          "ready_return": "BRA 0xcd0"
+        },
+        {
+          "fast_try_PC": "0xfb0",
+          "fast_try": "SYNCS.PHASECHK.TRANS64.TRYWAIT P0, [R15+URZ+0x19030], R14",
+          "failed_entry_branch_PC": "0x1030",
+          "failed_entry_branch": "@!P0 BRA 0x3150",
+          "outlined_target_PC": "0x3150",
+          "slow_try_PC": "0x3160",
+          "slow_try": "SYNCS.PHASECHK.TRANS64.TRYWAIT P0, [R15+URZ+0x19030], R14",
+          "failed_retry_branch_PC": "0x3170",
+          "failed_retry_branch": "@!P0 BRA 0x3150",
+          "ready_return": "BRA 0x1040"
+        },
+        {
+          "fast_try_PC": "0x1220",
+          "fast_try": "SYNCS.PHASECHK.TRANS64.TRYWAIT P1, [R8+URZ+0x19030], R15",
+          "failed_entry_branch_PC": "0x1290",
+          "failed_entry_branch": "@!P1 BRA 0x3190",
+          "outlined_target_PC": "0x3190",
+          "slow_try_PC": "0x31a0",
+          "slow_try": "SYNCS.PHASECHK.TRANS64.TRYWAIT P1, [R8+URZ+0x19030], R15",
+          "failed_retry_branch_PC": "0x31b0",
+          "failed_retry_branch": "@!P1 BRA 0x3190",
+          "ready_return": "BRA 0x12a0"
+        },
+        {
+          "fast_try_PC": "0x14f0",
+          "fast_try": "SYNCS.PHASECHK.TRANS64.TRYWAIT P1, [R15+URZ+0x19030], R14",
+          "failed_entry_branch_PC": "0x1570",
+          "failed_entry_branch": "@!P1 BRA 0x31d0",
+          "outlined_target_PC": "0x31d0",
+          "slow_try_PC": "0x31e0",
+          "slow_try": "SYNCS.PHASECHK.TRANS64.TRYWAIT P1, [R15+URZ+0x19030], R14",
+          "failed_retry_branch_PC": "0x31f0",
+          "failed_retry_branch": "@!P1 BRA 0x31d0",
+          "ready_return": "BRA 0x1580"
+        }
+      ],
+      "producer_owner_specific_barriers": {
+        "producer0_even_warps8..11": {
+          "PC": "0x2eb0",
+          "instruction": "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80"
+        },
+        "producer1_odd_warps12..15": {
+          "PC": "0x2e70",
+          "instruction": "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+        }
+      },
+      "math_fence_PCs": [
+        "0xd10",
+        "0x1070",
+        "0x12d0",
+        "0x1600"
+      ],
+      "math_retirement_wait1_PCs": [
+        "0xe80",
+        "0x11f0",
+        "0x14c0",
+        "0x17b0"
+      ],
+      "math_loop_X_LDG128_PCs": [
+        "0xef0",
+        "0xf00",
+        "0xf10",
+        "0xf20",
+        "0x15e0",
+        "0x1640",
+        "0x1650",
+        "0x1680",
+        "0x16a0",
+        "0x16b0",
+        "0x16e0",
+        "0x16f0",
+        "0x1820",
+        "0x1830",
+        "0x1840",
+        "0x1850"
+      ],
+      "math_loop_X_LDG128_instructions": [
+        "LDG.E.NA.128.CONSTANT R68, desc[UR12][R8.64]",
+        "LDG.E.NA.128.CONSTANT R64, desc[UR12][R8.64+0x200]",
+        "LDG.E.NA.128.CONSTANT R60, desc[UR12][R8.64+0x400]",
+        "LDG.E.NA.128.CONSTANT R56, desc[UR12][R8.64+0x600]",
+        "@!P2 LDG.E.NA.128.CONSTANT R116, desc[UR12][R10.64]",
+        "@!P2 LDG.E.NA.128.CONSTANT R112, desc[UR12][R10.64+0x200]",
+        "@!P2 LDG.E.NA.128.CONSTANT R108, desc[UR12][R10.64+0x400]",
+        "@!P2 LDG.E.NA.128.CONSTANT R104, desc[UR12][R10.64+0x600]",
+        "@!P3 LDG.E.NA.128.CONSTANT R100, desc[UR12][R6.64]",
+        "@!P3 LDG.E.NA.128.CONSTANT R96, desc[UR12][R6.64+0x200]",
+        "@!P3 LDG.E.NA.128.CONSTANT R92, desc[UR12][R6.64+0x400]",
+        "@!P3 LDG.E.NA.128.CONSTANT R88, desc[UR12][R6.64+0x600]",
+        "LDG.E.NA.128.CONSTANT R84, desc[UR12][R6.64]",
+        "LDG.E.NA.128.CONSTANT R80, desc[UR12][R6.64+0x200]",
+        "LDG.E.NA.128.CONSTANT R76, desc[UR12][R6.64+0x400]",
+        "LDG.E.NA.128.CONSTANT R72, desc[UR12][R6.64+0x600]"
+      ],
+      "initial_plus_loop_X_LDG128_site_count": 32,
+      "limit": "TRYWAIT is per-thread/potentially blocking; predicate counts show failed lanes, not initial readiness or exact warp retries without uniformity proof."
+    }
+  ],
+  "counter_preregistration": {
+    "variant": "DP: math warps0..7; producer0=8..11 even stages; producer1=12..15 odd",
+    "capture": "ONE fresh packed-X+DP graph, two selected nodes; no parent prepare or timing",
+    "sections_requested_externally": [
+      "LaunchStats",
+      "SourceCounters",
+      "MemoryWorkloadAnalysis_Tables",
+      "SchedulerStats",
+      "WarpStateStats",
+      "SpeedOfLight"
+    ],
+    "questions": [
+      "Do DP math Bfull TRYWAIT PCs still dominate samples after the measured producer-parallelism gain?",
+      "At exact failed-test entry/retry branch PCs, count Predicated-On Thread Instructions Executed; compare with Thread Instructions Executed for failed-lane fraction.",
+      "Separate actual failed tests/outlined-loop entry from TRYWAIT-site samples; successful first TRYWAIT may itself block until publication.",
+      "Compare current math X LDG, WGMMA fence/commit/wait PCs with Bfull and current producer Wfull/Bempty/bar3/bar4/CSR/store PCs.",
+      "Producer common PCs combine8warps and both owners; only source-proved owner-specific bar3/bar4 predicates distinguish those owners here."
+    ],
+    "preregistered_checks": [
+      "Bind report shader/source/launch to captured actual-JIT map; never reuse PX/old-DP hardcoded PC addresses.",
+      "For failed branches use Predicated-On Thread Instructions Executed, not Instructions Executed (which ignores predication).",
+      "Report failed-lane fraction as predicated-on thread count / total thread count at that branch when denominator exists.",
+      "Division by32 may be labeled warp-equivalent normalization only; per-thread try_wait without .sync does not formally prove per-instance uniform predicates.",
+      "Source/model predicts each of4math fast-test sites executes16iterations\u00d78mathwarps\u00d7128CTAs=16384warp instructions; use as coverage sanity check, not branch-taken count.",
+      "SourceCounters sampled TRYWAIT stalls alone do not prove producer starvation, initial barrier readiness, causal time or intrinsic instruction latency.",
+      "try_wait is potentially blocking until completion/system limit and has no explicit timeHint here: even no failed lanes cannot establish initially-ready Bfull.",
+      "Keep pack and DP main counters separate; node replay/cache flushing is profiling instrumentation, not whole-pipeline performance evidence."
+    ],
+    "limits": "One profiled graph gives counters/PC samples, not new F1/paired gain or a confidence interval. More producer warps alter denominators; samples are not microseconds."
+  },
+  "resources": {
+    "main_regs": 122,
+    "main_local": 0,
+    "dynamic_shared": 103600,
+    "max_dynamic_before": 49152,
+    "main_max_threads": 512,
+    "threads": 512,
+    "occupancy_after_optin": 1,
+    "max_dynamic_after": 103600,
+    "rounded_register_pool": 65536,
+    "pack_regs": 22,
+    "pack_local": 0,
+    "pack_max_threads": 1024
+  },
+  "immediate_selected_output_oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00",
+  "packed_bytes": "EXACT_ALL_1MiB",
+  "output_poison_overwritten": true,
+  "input_weights_pack_esc_immutable": true,
+  "counters": "ZERO",
+  "profile_nodes_expected": [
+    "rx_pack",
+    "rq_px_dp"
+  ],
+  "graph_cleanup": "RESET_AFTER_DRAIN"
+}

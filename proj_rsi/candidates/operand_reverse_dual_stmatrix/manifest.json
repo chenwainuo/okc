@@ -1,0 +1,54 @@
+{
+  "status": "CPU_DEVICE_PASS_FROZEN_INDEPENDENT_REVIEW_GPU_UNRUN",
+  "parent": "operand_reverse_dual_producer",
+  "parent_manifest_sha256": "281ff5a3ccc787ddeec466722d899f4b217c4d44248de0493188fb9b04718241",
+  "parent_source_sha256": "97dd5613f9dfe859c87bb62f21e6d9543c10cdc7fc7310c2e87e40246fb1cf3b",
+  "store_control_manifest_sha256": "2119b95e5789d4cc280f129d2817cc085e0ef0a1134bfcf2f63880e44afdefb7",
+  "source_sha256": "672dab448f74dbeecccd60b4070e8a6686c0533ae69f5827afd5a4283bb0cbd1",
+  "device_sha256": "327f35765720bbb56c630819854d5631f51637d4e73b11d089ad31bb2bd9167e",
+  "files": {
+    "prototype.py": "6aea46a12fb72abc873e73454bb273aba062c5fd903cc53900804e3ebeabc551",
+    "kernel_body.cuh": "8e2bf5426f4d50093a6479bb00e03471759b0c0c14810c3ab8e9667903ef70e3",
+    "layout_proof.py": "8e3cf92dd7334466b8fc35cbe9ec9ec872c14594979d25eb167e9a4d8013d968",
+    "liveness.py": "402eb10d97ab6a186647a498255755d6a4dc733852b0e984c6d75f5c55934dd5",
+    "protocol_proof.py": "f363e5dac73fa385049088c75ea2af4bd94eb9966b3b53f8a2eb9b2a2741ef05",
+    "protocol-proof.json": "48fadcb8b7b5e25a51538e9a267facb731cdaffcf5b30c0620ce5dd632c5a515",
+    "preflight.py": "8eaa12266779b0984a6cbe23723e21c5fdebdc38ecefc22526df14b4434d580a",
+    "preflight.json": "b63abb0d1a407fb3d1d3a27a861bd9379a4e109ba3984dee3335401ff77437ed",
+    "extension_source.cu": "672dab448f74dbeecccd60b4070e8a6686c0533ae69f5827afd5a4283bb0cbd1",
+    "device_source.cu": "327f35765720bbb56c630819854d5631f51637d4e73b11d089ad31bb2bd9167e",
+    "resource.log": "9bae9186d34ab478a74bcafe6e129daa214a5aaf3369253920f4ad4e97c4b7a5",
+    "sass.txt": "5e2e65397434ddf14ee844cd9b020b422c290043c8d92e76049d79a739582324",
+    "lab.py": "5afa5159e9f8986d05150607d658b38e574039028390d6e97f5c74edb9a87a4a",
+    "README.md": "6ffbc7dea63abafbd9a2b40ecd3343bd82a33ffe7a33aa09d5a20f2ff01d067c",
+    "checker-history/initial-liveness.py": "ce0ba14ddd6a3cbdc08e9f907256933412ce74b4866e04ac98de3770b7d96a29",
+    "checker-history/initial-preflight.json": "e096f548bb05e51946c3bd2f04899f8cc6bce0a883ca087b0ff78038ace8a1df",
+    "checker-history/README.md": "cc95a96a4265f0dc61e81792efeb0f933934f59104551f4de6c08405d95b78dc"
+  },
+  "policy": "Only decodedW scalar16STS->4STMatrix on frozen512thread DP; identical parity/CSR/W6B8/bar3+4/A4/Xpack/cache/geometry/output",
+  "comparison": [
+    "actual_pw36_incumbent",
+    "frozen_DP_bestfailed",
+    "frozen_STMX_control",
+    "new_dual_stmatrix"
+  ],
+  "runtime_budget_seconds": {
+    "inner": 240,
+    "outer": 300
+  },
+  "resource_gate": {
+    "main_registers_max": 128,
+    "rounded_register_pool_max": 65536,
+    "threads": 512,
+    "local_bytes": 0,
+    "shared_bytes": 103600,
+    "actual_optin_occupancy_min": 1
+  },
+  "GPU_gate": "ActualJIT A4 retirement and store/proxy/bothownerbarrier checks BEFORE first math; complete all4 oracles/20actualgraphs/15packedpoisons/all65536storage/immutability/counters/reset",
+  "incumbent_gain_gate_us": {
+    "F1": 0.5,
+    "paired_median": 0.5
+  },
+  "diagnosis_policy": "Progress vs predecessors retained even if incumbent wins; nonadditive result does not close family",
+  "parent_valid_result_sha256": "f6d272761ec59d751ce0e0ed5929bdb69ea669de25ffd4b79219812413dfee7e"
+}

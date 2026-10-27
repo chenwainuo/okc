@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-10-26T23:56:06.192261+00:00",
+  "updated_at_utc": "2026-10-27T01:25:38.007592+00:00",
   "goal_official_score_us_below": 3000,
   "incumbent": {
     "job": "fb548b5dc6f04696",
@@ -35,49 +35,35 @@
     "iteration_gpu": "H100@107.170.6.60",
     "gpu_serialization": "flock held inside named bounded container",
     "official_gpu": "H200 judge",
-    "check_quota_left": 0,
-    "scored_quota_left": 1,
-    "reset_utc": "2026-10-27T00:00:00Z",
-    "gpu_status": "Idle0MiBafterzero; packed-XphysicalregisterrepairandcompressionlayoutCPUfeasibilityparallel"
+    "check_quota_left": 20,
+    "scored_quota_left": 10,
+    "reset_utc": "2026-10-28T00:00:00Z",
+    "gpu_status": "Idle0MiBafterDS384187terminal01:15:42; DPNcu383540terminal01:10:47, rawsourceexportsarchived",
+    "quota_verified_utc": "2026-10-27T00:03:19.970407+00:00"
   },
   "ranked_open": [
     {
-      "id": "operand_reverse_packed_x",
-      "family": "operand_reverse",
-      "owner": "proj_tracks",
-      "status": "CPU_CORRECTNESS_REVISION_NATIVE_A4",
-      "hypothesis": "Freshpercall1MiBnativeAfragmentpackmovesXtransposeoutof128consumerCTAs, allowing4coalescedv4loads/noSHFLratherthanV1transposeorV2scalaramplification",
-      "predicted_observations": "Exactbitbijection/1MiBworkspace; main4vectorloads/64sectorinstances/noSHFL; two-nodecompletegraphwinsorloseswithpackfullyincluded",
-      "comparison": [
-        "actual_incumbent",
-        "best_failed_v1",
-        "v4_if_valid",
-        "pack_plus_main"
-      ],
-      "validity": "Everycallpackfresh; poisonworkspace+retainedoutput, freshXnormal/outlier/probes, allK/FP64/source/bytes/counters/lifetime; noinputcache",
-      "cost": "Extra1MiBlogicalread+1MiBwrite andonepacknodeperinvocation, memorysectortrafficmustmeasure",
-      "next": "CPUmap/inverse/overflow/lifetime/sourceandSASSresourceproof; independentreviewbeforeGPU",
-      "forecast": {
-        "attainable_gain": "UNKNOWN; largemechanismbutpackoverheadmayerasebenefit",
-        "information_value": "Separateamortizedlayoutconversionfromconsumerload/shufflecost",
-        "official_gain": "UNMEASURED"
-      },
       "rank": 1,
-      "observed_failure": "UnadmittedidentityrawQtoAcopymergedphysicalregisters; futureLDGoverwritesasyncA beforeconsumption/retirement despitezeroC75",
-      "plan_revision": "Preservefailedsource; useprovenretirednativeA4/3ahead; recordlookaheadconfound; repeatphysicalSASSgatebeforeGPU"
+      "id": "operand_reverse_fence_pair",
+      "owner": "proj_integration",
+      "status": "CPU_IMPLEMENTATION_AUTHORIZED",
+      "hypothesis": "FreshDPARRIVEdominates; batch2groupsperlegalper-registerfence, explicitprefetchretiredslots/lookahead3to2",
+      "next": "Fullphase/inputfencecoverage/physicalA4+Dgeneric/SASSfutureloadplacement/128regproof thenindependentGO"
     },
     {
-      "id": "hw_compression_reversible_layout",
-      "family": "hw_compression",
-      "owner": "proj_integration",
-      "status": "CPU_FEASIBILITY",
-      "hypothesis": "KnownzeroresponsebutnormalBF16flatpointsatpayloadpatternopportunity; bitexactreversiblecentering/zigzagorbyteplanesmayexposehomogeneouspatterns",
-      "next": "All65536bitinverseproof andactualrandomweightlocalpatterns/payload/decodecost, primarylimits; noGPUorservingrewriteyet",
-      "forecast": {
-        "attainable_gain": "UNKNOWN; mustbeatstock12bitpackedactualpathafterdecodecost",
-        "information_value": "Distinguishpatternlayoutopportunityfromworkingallocator/populationpath"
-      },
-      "rank": 2
+      "rank": 2,
+      "id": "dual_stmatrix_measure",
+      "owner": "proj_tracks",
+      "status": "FOCUSED_FIXED_SOURCE_MEASUREMENT_DESIGN",
+      "hypothesis": "ResolveDSblockedF1+.832usvsDPpaired-.256us; mode/order/variance unknown",
+      "next": "OnepredeterminedbalancedwholepipelineDPvsDS measurementwithallraw/mode/order; noincclaim"
+    },
+    {
+      "rank": 3,
+      "id": "K128_paired_stages",
+      "owner": "proj_tracks",
+      "status": "CPU_PLAN_ONLY_CONDITIONAL",
+      "next": "Beforeimplementationneedcost/resource/oldworkdistinction; pairingBpublication/A2lookaheadconfound"
     }
   ],
   "closed_this_takeover": [
@@ -199,7 +185,25 @@
       "decision": "CLOSE_UNCHANGED_POLICIES_NO_SHAPE_MEETS_GAIN_BAR"
     }
   ],
-  "hold": [],
+  "hold": [
+    {
+      "id": "HW_current_layouts",
+      "state": "PARKED_CURRENT_VERSIONS_NOT_FAMILY_BAN",
+      "evidence": "proj_rsi/audits/hw-compression-signlow-zero-result.md",
+      "reason": "Raw/byteplane/signlowflatdespitesame-readerzero~75%response; no>25%readcutneededtomatch12bitbaselinebeforeinversedecode/internalbytes",
+      "reopen": "Newrepresentationwithcrediblepayload-responseandfullinverse/mainresourceROIornewprimaryhardwareevidence; retainallversions"
+    },
+    {
+      "id": "PX_A6",
+      "state": "HOLD_COUNTER_EVIDENCE_PRIORITY",
+      "reason": "Freshdecoded-Bwait/publicationleading; A-fenceXattributionnotunique; testproducerfirst"
+    },
+    {
+      "id": "cooperative_pack_fusion",
+      "state": "PARKED_MARGINAL_ROI",
+      "reason": "Pack~2usprofilevsremaining~14usmain-gap; NCsamekernelcoherencyrequiresnewloadpolicy; resource/captureproofwouldbeneeded"
+    }
+  ],
   "verified_bases": [
     {
       "rank": 1,
@@ -305,8 +309,8 @@
     }
   ],
   "family_status": {
-    "operand_reverse": "ACTIVEv3afterv2regressionwithnewloaderhypothesis",
-    "hw_compression": "ACTIVEtrafficdiagnosisafternativevalidnogain; ownershipfixedproven",
+    "operand_reverse": "ACTIVEbestfailedDP34.496us; STMXandDPmeasuredprogress, composednext, officialincnotbeaten",
+    "hw_compression": "CurrentformatsPARKEDwithspecificreopeningROI; allocator/readobservervalidated; nofamilyimpossibilityclaim",
     "other_historical_failures": "Retained,lowerpriority; re-evaluatewithspecificprofilehypothesisratherthanblindlyrepeat."
   },
   "measured_versions": [
@@ -345,6 +349,37 @@
       },
       "result": "proj_rsi/candidates/operand_reverse_v3/operand-reverse-v301.json",
       "next": "V4addressworkcausaltest"
+    },
+    {
+      "status": "VALID_PARENT_PROGRESS_NO_INCUMBENT_GAIN",
+      "id": "operand_reverse_packed_x",
+      "F1_us": 39.64800015091896,
+      "gain_vs_parent_F1_us": 7.520001381635666,
+      "paired_gain_vs_inc_us": -15.840001404285431,
+      "result": "proj_rsi/candidates/operand_reverse_packed_x/operand-reverse-packed-x01.json"
+    },
+    {
+      "status": "VALID_PARENT_PROGRESS_NO_INCUMBENT_GAIN",
+      "id": "operand_reverse_stmatrix",
+      "F1_us": 38.27200084924698,
+      "gain_vs_parent_F1_us": 1.1839978396892548,
+      "paired_gain_vs_inc_us": -14.399999752640724,
+      "result": "proj_rsi/candidates/operand_reverse_stmatrix/operand-reverse-stmatrix01.json"
+    },
+    {
+      "id": "operand_reverse_dual_producer",
+      "status": "VALID_PREDECESSOR_PROGRESS_NO_INCUMBENT_GAIN",
+      "F1_us": 34.4959981739521,
+      "result": "proj_rsi/candidates/operand_reverse_dual_producer/operand-reverse-dual-producer01.json"
+    },
+    {
+      "id": "operand_reverse_dual_stmatrix",
+      "status": "VALID_MIXED_VS_DP_DIAGNOSE_METHOD_INTERACTION",
+      "F1_us": 33.59999880194664,
+      "F1_gain_vs_DP_us": 0.8320026099681854,
+      "paired_gain_vs_DP_us": -0.2559982240200043,
+      "paired_wins_vs_DP": "10/21",
+      "result": "proj_rsi/candidates/operand_reverse_dual_stmatrix/operand-reverse-dual-stmatrix01.json"
     }
   ],
   "completed_action_records": [
@@ -400,6 +435,121 @@
         "v1": -4.960000514984131,
         "incumbent": -28.416000306606293
       }
+    },
+    {
+      "id": "operand_reverse_packed_x",
+      "family": "operand_reverse",
+      "owner": "proj_tracks",
+      "status": "RUNNING_ACTUAL_JIT_GATE_AND_FOUR_WAY_WHOLE_PIPELINE",
+      "hypothesis": "Freshpercall1MiBnativeAfragmentpackmovesXtransposeoutof128consumerCTAs, allowing4coalescedv4loads/noSHFLratherthanV1transposeorV2scalaramplification",
+      "predicted_observations": "Exactbitbijection/1MiBworkspace; main4vectorloads/64sectorinstances/noSHFL; two-nodecompletegraphwinsorloseswithpackfullyincluded",
+      "comparison": [
+        "actual_incumbent",
+        "best_failed_v1",
+        "v4_if_valid",
+        "pack_plus_main"
+      ],
+      "validity": "Everycallpackfresh; poisonworkspace+retainedoutput, freshXnormal/outlier/probes, allK/FP64/source/bytes/counters/lifetime; noinputcache",
+      "cost": "Extra1MiBlogicalread+1MiBwrite andonepacknodeperinvocation, memorysectortrafficmustmeasure",
+      "next": "CPUmap/inverse/overflow/lifetime/sourceandSASSresourceproof; independentreviewbeforeGPU",
+      "forecast": {
+        "attainable_gain": "UNKNOWN; largemechanismbutpackoverheadmayerasebenefit",
+        "information_value": "Separateamortizedlayoutconversionfromconsumerload/shufflecost",
+        "official_gain": "UNMEASURED"
+      },
+      "rank": 1,
+      "observed_failure": "UnadmittedidentityrawQtoAcopymergedphysicalregisters; futureLDGoverwritesasyncA beforeconsumption/retirement despitezeroC75",
+      "plan_revision": "Preservefailedsource; useprovenretirednativeA4/3ahead; recordlookaheadconfound; repeatphysicalSASSgatebeforeGPU",
+      "expected_resources": {
+        "main_registers": 122,
+        "pack_registers": 22,
+        "local_bytes": 0
+      },
+      "negative_control": "FailedQ4A2SASSrejectedexact0xe30overwrite; snapshot538d5349preserved",
+      "actual_JIT_gate": "20scuobjdump+samephysicalcheckerbeforfirstmathlaunch",
+      "pid": 375811,
+      "container": "okc-proj-operand-reverse-packed-x01",
+      "inner_s": 240,
+      "outer_s": 300,
+      "manifest_sha256": "0420abd392bcb8fae64508f8c247bccec8f7fd7873777e6138e81543a48c94f4",
+      "source_sha256": "2c28de068a57235fcfec8af61a5678572ef76dc9833bc280e134623e8b6ff04a",
+      "review": "proj_rsi/audits/operand-reverse-packed-x-preflight.md",
+      "confound": "FreshpercallpacknativeA4threeahead vsV4fourahead; alloverheadincluded"
+    },
+    {
+      "id": "hw_compression_reversible_layout",
+      "family": "hw_compression",
+      "owner": "proj_integration",
+      "status": "FOUR_NODE_BYTEPLANES_FROZEN_INDEPENDENT_REVIEW",
+      "hypothesis": "KnownzeroresponsebutnormalBF16flatpointsatpayloadpatternopportunity; bitexactreversiblecentering/zigzagorbyteplanesmayexposehomogeneouspatterns",
+      "next": "One4node{rawWt,byteplanes64}x{GENERIC,NONE}fullspanvolatileuint4copydiagnostic; exactbytes/flags/graphs/resources/Region0; criticbeforeGPU",
+      "forecast": {
+        "attainable_gain": "UNKNOWN; mustbeatstock12bitpackedactualpathafterdecodecost",
+        "information_value": "Distinguishpatternlayoutopportunityfromworkingallocator/populationpath"
+      },
+      "rank": 2,
+      "inverse_cost_prior": "Byteplanes4PRMT/8weights; XOR~24ops/8, zigzag~48ops/8 vsstockrq~9ops/8; sourceestimatesnotSASS",
+      "CPU_pattern_limits": "4.19MCPUvaluesarenotactualGPUweights; all65536bitproofs; entropyunchanged10.46, zerosectorfraction0forall; nocompressionforecast",
+      "manifest_sha256": "8e3d6016f388d23616fec4fe4055ceefee99b2cba550ef3f437e3f481b52321e",
+      "driver": "proj_rsi/candidates/hw_compression_byteplanes/driver.py"
+    },
+    {
+      "rank": 1,
+      "id": "operand_reverse_dual_producer",
+      "family": "operand_reverse",
+      "owner": "root",
+      "status": "RUNNING_FOUR_WAY_INC_PX_STMX_DP",
+      "pid": 381876,
+      "container": "okc-proj-operand-reverse-dual-producer01",
+      "inner_s": 240,
+      "outer_s": 300,
+      "manifest_sha256": "281ff5a3ccc787ddeec466722d899f4b217c4d44248de0493188fb9b04718241",
+      "source_sha256": "97dd5613f9dfe859c87bb62f21e6d9543c10cdc7fc7310c2e87e40246fb1cf3b",
+      "review": "proj_rsi/audits/operand-reverse-dual-producer-independent.md",
+      "hypothesis": "UseheadroomfromPX122regstofit512threads/twoalternatingproducerWGs; moreproducerthroughputtargetsfreshBfullphase; sameWbytes/scalarstores/Xpack/mathA4",
+      "next": "ActualJITphysical/512maxthreads/rounded65536/0spill/occupancythenallK/20graphs15packpoisonand4waytiming",
+      "forecast": {
+        "gain": "UNKNOWN; fullpathmustbeatactual24usinc, currentSTMX38us",
+        "risk": "MetadataCSRsread2x; morethreads/registers mayoffsetproducerparallelism"
+      }
+    },
+    {
+      "rank": 1,
+      "id": "operand_reverse_dual_stmatrix",
+      "owner": "proj_tracks",
+      "status": "FROZEN_GO_QUEUED_AFTER_DPNCU",
+      "manifest_sha256": "6785da2ec9881ce13148951daff2f8802d8e7bbe6c83abf588607092b3f97072",
+      "hypothesis": "Composeindividuallyvalidproducerparallelism+storeissuechanges; actualfullpathadditivityunknown",
+      "next": "One4wayinc/DP/STMX/compositecompletepipeline; actualJIT512resource/lifetime/store/barriers/fullnumerics/workspaces"
+    },
+    {
+      "rank": 2,
+      "id": "dual_producer_ncu",
+      "owner": "proj_integration",
+      "status": "RUNNING_PC_MEMORY_DIAGNOSTIC",
+      "pid": 383540,
+      "container": "okc-proj-dual-producer-ncu01",
+      "driver_sha256": "65e8d9fda91c2b281f7a8b72a693b0f94f37ef1fd4d61fb2160b991a2dc65525",
+      "purpose": "FreshremainingBfull/fence/producerphase; predicatedfailedlanes!=initialreadiness; no latencyclaim"
+    },
+    {
+      "rank": 3,
+      "id": "fence_batching",
+      "owner": "proj_integration",
+      "status": "CPU_PRIMARY_ISA_FEASIBILITY_ONLY",
+      "next": "Per-registerfencerequirement/actualwaitmasks/lifetimeproofbeforeanyimplementation"
+    },
+    {
+      "rank": 4,
+      "id": "K128_paired_stages",
+      "owner": "proj_tracks",
+      "status": "CPU_FEASIBILITY_ONLY",
+      "next": "TwooldSW128planes/A2/206000Bshared/resource+lifetime+history, noimplementationyet"
     }
-  ]
+  ],
+  "best_failed_local": {
+    "id": "operand_reverse_dual_producer",
+    "F1_us": 34.4959981739521,
+    "reason": "ClearF1+pairedwinsoverPX/STMX; DScombinedF1winbutpairednegative10/21isnotnewbest"
+  }
 }

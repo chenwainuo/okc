@@ -1,0 +1,1223 @@
+{
+  "status": "DS_PROGRESS_DIAGNOSE_NEXT_LIMIT",
+  "parent_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "candidate_source_sha256": {
+    "dp": "97dd5613f9dfe859c87bb62f21e6d9543c10cdc7fc7310c2e87e40246fb1cf3b",
+    "smx": "cc4f5189bf0018a1e48941377b639b9c0983ffc2eb5cb6e44e6fa105f7d20b38",
+    "ds": "672dab448f74dbeecccd60b4070e8a6686c0533ae69f5827afd5a4283bb0cbd1"
+  },
+  "policy": "512threads/two alternating producerWGs with separatebar3/4+CSRskip; only scalar decodedWstores replaced by4STMatrix; sameWpack/mathA4/cache/pack/output",
+  "actual_JIT_SASS": {
+    "dp": {
+      "artifact": "/okc/logs/operand-reverse-dual-stmatrix01.dp.jit.sass",
+      "sha256": "bebe472634172ceb69c0a8d3df2c3555c70f89f421693b4d12dee847b2e7e746",
+      "module": "/root/.cache/torch_extensions/operand_reverse_dual_producer_97dd5613f9df/operand_reverse_dual_producer_97dd5613f9df.so",
+      "retirement_gate": {
+        "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+        "binaries": [
+          {
+            "status": "PASS_PHYSICAL_A4_RETIREMENT",
+            "iterations": 2,
+            "groups": 8,
+            "A_register_sets": [
+              [
+                104,
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112,
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119
+              ],
+              [
+                88,
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96,
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103
+              ],
+              [
+                72,
+                73,
+                74,
+                75,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87
+              ],
+              [
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70,
+                71
+              ]
+            ],
+            "payload_or_conservative_A_writes_checked": 32,
+            "outlined_wait_paths_no_A_writes": [
+              12560,
+              12624,
+              12688,
+              12752
+            ],
+            "retirement_events": [
+              {
+                "iteration": 0,
+                "PC": 3712,
+                "retired_groups": 0
+              },
+              {
+                "iteration": 0,
+                "PC": 4592,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 5312,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 6064,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 3712,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 4592,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 5312,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 6064,
+                "retired_groups": 1
+              }
+            ],
+            "final": "wait0 retires lastgroup before epilogue",
+            "loop_PC_range": [
+              2992,
+              6288
+            ],
+            "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+          }
+        ]
+      },
+      "store_form_gate": {
+        "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_OWNER_BARRIERS",
+        "binaries": [
+          {
+            "STSM": 0,
+            "scalar_STS": 32,
+            "fullwarp_unpredicated_STSM": false,
+            "last_producer_store_PC": 11808,
+            "proxy_fence_PC": 11840,
+            "producer_barriers_PC": {
+              "3": 11952,
+              "4": 11888
+            },
+            "owner_barrier_predicates": {
+              "same_predicate": "P0",
+              "complementary_bar3_bar4": true,
+              "instructions": [
+                "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80",
+                "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+              ],
+              "intervening_no_predicate_writer_instructions": [
+                "@!P0 WARPSYNC.ALL",
+                "@!P0 NOP",
+                "BSSY B0, 0x30d0"
+              ]
+            },
+            "shared_payload_bytes_per_stage": 8192,
+            "HGMMA": 16,
+            "X_LDG128": 32
+          }
+        ]
+      }
+    },
+    "smx": {
+      "artifact": "/okc/logs/operand-reverse-dual-stmatrix01.smx.jit.sass",
+      "sha256": "ac8e3807c5f0f0665907e0a71fd0e494a02641e2b7582ff84c21ca07912eb713",
+      "module": "/root/.cache/torch_extensions/operand_reverse_stmatrix_cc4f5189bf00/operand_reverse_stmatrix_cc4f5189bf00.so",
+      "retirement_gate": {
+        "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+        "binaries": [
+          {
+            "status": "PASS_PHYSICAL_A4_RETIREMENT",
+            "iterations": 2,
+            "groups": 8,
+            "A_register_sets": [
+              [
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70,
+                71
+              ],
+              [
+                72,
+                73,
+                74,
+                75,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87
+              ],
+              [
+                88,
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96,
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103
+              ],
+              [
+                104,
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112,
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119
+              ]
+            ],
+            "payload_or_conservative_A_writes_checked": 32,
+            "outlined_wait_paths_no_A_writes": [
+              11360,
+              11424,
+              11488,
+              11552
+            ],
+            "retirement_events": [
+              {
+                "iteration": 0,
+                "PC": 3632,
+                "retired_groups": 0
+              },
+              {
+                "iteration": 0,
+                "PC": 4512,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 5232,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 5984,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 3632,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 4512,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 5232,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 5984,
+                "retired_groups": 1
+              }
+            ],
+            "final": "wait0 retires lastgroup before epilogue",
+            "loop_PC_range": [
+              2912,
+              6208
+            ],
+            "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+          }
+        ]
+      },
+      "store_form_gate": {
+        "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_BAR3",
+        "binaries": [
+          {
+            "STSM": 4,
+            "scalar_STS": 16,
+            "fullwarp_unpredicated_STSM": true,
+            "last_producer_store_PC": 10672,
+            "proxy_fence_PC": 10704,
+            "bar3_PC": 10720,
+            "shared_payload_bytes_per_stage": 8192,
+            "HGMMA": 16,
+            "X_LDG128": 32
+          }
+        ]
+      }
+    },
+    "ds": {
+      "artifact": "/okc/logs/operand-reverse-dual-stmatrix01.ds.jit.sass",
+      "sha256": "145c56d97b81451c43cb025f8908687c447a64cef54af0b7dfd6ee9ef51b35fb",
+      "module": "/root/.cache/torch_extensions/operand_reverse_dual_stmatrix_672dab448f74/operand_reverse_dual_stmatrix_672dab448f74.so",
+      "retirement_gate": {
+        "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+        "binaries": [
+          {
+            "status": "PASS_PHYSICAL_A4_RETIREMENT",
+            "iterations": 2,
+            "groups": 8,
+            "A_register_sets": [
+              [
+                104,
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112,
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119
+              ],
+              [
+                88,
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96,
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103
+              ],
+              [
+                72,
+                73,
+                74,
+                75,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87
+              ],
+              [
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70,
+                71
+              ]
+            ],
+            "payload_or_conservative_A_writes_checked": 32,
+            "outlined_wait_paths_no_A_writes": [
+              11904,
+              11968,
+              12032,
+              12096
+            ],
+            "retirement_events": [
+              {
+                "iteration": 0,
+                "PC": 3712,
+                "retired_groups": 0
+              },
+              {
+                "iteration": 0,
+                "PC": 4592,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 5312,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 6064,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 3712,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 4592,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 5312,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 6064,
+                "retired_groups": 1
+              }
+            ],
+            "final": "wait0 retires lastgroup before epilogue",
+            "loop_PC_range": [
+              2992,
+              6288
+            ],
+            "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+          }
+        ]
+      },
+      "store_form_gate": {
+        "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_OWNER_BARRIERS",
+        "binaries": [
+          {
+            "STSM": 4,
+            "scalar_STS": 16,
+            "fullwarp_unpredicated_STSM": true,
+            "last_producer_store_PC": 11232,
+            "proxy_fence_PC": 11264,
+            "producer_barriers_PC": {
+              "3": 11296,
+              "4": 11280
+            },
+            "owner_barrier_predicates": {
+              "same_predicate": "P0",
+              "complementary_bar3_bar4": true,
+              "instructions": [
+                "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80",
+                "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+              ],
+              "intervening_no_predicate_writer_instructions": []
+            },
+            "shared_payload_bytes_per_stage": 8192,
+            "HGMMA": 16,
+            "X_LDG128": 32
+          }
+        ]
+      }
+    }
+  },
+  "attrs": {
+    "dp": {
+      "regs": 122,
+      "local": 0,
+      "smem": 103600,
+      "max_dynamic_before": 49152,
+      "occupancy_after_optin": 1,
+      "max_dynamic_after": 103600,
+      "threads": 512,
+      "rounded_register_pool": 65536,
+      "max_threads": 512,
+      "register_mode": "uniform static"
+    },
+    "smx": {
+      "regs": 122,
+      "local": 0,
+      "smem": 103600,
+      "max_dynamic_before": 49152,
+      "occupancy_after_optin": 1,
+      "max_dynamic_after": 103600,
+      "threads": 384,
+      "rounded_register_pool": 49152,
+      "register_mode": "uniform static"
+    },
+    "ds": {
+      "regs": 122,
+      "local": 0,
+      "smem": 103600,
+      "max_dynamic_before": 49152,
+      "occupancy_after_optin": 1,
+      "max_dynamic_after": 103600,
+      "threads": 512,
+      "rounded_register_pool": 65536,
+      "max_threads": 512,
+      "register_mode": "uniform static"
+    }
+  },
+  "packer_attrs": {
+    "dp": {
+      "regs": 22,
+      "local": 0,
+      "max_threads": 1024
+    },
+    "smx": {
+      "regs": 22,
+      "local": 0,
+      "max_threads": 1024
+    },
+    "ds": {
+      "regs": 22,
+      "local": 0,
+      "max_threads": 1024
+    }
+  },
+  "GPU_pack_all65536_BF16_storage_bits": {
+    "dp": "PASS_1MiB_EXACT_INPUT_IMMUTABLE_STORAGE_ONLY",
+    "smx": "PASS_1MiB_EXACT_INPUT_IMMUTABLE_STORAGE_ONLY",
+    "ds": "PASS_1MiB_EXACT_INPUT_IMMUTABLE_STORAGE_ONLY"
+  },
+  "validation": {
+    "dp": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 1.7e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "fixed_pointer_replay": "original",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "zero",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "fresh_outliers",
+        "status": "PASS"
+      }
+    ],
+    "smx": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 1.7e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "fixed_pointer_replay": "original",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "zero",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "fresh_outliers",
+        "status": "PASS"
+      }
+    ],
+    "ds": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 1.7e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "fixed_pointer_replay": "original",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "zero",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "fresh_outliers",
+        "status": "PASS"
+      }
+    ],
+    "incumbent": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 2.4e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 2.558e-03 (worst row 2.975e-03); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 2.836e-03 (worst row 3.009e-03); 16 probe rows exact to 0.0e+00"
+      }
+    ]
+  },
+  "fresh_workspace_and_output": {
+    "dp": {
+      "status": "PASS",
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00",
+      "workspace_bytes": 1048576
+    },
+    "smx": {
+      "status": "PASS",
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00",
+      "workspace_bytes": 1048576
+    },
+    "ds": {
+      "status": "PASS",
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00",
+      "workspace_bytes": 1048576
+    }
+  },
+  "incumbent_pick": {
+    "kind": "rq",
+    "variant": "s4s5hz",
+    "KS": 2
+  },
+  "timing": {
+    "F1_medians_us": {
+      "incumbent_before": 24.512000381946564,
+      "dp_before": 34.4959981739521,
+      "smx_before": 38.656000047922134,
+      "ds": 33.59999880194664,
+      "smx_after": 38.43199834227562,
+      "dp_after": 34.432001411914825,
+      "incumbent_after": 24.57600086927414
+    },
+    "F1_samples_us": {
+      "incumbent_before": [
+        24.25600029528141,
+        24.320000782608986,
+        25.18399991095066,
+        24.4159996509552,
+        24.607999250292778,
+        26.079999282956123,
+        24.191999807953835,
+        24.512000381946564,
+        24.224000051617622,
+        24.89599958062172,
+        24.639999493956566,
+        24.288000538945198,
+        24.288000538945198,
+        24.512000381946564,
+        24.480000138282776,
+        24.831999093294144,
+        25.119999423623085,
+        24.512000381946564,
+        25.760000571608543,
+        24.831999093294144,
+        24.57600086927414
+      ],
+      "dp_before": [
+        34.33600068092346,
+        35.071998834609985,
+        34.143999218940735,
+        34.20799970626831,
+        33.824000507593155,
+        34.4959981739521,
+        34.752000123262405,
+        33.63199904561043,
+        34.272000193595886,
+        33.92000123858452,
+        35.45600175857544,
+        36.288000643253326,
+        34.143999218940735,
+        35.232000052928925,
+        33.376000821590424,
+        35.16799956560135,
+        34.912001341581345,
+        34.912001341581345,
+        34.40000116825104,
+        35.42400151491165,
+        34.81600061058998
+      ],
+      "smx_before": [
+        38.7520007789135,
+        38.62399980425835,
+        38.68800029158592,
+        38.816001266241074,
+        38.7520007789135,
+        38.88000175356865,
+        38.495998829603195,
+        38.656000047922134,
+        38.784001022577286,
+        38.43199834227562,
+        38.43199834227562,
+        38.68800029158592,
+        38.72000053524971,
+        38.88000175356865,
+        38.656000047922134,
+        38.52799907326698,
+        38.656000047922134,
+        38.46399858593941,
+        38.46399858593941,
+        38.68800029158592,
+        38.43199834227562
+      ],
+      "ds": [
+        33.63199904561043,
+        32.92800113558769,
+        33.40800106525421,
+        32.735999673604965,
+        32.86400064826012,
+        32.607998698949814,
+        35.360001027584076,
+        35.071998834609985,
+        33.1839993596077,
+        34.752000123262405,
+        33.15199911594391,
+        33.88800099492073,
+        34.143999218940735,
+        35.32800078392029,
+        33.663999289274216,
+        33.59999880194664,
+        33.695999532938,
+        33.376000821590424,
+        33.215999603271484,
+        33.1839993596077,
+        34.97600182890892
+      ],
+      "smx_after": [
+        38.40000182390213,
+        38.55999931693077,
+        38.59199956059456,
+        38.59199956059456,
+        39.48799893260002,
+        38.55999931693077,
+        38.59199956059456,
+        38.30400109291077,
+        38.36800158023834,
+        38.59199956059456,
+        38.59199956059456,
+        38.36800158023834,
+        38.43199834227562,
+        38.40000182390213,
+        38.24000060558319,
+        38.336001336574554,
+        39.712000638246536,
+        38.11199963092804,
+        38.336001336574554,
+        38.52799907326698,
+        38.27200084924698
+      ],
+      "dp_after": [
+        33.695999532938,
+        34.432001411914825,
+        35.16799956560135,
+        34.52799841761589,
+        34.17599946260452,
+        33.344000577926636,
+        35.48799827694893,
+        34.97600182890892,
+        33.695999532938,
+        33.344000577926636,
+        34.2399999499321,
+        35.232000052928925,
+        33.63199904561043,
+        34.52799841761589,
+        34.272000193595886,
+        33.215999603271484,
+        35.679999738931656,
+        34.88000109791756,
+        34.65599939227104,
+        33.63199904561043,
+        35.58399900794029
+      ],
+      "incumbent_after": [
+        24.064000695943832,
+        24.768000468611717,
+        24.320000782608986,
+        25.696000084280968,
+        24.351999163627625,
+        24.512000381946564,
+        25.728000327944756,
+        24.512000381946564,
+        24.927999824285507,
+        24.480000138282776,
+        24.639999493956566,
+        23.93599972128868,
+        25.248000398278236,
+        25.472000241279602,
+        24.12799932062626,
+        24.191999807953835,
+        24.09599907696247,
+        24.57600086927414,
+        24.800000712275505,
+        24.639999493956566,
+        25.407999753952026
+      ]
+    },
+    "F1_ds_gain_us": {
+      "incumbent": -9.087998420000076,
+      "dp": 0.8320026099681854,
+      "smx": 4.8319995403289795
+    },
+    "paired_graph_us": [
+      {
+        "incumbent": 25.919999927282333,
+        "dp": 34.2399999499321,
+        "smx": 38.784001022577286,
+        "ds": 32.99200162291527
+      },
+      {
+        "dp": 33.504001796245575,
+        "smx": 38.84800150990486,
+        "ds": 34.65599939227104,
+        "incumbent": 23.584000766277313
+      },
+      {
+        "smx": 38.784001022577286,
+        "ds": 34.88000109791756,
+        "incumbent": 25.280000641942024,
+        "dp": 35.96799820661545
+      },
+      {
+        "ds": 34.33600068092346,
+        "incumbent": 23.744000121951103,
+        "dp": 35.45600175857544,
+        "smx": 38.68800029158592
+      },
+      {
+        "ds": 35.61599925160408,
+        "smx": 38.46399858593941,
+        "dp": 34.304000437259674,
+        "incumbent": 24.09599907696247
+      },
+      {
+        "smx": 38.91199827194214,
+        "dp": 35.2960005402565,
+        "incumbent": 24.000000208616257,
+        "ds": 33.31200033426285
+      },
+      {
+        "dp": 34.20799970626831,
+        "incumbent": 25.248000398278236,
+        "ds": 32.86400064826012,
+        "smx": 38.40000182390213
+      },
+      {
+        "incumbent": 24.12799932062626,
+        "ds": 34.97600182890892,
+        "smx": 38.336001336574554,
+        "dp": 34.432001411914825
+      },
+      {
+        "incumbent": 23.96799996495247,
+        "dp": 33.88800099492073,
+        "smx": 38.7520007789135,
+        "ds": 36.22400015592575
+      },
+      {
+        "dp": 34.84800085425377,
+        "smx": 38.36800158023834,
+        "ds": 35.10399907827377,
+        "incumbent": 24.320000782608986
+      },
+      {
+        "smx": 38.84800150990486,
+        "ds": 34.143999218940735,
+        "incumbent": 23.80800060927868,
+        "dp": 33.11999887228012
+      },
+      {
+        "ds": 35.679999738931656,
+        "incumbent": 25.05600079894066,
+        "dp": 34.912001341581345,
+        "smx": 38.88000175356865
+      },
+      {
+        "ds": 34.52799841761589,
+        "smx": 38.816001266241074,
+        "dp": 35.360001027584076,
+        "incumbent": 23.64799939095974
+      },
+      {
+        "smx": 38.336001336574554,
+        "dp": 34.36800092458725,
+        "incumbent": 23.552000522613525,
+        "ds": 35.96799820661545
+      },
+      {
+        "dp": 34.304000437259674,
+        "incumbent": 24.000000208616257,
+        "ds": 34.65599939227104,
+        "smx": 39.583999663591385
+      },
+      {
+        "incumbent": 25.248000398278236,
+        "ds": 34.623999148607254,
+        "smx": 38.68800029158592,
+        "dp": 35.0399985909462
+      },
+      {
+        "incumbent": 24.447999894618988,
+        "dp": 35.87200120091438,
+        "smx": 38.816001266241074,
+        "ds": 33.56799855828285
+      },
+      {
+        "dp": 33.02399814128876,
+        "smx": 38.68800029158592,
+        "ds": 33.63199904561043,
+        "incumbent": 23.584000766277313
+      },
+      {
+        "smx": 38.7520007789135,
+        "ds": 33.31200033426285,
+        "incumbent": 24.383999407291412,
+        "dp": 36.41600161790848
+      },
+      {
+        "ds": 35.61599925160408,
+        "incumbent": 24.032000452280045,
+        "dp": 33.59999880194664,
+        "smx": 38.52799907326698
+      },
+      {
+        "ds": 33.376000821590424,
+        "smx": 38.52799907326698,
+        "dp": 33.695999532938,
+        "incumbent": 24.191999807953835
+      }
+    ],
+    "paired_ds_median_gain_us": {
+      "incumbent": -10.592000558972359,
+      "dp": -0.2559982240200043,
+      "smx": 4.288002848625183
+    },
+    "paired_ds_wins": {
+      "incumbent": 0,
+      "dp": 10,
+      "smx": 21
+    }
+  },
+  "actual_timed_graph_checks": [
+    {
+      "graph": "incumbent",
+      "input": "original",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.686e-03 (worst row 2.986e-03); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "dp",
+      "input": "original",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "smx",
+      "input": "original",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "ds",
+      "input": "original",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "incumbent",
+      "input": "zero",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "dp",
+      "input": "zero",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "smx",
+      "input": "zero",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "ds",
+      "input": "zero",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "incumbent",
+      "input": "fresh_normal",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.671e-03 (worst row 2.983e-03); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "dp",
+      "input": "fresh_normal",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "smx",
+      "input": "fresh_normal",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "ds",
+      "input": "fresh_normal",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "incumbent",
+      "input": "fresh_outliers",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.833e-03 (worst row 2.971e-03); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "dp",
+      "input": "fresh_outliers",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "smx",
+      "input": "fresh_outliers",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "ds",
+      "input": "fresh_outliers",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "incumbent",
+      "input": "all_probes",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "dp",
+      "input": "all_probes",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "smx",
+      "input": "all_probes",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "ds",
+      "input": "all_probes",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    }
+  ],
+  "profile": {
+    "incumbent": [
+      {
+        "name": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 22687
+      }
+    ],
+    "dp": [
+      {
+        "name": "rx_pack(unsigned int const*, unsigned int*)",
+        "duration_ns": 1697
+      },
+      {
+        "name": "void rq_px_dp<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 30080
+      }
+    ],
+    "smx": [
+      {
+        "name": "rx_pack(unsigned int const*, unsigned int*)",
+        "duration_ns": 2208
+      },
+      {
+        "name": "void rq_stmx<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 33153
+      }
+    ],
+    "ds": [
+      {
+        "name": "rx_pack(unsigned int const*, unsigned int*)",
+        "duration_ns": 2113
+      },
+      {
+        "name": "void rq_px_dp_stmx<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 30305
+      }
+    ]
+  },
+  "full_pipeline_in_timed_graph": "FRESH_PACK_PLUS_MAIN_2_NODES_EVERY_CALL_FOR_ALL_THREE_PACKED_VARIANTS",
+  "weights_inputs_counters": "UNCHANGED_OR_RESET",
+  "versions_improved_both_methods": [
+    "smx"
+  ],
+  "next_measurement_question": "Combined measured dual-producer and STMatrix policies; compare DP and STMX controls for additive/nonadditive progress, retain same bytes/parity/CSR/fences. Diagnose residual phase; no family closure.",
+  "graph_cleanup": "RESET_ALL_FOUR"
+}

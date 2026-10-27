@@ -1304,3 +1304,41 @@ ThisestablishesD2D/allocation/consumer/observerresponsiveness;notnormalweightgai
 wirecompressionfactororlatency. ILCeligible0bothdespitereadresponseprovesthose
 fieldsarenotsufficientreadbenefitwitnesses. NextCPUreversiblepattern/bitinverse/
 decodecosttriage;SMwritefollowupnotneedednow. Allprevioussources/resultsretained.
+
+
+### 00:13–01:10UTC — retained failures yield measured family progress
+
+FreshpackedX+mainwholepipeline39.648us vsV147.168/v452.192/inc24.224inSAMErun;
+F1gain+7.520vsV1,paired+7.904,21/21winsfailedparents,0inc. InitialrawQ4/A2copy
+physicaloverwritecaughtBEFOREGPU; snapshot538d retained, nativeA4repairvalidated
+local+actualJITSASS/freshworkspaces/all65536storagebits/fullallK/20graphs.
+
+FreshPXNcu377801valid2nodes34passes. Main2387math/1111prod/82commonPCsamples;
+Bfull1027mathsamplesleading, publication276producer. Fence471notuniqueXcause.
+SixCTCfieldsunavailable; SourceCountermissing139warpgroup_arrive reconcilesraw;
+sourceinst8.943M vsHW7.986M differentpasses, nofalseexactsum. TRYWAITmayblock,
+PredOnThreadfailurecountsnotinitialreadinessoruniformwarps. NoPCfraction→us.
+
+STMX380790valid00:46:06exit0, full4way/20graphs10packpoisons/actualJIT.
+F138.272 vsPX39.456/inc24.416; paired+1.440PX21/21, -14.400inc0/21. FourSTSM
+vs16scalarproducerSTS, byteidentical8192Bstage, sameproxy/bar3; address/issue
+mechanismprogress, notmeasuredpublicationphasegain. Allsourceversionsretained.
+
+RootDP381876valid00:56:35exit0. PXregisterheadroomallows512threads/twoalternating
+producerWGs; W6/B8parityownership,bar3/4separate128,CSRskipoldseqmandatory.
+Actual122regsround128*512=65536,0local,maxThreads512,occupancy1; all3JIT_A4/full
+4wayallK/20graphs15packpoisons/pass. F134.496 vsPX39.520/STMX38.176/inc24.096;
+paired+5.152PX/+3.904STMX21/21both, -10.592inc0/21. Noincpromotion.
+
+Hardwareformatfamilydiagnosedratherthandiscarded: nativeflat→ownershipfix→
+trafficcounters→knownzeroLtresponse→raw/byteplanecontrolledreaderflat→same-reader
+zero+signlow6nodecalibration379727valid00:38:08exit0. ZeroGEN/NONE.25006675,
+74.9933%observedreadreduction; raw1.0/signlow1.00000763flat. All6ownersRegion0.
+CurrentformatsPARKbelowproducerROI; reopenoncredibleactualpayload/inversecost
+winvs12bitpath, nothardwareimpossibility. NoSMrewriteorunmeasuredmatmulport.
+
+Next: freshDPPC+memorydriver65e8/Ncu383540running; composedDP+STMXsource672d/
+manifest6785reviewedqueuedaftercontextdrains. ConditionalA6doesnotfit512/128reg
+uniformcap; fencebatchingandK128paired-stagesremainCPUfeasibilityonly. Official
+quotaresetverified20checks/10scored; noautomaticoldpw36repeat. Goal3000notmet,
+bestofficialstillrs32/fb548b5dc6f04696/3200.615us.

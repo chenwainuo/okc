@@ -1,0 +1,36 @@
+{
+  "state": "CPU_ALL_BITS_AND_LANE_MAPPING_PLUS_INVERSE_ONLY_SASS_PASS_GPU_UNRUN",
+  "CUDA_API_calls": 0,
+  "parent_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "source_sha256": "8a3096d859b8c31436f54432f7709053715cc83b111f2d4988115cf6a0fbfc17",
+  "all65536bit_patterns": true,
+  "all128rows_x512K_positions_bijection": true,
+  "actual_pack_nat_mapping_equal": true,
+  "both64row_HALFs_exact": true,
+  "all16B_load_offsets_bijection_per_stage": true,
+  "plane_stage_bytes": 16384,
+  "stock_stage_bytes": 12288,
+  "perlane_weights": 32,
+  "SASS_PRMT": 16,
+  "SASS_LDG128": 4,
+  "SASS_STG128": 4,
+  "spill_stack_bytes": 0,
+  "cubin_sha256": "4080af5e5aca57ac21cd21ac4a5b4783396dc4e5b888b1d0c4a3acac56a60e08",
+  "limits": [
+    "Inverse-only compile is not a WGMMA resource/launch proof",
+    "Fragment planes differ from raw-Wt byteplanes64 diagnostic payload",
+    "No GEMM/device launch/API execution or hardware-compression ratio"
+  ],
+  "compile_command": [
+    "/usr/local/cuda-12.8/bin/nvcc",
+    "-O3",
+    "-std=c++17",
+    "-lineinfo",
+    "-arch=sm_90a",
+    "--ptxas-options=-v",
+    "--cubin",
+    "/home/ubuntu/okc/proj_rsi/candidates/hw_compression_byteplanes_inverse/inverse_only.cu",
+    "-o",
+    "/home/ubuntu/okc/proj_rsi/candidates/hw_compression_byteplanes_inverse/inverse.sm90a.cubin"
+  ]
+}

@@ -1,0 +1,20 @@
+# Byte-plane01: valid flat response; preserve version, no matmul port
+
+`state=VALID_COUNTER_OBSERVATION_FLAT; backend_port=NOT_ADMITTED; family=ITERATING; speed_claim=NONE`
+
+Actual evidence is [driver](../../results/proj-rsi/takeover/20261027/hw-byteplanes/hw-byteplanes01.json), [raw CSV](../../results/proj-rsi/takeover/20261027/hw-byteplanes/hw-byteplanes01.raw.csv), [analysis](../../results/proj-rsi/takeover/20261027/hw-byteplanes/hw-byteplanes01.analysis.json), [host log](../../results/proj-rsi/takeover/20261027/hw-byteplanes/hw-byteplanes01.host.log). 2026-10-27 00:15:17–00:15:45UTC, exit0;4selected copy nodes,3passes each, unmodified-clock warning retained. Root confirmed process gone/node0MiB. Frozen manifest8e3d/driverac09/kernel d5b5 remain unchanged.
+
+Independent parser/driver validation exactly reproduces stored analysis:4unique case ranges, all21selected values finite, base units, bytes=32×sectors both directions. Every node is `okc_hwc_copy64m`, grid128×1×1/block256×1×1,32regs,1024B NCU shared (=0kernel+driver reserve). Actual JIT confirms0stack/spill/local/shared and occupancy8blocks/SM. Unlike shader equality alone, emitted volatile128bit copy plus proved full fixed address coverage controls all64MiB work; full output checks rule out skipped/stale bytes.
+
+|payload|GENERIC observed read B|NONE observed read B|NONE−GENERIC B|GENERIC/NONE|
+|---|---:|---:|---:|---:|
+|original prepared Wt|67,112,960|67,114,496|+1,536|0.9999771137|
+|byteplanes64|67,122,176|67,114,240|−7,936|1.0001182461|
+
+Ratio-of-allocation-ratios=1.0001411356. Original and planed reads stay within small overhead of64MiB; there is no material observed read reduction. Do not call+1536B a serving win or−7936B a meaningful slowdown. One ordered4node set has no CI or latency evidence. L2 device-fill sectors are2097315/2097339(rawG/N),2097554/2097308(planesG/N), consistent with the same flat reading. ILC evaluated sectors and success remain0; prior zero Lt already showed that those fields cannot by themselves deny a read benefit. All ordinary outputs/fresh outputs queried UNKNOWN, not fabricated NONE; aggregate DRAM writes~51.3MB therefore do not establish an allocation-specific weight compression ratio.
+
+All4eager+4actual preprofile+4fresh-output+4immediate-profile output executions validate full64MiB bytes/complement poison; JSON groups eager+preprofile in4rows. Actual profiled outputs were checked before any repair replay; none followed profiling. Full original raw/Wt/planes/foreign source bytes remain immutable, GPU-prepared plane inverse equals the native64MiB snapshot, all source/output ranges disjoint, source grants/query1/0 exact. Every main/fresh graph resets before alias drop and all4owners reach Region0/undefined tensor with checked idempotent close and no retained-resource warning.
+
+Diagnosis: byte rearrangement alone, with64B low/high spans per128B group, did not expose a useful compression response under this controlled copy reader. CPU statistics had predicted **no all-zero32B sectors**, unchanged zero-byte fraction0.2045%, and only fewer distinct bytes persector. They never guaranteed an ILC format. This result constrains this exact representation/reader and provides no evidence to pay the extra64vs48MiB shared/TMA payload in a matmul. The inverse16PRMT/32 and lane proof remain useful source evidence, but the conditional consumer design is not admitted.
+
+Root authorized one new causal hypothesis: exact **sign-low XOR16** moves random sign bits to low positions and XORs fixedBASE0x3c00, exposing high-zero bits within actual16bit words. It keeps length64MiB and has proven all65536-pattern inverse, with a higher estimated inverse issue cost~24ops/8 than packed12~9/8. Unlike byte planes, CPU sample changes zero bytes~0.20%→15.17% and upper-zero prefix structure; still no all-zero sectors or ratio promise. The next matrix retains raw controls, the same frozen copy shader/helper/D2D/cache/metrics and all byte/graph/lifetime gates. No zigzag/grid, SM rewrite, matmul or speed claim is part of it. This is a new failed-version diagnosis/iteration, not rejection of the whole hardware-compression family.

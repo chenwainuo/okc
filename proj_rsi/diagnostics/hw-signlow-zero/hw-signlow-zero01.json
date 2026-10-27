@@ -1,0 +1,534 @@
+{
+  "status": "DIAGNOSTIC_COMPLETE_COUNTERS_UNINTERPRETED",
+  "purpose": "SIX_NODE_READER_CALIBRATED_REPRESENTATION_ALLOCATION_COUNTERS_NO_SPEED",
+  "fixed_helper": {
+    "directory": "/okc/proj_rsi/candidates/hw_compression_owner",
+    "manifest_sha256": "8f32b91ee4146b2c9534360897d5953850f57b370c1ae653b5b04d325d80c781",
+    "sha256": {
+      "owner_cpu.cpp": "37bd530c08e466e73d17603e1e6c8f05dff614c4b12c15a0827317f3a6461400",
+      "cpu_probe.py": "1e3ab03f85d7a49b8c51c9ebf51dd3ff5fd338c02dfbe453461721d24659714b",
+      "cpu-torch213.json": "fff605fe7fc0a327e8d38b093ed19d090dd73417a712c26a7e3b12692088bb06",
+      "cpu-torch28-initial.json": "ae0f7ed6244fd3c50b995238f49d50ba420796b1d737305efeeec93ae6f050c3",
+      "cpu-torch28-locals.json": "e488ec9b8aff7fd62192ee031934a6aa8941bf528e9ad13d89446cb5ca641df0",
+      "allocator.cpp": "7f2dea1ecdcbff20efd1daad1a4250f775bbf9cfb8b9a76a16f257c1268140f8",
+      "adapter.py": "d76e63471c772aa69b0b76b2360ba4dde50f376e1cd33a88de575ff1e3e25362",
+      "build_helper.py": "b2953f722c7f392361aba08f0efc77f34eff21fbab5da6e74838db3477577f01",
+      "helper-build.json": "2e4d38fe9d0f76122f42de32be0632087439aade3d7cea490b0f879b26426cf7",
+      "README.md": "c445d020159ef76bea4fb2aed87b6a7eea4c5538a646b86803c318b0b75d629d",
+      "gpu_lifetime.py": "5e0dc4534b201fb9eb048fd4b2441bd10d5dff2cec2c689e02e9043a73422dac"
+    },
+    "ABI": {
+      "CUDA_VERSION": 12080,
+      "CUmemAllocationProp_size": 32,
+      "COMP_NONE": 0,
+      "COMP_GENERIC": 1
+    }
+  },
+  "profile_order": [
+    "raw_generic",
+    "raw_none",
+    "signlow_generic",
+    "signlow_none",
+    "zero_generic",
+    "zero_none"
+  ],
+  "reader_manifest_sha256": "8e3d6016f388d23616fec4fe4055ceefee99b2cba550ef3f437e3f481b52321e",
+  "CPU_patterns_manifest_sha256": "780fabc881ef06f5f3559742a4ce3bdefed3f93423bc99cb628e0c581e230f9d",
+  "superseded_signlow4_manifest_sha256": "11fff851a2ed48c2b2a209047244e10383c9292877c545af653629da02f69db1",
+  "knownzero": "64MiB_ZERO_BYTES_NOT_ENCODED_BF16_WEIGHT_ZERO",
+  "format": {
+    "name": "SIGNLOW_XOR16",
+    "BASE": 15360,
+    "arithmetic_precision_change": false
+  },
+  "population": "UNCHANGED_cuMemcpyDtoDAsync_then_stream_sync",
+  "checks": [
+    {
+      "case": "raw_generic",
+      "stage": "IMMEDIATELY_AFTER_SELECTED_ACTUAL_GRAPH",
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true,
+      "repair_replay": false
+    },
+    {
+      "case": "raw_none",
+      "stage": "IMMEDIATELY_AFTER_SELECTED_ACTUAL_GRAPH",
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true,
+      "repair_replay": false
+    },
+    {
+      "case": "signlow_generic",
+      "stage": "IMMEDIATELY_AFTER_SELECTED_ACTUAL_GRAPH",
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true,
+      "repair_replay": false
+    },
+    {
+      "case": "signlow_none",
+      "stage": "IMMEDIATELY_AFTER_SELECTED_ACTUAL_GRAPH",
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true,
+      "repair_replay": false
+    },
+    {
+      "case": "zero_generic",
+      "stage": "IMMEDIATELY_AFTER_SELECTED_ACTUAL_GRAPH",
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true,
+      "repair_replay": false
+    },
+    {
+      "case": "zero_none",
+      "stage": "IMMEDIATELY_AFTER_SELECTED_ACTUAL_GRAPH",
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true,
+      "repair_replay": false
+    }
+  ],
+  "cleanup": {
+    "counts_live": [
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 2,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 2,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 2,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 2,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 2,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 2,
+        "Storage_owners": 1
+      }
+    ],
+    "counts_after_alias_drop": [
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      }
+    ],
+    "counts_after_close": [
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      },
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      },
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      },
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      },
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      },
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      }
+    ],
+    "status": "CHECKED_CLOSE_PASS"
+  },
+  "copy_resources": {
+    "numRegs": 32,
+    "localSizeBytes": 0,
+    "sharedSizeBytes": 0,
+    "maxThreadsPerBlock": 256,
+    "occupancy_blocks_per_SM": 8,
+    "binaryVersion": 90,
+    "grid": [
+      128,
+      1,
+      1
+    ],
+    "block": [
+      256,
+      1,
+      1
+    ]
+  },
+  "jit_resources": {
+    "registers": 32,
+    "stack": 0,
+    "shared": 0,
+    "local": 0,
+    "cuobjdump_sha256": "b1bfb65bdd3fd754df21b56b3613aa3652273d78dcee9a1c9239c8214bf190ce"
+  },
+  "copy_identity": {
+    "kernel": "okc_hwc_copy64m",
+    "bytes": 67108864,
+    "grid": [
+      128,
+      1,
+      1
+    ],
+    "block": [
+      256,
+      1,
+      1
+    ],
+    "source_sha256": "d5b5e86f7801d518d8192a9397f952666466e08fef86af964334c7644ecaded5",
+    "bindings_sha256": "e391a11e6af0b3a1287d1a19a963111fb85a2f5748e0b8da69c07ecad846a0cb",
+    "jit_sha256": "150ef3890233f6baaf52cd7235293e92bd6ae29b27ea0cef9772cc24d705784f"
+  },
+  "payloads": {
+    "raw": {
+      "bytes": 67108864,
+      "sha256": "09d1920b4f42bd5ec1fbaa26f2ac936d688a81574c605b5ec474f0ee42168120"
+    },
+    "signlow": {
+      "bytes": 67108864,
+      "sha256": "34e64cbf96601ca2f67778e9da880cf68121a6f31bcb28f4dca69638150bd972",
+      "inverse_to_raw_exact": true,
+      "GPU_full_payload_inverse_to_raw_exact": true
+    },
+    "zero": {
+      "bytes": 67108864,
+      "sha256": "3b6a07d0d404fab4e23b6d34bc6696a6a312dd92821332385e5af7c01c421351",
+      "all_source_bytes_zero": true,
+      "all_poison_bytes_255": true
+    }
+  },
+  "capabilities": {
+    "device": 0,
+    "vmm_supported": 1,
+    "generic_compression_supported": 1
+  },
+  "allocations": [
+    {
+      "label": "raw_generic",
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 1,
+        "actual_compression": 1,
+        "device": 0,
+        "ptr": 12918456320,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 1,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    },
+    {
+      "label": "raw_none",
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 0,
+        "actual_compression": 0,
+        "device": 0,
+        "ptr": 12985565184,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 0,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    },
+    {
+      "label": "signlow_generic",
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 1,
+        "actual_compression": 1,
+        "device": 0,
+        "ptr": 13052674048,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 1,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    },
+    {
+      "label": "signlow_none",
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 0,
+        "actual_compression": 0,
+        "device": 0,
+        "ptr": 13119782912,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 0,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    },
+    {
+      "label": "zero_generic",
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 1,
+        "actual_compression": 1,
+        "device": 0,
+        "ptr": 13186891776,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 1,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    },
+    {
+      "label": "zero_none",
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 0,
+        "actual_compression": 0,
+        "device": 0,
+        "ptr": 13254000640,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 0,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    }
+  ],
+  "allocation_spans_disjoint": true,
+  "outputs": {
+    "raw_generic": {
+      "ptr": 131444487749632,
+      "properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      }
+    },
+    "raw_none": {
+      "ptr": 131444554858496,
+      "properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      }
+    },
+    "signlow_generic": {
+      "ptr": 131444621967360,
+      "properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      }
+    },
+    "signlow_none": {
+      "ptr": 131447641866240,
+      "properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      }
+    },
+    "zero_generic": {
+      "ptr": 131447708975104,
+      "properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      }
+    },
+    "zero_none": {
+      "ptr": 131443648888832,
+      "properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      }
+    }
+  },
+  "preprofile_checks": [
+    {
+      "case": "raw_generic",
+      "eager_and_actual_graph_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "raw_none",
+      "eager_and_actual_graph_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "signlow_generic",
+      "eager_and_actual_graph_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "signlow_none",
+      "eager_and_actual_graph_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "zero_generic",
+      "eager_and_actual_graph_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "zero_none",
+      "eager_and_actual_graph_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true
+    }
+  ],
+  "fresh_output_checks": [
+    {
+      "case": "raw_generic",
+      "new_output_ptr": 131443581779968,
+      "output_properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      },
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true
+    },
+    {
+      "case": "raw_none",
+      "new_output_ptr": 131443514671104,
+      "output_properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      },
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true
+    },
+    {
+      "case": "signlow_generic",
+      "new_output_ptr": 131443447562240,
+      "output_properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      },
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true
+    },
+    {
+      "case": "signlow_none",
+      "new_output_ptr": 131443380453376,
+      "output_properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      },
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true
+    },
+    {
+      "case": "zero_generic",
+      "new_output_ptr": 131443313344512,
+      "output_properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      },
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true
+    },
+    {
+      "case": "zero_none",
+      "new_output_ptr": 131443246235648,
+      "output_properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      },
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true
+    }
+  ],
+  "all18_source_main_fresh_spans_disjoint": true,
+  "postprofile_sources_immutable": true
+}

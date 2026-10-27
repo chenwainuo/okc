@@ -1,0 +1,421 @@
+{
+  "status": "CPU_DEVICE_PROOF_ONLY_GPU_UNRUN",
+  "X": {
+    "status": "PACK_INVERSE_NATIVE_FRAGMENT_BIT_BIJECTION_PASS",
+    "u32_words": 262144,
+    "BF16_words": 524288,
+    "all65536_BF16_bit_patterns": true,
+    "workspace_bytes": 1048576,
+    "max_input_or_packed_byte": 1048575,
+    "unsigned32_no_overflow": true,
+    "pack_launch": {
+      "CTAs": 256,
+      "threads": 256,
+      "words_per_thread": 4
+    },
+    "packer_8192_warps_each": {
+      "input_32B_sectors": 4,
+      "output_32B_sectors": 4,
+      "no_half_sector_amplification": true
+    },
+    "main": {
+      "LDG_v4_per_thread_stage": 4,
+      "SHFL_per_thread_stage": 0,
+      "warp_stage_32B_sector_touches": 64,
+      "warp_stage_unique32B_sectors": 64,
+      "all_vectors16B_aligned": true
+    },
+    "negative_stale_workspace_after_changed_input_mismatches": 262144,
+    "freshness": "pack launch precedes main on every normal API call; no input values populated in setup/prepare"
+  },
+  "W": {
+    "exact_BF16_values": 524288,
+    "escapes": 491209,
+    "cap": 61504,
+    "escape_lists_span32entry_windows": true,
+    "escape_control_flow": "Bit proof reconstructs CSR entries; unchanged inherited rq_fix supplies reload semantics, GPU runtime pending",
+    "shared_B_SW128_bijection": true
+  },
+  "output": {
+    "all8192_D_scalars_observed": true,
+    "single128x64_slab_bijection": true
+  },
+  "lifetime": {
+    "status": "PASS_V1_RAW_Q4_SEPARATE_A2_LIFETIME",
+    "prefetch_ahead": 4,
+    "current_raw_refill": "s+4 only after demux/current WGMMA commit; separate A still pinned",
+    "A_reuse": "A(s) last read pinned after wait_group1 in round(s+1), before its next write(s+2)",
+    "final": "wait_group0 then pin both A then releaseB63",
+    "negative_without_retirement_caught": 62,
+    "events": [
+      {
+        "issue": 1,
+        "A_retired": 0,
+        "raw_refill": 5
+      },
+      {
+        "issue": 2,
+        "A_retired": 1,
+        "raw_refill": 6
+      },
+      {
+        "issue": 3,
+        "A_retired": 2,
+        "raw_refill": 7
+      },
+      {
+        "issue": 4,
+        "A_retired": 3,
+        "raw_refill": 8
+      },
+      {
+        "issue": 5,
+        "A_retired": 4,
+        "raw_refill": 9
+      },
+      {
+        "issue": 6,
+        "A_retired": 5,
+        "raw_refill": 10
+      },
+      {
+        "issue": 7,
+        "A_retired": 6,
+        "raw_refill": 11
+      },
+      {
+        "issue": 8,
+        "A_retired": 7,
+        "raw_refill": 12
+      },
+      {
+        "issue": 9,
+        "A_retired": 8,
+        "raw_refill": 13
+      },
+      {
+        "issue": 10,
+        "A_retired": 9,
+        "raw_refill": 14
+      },
+      {
+        "issue": 11,
+        "A_retired": 10,
+        "raw_refill": 15
+      },
+      {
+        "issue": 12,
+        "A_retired": 11,
+        "raw_refill": 16
+      },
+      {
+        "issue": 13,
+        "A_retired": 12,
+        "raw_refill": 17
+      },
+      {
+        "issue": 14,
+        "A_retired": 13,
+        "raw_refill": 18
+      },
+      {
+        "issue": 15,
+        "A_retired": 14,
+        "raw_refill": 19
+      },
+      {
+        "issue": 16,
+        "A_retired": 15,
+        "raw_refill": 20
+      },
+      {
+        "issue": 17,
+        "A_retired": 16,
+        "raw_refill": 21
+      },
+      {
+        "issue": 18,
+        "A_retired": 17,
+        "raw_refill": 22
+      },
+      {
+        "issue": 19,
+        "A_retired": 18,
+        "raw_refill": 23
+      },
+      {
+        "issue": 20,
+        "A_retired": 19,
+        "raw_refill": 24
+      },
+      {
+        "issue": 21,
+        "A_retired": 20,
+        "raw_refill": 25
+      },
+      {
+        "issue": 22,
+        "A_retired": 21,
+        "raw_refill": 26
+      },
+      {
+        "issue": 23,
+        "A_retired": 22,
+        "raw_refill": 27
+      },
+      {
+        "issue": 24,
+        "A_retired": 23,
+        "raw_refill": 28
+      },
+      {
+        "issue": 25,
+        "A_retired": 24,
+        "raw_refill": 29
+      },
+      {
+        "issue": 26,
+        "A_retired": 25,
+        "raw_refill": 30
+      },
+      {
+        "issue": 27,
+        "A_retired": 26,
+        "raw_refill": 31
+      },
+      {
+        "issue": 28,
+        "A_retired": 27,
+        "raw_refill": 32
+      },
+      {
+        "issue": 29,
+        "A_retired": 28,
+        "raw_refill": 33
+      },
+      {
+        "issue": 30,
+        "A_retired": 29,
+        "raw_refill": 34
+      },
+      {
+        "issue": 31,
+        "A_retired": 30,
+        "raw_refill": 35
+      },
+      {
+        "issue": 32,
+        "A_retired": 31,
+        "raw_refill": 36
+      },
+      {
+        "issue": 33,
+        "A_retired": 32,
+        "raw_refill": 37
+      },
+      {
+        "issue": 34,
+        "A_retired": 33,
+        "raw_refill": 38
+      },
+      {
+        "issue": 35,
+        "A_retired": 34,
+        "raw_refill": 39
+      },
+      {
+        "issue": 36,
+        "A_retired": 35,
+        "raw_refill": 40
+      },
+      {
+        "issue": 37,
+        "A_retired": 36,
+        "raw_refill": 41
+      },
+      {
+        "issue": 38,
+        "A_retired": 37,
+        "raw_refill": 42
+      },
+      {
+        "issue": 39,
+        "A_retired": 38,
+        "raw_refill": 43
+      },
+      {
+        "issue": 40,
+        "A_retired": 39,
+        "raw_refill": 44
+      },
+      {
+        "issue": 41,
+        "A_retired": 40,
+        "raw_refill": 45
+      },
+      {
+        "issue": 42,
+        "A_retired": 41,
+        "raw_refill": 46
+      },
+      {
+        "issue": 43,
+        "A_retired": 42,
+        "raw_refill": 47
+      },
+      {
+        "issue": 44,
+        "A_retired": 43,
+        "raw_refill": 48
+      },
+      {
+        "issue": 45,
+        "A_retired": 44,
+        "raw_refill": 49
+      },
+      {
+        "issue": 46,
+        "A_retired": 45,
+        "raw_refill": 50
+      },
+      {
+        "issue": 47,
+        "A_retired": 46,
+        "raw_refill": 51
+      },
+      {
+        "issue": 48,
+        "A_retired": 47,
+        "raw_refill": 52
+      },
+      {
+        "issue": 49,
+        "A_retired": 48,
+        "raw_refill": 53
+      },
+      {
+        "issue": 50,
+        "A_retired": 49,
+        "raw_refill": 54
+      },
+      {
+        "issue": 51,
+        "A_retired": 50,
+        "raw_refill": 55
+      },
+      {
+        "issue": 52,
+        "A_retired": 51,
+        "raw_refill": 56
+      },
+      {
+        "issue": 53,
+        "A_retired": 52,
+        "raw_refill": 57
+      },
+      {
+        "issue": 54,
+        "A_retired": 53,
+        "raw_refill": 58
+      },
+      {
+        "issue": 55,
+        "A_retired": 54,
+        "raw_refill": 59
+      },
+      {
+        "issue": 56,
+        "A_retired": 55,
+        "raw_refill": 60
+      },
+      {
+        "issue": 57,
+        "A_retired": 56,
+        "raw_refill": 61
+      },
+      {
+        "issue": 58,
+        "A_retired": 57,
+        "raw_refill": 62
+      },
+      {
+        "issue": 59,
+        "A_retired": 58,
+        "raw_refill": 63
+      },
+      {
+        "issue": 60,
+        "A_retired": 59,
+        "raw_refill": null
+      },
+      {
+        "issue": 61,
+        "A_retired": 60,
+        "raw_refill": null
+      },
+      {
+        "issue": 62,
+        "A_retired": 61,
+        "raw_refill": null
+      },
+      {
+        "issue": 63,
+        "A_retired": 62,
+        "raw_refill": null
+      }
+    ],
+    "limits": "W6/B8 protocol inherited byte-identically except removed dynamic allocation; not an arbitrary interleaving GPU simulation"
+  },
+  "producer_output_source_identity": "V4_W_PRODUCER_OUTPUT_AND_ROUND_IDENTITY_EXCEPT_RAW_QTYPE_AND_IDENTITY_COPY",
+  "source_sha256": "a795a521870e813f699875c03a0f8f81240ac7de3596040201086f5dfca97361",
+  "device_sha256": "abaea08170530825e5490c47788322abbef0509342304f52a34075ce0fd7d021",
+  "shared_bytes": 103600,
+  "geometry": {
+    "m": 128,
+    "n": 8192,
+    "k": 4096,
+    "CTAs": 128,
+    "threads": 384,
+    "KS": 1
+  },
+  "resources": {
+    "main": {
+      "symbol": "_Z5rq_pxILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_",
+      "static_regs": 122,
+      "stack_spill_local": 0,
+      "CTA_register_pool": 46848
+    },
+    "packer": {
+      "symbol": "_Z7rx_packPKjPj",
+      "static_regs": 22,
+      "stack_spill_local": 0
+    }
+  },
+  "SASS": {
+    "main_HGMMA": 16,
+    "main_WG_arrive": 4,
+    "main_output_TMA": 1,
+    "main_X_TMA": 0,
+    "main_BFLY": 0,
+    "main_LDG128": 32,
+    "main_all_LDG_mnemonics": {
+      "LDG.E.NA.128.CONSTANT": 32,
+      "LDG.E.CONSTANT": 2
+    },
+    "packer_LDG_mnemonics": {
+      "LDG.E": 4
+    },
+    "packer_STG_mnemonics": {
+      "STG.E": 4
+    },
+    "main_MOV_static": 36,
+    "main_async_A": "same separateA2 pin/retire source; actualGPU required"
+  },
+  "SASS_sha256": "7b0324c5cdf749fcaaf2ccf669e80ce4b4e48b4fd40238de27af5cc0c7852210",
+  "ptxas": "ptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_Z5rq_pxILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_' for 'sm_90a'\nptxas info    : Function properties for _Z5rq_pxILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 122 registers, used 4 barriers\nptxas info    : Compile time = 40.725 ms\nptxas info    : Compiling entry function '_Z7rx_packPKjPj' for 'sm_90a'\nptxas info    : Function properties for _Z7rx_packPKjPj\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 22 registers, used 0 barriers\nptxas info    : Compile time = 1.438 ms\n",
+  "files": {
+    "prototype.py": "a5195a0918dc1e44aff4a63c6322112bb261e953825135636922d31a1847817f",
+    "kernel_body.cuh": "2cd4eb0909c975d96c3b364b518f4e35719ec4eb56fcb605fbf825e3cfd43fa0",
+    "preflight.py": "25589739000820cbb608051d536e49d3bea22c5b5c6a3e7206e2ebc8049e3b29"
+  }
+}

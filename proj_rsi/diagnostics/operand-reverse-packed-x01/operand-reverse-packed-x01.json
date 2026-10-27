@@ -1,0 +1,814 @@
+{
+  "status": "PX_PROGRESS_DIAGNOSE_NEXT_LIMIT",
+  "parent_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "candidate_source_sha256": {
+    "v1": "ca92a4fb0d3a488768c4531ba315e8d0327b0a4c4a994147b12c61a929ae85f8",
+    "v4": "5b6c3fb45f686b07a203ba7fb6feb0bdd5329cb48fa105b2a39b530759f7fee8",
+    "px": "2c28de068a57235fcfec8af61a5678572ef76dc9833bc280e134623e8b6ff04a"
+  },
+  "loader_policy": "EVERY_CALL fresh1MiBpack then4v4NC/no_allocate main, nativeA4 retired-slot/three-ahead; sameW/geometry/output",
+  "actual_JIT_SASS": {
+    "artifact": "/okc/logs/operand-reverse-packed-x01.jit.sass",
+    "sha256": "f954729bce07478ad46c6b9fd2ab21f0f32d255737559e672b0533b620ebe36f",
+    "module": "/root/.cache/torch_extensions/operand_reverse_packed_x_2c28de068a57/operand_reverse_packed_x_2c28de068a57.so",
+    "retirement_gate": {
+      "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+      "binaries": [
+        {
+          "status": "PASS_PHYSICAL_A4_RETIREMENT",
+          "iterations": 2,
+          "groups": 8,
+          "A_register_sets": [
+            [
+              56,
+              57,
+              58,
+              59,
+              60,
+              61,
+              62,
+              63,
+              64,
+              65,
+              66,
+              67,
+              68,
+              69,
+              70,
+              71
+            ],
+            [
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87
+            ],
+            [
+              88,
+              89,
+              90,
+              91,
+              92,
+              93,
+              94,
+              95,
+              96,
+              97,
+              98,
+              99,
+              100,
+              101,
+              102,
+              103
+            ],
+            [
+              104,
+              105,
+              106,
+              107,
+              108,
+              109,
+              110,
+              111,
+              112,
+              113,
+              114,
+              115,
+              116,
+              117,
+              118,
+              119
+            ]
+          ],
+          "payload_or_conservative_A_writes_checked": 32,
+          "outlined_wait_paths_no_A_writes": [
+            12000,
+            12064,
+            12128,
+            12192
+          ],
+          "retirement_events": [
+            {
+              "iteration": 0,
+              "PC": 3664,
+              "retired_groups": 0
+            },
+            {
+              "iteration": 0,
+              "PC": 4544,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 0,
+              "PC": 5264,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 0,
+              "PC": 6016,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 3664,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 4544,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 5264,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 6016,
+              "retired_groups": 1
+            }
+          ],
+          "final": "wait0 retires lastgroup before epilogue",
+          "loop_PC_range": [
+            2944,
+            6240
+          ],
+          "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+        }
+      ]
+    }
+  },
+  "attrs": {
+    "v1": {
+      "regs": 168,
+      "local": 0,
+      "smem": 103600,
+      "max_dynamic_before": 49152,
+      "occupancy_after_optin": 1,
+      "max_dynamic_after": 103600,
+      "register_mode": "64/216 dynamic frozen v1"
+    },
+    "v4": {
+      "regs": 150,
+      "local": 0,
+      "smem": 103600,
+      "max_dynamic_before": 49152,
+      "occupancy_after_optin": 1,
+      "max_dynamic_after": 103600,
+      "register_mode": "uniform static"
+    },
+    "px": {
+      "regs": 122,
+      "local": 0,
+      "smem": 103600,
+      "max_dynamic_before": 49152,
+      "occupancy_after_optin": 1,
+      "max_dynamic_after": 103600,
+      "register_mode": "uniform static"
+    }
+  },
+  "packer_attrs": {
+    "regs": 22,
+    "local": 0,
+    "max_threads": 1024
+  },
+  "GPU_pack_all65536_BF16_storage_bits": "PASS_1MiB_EXACT_INPUT_IMMUTABLE",
+  "validation": {
+    "v1": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 1.7e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "fixed_pointer_replay": "original",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "zero",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "fresh_outliers",
+        "status": "PASS"
+      }
+    ],
+    "v4": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 1.7e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "fixed_pointer_replay": "original",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "zero",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "fresh_outliers",
+        "status": "PASS"
+      }
+    ],
+    "px": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 1.7e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "fixed_pointer_replay": "original",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "zero",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "fresh_outliers",
+        "status": "PASS"
+      }
+    ],
+    "incumbent": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 2.4e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 2.558e-03 (worst row 2.975e-03); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 2.836e-03 (worst row 3.009e-03); 16 probe rows exact to 0.0e+00"
+      }
+    ]
+  },
+  "fresh_workspace_and_output": {
+    "status": "PASS",
+    "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00",
+    "workspace_bytes": 1048576
+  },
+  "incumbent_pick": {
+    "kind": "rq",
+    "variant": "s4s5hz",
+    "KS": 2
+  },
+  "timing": {
+    "F1_medians_us": {
+      "incumbent_before": 24.54400062561035,
+      "v1_before": 47.42399975657463,
+      "v4_before": 52.191998809576035,
+      "px": 39.64800015091896,
+      "v4_after": 52.70399898290634,
+      "v1_after": 47.16800153255463,
+      "incumbent_after": 24.224000051617622
+    },
+    "F1_samples_us": {
+      "incumbent_before": [
+        24.54400062561035,
+        24.927999824285507,
+        24.224000051617622,
+        24.351999163627625,
+        25.696000084280968,
+        24.70399998128414,
+        24.191999807953835,
+        25.05600079894066,
+        23.840000852942467,
+        23.711999878287315,
+        25.18399991095066,
+        24.383999407291412,
+        23.93599972128868,
+        25.119999423623085,
+        24.25600029528141,
+        24.54400062561035,
+        25.087999179959297,
+        24.831999093294144,
+        24.064000695943832,
+        24.54400062561035,
+        24.768000468611717
+      ],
+      "v1_before": [
+        48.09600114822388,
+        47.648001462221146,
+        47.68000170588493,
+        47.42399975657463,
+        47.93599992990494,
+        47.71199822425842,
+        47.39199951291084,
+        47.26399853825569,
+        47.359999269247055,
+        48.16000163555145,
+        47.39199951291084,
+        48.70399832725525,
+        47.42399975657463,
+        47.42399975657463,
+        47.13600128889084,
+        47.359999269247055,
+        47.520000487565994,
+        47.488000243902206,
+        47.26399853825569,
+        47.32799902558327,
+        47.775998711586
+      ],
+      "v4_before": [
+        51.45600065588951,
+        52.38400027155876,
+        51.52000114321709,
+        54.4000007212162,
+        51.61599814891815,
+        52.06400156021118,
+        52.000001072883606,
+        52.99200117588043,
+        52.51200124621391,
+        52.191998809576035,
+        52.960000932216644,
+        52.319999784231186,
+        53.95200103521347,
+        52.960000932216644,
+        52.51200124621391,
+        51.552001386880875,
+        51.58400163054466,
+        51.392000168561935,
+        51.90400034189224,
+        53.05600166320801,
+        51.13599821925163
+      ],
+      "px": [
+        39.84000161290169,
+        39.264000952243805,
+        39.583999663591385,
+        39.61599990725517,
+        39.5519994199276,
+        39.64800015091896,
+        39.77600112557411,
+        39.39199820160866,
+        39.64800015091896,
+        40.511999279260635,
+        39.39199820160866,
+        39.61599990725517,
+        39.48799893260002,
+        39.61599990725517,
+        39.744000881910324,
+        39.77600112557411,
+        39.61599990725517,
+        39.64800015091896,
+        39.64800015091896,
+        39.712000638246536,
+        39.8080013692379
+      ],
+      "v4_after": [
+        53.568001836538315,
+        51.61599814891815,
+        50.912000238895416,
+        52.70399898290634,
+        54.43200096487999,
+        52.06400156021118,
+        53.75999957323074,
+        51.231998950242996,
+        52.22399905323982,
+        51.552001386880875,
+        54.1439987719059,
+        53.408000618219376,
+        52.70399898290634,
+        53.21599915623665,
+        52.352000027894974,
+        51.90400034189224,
+        52.032001316547394,
+        54.11199852824211,
+        52.60799825191498,
+        53.02400141954422,
+        53.53600159287453
+      ],
+      "v1_after": [
+        48.0320006608963,
+        47.39199951291084,
+        47.58400097489357,
+        47.00800031423569,
+        47.359999269247055,
+        47.13600128889084,
+        47.13600128889084,
+        47.00800031423569,
+        46.94399982690811,
+        47.13600128889084,
+        48.09600114822388,
+        47.29599878191948,
+        47.231998294591904,
+        47.39199951291084,
+        47.13600128889084,
+        47.29599878191948,
+        47.040000557899475,
+        47.16800153255463,
+        47.16800153255463,
+        48.35199937224388,
+        46.9760000705719
+      ],
+      "incumbent_after": [
+        24.12799932062626,
+        24.159999564290047,
+        23.93599972128868,
+        24.671999737620354,
+        23.93599972128868,
+        24.70399998128414,
+        24.351999163627625,
+        24.12799932062626,
+        24.191999807953835,
+        24.800000712275505,
+        24.447999894618988,
+        24.351999163627625,
+        24.639999493956566,
+        24.831999093294144,
+        24.09599907696247,
+        23.871999233961105,
+        24.064000695943832,
+        24.447999894618988,
+        24.224000051617622,
+        24.064000695943832,
+        24.25600029528141
+      ]
+    },
+    "F1_px_gain_us": {
+      "incumbent": -15.424000099301338,
+      "v1": 7.520001381635666,
+      "v4": 12.543998658657074
+    },
+    "paired_graph_us": [
+      {
+        "incumbent": 25.536000728607178,
+        "v1": 47.807998955249786,
+        "v4": 51.61599814891815,
+        "px": 39.61599990725517
+      },
+      {
+        "v1": 48.00000041723251,
+        "v4": 52.41600051522255,
+        "px": 39.903998374938965,
+        "incumbent": 25.087999179959297
+      },
+      {
+        "v4": 54.17599901556969,
+        "px": 39.68000039458275,
+        "incumbent": 23.552000522613525,
+        "v1": 47.807998955249786
+      },
+      {
+        "px": 39.8080013692379,
+        "incumbent": 23.584000766277313,
+        "v1": 47.58400097489357,
+        "v4": 53.18399891257286
+      },
+      {
+        "px": 39.712000638246536,
+        "v4": 53.119998425245285,
+        "v1": 47.16800153255463,
+        "incumbent": 24.992000311613083
+      },
+      {
+        "v4": 51.32799968123436,
+        "v1": 47.58400097489357,
+        "incumbent": 23.840000852942467,
+        "px": 39.712000638246536
+      },
+      {
+        "v1": 47.74399846792221,
+        "incumbent": 23.552000522613525,
+        "px": 39.61599990725517,
+        "v4": 52.480001002550125
+      },
+      {
+        "incumbent": 23.77600036561489,
+        "px": 39.583999663591385,
+        "v4": 51.58400163054466,
+        "v1": 47.71199822425842
+      },
+      {
+        "incumbent": 23.80800060927868,
+        "v1": 47.74399846792221,
+        "v4": 51.96800082921982,
+        "px": 39.712000638246536
+      },
+      {
+        "v1": 47.45600000023842,
+        "v4": 52.09600180387497,
+        "px": 39.61599990725517,
+        "incumbent": 24.032000452280045
+      },
+      {
+        "v4": 53.82400006055832,
+        "px": 39.712000638246536,
+        "incumbent": 23.903999477624893,
+        "v1": 47.87199944257736
+      },
+      {
+        "px": 39.99999910593033,
+        "incumbent": 23.840000852942467,
+        "v1": 47.807998955249786,
+        "v4": 52.032001316547394
+      },
+      {
+        "px": 39.903998374938965,
+        "v4": 52.60799825191498,
+        "v1": 47.807998955249786,
+        "incumbent": 24.320000782608986
+      },
+      {
+        "v4": 52.960000932216644,
+        "v1": 47.807998955249786,
+        "incumbent": 24.032000452280045,
+        "px": 39.77600112557411
+      },
+      {
+        "v1": 48.25599864125252,
+        "incumbent": 23.744000121951103,
+        "px": 39.583999663591385,
+        "v4": 51.231998950242996
+      },
+      {
+        "incumbent": 23.77600036561489,
+        "px": 39.872001856565475,
+        "v4": 51.4880008995533,
+        "v1": 47.488000243902206
+      },
+      {
+        "incumbent": 24.12799932062626,
+        "v1": 47.520000487565994,
+        "v4": 51.77599936723709,
+        "px": 39.744000881910324
+      },
+      {
+        "v1": 47.231998294591904,
+        "v4": 51.35999992489815,
+        "px": 39.744000881910324,
+        "incumbent": 23.903999477624893
+      },
+      {
+        "v4": 52.76799947023392,
+        "px": 39.712000638246536,
+        "incumbent": 23.64799939095974,
+        "v1": 48.09600114822388
+      },
+      {
+        "px": 40.09599983692169,
+        "incumbent": 23.679999634623528,
+        "v1": 48.00000041723251,
+        "v4": 52.60799825191498
+      },
+      {
+        "px": 40.16000032424927,
+        "v4": 52.76799947023392,
+        "v1": 47.775998711586,
+        "incumbent": 24.064000695943832
+      }
+    ],
+    "paired_px_median_gain_us": {
+      "incumbent": -15.840001404285431,
+      "v1": 7.9040005803108215,
+      "v4": 12.511998414993286
+    },
+    "paired_px_wins": {
+      "incumbent": 0,
+      "v1": 21,
+      "v4": 21
+    }
+  },
+  "actual_timed_graph_checks": [
+    {
+      "graph": "incumbent",
+      "input": "original",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.686e-03 (worst row 2.986e-03); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v1",
+      "input": "original",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v4",
+      "input": "original",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "px",
+      "input": "original",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "incumbent",
+      "input": "zero",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "v1",
+      "input": "zero",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "v4",
+      "input": "zero",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "px",
+      "input": "zero",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "incumbent",
+      "input": "fresh_normal",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.671e-03 (worst row 2.983e-03); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v1",
+      "input": "fresh_normal",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v4",
+      "input": "fresh_normal",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "px",
+      "input": "fresh_normal",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "incumbent",
+      "input": "fresh_outliers",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.833e-03 (worst row 2.971e-03); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v1",
+      "input": "fresh_outliers",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v4",
+      "input": "fresh_outliers",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "px",
+      "input": "fresh_outliers",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "incumbent",
+      "input": "all_probes",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v1",
+      "input": "all_probes",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "v4",
+      "input": "all_probes",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "px",
+      "input": "all_probes",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    }
+  ],
+  "profile": {
+    "incumbent": [
+      {
+        "name": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 21918
+      }
+    ],
+    "v1": [
+      {
+        "name": "void rq<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 44896
+      }
+    ],
+    "v4": [
+      {
+        "name": "void rq_v4<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 49315
+      }
+    ],
+    "px": [
+      {
+        "name": "rx_pack(unsigned int const*, unsigned int*)",
+        "duration_ns": 2112
+      },
+      {
+        "name": "void rq_px<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 34622
+      }
+    ]
+  },
+  "full_pipeline_in_timed_graph": "FRESH_PACK_PLUS_MAIN_2_NODES_EVERY_CALL",
+  "weights_inputs_counters": "UNCHANGED_OR_RESET",
+  "versions_improved_both_methods": [
+    "v1",
+    "v4"
+  ],
+  "next_measurement_question": "Full pack+main delta includes packlaunch/traffic, nativeA4 threeahead versus V4rawQ4A2fourahead, and compiler/resource changes. Diagnose next dependency; no isolated-pack attribution or automatic family closure.",
+  "graph_cleanup": "RESET_ALL_FOUR"
+}

@@ -1,0 +1,653 @@
+{
+  "status": "CPU_DEVICE_PROOF_ONLY_GPU_UNRUN",
+  "X": {
+    "status": "PACK_INVERSE_NATIVE_FRAGMENT_BIT_BIJECTION_PASS",
+    "u32_words": 262144,
+    "BF16_words": 524288,
+    "all65536_BF16_bit_patterns": true,
+    "workspace_bytes": 1048576,
+    "max_input_or_packed_byte": 1048575,
+    "unsigned32_no_overflow": true,
+    "pack_launch": {
+      "CTAs": 256,
+      "threads": 256,
+      "words_per_thread": 4
+    },
+    "packer_8192_warps_each": {
+      "input_32B_sectors": 4,
+      "output_32B_sectors": 4,
+      "no_half_sector_amplification": true
+    },
+    "main": {
+      "LDG_v4_per_thread_stage": 4,
+      "SHFL_per_thread_stage": 0,
+      "warp_stage_32B_sector_touches": 64,
+      "warp_stage_unique32B_sectors": 64,
+      "all_vectors16B_aligned": true
+    },
+    "negative_stale_workspace_after_changed_input_mismatches": 262144,
+    "freshness": "pack launch precedes main on every normal API call; no input values populated in setup/prepare"
+  },
+  "W": {
+    "exact_BF16_values": 524288,
+    "escapes": 491158,
+    "cap": 61504,
+    "escape_lists_span32entry_windows": true,
+    "escape_control_flow": "Bit proof reconstructs CSR entries; unchanged inherited rq_fix supplies reload semantics, GPU runtime pending",
+    "shared_B_SW128_bijection": true,
+    "stmatrix_equals_16_scalar_STS_every_byte": true,
+    "per_stage_BF16_values": 4096,
+    "per_stage_bytes": 8192,
+    "all65536_weight_storage_patterns": true,
+    "cross_lane_rule": "address_provider=8*matrix_register+(data_lane>>2), word_offset=4*(data_lane&3)",
+    "all_provider_addresses16B_aligned": true,
+    "all4producerwarps_no_alias_or_cross_slot_write": true
+  },
+  "output": {
+    "all8192_D_scalars_observed": true,
+    "single128x64_slab_bijection": true
+  },
+  "lifetime": {
+    "status": "PASS_A4_ASYNC_LIFETIME_BY_COMMIT_ORDER",
+    "initial_stages": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "refill": "after wait_group1+pin retired(s-1), prefetch(s+3) into its four-slot buffer",
+    "final_group": "wait_group0 then pin all4 then release B63",
+    "negative_current_slot_refill_caught": 60,
+    "retirement_events": [
+      {
+        "issue": 1,
+        "retire": 0,
+        "refill": 4,
+        "slot": 0
+      },
+      {
+        "issue": 2,
+        "retire": 1,
+        "refill": 5,
+        "slot": 1
+      },
+      {
+        "issue": 3,
+        "retire": 2,
+        "refill": 6,
+        "slot": 2
+      },
+      {
+        "issue": 4,
+        "retire": 3,
+        "refill": 7,
+        "slot": 3
+      },
+      {
+        "issue": 5,
+        "retire": 4,
+        "refill": 8,
+        "slot": 0
+      },
+      {
+        "issue": 6,
+        "retire": 5,
+        "refill": 9,
+        "slot": 1
+      },
+      {
+        "issue": 7,
+        "retire": 6,
+        "refill": 10,
+        "slot": 2
+      },
+      {
+        "issue": 8,
+        "retire": 7,
+        "refill": 11,
+        "slot": 3
+      },
+      {
+        "issue": 9,
+        "retire": 8,
+        "refill": 12,
+        "slot": 0
+      },
+      {
+        "issue": 10,
+        "retire": 9,
+        "refill": 13,
+        "slot": 1
+      },
+      {
+        "issue": 11,
+        "retire": 10,
+        "refill": 14,
+        "slot": 2
+      },
+      {
+        "issue": 12,
+        "retire": 11,
+        "refill": 15,
+        "slot": 3
+      },
+      {
+        "issue": 13,
+        "retire": 12,
+        "refill": 16,
+        "slot": 0
+      },
+      {
+        "issue": 14,
+        "retire": 13,
+        "refill": 17,
+        "slot": 1
+      },
+      {
+        "issue": 15,
+        "retire": 14,
+        "refill": 18,
+        "slot": 2
+      },
+      {
+        "issue": 16,
+        "retire": 15,
+        "refill": 19,
+        "slot": 3
+      },
+      {
+        "issue": 17,
+        "retire": 16,
+        "refill": 20,
+        "slot": 0
+      },
+      {
+        "issue": 18,
+        "retire": 17,
+        "refill": 21,
+        "slot": 1
+      },
+      {
+        "issue": 19,
+        "retire": 18,
+        "refill": 22,
+        "slot": 2
+      },
+      {
+        "issue": 20,
+        "retire": 19,
+        "refill": 23,
+        "slot": 3
+      },
+      {
+        "issue": 21,
+        "retire": 20,
+        "refill": 24,
+        "slot": 0
+      },
+      {
+        "issue": 22,
+        "retire": 21,
+        "refill": 25,
+        "slot": 1
+      },
+      {
+        "issue": 23,
+        "retire": 22,
+        "refill": 26,
+        "slot": 2
+      },
+      {
+        "issue": 24,
+        "retire": 23,
+        "refill": 27,
+        "slot": 3
+      },
+      {
+        "issue": 25,
+        "retire": 24,
+        "refill": 28,
+        "slot": 0
+      },
+      {
+        "issue": 26,
+        "retire": 25,
+        "refill": 29,
+        "slot": 1
+      },
+      {
+        "issue": 27,
+        "retire": 26,
+        "refill": 30,
+        "slot": 2
+      },
+      {
+        "issue": 28,
+        "retire": 27,
+        "refill": 31,
+        "slot": 3
+      },
+      {
+        "issue": 29,
+        "retire": 28,
+        "refill": 32,
+        "slot": 0
+      },
+      {
+        "issue": 30,
+        "retire": 29,
+        "refill": 33,
+        "slot": 1
+      },
+      {
+        "issue": 31,
+        "retire": 30,
+        "refill": 34,
+        "slot": 2
+      },
+      {
+        "issue": 32,
+        "retire": 31,
+        "refill": 35,
+        "slot": 3
+      },
+      {
+        "issue": 33,
+        "retire": 32,
+        "refill": 36,
+        "slot": 0
+      },
+      {
+        "issue": 34,
+        "retire": 33,
+        "refill": 37,
+        "slot": 1
+      },
+      {
+        "issue": 35,
+        "retire": 34,
+        "refill": 38,
+        "slot": 2
+      },
+      {
+        "issue": 36,
+        "retire": 35,
+        "refill": 39,
+        "slot": 3
+      },
+      {
+        "issue": 37,
+        "retire": 36,
+        "refill": 40,
+        "slot": 0
+      },
+      {
+        "issue": 38,
+        "retire": 37,
+        "refill": 41,
+        "slot": 1
+      },
+      {
+        "issue": 39,
+        "retire": 38,
+        "refill": 42,
+        "slot": 2
+      },
+      {
+        "issue": 40,
+        "retire": 39,
+        "refill": 43,
+        "slot": 3
+      },
+      {
+        "issue": 41,
+        "retire": 40,
+        "refill": 44,
+        "slot": 0
+      },
+      {
+        "issue": 42,
+        "retire": 41,
+        "refill": 45,
+        "slot": 1
+      },
+      {
+        "issue": 43,
+        "retire": 42,
+        "refill": 46,
+        "slot": 2
+      },
+      {
+        "issue": 44,
+        "retire": 43,
+        "refill": 47,
+        "slot": 3
+      },
+      {
+        "issue": 45,
+        "retire": 44,
+        "refill": 48,
+        "slot": 0
+      },
+      {
+        "issue": 46,
+        "retire": 45,
+        "refill": 49,
+        "slot": 1
+      },
+      {
+        "issue": 47,
+        "retire": 46,
+        "refill": 50,
+        "slot": 2
+      },
+      {
+        "issue": 48,
+        "retire": 47,
+        "refill": 51,
+        "slot": 3
+      },
+      {
+        "issue": 49,
+        "retire": 48,
+        "refill": 52,
+        "slot": 0
+      },
+      {
+        "issue": 50,
+        "retire": 49,
+        "refill": 53,
+        "slot": 1
+      },
+      {
+        "issue": 51,
+        "retire": 50,
+        "refill": 54,
+        "slot": 2
+      },
+      {
+        "issue": 52,
+        "retire": 51,
+        "refill": 55,
+        "slot": 3
+      },
+      {
+        "issue": 53,
+        "retire": 52,
+        "refill": 56,
+        "slot": 0
+      },
+      {
+        "issue": 54,
+        "retire": 53,
+        "refill": 57,
+        "slot": 1
+      },
+      {
+        "issue": 55,
+        "retire": 54,
+        "refill": 58,
+        "slot": 2
+      },
+      {
+        "issue": 56,
+        "retire": 55,
+        "refill": 59,
+        "slot": 3
+      },
+      {
+        "issue": 57,
+        "retire": 56,
+        "refill": 60,
+        "slot": 0
+      },
+      {
+        "issue": 58,
+        "retire": 57,
+        "refill": 61,
+        "slot": 1
+      },
+      {
+        "issue": 59,
+        "retire": 58,
+        "refill": 62,
+        "slot": 2
+      },
+      {
+        "issue": 60,
+        "retire": 59,
+        "refill": 63,
+        "slot": 3
+      },
+      {
+        "issue": 61,
+        "retire": 60,
+        "refill": null,
+        "slot": 0
+      },
+      {
+        "issue": 62,
+        "retire": 61,
+        "refill": null,
+        "slot": 1
+      },
+      {
+        "issue": 63,
+        "retire": 62,
+        "refill": null,
+        "slot": 2
+      }
+    ],
+    "limits": "W6/B8 producer protocol unchanged; proof is register async lifetime, not arbitrary GPU barrier interleaving"
+  },
+  "producer_output_source_identity": "EXACT_PARENT_PX_WHOLE_SOURCE_EXCEPT_PRODUCER_STORES_AND_KERNEL_NAME",
+  "source_sha256": "cc4f5189bf0018a1e48941377b639b9c0983ffc2eb5cb6e44e6fa105f7d20b38",
+  "device_sha256": "81152aedc8e7fcc4bf87e869b7f6ea3bc0fc080238f0ff9c1e30b7291552ba1d",
+  "shared_bytes": 103600,
+  "geometry": {
+    "m": 128,
+    "n": 8192,
+    "k": 4096,
+    "CTAs": 128,
+    "threads": 384,
+    "KS": 1
+  },
+  "resources": {
+    "main": {
+      "symbol": "_Z7rq_stmxILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_",
+      "static_regs": 122,
+      "stack_spill_local": 0,
+      "CTA_register_pool": 46848
+    },
+    "packer": {
+      "symbol": "_Z7rx_packPKjPj",
+      "static_regs": 22,
+      "stack_spill_local": 0
+    }
+  },
+  "physical_A4_SASS": {
+    "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+    "binaries": [
+      {
+        "status": "PASS_PHYSICAL_A4_RETIREMENT",
+        "iterations": 2,
+        "groups": 8,
+        "A_register_sets": [
+          [
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71
+          ],
+          [
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87
+          ],
+          [
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103
+          ],
+          [
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119
+          ]
+        ],
+        "payload_or_conservative_A_writes_checked": 32,
+        "outlined_wait_paths_no_A_writes": [
+          11360,
+          11424,
+          11488,
+          11552
+        ],
+        "retirement_events": [
+          {
+            "iteration": 0,
+            "PC": 3632,
+            "retired_groups": 0
+          },
+          {
+            "iteration": 0,
+            "PC": 4512,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 0,
+            "PC": 5232,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 0,
+            "PC": 5984,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 3632,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 4512,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 5232,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 5984,
+            "retired_groups": 1
+          }
+        ],
+        "final": "wait0 retires lastgroup before epilogue",
+        "loop_PC_range": [
+          2912,
+          6208
+        ],
+        "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+      }
+    ]
+  },
+  "store_form_SASS": {
+    "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_BAR3",
+    "binaries": [
+      {
+        "STSM": 4,
+        "scalar_STS": 16,
+        "fullwarp_unpredicated_STSM": true,
+        "last_producer_store_PC": 10672,
+        "proxy_fence_PC": 10704,
+        "bar3_PC": 10720,
+        "shared_payload_bytes_per_stage": 8192,
+        "HGMMA": 16,
+        "X_LDG128": 32
+      }
+    ]
+  },
+  "negative_old_copy_alias_rejected": "{'error': 'ASYNC_A_WRITE_BEFORE_RETIRE', 'iteration': 0, 'PC': '0xe30', 'instruction': '@!P0 LDG.E.NA.128.CONSTANT R56, desc[UR12][R10.64]', 'clobbered': [56, 57, 58, 59]}",
+  "SASS": {
+    "main_HGMMA": 16,
+    "main_WG_arrive": 4,
+    "main_output_TMA": 1,
+    "main_X_TMA": 0,
+    "main_BFLY": 0,
+    "main_LDG128": 32,
+    "main_all_LDG_mnemonics": {
+      "LDG.E.NA.128.CONSTANT": 32,
+      "LDG.E.CONSTANT": 2
+    },
+    "packer_LDG_mnemonics": {
+      "LDG.E": 4
+    },
+    "packer_STG_mnemonics": {
+      "STG.E": 4
+    },
+    "main_STSM": 4,
+    "main_scalar_STS": 16,
+    "main_MOV_static": 35,
+    "main_async_A": "V2 nativeA4 retired(s-1) refill(s+3) afterwait1; physicalSASS gate mandatory"
+  },
+  "SASS_sha256": "02fd73c7709b6781fe17e4999c78739a55373fad88cab91c4ea6c7940b5bc653",
+  "ptxas": "ptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function '_Z7rq_stmxILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_' for 'sm_90a'\nptxas info    : Function properties for _Z7rq_stmxILi128ELi8ELi1ELi0ELi0ELi0ELi20EEv3RqP6RqTmapS1_\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 122 registers, used 4 barriers\nptxas info    : Compile time = 39.565 ms\nptxas info    : Compiling entry function '_Z7rx_packPKjPj' for 'sm_90a'\nptxas info    : Function properties for _Z7rx_packPKjPj\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 22 registers, used 0 barriers\nptxas info    : Compile time = 1.457 ms\n",
+  "files": {
+    "prototype.py": "c98331c946462863b31b06764558767676beeeedf9f9e2d99765bcb44d7b46d6",
+    "kernel_body.cuh": "ac5f0bc0ecae3aaca2559a9871630a2ec9087be3960aad6b40a97f69d1dcd36a",
+    "preflight.py": "7c2cd62125fd43eb58b0615ba80b0f0a363cd5d8e3adb39916f10bbb8361b3e8"
+  }
+}

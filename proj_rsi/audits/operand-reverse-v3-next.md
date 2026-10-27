@@ -133,3 +133,14 @@ Root terminal23:48:38Z exit0/nodeidle; raw `candidates/operand_reverse_v4/operan
 V4 removedsource-addresswork and improved its immediatepredecessor, including lowering/scheduling consequences. It remains slowerthanV1/incumbent; no port/officialslot/familywideclosure. This does not establish all remainingtime as Xload/demux or producerW. Mainloopfixeddescriptor/release/round and productioncosts persist.
 
 Root admitted NEW CPU-only `operand_reverse_packed_x/`: freshbitexact1MiBXlayout transformation **everycall** ->fourcoalesced16Bnative-Aloads/stage withoutSHFL, sameWproducer/geometry/plainoutput/rawQ4/separateA2. Entirepack+main mustbe two timedgraphnodes; preallocatedworkspace pointeronly, never activationvalues cached/prepared. Packerpoison/fullbytecomparison, changedX/freshoutput/zero/outlier replays and separateA lifetime are mandatory. Conditional fullpipelinegain is unmeasured; extra1MiBread+1MiBwrite and launch can offset savings. No GPUrequest byauthor.
+
+
+## Packed-X CPU gate outcome / explicit schedule revision
+
+Initialfreshpack rawQ4/separateA2 identitycopy **FAILEDphysicalretirementgate beforeGPU**, evenwith122registers/0spill/noC75: HGMMA readsR56/R60, futureLDG overwritesR56/R60 at0xe30/0xe40 beforelastMMA/coveringwait. Preservedfullsource/SASS/resource/hazard snapshotmanifest538d53494d48b01e7b943d372a4eae86050b8f7c4e0e5aca9a5bb460b99eabf9. Thisversionfailure wasdiagnosed; no familyclosure and no invalidtiming.
+
+Rootapproved correctnessrevision: **V2-nativeA4 retired-slotrefill**, initial0..3,wait1retires(s-1),load(s+3) intoretiredslot,finalwait0. Source mathloop byteidenticalV2, whileV4 Wproducer/output/cache/geometry stayfixed; rawQ4/A2fourahead ->nativeA4threeahead isexplicit confound. Both the combinedpacking change and scheduler/resource/compiler consequences belongto the completeversioncomparison.
+
+NewphysicalSASSgate passesfourdistinct16registerbanks/twoiterations/eightgroups/allpredicatewrites conservatively widened4regs; outlinedmathwaitpaths write noA. Samegate rejects preservedbadcopy exactly0xe30. Localmain122/packer22regs,0spill/local/dynamicallocation,32mainLDG128/noBFLY. ActualJIT .so is dumped and rawartifact saved **before** checker/firstmathlaunch; failureJSON INVALID_ACTUAL_JIT_RETIREMENT_GATE retainsbinary/source/artifacthash and no_mathlaunch. Thisis researchvalidation, not eventualproductiontooling.
+
+Frozenmanifest0420abd392bcb8fae64508f8c247bccec8f7fd7873777e6138e81543a48c94f4; source2c28de068a57235fcfec8af61a5678572ef76dc9833bc280e134623e8b6ff04a; lab39f9c69775e2fc926afe2d4d2ff3c4841f4533622d54887226556e08b4606b86. Proposedrootboundedtrial240/300s, fullfreshpack+main2nodes on everytimedcall; exactpackedpoison overwrite/freshX/storagebits/freshworkspace/output and allnumericalbasis/graphchecks. Criticreviewpending; noGPUbyauthor, noincumbentgainclaim.

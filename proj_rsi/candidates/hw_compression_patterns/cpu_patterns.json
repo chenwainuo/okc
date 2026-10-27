@@ -1,0 +1,109 @@
+{
+  "state": "CPU_PROOF_ONLY_NO_CUDA_NO_COMPRESSION_RATIO",
+  "versions": {
+    "torch": "2.13.0+cpu",
+    "numpy": "2.2.6",
+    "python": "3.10.12"
+  },
+  "source_sha256": "559cbdf5452b930531d09c4d039d0bdabdd273342174965319d1a665c1ef397a",
+  "BASE": 15360,
+  "proof": {
+    "all_65536_patterns_bijection": true,
+    "both_roundtrips": true,
+    "paired_all_low_and_high_values": true,
+    "paired_not_exhaustive_2pow32": true,
+    "paired_add_no_interhalf_carry": true,
+    "byteplane_roundtrips": true
+  },
+  "xor_proof": {
+    "all_65536_patterns_bijection": true,
+    "both_roundtrips": true,
+    "paired_all_low_and_high_values": true,
+    "byteplane_roundtrips": true
+  },
+  "sample": {
+    "weights": 4194304,
+    "device": "cpu",
+    "seed": 5151,
+    "distribution": "round_BF16_normal(0,1/64)",
+    "actual_H100_weight_payload": false,
+    "numeric_recode": false
+  },
+  "symbol_entropy_bits_per_weight": 10.464856888149036,
+  "encoded_symbol_entropy_bits_per_weight": 10.464856888149038,
+  "encoded_value_fractions": {
+    "256": 0.2537574768066406,
+    "1024": 0.854607343673706,
+    "2048": 0.9749903678894043,
+    "4096": 0.9984405040740967,
+    "8192": 0.999993085861206
+  },
+  "representations": {
+    "native16": {
+      "bytes": 8388608,
+      "sha256": "a9623435c165501b8128462be97cd21b0102ba4a5454251034d623dc3ae22965",
+      "byte_symbol_entropy_bits": 6.184071231380688,
+      "zero_byte_fraction": 0.0020453929901123047,
+      "all_zero_32B_sector_fraction": 0.0,
+      "constant_byte_32B_sector_fraction": 0.0,
+      "unique_bytes_per_32B_sector_mean": 20.904804229736328,
+      "u16_common_zero_high_bits_per_32B_sector_mean": 3.814697265625e-05,
+      "all_u16_fit_unsigned8_32B_sector_fraction": 0.0,
+      "interpretation": "Physical-byte local-pattern summaries only; not NVIDIA codec formats or ratio predictions"
+    },
+    "centered_zigzag16": {
+      "bytes": 8388608,
+      "sha256": "3d00a768ce54072941657608c311ca641e4fbbbdf27f648f3a7ba5785379378e",
+      "byte_symbol_entropy_bits": 6.168629707738733,
+      "zero_byte_fraction": 0.12956082820892334,
+      "all_zero_32B_sector_fraction": 0.0,
+      "constant_byte_32B_sector_fraction": 0.0,
+      "unique_bytes_per_32B_sector_mean": 20.764625549316406,
+      "u16_common_zero_high_bits_per_32B_sector_mean": 4.7220306396484375,
+      "all_u16_fit_unsigned8_32B_sector_fraction": 0.0,
+      "interpretation": "Physical-byte local-pattern summaries only; not NVIDIA codec formats or ratio predictions"
+    },
+    "signlow_xor16": {
+      "bytes": 8388608,
+      "sha256": "d8add8fbf573052fa4bb32d3e38ca070f00fb6f9f7e6ffe51869aeba23b8b2db",
+      "byte_symbol_entropy_bits": 6.133974620450685,
+      "zero_byte_fraction": 0.1516817808151245,
+      "all_zero_32B_sector_fraction": 0.0,
+      "constant_byte_32B_sector_fraction": 0.0,
+      "unique_bytes_per_32B_sector_mean": 20.647686004638672,
+      "u16_common_zero_high_bits_per_32B_sector_mean": 3.976482391357422,
+      "all_u16_fit_unsigned8_32B_sector_fraction": 0.0,
+      "interpretation": "Physical-byte local-pattern summaries only; not NVIDIA codec formats or ratio predictions"
+    },
+    "native16_byteplanes64": {
+      "bytes": 8388608,
+      "sha256": "eb1d3e38bdb712d01fe311d713e234f68eb9036e53f0da55e71329cbf111d472",
+      "byte_symbol_entropy_bits": 6.184071231380688,
+      "zero_byte_fraction": 0.0020453929901123047,
+      "all_zero_32B_sector_fraction": 0.0,
+      "constant_byte_32B_sector_fraction": 0.0,
+      "unique_bytes_per_32B_sector_mean": 18.608047485351562,
+      "u16_common_zero_high_bits_per_32B_sector_mean": 2.288818359375e-05,
+      "all_u16_fit_unsigned8_32B_sector_fraction": 0.0,
+      "interpretation": "Physical-byte local-pattern summaries only; not NVIDIA codec formats or ratio predictions"
+    },
+    "centered_zigzag16_byteplanes64": {
+      "bytes": 8388608,
+      "sha256": "bff883f8769173a37ffd634a229bc789aeda82c74e305e25b10d5b5673516e0c",
+      "byte_symbol_entropy_bits": 6.168629707738733,
+      "zero_byte_fraction": 0.12956082820892334,
+      "all_zero_32B_sector_fraction": 0.0,
+      "constant_byte_32B_sector_fraction": 0.0,
+      "unique_bytes_per_32B_sector_mean": 18.44979476928711,
+      "u16_common_zero_high_bits_per_32B_sector_mean": 2.3606796264648438,
+      "all_u16_fit_unsigned8_32B_sector_fraction": 0.0,
+      "interpretation": "Physical-byte local-pattern summaries only; not NVIDIA codec formats or ratio predictions"
+    }
+  },
+  "limits": [
+    "No GPU/API invocation",
+    "No hardware compression ratio or throughput forecast",
+    "CPU RNG differs from actual GPU weights",
+    "Local pattern formats are not claimed NVIDIA formats"
+  ]
+}

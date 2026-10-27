@@ -1,0 +1,381 @@
+{
+  "status": "DIAGNOSTIC_COMPLETE_COUNTERS_UNINTERPRETED",
+  "purpose": "FOUR_NODE_REPRESENTATION_ALLOCATION_COUNTERS_NO_SPEED",
+  "fixed_helper": {
+    "directory": "/okc/proj_rsi/candidates/hw_compression_owner",
+    "manifest_sha256": "8f32b91ee4146b2c9534360897d5953850f57b370c1ae653b5b04d325d80c781",
+    "sha256": {
+      "owner_cpu.cpp": "37bd530c08e466e73d17603e1e6c8f05dff614c4b12c15a0827317f3a6461400",
+      "cpu_probe.py": "1e3ab03f85d7a49b8c51c9ebf51dd3ff5fd338c02dfbe453461721d24659714b",
+      "cpu-torch213.json": "fff605fe7fc0a327e8d38b093ed19d090dd73417a712c26a7e3b12692088bb06",
+      "cpu-torch28-initial.json": "ae0f7ed6244fd3c50b995238f49d50ba420796b1d737305efeeec93ae6f050c3",
+      "cpu-torch28-locals.json": "e488ec9b8aff7fd62192ee031934a6aa8941bf528e9ad13d89446cb5ca641df0",
+      "allocator.cpp": "7f2dea1ecdcbff20efd1daad1a4250f775bbf9cfb8b9a76a16f257c1268140f8",
+      "adapter.py": "d76e63471c772aa69b0b76b2360ba4dde50f376e1cd33a88de575ff1e3e25362",
+      "build_helper.py": "b2953f722c7f392361aba08f0efc77f34eff21fbab5da6e74838db3477577f01",
+      "helper-build.json": "2e4d38fe9d0f76122f42de32be0632087439aade3d7cea490b0f879b26426cf7",
+      "README.md": "c445d020159ef76bea4fb2aed87b6a7eea4c5538a646b86803c318b0b75d629d",
+      "gpu_lifetime.py": "5e0dc4534b201fb9eb048fd4b2441bd10d5dff2cec2c689e02e9043a73422dac"
+    },
+    "ABI": {
+      "CUDA_VERSION": 12080,
+      "CUmemAllocationProp_size": 32,
+      "COMP_NONE": 0,
+      "COMP_GENERIC": 1
+    }
+  },
+  "profile_order": [
+    "raw_generic",
+    "raw_none",
+    "planes_generic",
+    "planes_none"
+  ],
+  "population": "UNCHANGED_cuMemcpyDtoDAsync_then_stream_sync",
+  "checks": [
+    {
+      "case": "raw_generic",
+      "stage": "IMMEDIATELY_AFTER_SELECTED_ACTUAL_GRAPH",
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true,
+      "repair_replay": false
+    },
+    {
+      "case": "raw_none",
+      "stage": "IMMEDIATELY_AFTER_SELECTED_ACTUAL_GRAPH",
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true,
+      "repair_replay": false
+    },
+    {
+      "case": "planes_generic",
+      "stage": "IMMEDIATELY_AFTER_SELECTED_ACTUAL_GRAPH",
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true,
+      "repair_replay": false
+    },
+    {
+      "case": "planes_none",
+      "stage": "IMMEDIATELY_AFTER_SELECTED_ACTUAL_GRAPH",
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true,
+      "repair_replay": false
+    }
+  ],
+  "cleanup": {
+    "counts_live": [
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 2,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 2,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 2,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 2,
+        "Storage_owners": 1
+      }
+    ],
+    "counts_after_alias_drop": [
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      },
+      {
+        "tensor_defined": true,
+        "Region_owners": 2,
+        "TensorImpl_owners": 1,
+        "Storage_owners": 1
+      }
+    ],
+    "counts_after_close": [
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      },
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      },
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      },
+      {
+        "tensor_defined": false,
+        "Region_owners": 0
+      }
+    ],
+    "status": "CHECKED_CLOSE_PASS"
+  },
+  "copy_resources": {
+    "numRegs": 32,
+    "localSizeBytes": 0,
+    "sharedSizeBytes": 0,
+    "maxThreadsPerBlock": 256,
+    "occupancy_blocks_per_SM": 8,
+    "binaryVersion": 90,
+    "grid": [
+      128,
+      1,
+      1
+    ],
+    "block": [
+      256,
+      1,
+      1
+    ]
+  },
+  "jit_resources": {
+    "registers": 32,
+    "stack": 0,
+    "shared": 0,
+    "local": 0,
+    "cuobjdump_sha256": "b1bfb65bdd3fd754df21b56b3613aa3652273d78dcee9a1c9239c8214bf190ce"
+  },
+  "copy_identity": {
+    "kernel": "okc_hwc_copy64m",
+    "bytes": 67108864,
+    "grid": [
+      128,
+      1,
+      1
+    ],
+    "block": [
+      256,
+      1,
+      1
+    ],
+    "source_sha256": "d5b5e86f7801d518d8192a9397f952666466e08fef86af964334c7644ecaded5",
+    "bindings_sha256": "e391a11e6af0b3a1287d1a19a963111fb85a2f5748e0b8da69c07ecad846a0cb",
+    "jit_sha256": "150ef3890233f6baaf52cd7235293e92bd6ae29b27ea0cef9772cc24d705784f"
+  },
+  "payloads": {
+    "raw": {
+      "bytes": 67108864,
+      "sha256": "09d1920b4f42bd5ec1fbaa26f2ac936d688a81574c605b5ec474f0ee42168120"
+    },
+    "planes": {
+      "bytes": 67108864,
+      "sha256": "22a32df734a948420950ed3e601ace67f8661a87e90fd778d62def5d55d26b92",
+      "inverse_to_raw_exact": true
+    }
+  },
+  "capabilities": {
+    "device": 0,
+    "vmm_supported": 1,
+    "generic_compression_supported": 1
+  },
+  "allocations": [
+    {
+      "label": "raw_generic",
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 1,
+        "actual_compression": 1,
+        "device": 0,
+        "ptr": 12918456320,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 1,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    },
+    {
+      "label": "raw_none",
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 0,
+        "actual_compression": 0,
+        "device": 0,
+        "ptr": 12985565184,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 0,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    },
+    {
+      "label": "planes_generic",
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 1,
+        "actual_compression": 1,
+        "device": 0,
+        "ptr": 13052674048,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 1,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    },
+    {
+      "label": "planes_none",
+      "info": {
+        "bytes": 67108864,
+        "mapped_bytes": 67108864,
+        "granularity": 2097152,
+        "requested_compression": 0,
+        "actual_compression": 0,
+        "device": 0,
+        "ptr": 13119782912,
+        "lifetime": "Tensor storage owns Region; graphs additionally need explicit owner"
+      },
+      "properties": {
+        "retain_result": 0,
+        "compression": 0,
+        "meaning": "allocation attribute, not a measured compression ratio"
+      }
+    }
+  ],
+  "allocation_spans_disjoint": true,
+  "outputs": {
+    "raw_generic": {
+      "ptr": 125810295963648,
+      "properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      }
+    },
+    "raw_none": {
+      "ptr": 125807007629312,
+      "properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      }
+    },
+    "planes_generic": {
+      "ptr": 125806839857152,
+      "properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      }
+    },
+    "planes_none": {
+      "ptr": 125806672084992,
+      "properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      }
+    }
+  },
+  "preprofile_checks": [
+    {
+      "case": "raw_generic",
+      "eager_and_actual_graph_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "raw_none",
+      "eager_and_actual_graph_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "planes_generic",
+      "eager_and_actual_graph_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true
+    },
+    {
+      "case": "planes_none",
+      "eager_and_actual_graph_bytes_exact": true,
+      "complement_poison_overwritten": true,
+      "input_immutable": true
+    }
+  ],
+  "fresh_output_checks": [
+    {
+      "case": "raw_generic",
+      "new_output_ptr": 125806604976128,
+      "output_properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      },
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true
+    },
+    {
+      "case": "raw_none",
+      "new_output_ptr": 125806537867264,
+      "output_properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      },
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true
+    },
+    {
+      "case": "planes_generic",
+      "new_output_ptr": 125806470758400,
+      "output_properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      },
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true
+    },
+    {
+      "case": "planes_none",
+      "new_output_ptr": 125806403649536,
+      "output_properties": {
+        "retain_result": 1,
+        "compression": null,
+        "meaning": "not queryable through VMM retain; compression state UNKNOWN, not NONE"
+      },
+      "full64MiB_bytes_exact": true,
+      "complement_poison_overwritten": true
+    }
+  ],
+  "postprofile_sources_immutable": true
+}

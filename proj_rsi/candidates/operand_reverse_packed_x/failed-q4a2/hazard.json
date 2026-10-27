@@ -1,0 +1,34 @@
+{
+  "status": "CPU_FOUND_UNSAFE_PHYSICAL_ASYNC_A_ALIAS_NO_GPU",
+  "source_sha256": "a795a521870e813f699875c03a0f8f81240ac7de3596040201086f5dfca97361",
+  "main_regs": 122,
+  "packer_regs": 22,
+  "example": [
+    {
+      "PC": "0xd30",
+      "HGMMA_A": "R56..59"
+    },
+    {
+      "PC": "0xd80",
+      "HGMMA_A": "R60..63"
+    },
+    {
+      "PC": "0xe30",
+      "LDG_refill_clobbers": "R56..59"
+    },
+    {
+      "PC": "0xe40",
+      "LDG_refill_clobbers": "R60..63"
+    },
+    {
+      "PC": "0xe50",
+      "last_HGMMA_group0": "R68..71"
+    },
+    {
+      "PC": "0xed0",
+      "wait_group1": "group0 may remain pending"
+    }
+  ],
+  "diagnosis": "Identity rawQ->A copy coalesces away; source emptypins/noC75 do not establish required physical conservative lifetime. Preserve evidence; no launch.",
+  "approved_revision": "Root authorized nativeA4 refill(s+3) into retired(s-1) only afterwait1; explicit4ahead->3ahead confound."
+}

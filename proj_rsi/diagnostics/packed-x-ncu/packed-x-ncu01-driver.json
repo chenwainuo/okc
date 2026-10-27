@@ -1,0 +1,163 @@
+{
+  "status": "COUNTERS_CAPTURE_COMPLETE_EXPORT_REVIEW_REQUIRED",
+  "purpose": "COUNTERS_PC_ONLY_NO_PERFORMANCE_CLAIM",
+  "source_sha256": "2c28de068a57235fcfec8af61a5678572ef76dc9833bc280e134623e8b6ff04a",
+  "manifest_sha256": "0420abd392bcb8fae64508f8c247bccec8f7fd7873777e6138e81543a48c94f4",
+  "JIT_artifact": "/okc/logs/packed-x-ncu01-driver.jit.sass",
+  "JIT_sha256": "f954729bce07478ad46c6b9fd2ab21f0f32d255737559e672b0533b620ebe36f",
+  "physical_A4_gate": {
+    "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+    "binaries": [
+      {
+        "status": "PASS_PHYSICAL_A4_RETIREMENT",
+        "iterations": 2,
+        "groups": 8,
+        "A_register_sets": [
+          [
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71
+          ],
+          [
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87
+          ],
+          [
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103
+          ],
+          [
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119
+          ]
+        ],
+        "payload_or_conservative_A_writes_checked": 32,
+        "outlined_wait_paths_no_A_writes": [
+          12000,
+          12064,
+          12128,
+          12192
+        ],
+        "retirement_events": [
+          {
+            "iteration": 0,
+            "PC": 3664,
+            "retired_groups": 0
+          },
+          {
+            "iteration": 0,
+            "PC": 4544,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 0,
+            "PC": 5264,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 0,
+            "PC": 6016,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 3664,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 4544,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 5264,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 6016,
+            "retired_groups": 1
+          }
+        ],
+        "final": "wait0 retires lastgroup before epilogue",
+        "loop_PC_range": [
+          2944,
+          6240
+        ],
+        "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+      }
+    ]
+  },
+  "resources": {
+    "main_regs": 122,
+    "pack_regs": 22,
+    "local": 0,
+    "dynamic_shared": 103600
+  },
+  "immediate_selected_output_oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00",
+  "packed_bytes": "EXACT_ALL_1MiB",
+  "output_poison_overwritten": true,
+  "input_weights_pack_esc_immutable": true,
+  "counters": "ZERO",
+  "profile_nodes_expected": [
+    "rx_pack",
+    "rq_px"
+  ],
+  "graph_cleanup": "RESET_AFTER_DRAIN"
+}

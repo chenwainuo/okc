@@ -1,0 +1,41 @@
+{
+  "status": "CPU_BIT_INDEX_SECTOR_PHYSICAL_A4_SM90A_PASS_GPU_UNRUN",
+  "source_sha256": "2c28de068a57235fcfec8af61a5678572ef76dc9833bc280e134623e8b6ff04a",
+  "device_sha256": "851942131f5b47869fad74b41b80e686712104260a067233cd2f36f129284cd7",
+  "parent_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "v1_source_sha256": "ca92a4fb0d3a488768c4531ba315e8d0327b0a4c4a994147b12c61a929ae85f8",
+  "v4_source_sha256": "5b6c3fb45f686b07a203ba7fb6feb0bdd5329cb48fa105b2a39b530759f7fee8",
+  "files": {
+    "README.md": "eb2c43de8f5472b2690994377041f96b9bb6833c6dfc9e1ed8612c7c14d645ab",
+    "device_source.cu": "851942131f5b47869fad74b41b80e686712104260a067233cd2f36f129284cd7",
+    "extension_source.cu": "2c28de068a57235fcfec8af61a5678572ef76dc9833bc280e134623e8b6ff04a",
+    "failed-q4a2/device_source.cu": "abaea08170530825e5490c47788322abbef0509342304f52a34075ce0fd7d021",
+    "failed-q4a2/extension_source.cu": "a795a521870e813f699875c03a0f8f81240ac7de3596040201086f5dfca97361",
+    "failed-q4a2/hazard.json": "7cecfd645a45923b0876cd07bcf6dcdc90fed3f29561de468b0003f95fb570ef",
+    "failed-q4a2/kernel_body.cuh": "2cd4eb0909c975d96c3b364b518f4e35719ec4eb56fcb605fbf825e3cfd43fa0",
+    "failed-q4a2/preflight.json": "0b64e32a89103d8310ad612a209348baf70f4ae7b8e312e50f4103a559b0513a",
+    "failed-q4a2/preflight.py": "25589739000820cbb608051d536e49d3bea22c5b5c6a3e7206e2ebc8049e3b29",
+    "failed-q4a2/prototype.py": "a5195a0918dc1e44aff4a63c6322112bb261e953825135636922d31a1847817f",
+    "failed-q4a2/resource.log": "3f8391b510dd23e214922c389964da3a520b6df912f1e2e26591ea78b95e770a",
+    "failed-q4a2/sass.txt": "7b0324c5cdf749fcaaf2ccf669e80ce4b4e48b4fd40238de27af5cc0c7852210",
+    "kernel_body.cuh": "88e3ef9988dca17180e7a86d97e4bf15e37602a76ed6edbd18088d43435d8495",
+    "lab.py": "39f9c69775e2fc926afe2d4d2ff3c4841f4533622d54887226556e08b4606b86",
+    "liveness.py": "0f09e0a1c1667dec9b45a9c680534e91fe752c3a23855d08b2e2fba5b6a4e92c",
+    "preflight.json": "7ca003aeff64ce590abf04a41af3abd2986f62e4f4d1f7a037fd7155c43313f2",
+    "preflight.py": "a0e154236f66fc9d8194261c17310d20e0aeb1d1ef453cfe2f9306d0569cd67b",
+    "prototype.py": "e1981ca7291341c226caf78acce89546c4d0aba1f2573e1d30c73e5ac0a42ad7",
+    "resource.log": "9cae86aa919ae62cb7acf6b0b870e65cb464f55feecefa73a46d9e1ac40b555a",
+    "sass.txt": "26796f01bd72df371701d3f05c32dd08ab6c429295b383c6e85ff8a99cead236",
+    "failed-q4a2/manifest.json": "538d53494d48b01e7b943d372a4eae86050b8f7c4e0e5aca9a5bb460b99eabf9"
+  },
+  "policy": "EVERY_CALL_1MiB_FRESH_PACK_PLUS_MAIN_NATIVE_A4_RETIRED_THREEAHEAD_4V4_NC_NOALLOC",
+  "failed_initial_copy_snapshot_manifest": "538d53494d48b01e7b943d372a4eae86050b8f7c4e0e5aca9a5bb460b99eabf9",
+  "actual_JIT_gate": "cuobjdump exactmodule .so; save SASS BEFORE sameCPUretirementgate; failureJSON beforefirstmath; no productiontooling",
+  "survival_gate": ">=.5us BOTH F1+paired vs actual pw36; always report v1/v4 deltas and diagnose next limit",
+  "trial_command": "MAX_JOBS=1 python3 proj_rsi/candidates/operand_reverse_packed_x/lab.py --json /okc/logs/operand-reverse-packed-x01.json",
+  "runtime_budget_seconds": {
+    "inner": 240,
+    "outer": 300
+  },
+  "GPU": "ROOT_NAMED_HANDOFF_AND_CRITIC_REQUIRED"
+}

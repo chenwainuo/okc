@@ -1,0 +1,1 @@
+Initial CPU checker rejected the legitimate complementary @P0 bar4 / @!P0 bar3 lowering because its match required unpredicated barriers. Kernel source/SASS unchanged. Corrected gate explicitly checks both retained post-proxy barriers and their complementary predicate; STSM itself remains unpredicated. No GPU launch occurred.

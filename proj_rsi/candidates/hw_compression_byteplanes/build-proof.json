@@ -1,0 +1,29 @@
+{
+  "state": "CPU_COMPILE_PASS_GPU_UNRUN",
+  "command": [
+    "/usr/local/cuda-12.8/bin/nvcc",
+    "-O3",
+    "-std=c++17",
+    "-lineinfo",
+    "-arch=sm_90a",
+    "--ptxas-options=-v",
+    "--cubin",
+    "/home/ubuntu/okc/proj_rsi/candidates/hw_compression_byteplanes/copy_kernel.cu",
+    "-o",
+    "/home/ubuntu/okc/proj_rsi/candidates/hw_compression_byteplanes/copy.sm90a.cubin"
+  ],
+  "registers": 32,
+  "stack_bytes": 0,
+  "spill_load_bytes": 0,
+  "spill_store_bytes": 0,
+  "shared_bytes": 0,
+  "local_bytes": 0,
+  "kernel_source_sha256": "d5b5e86f7801d518d8192a9397f952666466e08fef86af964334c7644ecaded5",
+  "cubin_sha256": "42aa85afe32adfac57b25af4098fbd9cefb7d395456a2a8fb6dd2a844d192c86",
+  "ptx_sha256": "6d1d0a039da9b95a2b4bc313c0a6ad3c5746e8774e70f96a97f97a37b4670b5f",
+  "sass_sha256": "ea596d2d6e950b86a4beb1f68324aaa4a649bcc2016305d0747ab70bb36ae88a",
+  "host_syntax_pass": true,
+  "SASS_volatile_LDG128_sites": 5,
+  "SASS_volatile_STG128_sites": 5,
+  "note": "Compiler peels/unrolls loop; each volatile vector load is stored. All4194304addresses covered exactly. Actual CUDA JIT/runtime attrs and launch remain GPU gates."
+}
