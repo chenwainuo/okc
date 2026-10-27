@@ -1,0 +1,2208 @@
+{
+  "schema_version": 1,
+  "view_kind": "projection_only_coordinator_planning_view_not_scheduler_authority",
+  "goal": {
+    "problem": "muse_bf16_proj",
+    "target_score_us": 3000,
+    "strictly_below_target": true,
+    "official_incumbent_job": "9916d34357b745cf",
+    "official_incumbent_source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "official_incumbent_score_us": 3157.0384036526784,
+    "gap_to_3000_us": 157.03840365267843,
+    "relative_score_reduction_to_3000_fraction": 0.04974231655560024,
+    "leaderboard_rank": 62,
+    "ranked_teams": 1173,
+    "board_capture": {
+      "path": "proj_rsi/audits/coordinator-observations-20261027/leaderboard-20261027T2125.json",
+      "sha256": "5549b15481d971072c1ad66022dfbd0c50a99aa2e0fdd5470aaf201015deb102"
+    }
+  },
+  "scope_policy": {
+    "active_problem_allowlist": [
+      "muse_bf16_proj"
+    ],
+    "serving_MoE_optimization_in_active_queue": false,
+    "past_MoE_results": "historical archive only; retained in history_catalog without active optimization priority",
+    "quota_assumptions": null
+  },
+  "ranking_method": "Root-directed projection planning ranks: rolledGVkeyedhalf1, actual-selectedRQ32loop2, actual-selectedGV16repair/decode3, source-pinned historical-positive audit4/support. Within targets, weights use exact official scored-route sensitivity. Expected gains/probabilities/costs unknown => numeric expected ROI unrankable. RuntimeREADY is0 per root21:33 observation; CPU assignment/review is not GPU readiness.",
+  "active_opportunities": [
+    {
+      "problem": "muse_bf16_proj",
+      "actual_runtime_READY": false,
+      "runtime_readiness_source": "Root-reported actual checkpoint21:33UTC:0READY; CPU/review readiness is distinct",
+      "expected_score_gain_us": null,
+      "p_gain": null,
+      "p_valid": null,
+      "numeric_expected_ROI": null,
+      "dispatch_authority": "root coordinator and existing exclusive GPU worker",
+      "priority_rank": 1,
+      "id": "projection.gv53.keyed_half",
+      "title": "Rolled GV keyed-half repair screen",
+      "work_kind": "implementation_screen",
+      "planning_readiness": "CPU_SOURCE_NATIVE_PROOF_READY_RUNTIME_STATUS_UNKNOWN",
+      "target_cells": [
+        {
+          "load": "decode 1",
+          "layer": "pooler",
+          "m": 1,
+          "selected_family": "gv_predxor",
+          "score_elasticity": 0.06461677550304479
+        },
+        {
+          "load": "verify 1",
+          "layer": "pooler",
+          "m": 8,
+          "selected_family": "gv_predxor",
+          "score_elasticity": 0.06114547809541188
+        }
+      ],
+      "hypothesis": "Reduce redundant packed escape target decoding in the exact scored rolled pooler M1/M8 repair path while preserving ignored-half semantics and execution order. Static instruction change is not a measured gain.",
+      "next_falsifier": "Matched current-source direct screen on poolerM1/M8 with exact tuple/current input/own timed output and source+resource evidence; preserve signed AB/BA/F1. Then test actual selected policy against GV9916 before any release.",
+      "evidence": [
+        {
+          "path": "proj_rsi/candidates/gv53_keyed_half_v1/source-proof.json",
+          "sha256": "fd1bf9cd96174bf70d7795ba4e8fe6484b02291157feaccb190c3457df6d01cd"
+        },
+        {
+          "path": "proj_rsi/candidates/gv53_keyed_half_v1/cpu-proof.json",
+          "sha256": "f9f3c2072f9136560240dec5e182f412c9bf523f96ca672d1d64b7aa91eafc43"
+        },
+        {
+          "path": "proj_rsi/audits/selected-hotpaths-gv9916/report.json",
+          "sha256": "e6196ca87583ce8e8ba117636ffc157ef154f15971252dfb94ebaee351976e20"
+        }
+      ],
+      "source_sha256": "239b530cf7eead0a2dbf0af5c29aea4ba02e449500eb80e45b255b361cf2f900",
+      "parent_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+      "static_nonNOP_delta": -3,
+      "registers": 64,
+      "spills_or_local_stack": 0,
+      "target_score_elasticity": 0.12576225359845666,
+      "conditional_scenario": {
+        "assumed_target_latency_reduction_fraction": 0.01,
+        "same_official_job_score_reduction_us": 3.9753720956731944,
+        "measured_or_forecast": false
+      },
+      "reviewed_wall_cap_seconds": null
+    },
+    {
+      "problem": "muse_bf16_proj",
+      "actual_runtime_READY": false,
+      "runtime_readiness_source": "Root-reported actual checkpoint21:33UTC:0READY; CPU/review readiness is distinct",
+      "expected_score_gain_us": null,
+      "p_gain": null,
+      "p_valid": null,
+      "numeric_expected_ROI": null,
+      "dispatch_authority": "root coordinator and existing exclusive GPU worker",
+      "priority_rank": 2,
+      "id": "projection.rq32.selected_loop",
+      "title": "RQ32 selected pooler/unpooler escape and loop scheduling",
+      "work_kind": "mechanism_and_implementation",
+      "planning_readiness": "CPU_IMPLEMENTATION_ASSIGNED_NO_RUNTIME_READY_JOB",
+      "target_cells": [
+        {
+          "load": "decode 32",
+          "layer": "pooler",
+          "m": 32,
+          "selected_family": "rq",
+          "score_elasticity": 0.04962468467383463,
+          "actual_stage_count": 6,
+          "actual_flags": 35,
+          "actual_KS": 4
+        },
+        {
+          "load": "decode 32",
+          "layer": "unpooler",
+          "m": 32,
+          "selected_family": "rq",
+          "score_elasticity": 0.04814265757835983,
+          "actual_stage_count": 6,
+          "actual_flags": 35,
+          "actual_KS": 2
+        }
+      ],
+      "hypothesis": "Target selected RQ producers/escape repair and stage geometry using actual flags/KS, not an unselected template or a faster-than-failed-parent comparison.",
+      "next_falsifier": "Pin actual selected ST6/FL35/KS4(pooler32) andKS2(unpooler32); implement one bounded changed-loop candidate versus current GV9916 source, preserving real timed graph numerics/mutation/output and every signed sample. Prior generic cursor results do not establish a win.",
+      "evidence": [
+        {
+          "path": "proj_rsi/audits/selected-hotpaths-gv9916/report.json",
+          "sha256": "e6196ca87583ce8e8ba117636ffc157ef154f15971252dfb94ebaee351976e20"
+        },
+        {
+          "path": "proj_rsi/audits/submission-stack-20261027/analysis.json",
+          "sha256": "462a2e0e090b58c991247d4564dc5381d583f3c31d6db7ccd9ddd7965967c4aa"
+        }
+      ],
+      "target_score_elasticity": 0.09776734225219447,
+      "conditional_scenario": {
+        "assumed_target_latency_reduction_fraction": 0.1,
+        "same_official_job_score_reduction_us": 31.648156381244583,
+        "measured_or_forecast": false
+      },
+      "reviewed_wall_cap_seconds": null,
+      "family_context": {
+        "all_selected_RQ_cases": 7,
+        "all_selected_RQ_score_elasticity": 0.2642671831574968,
+        "family_10pct_latency_cut_score_scenario_us": 85.2637068613949
+      }
+    },
+    {
+      "problem": "muse_bf16_proj",
+      "actual_runtime_READY": false,
+      "runtime_readiness_source": "Root-reported actual checkpoint21:33UTC:0READY; CPU/review readiness is distinct",
+      "expected_score_gain_us": null,
+      "p_gain": null,
+      "p_valid": null,
+      "numeric_expected_ROI": null,
+      "dispatch_authority": "root coordinator and existing exclusive GPU worker",
+      "priority_rank": 3,
+      "id": "projection.gv16.repair_decode",
+      "title": "GV16 selected predxor repair/decode specialization",
+      "work_kind": "implementation_screen",
+      "planning_readiness": "CPU_IMPLEMENTATION_ASSIGNED_NO_RUNTIME_READY_JOB",
+      "target_cells": [
+        {
+          "load": "decode 16",
+          "layer": "unpooler",
+          "m": 16,
+          "selected_family": "gv_predxor",
+          "score_elasticity": 0.048562831878118835,
+          "actual_scored_template": [
+            1,
+            2,
+            2,
+            1,
+            4,
+            16,
+            1,
+            1,
+            2,
+            1
+          ],
+          "static_instruction_count": 2080,
+          "registers": 110,
+          "static_P2R": 16
+        },
+        {
+          "load": "decode 16",
+          "layer": "pooler",
+          "m": 16,
+          "selected_family": "gv_predxor",
+          "score_elasticity": 0.04829180101466138,
+          "actual_scored_template": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "static_instruction_count": 2000,
+          "registers": 128,
+          "static_P2R": 16
+        }
+      ],
+      "target_score_elasticity": 0.0968546328927802,
+      "hypothesis": "A targeted repair/decode scheduling specialization may shorten selected GV16 work. Static SASS and register counts identify a bounded codegen question; no measured gain or dynamic-loop attribution exists.",
+      "next_falsifier": "Compile and inspect only two exact selected M16 native functions against frozen501d source. Measure one supported change with actual controls; pooler at128registers makes liveness/spill risk explicit. Reuse unchanged codec/math proof and retain every signed runtime result.",
+      "reviewed_wall_cap_seconds": null,
+      "evidence": [
+        {
+          "path": "proj_rsi/audits/selected-hotpaths-gv9916/report.json",
+          "sha256": "e6196ca87583ce8e8ba117636ffc157ef154f15971252dfb94ebaee351976e20"
+        },
+        {
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ]
+    },
+    {
+      "problem": "muse_bf16_proj",
+      "actual_runtime_READY": false,
+      "runtime_readiness_source": "Root-reported actual checkpoint21:33UTC:0READY; CPU/review readiness is distinct",
+      "expected_score_gain_us": null,
+      "p_gain": null,
+      "p_valid": null,
+      "numeric_expected_ROI": null,
+      "dispatch_authority": "root coordinator and existing exclusive GPU worker",
+      "priority_rank": 4,
+      "id": "projection.recover_unstacked_positive",
+      "title": "Audit route-specific historical positives against current selections",
+      "work_kind": "evidence_audit",
+      "planning_readiness": "VERSIONED_SUPPORTING_AUDIT_COMPLETE_NO_NEW_EXECUTABLE_READY",
+      "target_cells": [],
+      "hypothesis": "Recover comparator-specific tiny positives without treating bake observations or losing whole packages as deployable increments. O32 margin and private EH observations need exact current selected-route retesting.",
+      "next_falsifier": "Use the versioned recovery audit to scope an exact route-only experiment against current selected GV9916. Two selected local target positives and one explicitly unselected fixed diagnostic are conditional recoveries, not three proven deployable increments. No new executable or runtimeREADY job was produced.",
+      "evidence": [
+        {
+          "path": "proj_rsi/audits/gv-o32-positive-policy-result/analysis.json",
+          "sha256": "2e037fa0d4255acb74ecd948236bab3d3b8c3dc234ceef308f36bba136b058b8"
+        },
+        {
+          "path": "proj_rsi/audits/gv-private-eh-policy-result/analysis.json",
+          "sha256": "60112b1de7b5fc0249386cbb6009b2e6554c29bffa1d1f21a94d51667213745b"
+        },
+        {
+          "path": "proj_rsi/history_catalog.json",
+          "sha256": "ee563217e5ac0e8a2e94fbe7d8fb5e65f36e6b5baea6934f22232b6948f34792"
+        },
+        {
+          "path": "audits/projection-positive-recovery-20261027/independent-evidence.json",
+          "sha256": "3f4b9687ee316356f4d70403ad480bc7325bd59c5bf1e475aa3ca8945c7465d1"
+        }
+      ],
+      "direct_score_gain_us": 0,
+      "direct_score_gain_basis": "An evidence audit has no direct speed benefit; downstream implementation value remains unknown.",
+      "shortlist_caution": "O32 full-policy paired0.999842644/F11.001866895 conflicts; local parent GV45 differs from official current RQ-ST5. Private-EH composed scored3207.568us lost. Complete d1ca3187.1424 and55f73186.7445 were already scored and lost to GV9916; they are not unsubmitted wins.",
+      "recovery_audit": {
+        "path": "audits/projection-positive-recovery-20261027/independent-evidence.json",
+        "sha256": "3f4b9687ee316356f4d70403ad480bc7325bd59c5bf1e475aa3ca8945c7465d1"
+      },
+      "recoveries": [
+        {
+          "rank": 1,
+          "increment": "O32-only positive-selection comparison 0.99 to1.0",
+          "readiness": "Existing immutable candidate e0f1; numerically validated full30, direct current-GV source parent, no kernel change. No scored submission found in canonical submissions table.",
+          "candidate_source": "proj_rsi/candidates/gv_o32_positive_selection_v1/submission.py",
+          "source_sha256": "e0f1f712868f8a092a5e96c010420fcc92562291b051d391c9bc77abf0f5bba2",
+          "parent_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+          "actual_target": "decode32/o: local parentGV45\u2192originalRQ t32s6hze FL35 KS2",
+          "target_gain_us": {
+            "paired": 0.128000043,
+            "F1": 0.079999678
+          },
+          "whole_local_ratio": {
+            "paired": 0.9998426437788017,
+            "F1": 1.0018668946585063
+          },
+          "selected": true,
+          "binding_selector_evidence": "Same prepare9.73 contender versus9.79 incumbent:0.99 cutoff9.6921 rejects,1.0 accepts; rounding-robust0.05\u20130.07us positive gap. Other175ASTnodes exact.",
+          "counterevidence": "Whole paired estimate loses despite F1 gain; eleven fresh prepare choices differ. Official incumbent already serves O32RQST5, not local parentGV45. Complete O32-containing d1ca/55f7 packages already scored and lost. No isolated official gain.",
+          "recovery": "Use exact current-GV single-edit source as one narrow stack candidate; retain mixed whole estimates. No broad RQ/GV-margin additions needed.",
+          "evidence": [
+            "proj_rsi/audits/gv-o32-positive-policy-result/analysis.json",
+            "proj_rsi/audits/gv-o32-positive-policy-result/report.md",
+            "proj_rsi/candidates/gv_o32_positive_selection_v1/source-proof.json"
+          ],
+          "candidate_source_actual_sha256": "e0f1f712868f8a092a5e96c010420fcc92562291b051d391c9bc77abf0f5bba2"
+        },
+        {
+          "rank": 2,
+          "increment": "Pooler128 private-free EH hz851971 only",
+          "readiness": "Existing validated native code; route-only composition on501d still required. Fullaaf4source was already scored and lost; narrow pooler-only scope was not established by that whole result.",
+          "candidate_source": "proj_rsi/candidates/gv_private_eh_screen_v1/submission.py",
+          "actual_target": "verify16/pooler M128 KS4: current-GV local source selects private-free hz851971",
+          "target_gain_us": {
+            "narrow_selected_paired": 0.207999721,
+            "narrow_selected_F1": 0.223999843,
+            "narrow_fixed_paired": 0.319999643,
+            "narrow_fixed_F1": 0.191999599,
+            "full30_target_paired": 0.28800033,
+            "full30_target_F1": 0.607999973
+          },
+          "selected": true,
+          "counterevidence": "FullGV+privateEH aaf4 scored3207.567539us versus3157.038404 current. Local narrow parent selected oldEH65539 while actual scored incumbent reports nonEH3; same source parent is not same selected template. Historical PW45 fixed pooler arm had a paired loss.",
+          "recovery": "Retain current GV source/control and admit private-free contender only on pooler128, preserving original choices elsewhere; measure actual selected result, never force the supposed incumbent.",
+          "evidence": [
+            "proj_rsi/audits/gv-private-eh-screen-runtime/analysis.json",
+            "proj_rsi/audits/gv-private-eh-screen-runtime/report.md",
+            "proj_rsi/audits/gv-private-eh-policy-result/analysis.json",
+            "proj_rsi/audits/submission-stack-20261027/analysis.json"
+          ],
+          "candidate_source_actual_sha256": "aaf40d39d38a963efd2d634ad003c0558ad3f7921916934ed3749c207cb855d7"
+        },
+        {
+          "rank": 3,
+          "increment": "QKV128 private-free EH hz851971 selection recovery",
+          "readiness": "Diagnostic positive fixed arm, NOT a selected shipping gain. Existing native code/basis evidence reusable; a narrow selection/context repair is still required.",
+          "candidate_source": "proj_rsi/candidates/gv_private_eh_screen_v1/submission.py",
+          "actual_target": "verify16/qkv_gate M128 KS7 fixedprivate-free hz851971 versus actual prepared current-GV originalnonEH3",
+          "target_gain_us": {
+            "fixed_paired": 0.256000087,
+            "fixed_F1": 0.127999112,
+            "actual_policy_paired": -0.128000043,
+            "actual_policy_F1": -0.512000173
+          },
+          "selected": false,
+          "counterevidence": "Actual composed policy retained original3; privatefree and oldnonEH both printed16.74, so exact ordering versus rounded tie is unknown. Laterfull30 selectedprivatefree buttarget F1lost\u2212.591999us; aaf4wholeofficiallost. Do not mislabel a fixed-arm gain as serving improvement or claim a1%private-vsRQhurdle.",
+          "recovery": "Small direct graph-based comparison/tie confirmation within the original prepare budget and controls, on the currentincumbent packed state; no new kernel or proof campaign. This remains lowerconfidence than the two actualselected-target opportunities.",
+          "evidence": [
+            "proj_rsi/audits/gv-private-eh-screen-runtime/analysis.json",
+            "proj_rsi/audits/gv-private-eh-screen-runtime/bake-receipts.json",
+            "proj_rsi/audits/gv-private-eh-policy-result/report.md"
+          ],
+          "candidate_source_actual_sha256": "aaf40d39d38a963efd2d634ad003c0558ad3f7921916934ed3749c207cb855d7"
+        }
+      ],
+      "canonical_positive_audit": {
+        "rows": 1066,
+        "feature_level_true": 0,
+        "same_job_final_bake_label_matches_positive_mode": 321,
+        "same_job_final_bake_label_different": 745,
+        "caution": "Bake-label match is not current scored dispatch and can be superseded downstream. Rounded r6-control bakes are not paired incremental feature evidence."
+      }
+    }
+  ],
+  "selected_case_sensitivity": [
+    {
+      "index": 2,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "pooler",
+      "family": "gv_predxor",
+      "target_family": "GV",
+      "scored_latency_us": 13.714963545591969,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.3877006530182687,
+      "score_elasticity": 0.06461677550304479,
+      "weighted_latency_us": 2.2858272575986613,
+      "GV_predxor_selected": true,
+      "GV_template": [
+        1,
+        1,
+        1,
+        2,
+        16,
+        8,
+        1,
+        1,
+        0,
+        3
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 20.73733469344552,
+      "rank": 1
+    },
+    {
+      "index": 17,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "pooler",
+      "family": "gv_predxor",
+      "target_family": "GV",
+      "scored_latency_us": 13.536974268757183,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.3668728685724713,
+      "score_elasticity": 0.06114547809541188,
+      "weighted_latency_us": 2.2561623781261972,
+      "GV_predxor_selected": true,
+      "GV_template": [
+        1,
+        1,
+        1,
+        2,
+        16,
+        8,
+        1,
+        1,
+        0,
+        3
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.8 \u00b5s 100.0%      1\ntotal                                                             13.8 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 19.605740964969755,
+      "rank": 2
+    },
+    {
+      "index": 12,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "pooler",
+      "family": "rq",
+      "target_family": "rq",
+      "scored_latency_us": 15.522677468167032,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.2977481080430078,
+      "score_elasticity": 0.04962468467383463,
+      "weighted_latency_us": 2.587112911361172,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": 35,
+      "actual_kernel_names": [
+        "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.5 \u00b5s 100.0%      1\ntotal                                                             15.5 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "RQCU",
+          "ordinal": 149,
+          "line": 4479,
+          "end_line": 5109,
+          "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
+          "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_rqcall",
+          "ordinal": 168,
+          "line": 5246,
+          "end_line": 5247,
+          "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
+          "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 15.864680255936946,
+      "rank": 3
+    },
+    {
+      "index": 8,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "unpooler",
+      "family": "gv_predxor",
+      "target_family": "GV",
+      "scored_latency_us": 14.34517450571615,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.291376991268713,
+      "score_elasticity": 0.048562831878118835,
+      "weighted_latency_us": 2.3908624176193585,
+      "GV_predxor_selected": true,
+      "GV_template": [
+        1,
+        2,
+        2,
+        1,
+        4,
+        16,
+        1,
+        1,
+        2,
+        1
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                 14.2 \u00b5s 100.0%      1\ntotal                                                             14.2 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 15.520991812545162,
+      "rank": 4
+    },
+    {
+      "index": 7,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "pooler",
+      "family": "gv_predxor",
+      "target_family": "GV",
+      "scored_latency_us": 14.265113585000279,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.28975080608796827,
+      "score_elasticity": 0.04829180101466138,
+      "weighted_latency_us": 2.37751893083338,
+      "GV_predxor_selected": true,
+      "GV_template": [
+        1,
+        2,
+        2,
+        2,
+        8,
+        16,
+        1,
+        1,
+        0,
+        1
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                 14.2 \u00b5s 100.0%      1\ntotal                                                             14.2 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 15.433297732925439,
+      "rank": 5
+    },
+    {
+      "index": 27,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "pooler",
+      "family": "Lt/vendor",
+      "target_family": "Lt/vendor",
+      "scored_latency_us": 24.084211796200766,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.28958036176396307,
+      "score_elasticity": 0.04826339362732718,
+      "weighted_latency_us": 4.014035299366794,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           24.5 \u00b5s 100.0%      1\ntotal                                                             24.5 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_v12",
+          "ordinal": 145,
+          "line": 4329,
+          "end_line": 4352,
+          "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
+          "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_ltsearch",
+          "ordinal": 89,
+          "line": 2745,
+          "end_line": 2820,
+          "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
+          "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 15.424107017156075,
+      "rank": 6
+    },
+    {
+      "index": 13,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "unpooler",
+      "family": "rq",
+      "target_family": "rq",
+      "scored_latency_us": 15.059097119932208,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.28885594547015897,
+      "score_elasticity": 0.04814265757835983,
+      "weighted_latency_us": 2.5098495199887014,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": 35,
+      "actual_kernel_names": [
+        "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "RQCU",
+          "ordinal": 149,
+          "line": 4479,
+          "end_line": 5109,
+          "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
+          "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_rqcall",
+          "ordinal": 168,
+          "line": 5246,
+          "end_line": 5247,
+          "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
+          "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 15.385046469639747,
+      "rank": 7
+    },
+    {
+      "index": 23,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "unpooler",
+      "family": "Lt/vendor",
+      "target_family": "Lt/vendor",
+      "scored_latency_us": 18.543867084653822,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.28651260964901415,
+      "score_elasticity": 0.04775210160816903,
+      "weighted_latency_us": 3.0906445141089702,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT                     19.6 \u00b5s 100.0%      1\ntotal                                                             19.6 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_v12",
+          "ordinal": 145,
+          "line": 4329,
+          "end_line": 4352,
+          "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
+          "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_ltsearch",
+          "ordinal": 89,
+          "line": 2745,
+          "end_line": 2820,
+          "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
+          "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 15.25871036335684,
+      "rank": 8
+    },
+    {
+      "index": 22,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "pooler",
+      "family": "rq",
+      "target_family": "rq",
+      "scored_latency_us": 17.97685415312117,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.2777519582715784,
+      "score_elasticity": 0.04629199304526307,
+      "weighted_latency_us": 2.9961423588535285,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": 3,
+      "actual_kernel_names": [
+        "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               18.7 \u00b5s 100.0%      1\ntotal                                                             18.7 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "RQCU",
+          "ordinal": 149,
+          "line": 4479,
+          "end_line": 5109,
+          "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
+          "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_rqcall",
+          "ordinal": 168,
+          "line": 5246,
+          "end_line": 5247,
+          "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
+          "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 14.786622810963763,
+      "rank": 9
+    },
+    {
+      "index": 28,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "unpooler",
+      "family": "Lt/vendor",
+      "target_family": "Lt/vendor",
+      "scored_latency_us": 23.087707336283085,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.2775987314559334,
+      "score_elasticity": 0.04626645524265557,
+      "weighted_latency_us": 3.8479512227138475,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "nvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN                    23.6 \u00b5s 100.0%      1\ntotal                                                             23.6 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_v12",
+          "ordinal": 145,
+          "line": 4329,
+          "end_line": 4352,
+          "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
+          "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_ltsearch",
+          "ordinal": 89,
+          "line": 2745,
+          "end_line": 2820,
+          "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
+          "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 14.778368991639127,
+      "rank": 10
+    },
+    {
+      "index": 0,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "qkv_gate",
+      "family": "gv",
+      "target_family": "GV",
+      "scored_latency_us": 8.79496920496118,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.2486200778225866,
+      "score_elasticity": 0.04143667963709777,
+      "weighted_latency_us": 1.4658282008268635,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        1,
+        1,
+        2,
+        16,
+        8,
+        1,
+        1,
+        2,
+        1
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.3 \u00b5s 100.0%      1\ntotal                                                              9.3 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 13.219330558404181,
+      "rank": 11
+    },
+    {
+      "index": 15,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "qkv_gate",
+      "family": "gv",
+      "target_family": "GV",
+      "scored_latency_us": 9.159501030123945,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.2482365963692262,
+      "score_elasticity": 0.041372766061537704,
+      "weighted_latency_us": 1.5265835050206575,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        1,
+        1,
+        2,
+        16,
+        8,
+        1,
+        1,
+        2,
+        1
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.1 \u00b5s 100.0%      1\ntotal                                                              9.1 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 13.198725328465116,
+      "rank": 12
+    },
+    {
+      "index": 25,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "qkv_gate",
+      "family": "Lt/vendor",
+      "target_family": "Lt/vendor",
+      "scored_latency_us": 18.21574869548997,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.21901995970129828,
+      "score_elasticity": 0.03650332661688305,
+      "weighted_latency_us": 3.0359581159149953,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           19.5 \u00b5s 100.0%      1\ntotal                                                             19.5 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_v12",
+          "ordinal": 145,
+          "line": 4329,
+          "end_line": 4352,
+          "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
+          "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_ltsearch",
+          "ordinal": 89,
+          "line": 2745,
+          "end_line": 2820,
+          "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
+          "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 11.630838518417931,
+      "rank": 13
+    },
+    {
+      "index": 5,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "qkv_gate",
+      "family": "rq",
+      "target_family": "rq",
+      "scored_latency_us": 10.133088999632148,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.20582175447181913,
+      "score_elasticity": 0.03430362574530319,
+      "weighted_latency_us": 1.688848166605358,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": 35,
+      "actual_kernel_names": [
+        "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.0 \u00b5s 100.0%      1\ntotal                                                             10.0 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "RQCU",
+          "ordinal": 149,
+          "line": 4479,
+          "end_line": 5109,
+          "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
+          "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_rqcall",
+          "ordinal": 168,
+          "line": 5246,
+          "end_line": 5247,
+          "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
+          "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 10.923847109645067,
+      "rank": 14
+    },
+    {
+      "index": 20,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "qkv_gate",
+      "family": "rq",
+      "target_family": "rq",
+      "scored_latency_us": 13.095674200334908,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.20233513177821966,
+      "score_elasticity": 0.03372252196303661,
+      "weighted_latency_us": 2.1826123667224846,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": 3,
+      "actual_kernel_names": [
+        "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               12.3 \u00b5s 100.0%      1\ntotal                                                             12.3 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "RQCU",
+          "ordinal": 149,
+          "line": 4479,
+          "end_line": 5109,
+          "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
+          "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_rqcall",
+          "ordinal": 168,
+          "line": 5246,
+          "end_line": 5247,
+          "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
+          "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 10.737210936223619,
+      "rank": 15
+    },
+    {
+      "index": 10,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "qkv_gate",
+      "family": "rq",
+      "target_family": "rq",
+      "scored_latency_us": 9.556633372314327,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.18331048311108547,
+      "score_elasticity": 0.030551747185180913,
+      "weighted_latency_us": 1.5927722287190544,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": 35,
+      "actual_kernel_names": [
+        "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.8 \u00b5s 100.0%      1\ntotal                                                              9.8 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "RQCU",
+          "ordinal": 149,
+          "line": 4479,
+          "end_line": 5109,
+          "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
+          "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_rqcall",
+          "ordinal": 168,
+          "line": 5246,
+          "end_line": 5247,
+          "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
+          "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 9.719810283037987,
+      "rank": 16
+    },
+    {
+      "index": 1,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "o",
+      "family": "gv",
+      "target_family": "GV",
+      "scored_latency_us": 5.135565320514631,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.14517443096095073,
+      "score_elasticity": 0.024195738493491787,
+      "weighted_latency_us": 0.8559275534191052,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        1,
+        2,
+        1,
+        8,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.0 \u00b5s 100.0%      1\ntotal                                                              4.0 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 7.685307675734293,
+      "rank": 17
+    },
+    {
+      "index": 16,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "o",
+      "family": "gv",
+      "target_family": "GV",
+      "scored_latency_us": 5.3366173527983936,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.14463055612164682,
+      "score_elasticity": 0.024105092686941137,
+      "weighted_latency_us": 0.8894362254663989,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        1,
+        2,
+        1,
+        8,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           3.8 \u00b5s 100.0%      1\ntotal                                                              3.8 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 7.656340233832452,
+      "rank": 18
+    },
+    {
+      "index": 11,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "o",
+      "family": "rq",
+      "target_family": "rq",
+      "scored_latency_us": 6.765882458653126,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.12977971779911135,
+      "score_elasticity": 0.021629952966518557,
+      "weighted_latency_us": 1.1276470764421875,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": 34,
+      "actual_kernel_names": [
+        "void rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)                5.1 \u00b5s 100.0%      1\ntotal                                                              5.1 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "RQCU",
+          "ordinal": 149,
+          "line": 4479,
+          "end_line": 5109,
+          "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
+          "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_rqcall",
+          "ordinal": 168,
+          "line": 5246,
+          "end_line": 5247,
+          "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
+          "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 6.865880690751965,
+      "rank": 19
+    },
+    {
+      "index": 19,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "router",
+      "family": "gv",
+      "target_family": "GV",
+      "scored_latency_us": 4.466061412238903,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.12103714825774992,
+      "score_elasticity": 0.02017285804295832,
+      "weighted_latency_us": 0.7443435687064839,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        2,
+        1,
+        1,
+        1,
+        8,
+        1,
+        16,
+        1,
+        0,
+        536870912
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 6.401006844112089,
+      "rank": 20
+    },
+    {
+      "index": 24,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "router",
+      "family": "rtk",
+      "target_family": "rtk",
+      "scored_latency_us": 7.747534505872321,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.11970352890742275,
+      "score_elasticity": 0.019950588151237125,
+      "weighted_latency_us": 1.2912557509787201,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.2 \u00b5s 100.0%      1\ntotal                                                              6.2 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "RWCU",
+          "ordinal": 117,
+          "line": 3498,
+          "end_line": 4025,
+          "AST_sha256": "c43543cbe39ddb409cc0edcff62cd61cafb87ba1039e0323f42c457c96fb8e2a",
+          "source_segment_sha256": "29f3f0cf093d4e114469b8ba93e453a4ec14514fc785780b206b8cf071c40e31",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_rscall",
+          "ordinal": 140,
+          "line": 4175,
+          "end_line": 4180,
+          "AST_sha256": "3d9a89e00deed7c6998724ec99d7d33224f4883da3e1aa7092e51fddcf3c0fa6",
+          "source_segment_sha256": "613ce286227245800c932d82b7f954c31cbe6dc32bef42953125c655d6d521c8",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 6.330123649531288,
+      "rank": 21
+    },
+    {
+      "index": 18,
+      "load": "verify 1",
+      "m": 8,
+      "layer": "unpooler",
+      "family": "gv",
+      "target_family": "GV",
+      "scored_latency_us": 4.399116231812419,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.11922283067890585,
+      "score_elasticity": 0.01987047177981764,
+      "weighted_latency_us": 0.7331860386354032,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        1,
+        4,
+        1,
+        4,
+        4,
+        4,
+        1,
+        0,
+        536870913
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)                   3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 6.304576015548719,
+      "rank": 22
+    },
+    {
+      "index": 3,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "unpooler",
+      "family": "gv",
+      "target_family": "GV",
+      "scored_latency_us": 4.137310038096525,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.11695530929971767,
+      "score_elasticity": 0.019492551549952945,
+      "weighted_latency_us": 0.6895516730160876,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        1,
+        4,
+        1,
+        4,
+        4,
+        4,
+        1,
+        0,
+        536870913
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)                   3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 6.184078185201997,
+      "rank": 23
+    },
+    {
+      "index": 21,
+      "load": "verify 16",
+      "m": 128,
+      "layer": "o",
+      "family": "Lt/vendor",
+      "target_family": "Lt/vendor",
+      "scored_latency_us": 7.358760995765836,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.11369677139376493,
+      "score_elasticity": 0.01894946189896082,
+      "weighted_latency_us": 1.2264601659609726,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN                            5.5 \u00b5s 100.0%      1\ntotal                                                              5.5 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_v12",
+          "ordinal": 145,
+          "line": 4329,
+          "end_line": 4352,
+          "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
+          "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_ltsearch",
+          "ordinal": 89,
+          "line": 2745,
+          "end_line": 2820,
+          "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
+          "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 6.010957310595586,
+      "rank": 24
+    },
+    {
+      "index": 6,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "o",
+      "family": "gv",
+      "target_family": "GV",
+      "scored_latency_us": 5.595060884214828,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.11364602122882256,
+      "score_elasticity": 0.018941003538137092,
+      "weighted_latency_us": 0.932510147369138,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        2,
+        2,
+        1,
+        8,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.9 \u00b5s 100.0%      1\ntotal                                                              4.9 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 6.008261412090178,
+      "rank": 25
+    },
+    {
+      "index": 29,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "router",
+      "family": "rtk",
+      "target_family": "rtk",
+      "scored_latency_us": 9.06402700077578,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.10898277428107615,
+      "score_elasticity": 0.018163795713512693,
+      "weighted_latency_us": 1.5106711667959634,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       8.0 \u00b5s 100.0%      1\ntotal                                                              8.0 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "RWCU",
+          "ordinal": 117,
+          "line": 3498,
+          "end_line": 4025,
+          "AST_sha256": "c43543cbe39ddb409cc0edcff62cd61cafb87ba1039e0323f42c457c96fb8e2a",
+          "source_segment_sha256": "29f3f0cf093d4e114469b8ba93e453a4ec14514fc785780b206b8cf071c40e31",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_rscall",
+          "ordinal": 140,
+          "line": 4175,
+          "end_line": 4180,
+          "AST_sha256": "3d9a89e00deed7c6998724ec99d7d33224f4883da3e1aa7092e51fddcf3c0fa6",
+          "source_segment_sha256": "613ce286227245800c932d82b7f954c31cbe6dc32bef42953125c655d6d521c8",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 5.760594364193821,
+      "rank": 26
+    },
+    {
+      "index": 26,
+      "load": "verify 32",
+      "m": 256,
+      "layer": "o",
+      "family": "Lt/vendor",
+      "target_family": "Lt/vendor",
+      "scored_latency_us": 8.71765978318988,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.1048181727977291,
+      "score_elasticity": 0.017469695466288186,
+      "weighted_latency_us": 1.4529432971983134,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN                     8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_v12",
+          "ordinal": 145,
+          "line": 4329,
+          "end_line": 4352,
+          "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
+          "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_ltsearch",
+          "ordinal": 89,
+          "line": 2745,
+          "end_line": 2820,
+          "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
+          "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 5.53949283121392,
+      "rank": 27
+    },
+    {
+      "index": 4,
+      "load": "decode 1",
+      "m": 1,
+      "layer": "router",
+      "family": "rr",
+      "target_family": "rr",
+      "scored_latency_us": 3.5923284525626302,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.10154952889847615,
+      "score_elasticity": 0.01692492148307936,
+      "weighted_latency_us": 0.5987214087604383,
+      "GV_predxor_selected": false,
+      "GV_template": null,
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.7 \u00b5s 100.0%      1\ntotal                                                              2.7 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 5.366012607091761,
+      "rank": 28
+    },
+    {
+      "index": 14,
+      "load": "decode 32",
+      "m": 32,
+      "layer": "router",
+      "family": "gv",
+      "target_family": "GV",
+      "scored_latency_us": 5.229298506794368,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.1003057455766364,
+      "score_elasticity": 0.01671762426277273,
+      "weighted_latency_us": 0.8715497511323947,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        2,
+        4,
+        2,
+        1,
+        8,
+        2,
+        8,
+        1,
+        0,
+        134217728
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.3 \u00b5s 100.0%      1\ntotal                                                              4.3 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 5.300012506911116,
+      "rank": 29
+    },
+    {
+      "index": 9,
+      "load": "decode 16",
+      "m": 16,
+      "layer": "router",
+      "family": "gv",
+      "target_family": "GV",
+      "scored_latency_us": 4.8939137058298305,
+      "equal_log_load_weight": 0.16666666666666666,
+      "within_load_latency_fraction": 0.099404426942677,
+      "score_elasticity": 0.016567404490446167,
+      "weighted_latency_us": 0.8156522843049717,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        2,
+        2,
+        1,
+        1,
+        8,
+        1,
+        16,
+        1,
+        0,
+        134217728
+      ],
+      "RQ_flags": null,
+      "actual_kernel_names": [
+        "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+      ],
+      "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s",
+      "bindings": [
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "conditional_10pct_case_latency_cut_score_gain_us": 5.252189265939251,
+      "rank": 30
+    }
+  ],
+  "selected_family_sensitivity": [
+    {
+      "name": "GV",
+      "selected_cases": 14,
+      "score_elasticity": 0.46548907703439024,
+      "selected_latency_us_sum": 113.00963959245061,
+      "conditional_10pct_latency_cut_score_gain_us": 150.12978525776225
+    },
+    {
+      "name": "rq",
+      "selected_cases": 7,
+      "score_elasticity": 0.2642671831574968,
+      "selected_latency_us_sum": 88.10990777215491,
+      "conditional_10pct_latency_cut_score_gain_us": 85.2637068613949
+    },
+    {
+      "name": "Lt/vendor",
+      "selected_cases": 6,
+      "score_elasticity": 0.21520443446028384,
+      "selected_latency_us_sum": 100.00795569158336,
+      "conditional_10pct_latency_cut_score_gain_us": 69.81205758072747
+    },
+    {
+      "name": "rtk",
+      "selected_cases": 2,
+      "score_elasticity": 0.038114383864749815,
+      "selected_latency_us_sum": 16.8115615066481,
+      "conditional_10pct_latency_cut_score_gain_us": 12.079167544595748
+    },
+    {
+      "name": "rr",
+      "selected_cases": 1,
+      "score_elasticity": 0.01692492148307936,
+      "selected_latency_us_sum": 3.5923284525626302,
+      "conditional_10pct_latency_cut_score_gain_us": 5.366012607091761
+    }
+  ],
+  "parked_projection_opportunities": [
+    {
+      "problem": "muse_bf16_proj",
+      "id": "projection.C11.frontier",
+      "planning_readiness": "PARKED_CURRENT_SELECTED_CONTROL_REGRESSION",
+      "actual_runtime_READY": false,
+      "reason": "Preload versus exactV2 improves+2.192/+4.208us each24/24, but actualC12 loses-3.216/-8.384us each0/24. OldV2 INVALID_CLEANUP remains invalid.",
+      "reopen_when": "New source-level hypothesis predicts and tests a direct win versus current selected C12 with reviewed bounded total cost.",
+      "evidence": [
+        {
+          "path": "proj_rsi/candidates/gv_codec_frontier_v1/preload-analysis/actual-report.json",
+          "sha256": "f318d8f725912074c028da48a7bf5f65581df09614c7d5b5e969b18e49aa700b"
+        }
+      ]
+    }
+  ],
+  "historical_archive": {
+    "history_catalog": "proj_rsi/history_catalog.json",
+    "three_job_closure": "proj_rsi/audits/history-sync-m3012-preload-sharedbank-minimal-closure-20261027.json",
+    "active_queue_contains_historical_MoE_entries": false
+  },
+  "source_evidence": [
+    {
+      "path": "proj_rsi/audits/selected-hotpaths-gv9916/report.json",
+      "sha256": "e6196ca87583ce8e8ba117636ffc157ef154f15971252dfb94ebaee351976e20"
+    },
+    {
+      "path": "proj_rsi/ITERATION.md",
+      "sha256": "039c81fbe30faec28669a0ff14878fbe926010e7dcb2a40cbbb37cef836aa6d0"
+    },
+    {
+      "kind": "root_conversation_scope_and_order",
+      "instruction": "ONLYmuse_bf16_proj/sub3ms; rank1GV53keyedhalf/2RQ32/3GV16/4parallelpositiveaudit; actualcheckpointREADY0asof21:33UTC"
+    }
+  ],
+  "loop_contract": "proj_rsi/ITERATION.md",
+  "loop": "profile -> measure -> hypothesis -> optimize/reimplement -> test -> validate -> stack -> submit measured gains -> learn -> reprioritize -> repeat; deliberate idle<=10s",
+  "runtime_observation": {
+    "ready_count": 0,
+    "as_of_utc": "2026-10-27T21:33:00Z",
+    "source": "Root coordinator reported read of actual worker checkpoint at21:33 UTC in this conversation; this CPU view did not query/mutate runtime authority",
+    "observation_not_permanent": true
+  }
+}

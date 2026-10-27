@@ -1,0 +1,146 @@
+{
+  "state": "CPU_ONLY_PROJECTION_RECOVERY_AUDIT",
+  "scope": "ONLY muse_bf16_proj sub3ms; no serving or expert benchmark claims",
+  "incumbent": {
+    "source": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+    "sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "scored_job": "9916d34357b745cf",
+    "score_us": 3157.0384036526784,
+    "target_us": 3000,
+    "score_gap_us": 157.0384036526784,
+    "additional_geometric_speedup_needed": 1.0523461345508929
+  },
+  "canonical_positive_audit": {
+    "rows": 1066,
+    "feature_level_true": 0,
+    "same_job_final_bake_label_matches_positive_mode": 321,
+    "same_job_final_bake_label_different": 745,
+    "caution": "Bake-label match is not current scored dispatch and can be superseded downstream. Rounded r6-control bakes are not paired incremental feature evidence."
+  },
+  "conclusion": "There are not three proven unsubmitted shipping gains. Ranked recovery shortlist contains two actual selected local target positives and one explicitly unselected fixed diagnostic. Broader containing packages already submitted and lost; narrow route additions remain conditional.",
+  "top3": [
+    {
+      "rank": 1,
+      "increment": "O32-only positive-selection comparison 0.99 to1.0",
+      "readiness": "Existing immutable candidate e0f1; numerically validated full30, direct current-GV source parent, no kernel change. No scored submission found in canonical submissions table.",
+      "candidate_source": "proj_rsi/candidates/gv_o32_positive_selection_v1/submission.py",
+      "source_sha256": "e0f1f712868f8a092a5e96c010420fcc92562291b051d391c9bc77abf0f5bba2",
+      "parent_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+      "actual_target": "decode32/o: local parentGV45\u2192originalRQ t32s6hze FL35 KS2",
+      "target_gain_us": {
+        "paired": 0.128000043,
+        "F1": 0.079999678
+      },
+      "whole_local_ratio": {
+        "paired": 0.9998426437788017,
+        "F1": 1.0018668946585063
+      },
+      "selected": true,
+      "binding_selector_evidence": "Same prepare9.73 contender versus9.79 incumbent:0.99 cutoff9.6921 rejects,1.0 accepts; rounding-robust0.05\u20130.07us positive gap. Other175ASTnodes exact.",
+      "counterevidence": "Whole paired estimate loses despite F1 gain; eleven fresh prepare choices differ. Official incumbent already serves O32RQST5, not local parentGV45. Complete O32-containing d1ca/55f7 packages already scored and lost. No isolated official gain.",
+      "recovery": "Use exact current-GV single-edit source as one narrow stack candidate; retain mixed whole estimates. No broad RQ/GV-margin additions needed.",
+      "evidence": [
+        "proj_rsi/audits/gv-o32-positive-policy-result/analysis.json",
+        "proj_rsi/audits/gv-o32-positive-policy-result/report.md",
+        "proj_rsi/candidates/gv_o32_positive_selection_v1/source-proof.json"
+      ],
+      "candidate_source_actual_sha256": "e0f1f712868f8a092a5e96c010420fcc92562291b051d391c9bc77abf0f5bba2"
+    },
+    {
+      "rank": 2,
+      "increment": "Pooler128 private-free EH hz851971 only",
+      "readiness": "Existing validated native code; route-only composition on501d still required. Fullaaf4source was already scored and lost; narrow pooler-only scope was not established by that whole result.",
+      "candidate_source": "proj_rsi/candidates/gv_private_eh_screen_v1/submission.py",
+      "actual_target": "verify16/pooler M128 KS4: current-GV local source selects private-free hz851971",
+      "target_gain_us": {
+        "narrow_selected_paired": 0.207999721,
+        "narrow_selected_F1": 0.223999843,
+        "narrow_fixed_paired": 0.319999643,
+        "narrow_fixed_F1": 0.191999599,
+        "full30_target_paired": 0.28800033,
+        "full30_target_F1": 0.607999973
+      },
+      "selected": true,
+      "counterevidence": "FullGV+privateEH aaf4 scored3207.567539us versus3157.038404 current. Local narrow parent selected oldEH65539 while actual scored incumbent reports nonEH3; same source parent is not same selected template. Historical PW45 fixed pooler arm had a paired loss.",
+      "recovery": "Retain current GV source/control and admit private-free contender only on pooler128, preserving original choices elsewhere; measure actual selected result, never force the supposed incumbent.",
+      "evidence": [
+        "proj_rsi/audits/gv-private-eh-screen-runtime/analysis.json",
+        "proj_rsi/audits/gv-private-eh-screen-runtime/report.md",
+        "proj_rsi/audits/gv-private-eh-policy-result/analysis.json",
+        "proj_rsi/audits/submission-stack-20261027/analysis.json"
+      ],
+      "candidate_source_actual_sha256": "aaf40d39d38a963efd2d634ad003c0558ad3f7921916934ed3749c207cb855d7"
+    },
+    {
+      "rank": 3,
+      "increment": "QKV128 private-free EH hz851971 selection recovery",
+      "readiness": "Diagnostic positive fixed arm, NOT a selected shipping gain. Existing native code/basis evidence reusable; a narrow selection/context repair is still required.",
+      "candidate_source": "proj_rsi/candidates/gv_private_eh_screen_v1/submission.py",
+      "actual_target": "verify16/qkv_gate M128 KS7 fixedprivate-free hz851971 versus actual prepared current-GV originalnonEH3",
+      "target_gain_us": {
+        "fixed_paired": 0.256000087,
+        "fixed_F1": 0.127999112,
+        "actual_policy_paired": -0.128000043,
+        "actual_policy_F1": -0.512000173
+      },
+      "selected": false,
+      "counterevidence": "Actual composed policy retained original3; privatefree and oldnonEH both printed16.74, so exact ordering versus rounded tie is unknown. Laterfull30 selectedprivatefree buttarget F1lost\u2212.591999us; aaf4wholeofficiallost. Do not mislabel a fixed-arm gain as serving improvement or claim a1%private-vsRQhurdle.",
+      "recovery": "Small direct graph-based comparison/tie confirmation within the original prepare budget and controls, on the currentincumbent packed state; no new kernel or proof campaign. This remains lowerconfidence than the two actualselected-target opportunities.",
+      "evidence": [
+        "proj_rsi/audits/gv-private-eh-screen-runtime/analysis.json",
+        "proj_rsi/audits/gv-private-eh-screen-runtime/bake-receipts.json",
+        "proj_rsi/audits/gv-private-eh-policy-result/report.md"
+      ],
+      "candidate_source_actual_sha256": "aaf40d39d38a963efd2d634ad003c0558ad3f7921916934ed3749c207cb855d7"
+    }
+  ],
+  "excluded_or_already_shipped": [
+    {
+      "name": "Complete GV+RQ+EH+O32 d1ca and M1-added55f7",
+      "reason": "Already scored3187.14239967648 and3186.7445157626275us; both lose incumbent3157.0384036526784. Not missing submissions."
+    },
+    {
+      "name": "RQpredxor broadaddition",
+      "reason": "Already stacked withGV and scored3234.204865592354us. LocalPW45 control benefit1.005625/1.003082 is not currentincumbent causal gain; matchedfixedunpoolerST5+.272/.288us is context for narrow future rescue, not proof of currentselectedST6 benefit."
+    },
+    {
+      "name": "Codec frontier preload",
+      "reason": "Positive+2.192us pooler/+4.208us unpooler only versus slower v2. Versus actual current control loses\u22123.216/\u22128.384us paired,0/24wins both; not recoverable positive currentincumbent increment."
+    },
+    {
+      "name": "Balanced QKV256 LTconfirmation",
+      "reason": "Localwhole positive1.003577/1.000840 but confirmation retained legacychoice51 and downstreamRQ superseded LT locally. OfficialCHECK3173.281809us loses; no demonstrated newchooser benefit."
+    },
+    {
+      "name": "Older PW39/PW40 router gains",
+      "reason": "Compared oldrs32/PW38; current501d already includes selectedRTK mechanism. No fresh additive currentincumbent feature gain."
+    },
+    {
+      "name": "M1splitCTA",
+      "reason": "Localincrement selected no new tuple, sourceavailability not execution; full55f7 scored3186.744516us loses. Do not attribute same-path noise to feature."
+    }
+  ],
+  "non_additivity": "Do not add cross-run microsecond gains or multiply whole ratios to claim sub3ms. Actual combined source must be measured against501d; official score needs its own receipt.",
+  "evidence_sha256": {
+    "proj_rsi/tables/positive_observations.csv": "18a12137eddab058bcb3e044fe4beca557965859cb47f5af907594dd8f0ee303",
+    "proj_rsi/tables/local_observations.csv": "fe7800c5934531d13da7873ae198e82828b82729ecca0e4a70ec0255867712c5",
+    "proj_rsi/tables/checks.csv": "f94c5604ba897861f74310dbeb6796a6547b74ea4fc8988fcb0c65cbc81c4ab8",
+    "proj_rsi/tables/submissions.csv": "99d448553e405ce6a73dabd2ae9e4f4f9991d83eae3564d6607a6676b0fbd4fd",
+    "proj_rsi/CURRENT_STACK.md": "6f1b87b41724f7b0d46e9d05f41413ab41ab029d8b3c72ea79f5ff3608c9c950",
+    "proj_rsi/candidates/gv_codec_frontier_v1/preload-analysis/actual-report.json": "f318d8f725912074c028da48a7bf5f65581df09614c7d5b5e969b18e49aa700b",
+    "proj_rsi/audits/gv-lt-qkv256-balanced-policy-result/official-report.md": "ccfee0c211e9a7e2c92bdef048b45530973f6f78804a78b7662e0a9c37a07369",
+    "proj_rsi/audits/rq32-predxor-result-analysis/runtime-report.md": "d647731704f6c94259d2d961f462101f3b45edd8706a17b5c3224c320fc37c27",
+    "proj_rsi/audits/gv-o32-positive-policy-result/analysis.json": "2e037fa0d4255acb74ecd948236bab3d3b8c3dc234ceef308f36bba136b058b8",
+    "proj_rsi/audits/gv-o32-positive-policy-result/report.md": "b0ec74979d139e462691bc8522ad796df64196befa77d8e842b660633d4155b2",
+    "proj_rsi/candidates/gv_o32_positive_selection_v1/source-proof.json": "1b2ead991bb49ba081abf40652dc38c622ec49203786eece883a5406c23e8f73",
+    "proj_rsi/audits/gv-private-eh-screen-runtime/analysis.json": "c6040edd94b9728532cc4dcfd61e8f721b3825fa3859adfdd6fb65a58ca2c592",
+    "proj_rsi/audits/gv-private-eh-screen-runtime/report.md": "03ae97f470c23637ff87573d72ef14b90b615f2eb80c65a143c8374dc8944bc5",
+    "proj_rsi/audits/gv-private-eh-policy-result/analysis.json": "60112b1de7b5fc0249386cbb6009b2e6554c29bffa1d1f21a94d51667213745b",
+    "proj_rsi/audits/submission-stack-20261027/analysis.json": "462a2e0e090b58c991247d4564dc5381d583f3c31d6db7ccd9ddd7965967c4aa",
+    "proj_rsi/audits/gv-private-eh-screen-runtime/bake-receipts.json": "6c9e55d4fce2108b495dc2edab7f80dd3f582e45995aa5ae7dd38a2f7acc7654",
+    "proj_rsi/audits/gv-private-eh-policy-result/report.md": "4c8d7750721345f65297d388cec944c3e3b1f7c6912ebd569cd90b4878b46657"
+  },
+  "actions": "Read-only CPU evidence audit plus this newappend-only artifact; no GPU/SSH/API/queue/git action; no frozen source modifications",
+  "loop": "profile->measure->hypothesis->optimize/reimplement->test->validate->stack->submit measuredgains->learn->reprioritize->repeat; idle<=10s",
+  "contract": "proj_rsi/ITERATION.md"
+}
