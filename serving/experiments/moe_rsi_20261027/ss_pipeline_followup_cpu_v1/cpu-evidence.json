@@ -1,0 +1,151 @@
+{
+  "state": "CPU_ONLY_NO_GPU_NO_SERVING_RUNNER",
+  "parent": "/home/ubuntu/okc/serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/kernel.cuh",
+  "parent_sha256": "09a7d995f687ecbc172927b811bc30773e90f103aea9c02f3114a0b733491e63",
+  "protocol": [
+    {
+      "stages": 1,
+      "depth": 0,
+      "states": 5,
+      "edges": 4,
+      "terminal_states": 1,
+      "no_deadlocks": true
+    },
+    {
+      "stages": 1,
+      "depth": 1,
+      "states": 5,
+      "edges": 4,
+      "terminal_states": 1,
+      "no_deadlocks": true
+    },
+    {
+      "stages": 2,
+      "depth": 0,
+      "states": 14,
+      "edges": 18,
+      "terminal_states": 1,
+      "no_deadlocks": true
+    },
+    {
+      "stages": 2,
+      "depth": 1,
+      "states": 13,
+      "edges": 16,
+      "terminal_states": 1,
+      "no_deadlocks": true
+    },
+    {
+      "stages": 3,
+      "depth": 0,
+      "states": 23,
+      "edges": 32,
+      "terminal_states": 1,
+      "no_deadlocks": true
+    },
+    {
+      "stages": 3,
+      "depth": 1,
+      "states": 20,
+      "edges": 26,
+      "terminal_states": 1,
+      "no_deadlocks": true
+    },
+    {
+      "stages": 4,
+      "depth": 0,
+      "states": 32,
+      "edges": 46,
+      "terminal_states": 1,
+      "no_deadlocks": true
+    },
+    {
+      "stages": 4,
+      "depth": 1,
+      "states": 27,
+      "edges": 36,
+      "terminal_states": 1,
+      "no_deadlocks": true
+    },
+    {
+      "stages": 32,
+      "depth": 0,
+      "states": 284,
+      "edges": 438,
+      "terminal_states": 1,
+      "no_deadlocks": true
+    },
+    {
+      "stages": 32,
+      "depth": 1,
+      "states": 223,
+      "edges": 316,
+      "terminal_states": 1,
+      "no_deadlocks": true
+    },
+    {
+      "stages": 64,
+      "depth": 0,
+      "states": 572,
+      "edges": 886,
+      "terminal_states": 1,
+      "no_deadlocks": true
+    },
+    {
+      "stages": 64,
+      "depth": 1,
+      "states": 447,
+      "edges": 636,
+      "terminal_states": 1,
+      "no_deadlocks": true
+    }
+  ],
+  "K16_accumulation_order": "identical 256 steps",
+  "supported_prototype": "T8,DIV1/DIV8,K4096; pair2 requires K%128==0, no serving wrapper supplied",
+  "candidates": {
+    "wait1": {
+      "kernel_sha256": "26e5f0c43dc536edc7c8200a0504f2db29b42ae40fb0cc0c3983421c7a9ec4e8",
+      "register_reports": [
+        "40",
+        "60"
+      ],
+      "resource_log": "ptxas info    : 8192 bytes gmem\nptxas info    : Compiling entry function '_ZN24moe_ss_pipeline_wait1_v17projectILi8ELi8EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii' for 'sm_90a'\nptxas info    : Function properties for _ZN24moe_ss_pipeline_wait1_v17projectILi8ELi8EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 40 registers, used 4 barriers\nptxas info    : Compile time = 31.692 ms\nptxas info    : Compiling entry function '_ZN24moe_ss_pipeline_wait1_v17projectILi8ELi1EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii' for 'sm_90a'\nptxas info    : Function properties for _ZN24moe_ss_pipeline_wait1_v17projectILi8ELi1EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 60 registers, used 4 barriers\nptxas info    : Compile time = 33.296 ms\n",
+      "static_DEPBAR_lines": [
+        "/*0a40*/                   WARPGROUP.DEPBAR.LE gsb0, 0x1 ;                             /* 0x00008000000079c5 */",
+        "/*0cf0*/                   WARPGROUP.DEPBAR.LE gsb0, 0x1 ;                             /* 0x00008000000079c5 */",
+        "/*0df0*/                   WARPGROUP.DEPBAR.LE gsb0, 0x1 ;                             /* 0x00008000000079c5 */",
+        "/*0ec0*/                   WARPGROUP.DEPBAR.LE gsb0, 0x1 ;                             /* 0x00008000000079c5 */",
+        "/*1370*/                   WARPGROUP.DEPBAR.LE gsb0, 0x1 ;                             /* 0x00008000000079c5 */",
+        "/*1490*/                   WARPGROUP.DEPBAR.LE gsb0, 0x0 ;                             /* 0x00008000000079c5 */",
+        "/*0a40*/                   WARPGROUP.DEPBAR.LE gsb0, 0x1 ;                             /* 0x00008000000079c5 */",
+        "/*0cf0*/                   WARPGROUP.DEPBAR.LE gsb0, 0x1 ;                             /* 0x00008000000079c5 */",
+        "/*0df0*/                   WARPGROUP.DEPBAR.LE gsb0, 0x1 ;                             /* 0x00008000000079c5 */",
+        "/*0ec0*/                   WARPGROUP.DEPBAR.LE gsb0, 0x1 ;                             /* 0x00008000000079c5 */",
+        "/*1370*/                   WARPGROUP.DEPBAR.LE gsb0, 0x1 ;                             /* 0x00008000000079c5 */",
+        "/*1490*/                   WARPGROUP.DEPBAR.LE gsb0, 0x0 ;                             /* 0x00008000000079c5 */"
+      ],
+      "static_HGMMA": 40,
+      "dynamic_shared_T8": 27680,
+      "device_compile": "PASS"
+    },
+    "pair2": {
+      "kernel_sha256": "becfad743a366c7328626c70cd0448977c8101c690803661ca4175d040096ac6",
+      "register_reports": [
+        "32",
+        "64"
+      ],
+      "resource_log": "ptxas info    : 8192 bytes gmem\nptxas info    : Compiling entry function '_ZN24moe_ss_pipeline_pair2_v17projectILi8ELi8EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii' for 'sm_90a'\nptxas info    : Function properties for _ZN24moe_ss_pipeline_pair2_v17projectILi8ELi8EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 32 registers, used 4 barriers\nptxas info    : Compile time = 30.424 ms\nptxas info    : Compiling entry function '_ZN24moe_ss_pipeline_pair2_v17projectILi8ELi1EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii' for 'sm_90a'\nptxas info    : Function properties for _ZN24moe_ss_pipeline_pair2_v17projectILi8ELi1EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii\n    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 64 registers, used 4 barriers\nptxas info    : Compile time = 32.690 ms\n",
+      "static_DEPBAR_lines": [
+        "/*0bd0*/                   WARPGROUP.DEPBAR.LE gsb0, 0x0 ;                             /* 0x00008000000079c5 */",
+        "/*0eb0*/                   WARPGROUP.DEPBAR.LE gsb0, 0x0 ;                             /* 0x00008000000079c5 */",
+        "/*1660*/                   WARPGROUP.DEPBAR.LE gsb0, 0x0 ;                             /* 0x00008000000079c5 */",
+        "/*0bc0*/                   WARPGROUP.DEPBAR.LE gsb0, 0x0 ;                             /* 0x00008000000079c5 */",
+        "/*0ea0*/                   WARPGROUP.DEPBAR.LE gsb0, 0x0 ;                             /* 0x00008000000079c5 */",
+        "/*1650*/                   WARPGROUP.DEPBAR.LE gsb0, 0x0 ;                             /* 0x00008000000079c5 */"
+      ],
+      "static_HGMMA": 48,
+      "dynamic_shared_T8": 46112,
+      "device_compile": "PASS"
+    }
+  }
+}

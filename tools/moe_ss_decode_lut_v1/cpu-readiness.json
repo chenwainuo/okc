@@ -1,0 +1,32 @@
+{
+  "state": "CPU_RUNNABLE_DRIVER_GPU_UNRUN",
+  "driver_sha256": "f1a7fd9273cb4ae5f6b65546098479b928bafad68fc7c395482d9b2a261b699c",
+  "manifest_sha256": "ad38f0f46d46ab4fbe77436e1104da89a342dd5b6450bb641c8eac0d36578903",
+  "import_and_help_without_Torch": true,
+  "manifest_files_match": true,
+  "same_code_private_globals_mechanism": true,
+  "reused_twofunction_gate": [
+    {
+      "tokens": 8,
+      "gather_divisor": 8,
+      "static_K64_groups": 5,
+      "four_HGMMA_per_group": true,
+      "actual_D_no_generic_write_before_wait0": true,
+      "math_128thread_barriers_after_wait0": 5
+    },
+    {
+      "tokens": 8,
+      "gather_divisor": 1,
+      "static_K64_groups": 5,
+      "four_HGMMA_per_group": true,
+      "actual_D_no_generic_write_before_wait0": true,
+      "math_128thread_barriers_after_wait0": 5
+    }
+  ],
+  "gate_negative_rejections": [
+    "missing_wait0",
+    "missing_reader_barrier"
+  ],
+  "no_new_codec_or_matrix_campaign": true,
+  "CUDA_context_initialized": false
+}

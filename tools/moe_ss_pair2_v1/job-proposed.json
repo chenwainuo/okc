@@ -1,0 +1,104 @@
+{
+  "id": "research.moe.ss.lut.pair2.stage.01",
+  "resource": "gpu",
+  "kind": "diagnostic",
+  "state": "BACKLOG",
+  "author": "moe_pipeline_next",
+  "created_at": 1793133224.8943925,
+  "depends_on": [
+    {
+      "id": "research.moe.ss.decode.lut.stage.01",
+      "accepted_dispositions": [
+        "VALID_GAIN"
+      ]
+    }
+  ],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 0
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "Does halving actual LUT synchronization rounds improve up/down stages despite shared-memory occupancy tradeoff? FixedcapturedfixtureF1 plus8routingpairs perstage."
+    },
+    "basis": "WholeLUT actual1.49xoverSS but3.71xsloweranchor. pair2 source halves64to32handshakes with same decodebytes/K16order. Offline32/64regs,0spill,shared46112versus27680; actualJITresourcesunknown; no forecast.",
+    "confidence": "unknown",
+    "evidence": [
+      "tools/moe_ss_lut_whole_v1/actual-analysis/analysis.json",
+      "serving/experiments/moe_rsi_20261027/ss_pipeline_followup_cpu_v1/DESIGN.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 180,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 10
+  },
+  "files": {
+    "tools/moe_ss_pair2_v1/pilot.py": "9a41bd6ea6cfd3c0f561f641e334349b361286814cab36f75bc2f671a46f4bf4",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_pair2_v1/adapter.py": "2d840d07e2a3d16d99cc4aa87a3e83243a2350eec4867f21e4ddc7ee34b521e6",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_pair2_v1/kernel.cuh": "becfad743a366c7328626c70cd0448977c8101c690803661ca4175d040096ac6",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_pair2_v1/extension_source.cu": "dc31999a4ad82ef9ed5ff140a83df10ba580060ead1b3cde87f3cd53ad0843e5",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/adapter.py": "c8aa1303123db57d84e5d244c6ca3baeeaa1d5ae895534223399951ef1bba838",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/extension_source.cu": "29e8ccca7da01aeab28e2964b6e98d1e7d89cad8cb884f34f956bf25091b5974",
+    "tools/moe_ss_serving_pilot_v1/pilot.py": "d313e60ed27e053211bab0595c5c24e2f6b2d39dbe323588dbed7264262fe925",
+    "benchmarks/rsi_bundle.py": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25",
+    "benchmarks/rsi_worker.py": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_v2/cpu_proof.py": "45fd4b203053c634201d214a74316e820b56278efc44e528f5c3593e30a5d1f7",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_followup_cpu_v1/DESIGN.json": "3b21a64098d08c72235a92d605dbd24fb7f368c32e767ca742b0394f52a6ccb6",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_followup_cpu_v1/audit-evidence.json": "f233d835e9dac429b0edf4752c2b549ddb6fd0f9bd6c82ba75da55dbfcb154d7",
+    "tools/moe_ss_pair2_v1/manifest.json": "402443aa9e242c53a137384a0eab2239fd2f355e3f7d5dd0fd3885973796e576",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/tools/h100_sglang_trial.sh": "551ba60dd1d10175991c8e7279ff6ea548023dfca3a0dacbaec7134d35b4ac13",
+    "proj_rsi/tools/h100_sglang_container.sh": "1eac699c8aef569f69f5f8e9d9b83dfbd3d4fb2ba3b1998c53464b8e54b25d4c"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "image": "lmsysorg/sglang@sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
+    "container": "okc-proj-moe-ss-lut-pair2-stage-01",
+    "inner_seconds": 130,
+    "outer_seconds": 180,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/tools/moe_ss_pair2_v1/pilot.py",
+      "--prior",
+      "/okc/logs/scheduler/moe-ss-true-serving-pilot-01",
+      "--lut-prior",
+      "/okc/logs/scheduler/moe-ss-decode-lut-stage-01",
+      "--output",
+      "/okc/logs/scheduler/moe-ss-lut-pair2-stage-01",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/moe-ss-lut-pair2-stage-01.md",
+      "--review-sha256",
+      "ROOT_BIND_APPROVED_REVIEW_SHA256"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/moe-ss-lut-pair2-stage-01"
+    ]
+  },
+  "annotations": {
+    "state": "BACKLOG_FOCUSED_REVIEW_PENDING_NO_GO_YET",
+    "scope": "M8EP8normal,T8,DIV8up/DIV1down,K4096,N8192/4096,E32; same originalgrid/projectzeroing; no othercases",
+    "slot_lifetime": "Two logicalslots each two physicalK64 halves, publish afterbothproducerhalves;8MMAs thenwait0 then128threadrendezvous thenrelease; terminalsamewait0 coversepiloque",
+    "checks": "actualJIT2functions+8MMA/group+Rdestlifetime+sharedoccupancy; mixedfullreference eager/current/fresh/nonlocal; privategraphstagebitexact,currentinput, ownF1terminals andpairedterminals; immutablebanks/source; cleanup",
+    "timing": "18fixedfixtureF1calls+32balancedpairedstagecalls; bothstages actualsamefixture perF1block, immutablehash;8routingseeds perstage",
+    "optional_profile": "off bydefault; only aftersavedvaliddirectterminal; numeric/runtime stillmandatory",
+    "review_binding": "Pending focusedreview; root admission only afterGO; root-ready descriptor must files-pin receipt",
+    "performance_claim": "none; no addition to v2down stack until actual combinedpackage measured"
+  }
+}

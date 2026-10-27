@@ -1,0 +1,2 @@
+#include "kernel.cuh"
+template __global__ void moe_ss_lut_v2_unroll2::project<8,1>(const uint32_t*,const uint8_t*,const moe_ss_lut_v2_unroll2::B*,const moe_ss_lut_v2_unroll2::B*,const int32_t*,const int32_t*,const int32_t*,moe_ss_lut_v2_unroll2::B*,int,int,int,int,int,int,int,int);

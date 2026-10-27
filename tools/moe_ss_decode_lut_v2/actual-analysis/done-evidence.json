@@ -1,0 +1,66 @@
+{
+  "job_id": "research.moe.ss.decode.lut.rolled.down.01",
+  "recommended_state": "DONE",
+  "recommended_disposition": "VALID_REGRESSION",
+  "scope": "M8ep8normal downstage v1fullLUT versus lookup-scatterfused producerstep-unroll1; v1LUTup retained; narrowing rejects measuredconfiguration only",
+  "observed_state": "VALID_M8_ROLLED_DOWN_STAGE_SCREEN_ROOT_REVIEW_REQUIRED",
+  "result_path": "results/proj-rsi/scheduler/artifacts/research.moe.ss.decode.lut.rolled.down.01/collection-1793133248598911448/logs/scheduler/moe-ss-decode-lut-rolled-down-01/result.json",
+  "result_sha256": "949a880a2ed324584df8edd81dd5778d6373e75f2422b387721366aaf10fc56d",
+  "analysis_path": "tools/moe_ss_decode_lut_v2/actual-analysis/analysis.json",
+  "analysis_sha256": "f726b5baa43720bca590012a0d0783f3017f55d348b2429584a9ee451dd17823",
+  "measurement": {
+    "raw_calls": 25,
+    "F1_calls": 9,
+    "paired_calls": 16,
+    "pairs": 8,
+    "v2_wins": 0,
+    "v2_losses": 8,
+    "median_signed_v1_minus_v2_us": -101.93600505590439,
+    "median_v2_over_v1_slowdown": 1.7823110131941604,
+    "F1_exact_same_record": {
+      "v1_before_us": 214.4639939069748,
+      "v2_us": 228.12800109386444,
+      "v1_after_us": 213.85599672794342,
+      "before_minus_v2_us": -13.664007186889648,
+      "after_minus_v2_us": -14.27200436592102,
+      "v2_wins_both_endpoints": false,
+      "scope": "same frozen seed7904 record, same private graph buffers;9calls total, descriptive bracket",
+      "routing_record_identical": true
+    }
+  },
+  "resources": {
+    "v1_registers": 59,
+    "v2_actual_registers": 48,
+    "v1_active_CTA_SM": 4,
+    "v2_active_CTA_SM": 5,
+    "spills_local_stack": 0,
+    "B9_ideal_capacity_waves": "2to1 but actualstilllosespaired16.032us; occupancyaloneinsufficient"
+  },
+  "correctness": {
+    "records": 51,
+    "stage_bitwise_checks": 34,
+    "mixed_full_reference_and_bitwise_checks": 4,
+    "all_pass": true,
+    "direct_timings_own_terminals_currentinput_source_immutable_completed": true
+  },
+  "narrowed_diagnosis": "Actualv1 eightindependentsharedlookups thenfourpackedwordstores; v2eachlookupimmediatelyfeedsdependenthalfstore, doublesstoreinstructioncount. Loop/register/schedulingchangeisobserved; cycleattributionnotcountermeasured. Do notrejectrolling/allLUTs basedonthisconfiguration.",
+  "offline_followup": "Singleunroll2probe48regs/0spill retainsdependenthalfstorepattern; noGPUproposal. Parentalreadyregisteredpair2structuralnext, avoidsduplicate.",
+  "terminal_exit": 0,
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T20:32:33Z\nverify_reuse_tree_and_runtime\nreuse_exact_original_binary\nreuse_exact_v1_full_LUT_binary\ncompile_and_gate_one_actual_rolled_down_function\n[1/3] ccache c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=ss_lut_v2_down_cu130_a997cd54700169151e0e -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -fPIC -std=c++20 -c /root/.cache/torch_extensions/ss_lut_v2_down_cu130_a997cd54700169151e0e/main.cpp -o main.o \n[2/3] ccache /usr/local/cuda/bin/nvcc -MD -MF cuda.cuda.o.d -DTORCH_EXTENSION_NAME=ss_lut_v2_down_cu130_a997cd54700169151e0e -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options '-fPIC' -gencode=arch=compute_90a,code=sm_90a -O3 --expt-relaxed-constexpr -std=c++20 -c /root/.cache/torch_extensions/ss_lut_v2_down_cu130_a997cd54700169151e0e/cuda.cu -o cuda.cuda.o \n/root/.cache/torch_extensions/ss_lut_v2_down_cu130_a997cd54700169151e0e/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n/root/.cache/torch_extensions/ss_lut_v2_down_cu130_a997cd54700169151e0e/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n[3/3] ccache c++ main.o cuda.cuda.o -shared -L/opt/sglang/lib/python3.12/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o ss_lut_v2_down_cu130_a997cd54700169151e0e.so\none_original_prepare_shared_immutable_banks\ncapture_real_stage_inputs_and_graphs\ndown_F1_then_matched_stage_timings\ndirect_terminal_source_and_immutable_checks\ncomplete\nTRIAL_EXIT okc-proj-moe-ss-decode-lut-rolled-down-01 0\n2026-10-27T20:33:42Z\n",
+    "terminal_exit": 0
+  },
+  "evidence_files": {
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.decode.lut.rolled.down.01/collection-1793133248598911448/logs/scheduler/moe-ss-decode-lut-rolled-down-01/result.json": "949a880a2ed324584df8edd81dd5778d6373e75f2422b387721366aaf10fc56d",
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.decode.lut.rolled.down.01/collection-1793133248598911448/inventory.json": "b22b36c7b9a7553791e095e2d86c2ed267858e7a2570f7b604b2bea8b97c22c9",
+    "tools/moe_ss_decode_lut_v2/actual-analysis/analysis.json": "f726b5baa43720bca590012a0d0783f3017f55d348b2429584a9ee451dd17823"
+  },
+  "root_action": "Root independentlyvalidates thenmaymarkDONE/VALID_REGRESSION. Retainv1fullLUTbothstages; no incumbentpromotion/wholev2speedclaim/familyrejection."
+}

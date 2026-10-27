@@ -1,0 +1,23 @@
+"""Freeze CPU-only proposal. Does not admit jobs or touch GPU state."""
+import hashlib,json,time
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[2];D=Path(__file__).resolve().parent
+sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+base='serving/experiments/moe_rsi_20261027/ss_pipeline_pair2_v1/'
+prior=json.loads((ROOT/'tools/moe_ss_decode_lut_v2/manifest.json').read_text())
+paths=['tools/moe_ss_pair2_v1/pilot.py',base+'adapter.py',base+'kernel.cuh',base+'extension_source.cu','serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/adapter.py','serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/extension_source.cu','tools/moe_ss_serving_pilot_v1/pilot.py','benchmarks/rsi_bundle.py','benchmarks/rsi_worker.py','serving/experiments/moe_rsi_20261027/ss_pipeline_v2/cpu_proof.py','serving/experiments/moe_rsi_20261027/ss_pipeline_followup_cpu_v1/DESIGN.json','serving/experiments/moe_rsi_20261027/ss_pipeline_followup_cpu_v1/audit-evidence.json']
+m={k:v for k,v in prior.items() if k.startswith('prior_') or k.startswith('LUT_')}
+m.update(state='CPU_READY_GPU_UNRUN_FOCUSED_REVIEW_PENDING',files={p:sha(ROOT/p)for p in paths},candidate_adapter=base+'adapter.py',candidate_kernel=base+'kernel.cuh',candidate_extension_source=base+'extension_source.cu',reuse='Exact original and fullLUT binaries/tree/banks; oneprepare; newcandidate only twoT8 DIV1/DIV8 functions',timing='Perstage fixed seed7904 captured fixture F1 3control/3candidate/3control plus8balancedABBA routingpairs',kernel_delta='Pair2 unchanged physicalK64 tiles/publication;32logicalstages;8MMA/group; two logical2halfslots; originalK16order',failures='Everyraw saved before numericgate; ownF1 and pairedterminals; preserve all signedfailures/losses; numeric/runtime invalid')
+(D/'manifest.json').write_text(json.dumps(m,indent=2)+'\n')
+j=json.loads((ROOT/'tools/moe_ss_decode_lut_v2/job-proposed.json').read_text())
+j.update(id='research.moe.ss.lut.pair2.stage.01',state='BACKLOG',author='moe_pipeline_next',created_at=time.time(),files=dict(m['files']))
+j['files']['tools/moe_ss_pair2_v1/manifest.json']=sha(D/'manifest.json')
+for p in ['proj_rsi/tools/h100_trial.sh','proj_rsi/tools/h100_container.sh','proj_rsi/tools/h100_sglang_trial.sh','proj_rsi/tools/h100_sglang_container.sh']:j['files'][p]=sha(ROOT/p)
+j['estimate']['information']['decision']='Does halving actual LUT synchronization rounds improve up/down stages despite shared-memory occupancy tradeoff? FixedcapturedfixtureF1 plus8routingpairs perstage.'
+j['estimate']['basis']='WholeLUT actual1.49xoverSS but3.71xsloweranchor. pair2 source halves64to32handshakes with same decodebytes/K16order. Offline32/64regs,0spill,shared46112versus27680; actualJITresourcesunknown; no forecast.'
+j['estimate']['evidence']=['tools/moe_ss_lut_whole_v1/actual-analysis/analysis.json','serving/experiments/moe_rsi_20261027/ss_pipeline_followup_cpu_v1/DESIGN.json']
+j['cost']={'gpu_seconds':180,'followup_gpu_seconds':0,'cpu_minutes':10}
+j['launch'].update(container='okc-proj-moe-ss-lut-pair2-stage-01',inner_seconds=130,outer_seconds=180,argv=['python3','/okc/tools/moe_ss_pair2_v1/pilot.py','--prior','/okc/logs/scheduler/moe-ss-true-serving-pilot-01','--lut-prior','/okc/logs/scheduler/moe-ss-decode-lut-stage-01','--output','/okc/logs/scheduler/moe-ss-lut-pair2-stage-01','--review','/okc/proj_rsi/scheduling/reviews/moe-ss-lut-pair2-stage-01.md','--review-sha256','ROOT_BIND_APPROVED_REVIEW_SHA256'],artifacts=['/root/okc/logs/scheduler/moe-ss-lut-pair2-stage-01'])
+j['annotations']={'state':'BACKLOG_FOCUSED_REVIEW_PENDING_NO_GO_YET','scope':'M8EP8normal,T8,DIV8up/DIV1down,K4096,N8192/4096,E32; same originalgrid/projectzeroing; no othercases','slot_lifetime':'Two logicalslots each two physicalK64 halves, publish afterbothproducerhalves;8MMAs thenwait0 then128threadrendezvous thenrelease; terminalsamewait0 coversepiloque','checks':'actualJIT2functions+8MMA/group+Rdestlifetime+sharedoccupancy; mixedfullreference eager/current/fresh/nonlocal; privategraphstagebitexact,currentinput, ownF1terminals andpairedterminals; immutablebanks/source; cleanup','timing':'18fixedfixtureF1calls+32balancedpairedstagecalls; bothstages actualsamefixture perF1block, immutablehash;8routingseeds perstage','optional_profile':'off bydefault; only aftersavedvaliddirectterminal; numeric/runtime stillmandatory','review_binding':'Pending focusedreview; root admission only afterGO; root-ready descriptor must files-pin receipt','performance_claim':'none; no addition to v2down stack until actual combinedpackage measured'}
+(D/'job-proposed.json').write_text(json.dumps(j,indent=2)+'\n')
+print('manifest',sha(D/'manifest.json'),'proposal',sha(D/'job-proposed.json'))

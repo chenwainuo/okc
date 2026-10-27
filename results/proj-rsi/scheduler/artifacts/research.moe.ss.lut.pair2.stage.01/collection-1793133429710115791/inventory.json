@@ -1,0 +1,62 @@
+{
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T20:35:37Z\nverify_reuse_tree_and_runtime\nreuse_exact_original_binary\nreuse_exact_v1_full_LUT_binary\ncompile_and_gate_one_actual_pair2_function\n[1/3] ccache c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=ss_pair2_v1_down_cu130_cfa7618d6473fa63a389 -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -fPIC -std=c++20 -c /root/.cache/torch_extensions/ss_pair2_v1_down_cu130_cfa7618d6473fa63a389/main.cpp -o main.o \n[2/3] ccache /usr/local/cuda/bin/nvcc -MD -MF cuda.cuda.o.d -DTORCH_EXTENSION_NAME=ss_pair2_v1_down_cu130_cfa7618d6473fa63a389 -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options '-fPIC' -gencode=arch=compute_90a,code=sm_90a -O3 --expt-relaxed-constexpr -std=c++20 -c /root/.cache/torch_extensions/ss_pair2_v1_down_cu130_cfa7618d6473fa63a389/cuda.cu -o cuda.cuda.o \n/root/.cache/torch_extensions/ss_pair2_v1_down_cu130_cfa7618d6473fa63a389/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n/root/.cache/torch_extensions/ss_pair2_v1_down_cu130_cfa7618d6473fa63a389/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n[3/3] ccache c++ main.o cuda.cuda.o -shared -L/opt/sglang/lib/python3.12/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o ss_pair2_v1_down_cu130_cfa7618d6473fa63a389.so\none_original_prepare_shared_immutable_banks\ncapture_real_stage_inputs_and_graphs\nup_down_F1_then_matched_stage_timings\ndirect_terminal_source_and_immutable_checks\ncomplete\nTRIAL_EXIT okc-proj-moe-ss-lut-pair2-stage-01 0\n2026-10-27T20:36:47Z\n",
+    "terminal_exit": 0
+  },
+  "collected_at": 1793133430.6806436,
+  "dispatch": {
+    "artifacts": [
+      "/root/okc/logs/scheduler/moe-ss-lut-pair2-stage-01"
+    ],
+    "claimed_at": 1793133324.5701408,
+    "container": "okc-proj-moe-ss-lut-pair2-stage-01",
+    "controller_owner": "root",
+    "guard_pid": 576422,
+    "host": "root@107.170.6.60",
+    "host_log": "/root/okc/logs/scheduler/research.moe.ss.lut.pair2.stage.01.host.log",
+    "job_id": "research.moe.ss.lut.pair2.stage.01",
+    "launch_requested_at": 1793133336.6828897,
+    "phase": "RUNNING",
+    "remote_repo": "/root/okc",
+    "source_pins": {
+      "benchmarks/rsi_bundle.py": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25",
+      "benchmarks/rsi_worker.py": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+      "proj_rsi/scheduling/reviews/moe-ss-lut-pair2-stage-01.md": "74b20d8c8b0c06fa8d7208ddc3aea7a72a09369fc00e9715c24da913b236ee23",
+      "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+      "proj_rsi/tools/h100_sglang_container.sh": "1eac699c8aef569f69f5f8e9d9b83dfbd3d4fb2ba3b1998c53464b8e54b25d4c",
+      "proj_rsi/tools/h100_sglang_trial.sh": "551ba60dd1d10175991c8e7279ff6ea548023dfca3a0dacbaec7134d35b4ac13",
+      "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+      "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/adapter.py": "c8aa1303123db57d84e5d244c6ca3baeeaa1d5ae895534223399951ef1bba838",
+      "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/extension_source.cu": "29e8ccca7da01aeab28e2964b6e98d1e7d89cad8cb884f34f956bf25091b5974",
+      "serving/experiments/moe_rsi_20261027/ss_pipeline_followup_cpu_v1/DESIGN.json": "3b21a64098d08c72235a92d605dbd24fb7f368c32e767ca742b0394f52a6ccb6",
+      "serving/experiments/moe_rsi_20261027/ss_pipeline_followup_cpu_v1/audit-evidence.json": "f233d835e9dac429b0edf4752c2b549ddb6fd0f9bd6c82ba75da55dbfcb154d7",
+      "serving/experiments/moe_rsi_20261027/ss_pipeline_pair2_v1/adapter.py": "2d840d07e2a3d16d99cc4aa87a3e83243a2350eec4867f21e4ddc7ee34b521e6",
+      "serving/experiments/moe_rsi_20261027/ss_pipeline_pair2_v1/extension_source.cu": "dc31999a4ad82ef9ed5ff140a83df10ba580060ead1b3cde87f3cd53ad0843e5",
+      "serving/experiments/moe_rsi_20261027/ss_pipeline_pair2_v1/kernel.cuh": "becfad743a366c7328626c70cd0448977c8101c690803661ca4175d040096ac6",
+      "serving/experiments/moe_rsi_20261027/ss_pipeline_v2/cpu_proof.py": "45fd4b203053c634201d214a74316e820b56278efc44e528f5c3593e30a5d1f7",
+      "tools/moe_ss_pair2_v1/manifest.json": "402443aa9e242c53a137384a0eab2239fd2f355e3f7d5dd0fd3885973796e576",
+      "tools/moe_ss_pair2_v1/pilot.py": "9a41bd6ea6cfd3c0f561f641e334349b361286814cab36f75bc2f671a46f4bf4",
+      "tools/moe_ss_serving_pilot_v1/pilot.py": "d313e60ed27e053211bab0595c5c24e2f6b2d39dbe323588dbed7264262fe925"
+    }
+  },
+  "files": {
+    "logs/scheduler/moe-ss-lut-pair2-stage-01/actual_paired.cu": "cfa7618d6473fa63a3895de358cd3ccbd0d9b7faf741fa9ebbbe02adcabda535",
+    "logs/scheduler/moe-ss-lut-pair2-stage-01/actual_paired.resources": "29f94264800665a5ad77c728a3efcb737e53da559129defec443db4070071c1b",
+    "logs/scheduler/moe-ss-lut-pair2-stage-01/actual_paired.sass": "db34e2b40908202a44278a144cb6a3cec44d6a70ec5642ad3dcebd5cd0700c26",
+    "logs/scheduler/moe-ss-lut-pair2-stage-01/actual_paired.so": "999ff1b8949ca9a1dd0a98f855e53d5fb7ea230d8255d96540d4ed5c39a46a31",
+    "logs/scheduler/moe-ss-lut-pair2-stage-01/result.json": "e678168737b7798a3073dbc50210c3068c80b6a205e79ba952b6961dc6f9dcec",
+    "logs/scheduler/research.moe.ss.lut.pair2.stage.01.host.log": "89da98a77051d81fa0f5651b3d8a087df5e0466d53d4f26d0607cfed719c6498"
+  },
+  "job_id": "research.moe.ss.lut.pair2.stage.01",
+  "missing": [],
+  "symlinks_not_followed_or_materialized": {},
+  "terminal_exit": 0,
+  "validation": "ROOT_VALIDATION_REQUIRED_NO_PERFORMANCE_ADMISSION"
+}

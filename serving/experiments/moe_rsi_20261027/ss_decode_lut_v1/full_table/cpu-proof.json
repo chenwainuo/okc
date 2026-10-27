@@ -1,0 +1,139 @@
+{
+  "state": "CPU_ONLY_GPU_UNRUN",
+  "finite_exact_product_bit_cases": 4064,
+  "signed_zero_included": true,
+  "fp8_subnormal_signs_included": true,
+  "NaN_classification_cases": 32,
+  "NaN_sign_payload_equality": "not asserted: invalid finite-numeric input",
+  "global_fold_counterexample": {
+    "a": [
+      1.0,
+      1.0
+    ],
+    "w": [
+      1.0,
+      0.00390625
+    ],
+    "global": 1.5,
+    "canonical_postglobal": 1.5,
+    "folded_global": 1.5078125
+  },
+  "source_unchanged": [
+    "mma descriptors/instructions",
+    "input gather through math loop and global epilogue",
+    "complete serving method"
+  ],
+  "inherited_CPU_proofs": {
+    "layout": [
+      {
+        "tokens": 8,
+        "output_scalars": 512,
+        "shared_dynamic": 19488,
+        "stage_bytes": 9216,
+        "full_count": 1,
+        "empty_count": 1,
+        "math_release_threads_rendezvous": 128,
+        "producer_publication_threads": 128
+      },
+      {
+        "tokens": 16,
+        "output_scalars": 1024,
+        "shared_dynamic": 21536,
+        "stage_bytes": 10240,
+        "full_count": 1,
+        "empty_count": 1,
+        "math_release_threads_rendezvous": 128,
+        "producer_publication_threads": 128
+      },
+      {
+        "tokens": 32,
+        "output_scalars": 2048,
+        "shared_dynamic": 25632,
+        "stage_bytes": 12288,
+        "full_count": 1,
+        "empty_count": 1,
+        "math_release_threads_rendezvous": 128,
+        "producer_publication_threads": 128
+      },
+      {
+        "tokens": 64,
+        "output_scalars": 4096,
+        "shared_dynamic": 33824,
+        "stage_bytes": 16384,
+        "full_count": 1,
+        "empty_count": 1,
+        "math_release_threads_rendezvous": 128,
+        "producer_publication_threads": 128
+      }
+    ],
+    "protocol": {
+      "complete_stages": 64,
+      "reachable_interleavings": 192,
+      "no_dead_states": true,
+      "init_slots": [
+        0,
+        1
+      ],
+      "last_reads": [
+        62,
+        63
+      ],
+      "producer_final_return": "maththreads retain CTA shared lifetime until finalwait0",
+      "assumption": "finite warp/asynchronous-engine progress; not arbitrary scheduler or numeric proof"
+    },
+    "routing": {
+      "shape_block_routing_cases": 280,
+      "up_input": "slot//8 bounds originalM",
+      "down_input": "slot bounds M*8",
+      "nonlocal_and_empty": "no kernel write; explicit output zero each call",
+      "capacity_tail": "ceil grid with per-lane capacity guards; no block-alignment allocation assumption"
+    }
+  },
+  "SASS": [
+    {
+      "function": "_ZN18moe_ss_lut_full_v17projectILi8ELi8EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii",
+      "instructions": 944,
+      "LOP3": 99,
+      "LDS": 32,
+      "LDS_U16": 32,
+      "HGMMA": 20,
+      "wait0_groups": 5,
+      "reader_barriers": 5,
+      "total_LDG_U16_constant": 5
+    },
+    {
+      "function": "_ZN18moe_ss_lut_full_v17projectILi8ELi1EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii",
+      "instructions": 1080,
+      "LOP3": 109,
+      "LDS": 32,
+      "LDS_U16": 32,
+      "HGMMA": 20,
+      "wait0_groups": 5,
+      "reader_barriers": 5,
+      "total_LDG_U16_constant": 5
+    }
+  ],
+  "registers": [
+    40,
+    60
+  ],
+  "full_host_wrapper_matches_device_SASS": true,
+  "spill_stack_bytes": 0,
+  "shared_T8_bytes": 27680,
+  "extra_shared_bytes": 8192,
+  "lut_global_init_bytes_per_CTA": 8192,
+  "extra_LDS_payload_bytes_per_full_K4096_CTA": 524288,
+  "bank_service_rounds_seed7_1000_random_samples": {
+    "mean": 2.808,
+    "max": 5,
+    "histogram": {
+      "2": 321,
+      "3": 557,
+      "4": 115,
+      "5": 7
+    },
+    "same_scale": 1,
+    "adversarial_scales_stride8_same_q": 8
+  },
+  "CUDA_context_initialized": false
+}

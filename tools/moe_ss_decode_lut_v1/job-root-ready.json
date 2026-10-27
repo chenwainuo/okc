@@ -1,0 +1,101 @@
+{
+  "id": "research.moe.ss.decode.lut.stage.01",
+  "resource": "gpu",
+  "kind": "diagnostic",
+  "state": "HELD",
+  "author": "moe_decode_lut",
+  "created_at": 1793130401.0840163,
+  "depends_on": [
+    {
+      "id": "research.moe.ss.true.serving.pilot.01",
+      "accepted_dispositions": [
+        "VALID_REGRESSION",
+        "VALID_NO_GAIN"
+      ]
+    }
+  ],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 0
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "One M8 actual-serving stage screen determines numerical validity and signed independent up/down effects of full shared LUT; no full-serving/threefold forecast."
+    },
+    "basis": "Original SS measured5.57xslow; fullLUT removes scalar decode instructions but adds8KBshared, lookup traffic and registers. Value unknown until real separated stages.",
+    "confidence": "unknown",
+    "evidence": [
+      "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/README.md",
+      "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/cpu-proof.json",
+      "tools/moe_ss_serving_pilot_v1/actual-analysis/analysis.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 240,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 10
+  },
+  "files": {
+    "tools/moe_ss_decode_lut_v1/pilot.py": "f1a7fd9273cb4ae5f6b65546098479b928bafad68fc7c395482d9b2a261b699c",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/adapter.py": "c8aa1303123db57d84e5d244c6ca3baeeaa1d5ae895534223399951ef1bba838",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/kernel.cuh": "09a7d995f687ecbc172927b811bc30773e90f103aea9c02f3114a0b733491e63",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/cpu-proof.json": "09e395e3d60a666055bcc80cf2cb22e5f5dd92563cc7a27ea783da006042096a",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/experiment.json": "6b6235286053a4913c1f26645205eb26c576dc81fbcc862f9b74e5cd69129ed2",
+    "tools/moe_ss_serving_pilot_v1/pilot.py": "d313e60ed27e053211bab0595c5c24e2f6b2d39dbe323588dbed7264262fe925",
+    "benchmarks/rsi_bundle.py": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25",
+    "benchmarks/rsi_worker.py": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_v2/adapter.py": "e0e4790f996b34c0861d21e71687a707f92bec5c793d279213432c105b63b91d",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_v2/cpu_proof.py": "45fd4b203053c634201d214a74316e820b56278efc44e528f5c3593e30a5d1f7",
+    "tools/moe_ss_decode_lut_v1/manifest.json": "ad38f0f46d46ab4fbe77436e1104da89a342dd5b6450bb641c8eac0d36578903",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/tools/h100_sglang_trial.sh": "551ba60dd1d10175991c8e7279ff6ea548023dfca3a0dacbaec7134d35b4ac13",
+    "proj_rsi/tools/h100_sglang_container.sh": "1eac699c8aef569f69f5f8e9d9b83dfbd3d4fb2ba3b1998c53464b8e54b25d4c"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "image": "lmsysorg/sglang@sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
+    "container": "okc-proj-moe-ss-decode-lut-stage-01",
+    "inner_seconds": 180,
+    "outer_seconds": 240,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/tools/moe_ss_decode_lut_v1/pilot.py",
+      "--prior",
+      "/okc/logs/scheduler/moe-ss-true-serving-pilot-01",
+      "--output",
+      "/okc/logs/scheduler/moe-ss-decode-lut-stage-01",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/moe-ss-decode-lut-stage-01.md",
+      "--review-sha256",
+      "ROOT_BIND_APPROVED_REVIEW_SHA256"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/moe-ss-decode-lut-stage-01"
+    ]
+  },
+  "annotations": {
+    "state": "HELD_CPU_READY_ROOT_REVIEW_BINDING_REQUIRED_GPU_UNRUN",
+    "scope": "full-table only vs exact original; separated up/down; actual serving inputs/reference/current-input/terminalchecks; normalzeroing; samegrid; no full-servinggainclaim",
+    "new_compile": "exact two T8function candidate; original SO reused",
+    "optional_profile": "disabled by default; --profile allows post-saved-timing Torch traces, no NCU/counter privileges; trace failure optional, numeric/runtime failure invalidates",
+    "review_binding": "Root must bind independent focused driver review SHA256 in argv and review object before admission; no existing review reused",
+    "preserve": "all raw signed differences and failure evidence; loss rejects measured configuration only; mixed stage followup may be proposed if only one stage wins",
+    "transfer": "Existing prior directory/SO/tree stay in place; root transfers only hashpinned files in this descriptor, no replacement candidate snapshot/archive"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T20:32:33Z\nverify_reuse_tree_and_runtime\nreuse_exact_original_binary\nreuse_exact_v1_full_LUT_binary\ncompile_and_gate_one_actual_rolled_down_function\n[1/3] ccache c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=ss_lut_v2_down_cu130_a997cd54700169151e0e -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -fPIC -std=c++20 -c /root/.cache/torch_extensions/ss_lut_v2_down_cu130_a997cd54700169151e0e/main.cpp -o main.o \n[2/3] ccache /usr/local/cuda/bin/nvcc -MD -MF cuda.cuda.o.d -DTORCH_EXTENSION_NAME=ss_lut_v2_down_cu130_a997cd54700169151e0e -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options '-fPIC' -gencode=arch=compute_90a,code=sm_90a -O3 --expt-relaxed-constexpr -std=c++20 -c /root/.cache/torch_extensions/ss_lut_v2_down_cu130_a997cd54700169151e0e/cuda.cu -o cuda.cuda.o \n/root/.cache/torch_extensions/ss_lut_v2_down_cu130_a997cd54700169151e0e/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n/root/.cache/torch_extensions/ss_lut_v2_down_cu130_a997cd54700169151e0e/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n[3/3] ccache c++ main.o cuda.cuda.o -shared -L/opt/sglang/lib/python3.12/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o ss_lut_v2_down_cu130_a997cd54700169151e0e.so\none_original_prepare_shared_immutable_banks\ncapture_real_stage_inputs_and_graphs\ndown_F1_then_matched_stage_timings\ndirect_terminal_source_and_immutable_checks\ncomplete\nTRIAL_EXIT okc-proj-moe-ss-decode-lut-rolled-down-01 0\n2026-10-27T20:33:42Z\n",
+    "terminal_exit": 0
+  },
+  "collected_at": 1793133249.5680027,
+  "dispatch": {
+    "artifacts": [
+      "/root/okc/logs/scheduler/moe-ss-decode-lut-rolled-down-01"
+    ],
+    "claimed_at": 1793133143.0363643,
+    "container": "okc-proj-moe-ss-decode-lut-rolled-down-01",
+    "controller_owner": "root",
+    "guard_pid": 574730,
+    "host": "root@107.170.6.60",
+    "host_log": "/root/okc/logs/scheduler/research.moe.ss.decode.lut.rolled.down.01.host.log",
+    "job_id": "research.moe.ss.decode.lut.rolled.down.01",
+    "launch_requested_at": 1793133152.5058837,
+    "phase": "RUNNING",
+    "remote_repo": "/root/okc",
+    "source_pins": {
+      "benchmarks/rsi_bundle.py": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25",
+      "benchmarks/rsi_worker.py": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+      "proj_rsi/scheduling/reviews/moe-ss-decode-lut-rolled-down-01.md": "834b4611d632d4e0f45753950a56e6a49c950288232c7c9d3e4c9d9885951741",
+      "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+      "proj_rsi/tools/h100_sglang_container.sh": "1eac699c8aef569f69f5f8e9d9b83dfbd3d4fb2ba3b1998c53464b8e54b25d4c",
+      "proj_rsi/tools/h100_sglang_trial.sh": "551ba60dd1d10175991c8e7279ff6ea548023dfca3a0dacbaec7134d35b4ac13",
+      "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+      "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/adapter.py": "c8aa1303123db57d84e5d244c6ca3baeeaa1d5ae895534223399951ef1bba838",
+      "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/extension_source.cu": "29e8ccca7da01aeab28e2964b6e98d1e7d89cad8cb884f34f956bf25091b5974",
+      "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/codegen.json": "be0b2652d6362ddb70702df77ade847f1f625e462f8f540dd741d6484c03b5cb",
+      "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/down_only/adapter.py": "ca7fc37eaff3013a9093eb01fb1fff39a69576ebbe94271e2689fb73024f0590",
+      "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/down_only/extension_source.cu": "e91f5d5d609d5b1d8ab9bfb93d8db9e8cda1f691e1b6c6921f4b3606314566bd",
+      "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/down_only/kernel.cuh": "e0c181e8103d2ed69eec44047fe1184869a10424847d1551fa3d316007cc6734",
+      "serving/experiments/moe_rsi_20261027/ss_pipeline_v2/cpu_proof.py": "45fd4b203053c634201d214a74316e820b56278efc44e528f5c3593e30a5d1f7",
+      "tools/moe_ss_decode_lut_v2/manifest.json": "2881c648f8d86f6610d53c591b2bcc08b60eef8cbe8f8571543dfebdccd505bf",
+      "tools/moe_ss_decode_lut_v2/pilot.py": "d19e7c6b0c13145aba1ab41987b2ad9b4288b4bd4b5df93b3f15d9e9b715febc",
+      "tools/moe_ss_serving_pilot_v1/pilot.py": "d313e60ed27e053211bab0595c5c24e2f6b2d39dbe323588dbed7264262fe925"
+    }
+  },
+  "files": {
+    "logs/scheduler/moe-ss-decode-lut-rolled-down-01/actual_rolled.cu": "a997cd54700169151e0e8c7208205fae43fcec42414acafa87129298eccbccb3",
+    "logs/scheduler/moe-ss-decode-lut-rolled-down-01/actual_rolled.resources": "4509cfa0065f28b4e761d4f0ee48c5e3f971ad27b063af0d054c47e1687a617c",
+    "logs/scheduler/moe-ss-decode-lut-rolled-down-01/actual_rolled.sass": "489327ddf33b722a06a80f44466559215d6e636454b0d2282fe60b496e086e3c",
+    "logs/scheduler/moe-ss-decode-lut-rolled-down-01/actual_rolled.so": "bffbb3ec813352711cea30717f150569cb742a2a6ec88c8f3e65e8c33925114e",
+    "logs/scheduler/moe-ss-decode-lut-rolled-down-01/result.json": "949a880a2ed324584df8edd81dd5778d6373e75f2422b387721366aaf10fc56d",
+    "logs/scheduler/research.moe.ss.decode.lut.rolled.down.01.host.log": "19571f5df52a74e3f12ca30dc0b65076326dc83dfca8e4a04b6f88b8aa57edc3"
+  },
+  "job_id": "research.moe.ss.decode.lut.rolled.down.01",
+  "missing": [],
+  "symlinks_not_followed_or_materialized": {},
+  "terminal_exit": 0,
+  "validation": "ROOT_VALIDATION_REQUIRED_NO_PERFORMANCE_ADMISSION"
+}

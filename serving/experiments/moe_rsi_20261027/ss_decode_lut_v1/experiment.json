@@ -1,0 +1,15 @@
+{
+  "state": "CPU_VALIDATED_GPU_UNRUN_ROOT_OWNS_ADMISSION",
+  "case": "M8 normal, reuse existing actual serving weights/routing/input",
+  "candidate_adapter": "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/adapter.py",
+  "control_adapter": "serving/experiments/moe_rsi_20261027/ss_pipeline_v2/adapter.py",
+  "alternate_adapter": "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/adapter.py",
+  "API": "project(x,bank,sorted_ids,experts,post,block_m,out,gather_divisor)",
+  "capture": "Reuse the warm harness's real up/down call arguments and structurally identical Bank(packed,scales,globals); no new prepare/random fixtures for timing",
+  "fixed": {"M":8,"K":4096,"block_m":8,"T":8,"grid":"original allocation capacity, same control/candidate","zeroing":"included by both project wrappers"},
+  "stages": [{"name":"up","gather_divisor":8,"N":8192},{"name":"down","gather_divisor":1,"N":4096}],
+  "gates": ["two actual JIT function resource/SASS/wait0 gates", "onehot finite signed zero/subnormal/normal/max scale representation", "stage oracle for up and down on same real captured inputs"],
+  "timing": {"warmups":3,"matched_rounds":8,"order":"balanced AB/BA independently per stage","save":"every signed raw time, output error and resources; reject only measured configuration on a loss"},
+  "followup": "If only one stage wins, retain original other stage and verify the mixed full-serving method; do not infer a full-serving speedup from isolated stages",
+  "forbidden_scope": ["mapped-grid change", "broad shape campaign", "protocol change", "global folded into weights"]
+}

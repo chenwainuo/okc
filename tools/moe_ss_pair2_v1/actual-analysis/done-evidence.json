@@ -1,0 +1,108 @@
+{
+  "job_id": "research.moe.ss.lut.pair2.stage.01",
+  "recommended_state": "DONE",
+  "recommended_disposition": "VALID_REGRESSION",
+  "observed_state": "VALID_M8_PAIRED_STAGE_STAGE_SCREEN_ROOT_REVIEW_REQUIRED",
+  "scope": "pair2 fullLUT T8 up/down stages only, M8EP8, not fullserving/anchor/official",
+  "up": {
+    "paired_median_saving_us": -43.66399347782135,
+    "paired_median_control_over_candidate": 0.8903356183014556,
+    "paired_candidate_wins": 2,
+    "paired_control_median_us": 324.71999526023865,
+    "paired_candidate_median_us": 326.03199779987335,
+    "F1_medians_us": {
+      "v1_full_lut0": 332.2240114212036,
+      "v2_pair21": 377.1840035915375,
+      "v1_full_lut2": 332.12798833847046
+    },
+    "F1_control_endpoint_average_us": 332.17599987983704,
+    "F1_endpoint_average_saving_us": -45.00800371170044,
+    "F1_before_saving_us": -44.95999217033386,
+    "F1_after_saving_us": -45.05601525306702
+  },
+  "down": {
+    "paired_median_saving_us": -46.720005571842194,
+    "paired_median_control_over_candidate": 0.7909057883787233,
+    "paired_candidate_wins": 0,
+    "paired_control_median_us": 176.65600031614304,
+    "paired_candidate_median_us": 221.50400280952454,
+    "F1_medians_us": {
+      "v1_full_lut0": 206.2080055475235,
+      "v2_pair21": 278.8800001144409,
+      "v1_full_lut2": 208.8640034198761
+    },
+    "F1_control_endpoint_average_us": 207.5360044836998,
+    "F1_endpoint_average_saving_us": -71.34399563074112,
+    "F1_before_saving_us": -72.67199456691742,
+    "F1_after_saving_us": -70.01599669456482
+  },
+  "preserved_positive_subcases": [
+    {
+      "seed": 7903,
+      "active_blocks": 7,
+      "control_us": 318.2080090045929,
+      "candidate_us": 266.975998878479,
+      "saving_us": 51.23201012611389,
+      "control_over_candidate": 1.1918974377521983,
+      "order": [
+        "v2_pair2",
+        "v1_full_lut"
+      ],
+      "valid_CTAs_source_model": 896,
+      "control_residency_wave_model": 2,
+      "candidate_residency_wave_model": 2
+    },
+    {
+      "seed": 7906,
+      "active_blocks": 7,
+      "control_us": 318.4320032596588,
+      "candidate_us": 266.88000559806824,
+      "saving_us": 51.551997661590576,
+      "control_over_candidate": 1.1931654548120398,
+      "order": [
+        "v1_full_lut",
+        "v2_pair2"
+      ],
+      "valid_CTAs_source_model": 896,
+      "control_residency_wave_model": 2,
+      "candidate_residency_wave_model": 2
+    }
+  ],
+  "correctness": {
+    "records": 95,
+    "all_recorded_checks_pass": true,
+    "all_own_F1_and_paired_terminals_pass": true,
+    "full_chain_reference_and_bitwise_current_fresh_nonlocal_pass": true,
+    "actual_compile_gate_and_sourcepins_pass": true
+  },
+  "measurement": {
+    "raw_calls": 50,
+    "F1_fixed_fixture_calls": 18,
+    "paired_calls": 32,
+    "paired_rounds_per_stage": 8,
+    "wall_seconds": 62.33858323097229,
+    "candidate_compile_seconds": 46.281719556005555
+  },
+  "terminal_exit": 0,
+  "cleanup_verified": true,
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T20:35:37Z\nverify_reuse_tree_and_runtime\nreuse_exact_original_binary\nreuse_exact_v1_full_LUT_binary\ncompile_and_gate_one_actual_pair2_function\n[1/3] ccache c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=ss_pair2_v1_down_cu130_cfa7618d6473fa63a389 -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -fPIC -std=c++20 -c /root/.cache/torch_extensions/ss_pair2_v1_down_cu130_cfa7618d6473fa63a389/main.cpp -o main.o \n[2/3] ccache /usr/local/cuda/bin/nvcc -MD -MF cuda.cuda.o.d -DTORCH_EXTENSION_NAME=ss_pair2_v1_down_cu130_cfa7618d6473fa63a389 -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options '-fPIC' -gencode=arch=compute_90a,code=sm_90a -O3 --expt-relaxed-constexpr -std=c++20 -c /root/.cache/torch_extensions/ss_pair2_v1_down_cu130_cfa7618d6473fa63a389/cuda.cu -o cuda.cuda.o \n/root/.cache/torch_extensions/ss_pair2_v1_down_cu130_cfa7618d6473fa63a389/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n/root/.cache/torch_extensions/ss_pair2_v1_down_cu130_cfa7618d6473fa63a389/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n[3/3] ccache c++ main.o cuda.cuda.o -shared -L/opt/sglang/lib/python3.12/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o ss_pair2_v1_down_cu130_cfa7618d6473fa63a389.so\none_original_prepare_shared_immutable_banks\ncapture_real_stage_inputs_and_graphs\nup_down_F1_then_matched_stage_timings\ndirect_terminal_source_and_immutable_checks\ncomplete\nTRIAL_EXIT okc-proj-moe-ss-lut-pair2-stage-01 0\n2026-10-27T20:36:47Z\n",
+    "terminal_exit": 0
+  },
+  "missing_artifacts": [],
+  "evidence_files": {
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.lut.pair2.stage.01/collection-1793133429710115791/logs/scheduler/moe-ss-lut-pair2-stage-01/result.json": "e678168737b7798a3073dbc50210c3068c80b6a205e79ba952b6961dc6f9dcec",
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.lut.pair2.stage.01/collection-1793133429710115791/inventory.json": "d49ee691d73d0b27173e6659fb25746f94886ca18062ceebec95c8a9c4ee0ba2",
+    "tools/moe_ss_pair2_v1/actual-analysis/analysis.json": "7b1c5ac8beb024c1012c58db220f2a4448f5bf0352c012a2da9dab95b31da2b0"
+  },
+  "root_action": "Root may mark DONE/VALID_REGRESSION after independent scoped review; no incumbent/stack/promotion change; preserve B7 positives and all failures.",
+  "best_next_decision": "Keep pair2 source/results; do not stack whole pair2. Preserve bothB7 up gains without claiming runtime selectable coverage. Prioritize warm exactv1 producer/consumer attribution or lowercost actual-resource scheduling diagnosis before another codec/stage expansion; wait1 remains lowROI with historical no-help. One failed version does not reject grouped stages or SS family.",
+  "loop_contract": "profile->measure->hypothesis->optimize/reimplement->test->validate->stack->submit->learn->reprioritize->repeat; idle<=10s; proj_rsi/ITERATION.md"
+}

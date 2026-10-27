@@ -1,0 +1,169 @@
+{
+  "state": "CPU_ONLY_NOT_HARDWARE_VALIDATED",
+  "full_empty_parity": [
+    {
+      "stages": 1,
+      "full_arrivals": [
+        1,
+        0
+      ],
+      "empty_arrivals": [
+        1,
+        0
+      ],
+      "final_read": 0
+    },
+    {
+      "stages": 2,
+      "full_arrivals": [
+        1,
+        1
+      ],
+      "empty_arrivals": [
+        1,
+        1
+      ],
+      "final_read": 1
+    },
+    {
+      "stages": 3,
+      "full_arrivals": [
+        2,
+        1
+      ],
+      "empty_arrivals": [
+        2,
+        1
+      ],
+      "final_read": 2
+    },
+    {
+      "stages": 32,
+      "full_arrivals": [
+        16,
+        16
+      ],
+      "empty_arrivals": [
+        16,
+        16
+      ],
+      "final_read": 31
+    },
+    {
+      "stages": 64,
+      "full_arrivals": [
+        32,
+        32
+      ],
+      "empty_arrivals": [
+        32,
+        32
+      ],
+      "final_read": 63
+    }
+  ],
+  "pair2_layout_T8": [
+    {
+      "slot": 0,
+      "half": 0,
+      "base_bytes": 0,
+      "end_bytes": 9216
+    },
+    {
+      "slot": 0,
+      "half": 1,
+      "base_bytes": 9216,
+      "end_bytes": 18432
+    },
+    {
+      "slot": 1,
+      "half": 0,
+      "base_bytes": 18432,
+      "end_bytes": 27648
+    },
+    {
+      "slot": 1,
+      "half": 1,
+      "base_bytes": 27648,
+      "end_bytes": 36864
+    }
+  ],
+  "unsafe_release_negative": {
+    "issued": [
+      0
+    ],
+    "retired": [],
+    "wrongly_released": [
+      0
+    ],
+    "producer_may_overwrite_stage": 2,
+    "live_shared_reader_stage": 0,
+    "hazard_detected": true
+  },
+  "compiled_lifetimes": {
+    "wait1": [
+      {
+        "function": "_ZN24moe_ss_pipeline_wait1_v17projectILi8ELi8EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii",
+        "HGMMA": 20,
+        "ARRIVE": 5,
+        "wait0": 1,
+        "wait1": 5,
+        "accumulator_first_register": 24,
+        "epilogue_conversion_after_covering_wait0": true,
+        "operand_kind": "SS gdesc uniform descriptors, no register-A operand"
+      },
+      {
+        "function": "_ZN24moe_ss_pipeline_wait1_v17projectILi8ELi1EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii",
+        "HGMMA": 20,
+        "ARRIVE": 5,
+        "wait0": 1,
+        "wait1": 5,
+        "accumulator_first_register": 24,
+        "epilogue_conversion_after_covering_wait0": true,
+        "operand_kind": "SS gdesc uniform descriptors, no register-A operand"
+      }
+    ],
+    "pair2": [
+      {
+        "function": "_ZN24moe_ss_pipeline_pair2_v17projectILi8ELi8EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii",
+        "HGMMA": 24,
+        "ARRIVE": 3,
+        "wait0": 3,
+        "wait1": 0,
+        "accumulator_first_register": 24,
+        "epilogue_conversion_after_covering_wait0": true,
+        "operand_kind": "SS gdesc uniform descriptors, no register-A operand"
+      },
+      {
+        "function": "_ZN24moe_ss_pipeline_pair2_v17projectILi8ELi1EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii",
+        "HGMMA": 24,
+        "ARRIVE": 3,
+        "wait0": 3,
+        "wait1": 0,
+        "accumulator_first_register": 24,
+        "epilogue_conversion_after_covering_wait0": true,
+        "operand_kind": "SS gdesc uniform descriptors, no register-A operand"
+      }
+    ]
+  },
+  "recorded_whole_LUT_vs_active_blocks": {
+    "n": 8,
+    "slope_us_per_block": 41.676889277166794,
+    "intercept_us": 130.4304502490494,
+    "r_squared": 0.9174133682883213,
+    "limit": "descriptive routing/drift correlation, not PC latency attribution"
+  },
+  "assumptions": [
+    "finite warp and async engine progress",
+    "abstract group completion obeys ordered wait_group semantics",
+    "bar.sync 3 includes all128maththreads; elected release after rendezvous",
+    "fence.proxy then bar.sync2 includes all128producerthreads before publication"
+  ],
+  "limits": [
+    "offline CUDA12.8 cubin only, actual JIT CUDA13 resources unknown",
+    "no device numeric/graph/mutation/lifetime execution",
+    "pair2 supplied T8 DIV1/DIV8 K4096 only; no runtime wrapper or tail support",
+    "descriptor uniform-register values may be overwritten after issue because descriptor values are instruction inputs; shared ranges remain live until covering wait",
+    "CPU phase check complements abstract exploration, not arbitrary hardware scheduler proof"
+  ]
+}

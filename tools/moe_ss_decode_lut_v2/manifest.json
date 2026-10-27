@@ -1,0 +1,33 @@
+{
+  "state": "CPU_READY_GPU_UNRUN_FOCUSED_REVIEW_PENDING",
+  "files": {
+    "tools/moe_ss_decode_lut_v2/pilot.py": "d19e7c6b0c13145aba1ab41987b2ad9b4288b4bd4b5df93b3f15d9e9b715febc",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/down_only/adapter.py": "ca7fc37eaff3013a9093eb01fb1fff39a69576ebbe94271e2689fb73024f0590",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/down_only/kernel.cuh": "e0c181e8103d2ed69eec44047fe1184869a10424847d1551fa3d316007cc6734",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/down_only/extension_source.cu": "e91f5d5d609d5b1d8ab9bfb93d8db9e8cda1f691e1b6c6921f4b3606314566bd",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/adapter.py": "c8aa1303123db57d84e5d244c6ca3baeeaa1d5ae895534223399951ef1bba838",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/extension_source.cu": "29e8ccca7da01aeab28e2964b6e98d1e7d89cad8cb884f34f956bf25091b5974",
+    "tools/moe_ss_serving_pilot_v1/pilot.py": "d313e60ed27e053211bab0595c5c24e2f6b2d39dbe323588dbed7264262fe925",
+    "benchmarks/rsi_bundle.py": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25",
+    "benchmarks/rsi_worker.py": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_v2/cpu_proof.py": "45fd4b203053c634201d214a74316e820b56278efc44e528f5c3593e30a5d1f7",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/codegen.json": "be0b2652d6362ddb70702df77ade847f1f625e462f8f540dd741d6484c03b5cb"
+  },
+  "candidate_adapter": "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/down_only/adapter.py",
+  "candidate_kernel": "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/down_only/kernel.cuh",
+  "candidate_extension_source": "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/down_only/extension_source.cu",
+  "LUT_adapter": "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/adapter.py",
+  "LUT_extension_source": "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/extension_source.cu",
+  "prior_result_sha256": "ad773dffe31f34fa1249800c2c9f975373e5da9f39dd03e041f4c07787ac6a9c",
+  "prior_SO_sha256": "0c176fe07fe12c3f5fc7b8def5d2f05eb647f637daf846a7db80e6b7b67e4233",
+  "prior_module_name": "ss_serving_cu130_05a899aaaac331a822ff",
+  "prior_archive_sha256": "e49a158ba0ce83875d12e6767bdac85fe6a429dc980518dbdc7e8c688317aa86",
+  "LUT_result_sha256": "d953d950c4a14bec0253d4086a48a2766060726efa0b2cb0bdbacd48a296abf9",
+  "LUT_SO_sha256": "28f7b022d75dfdefd78ce0fd3699857eb05c4ab601cc0fb2670297a7f2b25d17",
+  "LUT_module_name": "ss_lut_stage_cu130_dd3f2f935a82b8f1ee30",
+  "reuse": "prior immutable tree and exact original/v1fullLUT SOs, one originalprepare, sharedreadonlybanks; actual v1up retained",
+  "timing": "down-only v1fullLUT versus v2rolleddown:9call fixedB9F1 bracket,8balancedmatchedpairs allseeds, normalzeroing/samegrid",
+  "unchanged_evidence": "exact helper/table and matrix/protocol reused, no new exhaustive proof",
+  "kernel_delta": "fuse each lookup into sharedscatter and producerstep loop unroll1 only; host instantiates T8DIV1 only",
+  "failures": "everyraw saved before numericgate; ownF1block and pairedterminals; numeric/runtime failures invalidate; losses retained"
+}

@@ -1,0 +1,88 @@
+{
+  "family": "moe-canonical-SS-producer-consumer",
+  "version": "ss_pipeline_followup_cpu_v1/pair2",
+  "state": "CPU_SOURCE_DEVICE_COMPILE_PROTOCOL_PASS_REQUIRES_INDEPENDENT_REVIEW_AND_ACTUAL_JIT_GATE",
+  "predecessor": {
+    "source": "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/kernel.cuh",
+    "sha256": "09a7d995f687ecbc172927b811bc30773e90f103aea9c02f3114a0b733491e63",
+    "whole_analysis": "tools/moe_ss_lut_whole_v1/actual-analysis/analysis.json"
+  },
+  "observed_failure": {
+    "whole_parent_LUT_median_us": 497.0880150794983,
+    "anchor_median_us": 124.2239959537983,
+    "same_pair_median_anchor_over_LUT": 0.26983654176728467,
+    "same_pair_median_slowdown_reciprocal": 3.70594732258525,
+    "LUT_over_original_SS_paired_ratio": 1.4878642131520743,
+    "all_8_LUT_vs_SS_pairs_win": true,
+    "hardware_latency_attribution": "UNKNOWN; no stage PC profiler for actual full-LUT serving binary"
+  },
+  "causal_hypothesis": "Residual SS cost includes serial per-stage publication/wake-up/fence/commit/drain/release bookkeeping. Pairing two unchanged K64 physical tiles halves logical sync rounds per K4096, while preserving decode bytes, data layout and accumulation order. Actual current bottleneck is not established.",
+  "change_or_diagnostic": {
+    "pair2": "Two logical slots each hold two physical K64 tiles. Publish once after both producer halves; issue eight unchanged SS K16 MMAs in original order; wait0 and release once per pair. Only T8 DIV1/DIV8 K4096 admitted to proposed diagnostic.",
+    "wait1": "CPU-only counterfactual: retain existing two K64 slots but wait1 and release previous slot, then terminal wait0. Historical no-help evidence means do not spend GPU time by default.",
+    "wgmma_axes": "m64n8k16: M64 is output-feature rows, N8 is token columns, K16 is reduction. There is no 8/64 token utilization factor. Sparse one-real-route blocks can use only 1/8 token columns.",
+    "unchanged": [
+      "LUT contents and lookup",
+      "packed/scales indexing",
+      "weight and input swizzles",
+      "descriptor bit encoding",
+      "256-thread producer/math roles",
+      "K16 accumulation sequence",
+      "cast before global multiply",
+      "routing and sparse output semantics"
+    ]
+  },
+  "CPU_evidence": {
+    "pair2_sync_rounds_K4096": 32,
+    "parent_sync_rounds_K4096": 64,
+    "pair2_dynamic_shared_T8_bytes": 46112,
+    "parent_dynamic_shared_T8_bytes": 27680,
+    "pair2_offline_regs_up_down": [
+      32,
+      64
+    ],
+    "parent_offline_regs_up_down": [
+      40,
+      60
+    ],
+    "pair2_offline_spill_stack_bytes": 0,
+    "compiled_waits": "Three static wait0 per pair2 function and24staticHGMMA reflect compiler peeling/loop unroll. Eight instructions occur per group; no per-MMA wait0 insertion. Exact emitted SASS retained.",
+    "protocol": "Abstract all-interleaving exploration for1/2/3/4/32/64logical stages, full/empty parity generations, terminal drain, exact paired layout ranges and K16-order checks pass; unsafe newest-slot release negative retained.",
+    "physical_accumulator": "R24-R27 retained through covering waits; first BF16 conversion follows covering wait0 in each function. SS uses gdesc uniform descriptors, so historical physical register-A premature reuse does not directly apply.",
+    "resource_tradeoff": "Shared alone predicts at most4residentCTAs on228KiBSM versus actual queried parent6up/4down. Actual candidate JIT registers/occupancy unknown; offline compilation is not runtime resource evidence."
+  },
+  "historical_counterevidence": {
+    "source": "proj_rsi/LOOP.md:790-799,1369-1378",
+    "wait1": "Previous BF16 pipeline wait depths1/2/3 and previous-slot release did not help. Halving synchronization rounds per byte improved that different workload; does not predict MoE speedup.",
+    "fence_pair": "Register-A fence-sharing failed due to compiler liveness/C75 and spills. Current SS descriptors differ, but compiled async accumulator/operand lifetime still reviewed.",
+    "group8": "Prior grouped-eight-register-A design existed; source/config/math contract differs. This candidate independently pairs actual LUT SS physical tiles and makes no prior speed claim."
+  },
+  "next_measurement": {
+    "priority": "After existing v2down bounded measurement; pair2 before further representation expansion. wait1 stays CPU-only.",
+    "setup": "Root supplies reviewed new T8-only host wrapper/runner. Reuse exact existing LUT SO and read-only banks, verify full candidate source/hash before compilation. One candidate actual-JIT compile, emit resources/SASS. No whole-serving or large shape grid in first diagnostic.",
+    "comparison": [
+      "actual original anchor retained as whole-serving reference/control",
+      "exact full-LUT v1 up/down stage controls",
+      "pair2 up/down stage candidate"
+    ],
+    "validity_before_timing": [
+      "actual JIT no C75/spills and shared/occupancy query",
+      "same current input/routing T8 DIV8 andDIV1 bitwise output versus parent",
+      "graph fresh-X and fresh-routing replay",
+      "valid-to-empty output clearing",
+      "bank/source immutability and cleanup"
+    ],
+    "timing": "8balanced AB/BA same-input pairs per up/down, own terminal outputs before optional trace, reuse known valid fixture and parent SO. Record signed savings, all raw times, brackets and actual resources.",
+    "budget": "One actual compile and two stage controls only; target<=90s warm wall, hard bounded by root-reviewed worker budget. No NCU by default.",
+    "support": "Positive paired stage savings with all validity gates, sufficient to justify a separate measured whole-serving package including v2down only if independently compatible and actually selected.",
+    "refute": "No positive paired stage effect, or lower occupancy offsets fewer rounds. Preserve signed effects and SASS; compare rolled producer plus paired stage only if measured evidence warrants it.",
+    "next_after_failure": "Use actual resource/profile result to distinguish occupancy/producer critical path from consumer synchronization; do not reject SS family from one failed version."
+  },
+  "forecast": {
+    "attainable_gain": "UNKNOWN",
+    "anchor_win": "UNKNOWN; requires roughly73% reduction from current paired full-LUT latency, with no evidence this candidate provides it",
+    "information_value": "Tests whether consumer synchronization round count contributes useful recoverable latency in actual canonical LUT MoE kernel",
+    "cumulative_stack": "NONE; source-only candidates have no measured gain and are not combined with existing v2down"
+  },
+  "loop_contract": "profile -> measure -> hypothesis -> optimize/reimplement -> test -> validate -> stack -> submit measured gains -> learn -> reprioritize -> repeat; idle<=10s; proj_rsi/ITERATION.md"
+}

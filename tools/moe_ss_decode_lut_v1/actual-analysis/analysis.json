@@ -1,0 +1,805 @@
+{
+  "state": "ACTUAL_VALID_LUT_STAGE_WINS_BOTH_NO_WHOLE_SERVING_ADMISSION",
+  "result": "results/proj-rsi/scheduler/artifacts/research.moe.ss.decode.lut.stage.01/collection-1793130937294077992/logs/scheduler/moe-ss-decode-lut-stage-01/result.json",
+  "result_sha256": "d953d950c4a14bec0253d4086a48a2766060726efa0b2cb0bdbacd48a296abf9",
+  "wall_seconds": 62.05046558380127,
+  "correctness_records": 65,
+  "own_stage_bitwise_records": 44,
+  "own_terminal_bitwise_records": 4,
+  "full_serving_reference_records": 21,
+  "current_input_and_immutable_checks": "driver mandatory all timed calls + source/bank terminal PASS",
+  "raw_event_calls": 32,
+  "F1": {
+    "collected": false,
+    "reason": "This bounded driver records balanced paired stage timings only;3warmups/arm are untimed. Do not substitute another job F1."
+  },
+  "profiles": {},
+  "stage": {
+    "up": {
+      "DIV": 8,
+      "N": 8192,
+      "rounds": 8,
+      "original_median_us": 415.24799168109894,
+      "LUT_median_us": 325.312003493309,
+      "median_paired_saving_us": 143.21599900722504,
+      "signed_paired_savings_us": [
+        149.98400211334229,
+        172.7680116891861,
+        181.63199722766876,
+        64.12801146507263,
+        109.24798250198364,
+        140.22397994995117,
+        60.57599186897278,
+        146.2080180644989
+      ],
+      "median_paired_original_over_LUT": 1.406247548269592,
+      "wins": 8,
+      "losses": 0,
+      "original_resources": {
+        "T": 8,
+        "DIV": 8,
+        "dynamic_shared": 19488,
+        "binary_resources": {
+          "REG": 32,
+          "STACK": 0,
+          "SHARED": 1024,
+          "LOCAL": 0
+        },
+        "registers": 32,
+        "local": 0,
+        "user_static": 0,
+        "max_threads": 256,
+        "max_dynamic": 49152,
+        "occupancy": 8
+      },
+      "LUT_resources": {
+        "T": 8,
+        "DIV": 8,
+        "dynamic_shared": 27680,
+        "binary_resources": {
+          "REG": 40,
+          "STACK": 0,
+          "SHARED": 1024,
+          "LOCAL": 0
+        },
+        "registers": 40,
+        "local": 0,
+        "user_static": 0,
+        "max_threads": 256,
+        "max_dynamic": 49152,
+        "occupancy": 6
+      }
+    },
+    "down": {
+      "DIV": 1,
+      "N": 4096,
+      "rounds": 8,
+      "original_median_us": 243.45600605010986,
+      "LUT_median_us": 171.4080050587654,
+      "median_paired_saving_us": 112.43200302124023,
+      "signed_paired_savings_us": [
+        142.71999895572662,
+        107.87200927734375,
+        112.73600161075592,
+        111.16799712181091,
+        31.231999397277832,
+        144.6080058813095,
+        112.12800443172455,
+        139.80799913406372
+      ],
+      "median_paired_original_over_LUT": 1.7322849267981264,
+      "wins": 8,
+      "losses": 0,
+      "original_resources": {
+        "T": 8,
+        "DIV": 1,
+        "dynamic_shared": 19488,
+        "binary_resources": {
+          "REG": 48,
+          "STACK": 0,
+          "SHARED": 1024,
+          "LOCAL": 0
+        },
+        "registers": 48,
+        "local": 0,
+        "user_static": 0,
+        "max_threads": 256,
+        "max_dynamic": 49152,
+        "occupancy": 5
+      },
+      "LUT_resources": {
+        "T": 8,
+        "DIV": 1,
+        "dynamic_shared": 27680,
+        "binary_resources": {
+          "REG": 59,
+          "STACK": 0,
+          "SHARED": 1024,
+          "LOCAL": 0
+        },
+        "registers": 59,
+        "local": 0,
+        "user_static": 0,
+        "max_threads": 256,
+        "max_dynamic": 49152,
+        "occupancy": 4
+      }
+    }
+  },
+  "per_seed": [
+    {
+      "seed": 7900,
+      "active_local_expert_blocks": 11,
+      "local_routes": 15,
+      "counts": {
+        "-1": 49,
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 2,
+        "4": 0,
+        "5": 1,
+        "6": 0,
+        "7": 3,
+        "8": 0,
+        "9": 1,
+        "10": 0,
+        "11": 1,
+        "12": 2,
+        "13": 0,
+        "14": 1,
+        "15": 0,
+        "16": 0,
+        "17": 0,
+        "18": 0,
+        "19": 1,
+        "20": 1,
+        "21": 0,
+        "22": 0,
+        "23": 0,
+        "24": 1,
+        "25": 0,
+        "26": 0,
+        "27": 0,
+        "28": 0,
+        "29": 1,
+        "30": 0,
+        "31": 0
+      },
+      "histogram_source": "same CUDA13 pinned reference generate_input seed and case, prior warmgrid raw routing; not recaptured in LUT result",
+      "stage": {
+        "up": {
+          "valid_CTAs": 1408,
+          "original_CTA_capacity_all_SMs": 1056,
+          "LUT_CTA_capacity_all_SMs": 792,
+          "idealized_original_waves": 2,
+          "idealized_LUT_waves": 2,
+          "original_us": 500.2880096435547,
+          "LUT_us": 350.3040075302124,
+          "signed_saving_us": 149.98400211334229
+        },
+        "down": {
+          "valid_CTAs": 704,
+          "original_CTA_capacity_all_SMs": 660,
+          "LUT_CTA_capacity_all_SMs": 528,
+          "idealized_original_waves": 2,
+          "idealized_LUT_waves": 2,
+          "original_us": 363.99999260902405,
+          "LUT_us": 221.27999365329742,
+          "signed_saving_us": 142.71999895572662
+        }
+      }
+    },
+    {
+      "seed": 7901,
+      "active_local_expert_blocks": 6,
+      "local_routes": 17,
+      "counts": {
+        "-1": 47,
+        "0": 0,
+        "1": 2,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 3,
+        "6": 0,
+        "7": 0,
+        "8": 1,
+        "9": 0,
+        "10": 8,
+        "11": 2,
+        "12": 0,
+        "13": 0,
+        "14": 0,
+        "15": 0,
+        "16": 0,
+        "17": 1,
+        "18": 0,
+        "19": 0,
+        "20": 0,
+        "21": 0,
+        "22": 0,
+        "23": 0,
+        "24": 0,
+        "25": 0,
+        "26": 0,
+        "27": 0,
+        "28": 0,
+        "29": 0,
+        "30": 0,
+        "31": 0
+      },
+      "histogram_source": "same CUDA13 pinned reference generate_input seed and case, prior warmgrid raw routing; not recaptured in LUT result",
+      "stage": {
+        "up": {
+          "valid_CTAs": 768,
+          "original_CTA_capacity_all_SMs": 1056,
+          "LUT_CTA_capacity_all_SMs": 792,
+          "idealized_original_waves": 1,
+          "idealized_LUT_waves": 1,
+          "original_us": 377.9520094394684,
+          "LUT_us": 205.1839977502823,
+          "signed_saving_us": 172.7680116891861
+        },
+        "down": {
+          "valid_CTAs": 384,
+          "original_CTA_capacity_all_SMs": 660,
+          "LUT_CTA_capacity_all_SMs": 528,
+          "idealized_original_waves": 1,
+          "idealized_LUT_waves": 1,
+          "original_us": 240.6720072031021,
+          "LUT_us": 132.79999792575836,
+          "signed_saving_us": 107.87200927734375
+        }
+      }
+    },
+    {
+      "seed": 7902,
+      "active_local_expert_blocks": 6,
+      "local_routes": 12,
+      "counts": {
+        "-1": 52,
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 1,
+        "12": 0,
+        "13": 0,
+        "14": 0,
+        "15": 1,
+        "16": 0,
+        "17": 0,
+        "18": 0,
+        "19": 0,
+        "20": 0,
+        "21": 1,
+        "22": 0,
+        "23": 1,
+        "24": 0,
+        "25": 1,
+        "26": 0,
+        "27": 7,
+        "28": 0,
+        "29": 0,
+        "30": 0,
+        "31": 0
+      },
+      "histogram_source": "same CUDA13 pinned reference generate_input seed and case, prior warmgrid raw routing; not recaptured in LUT result",
+      "stage": {
+        "up": {
+          "valid_CTAs": 768,
+          "original_CTA_capacity_all_SMs": 1056,
+          "LUT_CTA_capacity_all_SMs": 792,
+          "idealized_original_waves": 1,
+          "idealized_LUT_waves": 1,
+          "original_us": 389.15199041366577,
+          "LUT_us": 207.519993185997,
+          "signed_saving_us": 181.63199722766876
+        },
+        "down": {
+          "valid_CTAs": 384,
+          "original_CTA_capacity_all_SMs": 660,
+          "LUT_CTA_capacity_all_SMs": 528,
+          "idealized_original_waves": 1,
+          "idealized_LUT_waves": 1,
+          "original_us": 246.24000489711761,
+          "LUT_us": 133.5040032863617,
+          "signed_saving_us": 112.73600161075592
+        }
+      }
+    },
+    {
+      "seed": 7903,
+      "active_local_expert_blocks": 7,
+      "local_routes": 12,
+      "counts": {
+        "-1": 52,
+        "0": 0,
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0,
+        "12": 0,
+        "13": 0,
+        "14": 4,
+        "15": 0,
+        "16": 0,
+        "17": 1,
+        "18": 0,
+        "19": 0,
+        "20": 1,
+        "21": 2,
+        "22": 1,
+        "23": 0,
+        "24": 0,
+        "25": 0,
+        "26": 0,
+        "27": 0,
+        "28": 0,
+        "29": 0,
+        "30": 0,
+        "31": 0
+      },
+      "histogram_source": "same CUDA13 pinned reference generate_input seed and case, prior warmgrid raw routing; not recaptured in LUT result",
+      "stage": {
+        "up": {
+          "valid_CTAs": 896,
+          "original_CTA_capacity_all_SMs": 1056,
+          "LUT_CTA_capacity_all_SMs": 792,
+          "idealized_original_waves": 1,
+          "idealized_LUT_waves": 2,
+          "original_us": 382.2399973869324,
+          "LUT_us": 318.11198592185974,
+          "signed_saving_us": 64.12801146507263
+        },
+        "down": {
+          "valid_CTAs": 448,
+          "original_CTA_capacity_all_SMs": 660,
+          "LUT_CTA_capacity_all_SMs": 528,
+          "idealized_original_waves": 1,
+          "idealized_LUT_waves": 1,
+          "original_us": 239.32799696922302,
+          "LUT_us": 128.1599998474121,
+          "signed_saving_us": 111.16799712181091
+        }
+      }
+    },
+    {
+      "seed": 7904,
+      "active_local_expert_blocks": 9,
+      "local_routes": 12,
+      "counts": {
+        "-1": 52,
+        "0": 1,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 1,
+        "11": 0,
+        "12": 0,
+        "13": 1,
+        "14": 0,
+        "15": 1,
+        "16": 0,
+        "17": 3,
+        "18": 0,
+        "19": 1,
+        "20": 0,
+        "21": 0,
+        "22": 1,
+        "23": 2,
+        "24": 0,
+        "25": 0,
+        "26": 0,
+        "27": 1,
+        "28": 0,
+        "29": 0,
+        "30": 0,
+        "31": 0
+      },
+      "histogram_source": "same CUDA13 pinned reference generate_input seed and case, prior warmgrid raw routing; not recaptured in LUT result",
+      "stage": {
+        "up": {
+          "valid_CTAs": 1152,
+          "original_CTA_capacity_all_SMs": 1056,
+          "LUT_CTA_capacity_all_SMs": 792,
+          "idealized_original_waves": 2,
+          "idealized_LUT_waves": 2,
+          "original_us": 441.3439929485321,
+          "LUT_us": 332.09601044654846,
+          "signed_saving_us": 109.24798250198364
+        },
+        "down": {
+          "valid_CTAs": 576,
+          "original_CTA_capacity_all_SMs": 660,
+          "LUT_CTA_capacity_all_SMs": 528,
+          "idealized_original_waves": 1,
+          "idealized_LUT_waves": 2,
+          "original_us": 240.54400622844696,
+          "LUT_us": 209.31200683116913,
+          "signed_saving_us": 31.231999397277832
+        }
+      }
+    },
+    {
+      "seed": 7905,
+      "active_local_expert_blocks": 11,
+      "local_routes": 11,
+      "counts": {
+        "-1": 53,
+        "0": 0,
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 1,
+        "7": 0,
+        "8": 1,
+        "9": 1,
+        "10": 1,
+        "11": 0,
+        "12": 0,
+        "13": 0,
+        "14": 1,
+        "15": 0,
+        "16": 1,
+        "17": 0,
+        "18": 0,
+        "19": 1,
+        "20": 0,
+        "21": 0,
+        "22": 0,
+        "23": 0,
+        "24": 0,
+        "25": 1,
+        "26": 0,
+        "27": 0,
+        "28": 1,
+        "29": 1,
+        "30": 0,
+        "31": 0
+      },
+      "histogram_source": "same CUDA13 pinned reference generate_input seed and case, prior warmgrid raw routing; not recaptured in LUT result",
+      "stage": {
+        "up": {
+          "valid_CTAs": 1408,
+          "original_CTA_capacity_all_SMs": 1056,
+          "LUT_CTA_capacity_all_SMs": 792,
+          "idealized_original_waves": 2,
+          "idealized_LUT_waves": 2,
+          "original_us": 497.47198820114136,
+          "LUT_us": 357.2480082511902,
+          "signed_saving_us": 140.22397994995117
+        },
+        "down": {
+          "valid_CTAs": 704,
+          "original_CTA_capacity_all_SMs": 660,
+          "LUT_CTA_capacity_all_SMs": 528,
+          "idealized_original_waves": 2,
+          "idealized_LUT_waves": 2,
+          "original_us": 366.3040101528168,
+          "LUT_us": 221.69600427150726,
+          "signed_saving_us": 144.6080058813095
+        }
+      }
+    },
+    {
+      "seed": 7906,
+      "active_local_expert_blocks": 7,
+      "local_routes": 11,
+      "counts": {
+        "-1": 53,
+        "0": 0,
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 1,
+        "10": 3,
+        "11": 0,
+        "12": 0,
+        "13": 0,
+        "14": 0,
+        "15": 0,
+        "16": 0,
+        "17": 2,
+        "18": 0,
+        "19": 0,
+        "20": 0,
+        "21": 0,
+        "22": 0,
+        "23": 0,
+        "24": 1,
+        "25": 0,
+        "26": 2,
+        "27": 0,
+        "28": 0,
+        "29": 0,
+        "30": 1,
+        "31": 0
+      },
+      "histogram_source": "same CUDA13 pinned reference generate_input seed and case, prior warmgrid raw routing; not recaptured in LUT result",
+      "stage": {
+        "up": {
+          "valid_CTAs": 896,
+          "original_CTA_capacity_all_SMs": 1056,
+          "LUT_CTA_capacity_all_SMs": 792,
+          "idealized_original_waves": 1,
+          "idealized_LUT_waves": 2,
+          "original_us": 379.10398840904236,
+          "LUT_us": 318.5279965400696,
+          "signed_saving_us": 60.57599186897278
+        },
+        "down": {
+          "valid_CTAs": 448,
+          "original_CTA_capacity_all_SMs": 660,
+          "LUT_CTA_capacity_all_SMs": 528,
+          "idealized_original_waves": 1,
+          "idealized_LUT_waves": 1,
+          "original_us": 239.77600038051605,
+          "LUT_us": 127.6479959487915,
+          "signed_saving_us": 112.12800443172455
+        }
+      }
+    },
+    {
+      "seed": 7907,
+      "active_local_expert_blocks": 11,
+      "local_routes": 16,
+      "counts": {
+        "-1": 48,
+        "0": 0,
+        "1": 0,
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 0,
+        "6": 1,
+        "7": 0,
+        "8": 0,
+        "9": 2,
+        "10": 0,
+        "11": 0,
+        "12": 2,
+        "13": 0,
+        "14": 1,
+        "15": 2,
+        "16": 0,
+        "17": 0,
+        "18": 0,
+        "19": 2,
+        "20": 0,
+        "21": 0,
+        "22": 0,
+        "23": 0,
+        "24": 0,
+        "25": 0,
+        "26": 1,
+        "27": 0,
+        "28": 0,
+        "29": 0,
+        "30": 1,
+        "31": 0
+      },
+      "histogram_source": "same CUDA13 pinned reference generate_input seed and case, prior warmgrid raw routing; not recaptured in LUT result",
+      "stage": {
+        "up": {
+          "valid_CTAs": 1408,
+          "original_CTA_capacity_all_SMs": 1056,
+          "LUT_CTA_capacity_all_SMs": 792,
+          "idealized_original_waves": 2,
+          "idealized_LUT_waves": 2,
+          "original_us": 494.33600902557373,
+          "LUT_us": 348.12799096107483,
+          "signed_saving_us": 146.2080180644989
+        },
+        "down": {
+          "valid_CTAs": 704,
+          "original_CTA_capacity_all_SMs": 660,
+          "LUT_CTA_capacity_all_SMs": 528,
+          "idealized_original_waves": 2,
+          "idealized_LUT_waves": 2,
+          "original_us": 364.1279935836792,
+          "LUT_us": 224.31999444961548,
+          "signed_saving_us": 139.80799913406372
+        }
+      }
+    }
+  ],
+  "wave_model_limit": "ceil(validCTAs/(132SM*queriedactiveCTAperSM)) is an idealized capacity bound, not measured scheduling. Actual grid also includes short invalid buckets/tail CTAs. Timing bands are consistent with thresholds but do not uniquely prove cause.",
+  "mixed_stage_estimates": {
+    "scope": "stage sums only; up/down measured in separate phases, not full-serving measurements",
+    "per_seed": [
+      {
+        "seed": 7900,
+        "original_stage_sum_us": 864.2880022525787,
+        "LUT_stage_sum_us": 571.5840011835098,
+        "both_LUT_saving_us": 292.7040010690689,
+        "LUT_up_original_down_saving_us": 149.98400211334229,
+        "original_up_LUT_down_saving_us": 142.71999895572662
+      },
+      {
+        "seed": 7901,
+        "original_stage_sum_us": 618.6240166425705,
+        "LUT_stage_sum_us": 337.98399567604065,
+        "both_LUT_saving_us": 280.64002096652985,
+        "LUT_up_original_down_saving_us": 172.7680116891861,
+        "original_up_LUT_down_saving_us": 107.87200927734375
+      },
+      {
+        "seed": 7902,
+        "original_stage_sum_us": 635.3919953107834,
+        "LUT_stage_sum_us": 341.0239964723587,
+        "both_LUT_saving_us": 294.3679988384247,
+        "LUT_up_original_down_saving_us": 181.63199722766876,
+        "original_up_LUT_down_saving_us": 112.73600161075592
+      },
+      {
+        "seed": 7903,
+        "original_stage_sum_us": 621.5679943561554,
+        "LUT_stage_sum_us": 446.27198576927185,
+        "both_LUT_saving_us": 175.29600858688354,
+        "LUT_up_original_down_saving_us": 64.12801146507263,
+        "original_up_LUT_down_saving_us": 111.16799712181091
+      },
+      {
+        "seed": 7904,
+        "original_stage_sum_us": 681.8879991769791,
+        "LUT_stage_sum_us": 541.4080172777176,
+        "both_LUT_saving_us": 140.47998189926147,
+        "LUT_up_original_down_saving_us": 109.24798250198364,
+        "original_up_LUT_down_saving_us": 31.231999397277832
+      },
+      {
+        "seed": 7905,
+        "original_stage_sum_us": 863.7759983539581,
+        "LUT_stage_sum_us": 578.9440125226974,
+        "both_LUT_saving_us": 284.8319858312607,
+        "LUT_up_original_down_saving_us": 140.22397994995117,
+        "original_up_LUT_down_saving_us": 144.6080058813095
+      },
+      {
+        "seed": 7906,
+        "original_stage_sum_us": 618.8799887895584,
+        "LUT_stage_sum_us": 446.1759924888611,
+        "both_LUT_saving_us": 172.70399630069733,
+        "LUT_up_original_down_saving_us": 60.57599186897278,
+        "original_up_LUT_down_saving_us": 112.12800443172455
+      },
+      {
+        "seed": 7907,
+        "original_stage_sum_us": 858.4640026092529,
+        "LUT_stage_sum_us": 572.4479854106903,
+        "both_LUT_saving_us": 286.0160171985626,
+        "LUT_up_original_down_saving_us": 146.2080180644989,
+        "original_up_LUT_down_saving_us": 139.80799913406372
+      }
+    ],
+    "median_both_LUT_stage_saving_us": 282.73600339889526,
+    "median_LUT_up_only_saving_us": 143.21599900722504,
+    "median_LUT_down_only_saving_us": 112.43200302124023,
+    "decision": "Both LUT stages win every pair; observed evidence favors both, with no useful performance reason to retain either original stage. Root is preparing same-binary whole-serving anchor/SS/LUT/LUT+bound comparison."
+  },
+  "actual_LUT_path": {
+    "production_source_matches_candidate_prefix": true,
+    "kernel_sha256": "09a7d995f687ecbc172927b811bc30773e90f103aea9c02f3114a0b733491e63",
+    "augmented_source_sha256": "dd3f2f935a82b8f1ee30caea48b6d0d8c03469c0edec666ec50d92a870164c65",
+    "production_source_sha256": "29e8ccca7da01aeab28e2964b6e98d1e7d89cad8cb884f34f956bf25091b5974",
+    "SO_sha256": "28f7b022d75dfdefd78ce0fd3699857eb05c4ab601cc0fb2670297a7f2b25d17",
+    "PyInit_name": "ss_lut_stage_cu130_dd3f2f935a82b8f1ee30",
+    "actual_SASS": [
+      {
+        "DIV": 1,
+        "instructions": 1080,
+        "LOP3": 109,
+        "LDS_U16": 32,
+        "HGMMA": 20,
+        "decoder_LDS_offset_0x4820": 32
+      },
+      {
+        "DIV": 8,
+        "instructions": 944,
+        "LOP3": 99,
+        "LDS_U16": 32,
+        "HGMMA": 20,
+        "decoder_LDS_offset_0x4820": 32
+      }
+    ],
+    "shared_table": "8192B full signed FP4code/FP8scale; unchanged global after projection BF16 cast",
+    "hot_load_address": "shared byte offset0x4820=18464 after18432Boperandring+32Bbarriers",
+    "no_spills": true
+  },
+  "next_iteration": {
+    "immediate": "Reuse exact measured SO in whole-serving anchor/SS/LUT/LUT+bound warm comparison; no recompile or broad suite needed to establish transfer. Already coordinated with moe_result_repair.",
+    "next_kernel_hypothesis": "Fuse per-value lookup directly into its existing shared scatter to avoid live values[8]; target up<=32 and down<=48 registers to restore queried occupancy8/5, preserving8KBtable, offsets, all waits and matrix instructions. If insufficient, bounded producer step-loop unroll1 changes register lifetime/loop overhead; inspect two-function offline codegen before one stage screen.",
+    "why": "B7/9 wave thresholds show the new register footprint can erase a substantial part of otherwise consistent LUT benefit. This is a resource/codegen hypothesis, not proven cycle attribution.",
+    "do_not": "Do not call this a3x-anchor/full14/whole-serving gain; do not reject entire LUT family or assume lowerinstructioncount alone proves speed."
+  },
+  "offline_next_iteration": {
+    "codegen_path": "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/codegen.json",
+    "variants": [
+      {
+        "variant": "fused",
+        "state": "CPU_OFFLINE_ONLY_GPU_UNRUN",
+        "parent_kernel_sha256": "09a7d995f687ecbc172927b811bc30773e90f103aea9c02f3114a0b733491e63",
+        "kernel_sha256": "33523793fd2b1e3100b02f58ec23e4e2d109bcea9907fc27968f2ede66407710",
+        "functions": [
+          {
+            "DIV": 8,
+            "instructions": 944,
+            "LOP3": 100,
+            "LDS_U16": 32,
+            "HGMMA": 20,
+            "registers": 40
+          },
+          {
+            "DIV": 1,
+            "instructions": 1080,
+            "LOP3": 108,
+            "LDS_U16": 32,
+            "HGMMA": 20,
+            "registers": 58
+          }
+        ],
+        "spills_or_stack": false,
+        "same_codec": "byte-identical helper and8192Btable, no new scalar proof",
+        "same_matrix_protocol": "unchanged, no new proof"
+      },
+      {
+        "variant": "fused_rolled_step",
+        "state": "CPU_OFFLINE_ONLY_GPU_UNRUN",
+        "parent_kernel_sha256": "09a7d995f687ecbc172927b811bc30773e90f103aea9c02f3114a0b733491e63",
+        "kernel_sha256": "369e39446446ca1972cdff2df5b06b22ab540c9eed2b88715e54c556b8d1ac1f",
+        "functions": [
+          {
+            "DIV": 8,
+            "instructions": 760,
+            "LOP3": 52,
+            "LDS_U16": 8,
+            "HGMMA": 20,
+            "registers": 38
+          },
+          {
+            "DIV": 1,
+            "instructions": 896,
+            "LOP3": 61,
+            "LDS_U16": 8,
+            "HGMMA": 20,
+            "registers": 48
+          }
+        ],
+        "spills_or_stack": false,
+        "same_codec": "byte-identical helper and8192Btable, no new scalar proof",
+        "same_matrix_protocol": "unchanged, no new proof"
+      }
+    ],
+    "candidate": "v1fullLUTup plusv2fused_rolled_stepdown; noGPU timingclaim",
+    "interpretation": "Purefusion fails target; producerstep unroll1 reduces offline down to48registers, potentially restoring5activeCTAsSM. Must gate actualCUDA13/resources and measure loop-overhead/ILP tradeoff; staticinstructioncompaction does not reduce dynamic lookup traffic."
+  }
+}
