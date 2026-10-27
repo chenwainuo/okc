@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T22:16:08.069342+00:00",
+  "updated_at": "2026-10-27T22:26:22.636706+00:00",
   "objective": "ONLY muse_bf16_proj; official score <3000us. Serving/MoE optimization stopped by explicit user correction.",
   "contract": "proj_rsi/ITERATION.md; every user update includes compactloop+link; do not endcoordination forstatusquestions; idlewait<=10s; frozenhashdelivery immutable, supplements newpaths.",
   "incumbent": {
@@ -24,10 +24,17 @@
     "do_not_duplicate": true
   },
   "queue_latest": {
-    "sequence": 1715,
-    "GPU_ready": 0,
-    "GPU_running": 0,
-    "GPU_validating": 0
+    "sequence": 1738,
+    "jobs": {
+      "research.gv.unpool16.deltakey.robust.01": {
+        "state": "DONE",
+        "disposition": "VALID_REGRESSION"
+      },
+      "research.rq.compact256.half.fixed.01": {
+        "state": "RUNNING",
+        "disposition": null
+      }
+    }
   },
   "new_checks": [
     {
@@ -65,10 +72,14 @@
       "experiment": "gv53_keyed_choice_v1",
       "source": "78f93581a011fc7c0088032542faccb7617c6a5402ef79aded44a1aa33988597",
       "release": "results/proj-rsi/releases/gv53-keyed-choice-v1-78f93581a011",
-      "state": "accepted_pending",
-      "wait_session": 93384,
+      "state": "completed",
       "wait_archives_records": true,
-      "purpose": "SameH200actualWmatchedoptionalkeyedchoice; originalbakesrestored; strictpositive/tieold"
+      "purpose": "SameH200actualWmatchedoptionalkeyedchoice; originalbakesrestored; strictpositive/tieold",
+      "score_us": 3196.414179553723,
+      "passed": "9/9",
+      "decision": "refine",
+      "diagnosis": "Matched H200 M1 +0.048us selects keyed (mixed order effects); M8 -0.016us keeps parent. Actual profiles agree. 14other routes changed; whole loss.",
+      "report": "proj_rsi/audits/gv53-keyed-choice-result-v1/report.md"
     }
   ],
   "local_results": [
@@ -89,17 +100,24 @@
       "state": "DONE VALID_REGRESSION withpositiveF1",
       "evidence": "proj_rsi/audits/gv-unpool16-deltakey-result/analysis.json",
       "effects": "paired\u2212.080us/F1+.096us. Source713c frozen; authorbuilding3freshweightbankreuseSOdiagnostic, noJIT."
+    },
+    {
+      "job": "research.gv.unpool16.deltakey.robust.01",
+      "state": "DONE VALID_REGRESSION",
+      "evidence": "proj_rsi/audits/gv-unpool16-deltakey-robust-result/analysis.json",
+      "sha256": "cc9748f850e7e457832e5b40b3fdc82f500e4e04d678fc53529510e714266800",
+      "effects": "3W paired +.016/-.128/0us; aggregate -.063999556us. All3blocked losses. 3.653s/JIT0. No detected setup/numerical/cleanup failure."
     }
   ],
   "active_assignments": {
     "rq_lab_review": "OptionalkeyedH200receiptanalyzer forpendingfe5c; noGPU/API",
-    "moe_decode_lut": "Projectiononly71aRQtarget/exposure/calibration diagnosis pluslargerRQregister/occupancyopportunity",
-    "hotloop_counters": "GV16robustauthor awaitingreview; analyzeactualresultafterrootrun",
-    "gv_codec_frontier": "Focusedreviewpending GV16robustexactSO3weights",
-    "measurement_contract_audit": "Optional78f9sourceGOdelivered7ae81f39; available",
-    "scheduler_fastpath": "CPU3branchcomposer complete; composeonlyvalidatedrootchosen subsets. audits/projection-three-branch-stack-v1",
-    "moe_result_repair": "Top3largerGV/codec/data-movementopportunities fromactualhotpath+failureaudit, excludingRQoccupancy",
-    "stack_evidence_sync": "Freezing71officialhistoryclosure; optionalfe5cpendingnotyetincluded",
+    "moe_decode_lut": "RQ256 sourcebf5ab652/20pinreviewGO; queued research.rq.compact256.half.fixed.01, author analyzer ready for collection. Compact256half128entryregs/0spill, actual2CTArequired; oldHALFunsafe skips.",
+    "hotloop_counters": "Actual GV16 SASS found repeated lane-base rematerialization S2R5to20; new lane-hoist CPU implementation/compile hypothesis, no GPU yet.",
+    "gv_codec_frontier": "Compact v8 append-only learning proposal for newest projection findings, root applies live.",
+    "measurement_contract_audit": "RQ256 source/driver GO delivered; available",
+    "scheduler_fastpath": "Prospective matched-bank chooser stabilization plan complete, not implemented/admitted.",
+    "moe_result_repair": "Larger GV design opportunities: C12 stream/decode/MMA, lowerentropyfixedpackets, cooperativeoperandtransport; pending final plan.",
+    "stack_evidence_sync": "Next completed batch fe5+GV16robust pending wake; no transition-per-file churn.",
     "queue_continuity": "Renewedreadonly10sobserver22:15:34to22:30:34session8451"
   },
   "important_docs": [
@@ -115,8 +133,9 @@
     "NewGPUdescriptorsrequireproblem=muse_bf16_proj; optionalmachinepolicyfilterproposalnotactivated; rootmanualscope+observeractive.",
     "Schedulerstore latestsnapshotreads usesauthoritativeWALsnapshot, notcheckpointwrites. Alwayspollregister/transitioncompletion.",
     "Use actualexclusiveworker; no agentGPU/SSH/queue/git. Implementers/reviewersCPUonly.",
-    "Onlyofficialwait93384pendingfe5c; 49049combinedcompletedandarchived/recorded/refine. Neverresubmitacceptedjob.",
-    "Gitlatestpushed6246d44; pendinghistoryclosureandnewprojectioncandidates/results. No broadgitadd.",
-    "GV16robustproposalresearch.gv.unpool16.deltakey.robust.01problem=muse_bf16_proj awaitingGO; queueemptyseq1715; admitwithrootverifythenexistingworker."
+    "No active official wait: fe5 completed/archived/recorded/refine. Quota1scored/7checks last confirmed by accepted submission accounting.",
+    "Git local5b2b61a push session48308 pending; earlier4ae203e pushed. Compactcommunication contract and updated recovery uncommitted.",
+    "RQ256 registration43650 completedREADY; existing worker only. Exact top-level problem verified.",
+    "User permits compact non-English communication for efficiency; ITERATION Compact coordination records structured deltas/artifact refs, no opaque language or minification."
   ]
 }

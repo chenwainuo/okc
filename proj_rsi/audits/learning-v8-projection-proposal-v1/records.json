@@ -1,0 +1,902 @@
+{
+  "status": "PRIVATE_UNSEALED_PENDING_INDEPENDENT_REVIEW",
+  "base_registry_path": "proj_rsi/learnings.json",
+  "base_registry_sha256": "544dfe2c6077c070d836016c0ab6dad145abf045ad189cafaad06ee12589d916",
+  "base_registry_version": 7,
+  "proposed_registry_version": 8,
+  "append_lessons": [
+    {
+      "id": "gv16-static-repair-savings-not-runtime",
+      "version": 1,
+      "supersedes": null,
+      "record_sha256": null,
+      "title": "Fewer repair instructions and registers did not improve this GV16 comparison",
+      "tags": [
+        "projection",
+        "GV16",
+        "codegen",
+        "negative-result"
+      ],
+      "context": {
+        "experiment_id": "research.gv.unpool16.deltakey.robust.01",
+        "family": "muse_bf16_proj",
+        "parents": [
+          "actual incumbent 9916d34357b745cf / 501d901db8ee"
+        ],
+        "comparators": [
+          "same-SO original GV16 control",
+          "prior single-weight deltakey result"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_REGRESSION",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/gv_unpool16_deltakey_v1/submission.py",
+            "sha256": "713c46b37e50f71410ef4c7116f7fcb94bea71bd7b64c7f33d2a9e0d93e24f6c",
+            "role": "gv16"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "static",
+          "path": "proj_rsi/candidates/gv_unpool16_deltakey_v1/proof.json",
+          "sha256": "9c87b4bc9770d75c4963e5f6854d9eb3815248c955b951dda568bf4b0ab9dc61"
+        },
+        {
+          "id": "robust",
+          "path": "proj_rsi/audits/gv-unpool16-deltakey-robust-result/analysis.json",
+          "sha256": "cc9748f850e7e457832e5b40b3fdc82f500e4e04d678fc53529510e714266800"
+        }
+      ],
+      "observations": [
+        {
+          "id": "code",
+          "statement": "Exact offline target shrank 2080\u21921992 instructions and 110\u2192108 registers; this is static codegen evidence.",
+          "outcome": "positive",
+          "evidence": "static",
+          "selector": {
+            "json_pointer": "/native",
+            "equals": {
+              "new": {
+                "symbol": "_Z20gv_unpool16_deltakeyILi1ELi2ELi2ELi1ELi4ELi16ELi1ELi1ELi2ELi1EEv1G",
+                "instructions": 1992,
+                "registers": 108,
+                "stack_B": 0,
+                "local_B": 0,
+                "P2R": 16,
+                "SHFL": 17,
+                "HMMA": 128,
+                "LDG": 113
+              },
+              "control": {
+                "symbol": "_Z10gv_predxorILi1ELi2ELi2ELi1ELi4ELi16ELi1ELi1ELi2ELi1EEv1G",
+                "instructions": 2080,
+                "registers": 110,
+                "stack_B": 0,
+                "local_B": 0,
+                "P2R": 16,
+                "SHFL": 17,
+                "HMMA": 128,
+                "LDG": 113
+              }
+            }
+          }
+        },
+        {
+          "id": "residency",
+          "statement": "Actual 108-register candidate and 110-register control both query occupancy4 and local0; register reduction did not increase queried capacity.",
+          "outcome": "neutral",
+          "evidence": "robust",
+          "selector": {
+            "json_pointer": "/actual_resources",
+            "equals": {
+              "control": {
+                "registers": 110,
+                "local": 0,
+                "user_static": 0,
+                "max_dynamic": 5120,
+                "max_threads": 128,
+                "occupancy": 4,
+                "device_reserved": 1024,
+                "arm_echo": 0
+              },
+              "deltakey": {
+                "registers": 108,
+                "local": 0,
+                "user_static": 0,
+                "max_dynamic": 5120,
+                "max_threads": 128,
+                "occupancy": 4,
+                "device_reserved": 1024,
+                "arm_echo": 1
+              }
+            }
+          }
+        },
+        {
+          "id": "aggregate",
+          "statement": "Equal-weight 48 matched pairs give control\u2212candidate median \u22120.063999556us, 22wins/1tie/25losses; candidate regresses.",
+          "outcome": "negative",
+          "evidence": "robust",
+          "selector": {
+            "json_pointer": "/aggregate_equal_weight_diagnostic",
+            "equals": {
+              "n": 48,
+              "median_us": -0.06399955600500107,
+              "mean_us": -0.04199993175764879,
+              "win_tie_loss": [
+                22,
+                1,
+                25
+              ],
+              "range_us": [
+                -1.7600003629922867,
+                1.4399997889995575
+              ]
+            }
+          }
+        },
+        {
+          "id": "counter",
+          "statement": "Weight6203 still has +0.015999191us interleaved median; the aggregate loss does not erase this point.",
+          "outcome": "positive",
+          "evidence": "robust",
+          "selector": {
+            "json_pointer": "/per_weight/6203/interleaved/median_us",
+            "equals": 0.015999190509319305
+          }
+        },
+        {
+          "id": "prior",
+          "statement": "Prior paired\u22120.079999678us and positive F1 endpoints +0.032000244/+0.160001218us remain preserved.",
+          "outcome": "mixed",
+          "evidence": "robust",
+          "selector": {
+            "json_pointer": "/prior_preserved",
+            "equals": {
+              "paired_us": -0.07999967783689499,
+              "F1_before_us": 0.03200024366378784,
+              "F1_after_us": 0.1600012183189392
+            }
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Static instruction/register reduction alone predicts a positive matched runtime effect for this version.",
+          "status": "refuted",
+          "observation_ids": [
+            "code",
+            "residency",
+            "aggregate",
+            "counter",
+            "prior"
+          ]
+        }
+      ],
+      "scope": "Exact unpoolerM16 deltakey geometry and observed H100 schedules/fixtures; no family rejection.",
+      "transfer_limits": [
+        "Instruction count is not a dynamic time fraction.",
+        "Schedule, weights, addresses and time covary; no bandwidth, dependency or clock cause was isolated.",
+        "Repeated orders over eight X fixtures are not independent workload samples."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "A source-isolated dependency change reverses the matched negative effect while preserving the current-input oracle; otherwise retain this version as a loss.",
+      "next_test": {
+        "question": "Does one specific remaining dependency change beat this version and the actual incumbent under a matched workload?",
+        "controls": [
+          "Actual incumbent control and preserved deltakey version",
+          "Same stored X bank and prospectively fixed weights/orders"
+        ],
+        "discriminator": "A source-isolated dependency change reverses the matched negative effect while preserving the current-input oracle; otherwise retain this version as a loss.",
+        "stop_rule": "Park unchanged version; reopen on a concrete dependency mechanism or changed target context, not the static instruction saving alone.",
+        "required_gates": [
+          "Exact source/binary and actual selected geometry identity.",
+          "Matched current inputs, own timed-terminal correctness and cleanup; reuse unchanged proofs."
+        ]
+      },
+      "related_queue_ids": [
+        "research.gv.unpool16.deltakey.robust.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "Prioritize only a new discriminating projection comparison; no predicted kernel or official score gain."
+        ]
+      },
+      "cost": {
+        "basis": "Existing frozen evidence; no new GPU work proposed or authorized by this record.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      }
+    },
+    {
+      "id": "normal-chooser-needs-actual-route-evidence",
+      "version": 2,
+      "supersedes": "27299b8d0bae32b0dc1e691df6d29bdb61b38d04ff169c28fa6b5ac1e5f019cb",
+      "record_sha256": null,
+      "title": "Completed hardware-matched choice and actual execution remain distinct from transferred gains",
+      "tags": [
+        "projection",
+        "GV53",
+        "selection",
+        "H200"
+      ],
+      "context": {
+        "experiment_id": "fe5c45197ca041bb",
+        "family": "muse_bf16_proj",
+        "parents": [
+          "actual incumbent 9916d34357b745cf / 501d901db8ee"
+        ],
+        "comparators": [
+          "9916d34357b745cf actual incumbent",
+          "same-prepare keyed versus parent M1/M8"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H200"
+        },
+        "validity": "VALID_OFFICIAL_CHECK",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/gv53_keyed_choice_v1/submission.py",
+            "sha256": "78f93581a011fc7c0088032542faccb7617c6a5402ef79aded44a1aa33988597",
+            "role": "choice"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "choice",
+          "path": "proj_rsi/audits/gv53-keyed-choice-result-v1/analysis.json",
+          "sha256": "67095da4af59e8988e9a1b6380877a190e1369b51ed5e8c8cbb3add41bbd2bc6"
+        }
+      ],
+      "observations": [
+        {
+          "id": "m1",
+          "statement": "Same-H200-prepare M1 median(parent\u2212keyed) is +0.048000365us; completed choice selects keyed.",
+          "outcome": "positive",
+          "evidence": "choice",
+          "selector": {
+            "json_pointer": "/choice_receipts/0/record",
+            "equals": {
+              "m": 1,
+              "choice": "keyed",
+              "status": "COMPLETE_ZERO_THRESHOLD",
+              "pairs_us": [
+                {
+                  "parent": 17.664000391960144,
+                  "keyed": 17.791999503970146,
+                  "order": "AB"
+                },
+                {
+                  "parent": 17.855999991297722,
+                  "keyed": 17.75999926030636,
+                  "order": "BA"
+                },
+                {
+                  "parent": 17.791999503970146,
+                  "keyed": 17.791999503970146,
+                  "order": "AB"
+                },
+                {
+                  "parent": 18.0479995906353,
+                  "keyed": 17.696000635623932,
+                  "order": "BA"
+                }
+              ],
+              "samples_us": [
+                {
+                  "block": 0,
+                  "arm": "parent",
+                  "us": 17.664000391960144
+                },
+                {
+                  "block": 0,
+                  "arm": "keyed",
+                  "us": 17.791999503970146
+                },
+                {
+                  "block": 1,
+                  "arm": "keyed",
+                  "us": 17.75999926030636
+                },
+                {
+                  "block": 1,
+                  "arm": "parent",
+                  "us": 17.855999991297722
+                },
+                {
+                  "block": 2,
+                  "arm": "parent",
+                  "us": 17.791999503970146
+                },
+                {
+                  "block": 2,
+                  "arm": "keyed",
+                  "us": 17.791999503970146
+                },
+                {
+                  "block": 3,
+                  "arm": "keyed",
+                  "us": 17.696000635623932
+                },
+                {
+                  "block": 3,
+                  "arm": "parent",
+                  "us": 18.0479995906353
+                }
+              ],
+              "template": [
+                1,
+                1,
+                1,
+                2,
+                16,
+                8,
+                1,
+                1,
+                0,
+                3
+              ],
+              "id": 53,
+              "owner": "gv",
+              "paired_median_parent_minus_keyed_us": 0.04800036549568176
+            }
+          }
+        },
+        {
+          "id": "m8",
+          "statement": "Same-H200-prepare M8 median(parent\u2212keyed) is \u22120.016000122us; completed choice retains parent.",
+          "outcome": "negative",
+          "evidence": "choice",
+          "selector": {
+            "json_pointer": "/choice_receipts/1/record",
+            "equals": {
+              "m": 8,
+              "choice": "parent",
+              "status": "COMPLETE_ZERO_THRESHOLD",
+              "pairs_us": [
+                {
+                  "parent": 17.791999503970146,
+                  "keyed": 17.664000391960144,
+                  "order": "AB"
+                },
+                {
+                  "parent": 17.632000148296356,
+                  "keyed": 17.664000391960144,
+                  "order": "BA"
+                },
+                {
+                  "parent": 17.664000391960144,
+                  "keyed": 18.079999834299088,
+                  "order": "AB"
+                },
+                {
+                  "parent": 17.696000635623932,
+                  "keyed": 17.696000635623932,
+                  "order": "BA"
+                }
+              ],
+              "samples_us": [
+                {
+                  "block": 0,
+                  "arm": "parent",
+                  "us": 17.791999503970146
+                },
+                {
+                  "block": 0,
+                  "arm": "keyed",
+                  "us": 17.664000391960144
+                },
+                {
+                  "block": 1,
+                  "arm": "keyed",
+                  "us": 17.664000391960144
+                },
+                {
+                  "block": 1,
+                  "arm": "parent",
+                  "us": 17.632000148296356
+                },
+                {
+                  "block": 2,
+                  "arm": "parent",
+                  "us": 17.664000391960144
+                },
+                {
+                  "block": 2,
+                  "arm": "keyed",
+                  "us": 18.079999834299088
+                },
+                {
+                  "block": 3,
+                  "arm": "keyed",
+                  "us": 17.696000635623932
+                },
+                {
+                  "block": 3,
+                  "arm": "parent",
+                  "us": 17.696000635623932
+                }
+              ],
+              "template": [
+                1,
+                1,
+                1,
+                2,
+                16,
+                8,
+                1,
+                1,
+                0,
+                3
+              ],
+              "id": 53,
+              "owner": "gv",
+              "paired_median_parent_minus_keyed_us": -0.01600012183189392
+            }
+          }
+        },
+        {
+          "id": "execution",
+          "statement": "Actual M1 keyed/M8 parent profiles agree with both completed receipts; M8 is measured and declined, not hidden by budget.",
+          "outcome": "neutral",
+          "evidence": "choice",
+          "selector": {
+            "json_pointer": "/target_selection_profile_comparisons",
+            "equals": [
+              {
+                "m": 1,
+                "official_index": 2,
+                "actual_profile_implementation": "keyed",
+                "receipt_count": 1,
+                "selection_receipt_agrees_with_profile": true
+              },
+              {
+                "m": 8,
+                "official_index": 17,
+                "actual_profile_implementation": "parent_predxor",
+                "receipt_count": 1,
+                "selection_receipt_agrees_with_profile": true
+              }
+            ]
+          }
+        },
+        {
+          "id": "score",
+          "statement": "Official 9/9 CHECK scores3196.414180us, +39.375776us worse than incumbent; local choice is not a whole-score gain.",
+          "outcome": "negative",
+          "evidence": "choice",
+          "selector": {
+            "json_pointer": "/cross_job_NONCAUSAL/score_delta_new_minus_old_us",
+            "equals": 39.37577590104456
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Actual target-hardware matched choice can select a different arm than an earlier H100 estimate; a selected local win does not prove official package improvement.",
+          "status": "supported_in_scope",
+          "observation_ids": [
+            "m1",
+            "m8",
+            "execution",
+            "score"
+          ]
+        }
+      ],
+      "scope": "Refines v1 with new GV53 keyed-choice evidence; prior split-CTA observations remain immutable in v1. This is a tuning-input comparison, not a matched old/new scored-case experiment.",
+      "transfer_limits": [
+        "No H100\u2192H200 gain transfer or forced M8 selection.",
+        "AB/BA block signs disagree for M1; tiny point is preserved without a significance cutoff.",
+        "Scored inputs, routes and calibration differ across jobs; no source-only official effect is isolated."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Held-out paired signs disagree with the tuning decision; preserve both contexts rather than infer a stable hardware-wide winner.",
+      "next_test": {
+        "question": "Is the selected arm preferred on the actual target hardware under a small held-out matched fixture comparison?",
+        "controls": [
+          "Same surviving geometry and exact parent/keyed sources",
+          "Same W/X objects and balanced AB/BA; preserve all signed block effects"
+        ],
+        "discriminator": "Held-out paired signs disagree with the tuning decision; preserve both contexts rather than infer a stable hardware-wide winner.",
+        "stop_rule": "No unchanged full CHECK retry merely to repeat selection; re-open only a distinct comparability or selector question.",
+        "required_gates": [
+          "Exact source/binary and actual selected geometry identity.",
+          "Matched current inputs, own timed-terminal correctness and cleanup; reuse unchanged proofs."
+        ]
+      },
+      "related_queue_ids": [
+        "fe5c45197ca041bb"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "Prioritize only a new discriminating projection comparison; no predicted kernel or official score gain."
+        ]
+      },
+      "cost": {
+        "basis": "Existing frozen evidence; no new GPU work proposed or authorized by this record.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      }
+    },
+    {
+      "id": "projection-calibration-score-route-accounting",
+      "version": 1,
+      "supersedes": null,
+      "record_sha256": null,
+      "title": "Separate raw events, reference calibration and other-route changes before attributing official score",
+      "tags": [
+        "projection",
+        "calibration",
+        "score",
+        "route-selection"
+      ],
+      "context": {
+        "experiment_id": "fe5c45197ca041bb+71a76a2c3fcd431f",
+        "family": "muse_bf16_proj",
+        "parents": [
+          "actual incumbent 9916d34357b745cf / 501d901db8ee"
+        ],
+        "comparators": [
+          "9916d34357b745cf actual incumbent",
+          "ac49231d41d441f6 keyed CHECK"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H200"
+        },
+        "validity": "VALID_OFFICIAL_CHECK",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/gv53_keyed_choice_v1/submission.py",
+            "sha256": "78f93581a011fc7c0088032542faccb7617c6a5402ef79aded44a1aa33988597",
+            "role": "choice"
+          },
+          {
+            "path": "results/proj-rsi/releases/gv53-rq-unpooler32-stack-v1-f018932999fb/submission.py",
+            "sha256": "f018932999fbaed6600b330f3002749a2e423038fd925e27036ac3c1e6183d1e",
+            "role": "rq"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "choice",
+          "path": "proj_rsi/audits/gv53-keyed-choice-result-v1/analysis.json",
+          "sha256": "67095da4af59e8988e9a1b6380877a190e1369b51ed5e8c8cbb3add41bbd2bc6"
+        },
+        {
+          "id": "score",
+          "path": "proj_rsi/audits/gv53-keyed-choice-result-v1/score-accounting.json",
+          "sha256": "b092b0c9095c2d0536422f7cc4355424e04300127e8fe0e601435e8ee7d555ee"
+        },
+        {
+          "id": "rq",
+          "path": "proj_rsi/audits/rq-unpooler32-official-stack-v1/analysis.json",
+          "sha256": "2fec33c4f083c0c8d06f25783bfee7cc02094e19b7fa2584c5eb9fb0ef6a8bf7"
+        }
+      ],
+      "observations": [
+        {
+          "id": "rqinc",
+          "statement": "RQ71 loses25.310370us score versus incumbent; all30 input seeds and14 displayed routes change.",
+          "outcome": "negative",
+          "evidence": "rq",
+          "selector": {
+            "json_pointer": "/comparisons/9916d34357b745cf/score_gain_us",
+            "equals": -25.31036971572803
+          }
+        },
+        {
+          "id": "rqparent",
+          "statement": "RQ71 improves43.544472us versus keyed CHECKac492; this measured point survives the incumbent loss.",
+          "outcome": "positive",
+          "evidence": "rq",
+          "selector": {
+            "json_pointer": "/comparisons/ac49231d41d441f6/score_gain_us",
+            "equals": 43.544472179301465
+          }
+        },
+        {
+          "id": "calibration",
+          "statement": "Official calibrated median is baseline/paired_ratio; raw event minus replay overhead is a different quantity.",
+          "outcome": "neutral",
+          "evidence": "rq",
+          "selector": {
+            "json_pointer": "/calibration",
+            "equals": "Every official calibrated median equals calibrated baseline / paired_ratio. Raw event minus overhead is not the official calibrated formula. Profile snapshot durations and parent/outside timings are distinct."
+          }
+        },
+        {
+          "id": "other",
+          "statement": "GV53choice has14 displayed route changes outside its intended target; final owner confirmation cannot establish their cause.",
+          "outcome": "neutral",
+          "evidence": "score",
+          "selector": {
+            "json_pointer": "/unaffected_source_changed_displayed_routes",
+            "equals": [
+              0,
+              3,
+              4,
+              6,
+              11,
+              13,
+              14,
+              18,
+              20,
+              21,
+              23,
+              24,
+              26,
+              27
+            ]
+          }
+        },
+        {
+          "id": "accounting",
+          "statement": "Replacing only the two target calibrated times in the old vector yields\u22121.828819us score delta: arithmetic accounting, not an isolated source gain or additive stack effect.",
+          "outcome": "mixed",
+          "evidence": "score",
+          "selector": {
+            "json_pointer": "/target_two_calibrated_times_only_delta_score_us",
+            "equals": -1.828819134819696
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Official package deltas uniquely measure the changed kernel contribution when its target is actually selected.",
+          "status": "refuted",
+          "observation_ids": [
+            "rqinc",
+            "rqparent",
+            "calibration",
+            "other",
+            "accounting"
+          ]
+        }
+      ],
+      "scope": "Cross-job score decomposition for fe5 and RQ71; extends selection lessons with reference-normalizer and calibration accounting, not a new kernel claim.",
+      "transfer_limits": [
+        "Every official input seed changes; displayed equal labels need not imply identical hidden library configuration.",
+        "Counterfactual time-vector replacement is descriptive algebra, not causal attribution.",
+        "Actual route/9-of-9 correctness is established; cause of transfer and other-route changes remains UNKNOWN."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Guarded131107 beats the exact same-run incumbent geometry on matched X; a win only over ST5 indicates a different contrast.",
+      "next_test": {
+        "question": "For RQ32, is the guarded offset effect separable from ST5/ST6 geometry preference?",
+        "controls": [
+          "One same-run shared-fixture comparison of actual incumbentST6, prior selectedST5 and guarded131107",
+          "Raw events, calibrated values and reference inputs separately retained"
+        ],
+        "discriminator": "Guarded131107 beats the exact same-run incumbent geometry on matched X; a win only over ST5 indicates a different contrast.",
+        "stop_rule": "Do not rerun unchanged full30 solely to explain cross-job deltas; no promotion by counterfactual score accounting.",
+        "required_gates": [
+          "Exact source/binary and actual selected geometry identity.",
+          "Matched current inputs, own timed-terminal correctness and cleanup; reuse unchanged proofs."
+        ]
+      },
+      "related_queue_ids": [
+        "fe5c45197ca041bb+71a76a2c3fcd431f"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "Prioritize only a new discriminating projection comparison; no predicted kernel or official score gain."
+        ]
+      },
+      "cost": {
+        "basis": "Existing frozen evidence; no new GPU work proposed or authorized by this record.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      }
+    },
+    {
+      "id": "exact-so-reuse-bounds-robustness-cost",
+      "version": 1,
+      "supersedes": null,
+      "record_sha256": null,
+      "title": "Reusing the exact compiled module made a three-weight diagnostic inexpensive",
+      "tags": [
+        "projection",
+        "experiment-cost",
+        "binary-reuse"
+      ],
+      "context": {
+        "experiment_id": "research.gv.unpool16.deltakey.robust.01",
+        "family": "muse_bf16_proj",
+        "parents": [
+          "actual incumbent 9916d34357b745cf / 501d901db8ee"
+        ],
+        "comparators": [
+          "same exact SO with original-control and deltakey arms",
+          "earlier compiled single-weight attempt"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_REGRESSION",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/gv_unpool16_deltakey_v1/submission.py",
+            "sha256": "713c46b37e50f71410ef4c7116f7fcb94bea71bd7b64c7f33d2a9e0d93e24f6c",
+            "role": "gv16"
+          },
+          {
+            "path": "proj_rsi/candidates/gv_unpool16_deltakey_robust_v1/driver.py",
+            "sha256": "fa2512109c267af3e1c1c555fc10ab4ff17ef2929fbed5e534818d5107b12d70",
+            "role": "driver"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "robust",
+          "path": "proj_rsi/audits/gv-unpool16-deltakey-robust-result/analysis.json",
+          "sha256": "cc9748f850e7e457832e5b40b3fdc82f500e4e04d678fc53529510e714266800"
+        }
+      ],
+      "observations": [
+        {
+          "id": "cost",
+          "statement": "Complete three-weight run elapsed3.653058080s; native load0.002178360s and weight packing0.036164963s are separate recorded costs.",
+          "outcome": "positive",
+          "evidence": "robust",
+          "selector": {
+            "json_pointer": "/cost",
+            "equals": {
+              "native_load_seconds": 0.0021783600095659494,
+              "task_weight_pack_seconds": 0.03616496299218852,
+              "run_elapsed_seconds": 3.6530580800026655
+            }
+          }
+        },
+        {
+          "id": "validation",
+          "statement": "No native compile/profiler calls:240 clean timings,30 warmups and30 own-terminal oracles, source/cleanup checks retained.",
+          "outcome": "neutral",
+          "evidence": "robust",
+          "selector": {
+            "json_pointer": "/validation",
+            "equals": {
+              "launch_source_pins": 13,
+              "journal_rows": 270,
+              "clean_calls": 240,
+              "warmups": 30,
+              "own_timed_terminal_oracles": 30,
+              "retained_mutations": 30,
+              "basis_columns_per_arm_per_weight": 16,
+              "native_compile_calls": 0,
+              "profiler_calls": 0,
+              "post_scope_cleanup": {
+                "allocated": 0,
+                "reserved": 0,
+                "before_blas_clear": {
+                  "allocated": 33554432,
+                  "reserved": 1832910848
+                },
+                "blas_map_entries_workspace_bytes_after": [
+                  1,
+                  33554432,
+                  0
+                ],
+                "clear_error": null,
+                "after_run_scope_and_drain": true
+              },
+              "external_cleanup": {
+                "cleanup_failed": false,
+                "compute_pids": [],
+                "container_exists": false,
+                "containers": [],
+                "gpu_memory_mib": 0,
+                "guard_pids": [],
+                "host_log_exists": true,
+                "terminal_exit": 0
+              },
+              "task_FP64_oracles": 78,
+              "exact_basis_launches": 6,
+              "basis_rows_across_arms_weights": 96
+            }
+          }
+        },
+        {
+          "id": "outcome",
+          "statement": "Cheap execution still found a\u22120.063999556us aggregate paired result; reuse is a cost improvement, not kernel speed evidence.",
+          "outcome": "negative",
+          "evidence": "robust",
+          "selector": {
+            "json_pointer": "/aggregate_equal_weight_diagnostic/median_us",
+            "equals": -0.06399955600500107
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Exact-binary reuse can answer a bounded fixture-generalization question without paying another native compilation.",
+          "status": "supported_in_scope",
+          "observation_ids": [
+            "cost",
+            "validation",
+            "outcome"
+          ]
+        }
+      ],
+      "scope": "Observed host-run cost for this exact collected SO/ABI and three-weight protocol; not a controlled compile/no-compile speedup ratio.",
+      "transfer_limits": [
+        "Reuse requires matching binary hash, exported module identity, source lineage and compatible runtime ABI.",
+        "This cost is not GPU kernel duration or a guaranteed cost for other drivers.",
+        "Unchanged codec/native proofs may be reused only while their assumptions hold."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "A source/ABI mismatch or changed native behavior requires a new build; otherwise measure full host cost and keep compilation zero.",
+      "next_test": {
+        "question": "Can the next genuinely new fixture/order question reuse its exact admitted module and unchanged proofs?",
+        "controls": [
+          "Hash and module identity bound before load",
+          "Only changed driver scheduling/current-input behavior reviewed"
+        ],
+        "discriminator": "A source/ABI mismatch or changed native behavior requires a new build; otherwise measure full host cost and keep compilation zero.",
+        "stop_rule": "No repeated run solely because reuse is cheap; require a new causal or robustness question.",
+        "required_gates": [
+          "Exact source/binary and actual selected geometry identity.",
+          "Matched current inputs, own timed-terminal correctness and cleanup; reuse unchanged proofs."
+        ]
+      },
+      "related_queue_ids": [
+        "research.gv.unpool16.deltakey.robust.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "Prioritize only a new discriminating projection comparison; no predicted kernel or official score gain."
+        ]
+      },
+      "cost": {
+        "basis": "Measured total host run3.653058080s; compilation0 calls. Not a requested GPU reservation.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      }
+    }
+  ],
+  "append_ideas": [],
+  "live_registry_mutated": false,
+  "seal_policy": "Root applies after independent semantic review; record_sha256 intentionally null until that review. No queue or promotion authority."
+}

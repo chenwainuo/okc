@@ -30,6 +30,11 @@ historical LOOP.md log is evidence, not the current work queue.
   results promptly; unblock dependencies; admit reviewed work by expected ROI;
   assign implementation/review/analysis concurrently. Poll mutation completion
   and verify effects rather than assuming a tool succeeded.
+- Verify actual agent state when assigning or waiting on a dependency.
+  `send_message` does not reactivate a completed agent; use `followup_task` for
+  new work on an idle/completed agent and confirm running state or acknowledgment.
+  A delivered message is not an active review. Root owns reviewer activation,
+  including when an author sends its own review request.
 - Keep the GPU supplied with useful bounded work. A live polling worker with an
   empty eligible queue is not GPU utilization. Distinguish queue state, physical
   utilization, agent activity and coordinator activity in reports. If nothing
@@ -59,6 +64,19 @@ historical LOOP.md log is evidence, not the current work queue.
 
 Response reminder:
 `Loop: profile -> measure -> hypothesis -> optimize/reimplement -> test -> validate -> stack -> submit measured gains -> learn -> reprioritize -> repeat; idle <=10s. [Contract](ITERATION.md)`
+
+## Compact coordination
+
+Authority: user2026-10-27 permits compact/non-English agent communication for efficiency.
+Prefer short structured deltas with shared artifact references, not repeated context:
+`task | scope | parent/hash | hypothesis | changed | reuse | result+units | cause-confidence | next | artifact/hash`.
+Fields are optional when unchanged or already bound by the referenced artifact.
+Keep messages legible, identifiers stable, code valid and debuggable. Do not invent
+an opaque language or assume fewer characters means fewer tokens. Preserve signs,
+units, comparator, source identity, uncertainty and actual execution/selection.
+Reuse compiled binaries and established proofs where their assumptions hold;
+review changed behavior. Optimize tokens and elapsed time per validated improvement,
+not code minification. This does not add a new admission gate or reporting artifact.
 
 Queue details: [scheduling/OPERATIONS.md](scheduling/OPERATIONS.md) and
 [scheduling/CONTRACT.md](scheduling/CONTRACT.md). Learning:

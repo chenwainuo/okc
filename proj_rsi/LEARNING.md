@@ -1,5 +1,12 @@
 # Experiment learning registry
 
+Current revision8: [sealed archive](learning_archive/registry-v8-75966e64.json),
+27 lesson versions / 24 latest lessons / 22 ideas. [Root review and validation](audits/learning-v8-projection-proposal-v1/root-validation-v1.json)
+preserve the entire v7 prefix. Four appended records cover GV16 static/runtime
+disagreement, actual H200 keyed selection, official calibration/route accounting,
+and exact-SO diagnostic reuse. Signed losses and small positives remain explicit;
+these lessons authorize no GPU work or promotion.
+
 A completed success, regression, mixed result or diagnosed setup failure should
 produce a lesson in parallel with the next experiment. Completing a lesson,
 catalog refresh or retrospective review is not a GPU-admission dependency.
