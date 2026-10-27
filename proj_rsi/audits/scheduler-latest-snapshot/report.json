@@ -1,0 +1,101 @@
+{
+  "status": "ISOLATED_OPT_IN_PROPOSAL_CPU_TESTED_NOT_ACTIVATED_CONTRACT_REVIEW_REQUIRED",
+  "activation": {
+    "live_code_changed": false,
+    "worker_or_dispatcher_changed": false,
+    "live_queue_operations": 0,
+    "live_wal_reads": 0,
+    "gpu_calls": 0,
+    "git_commands": 0
+  },
+  "entrypoint": "QueueStore(..., latest_snapshot_reads=True); default False retains strict per-operation history verification.",
+  "contract": [
+    "Opt-in constructor performs existing locked strict history verification before returning.",
+    "Every operational read uses the actual final complete WAL record bytes, verifies checksum/snapshot envelope/positive sequence, and reads fresh current state under the existing stable-inode exclusive flock.",
+    "No stat memo and no checkpoint/cache-supplied state. Tail scan scales with final record size, not total history.",
+    "Each instance tracks a sequence floor from startup, successful reads, and validated durable own commits. Observed sequence rollback, missing WAL, and empty WAL after state exists are refused.",
+    "Historical corruption and historical sequence-chain faults that leave the latest complete record valid are deliberately detected at strict startup or explicit audit(), rather than every operational read.",
+    "Explicit audit() always uses existing strict history verification and refuses rollback below this instance sequence floor.",
+    "Cooperating cross-process writers retain the existing exclusive lock through read/change/append; claims therefore use latest current active ownership state.",
+    "No compaction, WAL format change, or bulk WAL rewrite. Existing torn-final evidence preservation/truncation is retained inside operational recovery; actual live WAL was never opened by this audit."
+  ],
+  "limitations": [
+    "This intentionally changes the historical-integrity failure contract and requires explicit review before any GPU worker activation.",
+    "No durable antirollback anchor is added: a valid truncated prefix presented to a fresh process can pass strict startup, as in the original store. A running instance detects sequence regression.",
+    "A same-sequence replacement containing a new valid self-checksummed snapshot is outside existing accidental-corruption checksum guarantees; no malicious owner/root security claims.",
+    "Noncooperating in-place writes can race filesystem reads as before; metadata comparison detects common races but is not claimed to authenticate bytes. Unlike rejected stat memo, every operational read rechecks actual record bytes.",
+    "Per-read time scales with final record and JSON snapshot size; synthetic benchmark uses large audit data with an empty jobs map.",
+    "Benchmark startup strict replay ran first and built replay sidecar; subsequent baseline_cold timing is a cached-prefix strict read, not raw replay."
+  ],
+  "tests": {
+    "strict_default_existing": {
+      "passed": 13,
+      "failed": 0
+    },
+    "dedicated_latest_contract": {
+      "passed": 14,
+      "failed": 0
+    },
+    "existing_suite_optin": {
+      "passed": 13,
+      "failed": 0,
+      "semantics": "12 unchanged tests plus historical-corruption case explicitly rewritten for deferred detection; no claim all original hot integrity expectations remain unchanged"
+    }
+  },
+  "benchmark": {
+    "wal_bytes": 268486440,
+    "strict_startup_seconds": 1.4770352393388748,
+    "strict_repeated_median_seconds": 0.1539989523589611,
+    "latest_read_repeated_median_seconds": 0.006199825555086136,
+    "speedup": 24.83923958676956
+  },
+  "prior_rejected_proposal": "../scheduler-state-memo/metadata-collision.json preserves ordinary same-tick metadata collision evidence. This alternative does not reuse state based on metadata.",
+  "recommendation": "Hold activation. Parent review must explicitly accept startup/explicit historical auditing while current latest snapshot is validated on every operation. No worker mode wiring has been changed.",
+  "base_hashes": {
+    "proj_rsi/scheduling/store.py": "578613244b8f89fb4f3bdf624e2dde417a98f112cac775e5e52804b98c1fbe1f",
+    "proj_rsi/scheduling/cli.py": "e8a1752fd9b7691cb5bce79b3b0ba5ea0e2432f4a8712138f46c91aefe1f47c2"
+  },
+  "artifacts": {
+    "proj_rsi/audits/scheduler-latest-snapshot/activation.patch": "1526109516dc05c65b28186ce0b92b5c4b49a4bd37f7743fe75740fe04e4f99a",
+    "proj_rsi/audits/scheduler-latest-snapshot/base-hashes.json": "85584dc810780a3890a99e7a3b80a45fb6ccd9f323936b8ca5bdcb716bb2feec",
+    "proj_rsi/audits/scheduler-latest-snapshot/cli-test-results.txt": "1bb25c766048ee3b6e8f47aa509e99d7ee1cd85f0cf5b85080a19f90abf1b959",
+    "proj_rsi/audits/scheduler-latest-snapshot/cli.patch": "d7d2be994920bb0c022615a911bfcc0da23b216e592a259803f147d590af25dc",
+    "proj_rsi/audits/scheduler-latest-snapshot/cli_proposal.py": "2b8f6b8bdcbdd5756be33647a4a6d6d93d3b78eb325561e63136c2450a9d6fee",
+    "proj_rsi/audits/scheduler-latest-snapshot/hot-existing-test-results.txt": "cf67f88a2e6efc3d4e44e485d679dff4e08f00cd0a501057749b3c552f3c80fe",
+    "proj_rsi/audits/scheduler-latest-snapshot/profile-output.txt": "de58b22b25056cd54f5989d8b10b2e60ed26c389d778163321abc0c58d97c207",
+    "proj_rsi/audits/scheduler-latest-snapshot/profile.py": "653c9da55990a9fa129abdd45a49228bb225f3159e5e4189f2c284cbfc13f873",
+    "proj_rsi/audits/scheduler-latest-snapshot/store.patch": "6a6c0e1fab8480acb57ca9ce594c39f070cf12bcc3cef19717e5cb3a6b2b2e0b",
+    "proj_rsi/audits/scheduler-latest-snapshot/store_proposal.py": "f10578b8d03fb15605c340d0636d4f9d9c2046e86a4481aea5e0294437a27662",
+    "proj_rsi/audits/scheduler-latest-snapshot/synthetic-profile.json": "de58b22b25056cd54f5989d8b10b2e60ed26c389d778163321abc0c58d97c207",
+    "proj_rsi/audits/scheduler-latest-snapshot/test-results.txt": "b62d615ee958389d30201f53cde576ca83710c21ace372882f968e9952464210",
+    "proj_rsi/audits/scheduler-latest-snapshot/test_cli_proposal.py": "75b34ab9ab18bd3444507c4cfd01f33a3469c496df59cd16db0d485fe2ac28ab",
+    "proj_rsi/audits/scheduler-latest-snapshot/test_hot_existing.py": "f88a67b8dc4d90383c1dbd13a5357a7f6c01008c6131baaaa43cfdd9abe39788",
+    "proj_rsi/audits/scheduler-latest-snapshot/test_proposal.py": "9d9c8b02725d3995acf270eed8b94f4f119aa2f0b519ad025743b529bcd98195"
+  },
+  "cli_proposal": {
+    "flag": "work --latest-snapshot",
+    "strict_commands": [
+      "work without flag",
+      "run-next",
+      "register",
+      "status",
+      "all other commands"
+    ],
+    "startup": "opt-in constructor strictly audits existing history before any dispatcher is constructed",
+    "dispatcher_changes": false,
+    "activation_applied": false,
+    "combined_patch": "activation.patch",
+    "tests": {
+      "passed": 6,
+      "failed": 0,
+      "coverage": [
+        "work strict default",
+        "work opt-in passes explicit constructor flag and strict startup",
+        "real corrupted history refuses before fake dispatcher construction",
+        "run-next/register/status remain strict",
+        "non-work commands reject flag",
+        "help discloses audit deferral"
+      ]
+    }
+  }
+}

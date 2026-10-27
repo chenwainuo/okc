@@ -1,0 +1,52 @@
+{
+  "status": "ISOLATED_CPU_PROPOSAL_REJECTED_FOR_ACTIVATION_METADATA_COLLISION",
+  "live_code_changed": false,
+  "live_queue_operations": 0,
+  "live_wal_reads": 0,
+  "gpu_calls": 0,
+  "git_commands": 0,
+  "implementation": "Private deep-copied verified state on the QueueStore instance, reused under existing lock only when dev/ino/size/mtime_ns/ctime_ns match. Existing full verification for cold/changed WAL; own commits refresh from validated JSON record; failed commits invalidate memo.",
+  "test_results": {
+    "proposal": {
+      "run": 24,
+      "passed": 23,
+      "failed": 1,
+      "failure": "existing test_middle_corruption_fail_closed"
+    },
+    "live_baseline_store": {
+      "run": 13,
+      "passed": 13
+    }
+  },
+  "critical_finding": "Actual same-size overwrite retained all five fingerprint values in ordinary rapid writes on this filesystem. Nanosecond fields do not imply nanosecond timestamp resolution. Warm memo returned state while baseline rejected corrupt WAL record 1. This is a real regression, not only adversarial metadata restoration.",
+  "limitations": [
+    "Any metadata-identical content change is invisible to the required fingerprint memo, including this observed same-tick corruption.",
+    "No malicious-root or queue-owner security claims.",
+    "Synthetic benchmark has an empty jobs snapshot and large audit payload; deepcopy cost grows with final snapshot size.",
+    "Initial baseline cold replay built a sidecar; proposal cold read used that authenticated sidecar. Compare repeated-read numbers for the intended optimization.",
+    "Live 5 GB WAL was neither read nor modified."
+  ],
+  "timing": {
+    "synthetic_wal_bytes": 268486440,
+    "baseline_repeated_median_seconds": 0.15689365193247795,
+    "proposal_repeated_median_seconds": 1.85258686542511e-05,
+    "proposal_after_external_writer_seconds": 0.15105776861310005
+  },
+  "recommendation": "Do not activate exact stat-only memo. Decide explicitly whether weakening corruption detection is acceptable, or design additional invalidation/quiet-period revalidation with explicit filesystem assumptions before further patch review.",
+  "base_hashes": {
+    "proj_rsi/scheduling/store.py": "578613244b8f89fb4f3bdf624e2dde417a98f112cac775e5e52804b98c1fbe1f"
+  },
+  "artifacts": {
+    "proj_rsi/audits/scheduler-state-memo/base-hashes.json": "ff8a15c531d81e6bbb31e51877aa9a43155968c9c6b10cbe6b007c050cfad8a6",
+    "proj_rsi/audits/scheduler-state-memo/baseline-test-results.txt": "140763e808778a382f99e08ad0652708d5f7ce9d98eea469c7150ffe9d4c2d6e",
+    "proj_rsi/audits/scheduler-state-memo/metadata-collision.json": "7b3805ef0f2e0e8699f1f1660b165462d30c34962cc68cf75616a8bade41502d",
+    "proj_rsi/audits/scheduler-state-memo/profile-output.txt": "abfbdd4fa379b90e2245619a852161577cddcf7dc3b2ce2e0cfbc4515deb186f",
+    "proj_rsi/audits/scheduler-state-memo/profile.py": "1b83beafcfa682677875dccf5c8e5c8ff5080154de33b150fd390d80d9c553ba",
+    "proj_rsi/audits/scheduler-state-memo/reproduce_metadata_collision.py": "74dcc014d01ebbd846fed3d251632e6625cb30ccd8d6d5a820d9ce47443ee5a8",
+    "proj_rsi/audits/scheduler-state-memo/store.patch": "83d8e9edfc2140c3f04174605bab55e9c5f52b023f6776fce2c61ea3fa230391",
+    "proj_rsi/audits/scheduler-state-memo/store_proposal.py": "d5051d72875fc2153027b89c72caaa83b7e6d7b972ed7a769348e3417dde5c66",
+    "proj_rsi/audits/scheduler-state-memo/synthetic-profile.json": "abfbdd4fa379b90e2245619a852161577cddcf7dc3b2ce2e0cfbc4515deb186f",
+    "proj_rsi/audits/scheduler-state-memo/test-results.txt": "9180577e064819c8d6eb37ae14ac086ffec5d3ebd95d2ba629593b3ecd4a6fb6",
+    "proj_rsi/audits/scheduler-state-memo/test_proposal.py": "84b0fe48dfaf290439bf6fe876dfd9d9b75ba4f7e14ad4d1ab95bb38f3a2e6cb"
+  }
+}

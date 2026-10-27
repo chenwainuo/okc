@@ -55,7 +55,7 @@ Max avoids counting the same learning/direct benefit twice. Probabilities are
 explicit subjective priors; never label mathematical scenarios measured gains.
 Capped age bonus policy; deterministic tie: older created_at, then id.
 
-State API, class `QueueStore(directory, *, repo_root=None, policy=None)`:
+State API, class `QueueStore(directory, *, repo_root=None, policy=None, latest_snapshot_reads=False)`:
 - `register(job)`, `get(id)`, `snapshot()`, `rank(resource)`.
 - `rebalance(resource)`: highest eligible top K become READY; displaced READY
   return BACKLOG with event. NEVER demote/preempt RUNNING/VALIDATING.
@@ -81,7 +81,13 @@ new attempt IDs for repairs/retries. Families never discarded automatically.
 Persistence must use a stable advisory flock (never unlink), atomic writes,
 and append-only audit. An append-only fsynced event WAL is authoritative;
 materialized JSON is a regenerable checkpoint. Torn final event recovery must
-preserve raw evidence and never ignore middle corruption. Test races/restarts.
+preserve raw evidence. Strict mode checks the complete history on each read.
+Opt-in `work --latest-snapshot` performs a strict startup audit, then verifies
+the actual latest complete snapshot bytes/checksum under the same lock for
+each operation. Historical corruption detection is deferred to the next strict
+startup or explicit `audit()`; it is not silently accepted as audited history.
+The running instance rejects sequence regression below its observed tip.
+This adds no durable antirollback guarantee. Test races/restarts.
 Runtime directory default results/proj-rsi/scheduler/ (gitignored); immutable
 job descriptors under proj_rsi/scheduling/jobs/ are versioned separately.
 

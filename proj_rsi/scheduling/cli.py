@@ -30,6 +30,8 @@ def main(argv=None):
         command = sub.add_parser(name); command.add_argument('id'); command.add_argument('--reason', required=True)
     run = sub.add_parser('run-next'); run.add_argument('--owner', default='root')
     work = sub.add_parser('work', help='bounded drain of approved GPU queue; never validates results')
+    work.add_argument('--latest-snapshot', action='store_true',
+                      help='strict startup history audit, then verify only the latest complete snapshot per operation; historical corruption detection is deferred until the next strict audit')
     work.add_argument('--owner', default='root')
     work.add_argument('--max-jobs', type=int, default=3)
     work.add_argument('--max-wall-seconds', type=int, default=3600)
@@ -40,7 +42,10 @@ def main(argv=None):
         command = sub.add_parser(name); command.add_argument('id')
     args = parser.parse_args(argv)
     try:
-        store = QueueStore(args.directory, repo_root=args.repo_root)
+        if args.command == 'work' and args.latest_snapshot:
+            store = QueueStore(args.directory, repo_root=args.repo_root, latest_snapshot_reads=True)
+        else:
+            store = QueueStore(args.directory, repo_root=args.repo_root)
         if args.command == 'init':
             result = store.snapshot()
         elif args.command == 'register':

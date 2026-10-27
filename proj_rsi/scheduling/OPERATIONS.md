@@ -32,6 +32,14 @@ harness review is sufficient; do not require extra narrative reviews of the
 same bytes. Learning, dashboard and history updates run after artifact collection
 in parallel with the next GPU job, never while holding the hardware slot.
 
+For the long-lived worker, `work --latest-snapshot` avoids rehashing the entire
+event history on every operation. It audits history at startup and checks the
+actual latest full snapshot on each read under the existing lock. Normal CLI
+commands stay strict; `QueueStore.audit()` explicitly rechecks history. Historical
+corruption detection is deferred in this opt-in mode. It never uses a cached
+checkpoint as execution authority. Review and tests:
+`proj_rsi/audits/scheduler-latest-snapshot-review/review.md`.
+
 Audit: `proj_rsi/audits/process-audit-20261027/harness.md` and
 `audits/process-audit-20261027/promotion.md`. This guidance changes future
 experiment design; it does not silently alter the gates of a frozen running job.

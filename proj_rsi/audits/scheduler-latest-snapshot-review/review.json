@@ -1,0 +1,21 @@
+{
+  "state": "GO_EXPLICIT_WORK_LATEST_SNAPSHOT_ONLY_NOT_ACTIVATED",
+  "activation_patch_sha256": "1526109516dc05c65b28186ce0b92b5c4b49a4bd37f7743fe75740fe04e4f99a",
+  "store_sha256": "f10578b8d03fb15605c340d0636d4f9d9c2046e86a4481aea5e0294437a27662",
+  "cli_sha256": "2b8f6b8bdcbdd5756be33647a4a6d6d93d3b78eb325561e63136c2450a9d6fee",
+  "base_hashes_file_sha256": "85584dc810780a3890a99e7a3b80a45fb6ccd9f323936b8ca5bdcb716bb2feec",
+  "temporary_patch_application_matches_proposals": true,
+  "tests_passed": {
+    "strict_and_latest_contract": 27,
+    "existing_under_optin_adjusted_history_detection": 13,
+    "CLI_wiring": 6
+  },
+  "current_state_contract": "Actual complete latest snapshot bytes/checksum/envelope under stable exclusive lock; atomic cooperating read/change/append; local observed sequence floor; no cache-supplied state.",
+  "accepted_history_contract": "Strict startup once and explicit audit; historical fault detection deferred between audits. Default and non-work CLI remain strict.",
+  "rollback_limit": "No durable global antirollback guarantee: unseen-commit rollback and fresh-process valid-prefix rollback remain outside the floor, as strict replay lacks such an anchor too.",
+  "performance_limit": "Removes per-operation O(history) verification; exact29s live saving unmeasured.",
+  "live_queue_operations": 0,
+  "live_WAL_reads": 0,
+  "activation_performed": false,
+  "GPU_calls": 0
+}

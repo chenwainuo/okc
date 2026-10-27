@@ -1,0 +1,100 @@
+--- a/proj_rsi/scheduling/store.py
++++ b/proj_rsi/scheduling/store.py
+@@ -85,6 +85,7 @@
+         self.cache_path = self.directory / 'replay-cache.json'
+         self.cache_key_path = self.directory / '.replay-cache.key'
+         self._verified_prefix = None
++        self._verified_state = None
+         # Never unlink the lock inode, including during restart/recovery.
+         self.lock_path.touch(exist_ok=True)
+ 
+@@ -217,15 +218,44 @@
+         except OSError:
+             pass  # WAL/checkpoint durability and operation results do not depend on cache writes.
+ 
++    @staticmethod
++    def _fingerprint(stat):
++        return (stat.st_dev, stat.st_ino, stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns)
++
++    def _wal_fingerprint(self):
++        try:
++            return self._fingerprint(self.wal_path.stat())
++        except FileNotFoundError:
++            return None
++
+     def _read(self):
++        # Called under the existing stable-inode lock. A memo is created only by
++        # this instance after verified replay or a validated own commit.
++        fingerprint = self._wal_fingerprint()
++        memo = self._verified_state
++        if memo is not None and memo['fingerprint'] == fingerprint:
++            return deepcopy(memo['state'])
++        self._verified_state = None
++        state = self._read_verified()
++        return state
++
++    def _remember(self, state, fingerprint):
++        self._verified_state = {'fingerprint': fingerprint, 'state': deepcopy(state)}
++
++    def _read_verified(self):
+         state = {'version': 1, 'sequence': 0, 'jobs': {}}
+         self._verified_prefix = None
+         if not self.wal_path.exists():
+             self._verified_prefix = {'bytes': 0, 'digest': hashlib.sha256(), 'sequence': 0,
+                                      'last_start': 0, 'last_sha256': None}
++            self._remember(state, None)
+             return state
+         size = self._complete_wal()
++        fingerprint = self._wal_fingerprint()
+         with self.wal_path.open('rb') as handle:
++            if (fingerprint is None or fingerprint[2] != size
++                    or fingerprint != self._fingerprint(os.fstat(handle.fileno()))):
++                raise CorruptWAL('WAL changed during locked replay; execution refused')
+             cached = self._cached_prefix(handle, size)
+             if cached is None:
+                 handle.seek(0)
+@@ -243,11 +273,20 @@
+                 offset += len(line)
+             self._verified_prefix = {'bytes': offset, 'digest': digest, 'sequence': state['sequence'],
+                                      'last_start': last, 'last_sha256': last_sha}
++        if fingerprint != self._wal_fingerprint():
++            self._verified_prefix = None
++            raise CorruptWAL('WAL changed during locked replay; execution refused')
+         if cached is None or offset != starting_offset:
+             self._publish_prefix()
++        self._remember(state, fingerprint)
+         return state
+ 
+     def _commit(self, state, action, *, actor='controller', reason='', data=None):
++        before = self._wal_fingerprint()
++        memo = self._verified_state
++        self._verified_state = None  # Any failed/partial commit requires replay.
++        if memo is None or memo['fingerprint'] != before:
++            self._verified_prefix = None
+         state['sequence'] += 1
+         payload = {'sequence': state['sequence'], 'timestamp': time.time(), 'action': action,
+                    'actor': actor, 'reason': reason, 'data': data, 'snapshot': state}
+@@ -266,7 +305,7 @@
+             # Only strictly valid new events may extend an attested prefix, even
+             # if a private caller supplied a malformed snapshot to _commit.
+             try:
+-                self._record(record, prefix['sequence'], state['sequence'])
++                committed_state = self._record(record, prefix['sequence'], state['sequence'])
+             except CorruptWAL:
+                 self._verified_prefix = None
+                 return
+@@ -275,7 +314,13 @@
+             self._verified_prefix = {'bytes': previous_size + len(record), 'digest': digest,
+                                      'sequence': state['sequence'], 'last_start': previous_size,
+                                      'last_sha256': hashlib.sha256(record).hexdigest()}
+-            self._publish_prefix()
++            after = self._wal_fingerprint()
++            if (after is not None and after[2] == previous_size + len(record)
++                    and (before is None or after[:2] == before[:2])):
++                self._publish_prefix()
++                self._remember(committed_state, after)
++            else:
++                self._verified_prefix = None
+         else:
+             self._verified_prefix = None
+ 

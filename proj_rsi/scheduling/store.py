@@ -65,7 +65,7 @@ def _atomic(path, content, *, mode=None):
 
 
 class QueueStore:
-    def __init__(self, directory, *, repo_root=None, policy=None):
+    def __init__(self, directory, *, repo_root=None, policy=None, latest_snapshot_reads=False):
         self.directory = Path(directory).resolve()
         self.directory.mkdir(parents=True, exist_ok=True)
         self.repo_root = Path(repo_root or Path(__file__).resolve().parents[2]).resolve()
@@ -85,8 +85,16 @@ class QueueStore:
         self.cache_path = self.directory / 'replay-cache.json'
         self.cache_key_path = self.directory / '.replay-cache.key'
         self._verified_prefix = None
+        self._latest_snapshot_reads = False
+        self._sequence_floor = 0
         # Never unlink the lock inode, including during restart/recovery.
         self.lock_path.touch(exist_ok=True)
+        if latest_snapshot_reads:
+            # Explicit tradeoff: full history is audited at startup, then each
+            # operation verifies the actual final complete snapshot record.
+            with self._locked():
+                self._sequence_floor = self._read()['sequence']
+            self._latest_snapshot_reads = True
 
     @contextmanager
     def _locked(self):
@@ -217,7 +225,64 @@ class QueueStore:
         except OSError:
             pass  # WAL/checkpoint durability and operation results do not depend on cache writes.
 
+    def audit(self):
+        """Explicit full-history audit, even when operational latest reads are enabled."""
+        with self._locked():
+            state = self._read_strict()
+            if state['sequence'] < self._sequence_floor:
+                raise CorruptWAL('WAL sequence rolled back; execution refused')
+            self._sequence_floor = state['sequence']
+            return deepcopy(state)
+
     def _read(self):
+        if self._latest_snapshot_reads:
+            return self._read_latest()
+        return self._read_strict()
+
+    def _read_latest(self):
+        # No persisted cache or stat memo supplies operational state. Historical
+        # corruption detection is deferred until audit()/a strict restart.
+        self._verified_prefix = None
+        state = {'version': 1, 'sequence': 0, 'jobs': {}}
+        if self.wal_path.exists():
+            size = self._complete_wal()
+            with self.wal_path.open('rb') as handle:
+                before = os.fstat(handle.fileno())
+                if before.st_size != size:
+                    raise CorruptWAL('WAL changed during locked replay; execution refused')
+                if size:
+                    # Skip the terminal newline; find the preceding newline.
+                    end, chunks = size - 1, [b'\n']
+                    while end:
+                        start = max(0, end - (1 << 16))
+                        handle.seek(start)
+                        block = handle.read(end - start)
+                        if len(block) != end - start:
+                            raise CorruptWAL('WAL changed during locked replay; execution refused')
+                        index = block.rfind(b'\n')
+                        if index >= 0:
+                            chunks.append(block[index + 1:])
+                            break
+                        chunks.append(block)
+                        end = start
+                    line = b''.join(reversed(chunks))
+                    try:
+                        sequence = json.loads(line)['payload']['sequence']
+                        if type(sequence) is not int or sequence < 1:
+                            raise ValueError('invalid latest sequence')
+                    except (ValueError, TypeError, KeyError) as error:
+                        raise CorruptWAL('latest WAL record is corrupt; execution refused: ' + str(error)) from error
+                    state = self._record(line, sequence - 1, sequence)
+                after = self.wal_path.stat()
+                fields = ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+                if any(getattr(before, field) != getattr(after, field) for field in fields):
+                    raise CorruptWAL('WAL changed during locked replay; execution refused')
+        if state['sequence'] < self._sequence_floor:
+            raise CorruptWAL('WAL sequence rolled back; execution refused')
+        self._sequence_floor = state['sequence']
+        return state
+
+    def _read_strict(self):
         state = {'version': 1, 'sequence': 0, 'jobs': {}}
         self._verified_prefix = None
         if not self.wal_path.exists():
@@ -261,6 +326,9 @@ class QueueStore:
         if new_file:
             _sync_directory(self.directory)
         _atomic(self.checkpoint_path, _json(state) + b'\n')
+        if self._latest_snapshot_reads:
+            self._record(record, state['sequence'] - 1, state['sequence'])
+            self._sequence_floor = state['sequence']
         prefix = self._verified_prefix
         if prefix and prefix['bytes'] == previous_size and prefix['sequence'] == state['sequence'] - 1:
             # Only strictly valid new events may extend an attested prefix, even
