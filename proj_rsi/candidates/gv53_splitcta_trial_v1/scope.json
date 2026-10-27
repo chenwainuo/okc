@@ -1,0 +1,13 @@
+{
+  "state": "FOCUSED_CPU_READY_ROOT_ONLY_GPU_UNRUN",
+  "comparison": "Current official501d GV53 predxor versus exact same predxor body directly instantiated at split-CTA tuple8195. New tuple is absent current serving whitelist; pilot explicitly extends its assertion and directly binds predxor. A naive new GVI entry in current501d would NOT select predxor; this pilot is not a serving policy integration.",
+  "control": {"tuple": [1,1,1,2,16,8,1,1,0,3], "grid": [1,128,1], "threads": 1024, "dynamic_shared_bytes": 17408, "expected_registers": 64, "required_CTAs_per_SM": 1},
+  "splitcta": {"tuple": [1,1,1,1,16,8,1,1,0,8195], "grid": [1,256,1], "threads": 512, "dynamic_shared_bytes": 8704, "expected_registers": 64, "required_CTAs_per_SM": 2},
+  "mechanism": "Two independent CTA reduction rendezvous, same per-output K sequence, same4096 total grid warps and approximate32 residentwarps per SM. No claim of increased residentwarp count. W/CSR source load count unchanged; actual DRAM traffic unmeasured.",
+  "escape_ownership": "Separate _gvesc allocation for each actual geometry, both131072 int32words. CurrentW and lossless codec shared; complete immutability checked for both packs.",
+  "bounds": {"inner_seconds":120,"outer_seconds":240,"full_prepare_calls":0,"profiler_calls":0,"SASS_runtime_gates":0},
+  "validation": "Original reviewed maskgate driver protocol reused: M1/M8,64 selected basiscolumns eacharmcell, currentX FP64/task normal/outlier/zero checks,162timed/20warm calls,8own-terminal sites checked before replay/mutation,20graph mutations, full scratch/counter/weight/pack immutability, guarded buffers, graph drain/reset.",
+  "CPU_compile_scope": "Two exact nativefunctions plus Tensorhostbinding; no all95compile/fullproof. Pilot body/helper prefix matches prior frozen current-predxor prefix except scope assertion and explicit instantiation list. Local declaration-only stream seam is not remote ABI/load/numeric proof.",
+  "prior_evidence": "P2 qkv related WR1/WK16 controls and PW42B XS2/unrolled geometry already tested; this exact pooler rolledXS0 form was absent inspected GVI. No KU16 SHFL, maskgate, emptyguard, deep rings or RT2 route is repeated.",
+  "admission": "Root only GPU. Fixed-template result does not establish selected-policy or official gain. Keep tiny signed/conflicting observations; no minimum gain filter. Full120/240 reservation includes compile/pack/validate/timing/cleanup."
+}

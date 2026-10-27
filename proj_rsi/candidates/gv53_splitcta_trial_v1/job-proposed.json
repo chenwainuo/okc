@@ -1,0 +1,103 @@
+{
+  "id": "research.gv53.splitcta.fixed.01",
+  "resource": "gpu",
+  "kind": "optimization",
+  "state": "BACKLOG",
+  "author": "scheduler_fastpath",
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 2.9161139478576454,
+      "p_gain": 0.1,
+      "p_valid": 0.8
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "No separate information credit; scoped fixed contrast only."
+    },
+    "confidence": "CPU_ONLY_UNMEASURED",
+    "basis": "Unmeasured planning scenario only: hypothetical0.1us in each currentofficialM1/M8cell, same score scenario/priors as reviewed maskgate screen. Changes CTA geometry only in explicit direct-predxor pilot; same totalwarps and no occupancy-increase claim. Currentserving whitelist excludes newtuple, so no selected-policy result is asserted.",
+    "evidence": [
+      "proj_rsi/candidates/gv53_splitcta_trial_v1/cpu-proof.json",
+      "proj_rsi/candidates/gv53_splitcta_trial_v1/harness-cpu-proof.json",
+      "proj_rsi/candidates/gv53_splitcta_trial_v1/scope.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 240,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 30
+  },
+  "files": {
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "proj_rsi/candidates/gv53_maskgate_v1/pilot.cu": "6450588bfb56865006140ea3dece24856f262e59dc7ec9e11f2b0f0b1e1f3e1a",
+    "proj_rsi/candidates/gv53_splitcta_trial_v1/binding.cu": "c92c07d56bf9d320a3d60723ea7906f76ed69888ce472bcdbf92c20c63a44e97",
+    "proj_rsi/candidates/gv53_splitcta_trial_v1/compile-result.json": "65b5bb98906d5d380d2490f7fbebadffa3701844bf998b4e12901abac0532fe1",
+    "proj_rsi/candidates/gv53_splitcta_trial_v1/cpu-proof.json": "f71d463009f004cffc9852dda7cc705b0f8767998f103519f00aa72628f5ce2c",
+    "proj_rsi/candidates/gv53_splitcta_trial_v1/driver.py": "e4a8760d7072f90d70b18de52ae69ab20d012f846aec14d40db3be9a3e7c3ee1",
+    "proj_rsi/candidates/gv53_splitcta_trial_v1/pilot.cu": "8d5b488ca4b48c8c2b0c2e06602d500a65c68f51e12326d360330fef9376dc1b",
+    "proj_rsi/candidates/gv53_splitcta_trial_v1/proof.py": "d5605b479e0def4621eee81a7ca3d46c31693308505376756f1ac1388612f416",
+    "proj_rsi/candidates/gv53_splitcta_trial_v1/scope.json": "4ee032dbd17234b39a97b1b10a6e6cee05126cbdb6f024875e45e58280070ecc",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/scheduling/reviews/gv53-maskgate-01.md": "8250b0dc4ea6ebbc5e005ef9134d6ab5d8f858c857062bb6a01005aeb1d1e376",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/candidates/gv53_splitcta_trial_v1/harness-cpu-proof.json": "b914441de0999695f13d06a274fee672990a38ee9d6cf4c7e8ef514c4f9f53d8",
+    "proj_rsi/candidates/gv53_splitcta_trial_v1/manifest.json": "fe9ee234aff222949fbaeaf44afa9661d101a2ce75abdf0d46d0467e1d355317"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-gv53-splitcta-01",
+    "inner_seconds": 120,
+    "outer_seconds": 240,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/gv53_splitcta_trial_v1/driver.py",
+      "--output",
+      "/okc/logs/scheduler/gv53-splitcta-01/run",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/gv53-splitcta-01.md"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv53-splitcta-01"
+    ]
+  },
+  "annotations": {
+    "status": "FOCUSED_INDEPENDENT_GO_NOT_REGISTERED",
+    "scope": {
+      "fixed_cells": 2,
+      "timed_calls": 162,
+      "warmup_calls": 20,
+      "terminal_sites": 8,
+      "mutations": 20,
+      "basis_columns_per_arm_cell": 64,
+      "full_prepare_calls": 0,
+      "profiler_calls": 0,
+      "SASS_gates": 0
+    },
+    "source_sha256": "8d5b488ca4b48c8c2b0c2e06602d500a65c68f51e12326d360330fef9376dc1b",
+    "costs": "Entire240s reservation includes compile/load/weights/packing/smoke/timing; costs recorded by phase. No local/official followup authorized or budgeted here; any later policy/official work requires separate root pricing. CPU30min planning cap is not observed usage.",
+    "limits": "No fullprepare/profiler/SASS dependency; no minimumgain threshold; preserve all partial artifacts/invalid attempts and tiny/conflicting observations. Fixed kernel result is not policy or official gain.",
+    "source_scope": "Direct explicit predxor tuple8195, absent current501d serving whitelist. Same4096warps; CTAcount128to256, threads1024to512, shared17408to8704. Pergeometry escape packs."
+  },
+  "review": {
+    "actor": "rq_lab_review",
+    "path": "proj_rsi/scheduling/reviews/gv53-splitcta-01.md",
+    "sha256": "50d38950001c0f00d9cda75f0bc837108bfc97c936cc258dfbb6e86f8176258c",
+    "decision": "GO"
+  },
+  "created_at": 1793129020.455544
+}

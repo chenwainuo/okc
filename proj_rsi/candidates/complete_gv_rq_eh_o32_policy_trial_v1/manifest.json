@@ -1,0 +1,47 @@
+{
+  "version": "complete-compatible-GV-RQ-EH-O32-versus-currentGV-v1",
+  "state": "CPU_SOURCE_BINDING_DELTA_GPU_UNRUN",
+  "files": {
+    "proj_rsi/candidates/gv_private_eh_policy_trial_v1/driver.py": "7b71815ead01a12af83949125b4c311c9ea9d8003e4811125fc86012b221a432",
+    "proj_rsi/candidates/complete_gv_rq_eh_o32_policy_trial_v1/driver.py": "4cae4c9022600c6466145e3be74f12dd902a73c48cf004849a4797f1fd88aec0",
+    "proj_rsi/candidates/policy_integration_trial_v1/support.py": "dc4286bc47af139767e860fd602b3d385a847eada81d1a90d05a385644e15e24",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/candidates/complete_gv_rq_eh_o32_v1/submission.py": "d1ca973956a3a968796964679e8685741dba0d390e8f4c09f4b0794be108872b"
+  },
+  "derivation": {
+    "base_path": "proj_rsi/candidates/gv_private_eh_policy_trial_v1/driver.py",
+    "base_sha256": "7b71815ead01a12af83949125b4c311c9ea9d8003e4811125fc86012b221a432",
+    "edits": [
+      {
+        "name": "complete-trial-binding",
+        "before": "TRIAL=ROOT/'proj_rsi/candidates/gv_private_eh_policy_trial_v1'",
+        "after": "TRIAL=ROOT/'proj_rsi/candidates/complete_gv_rq_eh_o32_policy_trial_v1'"
+      },
+      {
+        "name": "complete-source-binding",
+        "before": "ALLOWED={'gv_predxor_pw45_v2':'501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9','gv_private_eh_screen_v1':'aaf40d39d38a963efd2d634ad003c0558ad3f7921916934ed3749c207cb855d7'}",
+        "after": "ALLOWED={'gv_predxor_pw45_v2':'501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9','complete_gv_rq_eh_o32_v1':'d1ca973956a3a968796964679e8685741dba0d390e8f4c09f4b0794be108872b'}"
+      },
+      {
+        "name": "complete-candidate",
+        "before": "CANDIDATES={'private_free':'gv_private_eh_screen_v1'}",
+        "after": "CANDIDATES={'complete':'complete_gv_rq_eh_o32_v1'}"
+      },
+      {
+        "name": "complete-default-pins",
+        "before": "PINS={key:ALLOWED[key]for key in ('gv_predxor_pw45_v2','gv_private_eh_screen_v1')}",
+        "after": "PINS={key:ALLOWED[key]for key in ('gv_predxor_pw45_v2','complete_gv_rq_eh_o32_v1')}"
+      },
+      {
+        "name": "complete-default-candidate",
+        "before": "default='private_free'",
+        "after": "default='complete'"
+      }
+    ]
+  },
+  "reused_scope": "Exact completed privateEHfullpolicy timing/selection/resource/checkloops; five source/trial/candidatebinding edits only; actualcurrentGVcontrol."
+}

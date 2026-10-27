@@ -1,0 +1,107 @@
+{
+  "id": "complete.gv.rq.eh.o32.fullpolicy.01",
+  "resource": "gpu",
+  "kind": "optimization",
+  "state": "BACKLOG",
+  "author": "process_history_audit",
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 1,
+      "p_gain": 0.3,
+      "p_valid": 0.9
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "Measure actual combined fullpolicy marginal effect after selected current-parent pooler point gain; retain all signs."
+    },
+    "basis": "Low-confidence subjective1score-us wholepackage scenario only, not measured and not sum of component points. CurrentbestGVcontrol versus completeGV+RQpredxor+privateEH+O32factor. Prior RQ/EH official losses and combined03/individual mixed points retained. Existing1020s cap and20CPUmin reuse/focusedreview/analysis; no speed forecast.",
+    "confidence": "low",
+    "evidence": [
+      "proj_rsi/candidates/complete_gv_rq_eh_o32_v1/source-proof.json",
+      "proj_rsi/audits/gv-private-eh-policy-result/report.md",
+      "proj_rsi/audits/gv-o32-positive-policy-result/report.md",
+      "proj_rsi/audits/combined-direct-policy-result/current-gv-report.md"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 1020,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 20
+  },
+  "files": {
+    "proj_rsi/candidates/gv_private_eh_policy_trial_v1/driver.py": "7b71815ead01a12af83949125b4c311c9ea9d8003e4811125fc86012b221a432",
+    "proj_rsi/candidates/complete_gv_rq_eh_o32_policy_trial_v1/driver.py": "4cae4c9022600c6466145e3be74f12dd902a73c48cf004849a4797f1fd88aec0",
+    "proj_rsi/candidates/policy_integration_trial_v1/support.py": "dc4286bc47af139767e860fd602b3d385a847eada81d1a90d05a385644e15e24",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/candidates/complete_gv_rq_eh_o32_v1/submission.py": "d1ca973956a3a968796964679e8685741dba0d390e8f4c09f4b0794be108872b",
+    "proj_rsi/candidates/complete_gv_rq_eh_o32_policy_trial_v1/manifest.json": "1f286a76cb870ea3630af59804c17378d10e160c4292bdd0fb08255aa15401e9"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-complete-gv-rq-eh-o32-policy-01",
+    "inner_seconds": 900,
+    "outer_seconds": 1020,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/complete_gv_rq_eh_o32_policy_trial_v1/driver.py",
+      "--control",
+      "gv_predxor_pw45_v2",
+      "--candidate",
+      "complete",
+      "--output",
+      "/okc/logs/scheduler/complete-gv-rq-eh-o32-policy-01/run",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/complete-gv-rq-eh-o32-policy-01.md"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/complete-gv-rq-eh-o32-policy-01"
+    ]
+  },
+  "annotations": {
+    "scope": {
+      "policies": 2,
+      "shapes": 30,
+      "task_checks": 148,
+      "raw_timing_calls": 2910,
+      "terminal_oracles": 120,
+      "mutations": 240,
+      "fixed_arms": 0,
+      "profiler_calls": 0
+    },
+    "bounds": {
+      "inner_seconds": 900,
+      "outer_seconds": 1020,
+      "profile": false
+    },
+    "review_binding": "DRAFT: independent rq focused review attaches actual GO receipt before root admission.",
+    "reused_scope": "Existing privateEHwhole30driver unchanged except source/trial/defaultbindings; all compatible measured mechanisms composed; keepchoice alternative excluded; no additive claim or awaitofficialEH requirement.",
+    "source_review": {
+      "path": "proj_rsi/candidates/complete_gv_rq_eh_o32_v1/source-proof.json",
+      "sha256": "a7880460bec2ca0e239d57f1c3a23de9a0db22a3014416909382703e8ccdd3a6"
+    }
+  },
+  "created_at": 1793128300.6139667,
+  "review": {
+    "actor": "rq_lab_review",
+    "path": "proj_rsi/scheduling/reviews/complete-gv-rq-eh-o32-policy-01.md",
+    "sha256": "b7bfbfb08f6c0864d49612cf6d21d8348f3a1b1c5acf175892f04d3df1802358",
+    "decision": "GO"
+  }
+}

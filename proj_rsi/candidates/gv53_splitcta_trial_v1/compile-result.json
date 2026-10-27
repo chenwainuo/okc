@@ -1,0 +1,25 @@
+{
+  "state": "PASS_TWO_KERNEL_HOST_BINDING_CPU_COMPILE",
+  "argv": [
+    "/usr/local/cuda-12.8/bin/nvcc",
+    "-std=c++20",
+    "-O3",
+    "-lineinfo",
+    "-gencode=arch=compute_90a,code=sm_90a",
+    "-Xptxas=-v",
+    "-I",
+    "/home/ubuntu/.local/lib/python3.10/site-packages/torch/include",
+    "-I",
+    "/home/ubuntu/.local/lib/python3.10/site-packages/torch/include/torch/csrc/api/include",
+    "-c",
+    "/home/ubuntu/okc/proj_rsi/candidates/gv53_splitcta_trial_v1/focused-binding.cu",
+    "-o",
+    "/home/ubuntu/okc/proj_rsi/candidates/gv53_splitcta_trial_v1/focused-binding.o"
+  ],
+  "returncode": 0,
+  "seconds_observed": 6.130460489541292,
+  "resources": "Two exactsymbols,64regs/zero stack/spills each",
+  "local_Torch": "2.13.0+cpu",
+  "limits": "Real localTensor API with declaration-only CUDA current-stream seam/C++20. RemoteABI/JIT/load/occupancy/numeric unmeasured.",
+  "GPU_calls": 0
+}

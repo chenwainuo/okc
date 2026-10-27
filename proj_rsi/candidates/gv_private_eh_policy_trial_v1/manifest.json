@@ -1,0 +1,57 @@
+{
+  "version": "gv-private-free-actual-policy-v1",
+  "state": "CPU_BINDING_DELTA_GPU_UNRUN",
+  "files": {
+    "proj_rsi/candidates/policy_selection_trial_v2/driver.py": "b511d45fbcf918db16fd5462f733cd6ec6e91e0defceee1657603c0e9d8bddb8",
+    "proj_rsi/candidates/policy_integration_trial_v1/support.py": "dc4286bc47af139767e860fd602b3d385a847eada81d1a90d05a385644e15e24",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/candidates/gv_private_eh_screen_v1/submission.py": "aaf40d39d38a963efd2d634ad003c0558ad3f7921916934ed3749c207cb855d7",
+    "proj_rsi/candidates/gv_private_eh_policy_trial_v1/driver.py": "7b71815ead01a12af83949125b4c311c9ea9d8003e4811125fc86012b221a432"
+  },
+  "derivation": {
+    "base_path": "proj_rsi/candidates/policy_selection_trial_v2/driver.py",
+    "base_sha256": "b511d45fbcf918db16fd5462f733cd6ec6e91e0defceee1657603c0e9d8bddb8",
+    "edits": [
+      {
+        "name": "new-trial-binding",
+        "before": "TRIAL=ROOT/'proj_rsi/candidates/policy_selection_trial_v2'",
+        "after": "TRIAL=ROOT/'proj_rsi/candidates/gv_private_eh_policy_trial_v1'"
+      },
+      {
+        "name": "two-current-source-bindings",
+        "before": "ALLOWED={'pw45': '835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3', 'gv_predxor_pw45_v2': '501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9', 'rq32_gv_predxor_pw45_v1': '137e0dbce0f0126ef9c72d4b6e9b48e0448b02d0c397d9cc0ba927bac2d2a4a6', 'gv_predxor_keepchoice_v1': '244e5b7d6bb8a68b503eebf09dd5c2d6cfba5a579680c24381018c918a802b4a', 'combined_positive_selection_v1': '44d1693ec289630ef25c97a78deb99c8aef9d3ecb06b201aed3eeca215210797', 'gv_o32_positive_selection_v1': 'e0f1f712868f8a092a5e96c010420fcc92562291b051d391c9bc77abf0f5bba2'}",
+        "after": "ALLOWED={'gv_predxor_pw45_v2':'501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9','gv_private_eh_screen_v1':'aaf40d39d38a963efd2d634ad003c0558ad3f7921916934ed3749c207cb855d7'}"
+      },
+      {
+        "name": "private-free-choice-only",
+        "before": "CANDIDATES={'keepchoice': 'gv_predxor_keepchoice_v1', 'positive_selection': 'combined_positive_selection_v1', 'o32_positive': 'gv_o32_positive_selection_v1'}",
+        "after": "CANDIDATES={'private_free':'gv_private_eh_screen_v1'}"
+      },
+      {
+        "name": "default-two-policy-binding",
+        "before": "PINS={key:ALLOWED[key]for key in ('gv_predxor_pw45_v2','gv_o32_positive_selection_v1')}",
+        "after": "PINS={key:ALLOWED[key]for key in ('gv_predxor_pw45_v2','gv_private_eh_screen_v1')}"
+      },
+      {
+        "name": "preserve-private-shared-query-domain",
+        "before": "assert attrs[2]==1024+st*(nt*128+(6144 if fl&16 else 12288))+24*st+16",
+        "after": "assert attrs[2]==(178176 if fl&262144 else 1024+st*(nt*128+(6144 if fl&16 else 12288))+24*st+16)"
+      },
+      {
+        "name": "fixed-current-control",
+        "before": "choices=('pw45','gv_predxor_pw45_v2','rq32_gv_predxor_pw45_v1')",
+        "after": "choices=('gv_predxor_pw45_v2',)"
+      },
+      {
+        "name": "default-private-free",
+        "before": "default='o32_positive'",
+        "after": "default='private_free'"
+      }
+    ]
+  },
+  "reused_scope": "Existing two-arm32-pair actual policy integration/selection driver; prior privateEHsourceproof and successful narrowruntime reused; no fixed arms/profiler/newproof"
+}

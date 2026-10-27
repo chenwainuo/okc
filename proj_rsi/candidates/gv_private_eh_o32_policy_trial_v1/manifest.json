@@ -1,0 +1,52 @@
+{
+  "version": "local-EH-control-plus-O32-incremental-v1",
+  "state": "CPU_BINDING_DELTA_GPU_UNRUN",
+  "files": {
+    "proj_rsi/candidates/gv_private_eh_policy_trial_v1/driver.py": "7b71815ead01a12af83949125b4c311c9ea9d8003e4811125fc86012b221a432",
+    "proj_rsi/candidates/gv_private_eh_o32_policy_trial_v1/driver.py": "4e886e722dcc4badfa7fe21b520031f6a4f89bf5f3d8c28fc78a2d5e2aff453b",
+    "proj_rsi/candidates/policy_integration_trial_v1/support.py": "dc4286bc47af139767e860fd602b3d385a847eada81d1a90d05a385644e15e24",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/candidates/gv_private_eh_screen_v1/submission.py": "aaf40d39d38a963efd2d634ad003c0558ad3f7921916934ed3749c207cb855d7",
+    "proj_rsi/candidates/gv_private_eh_o32_v1/submission.py": "c425148c973480565bbf966721a7e24e96ea777d19ab099c1bf48282ca38f716"
+  },
+  "derivation": {
+    "base_path": "proj_rsi/candidates/gv_private_eh_policy_trial_v1/driver.py",
+    "base_sha256": "7b71815ead01a12af83949125b4c311c9ea9d8003e4811125fc86012b221a432",
+    "edits": [
+      {
+        "name": "trial-binding",
+        "before": "TRIAL=ROOT/'proj_rsi/candidates/gv_private_eh_policy_trial_v1'",
+        "after": "TRIAL=ROOT/'proj_rsi/candidates/gv_private_eh_o32_policy_trial_v1'"
+      },
+      {
+        "name": "EH-local-control-and-composition-source",
+        "before": "ALLOWED={'gv_predxor_pw45_v2':'501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9','gv_private_eh_screen_v1':'aaf40d39d38a963efd2d634ad003c0558ad3f7921916934ed3749c207cb855d7'}",
+        "after": "ALLOWED={'gv_private_eh_screen_v1':'aaf40d39d38a963efd2d634ad003c0558ad3f7921916934ed3749c207cb855d7','gv_private_eh_o32_v1':'c425148c973480565bbf966721a7e24e96ea777d19ab099c1bf48282ca38f716'}"
+      },
+      {
+        "name": "candidatebinding",
+        "before": "CANDIDATES={'private_free':'gv_private_eh_screen_v1'}",
+        "after": "CANDIDATES={'eh_o32':'gv_private_eh_o32_v1'}"
+      },
+      {
+        "name": "defaultpolicybinding",
+        "before": "PINS={key:ALLOWED[key]for key in ('gv_predxor_pw45_v2','gv_private_eh_screen_v1')}",
+        "after": "PINS={key:ALLOWED[key]for key in ('gv_private_eh_screen_v1','gv_private_eh_o32_v1')}"
+      },
+      {
+        "name": "localEHcontrol",
+        "before": "choices=('gv_predxor_pw45_v2',),default='gv_predxor_pw45_v2'",
+        "after": "choices=('gv_private_eh_screen_v1',),default='gv_private_eh_screen_v1'"
+      },
+      {
+        "name": "candidate-default",
+        "before": "default='private_free'",
+        "after": "default='eh_o32'"
+      }
+    ]
+  },
+  "reused_scope": "Exact existing privateEHfullpolicy runner; only source/trial/control/candidate bindings changed. Local EH control does not require scored result first."
+}

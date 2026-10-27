@@ -45,15 +45,18 @@ def _sha(path):
 
 # These scripts are data for an SSH python process. No shell interpolates job data.
 _INVENTORY = r'''
-import hashlib,json,pathlib,sys
-root=pathlib.Path(sys.argv[1]).resolve(); result={}; missing=[]; allow_missing=len(sys.argv)>3
+import hashlib,json,os,pathlib,sys
+root=pathlib.Path(sys.argv[1]).resolve(); result={}; missing=[]; symlinks={}; allow_missing=len(sys.argv)>3
 for rel in json.loads(sys.argv[2]):
  p=root/rel
  if not p.exists() and allow_missing: missing.append(rel); continue
  if p.resolve()!=p or not p.is_relative_to(root): raise RuntimeError('unsafe remote path')
  paths=sorted(p.rglob('*')) if p.is_dir() else [p]
  for f in paths:
-  if f.is_symlink(): raise RuntimeError('remote symlink')
+  if f.is_symlink():
+   if not allow_missing: raise RuntimeError('remote symlink')
+   symlinks[str(f.relative_to(root))]=os.readlink(f)
+   continue
   if not f.is_file():
    if f.is_dir(): continue
    raise RuntimeError('missing remote artifact: '+str(f))
@@ -62,7 +65,7 @@ for rel in json.loads(sys.argv[2]):
   with f.open('rb') as stream:
    for block in iter(lambda:stream.read(1048576),b''): h.update(block)
   result[str(f.relative_to(root))]=h.hexdigest()
-print(json.dumps({'files':result,'missing':missing} if allow_missing else result,sort_keys=True))
+print(json.dumps({'files':result,'missing':missing,'symlinks':symlinks} if allow_missing else result,sort_keys=True))
 '''
 
 _PROBE = r'''
@@ -338,6 +341,13 @@ class GPUDispatcher:
             remote_inventory = self.transport.inventory(HOST, REMOTE_REPO, paths)
             expected=remote_inventory.get('files',remote_inventory)
             missing=remote_inventory.get('missing',[]) if 'files' in remote_inventory else []
+            symlinks=remote_inventory.get('symlinks',{}) if 'files' in remote_inventory else {}
+            if not isinstance(symlinks,dict):raise ValueError('invalid symlink metadata')
+            for rel,target in symlinks.items():
+                _relative(rel)
+                if not isinstance(target,str) or not any(rel == p or rel.startswith(p + '/') for p in paths):
+                    raise ValueError('unexpected symlink metadata')
+                if rel in expected:raise ValueError('symlink cannot also be a transferred file')
             if not isinstance(missing,list) or any(p not in paths for p in missing):raise ValueError('invalid missing-artifact inventory')
             if not expected: raise ValueError('empty artifact inventory')
             for rel, digest in expected.items():
@@ -352,6 +362,7 @@ class GPUDispatcher:
                 if p.resolve() != p or not p.is_file() or _sha(p) != digest:
                     raise ValueError('collected artifact hash mismatch: ' + rel)
             inventory = {'job_id': job_id, 'terminal_exit': probe['terminal_exit'], 'files': expected, 'missing':missing,
+                         'symlinks_not_followed_or_materialized':symlinks,
                          'dispatch': handles, 'cleanup_observation': probe, 'collected_at': time.time(),
                          'validation': 'ROOT_VALIDATION_REQUIRED_NO_PERFORMANCE_ADMISSION'}
             inventory_path = destination / 'inventory.json'
