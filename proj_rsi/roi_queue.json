@@ -42,63 +42,69 @@
   },
   "loop_contract": "proj_rsi/ITERATION.md",
   "loop": "profile -> measure -> hypothesis -> optimize/reimplement -> test -> validate -> stack -> submit measured gains -> learn -> reprioritize -> repeat; deliberate idle<=10s",
-  "view_updated_at_utc": "2026-10-27T23:29:42.837316+00:00",
-  "ranking_method": "Only current active follow-up is production M1keyed+M8earlyload source integration pending review/transfer. Earlyload fixed VALID_GAIN1853 is completed evidence, not a running queue entry. Earlier priors/budgets are historical, not automatically applied to new production source.",
+  "view_updated_at_utc": "2026-10-27T23:40:45.660248+00:00",
+  "ranking_method": "Active CPU preparation only; root priority ordering, attainable gains/expected score ROI remain UNKNOWN. Completed local and official results are historical evidence, not active slots.",
   "active_opportunities": [
     {
       "problem": "muse_bf16_proj",
       "priority_rank": 1,
-      "id": "projection.production.M1keyed_M8earlyload",
-      "title": "Production integration: M1 keyed + M8 early-load",
-      "work_kind": "source_integration_and_transfer_validation",
-      "planning_readiness": "CPU_PRODUCTION_SOURCE_BUILDING",
+      "id": "projection.unpool16.xprefetch.optional",
+      "title": "Optional unpoolerM16 Xprefetch production integration",
+      "owner": "moe_result_repair",
+      "work_kind": "CPU_source_and_focused_review",
+      "planning_readiness": "PREPARING_OR_REVIEWING_AT_CUT",
       "GPU_admitted": false,
       "actual_runtime_READY": false,
-      "production_source_sha256": null,
-      "combined_source_artifact": null,
-      "actual_selected_execution": null,
-      "measured_combined_gain_us": null,
-      "official_job_id": null,
-      "official_score_us": null,
+      "artifact_directory": "proj_rsi/candidates/gv_unpool16_xprefetch_choice_v1",
       "attainable_gain_us": null,
       "expected_score_gain_us": null,
       "approved_new_cost_or_priors": null,
-      "components": [
-        {
-          "target": "M1 keyed",
-          "evidence_type": "same-H200-prepare target comparison",
-          "paired_tuning_input_us": 0.04800036549568176,
-          "scope_limit": "Not a paired official-case gain; prior whole CHECK lost. Final production branch/dispatch not yet supplied.",
-          "evidence": {
-            "path": "proj_rsi/audits/gv53-keyed-choice-result-v1/analysis.json",
-            "sha256": "67095da4af59e8988e9a1b6380877a190e1369b51ed5e8c8cbb3add41bbd2bc6"
-          }
-        },
-        {
-          "target": "M8 earlyload",
-          "source_sha256": "81fdc825bc21a568db8082873892982fb16eff5fbbc894baed2211a58aef1791",
-          "evidence_type": "valid fixed current501d target measurement",
-          "paired_gain_us": 0.19200053066015244,
-          "F1_endpoint_average_us": 0.1600002869963646,
-          "scope_limit": "Fixed H100M8 gain; selected production policy and official transfer remain unmeasured.",
-          "evidence": {
-            "path": "proj_rsi/audits/gv53-earlyload-result-v1/analysis.json",
-            "sha256": "28150cae7639fab88467fb22007e5af2a17fa70a9e1c7e291e4357f0ca03f9eb"
-          }
-        }
-      ],
-      "next_falsifier": "Freeze/review the actual combined source and dispatch, reuse unchanged codec/math/native/ABI proof, then inspect its own selected paths/correctness/whole result versus current501d. Preserve source inclusion versus selected execution. Do not add isolated M1/M8 gains or claim an official improvement before its own receipt.",
-      "history_ref": "proj_rsi/history_catalog.json"
+      "scope_limit": "Fixed local+.576us/21W3L; F1 endpoints\u2212.128/+.544us. New policy selection and official transfer unmeasured.",
+      "next_falsifier": "Freeze source/review and obtain root admission for the changed behavior; inspect own current-parent result and actual selected execution."
+    },
+    {
+      "problem": "muse_bf16_proj",
+      "priority_rank": 2,
+      "id": "projection.gv53.M8.Wonly",
+      "title": "GV53 M8 W-only earlier issue falsifier",
+      "owner": "scheduler_fastpath",
+      "work_kind": "CPU_source_and_focused_review",
+      "planning_readiness": "PREPARING_OR_REVIEWING_AT_CUT",
+      "GPU_admitted": false,
+      "actual_runtime_READY": false,
+      "artifact_directory": null,
+      "attainable_gain_us": null,
+      "expected_score_gain_us": null,
+      "approved_new_cost_or_priors": null,
+      "scope_limit": "Remove X snapshot/leave X late; prior earlyload fixed gain did not select on official40d M8. New version unmeasured.",
+      "next_falsifier": "Freeze source/review and obtain root admission for the changed behavior; inspect own current-parent result and actual selected execution."
+    },
+    {
+      "problem": "muse_bf16_proj",
+      "priority_rank": 3,
+      "id": "projection.rq.pooler32.lookahead",
+      "title": "RQ poolerM32 escape-lookahead trial",
+      "owner": "moe_decode_lut",
+      "work_kind": "CPU_source_and_focused_review",
+      "planning_readiness": "PREPARING_OR_REVIEWING_AT_CUT",
+      "GPU_admitted": false,
+      "actual_runtime_READY": false,
+      "artifact_directory": null,
+      "attainable_gain_us": null,
+      "expected_score_gain_us": null,
+      "approved_new_cost_or_priors": null,
+      "scope_limit": "Exact current counters motivate dependency separation;168regs/0spill static with+112instructions/+5SHFL does not prove speed.",
+      "next_falsifier": "Freeze source/review and obtain root admission for the changed behavior; inspect own current-parent result and actual selected execution."
     }
   ],
   "runtime_observation": {
-    "source": "Fresh root coordinator report",
-    "sequence": 1853,
-    "state": "EARLYLOAD_DONE_VALID_GAIN_QUEUE_EMPTY",
+    "source": "Root frozen handover at2026-10-27T23:40:45.660248+00:00",
+    "sequence": 1897,
+    "state": "QUEUE_EMPTY_AT_COMPLETED_CUT",
     "eligible_GPU_jobs": 0,
     "physical_GPU_utilization": null,
-    "active_CPU_preparation": "Explicit M1keyed+M8earlyload production being built",
-    "note": "Completed earlyload is historical evidence. No new GPU admission or official result reported; do not infer physicalutilization from empty queue."
+    "active_CPU_preparation": "Optional unpoolerM16 Xprefetch integration; GV53 M8 W-only falsifier; RQ poolerM32 escape lookahead",
+    "note": "Timestamped observation, not a live poll; no READY/admission inferred."
   },
   "conditional_scenario_method": {
     "official_source": {
@@ -119,8 +125,8 @@
     "note": "All prior signed measurements/sources and completed losses remain historical evidence; they are counterevidence, not active queue entries.",
     "newly_completed_reference_index": "proj_rsi/audits/projection-completed-live-references-quarter-lane-abi-v1-20261027.json",
     "canonical_batch_for_new_results_pending": false,
-    "latest_completed_cut": "proj_rsi/audits/projection-six-completed-cut-20261027T2313.json",
-    "scope_note": "Canonical history now includes the six-job cut; all timing signs/diagnostic limits retained. Earlyload ongoing result is outside this cut.",
+    "latest_completed_cut": "proj_rsi/audits/projection-production-DONE1897-cut-v1-20261027.json",
+    "scope_note": "Canonical cut includes production bodies/RQcounter/Xprefetch and own scored40d; all signs/selection contexts retained.",
     "latest_completed_earlyload": "proj_rsi/audits/projection-earlyload-DONE1853-cut-v1-20261027.json"
   },
   "root_adopted_planning_priors": null,
@@ -254,7 +260,13 @@
       "path": "proj_rsi/audits/gv53-earlyload-result-v1/manifest.json",
       "sha256": "4ab5f3c5c8bf3e6afef299459a4f677056f9e99871f03cda174866fe366fae3f"
     },
-    "policy_or_official_result": null,
+    "policy_or_official_result": {
+      "job_id": "40d856e085274f51",
+      "M8_actual_selected": "parent",
+      "official_score_us": 3175.899650724306,
+      "source": "17d44d1140ab09cdbab1f2835841e2891fc1c7c01c1eb4d9a2833c242d99a3e6",
+      "scope": "Own optional production result; fixed earlyload gain did not transfer into selectedM8 execution."
+    },
     "combined_gain_claim": false
   },
   "historical_earlyload_planning": {
@@ -342,5 +354,33 @@
     "conditional_score_us": 9.726540498180384,
     "bound_seconds": 120,
     "not_forecast": true
+  },
+  "completed_production_cut": {
+    "official_job_id": "40d856e085274f51",
+    "source_sha256": "17d44d1140ab09cdbab1f2835841e2891fc1c7c01c1eb4d9a2833c242d99a3e6",
+    "score_us": 3175.899650724306,
+    "tests_passed": 9,
+    "tests": 9,
+    "decision": "REFINE",
+    "actual_selection": {
+      "poolerM1": "keyed",
+      "poolerM8": "parent predxor"
+    },
+    "best_unchanged_us": 3157.0384036526784,
+    "fixed_body_paired_us": {
+      "M1": -0.04800036549568176,
+      "M8": 0.031999312341213226
+    },
+    "fixed_body_F1_average_us": {
+      "M1": -0.960000790655613,
+      "M8": 0.17600040882825851
+    },
+    "unpoolM16_xprefetch_paired_us": 0.5760006606578827,
+    "unpoolM16_xprefetch_F1_endpoints_us": [
+      -0.12799911201000214,
+      0.5440004169940948
+    ],
+    "RQ_exactSO": "VALID_NO_GAIN counter diagnostic; no speed claim",
+    "combined_or_official_Xprefetch_gain": null
   }
 }

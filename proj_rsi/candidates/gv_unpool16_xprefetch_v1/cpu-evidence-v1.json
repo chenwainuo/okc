@@ -1,0 +1,148 @@
+{
+  "scope": "CPU compiled candidate only; no GPU execution, runtime occupancy, task numeric validation, timing or official gain",
+  "parent_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+  "template": [
+    1,
+    2,
+    2,
+    1,
+    4,
+    16,
+    1,
+    1,
+    2,
+    1
+  ],
+  "collected_parent_instruction_encoding_match": true,
+  "current_operand_address_regression": {
+    "units": 16,
+    "tokens": 2,
+    "vector_loads": 64,
+    "bounds": "no u16 load",
+    "result": "PASS"
+  },
+  "instruction_counts": {
+    "control": {
+      "LDC": 4,
+      "S2R": 5,
+      "ULDC": 23,
+      "IMAD": 116,
+      "SHF": 164,
+      "LOP3": 511,
+      "LEA": 30,
+      "VIMNMX": 3,
+      "LDG": 113,
+      "VIADD": 153,
+      "VIADDMNMX": 1,
+      "USHF": 2,
+      "SHFL": 17,
+      "PRMT": 262,
+      "BRA": 54,
+      "ISETP": 358,
+      "P2R": 16,
+      "HMMA": 128,
+      "NOP": 30,
+      "S2UR": 2,
+      "UMOV": 1,
+      "ULEA": 1,
+      "STS": 2,
+      "BAR": 1,
+      "EXIT": 3,
+      "BSSY": 4,
+      "IADD3": 3,
+      "LDS": 12,
+      "FADD": 36,
+      "F2FP": 9,
+      "STG": 12,
+      "BSYNC": 4
+    },
+    "candidate": {
+      "LDC": 4,
+      "S2R": 5,
+      "ULDC": 23,
+      "IMAD": 116,
+      "SHF": 164,
+      "LOP3": 511,
+      "VIMNMX": 3,
+      "LEA": 30,
+      "VIADD": 153,
+      "LDG": 113,
+      "VIADDMNMX": 1,
+      "USHF": 2,
+      "SHFL": 17,
+      "PRMT": 261,
+      "BRA": 54,
+      "ISETP": 358,
+      "P2R": 16,
+      "HMMA": 128,
+      "NOP": 31,
+      "S2UR": 2,
+      "UMOV": 1,
+      "ULEA": 1,
+      "STS": 2,
+      "BAR": 1,
+      "EXIT": 3,
+      "BSSY": 4,
+      "IADD3": 3,
+      "LDS": 12,
+      "FADD": 36,
+      "F2FP": 9,
+      "STG": 12,
+      "BSYNC": 4
+    }
+  },
+  "resource": {
+    "control_registers": 110,
+    "candidate_registers": 126,
+    "stack_bytes": 0,
+    "spill_loads_bytes": 0,
+    "spill_stores_bytes": 0,
+    "threads": 128,
+    "rounded_registers_per_thread": 128,
+    "SM_register_bound_CTAs": 4,
+    "actual_candidate_runtime_active_CTAs": "UNKNOWN",
+    "parent_observed_runtime_active_CTAs": 4,
+    "dynamic_shared_bytes": 5120,
+    "static_shared_bytes": 1024
+  },
+  "source_semantics": "Only X fetch staging/address time changed; current operands snapshot before next slot overwrite. Original W loads, global load cache policy, exponent decode, repair list cursor/order, accumulation, reduction and output ownership retained. Immutable X throughout invocation is required and already part of task contract.",
+  "SASS_motion": {
+    "control_next_X_u1": [
+      "0xab0",
+      "0xac0",
+      "0xad0",
+      "0xae0"
+    ],
+    "candidate_next_X_u1": [
+      "0x4a0",
+      "0x4b0",
+      "0x4c0",
+      "0x4d0"
+    ],
+    "candidate_first_decode_PRMT": "0x580",
+    "candidate_after_repair_X_u2": [
+      "0xaf0",
+      "0xb00",
+      "0xb10",
+      "0xb20"
+    ]
+  },
+  "fixed_9916_conditional_scenarios": [
+    {
+      "official_case_latency_cut_us": 0.1,
+      "conditional_score_gain_us": 1.0723150771656613,
+      "forecast": false
+    },
+    {
+      "official_case_latency_cut_us": 0.2,
+      "conditional_score_gain_us": 2.151816219807678,
+      "forecast": false
+    },
+    {
+      "official_case_latency_cut_us": 0.5,
+      "conditional_score_gain_us": 5.434441319491692,
+      "forecast": false
+    }
+  ],
+  "next": "Optional bounded same-run selected control/candidate unpooler M16 timing with original task/reference/current-input/own terminals and runtime resource query, reused immutable W banks; actual H200 policy/score required before official claim. No register ban and no assumed H100-to-H200 transfer."
+}

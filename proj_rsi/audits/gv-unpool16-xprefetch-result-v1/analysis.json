@@ -1,0 +1,314 @@
+{
+  "job_id": "research.gv.unpool16.xprefetch.fixed.01",
+  "state": "CPU_VALIDATED_ACTUAL_XPREFETCH_COMPLETE",
+  "recommended_DONE_disposition": "VALID_GAIN",
+  "native_pilot_sha256": "c6ad13df2e1a1a7cea774322bef4ac78e72668d89c9f30d457ba56b967b8c248",
+  "control_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+  "artifact_hashes_verified": 11,
+  "source_pins_verified": 18,
+  "actual_CU_sha256": "2da1fab0c939591242522af963297713e4754b11610795b0eeb8a96d9ed2c748",
+  "actual_SO_sha256": "63ea6c76864c920dbde306b6d0156512f451397f2c5cfabef2ca91194ce9585e",
+  "actual_native_full_PC_predicate_128bitencoding_equals_CPU": true,
+  "native_instruction_counts": {
+    "_Z12gv_xprefetchILi1ELi2ELi2ELi1ELi4ELi16ELi1ELi1ELi2ELi1EEv1G": 2080,
+    "_Z10gv_predxorILi1ELi2ELi2ELi1ELi4ELi16ELi1ELi1ELi2ELi1EEv1G": 2080
+  },
+  "actual_resources": {
+    "control": {
+      "registers": 110,
+      "local": 0,
+      "user_static": 0,
+      "max_dynamic": 5120,
+      "max_threads": 128,
+      "occupancy": 4,
+      "device_reserved": 1024,
+      "arm_echo": 0
+    },
+    "xprefetch": {
+      "registers": 126,
+      "local": 0,
+      "user_static": 0,
+      "max_dynamic": 5120,
+      "max_threads": 128,
+      "occupancy": 4,
+      "device_reserved": 1024,
+      "arm_echo": 1
+    }
+  },
+  "hardware": {
+    "name": "NVIDIA H100 80GB HBM3",
+    "SM_count": 132,
+    "cc": [
+      9,
+      0
+    ],
+    "UUID": "54a7daab-fe3e-c7fc-7f7c-6fbc40145a22"
+  },
+  "pack": {
+    "W_seed": 5344,
+    "actual_W_bit_reconstruction": "EXACT",
+    "packed_bytes": 50331648,
+    "escape_words": 65536,
+    "geometry": [
+      1,
+      4,
+      16,
+      1,
+      1,
+      2
+    ],
+    "packing_functions": "Exact original source AST; prepare and extension factories not executed"
+  },
+  "escape_contract": {
+    "both_arms_same_original_bank": true,
+    "SHA256": "c1d0a56610d51962de4f2b069d5db8b05afe5ae360810eb8c5edf452dac42b08",
+    "transport_repack_calls": 0
+  },
+  "timing": {
+    "sign": "control_minus_xprefetch_us,positivefavorsnew",
+    "paired_median_us": 0.5760006606578827,
+    "paired_mean_us": 0.5226667659978071,
+    "paired_median_control_over_new": 1.0265888462948123,
+    "win_tie_loss": [
+      21,
+      0,
+      3
+    ],
+    "paired_each_delta_us": [
+      -0.4159994423389435,
+      -0.9920001029968262,
+      0.5760006606578827,
+      0.9279996156692505,
+      0.6400011479854584,
+      0.6080009043216705,
+      0.28800033032894135,
+      0.7360000163316727,
+      0.5439985543489456,
+      0.9920001029968262,
+      0.512000173330307,
+      0.8960012346506119,
+      0.5759987980127335,
+      0.5760006606578827,
+      0.5440004169940948,
+      0.5439985543489456,
+      -0.15999935567378998,
+      1.343999058008194,
+      0.6080009043216705,
+      1.183999702334404,
+      0.03200024366378784,
+      0.5440004169940948,
+      0.6080009043216705,
+      0.831998884677887
+    ],
+    "control_first_paired_median_us": 0.5439994856715202,
+    "new_first_paired_median_us": 0.7839994505047798,
+    "F1_medians_us": {
+      "control_before": 22.592000663280487,
+      "xprefetch": 22.71999977529049,
+      "control_after": 23.264000192284584
+    },
+    "F1_before_minus_new_us": -0.12799911201000214,
+    "F1_after_minus_new_us": 0.5440004169940948,
+    "F1_endpoint_average_us": 0.20800065249204636,
+    "F1_control_drift_us": 0.671999529004097,
+    "F1_matched_seed_endpoint_medians_us": [
+      -0.12800097465515137,
+      0.5440004169940948
+    ]
+  },
+  "host_timestamps": {
+    "all_clean": {
+      "submission_span_us": {
+        "median": 22.75,
+        "minimum": 21.68,
+        "maximum": 69.866,
+        "mean": 23.437913580246914
+      },
+      "end_enqueue_to_sync_us": {
+        "median": 103.315,
+        "minimum": 69.217,
+        "maximum": 111.504,
+        "mean": 103.03154320987655
+      }
+    },
+    "F1_control_before": {
+      "submission_span_us": {
+        "median": 22.859,
+        "minimum": 21.87,
+        "maximum": 23.807,
+        "mean": 22.75881818181818
+      },
+      "end_enqueue_to_sync_us": {
+        "median": 103.688,
+        "minimum": 101.253,
+        "maximum": 108.879,
+        "mean": 103.87136363636364
+      }
+    },
+    "F1_new": {
+      "submission_span_us": {
+        "median": 22.521,
+        "minimum": 21.853,
+        "maximum": 23.124,
+        "mean": 22.583727272727273
+      },
+      "end_enqueue_to_sync_us": {
+        "median": 103.338,
+        "minimum": 102.407,
+        "maximum": 105.41,
+        "mean": 103.46436363636364
+      }
+    },
+    "F1_control_after": {
+      "submission_span_us": {
+        "median": 22.681,
+        "minimum": 22.167,
+        "maximum": 24.119,
+        "mean": 22.83218181818182
+      },
+      "end_enqueue_to_sync_us": {
+        "median": 103.337,
+        "minimum": 102.524,
+        "maximum": 104.163,
+        "mean": 103.30072727272727
+      }
+    },
+    "control": {
+      "submission_span_us": {
+        "median": 22.792,
+        "minimum": 21.68,
+        "maximum": 69.866,
+        "mean": 24.741416666666666
+      },
+      "end_enqueue_to_sync_us": {
+        "median": 103.6515,
+        "minimum": 69.217,
+        "maximum": 109.555,
+        "mean": 102.2645
+      }
+    },
+    "xprefetch": {
+      "submission_span_us": {
+        "median": 22.8315,
+        "minimum": 21.972,
+        "maximum": 28.216,
+        "mean": 23.114791666666665
+      },
+      "end_enqueue_to_sync_us": {
+        "median": 102.63999999999999,
+        "minimum": 98.834,
+        "maximum": 111.504,
+        "mean": 103.09191666666666
+      }
+    }
+  },
+  "journal_spans_us": {
+    "median": 25.938,
+    "minimum": 24.812,
+    "maximum": 119.991,
+    "mean": 27.989131868131867
+  },
+  "F1_first_start_to_last_sync_seconds": 0.006571774,
+  "build": {
+    "CUDA_sha256": "2da1fab0c939591242522af963297713e4754b11610795b0eeb8a96d9ed2c748",
+    "SO_sha256": "63ea6c76864c920dbde306b6d0156512f451397f2c5cfabef2ca91194ce9585e",
+    "stages": [
+      {
+        "stage": "native_compile",
+        "argv": [
+          "/usr/local/cuda/bin/nvcc",
+          "-c",
+          "-std=c++17",
+          "-arch=sm_90a",
+          "-O3",
+          "-lineinfo",
+          "-Xptxas=-v",
+          "-Xcompiler",
+          "-fPIC",
+          "/okc/logs/scheduler/gv-unpool16-xprefetch-fixed-01/run/actual.cu",
+          "-o",
+          "/okc/logs/scheduler/gv-unpool16-xprefetch-fixed-01/run/actual.o"
+        ],
+        "seconds": 2.131506484001875,
+        "returncode": 0
+      },
+      {
+        "stage": "host_link",
+        "argv": [
+          "/usr/local/cuda/bin/nvcc",
+          "-shared",
+          "-cudart",
+          "shared",
+          "-Xcompiler",
+          "-fPIC",
+          "/okc/logs/scheduler/gv-unpool16-xprefetch-fixed-01/run/actual.o",
+          "-o",
+          "/okc/logs/scheduler/gv-unpool16-xprefetch-fixed-01/run/actual.so"
+        ],
+        "seconds": 0.04826264599978458,
+        "returncode": 0
+      }
+    ],
+    "CXX_Torch_compile_calls": 0,
+    "native_compile_calls": 1,
+    "actual_fullPC_predicate_encoding_equals_pilot": true,
+    "ABI": "validatedthinCABIwithcurrentstreamandstrongowners"
+  },
+  "cost": {
+    "native_compile_and_link_seconds": 2.1800519859971246,
+    "task_weight_pack_seconds": 0.26862429799803067,
+    "run_elapsed_seconds": 5.819772977993125
+  },
+  "validity": {
+    "journal_rows": 91,
+    "clean_calls": 81,
+    "warmups": 10,
+    "initial_task_plus_FP64_oracles": 6,
+    "basis_columns_per_arm": 16,
+    "own_terminal_oracles": 4,
+    "mutations": 10,
+    "current_X_bytecheck": "PASS beforeanyreplay/mutation",
+    "same_original_escape_bank": "PASS",
+    "thin_currentstream_strongowners": "Source-bound success; owners retiredonlyafterallgraphsdrain/reset",
+    "post_scope_cleanup": {
+      "allocated": 0,
+      "reserved": 0,
+      "before_blas_clear": {
+        "allocated": 33554432,
+        "reserved": 1174405120
+      },
+      "blas_map_entries_workspace_bytes_after": [
+        1,
+        33554432,
+        0
+      ],
+      "clear_error": null,
+      "after_run_scope_and_drain": true
+    },
+    "external_cleanup": {
+      "cleanup_failed": false,
+      "compute_pids": [],
+      "container_exists": false,
+      "containers": [],
+      "gpu_memory_mib": 0,
+      "guard_pids": [],
+      "host_log_exists": true,
+      "host_log_tail": "2026-10-27T23:35:36Z\ntorch_import_and_device\nload_cleanup_bridge_and_compile_thin\nactual_task_weight_and_pack\nfixed_unpooler_M16\ncomplete\nTRIAL_EXIT okc-proj-gv-unpool16-xprefetch-fixed-01 0\n2026-10-27T23:35:48Z\n",
+      "terminal_exit": 0
+    }
+  },
+  "evidence": {
+    "results/proj-rsi/scheduler/artifacts/research.gv.unpool16.xprefetch.fixed.01/collection-1793144168981231482/inventory.json": "c06b4de979abdb7338bceea8aa5818635b495f28f1dbd6daa1b63796a9878a9f",
+    "results/proj-rsi/scheduler/artifacts/research.gv.unpool16.xprefetch.fixed.01/collection-1793144168981231482/logs/scheduler/gv-unpool16-xprefetch-fixed-01/run/result.json": "96142456af9f2867b04b0567b7cf54e6f14eb86ebd512508207a0a9a0fde516d",
+    "results/proj-rsi/scheduler/artifacts/research.gv.unpool16.xprefetch.fixed.01/collection-1793144168981231482/logs/scheduler/gv-unpool16-xprefetch-fixed-01/run/raw.jsonl": "3973f3cbeded232153c28b8ebea42cd695899f4f0a7c4a68bc81344ebc05e9c2",
+    "results/proj-rsi/scheduler/artifacts/research.gv.unpool16.xprefetch.fixed.01/collection-1793144168981231482/logs/scheduler/gv-unpool16-xprefetch-fixed-01/run/actual.sass": "5fea0d76fe84ede394205689463f58db8dab0f487fb283bc4097250f12201db7",
+    "results/proj-rsi/scheduler/artifacts/research.gv.unpool16.xprefetch.fixed.01/collection-1793144168981231482/logs/scheduler/gv-unpool16-xprefetch-fixed-01/run/native_compile.stderr": "fe5ea4d21a5718ed7eb259cbbf481eebc48f1c129e9d5cea6413eddcd769b800"
+  },
+  "limits": [
+    "OnefreshWseed/fixedunpoolerM16H100cell; nofullpolicy/officialH200gainclaim.",
+    "F1andpairedusedifferentXbanks; everylossandorderestimatepreserved.",
+    "EarliernativeissuePROVEN; hardwarewaitreductioncauseUNMEASURED here, priorNCUcountercontextnotthisbinary.",
+    "Reusableevents/hosttimestampsaremethodchange; same-windowarmsidenticalmethod, cross-jobcausalityunproven.",
+    "Noactualdeviceclocktelemetrythiscleanrun; timestampgapscannotdetermineeventGPUqueueunderflow."
+  ]
+}

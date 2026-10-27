@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "revision": 22,
+  "revision": 23,
   "active_jobs_snapshot": "complete-stack-scored-complete-161bdb8de7354344",
   "jobs_snapshots": [
     {
@@ -513,6 +513,28 @@
         }
       ],
       "association": "Accepted primary CHECK pins exact source78f9; own completed normalized result passes9/9 at3196.414179553723us. Same-prepare M1 keyed/M8 parent choice and actual timed routes remain separate from official score causality. Root REFINE; no new API snapshot/leaderboard gain."
+    },
+    "40d856e085274f51": {
+      "candidate": "gv53_selected_earlyload_v1",
+      "source": {
+        "path": "results/proj-rsi/releases/gv53-selected-earlyload-v1-17d44d1140ab/submission.py",
+        "sha256": "17d44d1140ab09cdbab1f2835841e2891fc1c7c01c1eb4d9a2833c242d99a3e6"
+      },
+      "attestation": {
+        "path": "results/proj-rsi/jobs/40d856e085274f51.submitted.json",
+        "sha256": "ebe7149ef29d9e4eae8a99626ebcf32b9f0c024355dd92ee83bc2d3f09dd5af8"
+      },
+      "additional_attestations": [
+        {
+          "path": "results/proj-rsi/releases/gv53-selected-earlyload-v1-17d44d1140ab/release.json",
+          "sha256": "d214f92c3c9de6a0b37bfc183cc5d5b15e3fbc51b5183e31f061b6f8f78b8d72"
+        },
+        {
+          "path": "results/proj-rsi/releases/gv53-selected-earlyload-v1-17d44d1140ab/profiles/submission.40d856e085274f51.json",
+          "sha256": "e15b9f5c98140c844c5da8b5461eb520cdcc9b19558d8fcf5727564bf7263d4b"
+        }
+      ],
+      "association": "Own accepted SCORED receipt and completed official result9/9 at3175.899650724306us. Actual M1keyed/M8parent; earlyload source inclusion is not selected execution. Root REFINE; no new API/board capture."
     }
   },
   "preservation": "Never overwrite earlier API snapshots. Append a new snapshot ID/path/SHA and advance active pointer/revision after collecting a fresh read-only API response. Checks never enter submissions unless mode=run.",
@@ -647,6 +669,17 @@
       "result": {
         "path": "results/proj-rsi/jobs/fe5c45197ca041bb.json",
         "sha256": "b3f81d4e7d7196ad9e1147857536c860f2f40eb9482556572ce9b78e41337559"
+      }
+    },
+    {
+      "job_id": "40d856e085274f51",
+      "receipt": {
+        "path": "results/proj-rsi/jobs/40d856e085274f51.submitted.json",
+        "sha256": "ebe7149ef29d9e4eae8a99626ebcf32b9f0c024355dd92ee83bc2d3f09dd5af8"
+      },
+      "result": {
+        "path": "results/proj-rsi/jobs/40d856e085274f51.json",
+        "sha256": "e15b9f5c98140c844c5da8b5461eb520cdcc9b19558d8fcf5727564bf7263d4b"
       }
     }
   ],
@@ -854,10 +887,14 @@
     "smallm_increment",
     "smallm_increment_trial",
     "smallm_increment_trial_v3",
-    "smallm_matched_geometry_trial"
+    "smallm_matched_geometry_trial",
+    "gv53_selected_earlyload_v1",
+    "gv53_selected_earlyload_trial_v1",
+    "rq_pooler32_exactso_counters_v1",
+    "gv_unpool16_xprefetch_v1"
   ],
   "candidate_inventory_policy": "Explicit preserved inventory cut. New in-progress candidate directories are retained on disk/ROI; append reviewed/measured versions deliberately rather than invalidating frozen history outputs during parallel CPU work. Discovery: python3 -m proj_rsi.history_catalog --discover-candidates (read-only). Refresh: append reviewed roots, advance revision/cut timestamp, regenerate/check. No source files are hidden or removed.",
-  "candidate_inventory_cut_utc": "2026-10-27T23:27:56Z",
+  "candidate_inventory_cut_utc": "2026-10-27T23:40:45Z",
   "candidate_inventory_refresh_notes": [
     {
       "cut_utc": "2026-10-27T23:18:16Z",
@@ -878,6 +915,16 @@
         "gv53_earlyload_v1"
       ],
       "basis": "Root DONE VALID_GAIN1853; pending production source remains separately ROI tracked/discoverable until delivered."
+    },
+    {
+      "cut_utc": "2026-10-27T23:40:45Z",
+      "added": [
+        "gv53_selected_earlyload_v1",
+        "gv53_selected_earlyload_trial_v1",
+        "rq_pooler32_exactso_counters_v1",
+        "gv_unpool16_xprefetch_v1"
+      ],
+      "basis": "Completed body/RQcounter/Xprefetch/official40d cut; new optionalstack/W-only/RQlookahead remain liveROI preparation and read-only discoverable."
     }
   ]
 }

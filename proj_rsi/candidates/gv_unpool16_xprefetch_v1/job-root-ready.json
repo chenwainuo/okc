@@ -1,0 +1,115 @@
+{
+  "id": "research.gv.unpool16.xprefetch.fixed.01",
+  "resource": "gpu",
+  "kind": "optimization",
+  "state": "BACKLOG",
+  "author": "moe_result_repair",
+  "created_at": 1793143914.4996808,
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 2.151816219807678,
+      "p_gain": 0.2,
+      "p_valid": 0.8
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "Does realized one-unit X prefetch improve the selected unpooler M16 template at queried four-CTA capacity?"
+    },
+    "basis": "Root unmeasured priors .20 gain/.80 validity; conditional fixed9916 case reduction .2us implies2.151816scoreus, not forecast. CPU realized earlier X issue,126vs110regs/0spill; no H100-to-H200 transfer assumed.",
+    "confidence": "unmeasured priors",
+    "evidence": [
+      "proj_rsi/candidates/gv_unpool16_xprefetch_v1/cpu-evidence-v1.json",
+      "proj_rsi/candidates/gv_unpool16_xprefetch_v1/brief-v1.md"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 120,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 2
+  },
+  "files": {
+    "proj_rsi/candidates/gv_unpool16_xprefetch_v1/pilot.cu": "c6ad13df2e1a1a7cea774322bef4ac78e72668d89c9f30d457ba56b967b8c248",
+    "proj_rsi/candidates/gv_unpool16_xprefetch_v1/bridge.cuh": "aae0b8a44552fc391c54cc91c8e103d15e2131ea0a3c683e9126cc73a137d3aa",
+    "proj_rsi/candidates/gv_unpool16_xprefetch_v1/adapter.py": "5576a7172f5081f13112965876d0894b39590054fccfbf03b225db8168e08927",
+    "proj_rsi/candidates/gv_unpool16_xprefetch_v1/driver.py": "1cddb8a18b6a8d1dd050421663abcd1f446d36525ed79284fc1556e362daefb3",
+    "proj_rsi/candidates/gv_unpool16_xprefetch_v1/thin.sass": "bcff9446b82bb9ad884857f61522604479a4aa736911fee423aaa8cf4ae40bb4",
+    "proj_rsi/candidates/gv_unpool16_xprefetch_v1/cpu-evidence-v1.json": "3c860f3f42570db21ec68a31cd146d140296fc295009994e81db90d8d7461e41",
+    "proj_rsi/candidates/gv_unpool16_xprefetch_v1/brief-v1.md": "1dbdfeea2e370cf4c30a23a0296277c0c8041ad26a6780ae595275dc400424d6",
+    "proj_rsi/candidates/gv_unpool16_xprefetch_v1/delta-v1.json": "a7c562e2863335e188e365ce2cb4a02715930e40e98760500f8e61ca9820cf3d",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "results/proj-rsi/scheduler/artifacts/research.gv53.quarter.sparse.fixed.01/collection-1793141738325901851/logs/scheduler/gv53-quarter-sparse-01/run/actual.so": "2eb511c0af3c4ce5bd3990e45d376c64d12016b876a2109ac0f263eafc8c17a7",
+    "results/proj-rsi/scheduler/artifacts/research.gv53.quarter.sparse.fixed.01/collection-1793141738325901851/logs/scheduler/gv53-quarter-sparse-01/run/result.json": "81e2e007a5a7bb20f306589c2c96cafa8c01b9f38cbfd30ae97dd005802b53db",
+    "proj_rsi/candidates/gv_unpool16_xprefetch_v1/harness-cpu-proof.json": "dbae008737e8439cc3ee634b8f475234bfe023a0f0bd3a00a3166547642227ca",
+    "proj_rsi/candidates/gv_unpool16_xprefetch_v1/manifest.json": "7c4a187ab1e834c29c9cdcf934a42a8347acd0acc7d4997c93d68e042cef7181",
+    "proj_rsi/scheduling/reviews/gv-unpool16-xprefetch-01.md": "b5c771efac0dc4869c4ab4833df968963feb5d94185510eab827d69634ac980f"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-gv-unpool16-xprefetch-fixed-01",
+    "inner_seconds": 60,
+    "outer_seconds": 120,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/gv_unpool16_xprefetch_v1/driver.py",
+      "--output",
+      "/okc/logs/scheduler/gv-unpool16-xprefetch-fixed-01/run",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/gv-unpool16-xprefetch-01.md"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv-unpool16-xprefetch-fixed-01"
+    ]
+  },
+  "annotations": {
+    "problem": "muse_bf16_proj",
+    "state": "GO_BOUND_ROOT_READY_BACKLOG",
+    "scope": {
+      "fixed_cells": 1,
+      "native_functions": 2,
+      "timed_calls": 81,
+      "warmups": 10,
+      "own_terminal_oracles": 4,
+      "mutations": 10,
+      "basis_columns": 16,
+      "full_prepare": 0,
+      "profiler": 0,
+      "Torch_CXX_JIT_builds": 0
+    },
+    "bounds": {
+      "inner_seconds": 60,
+      "outer_seconds": 120,
+      "profile": false
+    },
+    "reused": "Validated thin C ABI owner/current-stream and collected cleanup bridge; exact original codec AST; unpooler geometry/output/full-backing contract; event reuse and host timestamps.",
+    "limitations": "Actual X issue motion and legal resource model are not a speed forecast. Candidate runtime four-CTA capacity unqueried. Fixed cell only, no current policy/H200 official claim.",
+    "source_review": {
+      "path": "proj_rsi/candidates/gv_unpool16_xprefetch_v1/cpu-evidence-v1.json",
+      "sha256": "3c860f3f42570db21ec68a31cd146d140296fc295009994e81db90d8d7461e41"
+    },
+    "review_binding": "Independent GO explicitly files-pinned; proposal/source unchanged; exact queriedcapacity4 contract documented in receipt."
+  },
+  "problem": "muse_bf16_proj",
+  "review": {
+    "actor": "rq_lab_review",
+    "path": "proj_rsi/scheduling/reviews/gv-unpool16-xprefetch-01.md",
+    "sha256": "b5c771efac0dc4869c4ab4833df968963feb5d94185510eab827d69634ac980f",
+    "decision": "GO"
+  }
+}

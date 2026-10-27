@@ -1,0 +1,1951 @@
+{
+  "state": "ARCHIVED_OFFICIAL_RESULT_ANALYZED",
+  "job_id": "40d856e085274f51",
+  "summary": {
+    "error": null,
+    "passed": true,
+    "score_us": 3175.899650724306,
+    "speedup": 1.5210808058429277,
+    "speedup_ci": [
+      1.4982645937552839,
+      1.5438970179305715
+    ],
+    "status": "ok",
+    "tests": 9,
+    "tests_passed": 9
+  },
+  "source_sha256": "17d44d1140ab09cdbab1f2835841e2891fc1c7c01c1eb4d9a2833c242d99a3e6",
+  "benchmarks": 30,
+  "profiles": 30,
+  "actual_targets": [
+    {
+      "load": "decode 1",
+      "layer": "pooler",
+      "m": 1,
+      "actual_profile_implementation": "keyed",
+      "report": "kernel                                                           GPU time  share  calls\nvoid gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                   14.4 \u00b5s 100.0%      1\ntotal                                                             14.4 \u00b5s",
+      "receipt_match": [
+        {
+          "prefix": "GV_KEYED_CHOICE",
+          "record": {
+            "m": 1,
+            "choice": "keyed",
+            "status": "COMPLETE_ZERO_THRESHOLD",
+            "pairs_us": [
+              {
+                "parent": 17.88800023496151,
+                "keyed": 17.823999747633934,
+                "order": "AB"
+              },
+              {
+                "parent": 17.791999503970146,
+                "keyed": 17.855999991297722,
+                "order": "BA"
+              },
+              {
+                "parent": 17.983999103307724,
+                "keyed": 17.823999747633934,
+                "order": "AB"
+              },
+              {
+                "parent": 17.823999747633934,
+                "keyed": 17.855999991297722,
+                "order": "BA"
+              }
+            ],
+            "samples_us": [
+              {
+                "block": 0,
+                "arm": "parent",
+                "us": 17.88800023496151
+              },
+              {
+                "block": 0,
+                "arm": "keyed",
+                "us": 17.823999747633934
+              },
+              {
+                "block": 1,
+                "arm": "keyed",
+                "us": 17.855999991297722
+              },
+              {
+                "block": 1,
+                "arm": "parent",
+                "us": 17.791999503970146
+              },
+              {
+                "block": 2,
+                "arm": "parent",
+                "us": 17.983999103307724
+              },
+              {
+                "block": 2,
+                "arm": "keyed",
+                "us": 17.823999747633934
+              },
+              {
+                "block": 3,
+                "arm": "keyed",
+                "us": 17.855999991297722
+              },
+              {
+                "block": 3,
+                "arm": "parent",
+                "us": 17.823999747633934
+              }
+            ],
+            "template": [
+              1,
+              1,
+              1,
+              2,
+              16,
+              8,
+              1,
+              1,
+              0,
+              3
+            ],
+            "id": 53,
+            "owner": "gv",
+            "paired_median_parent_minus_keyed_us": 0.01600012183189392
+          }
+        }
+      ]
+    },
+    {
+      "load": "verify 1",
+      "layer": "pooler",
+      "m": 8,
+      "actual_profile_implementation": "predxor",
+      "report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.7 \u00b5s 100.0%      1\ntotal                                                             13.7 \u00b5s",
+      "receipt_match": [
+        {
+          "prefix": "GV_EARLYLOAD_CHOICE",
+          "record": {
+            "m": 8,
+            "choice": "parent",
+            "status": "COMPLETE_ZERO_THRESHOLD",
+            "pairs_us": [
+              {
+                "parent": 17.855999991297722,
+                "earlyload": 17.88800023496151,
+                "order": "AB"
+              },
+              {
+                "parent": 17.823999747633934,
+                "earlyload": 17.823999747633934,
+                "order": "BA"
+              },
+              {
+                "parent": 17.920000478625298,
+                "earlyload": 17.823999747633934,
+                "order": "AB"
+              },
+              {
+                "parent": 17.791999503970146,
+                "earlyload": 17.952000722289085,
+                "order": "BA"
+              }
+            ],
+            "samples_us": [
+              {
+                "block": 0,
+                "arm": "parent",
+                "us": 17.855999991297722
+              },
+              {
+                "block": 0,
+                "arm": "earlyload",
+                "us": 17.88800023496151
+              },
+              {
+                "block": 1,
+                "arm": "earlyload",
+                "us": 17.823999747633934
+              },
+              {
+                "block": 1,
+                "arm": "parent",
+                "us": 17.823999747633934
+              },
+              {
+                "block": 2,
+                "arm": "parent",
+                "us": 17.920000478625298
+              },
+              {
+                "block": 2,
+                "arm": "earlyload",
+                "us": 17.823999747633934
+              },
+              {
+                "block": 3,
+                "arm": "earlyload",
+                "us": 17.952000722289085
+              },
+              {
+                "block": 3,
+                "arm": "parent",
+                "us": 17.791999503970146
+              }
+            ],
+            "template": [
+              1,
+              1,
+              1,
+              2,
+              16,
+              8,
+              1,
+              1,
+              0,
+              3
+            ],
+            "id": 53,
+            "owner": "gv",
+            "paired_median_parent_minus_earlyload_us": -0.01600012183189392
+          }
+        }
+      ]
+    }
+  ],
+  "actual_unpooler_M16": {
+    "tuple": [
+      1,
+      2,
+      2,
+      1,
+      4,
+      16,
+      1,
+      1,
+      2,
+      1
+    ],
+    "profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                 15.4 \u00b5s 100.0%      1\ntotal                                                             15.4 \u00b5s",
+    "eligibility": "matchesexactscopedunpoolerM16tuple;futurefreshprepareselectionstillunmeasured"
+  },
+  "prepare_choice_receipts": [
+    {
+      "prefix": "GV_KEYED_CHOICE",
+      "record": {
+        "m": 1,
+        "choice": "keyed",
+        "status": "COMPLETE_ZERO_THRESHOLD",
+        "pairs_us": [
+          {
+            "parent": 17.88800023496151,
+            "keyed": 17.823999747633934,
+            "order": "AB"
+          },
+          {
+            "parent": 17.791999503970146,
+            "keyed": 17.855999991297722,
+            "order": "BA"
+          },
+          {
+            "parent": 17.983999103307724,
+            "keyed": 17.823999747633934,
+            "order": "AB"
+          },
+          {
+            "parent": 17.823999747633934,
+            "keyed": 17.855999991297722,
+            "order": "BA"
+          }
+        ],
+        "samples_us": [
+          {
+            "block": 0,
+            "arm": "parent",
+            "us": 17.88800023496151
+          },
+          {
+            "block": 0,
+            "arm": "keyed",
+            "us": 17.823999747633934
+          },
+          {
+            "block": 1,
+            "arm": "keyed",
+            "us": 17.855999991297722
+          },
+          {
+            "block": 1,
+            "arm": "parent",
+            "us": 17.791999503970146
+          },
+          {
+            "block": 2,
+            "arm": "parent",
+            "us": 17.983999103307724
+          },
+          {
+            "block": 2,
+            "arm": "keyed",
+            "us": 17.823999747633934
+          },
+          {
+            "block": 3,
+            "arm": "keyed",
+            "us": 17.855999991297722
+          },
+          {
+            "block": 3,
+            "arm": "parent",
+            "us": 17.823999747633934
+          }
+        ],
+        "template": [
+          1,
+          1,
+          1,
+          2,
+          16,
+          8,
+          1,
+          1,
+          0,
+          3
+        ],
+        "id": 53,
+        "owner": "gv",
+        "paired_median_parent_minus_keyed_us": 0.01600012183189392
+      }
+    },
+    {
+      "prefix": "GV_EARLYLOAD_CHOICE",
+      "record": {
+        "m": 8,
+        "choice": "parent",
+        "status": "COMPLETE_ZERO_THRESHOLD",
+        "pairs_us": [
+          {
+            "parent": 17.855999991297722,
+            "earlyload": 17.88800023496151,
+            "order": "AB"
+          },
+          {
+            "parent": 17.823999747633934,
+            "earlyload": 17.823999747633934,
+            "order": "BA"
+          },
+          {
+            "parent": 17.920000478625298,
+            "earlyload": 17.823999747633934,
+            "order": "AB"
+          },
+          {
+            "parent": 17.791999503970146,
+            "earlyload": 17.952000722289085,
+            "order": "BA"
+          }
+        ],
+        "samples_us": [
+          {
+            "block": 0,
+            "arm": "parent",
+            "us": 17.855999991297722
+          },
+          {
+            "block": 0,
+            "arm": "earlyload",
+            "us": 17.88800023496151
+          },
+          {
+            "block": 1,
+            "arm": "earlyload",
+            "us": 17.823999747633934
+          },
+          {
+            "block": 1,
+            "arm": "parent",
+            "us": 17.823999747633934
+          },
+          {
+            "block": 2,
+            "arm": "parent",
+            "us": 17.920000478625298
+          },
+          {
+            "block": 2,
+            "arm": "earlyload",
+            "us": 17.823999747633934
+          },
+          {
+            "block": 3,
+            "arm": "earlyload",
+            "us": 17.952000722289085
+          },
+          {
+            "block": 3,
+            "arm": "parent",
+            "us": 17.791999503970146
+          }
+        ],
+        "template": [
+          1,
+          1,
+          1,
+          2,
+          16,
+          8,
+          1,
+          1,
+          0,
+          3
+        ],
+        "id": 53,
+        "owner": "gv",
+        "paired_median_parent_minus_earlyload_us": -0.01600012183189392
+      }
+    }
+  ],
+  "prepare_choice_receipt_status": "PRESENT",
+  "searched_receipt_text_files": [
+    "results/proj-rsi/jobs/40d856e085274f51.log",
+    "results/proj-rsi/jobs/40d856e085274f51.txt"
+  ],
+  "comparisons": {
+    "9916d34357b745cf": {
+      "old_score_us": 3157.0384036526784,
+      "new_score_us": 3175.899650724306,
+      "old_minus_new_score_us": -18.86124707162753,
+      "targets": [
+        {
+          "load": "decode 1",
+          "layer": "pooler",
+          "m": 1,
+          "old_raw_us": 17.632000148296356,
+          "new_raw_us": 17.664000391960144,
+          "old_minus_new_raw_us": -0.03200024366378784,
+          "old_calibrated_us": 13.714963545591969,
+          "new_calibrated_us": 13.838390713003543,
+          "old_minus_new_calibrated_us": -0.12342716741157346,
+          "old_baseline_raw_us": 25.50400048494339,
+          "new_baseline_raw_us": 25.472000241279602,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                   14.4 \u00b5s 100.0%      1\ntotal                                                             14.4 \u00b5s",
+          "old_selected_native_names": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 1",
+          "layer": "pooler",
+          "m": 8,
+          "old_raw_us": 17.59999990463257,
+          "new_raw_us": 17.664000391960144,
+          "old_minus_new_raw_us": -0.06400048732757568,
+          "old_calibrated_us": 13.536974268757183,
+          "new_calibrated_us": 13.768730134448942,
+          "old_minus_new_calibrated_us": -0.23175586569175902,
+          "old_baseline_raw_us": 25.26400052011013,
+          "new_baseline_raw_us": 25.439999997615814,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.8 \u00b5s 100.0%      1\ntotal                                                             13.8 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.7 \u00b5s 100.0%      1\ntotal                                                             13.7 \u00b5s",
+          "old_selected_native_names": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        }
+      ],
+      "all_cases": [
+        {
+          "load": "decode 1",
+          "layer": "qkv_gate",
+          "m": 1,
+          "old_raw_us": 12.927999719977379,
+          "new_raw_us": 12.912000063806772,
+          "old_minus_new_raw_us": 0.015999656170606613,
+          "old_calibrated_us": 8.79496920496118,
+          "new_calibrated_us": 9.210867987524566,
+          "old_minus_new_calibrated_us": -0.41589878256338486,
+          "old_baseline_raw_us": 18.624000251293182,
+          "new_baseline_raw_us": 18.25599931180477,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.3 \u00b5s 100.0%      1\ntotal                                                              9.3 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.4 \u00b5s 100.0%      1\ntotal                                                              9.4 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 1",
+          "layer": "o",
+          "m": 1,
+          "old_raw_us": 9.151999838650227,
+          "new_raw_us": 9.151999838650227,
+          "old_minus_new_raw_us": 0.0,
+          "old_calibrated_us": 5.135565320514631,
+          "new_calibrated_us": 5.206901928191856,
+          "old_minus_new_calibrated_us": -0.0713366076772245,
+          "old_baseline_raw_us": 10.784000158309937,
+          "new_baseline_raw_us": 10.816000401973724,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.0 \u00b5s 100.0%      1\ntotal                                                              4.0 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 1",
+          "layer": "pooler",
+          "m": 1,
+          "old_raw_us": 17.632000148296356,
+          "new_raw_us": 17.664000391960144,
+          "old_minus_new_raw_us": -0.03200024366378784,
+          "old_calibrated_us": 13.714963545591969,
+          "new_calibrated_us": 13.838390713003543,
+          "old_minus_new_calibrated_us": -0.12342716741157346,
+          "old_baseline_raw_us": 25.50400048494339,
+          "new_baseline_raw_us": 25.472000241279602,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                   14.4 \u00b5s 100.0%      1\ntotal                                                             14.4 \u00b5s",
+          "old_selected_native_names": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 1",
+          "layer": "unpooler",
+          "m": 1,
+          "old_raw_us": 8.128000423312187,
+          "new_raw_us": 8.352000266313553,
+          "old_minus_new_raw_us": -0.22399984300136566,
+          "old_calibrated_us": 4.137310038096525,
+          "new_calibrated_us": 4.422207345284414,
+          "old_minus_new_calibrated_us": -0.28489730718788814,
+          "old_baseline_raw_us": 10.975999757647514,
+          "new_baseline_raw_us": 10.912000201642513,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)                   3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)                   3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 1",
+          "layer": "router",
+          "m": 1,
+          "old_raw_us": 7.552000228315592,
+          "new_raw_us": 7.568000117316842,
+          "old_minus_new_raw_us": -0.015999889001250267,
+          "old_calibrated_us": 3.5923284525626302,
+          "new_calibrated_us": 3.6370970626053265,
+          "old_minus_new_calibrated_us": -0.044768610042695854,
+          "old_baseline_raw_us": 14.399999752640724,
+          "new_baseline_raw_us": 14.303999952971935,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.7 \u00b5s 100.0%      1\ntotal                                                              2.7 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.8 \u00b5s 100.0%      1\ntotal                                                              2.8 \u00b5s",
+          "old_selected_native_names": [
+            "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+          ],
+          "new_selected_native_names": [
+            "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 16",
+          "layer": "qkv_gate",
+          "m": 16,
+          "old_raw_us": 13.952000066637993,
+          "new_raw_us": 13.887999579310417,
+          "old_minus_new_raw_us": 0.06400048732757568,
+          "old_calibrated_us": 10.133088999632148,
+          "new_calibrated_us": 10.111835050320055,
+          "old_minus_new_calibrated_us": 0.021253949312094848,
+          "old_baseline_raw_us": 18.271999433636665,
+          "new_baseline_raw_us": 17.904000356793404,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.0 \u00b5s 100.0%      1\ntotal                                                             10.0 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.2 \u00b5s 100.0%      1\ntotal                                                             10.2 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 16",
+          "layer": "o",
+          "m": 16,
+          "old_raw_us": 9.40799992531538,
+          "new_raw_us": 9.519999846816063,
+          "old_minus_new_raw_us": -0.11199992150068283,
+          "old_calibrated_us": 5.595060884214828,
+          "new_calibrated_us": 5.740073286307048,
+          "old_minus_new_calibrated_us": -0.14501240209222033,
+          "old_baseline_raw_us": 10.847999714314938,
+          "new_baseline_raw_us": 10.751999914646149,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.9 \u00b5s 100.0%      1\ntotal                                                              4.9 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           5.1 \u00b5s 100.0%      1\ntotal                                                              5.1 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 0>(G)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 16",
+          "layer": "pooler",
+          "m": 16,
+          "old_raw_us": 18.0479995906353,
+          "new_raw_us": 17.88800023496151,
+          "old_minus_new_raw_us": 0.15999935567378998,
+          "old_calibrated_us": 14.265113585000279,
+          "new_calibrated_us": 13.965112992737524,
+          "old_minus_new_calibrated_us": 0.30000059226275516,
+          "old_baseline_raw_us": 25.472000241279602,
+          "new_baseline_raw_us": 25.520000606775284,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                 14.2 \u00b5s 100.0%      1\ntotal                                                             14.2 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                 14.1 \u00b5s 100.0%      1\ntotal                                                             14.1 \u00b5s",
+          "old_selected_native_names": [
+            "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 16",
+          "layer": "unpooler",
+          "m": 16,
+          "old_raw_us": 18.52799952030182,
+          "new_raw_us": 18.464000895619392,
+          "old_minus_new_raw_us": 0.06399862468242645,
+          "old_calibrated_us": 14.34517450571615,
+          "new_calibrated_us": 14.37576089662965,
+          "old_minus_new_calibrated_us": -0.03058639091350051,
+          "old_baseline_raw_us": 22.5600004196167,
+          "new_baseline_raw_us": 22.60800078511238,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                 14.2 \u00b5s 100.0%      1\ntotal                                                             14.2 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                 15.4 \u00b5s 100.0%      1\ntotal                                                             15.4 \u00b5s",
+          "old_selected_native_names": [
+            "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 16",
+          "layer": "router",
+          "m": 16,
+          "old_raw_us": 8.736000396311283,
+          "new_raw_us": 8.736000396311283,
+          "old_minus_new_raw_us": 0.0,
+          "old_calibrated_us": 4.8939137058298305,
+          "new_calibrated_us": 4.870923580933068,
+          "old_minus_new_calibrated_us": 0.0229901248967617,
+          "old_baseline_raw_us": 19.007999449968338,
+          "new_baseline_raw_us": 18.880000337958336,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 32",
+          "layer": "qkv_gate",
+          "m": 32,
+          "old_raw_us": 14.22400027513504,
+          "new_raw_us": 14.175999909639359,
+          "old_minus_new_raw_us": 0.04800036549568176,
+          "old_calibrated_us": 9.556633372314327,
+          "new_calibrated_us": 10.140871678062007,
+          "old_minus_new_calibrated_us": -0.58423830574768,
+          "old_baseline_raw_us": 18.624000251293182,
+          "new_baseline_raw_us": 18.192000687122345,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.8 \u00b5s 100.0%      1\ntotal                                                              9.8 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.9 \u00b5s 100.0%      1\ntotal                                                              9.9 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 32",
+          "layer": "o",
+          "m": 32,
+          "old_raw_us": 10.495999827980995,
+          "new_raw_us": 10.528000071644783,
+          "old_minus_new_raw_us": -0.03200024366378784,
+          "old_calibrated_us": 6.765882458653126,
+          "new_calibrated_us": 6.517843546449371,
+          "old_minus_new_calibrated_us": 0.24803891220375407,
+          "old_baseline_raw_us": 10.816000401973724,
+          "new_baseline_raw_us": 10.847999714314938,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)                5.1 \u00b5s 100.0%      1\ntotal                                                              5.1 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                5.7 \u00b5s 100.0%      1\ntotal                                                              5.7 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 32",
+          "layer": "pooler",
+          "m": 32,
+          "old_raw_us": 19.53599974513054,
+          "new_raw_us": 19.392000511288643,
+          "old_minus_new_raw_us": 0.14399923384189606,
+          "old_calibrated_us": 15.522677468167032,
+          "new_calibrated_us": 15.355563361107766,
+          "old_minus_new_calibrated_us": 0.16711410705926574,
+          "old_baseline_raw_us": 25.728000327944756,
+          "new_baseline_raw_us": 25.95200017094612,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.5 \u00b5s 100.0%      1\ntotal                                                             15.5 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.4 \u00b5s 100.0%      1\ntotal                                                             15.4 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 32",
+          "layer": "unpooler",
+          "m": 32,
+          "old_raw_us": 19.007999449968338,
+          "new_raw_us": 19.071999937295914,
+          "old_minus_new_raw_us": -0.06400048732757568,
+          "old_calibrated_us": 15.059097119932208,
+          "new_calibrated_us": 15.174128723449417,
+          "old_minus_new_calibrated_us": -0.11503160351720908,
+          "old_baseline_raw_us": 22.671999409794807,
+          "new_baseline_raw_us": 22.784000262618065,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               16.0 \u00b5s 100.0%      1\ntotal                                                             16.0 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 32",
+          "layer": "router",
+          "m": 32,
+          "old_raw_us": 9.056000038981438,
+          "new_raw_us": 9.02399979531765,
+          "old_minus_new_raw_us": 0.03200024366378784,
+          "old_calibrated_us": 5.229298506794368,
+          "new_calibrated_us": 4.994401388596497,
+          "old_minus_new_calibrated_us": 0.23489711819787135,
+          "old_baseline_raw_us": 19.1040001809597,
+          "new_baseline_raw_us": 19.231999292969704,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.3 \u00b5s 100.0%      1\ntotal                                                              4.3 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.3 \u00b5s 100.0%      1\ntotal                                                              4.3 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 1",
+          "layer": "qkv_gate",
+          "m": 8,
+          "old_raw_us": 13.07199988514185,
+          "new_raw_us": 13.151999562978745,
+          "old_minus_new_raw_us": -0.07999967783689499,
+          "old_calibrated_us": 9.159501030123945,
+          "new_calibrated_us": 9.315258443462923,
+          "old_minus_new_calibrated_us": -0.15575741333897714,
+          "old_baseline_raw_us": 18.60800012946129,
+          "new_baseline_raw_us": 18.0479995906353,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.1 \u00b5s 100.0%      1\ntotal                                                              9.1 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.0 \u00b5s 100.0%      1\ntotal                                                              9.0 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 1",
+          "layer": "o",
+          "m": 8,
+          "old_raw_us": 9.216000325977802,
+          "new_raw_us": 9.296000003814697,
+          "old_minus_new_raw_us": -0.07999967783689499,
+          "old_calibrated_us": 5.3366173527983936,
+          "new_calibrated_us": 5.453187791527743,
+          "old_minus_new_calibrated_us": -0.11657043872934901,
+          "old_baseline_raw_us": 10.623999871313572,
+          "new_baseline_raw_us": 10.56000031530857,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           3.8 \u00b5s 100.0%      1\ntotal                                                              3.8 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 1",
+          "layer": "pooler",
+          "m": 8,
+          "old_raw_us": 17.59999990463257,
+          "new_raw_us": 17.664000391960144,
+          "old_minus_new_raw_us": -0.06400048732757568,
+          "old_calibrated_us": 13.536974268757183,
+          "new_calibrated_us": 13.768730134448942,
+          "old_minus_new_calibrated_us": -0.23175586569175902,
+          "old_baseline_raw_us": 25.26400052011013,
+          "new_baseline_raw_us": 25.439999997615814,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.8 \u00b5s 100.0%      1\ntotal                                                             13.8 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.7 \u00b5s 100.0%      1\ntotal                                                             13.7 \u00b5s",
+          "old_selected_native_names": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 1",
+          "layer": "unpooler",
+          "m": 8,
+          "old_raw_us": 8.208000101149082,
+          "new_raw_us": 8.0960001796484,
+          "old_minus_new_raw_us": 0.11199992150068283,
+          "old_calibrated_us": 4.399116231812419,
+          "new_calibrated_us": 4.1286870042680155,
+          "old_minus_new_calibrated_us": 0.27042922754440313,
+          "old_baseline_raw_us": 10.89600007981062,
+          "new_baseline_raw_us": 10.912000201642513,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)                   3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.5 \u00b5s 100.0%      1\ntotal                                                              3.5 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 1",
+          "layer": "router",
+          "m": 8,
+          "old_raw_us": 8.320000022649765,
+          "new_raw_us": 8.352000266313553,
+          "old_minus_new_raw_us": -0.03200024366378784,
+          "old_calibrated_us": 4.466061412238903,
+          "new_calibrated_us": 4.406493384745029,
+          "old_minus_new_calibrated_us": 0.05956802749387407,
+          "old_baseline_raw_us": 30.01599945127964,
+          "new_baseline_raw_us": 30.079999938607216,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.6 \u00b5s 100.0%      1\ntotal                                                              3.6 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 16",
+          "layer": "qkv_gate",
+          "m": 128,
+          "old_raw_us": 16.815999522805214,
+          "new_raw_us": 16.847999766469,
+          "old_minus_new_raw_us": -0.03200024366378784,
+          "old_calibrated_us": 13.095674200334908,
+          "new_calibrated_us": 12.96698263596402,
+          "old_minus_new_calibrated_us": 0.12869156437088713,
+          "old_baseline_raw_us": 20.800000056624413,
+          "new_baseline_raw_us": 21.040000021457672,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               12.3 \u00b5s 100.0%      1\ntotal                                                             12.3 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           12.6 \u00b5s 100.0%      1\ntotal                                                             12.6 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 16",
+          "layer": "o",
+          "m": 128,
+          "old_raw_us": 11.119999922811985,
+          "new_raw_us": 11.359999887645245,
+          "old_minus_new_raw_us": -0.23999996483325958,
+          "old_calibrated_us": 7.358760995765836,
+          "new_calibrated_us": 7.086527640299565,
+          "old_minus_new_calibrated_us": 0.272233355466271,
+          "old_baseline_raw_us": 11.58399973064661,
+          "new_baseline_raw_us": 11.42400037497282,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN                            5.5 \u00b5s 100.0%      1\ntotal                                                              5.5 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT                            5.3 \u00b5s 100.0%      1\ntotal                                                              5.3 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN"
+          ],
+          "new_selected_native_names": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 16",
+          "layer": "pooler",
+          "m": 128,
+          "old_raw_us": 22.6879995316267,
+          "new_raw_us": 22.23999984562397,
+          "old_minus_new_raw_us": 0.4479996860027313,
+          "old_calibrated_us": 17.97685415312117,
+          "new_calibrated_us": 18.299597445561975,
+          "old_minus_new_calibrated_us": -0.3227432924408058,
+          "old_baseline_raw_us": 29.16800044476986,
+          "new_baseline_raw_us": 29.32799980044365,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               18.7 \u00b5s 100.0%      1\ntotal                                                             18.7 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)           18.7 \u00b5s 100.0%      1\ntotal                                                             18.7 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 16",
+          "layer": "unpooler",
+          "m": 128,
+          "old_raw_us": 22.60800078511238,
+          "new_raw_us": 22.92799949645996,
+          "old_minus_new_raw_us": -0.31999871134757996,
+          "old_calibrated_us": 18.543867084653822,
+          "new_calibrated_us": 19.011992632082507,
+          "old_minus_new_calibrated_us": -0.4681255474286845,
+          "old_baseline_raw_us": 24.01600033044815,
+          "new_baseline_raw_us": 24.000000208616257,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT                     19.6 \u00b5s 100.0%      1\ntotal                                                             19.6 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT                     19.0 \u00b5s 100.0%      1\ntotal                                                             19.0 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT"
+          ],
+          "new_selected_native_names": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 16",
+          "layer": "router",
+          "m": 128,
+          "old_raw_us": 11.487999930977821,
+          "new_raw_us": 11.615999974310398,
+          "old_minus_new_raw_us": -0.12800004333257675,
+          "old_calibrated_us": 7.747534505872321,
+          "new_calibrated_us": 7.483344842008743,
+          "old_minus_new_calibrated_us": 0.2641896638635772,
+          "old_baseline_raw_us": 20.336000248789787,
+          "new_baseline_raw_us": 20.38400061428547,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.2 \u00b5s 100.0%      1\ntotal                                                              6.2 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.1 \u00b5s 100.0%      1\ntotal                                                              6.1 \u00b5s",
+          "old_selected_native_names": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "new_selected_native_names": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 32",
+          "layer": "qkv_gate",
+          "m": 256,
+          "old_raw_us": 22.463999688625336,
+          "new_raw_us": 21.647999994456768,
+          "old_minus_new_raw_us": 0.8159996941685677,
+          "old_calibrated_us": 18.21574869548997,
+          "new_calibrated_us": 17.8840856902749,
+          "old_minus_new_calibrated_us": 0.3316630052150722,
+          "old_baseline_raw_us": 23.584000766277313,
+          "new_baseline_raw_us": 23.760000243782997,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           19.5 \u00b5s 100.0%      1\ntotal                                                             19.5 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           19.0 \u00b5s 100.0%      1\ntotal                                                             19.0 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN"
+          ],
+          "new_selected_native_names": [
+            "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 32",
+          "layer": "o",
+          "m": 256,
+          "old_raw_us": 12.896000407636166,
+          "new_raw_us": 13.376000337302685,
+          "old_minus_new_raw_us": -0.47999992966651917,
+          "old_calibrated_us": 8.71765978318988,
+          "new_calibrated_us": 9.37625269745272,
+          "old_minus_new_calibrated_us": -0.6585929142628411,
+          "old_baseline_raw_us": 13.472000136971474,
+          "new_baseline_raw_us": 13.311999849975109,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN                     8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT                           8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN"
+          ],
+          "new_selected_native_names": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 32",
+          "layer": "pooler",
+          "m": 256,
+          "old_raw_us": 28.07999961078167,
+          "new_raw_us": 28.16000021994114,
+          "old_minus_new_raw_us": -0.0800006091594696,
+          "old_calibrated_us": 24.084211796200766,
+          "new_calibrated_us": 24.59031738563393,
+          "old_minus_new_calibrated_us": -0.5061055894331657,
+          "old_baseline_raw_us": 33.663999289274216,
+          "new_baseline_raw_us": 35.232000052928925,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           24.5 \u00b5s 100.0%      1\ntotal                                                             24.5 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           24.0 \u00b5s 100.0%      1\ntotal                                                             24.0 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+          ],
+          "new_selected_native_names": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 32",
+          "layer": "unpooler",
+          "m": 256,
+          "old_raw_us": 27.087999507784843,
+          "new_raw_us": 28.28799933195114,
+          "old_minus_new_raw_us": -1.199999824166298,
+          "old_calibrated_us": 23.087707336283085,
+          "new_calibrated_us": 24.08993863108691,
+          "old_minus_new_calibrated_us": -1.0022312948038234,
+          "old_baseline_raw_us": 28.4000001847744,
+          "new_baseline_raw_us": 28.28799933195114,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN                    23.6 \u00b5s 100.0%      1\ntotal                                                             23.6 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT                          24.6 \u00b5s 100.0%      1\ntotal                                                             24.6 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN"
+          ],
+          "new_selected_native_names": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 32",
+          "layer": "router",
+          "m": 256,
+          "old_raw_us": 13.055999763309956,
+          "new_raw_us": 13.248000293970108,
+          "old_minus_new_raw_us": -0.19200053066015244,
+          "old_calibrated_us": 9.06402700077578,
+          "new_calibrated_us": 9.177043392266368,
+          "old_minus_new_calibrated_us": -0.11301639149058793,
+          "old_baseline_raw_us": 21.60000056028366,
+          "new_baseline_raw_us": 21.503999829292297,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       8.0 \u00b5s 100.0%      1\ntotal                                                              8.0 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       7.9 \u00b5s 100.0%      1\ntotal                                                              7.9 \u00b5s",
+          "old_selected_native_names": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "new_selected_native_names": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        }
+      ],
+      "causal_scope": "Cross-job descriptive only:baselinecalibration,choices,devicecontext/timing/weight/inputcaseidentity maydiffer; noisolatedearlyloadcausality"
+    },
+    "fe5c45197ca041bb": {
+      "old_score_us": 3196.414179553723,
+      "new_score_us": 3175.899650724306,
+      "old_minus_new_score_us": 20.51452882941703,
+      "targets": [
+        {
+          "load": "decode 1",
+          "layer": "pooler",
+          "m": 1,
+          "old_raw_us": 17.44000054895878,
+          "new_raw_us": 17.664000391960144,
+          "old_minus_new_raw_us": -0.22399984300136566,
+          "old_calibrated_us": 13.52125752498267,
+          "new_calibrated_us": 13.838390713003543,
+          "old_minus_new_calibrated_us": -0.3171331880208727,
+          "old_baseline_raw_us": 25.200000032782555,
+          "new_baseline_raw_us": 25.472000241279602,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                   13.9 \u00b5s 100.0%      1\ntotal                                                             13.9 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                   14.4 \u00b5s 100.0%      1\ntotal                                                             14.4 \u00b5s",
+          "old_selected_native_names": [
+            "void gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 1",
+          "layer": "pooler",
+          "m": 8,
+          "old_raw_us": 17.56799966096878,
+          "new_raw_us": 17.664000391960144,
+          "old_minus_new_raw_us": -0.09600073099136353,
+          "old_calibrated_us": 13.611366277787576,
+          "new_calibrated_us": 13.768730134448942,
+          "old_minus_new_calibrated_us": -0.1573638566613663,
+          "old_baseline_raw_us": 25.151999667286873,
+          "new_baseline_raw_us": 25.439999997615814,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.4 \u00b5s 100.0%      1\ntotal                                                             13.4 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.7 \u00b5s 100.0%      1\ntotal                                                             13.7 \u00b5s",
+          "old_selected_native_names": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        }
+      ],
+      "all_cases": [
+        {
+          "load": "decode 1",
+          "layer": "qkv_gate",
+          "m": 1,
+          "old_raw_us": 12.992000207304955,
+          "new_raw_us": 12.912000063806772,
+          "old_minus_new_raw_us": 0.0800001434981823,
+          "old_calibrated_us": 8.926062921710944,
+          "new_calibrated_us": 9.210867987524566,
+          "old_minus_new_calibrated_us": -0.2848050658136217,
+          "old_baseline_raw_us": 18.160000443458557,
+          "new_baseline_raw_us": 18.25599931180477,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)                       9.4 \u00b5s 100.0%      1\ntotal                                                              9.4 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.4 \u00b5s 100.0%      1\ntotal                                                              9.4 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 1",
+          "layer": "o",
+          "m": 1,
+          "old_raw_us": 9.279999881982803,
+          "new_raw_us": 9.151999838650227,
+          "old_minus_new_raw_us": 0.12800004333257675,
+          "old_calibrated_us": 5.233084334299053,
+          "new_calibrated_us": 5.206901928191856,
+          "old_minus_new_calibrated_us": 0.026182406107196583,
+          "old_baseline_raw_us": 10.944000445306301,
+          "new_baseline_raw_us": 10.816000401973724,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           3.9 \u00b5s 100.0%      1\ntotal                                                              3.9 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 1",
+          "layer": "pooler",
+          "m": 1,
+          "old_raw_us": 17.44000054895878,
+          "new_raw_us": 17.664000391960144,
+          "old_minus_new_raw_us": -0.22399984300136566,
+          "old_calibrated_us": 13.52125752498267,
+          "new_calibrated_us": 13.838390713003543,
+          "old_minus_new_calibrated_us": -0.3171331880208727,
+          "old_baseline_raw_us": 25.200000032782555,
+          "new_baseline_raw_us": 25.472000241279602,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                   13.9 \u00b5s 100.0%      1\ntotal                                                             13.9 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                   14.4 \u00b5s 100.0%      1\ntotal                                                             14.4 \u00b5s",
+          "old_selected_native_names": [
+            "void gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 1",
+          "layer": "unpooler",
+          "m": 1,
+          "old_raw_us": 8.25599953532219,
+          "new_raw_us": 8.352000266313553,
+          "old_minus_new_raw_us": -0.09600073099136353,
+          "old_calibrated_us": 4.236691741055472,
+          "new_calibrated_us": 4.422207345284414,
+          "old_minus_new_calibrated_us": -0.1855156042289418,
+          "old_baseline_raw_us": 10.863999836146832,
+          "new_baseline_raw_us": 10.912000201642513,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 16, 4, 1, 1, 0, 0>(G)                          3.6 \u00b5s 100.0%      1\ntotal                                                              3.6 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)                   3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 1, 2, 1, 16, 4, 1, 1, 0, 0>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 1",
+          "layer": "router",
+          "m": 1,
+          "old_raw_us": 7.679999805986881,
+          "new_raw_us": 7.568000117316842,
+          "old_minus_new_raw_us": 0.11199968867003918,
+          "old_calibrated_us": 3.8498791059102344,
+          "new_calibrated_us": 3.6370970626053265,
+          "old_minus_new_calibrated_us": 0.21278204330490827,
+          "old_baseline_raw_us": 14.431999996304512,
+          "new_baseline_raw_us": 14.303999952971935,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rr<1, 2, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.6 \u00b5s 100.0%      1\ntotal                                                              2.6 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.8 \u00b5s 100.0%      1\ntotal                                                              2.8 \u00b5s",
+          "old_selected_native_names": [
+            "void rr<1, 2, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+          ],
+          "new_selected_native_names": [
+            "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 16",
+          "layer": "qkv_gate",
+          "m": 16,
+          "old_raw_us": 13.952000066637993,
+          "new_raw_us": 13.887999579310417,
+          "old_minus_new_raw_us": 0.06400048732757568,
+          "old_calibrated_us": 10.082526230439257,
+          "new_calibrated_us": 10.111835050320055,
+          "old_minus_new_calibrated_us": -0.029308819880798184,
+          "old_baseline_raw_us": 18.031999468803406,
+          "new_baseline_raw_us": 17.904000356793404,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.9 \u00b5s 100.0%      1\ntotal                                                              9.9 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.2 \u00b5s 100.0%      1\ntotal                                                             10.2 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 16",
+          "layer": "o",
+          "m": 16,
+          "old_raw_us": 9.503999724984169,
+          "new_raw_us": 9.519999846816063,
+          "old_minus_new_raw_us": -0.01600012183189392,
+          "old_calibrated_us": 5.67763880773779,
+          "new_calibrated_us": 5.740073286307048,
+          "old_minus_new_calibrated_us": -0.06243447856925741,
+          "old_baseline_raw_us": 10.607999749481678,
+          "new_baseline_raw_us": 10.751999914646149,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           5.2 \u00b5s 100.0%      1\ntotal                                                              5.2 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           5.1 \u00b5s 100.0%      1\ntotal                                                              5.1 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 0>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 0>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 16",
+          "layer": "pooler",
+          "m": 16,
+          "old_raw_us": 17.775999382138252,
+          "new_raw_us": 17.88800023496151,
+          "old_minus_new_raw_us": -0.11200085282325745,
+          "old_calibrated_us": 13.86658339346883,
+          "new_calibrated_us": 13.965112992737524,
+          "old_minus_new_calibrated_us": -0.09852959926869516,
+          "old_baseline_raw_us": 25.087999179959297,
+          "new_baseline_raw_us": 25.520000606775284,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                 13.7 \u00b5s 100.0%      1\ntotal                                                             13.7 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                 14.1 \u00b5s 100.0%      1\ntotal                                                             14.1 \u00b5s",
+          "old_selected_native_names": [
+            "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 16",
+          "layer": "unpooler",
+          "m": 16,
+          "old_raw_us": 18.400000408291817,
+          "new_raw_us": 18.464000895619392,
+          "old_minus_new_raw_us": -0.06400048732757568,
+          "old_calibrated_us": 14.400463512711699,
+          "new_calibrated_us": 14.37576089662965,
+          "old_minus_new_calibrated_us": 0.024702616082049645,
+          "old_baseline_raw_us": 22.352000698447227,
+          "new_baseline_raw_us": 22.60800078511238,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                 14.2 \u00b5s 100.0%      1\ntotal                                                             14.2 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                 15.4 \u00b5s 100.0%      1\ntotal                                                             15.4 \u00b5s",
+          "old_selected_native_names": [
+            "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 16",
+          "layer": "router",
+          "m": 16,
+          "old_raw_us": 8.736000396311283,
+          "new_raw_us": 8.736000396311283,
+          "old_minus_new_raw_us": 0.0,
+          "old_calibrated_us": 4.771963098821904,
+          "new_calibrated_us": 4.870923580933068,
+          "old_minus_new_calibrated_us": -0.09896048211116432,
+          "old_baseline_raw_us": 18.880000337958336,
+          "new_baseline_raw_us": 18.880000337958336,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.1 \u00b5s 100.0%      1\ntotal                                                              4.1 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 32",
+          "layer": "qkv_gate",
+          "m": 32,
+          "old_raw_us": 14.271999709308147,
+          "new_raw_us": 14.175999909639359,
+          "old_minus_new_raw_us": 0.09599979966878891,
+          "old_calibrated_us": 10.351301138085441,
+          "new_calibrated_us": 10.140871678062007,
+          "old_minus_new_calibrated_us": 0.21042946002343343,
+          "old_baseline_raw_us": 18.559999763965607,
+          "new_baseline_raw_us": 18.192000687122345,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.1 \u00b5s 100.0%      1\ntotal                                                             10.1 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.9 \u00b5s 100.0%      1\ntotal                                                              9.9 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 32",
+          "layer": "o",
+          "m": 32,
+          "old_raw_us": 10.863999836146832,
+          "new_raw_us": 10.528000071644783,
+          "old_minus_new_raw_us": 0.3359997645020485,
+          "old_calibrated_us": 7.159691513712454,
+          "new_calibrated_us": 6.517843546449371,
+          "old_minus_new_calibrated_us": 0.6418479672630829,
+          "old_baseline_raw_us": 10.991999879479408,
+          "new_baseline_raw_us": 10.847999714314938,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_64x32_64x16_2x1_v_bz_TNT                            4.7 \u00b5s 100.0%      1\ntotal                                                              4.7 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                5.7 \u00b5s 100.0%      1\ntotal                                                              5.7 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_64x32_64x16_2x1_v_bz_TNT"
+          ],
+          "new_selected_native_names": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 32",
+          "layer": "pooler",
+          "m": 32,
+          "old_raw_us": 19.26399953663349,
+          "new_raw_us": 19.392000511288643,
+          "old_minus_new_raw_us": -0.12800097465515137,
+          "old_calibrated_us": 14.958551446355928,
+          "new_calibrated_us": 15.355563361107766,
+          "old_minus_new_calibrated_us": -0.39701191475183806,
+          "old_baseline_raw_us": 25.760000571608543,
+          "new_baseline_raw_us": 25.95200017094612,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.6 \u00b5s 100.0%      1\ntotal                                                             15.6 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.4 \u00b5s 100.0%      1\ntotal                                                             15.4 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 32",
+          "layer": "unpooler",
+          "m": 32,
+          "old_raw_us": 19.279999658465385,
+          "new_raw_us": 19.071999937295914,
+          "old_minus_new_raw_us": 0.20799972116947174,
+          "old_calibrated_us": 15.643530773724468,
+          "new_calibrated_us": 15.174128723449417,
+          "old_minus_new_calibrated_us": 0.46940205027505,
+          "old_baseline_raw_us": 22.624000906944275,
+          "new_baseline_raw_us": 22.784000262618065,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               16.3 \u00b5s 100.0%      1\ntotal                                                             16.3 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               16.0 \u00b5s 100.0%      1\ntotal                                                             16.0 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "decode 32",
+          "layer": "router",
+          "m": 32,
+          "old_raw_us": 9.344000369310379,
+          "new_raw_us": 9.02399979531765,
+          "old_minus_new_raw_us": 0.3200005739927292,
+          "old_calibrated_us": 5.376823762161031,
+          "new_calibrated_us": 4.994401388596497,
+          "old_minus_new_calibrated_us": 0.3824223735645346,
+          "old_baseline_raw_us": 19.231999292969704,
+          "new_baseline_raw_us": 19.231999292969704,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 4, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.3 \u00b5s 100.0%      1\ntotal                                                              4.3 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.3 \u00b5s 100.0%      1\ntotal                                                              4.3 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<2, 4, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 1",
+          "layer": "qkv_gate",
+          "m": 8,
+          "old_raw_us": 13.279999606311321,
+          "new_raw_us": 13.151999562978745,
+          "old_minus_new_raw_us": 0.12800004333257675,
+          "old_calibrated_us": 9.473752346303227,
+          "new_calibrated_us": 9.315258443462923,
+          "old_minus_new_calibrated_us": 0.15849390284030415,
+          "old_baseline_raw_us": 18.192000687122345,
+          "new_baseline_raw_us": 18.0479995906353,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          8.8 \u00b5s 100.0%      1\ntotal                                                              8.8 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.0 \u00b5s 100.0%      1\ntotal                                                              9.0 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 1",
+          "layer": "o",
+          "m": 8,
+          "old_raw_us": 9.472000412642956,
+          "new_raw_us": 9.296000003814697,
+          "old_minus_new_raw_us": 0.17600040882825851,
+          "old_calibrated_us": 5.553468051251921,
+          "new_calibrated_us": 5.453187791527743,
+          "old_minus_new_calibrated_us": 0.10028025972417799,
+          "old_baseline_raw_us": 10.56000031530857,
+          "new_baseline_raw_us": 10.56000031530857,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           3.9 \u00b5s 100.0%      1\ntotal                                                              3.9 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 1",
+          "layer": "pooler",
+          "m": 8,
+          "old_raw_us": 17.56799966096878,
+          "new_raw_us": 17.664000391960144,
+          "old_minus_new_raw_us": -0.09600073099136353,
+          "old_calibrated_us": 13.611366277787576,
+          "new_calibrated_us": 13.768730134448942,
+          "old_minus_new_calibrated_us": -0.1573638566613663,
+          "old_baseline_raw_us": 25.151999667286873,
+          "new_baseline_raw_us": 25.439999997615814,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.4 \u00b5s 100.0%      1\ntotal                                                             13.4 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.7 \u00b5s 100.0%      1\ntotal                                                             13.7 \u00b5s",
+          "old_selected_native_names": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 1",
+          "layer": "unpooler",
+          "m": 8,
+          "old_raw_us": 8.39999970048666,
+          "new_raw_us": 8.0960001796484,
+          "old_minus_new_raw_us": 0.30399952083826065,
+          "old_calibrated_us": 4.371440470693082,
+          "new_calibrated_us": 4.1286870042680155,
+          "old_minus_new_calibrated_us": 0.2427534664250661,
+          "old_baseline_raw_us": 10.975999757647514,
+          "new_baseline_raw_us": 10.912000201642513,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.5 \u00b5s 100.0%      1\ntotal                                                              3.5 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.5 \u00b5s 100.0%      1\ntotal                                                              3.5 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 1",
+          "layer": "router",
+          "m": 8,
+          "old_raw_us": 8.495999965816736,
+          "new_raw_us": 8.352000266313553,
+          "old_minus_new_raw_us": 0.14399969950318336,
+          "old_calibrated_us": 4.578790200278141,
+          "new_calibrated_us": 4.406493384745029,
+          "old_minus_new_calibrated_us": 0.17229681553311185,
+          "old_baseline_raw_us": 30.368000268936157,
+          "new_baseline_raw_us": 30.079999938607216,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.5 \u00b5s 100.0%      1\ntotal                                                              3.5 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.6 \u00b5s 100.0%      1\ntotal                                                              3.6 \u00b5s",
+          "old_selected_native_names": [
+            "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+          ],
+          "new_selected_native_names": [
+            "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 16",
+          "layer": "qkv_gate",
+          "m": 128,
+          "old_raw_us": 17.03999936580658,
+          "new_raw_us": 16.847999766469,
+          "old_minus_new_raw_us": 0.19199959933757782,
+          "old_calibrated_us": 13.165304192999477,
+          "new_calibrated_us": 12.96698263596402,
+          "old_minus_new_calibrated_us": 0.19832155703545504,
+          "old_baseline_raw_us": 20.99199965596199,
+          "new_baseline_raw_us": 21.040000021457672,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           12.6 \u00b5s 100.0%      1\ntotal                                                             12.6 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           12.6 \u00b5s 100.0%      1\ntotal                                                             12.6 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 16",
+          "layer": "o",
+          "m": 128,
+          "old_raw_us": 11.392000131309032,
+          "new_raw_us": 11.359999887645245,
+          "old_minus_new_raw_us": 0.03200024366378784,
+          "old_calibrated_us": 7.3209798351743345,
+          "new_calibrated_us": 7.086527640299565,
+          "old_minus_new_calibrated_us": 0.2344521948747697,
+          "old_baseline_raw_us": 11.359999887645245,
+          "new_baseline_raw_us": 11.42400037497282,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT                            5.4 \u00b5s 100.0%      1\ntotal                                                              5.4 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT                            5.3 \u00b5s 100.0%      1\ntotal                                                              5.3 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT"
+          ],
+          "new_selected_native_names": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 16",
+          "layer": "pooler",
+          "m": 128,
+          "old_raw_us": 22.6879995316267,
+          "new_raw_us": 22.23999984562397,
+          "old_minus_new_raw_us": 0.4479996860027313,
+          "old_calibrated_us": 18.520356016660784,
+          "new_calibrated_us": 18.299597445561975,
+          "old_minus_new_calibrated_us": 0.22075857109880961,
+          "old_baseline_raw_us": 28.9280004799366,
+          "new_baseline_raw_us": 29.32799980044365,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               18.0 \u00b5s 100.0%      1\ntotal                                                             18.0 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)           18.7 \u00b5s 100.0%      1\ntotal                                                             18.7 \u00b5s",
+          "old_selected_native_names": [
+            "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+          ],
+          "new_selected_native_names": [
+            "void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 16",
+          "layer": "unpooler",
+          "m": 128,
+          "old_raw_us": 22.87999913096428,
+          "new_raw_us": 22.92799949645996,
+          "old_minus_new_raw_us": -0.04800036549568176,
+          "old_calibrated_us": 18.93096688689289,
+          "new_calibrated_us": 19.011992632082507,
+          "old_minus_new_calibrated_us": -0.08102574518961773,
+          "old_baseline_raw_us": 23.760000243782997,
+          "new_baseline_raw_us": 24.000000208616257,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_h_bz_coopB_NNN                     19.8 \u00b5s 100.0%      1\ntotal                                                             19.8 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT                     19.0 \u00b5s 100.0%      1\ntotal                                                             19.0 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_coopB_NNN"
+          ],
+          "new_selected_native_names": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 16",
+          "layer": "router",
+          "m": 128,
+          "old_raw_us": 11.760000139474869,
+          "new_raw_us": 11.615999974310398,
+          "old_minus_new_raw_us": 0.14400016516447067,
+          "old_calibrated_us": 7.666043056239684,
+          "new_calibrated_us": 7.483344842008743,
+          "old_minus_new_calibrated_us": 0.1826982142309407,
+          "old_baseline_raw_us": 20.54399996995926,
+          "new_baseline_raw_us": 20.38400061428547,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 4, 128, 128, 1, 4>(RtMap, RtMap, RtMap, flo...       6.1 \u00b5s 100.0%      1\ntotal                                                              6.1 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.1 \u00b5s 100.0%      1\ntotal                                                              6.1 \u00b5s",
+          "old_selected_native_names": [
+            "void rtk<256, 4, 128, 128, 1, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "new_selected_native_names": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 32",
+          "layer": "qkv_gate",
+          "m": 256,
+          "old_raw_us": 21.51999995112419,
+          "new_raw_us": 21.647999994456768,
+          "old_minus_new_raw_us": -0.12800004333257675,
+          "old_calibrated_us": 17.27458327749486,
+          "new_calibrated_us": 17.8840856902749,
+          "old_minus_new_calibrated_us": -0.6095024127800425,
+          "old_baseline_raw_us": 23.887999355793,
+          "new_baseline_raw_us": 23.760000243782997,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           18.0 \u00b5s 100.0%      1\ntotal                                                             18.0 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           19.0 \u00b5s 100.0%      1\ntotal                                                             19.0 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN"
+          ],
+          "new_selected_native_names": [
+            "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN"
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 32",
+          "layer": "o",
+          "m": 256,
+          "old_raw_us": 12.912000063806772,
+          "new_raw_us": 13.376000337302685,
+          "old_minus_new_raw_us": -0.46400027349591255,
+          "old_calibrated_us": 8.999675475858291,
+          "new_calibrated_us": 9.37625269745272,
+          "old_minus_new_calibrated_us": -0.3765772215944289,
+          "old_baseline_raw_us": 13.327999971807003,
+          "new_baseline_raw_us": 13.311999849975109,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_1x1_h_bz_coopA_NNN                     8.0 \u00b5s 100.0%      1\ntotal                                                              8.0 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT                           8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_128x128_64x6_1x1_h_bz_coopA_NNN"
+          ],
+          "new_selected_native_names": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 32",
+          "layer": "pooler",
+          "m": 256,
+          "old_raw_us": 28.736000880599022,
+          "new_raw_us": 28.16000021994114,
+          "old_minus_new_raw_us": 0.5760006606578827,
+          "old_calibrated_us": 24.899630250869077,
+          "new_calibrated_us": 24.59031738563393,
+          "old_minus_new_calibrated_us": 0.3093128652351443,
+          "old_baseline_raw_us": 35.151999443769455,
+          "new_baseline_raw_us": 35.232000052928925,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_64x128_64x8_1x1_v_bz_NNT                           28.0 \u00b5s 100.0%      1\ntotal                                                             28.0 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           24.0 \u00b5s 100.0%      1\ntotal                                                             24.0 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_64x128_64x8_1x1_v_bz_NNT"
+          ],
+          "new_selected_native_names": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 32",
+          "layer": "unpooler",
+          "m": 256,
+          "old_raw_us": 27.456000447273254,
+          "new_raw_us": 28.28799933195114,
+          "old_minus_new_raw_us": -0.831998884677887,
+          "old_calibrated_us": 23.41571083134287,
+          "new_calibrated_us": 24.08993863108691,
+          "old_minus_new_calibrated_us": -0.674227799744036,
+          "old_baseline_raw_us": 28.384000062942505,
+          "new_baseline_raw_us": 28.28799933195114,
+          "old_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN                    24.5 \u00b5s 100.0%      1\ntotal                                                             24.5 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT                          24.6 \u00b5s 100.0%      1\ntotal                                                             24.6 \u00b5s",
+          "old_selected_native_names": [
+            "nvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN"
+          ],
+          "new_selected_native_names": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+          ],
+          "profile_route_changed": true,
+          "case_seed_equal": false
+        },
+        {
+          "load": "verify 32",
+          "layer": "router",
+          "m": 256,
+          "old_raw_us": 13.151999562978745,
+          "new_raw_us": 13.248000293970108,
+          "old_minus_new_raw_us": -0.09600073099136353,
+          "old_calibrated_us": 9.11210508462147,
+          "new_calibrated_us": 9.177043392266368,
+          "old_minus_new_calibrated_us": -0.06493830764489758,
+          "old_baseline_raw_us": 21.584000438451767,
+          "new_baseline_raw_us": 21.503999829292297,
+          "old_profile": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s",
+          "new_profile": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       7.9 \u00b5s 100.0%      1\ntotal                                                              7.9 \u00b5s",
+          "old_selected_native_names": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "new_selected_native_names": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "profile_route_changed": false,
+          "case_seed_equal": false
+        }
+      ],
+      "causal_scope": "Cross-job descriptive only:baselinecalibration,choices,devicecontext/timing/weight/inputcaseidentity maydiffer; noisolatedearlyloadcausality"
+    }
+  },
+  "local_body_points_preserved": {
+    "M1_keyed_minusparent_direction": "control_minuskeyed\u2212.048000365us",
+    "M8_control_minusearlyload_us": 0.031999312341213226,
+    "scope": "separatefixedH100sourcebodyvalidation,notofficialforecast"
+  },
+  "evidence": {
+    "results/proj-rsi/jobs/40d856e085274f51.json": "e15b9f5c98140c844c5da8b5461eb520cdcc9b19558d8fcf5727564bf7263d4b",
+    "results/proj-rsi/releases/gv53-selected-earlyload-v1-17d44d1140ab/submission.py": "17d44d1140ab09cdbab1f2835841e2891fc1c7c01c1eb4d9a2833c242d99a3e6",
+    "results/proj-rsi/releases/gv53-selected-earlyload-v1-17d44d1140ab/official-status.json": "963ca3e5e48a29e6ba94e876cdd7cb06d1fa1ab24f47555ef70aa476371141c7",
+    "results/proj-rsi/releases/gv53-selected-earlyload-v1-17d44d1140ab/profiles/submission.40d856e085274f51.log": "cd3eb62fc541947c4e531a3fab60e0ce43e5d0d5923adf5150c40d659678ef10",
+    "results/proj-rsi/jobs/40d856e085274f51.log": "cd3eb62fc541947c4e531a3fab60e0ce43e5d0d5923adf5150c40d659678ef10",
+    "results/proj-rsi/jobs/9916d34357b745cf.json": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+    "results/proj-rsi/jobs/fe5c45197ca041bb.json": "b3f81d4e7d7196ad9e1147857536c860f2f40eb9482556572ce9b78e41337559"
+  },
+  "promotion": "ROOT_RECORDED_REFINE_INCUMBENT9916_REMAINS_NO_ACTION_BY_ANALYZER",
+  "submission_receipt": {
+    "receipt_schema_version": 1,
+    "attempt_id": "5e4a33c3f4f2434385442964fa080da6",
+    "problem": "muse_bf16_proj",
+    "job": "40d856e085274f51",
+    "kind": "scored",
+    "verb": "submit",
+    "candidate": "results/proj-rsi/releases/gv53-selected-earlyload-v1-17d44d1140ab/submission.py",
+    "source_sha256": "17d44d1140ab09cdbab1f2835841e2891fc1c7c01c1eb4d9a2833c242d99a3e6",
+    "experiment": "gv53_selected_earlyload_v1",
+    "submitted_at": "2026-10-27T23:34:19Z",
+    "quota_before": {
+      "scored": {
+        "per_day": 10,
+        "used": 9,
+        "left": 1
+      },
+      "checks": {
+        "per_day": 20,
+        "used": 13,
+        "left": 7
+      }
+    },
+    "quota_bucket": "scored",
+    "response_received_at": "2026-10-27T23:34:19Z",
+    "status": "accepted",
+    "submit_response": {
+      "job_id": "40d856e085274f51",
+      "problem": "muse_bf16_proj"
+    }
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "state": "VALID_EXACT_CURRENT_POOLER32_RQ_PROFILE_OUTPUTS",
+  "review_sha256": "dd5ab01945854af54464d28f29e04ea65a29ff935801689ec3a11d80c4a24d08",
+  "phases": [
+    "load_exact_SO_no_JIT",
+    "original_task_weights_codec",
+    "capture_exact_incumbent_graph",
+    "profile_own_terminal_validated",
+    "complete"
+  ],
+  "profile_launches": 1,
+  "JIT_calls": 0,
+  "build": {
+    "SO_sha256": "ab6c3ad71701098713f7c3435439f905c4d482ae66a995948bfcda254494a32f",
+    "CUDA_sha256": "b9ce4596f79c85acdc831610e3ace2cd8b7dfaa8d11a5506697c5e3802efb867",
+    "native_arm": 0,
+    "cleanup_helper_SO_sha256": "2eb511c0af3c4ce5bd3990e45d376c64d12016b876a2109ac0f263eafc8c17a7",
+    "helper_use": "Only clear_blas_cache, no math/profile launches",
+    "JIT": false
+  },
+  "attributes": {
+    "registers": 168,
+    "local": 0,
+    "static": 0,
+    "max_dynamic": 99488,
+    "max_threads": 384,
+    "occupancy": 1
+  },
+  "hardware": {
+    "name": "NVIDIA H100 80GB HBM3",
+    "SMs": 132
+  },
+  "fixture": {
+    "W_seed": 5151,
+    "X_seed": 91100,
+    "m": 32,
+    "N": 4096,
+    "K": 8192,
+    "KS": 4,
+    "packed_pointer_mod32": 0
+  },
+  "validation": [
+    {
+      "kind": "normal",
+      "oracle": {
+        "task_FP64": "relative L2 error 3.379e-03 (worst row 3.607e-03); 4 probe rows exact to 0.0e+00",
+        "current_X": "EXACT",
+        "RQ_counters_reset0": true,
+        "physical_guards_sink_immutable": "PASS"
+      }
+    },
+    {
+      "kind": "outliers",
+      "oracle": {
+        "task_FP64": "relative L2 error 3.529e-03 (worst row 3.690e-03); 1 probe rows exact to 0.0e+00",
+        "current_X": "EXACT",
+        "RQ_counters_reset0": true,
+        "physical_guards_sink_immutable": "PASS"
+      }
+    },
+    {
+      "kind": "zero",
+      "oracle": {
+        "task_FP64": "relative L2 error 0.000e+00 (worst row 0.000e+00)",
+        "current_X": "EXACT",
+        "RQ_counters_reset0": true,
+        "physical_guards_sink_immutable": "PASS"
+      }
+    },
+    {
+      "kind": "ring_split_boundary",
+      "oracle": {
+        "task_FP64": "relative L2 error 0.000e+00 (worst row 0.000e+00); 32 probe rows exact to 0.0e+00",
+        "current_X": "EXACT",
+        "RQ_counters_reset0": true,
+        "physical_guards_sink_immutable": "PASS"
+      }
+    }
+  ],
+  "actual_graph_nodes": [
+    {
+      "node_handle": "0x5c059dec2070",
+      "node_type": 0,
+      "cluster_query_returncode": 0,
+      "cluster_dimension": [
+        0,
+        0,
+        0
+      ],
+      "function_mangled": "_ZN10rq_control2rqILi32ELi6ELi1ELi0ELi0ELi0ELi35EEEvNS_3RqPENS_6RqTmapES2_",
+      "function_handle": "0x5c057432f170",
+      "grid": [
+        32,
+        4,
+        1
+      ],
+      "block": [
+        384,
+        1,
+        1
+      ],
+      "threads": 384,
+      "dynamic_shared_bytes": 99488,
+      "attributes": {
+        "max_threads": 384,
+        "static_shared_bytes": 0,
+        "local_bytes": 0,
+        "registers": 168,
+        "PTX_version": 90,
+        "binary_version": 90,
+        "max_dynamic_shared_bytes": 99488
+      },
+      "theoretical_CTA_occupancy_per_SM": 1,
+      "occupancy_scope": "Read-only driver calculation for actual block/dynamic shared; not measured achieved occupancy or cluster occupancy"
+    }
+  ],
+  "raw": [
+    {
+      "mode": "warmup",
+      "seed": 91100
+    },
+    {
+      "mode": "warmup",
+      "seed": 91100
+    },
+    {
+      "mode": "warmup",
+      "seed": 91100
+    },
+    {
+      "mode": "warmup",
+      "seed": 91100
+    },
+    {
+      "mode": "warmup",
+      "seed": 91100
+    },
+    {
+      "mode": "profile",
+      "seed": 91100
+    }
+  ],
+  "own_terminal": {
+    "seed": 91100,
+    "before_any_later_replay_or_mutation": true,
+    "oracle": {
+      "task_FP64": "relative L2 error 3.377e-03 (worst row 3.603e-03); 4 probe rows exact to 0.0e+00",
+      "current_X": "EXACT",
+      "RQ_counters_reset0": true,
+      "physical_guards_sink_immutable": "PASS"
+    }
+  },
+  "mutations": [
+    {
+      "kind": "zero",
+      "oracle": {
+        "task_FP64": "relative L2 error 0.000e+00 (worst row 0.000e+00)",
+        "current_X": "EXACT",
+        "RQ_counters_reset0": true,
+        "physical_guards_sink_immutable": "PASS"
+      },
+      "NaN_output_overwritten": true
+    },
+    {
+      "kind": "normal",
+      "oracle": {
+        "task_FP64": "relative L2 error 3.410e-03 (worst row 3.662e-03); 2 probe rows exact to 0.0e+00",
+        "current_X": "EXACT",
+        "RQ_counters_reset0": true,
+        "physical_guards_sink_immutable": "PASS"
+      },
+      "NaN_output_overwritten": true
+    },
+    {
+      "kind": "outliers",
+      "oracle": {
+        "task_FP64": "relative L2 error 3.502e-03 (worst row 3.608e-03); 6 probe rows exact to 0.0e+00",
+        "current_X": "EXACT",
+        "RQ_counters_reset0": true,
+        "physical_guards_sink_immutable": "PASS"
+      },
+      "NaN_output_overwritten": true
+    },
+    {
+      "kind": "boundary",
+      "oracle": {
+        "task_FP64": "relative L2 error 0.000e+00 (worst row 0.000e+00); 32 probe rows exact to 0.0e+00",
+        "current_X": "EXACT",
+        "RQ_counters_reset0": true,
+        "physical_guards_sink_immutable": "PASS"
+      },
+      "NaN_output_overwritten": true
+    },
+    {
+      "kind": "fresh_normal",
+      "oracle": {
+        "task_FP64": "relative L2 error 3.277e-03 (worst row 3.676e-03); 4 probe rows exact to 0.0e+00",
+        "current_X": "EXACT",
+        "RQ_counters_reset0": true,
+        "physical_guards_sink_immutable": "PASS"
+      },
+      "NaN_output_overwritten": true
+    }
+  ],
+  "graph_cleanup": [],
+  "cost": {
+    "elapsed_seconds": 4.738490308998735
+  },
+  "post_scope_cleanup": {
+    "allocated": 0,
+    "reserved": 0,
+    "blas_after": [
+      1,
+      33554432,
+      0
+    ],
+    "clear_error": null,
+    "after_run_scope_and_drain": true
+  }
+}

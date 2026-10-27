@@ -1,0 +1,41 @@
+{
+  "capture.py": {
+    "state": "CPU_EXACT_RQ_CAPTURE_PASS_RUNTIME_UNRUN",
+    "JIT_calls": 0,
+    "profile_launches": 1,
+    "warmup_launches": 5,
+    "fixed_X_seed": 91100,
+    "actual_weight_seed": "reference.WEIGHTS_SEED",
+    "SO_pins": "PASS",
+    "helper": "clear_blas_cache only; no GV calls"
+  },
+  "profile.py": {
+    "state": "CPU_ONE_KERNEL_PROFILE_RECIPE_PASS",
+    "metrics": [
+      "gpu__time_duration.sum",
+      "dram__bytes_read.sum",
+      "dram__bytes_write.sum",
+      "dram__throughput.avg.pct_of_peak_sustained_elapsed",
+      "smsp__issue_active.avg.pct_of_peak_sustained_active",
+      "smsp__warps_eligible.avg.per_cycle_active",
+      "smsp__inst_executed.sum",
+      "smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+      "smsp__warp_issue_stalled_short_scoreboard_per_warp_active.pct",
+      "smsp__warp_issue_stalled_wait_per_warp_active.pct",
+      "smsp__warp_issue_stalled_branch_resolving_per_warp_active.pct",
+      "smsp__warp_issue_stalled_math_pipe_throttle_per_warp_active.pct"
+    ],
+    "NCU_GPU_subprocesses": 0,
+    "capture_timeout_max_seconds": 60,
+    "overall_inner_seconds": 90,
+    "outer_seconds": 120,
+    "process_group_termination": true
+  },
+  "tests": {
+    "state": "CPU_PROFILE_FOCUSED_TESTS_PASS",
+    "parser_negatives": 7,
+    "leader_exited_descendant_SIGKILL_attempted": true,
+    "group_disappeared_before3s": true,
+    "GPU_NCU_calls": 0
+  }
+}

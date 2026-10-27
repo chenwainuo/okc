@@ -1,0 +1,19 @@
+{
+  "parent_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+  "source": "one X slot primed with u0; current snapshot then load u+1 before decode/repair; W schedule unchanged",
+  "old_block": "    if (XS == 2 && LX && !((V >> 25) & 1)) {  // pw21: the router token loop loads x at use\n#pragma unroll\n      for (int n = 0; n < MT; n++) { xd[n][0] = gxp<(V >> 15) & 3>(xp[n] + u * 64); xd[n][1] = gxp<(V >> 15) & 3>(xp[n] + u * 64 + 8); }\n    }",
+  "new_block": "    if (XS == 2 && LX && !((V >> 25) & 1)) {\n#pragma unroll\n      for (int n=0;n<MT;n++) { xd[n][0]=next_x[n][0]; xd[n][1]=next_x[n][1]; }\n      if (u+1<KU) {\n#pragma unroll\n        for (int n=0;n<MT;n++) { next_x[n][0]=gxp<(V >> 15) & 3>(xp[n]+(u+1)*64); next_x[n][1]=gxp<(V >> 15) & 3>(xp[n]+(u+1)*64+8); }\n      }\n    }",
+  "prime": "  uint4 next_x[MT][2];\n#pragma unroll\n  for (int n=0;n<MT;n++) { next_x[n][0]=gxp<(V >> 15) & 3>(xp[n]); next_x[n][1]=gxp<(V >> 15) & 3>(xp[n]+8); }\n",
+  "scope": [
+    1,
+    2,
+    2,
+    1,
+    4,
+    16,
+    1,
+    1,
+    2,
+    1
+  ]
+}

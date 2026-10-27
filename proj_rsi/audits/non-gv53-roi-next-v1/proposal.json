@@ -1,0 +1,236 @@
+{
+  "state": "CPU_RANKED_DIAGNOSTIC_PROPOSAL_NOT_GPU_READY",
+  "scope": "ONLY muse_bf16_proj; exclude selected GV53 M1/M8, no automatic compactRQ retry",
+  "incumbent_job": "9916d34357b745cf",
+  "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+  "ranking": [
+    {
+      "non_GV53_rank": 1,
+      "scored_rank": 3,
+      "load": "decode 32",
+      "layer": "pooler",
+      "m": 32,
+      "actual_kernel_names": [
+        "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "calibrated_us": 15.522677468167032,
+      "score_elasticity": 0.04962468467383463,
+      "conditional_10pct_case_gain_us": 15.864680255936946
+    },
+    {
+      "non_GV53_rank": 2,
+      "scored_rank": 4,
+      "load": "decode 16",
+      "layer": "unpooler",
+      "m": 16,
+      "actual_kernel_names": [
+        "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+      ],
+      "calibrated_us": 14.34517450571615,
+      "score_elasticity": 0.048562831878118835,
+      "conditional_10pct_case_gain_us": 15.520991812545162
+    },
+    {
+      "non_GV53_rank": 3,
+      "scored_rank": 5,
+      "load": "decode 16",
+      "layer": "pooler",
+      "m": 16,
+      "actual_kernel_names": [
+        "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+      ],
+      "calibrated_us": 14.265113585000279,
+      "score_elasticity": 0.04829180101466138,
+      "conditional_10pct_case_gain_us": 15.433297732925439
+    },
+    {
+      "non_GV53_rank": 4,
+      "scored_rank": 6,
+      "load": "verify 32",
+      "layer": "pooler",
+      "m": 256,
+      "actual_kernel_names": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+      ],
+      "calibrated_us": 24.084211796200766,
+      "score_elasticity": 0.04826339362732718,
+      "conditional_10pct_case_gain_us": 15.424107017156075
+    },
+    {
+      "non_GV53_rank": 5,
+      "scored_rank": 7,
+      "load": "decode 32",
+      "layer": "unpooler",
+      "m": 32,
+      "actual_kernel_names": [
+        "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "calibrated_us": 15.059097119932208,
+      "score_elasticity": 0.04814265757835983,
+      "conditional_10pct_case_gain_us": 15.385046469639747
+    },
+    {
+      "non_GV53_rank": 6,
+      "scored_rank": 8,
+      "load": "verify 16",
+      "layer": "unpooler",
+      "m": 128,
+      "actual_kernel_names": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT"
+      ],
+      "calibrated_us": 18.543867084653822,
+      "score_elasticity": 0.04775210160816903,
+      "conditional_10pct_case_gain_us": 15.25871036335684
+    },
+    {
+      "non_GV53_rank": 7,
+      "scored_rank": 9,
+      "load": "verify 16",
+      "layer": "pooler",
+      "m": 128,
+      "actual_kernel_names": [
+        "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+      ],
+      "calibrated_us": 17.97685415312117,
+      "score_elasticity": 0.04629199304526307,
+      "conditional_10pct_case_gain_us": 14.786622810963763
+    },
+    {
+      "non_GV53_rank": 8,
+      "scored_rank": 10,
+      "load": "verify 32",
+      "layer": "unpooler",
+      "m": 256,
+      "actual_kernel_names": [
+        "nvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN"
+      ],
+      "calibrated_us": 23.087707336283085,
+      "score_elasticity": 0.04626645524265557,
+      "conditional_10pct_case_gain_us": 14.778368991639127
+    },
+    {
+      "non_GV53_rank": 9,
+      "scored_rank": 11,
+      "load": "decode 1",
+      "layer": "qkv_gate",
+      "m": 1,
+      "actual_kernel_names": [
+        "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+      ],
+      "calibrated_us": 8.79496920496118,
+      "score_elasticity": 0.04143667963709777,
+      "conditional_10pct_case_gain_us": 13.219330558404181
+    },
+    {
+      "non_GV53_rank": 10,
+      "scored_rank": 12,
+      "load": "verify 1",
+      "layer": "qkv_gate",
+      "m": 8,
+      "actual_kernel_names": [
+        "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+      ],
+      "calibrated_us": 9.159501030123945,
+      "score_elasticity": 0.041372766061537704,
+      "conditional_10pct_case_gain_us": 13.198725328465116
+    }
+  ],
+  "choice": {
+    "load": "decode32",
+    "layer": "pooler",
+    "m": 32,
+    "N": 4096,
+    "K": 8192,
+    "KS": 4,
+    "selected_template": [
+      32,
+      6,
+      1,
+      0,
+      0,
+      0,
+      35
+    ],
+    "grid": [
+      32,
+      4,
+      1
+    ],
+    "block": [
+      384,
+      1,
+      1
+    ],
+    "shared_request": 99488,
+    "registers": 168,
+    "queried_occupancy": 1,
+    "case_latency_us": 15.522677468167032,
+    "score_elasticity": 0.04962468467383463,
+    "reason": "Highest-sensitivity non-GV53 case, source-selected customkernel with previously valid exactcurrent binary. RQ loopinstruction edits have mixed/negative evidence and no current pooler32 hardwarecriticalpath diagnosis found."
+  },
+  "ready_asset_reuse": {
+    "SO": "results/proj-rsi/scheduler/artifacts/research.rq.descriptor.offset.fixed.01/collection-1793137716124289144/logs/scheduler/rq-descriptor-offset-fixed-01/run/actual.so",
+    "SO_sha256": "ab6c3ad71701098713f7c3435439f905c4d482ae66a995948bfcda254494a32f",
+    "CUDA": "results/proj-rsi/scheduler/artifacts/research.rq.descriptor.offset.fixed.01/collection-1793137716124289144/logs/scheduler/rq-descriptor-offset-fixed-01/run/actual.cu",
+    "CUDA_sha256": "b9ce4596f79c85acdc831610e3ace2cd8b7dfaa8d11a5506697c5e3802efb867",
+    "PyInit": "PyInit_rq_offset_fixed_b9ce4596f79c85acdc",
+    "arm_index": 0,
+    "function": "_ZN10rq_control2rqILi32ELi6ELi1ELi0ELi0ELi0ELi35EEEvNS_3RqPENS_6RqTmapES2_",
+    "native_evidence": "proj_rsi/candidates/rq_descriptor_offset_trial_v1/actual-analysis/native-supplement-v1.json",
+    "native_instructions": 2184,
+    "newJIT": false,
+    "reuse": "Same frozen original codec pack/escape generation, pooler shape/KS4 wrapper, privateoutputs and existing graph/currentinput/ownterminal/mutation checks. Use only control arm; do not touch offset or compact kernels. Source-load factory can be primed from exact frozen source, no prepare/selector or modified instrumentation."
+  },
+  "concrete_question": {
+    "hypothesis_A": "Currentpooler32 pipeline is limited by W/X delivery or asynchronousconsumer waits; shortening scalar descriptor/cursorwork alone cannot meaningfullyreduce fullstage time.",
+    "hypothesis_B": "Current12bitdecode/escape/control dependence leaves mathgroups unable to issue while delivery is notsaturated, so a targeted schedule/liverange edit has attainable headroom.",
+    "cause_confidence": "UNKNOWN; both plausible, existinginstructioncounts and oldH100QKV_INS cannotdecide currentH200pooler case.",
+    "smallest_diagnostic": "One exactcurrent pooler32 launch under bounded NCU, load existingSO withoutJIT. Start with same12 currently runtime-verified metrics as GV53 profile recipe; queryruntime capability and record replaypasses. Optionally collect SourceCounters/SASS-PC sampling within same120s outer bound if exactlocalNCUmetadata supports it. Preserve sparse/unavailable as inconclusive, not impliedproducerproof.",
+    "counter_role_limits": "AggregateDRAM/issue/scoreboard metrics do not identify producer versus consumer roles. Only source-bound SASS-PC groups with adequate samples could attribute roles; no source-line correlation promised for binarywithoutlineinfo. No profiler duration is clean benchmark.",
+    "predicted_decision": "Delivery-busy/scoreboard-heavy evidence reprioritizes independentprefetch/asyncprogress investigation; issue/decode-heavy PC evidence justifies one explicit decode schedule prototype. Ambiguous/sparse results do not authorize broad rewrite."
+  },
+  "metrics_recipe_reuse": "proj_rsi/candidates/gv53_exactso_counters_v1/profile.py METRICS tuple and kernel-replay/cacheall/clocknone settings, adapted to exactlyone RQcontrol function/launch ratherthanthreeGV arms",
+  "cost": {
+    "inner_seconds": 90,
+    "outer_seconds": 120,
+    "new_kernel_compilations": 0,
+    "profiled_kernel_launches": 1,
+    "clean_timing_claim": false,
+    "remaining_work_before_admission": "A tiny capture adapter+exactSO pins and focused review; this note is not an executable job or readiness claim."
+  },
+  "conditional_score_value": {
+    "formula": "3157.03840365 * (1-(1-delta_us/52.13358893)^(1/6)); all else incumbent fixed",
+    "scenario_us_case_to_score_gain": {
+      "0.1": 1.0100860202109474,
+      "0.5": 5.066677257682981,
+      "1.0": 10.174407319665429
+    },
+    "ten_percent_case_gain_us": 15.864680255936946,
+    "not_a_forecast": "Diagnostic earns0 speedcredit; attainablegain and predictedscore areUNKNOWN. Singlecase cannotbe assumed toclose157us targetgap."
+  },
+  "prior_failures_and_reopening": [
+    {
+      "evidence": "proj_rsi/audits/cursor-matched-geometry-01/report.md",
+      "facts": "PoolerST6 loadercursor paired\u2212.080us/F1\u2212.032us; oldsource freshpolicy mixed/nointegrationgain. Keep oldH100geometry/KS contexts separate.",
+      "implication": "Do not repeatcursor without currentcriticalpath evidence."
+    },
+    {
+      "evidence": "proj_rsi/candidates/rq_descriptor_offset_trial_v1/actual-analysis/done-evidence.json",
+      "facts": "ExactscoredST6 pooler descriptoroffset paired\u2212.224001us/F1+.080001us; noresourceschange. Unpoolpositive doesnottransfer automatically."
+    },
+    {
+      "evidence": "proj_rsi/audits/rq32-predxor-result-analysis/runtime-report.md",
+      "facts": "Localpolicy paired1.005625/F11.003082 positive; officialpredxorCHECK3182.721286 lost3.435662us toPW45. Not evidenceescapeoptimizations are universallywrong."
+    },
+    {
+      "evidence": "proj_rsi/candidates/rq_compact256_half_trial_v1/actual-analysis/done-evidence.json",
+      "facts": "Differentunpoolcell reached128regs/2CTA query but paired\u2212.016us/F1\u2212.064us. Noautomaticpoolercompact retry."
+    },
+    {
+      "evidence": "proj_rsi/audits/gv-unpool16-deltakey-result/analysis.json",
+      "facts": "Next-rankedunpoolerM16 has recentdeltakey paired\u2212.080us/F1+.096us andlanebase no pairedgain; avoid duplicatedsmallkeyedloopwork while otheragents own thatfamily."
+    }
+  ],
+  "GPU_API_SSH_queue_git_actions": 0,
+  "contract": "proj_rsi/ITERATION.md"
+}

@@ -1,0 +1,17 @@
+import pathlib
+D=pathlib.Path(__file__).resolve().parent;R=D.parents[2];P=R/'proj_rsi/candidates/gv53_earlyload_v1'
+s=(P/'driver.py').read_text().replace('earlyload','xprefetch').replace('pooler','unpooler').replace('ThinGV53','ThinGV16')
+s=s.replace('8192','@SWAP@').replace('4096','8192').replace('@SWAP@','4096')
+s=s.replace('columns=[0,1,31,63,64,511,512,8191]','columns=[0,1,15,16,31,32,63,64,127,128,511,512,1023,1024,4094,4095]')
+s=s.replace('len(columns)==len(set(columns))==8','len(columns)==len(set(columns))==16').replace('len(basis_columns())==8','len(basis_columns())==16').replace("'basis_columns_per_arm_cell':8","'basis_columns_per_arm_cell':16")
+s=s.replace('for m in (8,):','for m in (16,):').replace('range(0,8,m)','range(0,len(columns),m)').replace('ONE_FIXED_M8_CELL','ONE_FIXED_UNPOOLER16_CELL')
+s=s.replace('reference.WEIGHTS_SEED+193','reference.WEIGHTS_SEED+193')
+s=s.replace("env['_gvesc'](esc7,256,(2,16,8,1,1,0))","env['_gvesc'](esc7,512,(1,4,16,1,1,2))").replace("'geometry':[2,16,8,1,1,0]","'geometry':[1,4,16,1,1,2]")
+s=s.replace("a['max_dynamic']>=17408 and a['max_threads']>=1024 and a['occupancy']>=1","a['max_dynamic']>=5120 and a['max_threads']>=128 and a['occupancy']==4")
+s=s.replace('Fixed GV53 implementation','Fixed selected GV16 implementation').replace('One fixed M8 incumbent earlier-load cell','One fixed unpooler M16 X-prefetch cell')
+(D/'driver.py').write_text(s)
+a=(P/'adapter.py').read_text().replace('ThinGV53','ThinGV16').replace('GV53','GV16').replace('x.shape[0]not in(1,8)or x.shape[1]!=8192','x.shape[0]!=16 or x.shape[1]!=4096').replace('tuple(out.shape)!=(x.shape[0],4096)','tuple(out.shape)!=(16,8192)').replace('esc.numel()!=131072','esc.numel()!=65536')
+(D/'adapter.py').write_text(a)
+b=(P/'bridge.cuh').read_text().replace('gv_predxor<1,1,1,2,16,8,1,1,0,3>','gv_predxor<1,2,2,1,4,16,1,1,2,1>').replace('gv_earlyload<1,1,1,2,16,8,1,1,0,3>','gv_xprefetch<1,2,2,1,4,16,1,1,2,1>').replace('17408','5120').replace('1024','128').replace('m!=8','m!=16').replace('p.N=4096;p.K=8192;p.KC=128','p.N=8192;p.K=4096;p.KC=64').replace('dim3((m+7)/8,128,1)','dim3((m+15)/16,512,1)')
+(D/'bridge.cuh').write_text(b)
+(D/'thin.cu').write_text((D/'pilot.cu').read_text()+'\n'+b)
