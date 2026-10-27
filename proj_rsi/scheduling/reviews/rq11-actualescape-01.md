@@ -1,0 +1,48 @@
+# Independent RQ11 actual-escape CPU accounting review
+
+**CPU_PASS for bit preservation, exact CPU fixture accounting and the next research decision.** This is not admission of a GPU codec, CUDA fixture distribution, GPU instruction cost, serving speed, or official-score gain. The independent review found and resolved one descriptive metadata error in a new v2 accounting revision: maximum prefetch windows now include the sentinel-only fetch at multiples of32. Requested-load, allocation and retained-cache byte totals were already correct and remain unchanged. No review blocker remains within the CPU accounting scope.
+
+Final reviewed v2 manifest SHA256 `a6e2ae29bd615d669aba3d9cefeca0c2ea7731cd015b3da5a119d1242e836fb9`; all39 listed hashes verify. Final tool SHA256 `b27e1cd5f815efc50c5dd393fa4d437ccdc6e778596d904550176af69c78cf52`. All9 CPU tests independently pass in0.950s, including the new maximum-prefetch regression. Reviewer reran the complete bounded single-thread v2 tool to `/tmp/rq11-independent-worker18-v2.json` without overwriting the frozen result:5.679s internal elapsed, no CUDA initialization. Every substantive field, including source hashes, exact matrix/router hashes, all histograms/window candidate coverage, payload hashes and all six KS geometries, equals the retained v2 result.
+
+The original manifest `14da86b2241e866049ad921ca7da537517acc645306bfdbf59fe94b11184529b` and tool `70918fa57c68ee9a48131db75f586ea4f31279bd376827aae18c922226e2e3b2` were independently checked first (all18 pins,8 tests, full run5.753s). All20 archival path/hash records, including that exact manifest and source, now verify under `history/cpu-reference-v1/`. Independent v1/v2 comparison confirms exactly three maximum-window fields changed across all layer records; every other layer/histogram/payload/geometry/accounting field is identical.
+
+## Exact scope and bit proof
+
+Unchanged AST-extracted `reference.generate_weights(5151, device='cpu')` preserves shared generator state and layer order. It is not a NumPy normal approximation or a reset generator per layer. Four matrices contain94,371,840 BF16 values; both12-bit and11-bit payload+escape paths reconstruct every value bit-exact. The2,097,152 FP32 router values are hashed and excluded from BF16 coding. The same seed does not establish CPU/CUDA RNG identity, and local Torch2.13.0+cpu is explicitly qualified; actual CUDA weight distributions remain UNKNOWN.
+
+The final9-test suite checks every65,536 storage pattern at all125 legal11-bit windows and121 legal12-bit windows:16,121,856 pattern/window cases. Storage preservation includes sign, signed zero, subnormals and nonfinite payloads; separate serving admissibility rejects nonfinite inputs and mutated decoded bits. Frozen11-bit layout matches all patterns at representative bases0/57/124. Whole finite reference matrices pass independently of that exhaustive synthetic storage proof.
+
+Reviewer separately enumerated the pinned natural fragment coordinate map over16,384 entries in a128×128 matrix, including every lane/value/step and both K chunks. It is bijective and equals `fragments()` exactly: row=`16*tile +8*((value//2)%2)+lane//4`, col=`64*chunk+16*step+8*(value//4)+2*(lane%4)+value%2`. Thus the grouping is the actual16×64 warp fragment rather than arbitrary consecutive blocks. RQ11's per-lane32 three-bit selectors cover all96 header bits exactly; RQ12 offset/sign positions cover all32 bits of each code word without overlap or gaps. Low planes remain1024B per1024 BF16 values, headers384B versus512B; no hidden selector padding is required.
+
+Every retained128-bin h7 histogram sums to its matrix count. Reviewer independently summed each contiguous width4/8 candidate window and confirmed every coverage count and first-argmax tie rule. RQ11 bases57/58 and RQ12 base54 are CPU-fixture results, not GPU constants.
+
+## Escape coordinates, bounds and prefetch
+
+Escape corrections are XOR7 of original h7 and selected base, with the escape selector offset forced to0; sign and low8 bits remain preserved. Real escapes have nonzero XOR within7 bits. Field layout is seq15 | lane5 | register4 | half1 | xor7. Reviewer independently roundtripped393,216 legal field combinations across seq0/1/32766, all step/lane/value coordinates and all128 xor values. No valid entry aliases0xffffffff; ten negative/out-of-range coordinate/sequence/xor controls reject through the frozen checked entry API. Current real KC values are at most128, so relative sequences remain far below reserved32767.
+
+The actual tool checks every actual escape field across KS1/2/4/6/7/8. Unequal split boundaries are `floor(split*KC/KS)`, and coordinate-to-group counts independently agree with physical-list sums. There is no finite32-hit truncation. CAP is the next multiple of32 strictly greater than the global maximum physical-list length. Every list has its own sentinel; the allocation retains32 additional guard words. Last-window bounds fit within CAP, and overflowing checked-format/cap cases reject rather than silently drop entries.
+
+Pinned stock `rq_fix` initially loads32 entries, then loads32 more after each32 consumed entries. Hence requested words/list=`32*(floor(length/32)+1)`, including empty lists and a sentinel-only window at lengths32/64/etc. Boundary tests0/1/31/32/33/63/64 pass. `window-costs.json` uses this correct formula. The v1 descriptive `max_prefetch_windows_per_list` usedceil(max/32), underreporting three cases: qkv11 KS6 max352 needs12 rather than11, qkv11 KS7 max320 needs11 rather than10, and unpooler11 KS8 max256 needs9 rather than8. V2 now usesfloor(max/32)+1, with independent full-result verification and explicit0/1/31/32/33/63/64/256/320/352 plus every-geometry regression coverage. The v1 bytes are preserved. Requested-byte accounting is unchanged.
+
+## Whole allocation and retained-cache ledger
+
+Per warp-unit payload is1536B/1408B. For G=KS×NB×8, total codec allocation is `payload +4*G*CAP +128`. The ledger separately retains actual entries, fixed-stride slack including per-list sentinel space,128B trailing guards, zero selector/stage padding, logical4B table and8B host ABI value with no separate device table. Full128 stages are12288B/11264B, HALF64 stages6144B/5632B. Shared rings/common counters are separate format-independent costs; they are not payload savings. `_rqesc` returns a4B dummy tensor that the selected callers discard, so it is correctly excluded from retained serving allocation.
+
+Pinned `_rqbake` stores `(lay,tab,esc6)` in `state['rq_pk']`; esc6 contains six int64 fields: **48B per escaped value**. Reviewer checked source retention and each result's cache ledger. RQ12 retains this source cache. Applying the same cache policy to RQ11 is conditional because no RQ11 GPU prepare/integration exists. The scope is steady source-style retained tensors for one selected KS allocation/layer, not allocator reservation or full prepare peak memory; original weights, other packs and additional KS allocations remain distinct.
+
+| CPU matrix / reference KS | RQ12 payload+ESC B | RQ11 payload+ESC B | Allocation saving | RQ12 including esc6 B | RQ11 with same cache B |
+|---|---:|---:|---:|---:|---:|
+| qkv /7 |28,440,704|27,371,648|3.75889%|28,565,744|39,651,104|
+| o /2 |12,714,112|12,189,824|4.12367%|12,762,544|17,218,592|
+| pooler /4 |50,462,848|48,365,696|4.15583%|50,686,912|70,167,296|
+| unpooler /2 |50,462,848|49,938,560|1.03896%|50,618,368|89,985,968|
+
+One geometry per layer totals142,080,512→137,865,728B packed+ESC, but stock-style esc6 retention raises142,633,568→217,022,960B. UnpoolerKS8 has exactly zero codec-allocation saving on this CPU fixture. Requested source load savings at the listed geometries are4.92052%/5.40633%/4.83716%/1.82249%; these are not measured HBM/L2 bytes or decoder latency. Selected geometry summary matches full results, and its source official-log hash verifies; actual selected qkv16/32/128 KS7, pooler32/128 KS4, unpooler32 KS2 and o32 KS2 are checked as geometry references only.
+
+## Instruction and task contract
+
+This package implements CPU encoding/accounting and an exact conceptual decoder. There is no RQ11 CUDA decoder, kernel JIT/SASS, actual occupancy, graph, full output/probe gate, bounded GPU prepare or same-run selected-incumbent measurement to approve. Three packed selector planes require cross-word extraction, and larger serial escape walks/cache retention can outweigh byte reduction; no instruction-count, latency or throughput saving follows from CPU bits/bytes. Stock-walker requested-load accounting is explicitly conditional on retaining that implementation, and no GPU instruction schedule is invented.
+
+The existing task requires lossless weights, GPU weight preparation from the judge's current tensors, no input-derived output caching or host synchronization in kernel_fn, unchanged exact shape/precision semantics including FP32 router and probe checks, and a source-qualified valid comparison against the actual selected incumbent before integration. This CPU artifact satisfies its narrower proof scope. It does not satisfy the absent serving/runtime gates. Historical family-closure wording is superseded by the current iteration contract: a geometry-specific zero saving or expensive escape distribution does not retire the family.
+
+The next decision can use this exact CPU ledger to design a compact/drop-after-prepare escape metadata policy, a bounded producer/decode isolation prototype, or accounting against saved exact CUDA weights if available. Any new implementation requires its own frozen version and independent validity review. No GPU action, queue mutation, source integration, family retirement or score forecast was performed or authorized by this review.

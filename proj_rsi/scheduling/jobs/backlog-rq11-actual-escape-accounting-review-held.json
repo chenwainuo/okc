@@ -1,0 +1,60 @@
+{
+  "id": "research.rq11.actualescape.review.01",
+  "resource": "cpu",
+  "kind": "review",
+  "state": "HELD",
+  "author": "sol13",
+  "created_at": 1793075695.9612088,
+  "depends_on": [
+    {
+      "id": "research.rq11.actualescape.readiness.01",
+      "accepted_dispositions": [
+        "CPU_PASS"
+      ]
+    }
+  ],
+  "write_paths": [
+    "proj_rsi/scheduling/reviews/rq11-actual-escape-accounting.md"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 7.950628540704201,
+      "p_resolve": 0.7,
+      "p_followup_gain": 0.01,
+      "unblocks": [
+        "research.rq11.actualescape.gpu.01"
+      ],
+      "decision": "Do actual task W and selected geometry retain any net byte advantage after exact old/new escape allocations, and is it worth a separate producer/decode causal test?"
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains.",
+    "confidence": "low; omitted historical mechanisms and readiness gaps, no new measured speedup",
+    "evidence": [
+      "proj_rsi/audits/sol17-rq11-feasibility.md",
+      "proj_rsi/candidates/rq11_codec/hypothesis.json",
+      "proj_rsi/candidates/rq11_codec/cpu-results.json",
+      "muse_bf16_proj/reference.py",
+      "proj_rsi/audits/sol16-score-opportunity.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 1500,
+    "cpu_minutes": null
+  },
+  "annotations": {
+    "readiness": "HELD until author package frozen and a reviewer independent of implementation owner is assigned. Review effort unknown; do not silently price zero or dispatch.",
+    "comparator": "Stock frozen PW36/RQ12 actual selected geometry and actual CUDA fixture W versus rq11-wordplanes-v1 exact same W/KS/NB grouping; compare payload+old/new CSR+guard+metadata, not raw11/12 or NumPy synthetic means.",
+    "requires": [
+      "all declared output artifacts frozen and hash-pinned",
+      "independent source/indexing/lifetime/resource/actual-JIT/final-output/counter contract review",
+      "explicit GO/HOLD with proposed full reservation cost and exact root launch argv"
+    ],
+    "implementation_owner": "unassigned",
+    "no_execution_authorized": true
+  }
+}

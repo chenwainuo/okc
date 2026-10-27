@@ -1,0 +1,61 @@
+{
+  "version": "pw38-official-release-plan-v1",
+  "state": "PLANNED_ONLY_AWAIT_VALID_LOCAL_STACK_AND_ROOT_RELEASE",
+  "executed_by_this_worker": {"GPU": false, "prepare": false, "official_API": false, "quota_query": false, "submission": false, "scheduler_change": false},
+  "candidate": {
+    "path": "proj_rsi/candidates/pw38/submission.py",
+    "sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+    "manifest": "proj_rsi/candidates/pw38/manifest.json",
+    "manifest_sha256": "48b697b288e71617bdf5e688325c17e90d6541d140153acfb73a464e01dbc89b",
+    "includes": "PW36 combined RS32 small-M RQ and PW35 RTK router, plus optional EH65538/65539; old controls retained; cursor excluded",
+    "EH_actual_selection": "UNKNOWN_UNTIL_ACTUAL_PICK_AND_PROFILE_EVIDENCE"
+  },
+  "local_release_prerequisites": [
+    "Exact registered pw38.stack.fullscope.01 result completes all three arms, all65normal+9exactofficial cases per arm and all30 paired/F1 shapes; no missing or filtered rows.",
+    "Both immediate actual terminal-output gates, current-X mutations, NaN output/float-workspace poison, immutable bytes, active reset/monotonic/dormant counter contracts and graph drain/reset pass.",
+    "Actual JIT EH/control PC/predicate/instruction/resource/physical gates pass; no caught build/gate failure is hidden by production fallback.",
+    "Root independently verifies actual guard/container/context/GPU cleanup and retains the source-bound raw artifacts; exit0 alone is not validation.",
+    "Independent full-result interpretation compares actual RS32 incumbent, PW36 parent and PW38 cumulative policy, including all regressions/uncertainty. No stitched minima or assumed additive gain.",
+    "Root explicitly releases an official check on the exact frozen file. A local H100 pass is not an official H200 pass or cold-prepare feasibility proof."
+  ],
+  "official_snapshot_plan": {
+    "directory": "results/proj-rsi/releases/pw38-v1-29e557ea53f3",
+    "source_snapshot": "results/proj-rsi/releases/pw38-v1-29e557ea53f3/submission.py",
+    "preserve_before_API": ["immutable source copy with expected SHA256", "source manifest and source/driver/result independent reviews", "complete local result/raw/JIT/cleanup hash inventory", "lint output", "attestation JSON with UTC timestamp, source size/hash, parent manifest hash and exact planned command"],
+    "preserve_after_API": ["quota-before and quota-after JSON, last-known limits and actual live remaining counts", "raw submit/check response and job id/mode/content_hash/payload_ref verbatim", "submitted descriptor and stdout", "normalized benchmark JSON, all30 actual profiles and full available preparation log", "result/status/raw API snapshot and hashes", "unchanged source SHA after completion", "job-to-source attestation tying job id to the pre-upload local byte hash"],
+    "identity_limit": "Preserve server content_hash and payload_ref as opaque identifiers unless their algorithm/normalization is documented; do not equate them to local SHA256. Retain an actual uploaded payload copy if the service exposes one."
+  },
+  "commands_after_explicit_root_release_only": [
+    "python3 -m proj_rsi quota > results/proj-rsi/releases/pw38-v1-29e557ea53f3/quota-before-check.json",
+    "python3 -m proj_rsi check results/proj-rsi/releases/pw38-v1-29e557ea53f3/submission.py --against fb548b5dc6f04696 --reserve 1 > results/proj-rsi/releases/pw38-v1-29e557ea53f3/check.stdout 2>&1",
+    "python3 -m proj_rsi quota > results/proj-rsi/releases/pw38-v1-29e557ea53f3/quota-after-check.json"
+  ],
+  "commands_notes": [
+    "First create the snapshot directory and exact source copy; verify expected SHA and lint before any API call. Do not overwrite an existing attempt's logs; use a new attempt directory when needed.",
+    "The wrapper check command is quota-aware, prints the submitted id, waits, archives profiles and records the ordinary job ledger; it does not set the incumbent. It intentionally lacks --scored.",
+    "On a controller/SSH timeout use the recorded official job id to inspect/wait; never submit blindly again. A cached same-code result is not a fresh measurement; retain its actual id and mode.",
+    "Last documented pools are20checks/day and10scored/day, reset00:00UTC. These are planning context only; query actual limits/remaining quota after root release. Do not spend a scored slot merely because a quota reset is near."
+  ],
+  "official_acceptance_review": [
+    "Verify job problem/mode/source association and successful official9/9 correctness plus all30 finite benchmark rows and actual profiles.",
+    "Check fresh H200 preparation and build behavior. Internal production guards remain240s; last documented prepare ceiling is300s and whole official run10minutes including compilation. Reconfirm current service limits at release. Warm local extension-cache preparation does not prove fresh judge feasibility.",
+    "Read actual H200 PREP/BAKE/PICK and skipped-budget/error lines, F1 before-pack/after-variants baselines and discarded warmup. Confirm RTK and small-M paths are genuinely selected where claimed; EH can remain unselected without falsifying source inclusion, but no EH speedup is then claimed.",
+    "Preserve all per-shape losses, load sums, official confidence intervals and preparation timing. Local bracketed F1, official calibrated paired timings and profiler durations are different contexts; do not subtract them into a latency decomposition.",
+    "Recompute speedup and score from this official job's own SGLang vector. Cross-job point differences alone do not prove a causal feature gain; statistical uncertainty remains visible."
+  ],
+  "scoring": {
+    "loads": ["decode1 M1", "decode16 M16", "decode32 M32", "verify1 M8", "verify16 M128", "verify32 M256"],
+    "layers_per_load": ["qkv_gate", "o", "pooler", "unpooler", "router"],
+    "formula": "For each of six loads l, C_l=sum of the five official calibrated candidate times and B_l=sum of the same job's five SGLang times. Speedup=exp(sum_l(log(B_l/C_l))/6). score_us=4830.8/speedup.",
+    "CI_conversion": "If official speedup CI=[lo,hi], score CI=[4830.8/hi,4830.8/lo].",
+    "prohibitions": ["62*geomean(candidate load sums) is not the exact board score", "No cross-job stitched minimum table", "No H100 timing substituted for H200 official timing", "No uncompressed floor treated as an absolute lossless-compression bound"],
+    "implementation_refs": ["proj_rsi/okc_result.py:21", "proj_rsi/okc_result.py:73", "proj_rsi/protocol.json:19", "proj_rsi/audits/pw36-official.md:5"]
+  },
+  "scored_release_is_separate": {
+    "state": "REQUIRES_NEW_EXPLICIT_ROOT_DECISION_AFTER_OFFICIAL_CHECK_REVIEW",
+    "command_template": "python3 -m proj_rsi check results/proj-rsi/releases/pw38-v1-29e557ea53f3/submission.py --scored --against fb548b5dc6f04696 --reserve 1",
+    "requirements": ["same frozen source bytes as checked; any edit creates a new version/check", "fresh scored quota snapshot and archived response/id", "independent correctness/rules/graph/lifetime/source review and evidence-aware comparison to actual best", "retain official outcome whether gain, no gain, regression or invalid"],
+    "promotion": "No quota-driven automatic scoring or incumbent update. A passing check/exit0/full local result does not auto-promote. Root reviews the scored outcome before any separate incumbent action."
+  },
+  "current_incumbent_context": {"job": "fb548b5dc6f04696", "score_us": 3200.6150084373335, "note": "Root live-verified separately; keep its immutable record. PW38 official result is currently absent."}
+}

@@ -1,0 +1,161 @@
+{
+  "id": "research.eh.samegeometry.gpu.01",
+  "resource": "gpu",
+  "kind": "diagnostic",
+  "state": "HELD",
+  "author": "sol13",
+  "created_at": 1793075695.9612088,
+  "depends_on": [
+    {
+      "id": "research.eh.samegeometry.readiness.01",
+      "accepted_dispositions": [
+        "CPU_PASS"
+      ]
+    },
+    {
+      "id": "research.eh.samegeometry.review.01",
+      "accepted_dispositions": [
+        "CPU_PASS"
+      ]
+    }
+  ],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 4.7585015873737575,
+      "p_resolve": 0.8,
+      "p_followup_gain": 0.2,
+      "unblocks": [
+        "research.eh.samegeometry.followup.01"
+      ],
+      "decision": "Does historical EH itself retain even a tiny complete-kernel gain against same-geometry current PW36, before claiming cumulative PW38 selection/stack gains?"
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains.",
+    "confidence": "low; omitted historical mechanisms and readiness gaps, no new measured speedup",
+    "evidence": [
+      "proj_rsi/audits/eh-backport.md",
+      "proj_rsi/candidates/rs32_eh_backport/README.md",
+      "proj_rsi/audits/mx-h100.md",
+      "proj_rsi/audits/sol16-score-opportunity.json",
+      "proj_rsi/candidates/eh_same_geometry_trial/README.md",
+      "proj_rsi/candidates/eh_same_geometry_trial/cpu-proof.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 600,
+    "followup_gpu_seconds": 900,
+    "cpu_minutes": 30
+  },
+  "annotations": {
+    "readiness": "Frozen runnable independently GO-reviewed package. Root must UPDATE the existing research.eh.samegeometry.gpu.01 descriptor, record canonical readiness and review jobs CPU_PASS, then explicitly release HELD to BACKLOG. Never register a duplicate ID.",
+    "comparator": "Mechanism-only PW36 control FL2/3 versus recovered EH FL65538/65539 at M128/ST5/KS pooler4,qkv7,unpooler2,o2; match nonEH control opcode identity. Include current PW38 carriers explicitly; no full prepared-policy claim from forced variants.",
+    "planning_chain_gpu_seconds": 600,
+    "planning_only_not_dispatch_cost": true,
+    "required_runtime_gates": [
+      "source/installed guards and actual JIT resources before first candidate math",
+      "actual declared weights and source-bound active/dormant counter contracts",
+      "full-K basis/FP64/task and fresh/current/zero/poison/immutability",
+      "strict actual final timed output before replay or mutation",
+      "balanced paired/F1 raw samples and named cleanup",
+      "root validation; never promote from exit0"
+    ],
+    "next_after_failure": "Retain artifacts/source identity, diagnose concrete failure or valid regression, new attempt for repairs; no family retirement or presumed additive gains.",
+    "full_cost_basis": "600s estimated entire reservation including transfer/compile/two actual JITs/all four full-K validations/measurement/profiling/cleanup; hard guard inner600 outer720.900s planning full downstream cumulative selected-policy follow-up;30 CPUminutes review/collection/analysis. Bounds are limits, estimates are subjective.",
+    "expected_artifacts": {
+      "shape_count": 4,
+      "raw_calls": 1096,
+      "strict_terminal_checks": 32,
+      "mutation_checks": 80,
+      "mechanism_only": true
+    },
+    "independent_review_pending": false,
+    "independent_review_go_sha256": "c28f3b06b4f8ad29a416e61f34dccdebfd32bd0e4059f935253900c17278211d",
+    "validity_prior": "direct.p_valid=1 is immaterial because direct.scenario_score_us=0; no direct achieved gain forecast. information.p_resolve=.8 includes risk that a valid complete mechanism comparison resolves the EH question; p_followup_gain=.2 subjective, no measured forecast.",
+    "reviewed_planning_score": {
+      "priority": 0.36561021027778506,
+      "direct_expected_us": 0,
+      "information_expected_us": 0.7613602539798013,
+      "effective_value_us": 0.7613602539798013,
+      "cost_usd": 2.0833333333333335,
+      "cpu_minutes": 30,
+      "age_multiplier": 1.0004303929673302,
+      "assumptions": [
+        "Probabilities are subjective conditional priors, never measured speedups.",
+        "Scenario score benefit uses fixed same-job official reference arithmetic.",
+        "No H100 measurement is automatically a H200 forecast.",
+        "Unknown estimates are null and unrankable, not zero.",
+        "GPU seconds estimate includes full reservation wall time: transfer, compilation, prepare, validation and measurement; follow-up adds full follow-up reservation. CPU minutes include the planned CPU work chain.",
+        "All probabilities are subjective conditional priors, not measured speedups.",
+        "No H100-to-H200 performance transfer is inferred.",
+        "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains."
+      ],
+      "errors": [],
+      "rankable": true
+    }
+  },
+  "files": {
+    "proj_rsi/tools/eh_same_geometry_lab.py": "fa8420608041ae6884518c95b44fb495b60262e5e498627ff74a2080e0b95c79",
+    "proj_rsi/candidates/eh_same_geometry_trial/README.md": "99f79c4a27fb4614187ba7712f7183ad9a61b5e5114052b017aa8b4e6ed01780",
+    "proj_rsi/candidates/eh_same_geometry_trial/cpu-proof.json": "9d96f8c8eae24715fb16d6021f7225d4644a97090732fcfbd65f7830de423146",
+    "proj_rsi/candidates/eh_same_geometry_trial/cpu_proof.py": "2256b478e241b1d78ad303dd84854ac88074e3dd5d0fca6bb79077ac44f1e9f0",
+    "proj_rsi/candidates/eh_same_geometry_trial/eh.cubin": "e9e0d2b13e5e62ef0d86e38221a1254a1de4de51258922acf64b9369a5e54b86",
+    "proj_rsi/candidates/eh_same_geometry_trial/eh.device.cu": "2e8ba7f47a0379997445effdd14c1ea6afc882a9f3e20d0ab68a1ad3c18c0f1b",
+    "proj_rsi/candidates/eh_same_geometry_trial/eh.extension.cu": "2bfdb9adde7fc6e7c246605d7846a2474898f4d86346836db4a69fca8f7a881a",
+    "proj_rsi/candidates/eh_same_geometry_trial/eh.resource.log": "c2d026f10d19385108698d89b9a0ee4e172edd582c376f841dc467b70d16f9cd",
+    "proj_rsi/candidates/eh_same_geometry_trial/eh.sass": "a0b922069e1f3933f790313695ba865baf7d46921e91f2711be3ea1ba85823e5",
+    "proj_rsi/candidates/eh_same_geometry_trial/parent.cubin": "74120894079aad1879776beb84a2884bb6ad8c4f57d9d6285a19f690e98a7c1d",
+    "proj_rsi/candidates/eh_same_geometry_trial/parent.device.cu": "1c8e9002ecc2d811d8b9ff6ba46e71e99e8503380473046874d161a07399bfba",
+    "proj_rsi/candidates/eh_same_geometry_trial/parent.extension.cu": "e19d8585671e4d0792219deb91933ca739d1fd42d28dbcc72358235c2f2b282e",
+    "proj_rsi/candidates/eh_same_geometry_trial/parent.resource.log": "434d1cfc10d62c179cf1cb701634d6aab65441a9c32db2ad903d06baa09a80e1",
+    "proj_rsi/candidates/eh_same_geometry_trial/parent.sass": "cdd2dcac17576ade30c431a882a17e1388770be728610d9ab1ef2165d3f66ed4",
+    "proj_rsi/candidates/eh_same_geometry_trial/pins.json": "f00823b0dba5d0984dde9bb133bb11a16ababf114e96aef9f4dd227e63be7d2a",
+    "proj_rsi/candidates/eh_same_geometry_trial/support.py": "f38ab791aee0aaf052ac12ca0d6c84e0060bbadb60f2e91043c0ca75cf2c0415",
+    "proj_rsi/candidates/pw36/submission.py": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+    "proj_rsi/candidates/pw38/manifest.json": "48b697b288e71617bdf5e688325c17e90d6541d140153acfb73a464e01dbc89b",
+    "proj_rsi/candidates/pw38/submission.py": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+    "proj_rsi/candidates/pw38/same_geometry_lab.json": "a2335dab6f6775a1d95547cd0d237e53190250808701c605e3e0ac2117a1d65a",
+    "proj_rsi/candidates/rs32_eh_backport/manifest.json": "a4ccf23b7ff6b9a383ad0d6299d7de2d0d0d18b60d85e287150a0e465aac9869",
+    "proj_rsi/candidates/rs32_eh_backport/delta.json": "05440c42518a7e7c98971ad6d96ef9528dc6523169c3d04483b7520bf88cbe5a",
+    "proj_rsi/candidates/rs32_eh_backport/preflight.py": "c10ca7bb4a50c9a6e2982039482b10fe469d01ce859bfdbf8d3b2d0f467376a4",
+    "proj_rsi/candidates/rs32_eh_backport/preflight.json": "748bd4b6f764215a61ae75444062557a914b2d1526c96890cec4e6301849263f",
+    "proj_rsi/candidates/rs32_eh_backport/sass.txt": "19cafb1adb1489d9f22dcca2e23e9da7e71bf3bc50c81521a8db5148c091db59",
+    "proj_rsi/candidates/rs32_eh_backport/control-sass.txt": "cdd2dcac17576ade30c431a882a17e1388770be728610d9ab1ef2165d3f66ed4",
+    "proj_rsi/candidates/eh_same_geometry_trial/manifest.json": "92121f07b0e4e895cdb9e5f1292971dd73776e9bb03b5e535364aefc6e47d9cc",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "proj_rsi/scheduling/reviews/eh-same-geometry.md": "c28f3b06b4f8ad29a416e61f34dccdebfd32bd0e4059f935253900c17278211d",
+    "proj_rsi/audits/eh-same-geometry-review/review-cpu.json": "e8f2a0cf69995edf7911a1a8496d1b9d83aca71c9633f21ef4da3a170e6d9e36"
+  },
+  "review": {
+    "actor": "sol09",
+    "path": "proj_rsi/scheduling/reviews/eh-same-geometry.md",
+    "sha256": "c28f3b06b4f8ad29a416e61f34dccdebfd32bd0e4059f935253900c17278211d",
+    "decision": "GO"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-eh-same-geometry-01",
+    "inner_seconds": 600,
+    "outer_seconds": 720,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/tools/eh_same_geometry_lab.py",
+      "--json",
+      "/okc/logs/scheduler/eh-same-geometry-01/result.json"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/eh-same-geometry-01"
+    ]
+  }
+}

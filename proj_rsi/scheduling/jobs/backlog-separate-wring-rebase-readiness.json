@@ -1,0 +1,98 @@
+{
+  "id": "research.wring.rebase.readiness.01",
+  "resource": "cpu",
+  "kind": "implementation",
+  "state": "BACKLOG",
+  "author": "sol13",
+  "created_at": 1793075695.9612088,
+  "depends_on": [],
+  "write_paths": [
+    "proj_rsi/candidates/pw36_wring_rebase",
+    "proj_rsi/tools/wring_rebase_lab.py"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 3.009604389487322,
+      "p_resolve": 0.6,
+      "p_followup_gain": 0.15,
+      "unblocks": [
+        "research.wring.rebase.review.01",
+        "research.wring.rebase.gpu.01"
+      ],
+      "decision": "Does the narrowly recovered x6w4 mechanism retain a real complete-kernel QKV128 advantage against current PW36, or was the historical ~.38us observation noise/old geometry?"
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains.",
+    "confidence": "low; omitted historical mechanisms and readiness gaps, no new measured speedup",
+    "evidence": [
+      "proj_rsi/audits/mx-h100.md",
+      "proj_rsi/candidates/rs128b/submission.py",
+      "proj_rsi/audits/current-leaderboard-gains-completeness.json",
+      "proj_rsi/audits/sol16-score-opportunity.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 900,
+    "cpu_minutes": 120
+  },
+  "annotations": {
+    "family": "separate-wring-rebase",
+    "current_owner": "unassigned",
+    "readiness": "Historical source present, no current rebase/lifetime/JIT-ready package. Separate research lineage; not included in current PW37/PW38 by default.",
+    "causal_hypothesis": "Historical qkv128 x6w4 separate-ring observation15.23->14.85us (~.38us near noise) may reflect decoupled W/X release; deeper W alone historically regressed.",
+    "comparator": "New narrow rebase onto frozen PW36, QKV128 KS7, coupled current control versus equal-depth split x5w5 control versus historical x6w4. Same codec/math/output, explicit depth-change confounds; no broad depth sweep.",
+    "required_next_work": [
+      "Recover exact historical FL bits8..15 W depth fields and source, preserve its raw near-noise evidence; do not fold into EH bit16 or optional EP.",
+      "Produce strict apply/reverse delta from current PW36; preserve current bounded zero poll, D retirement and output/numerical order. Isolate equal-depth barrier split from x6w4 depth change.",
+      "Prove independent Wfull/Wempty and Xfull/Xempty address/phase publication, no stage reuse before decode/read and WGMMA retirement, finite startup/drain for ragged K/KS.",
+      "Offline SASS/register/SMEM proofs, nonEH/non-Wring control identity and new minimal mechanism lab must be independently reviewed before any actual GPU attempt."
+    ],
+    "required_output_artifacts": [
+      "proj_rsi/candidates/pw36_wring_rebase/submission.py",
+      "proj_rsi/candidates/pw36_wring_rebase/delta.json",
+      "proj_rsi/candidates/pw36_wring_rebase/manifest.json",
+      "proj_rsi/tools/wring_rebase_lab.py"
+    ],
+    "conditional_score_scenario": {
+      "official_job": "fb548b5dc6f04696",
+      "official_score_us": 3200.6150084373335,
+      "delta_load_us": {
+        "verify 16": 0.38
+      },
+      "scenario_score_us": 3.009604389487322,
+      "formula": "S0 - S0*exp(sum(log1p(-delta_load/load_sum))/6)",
+      "meaning": "Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer."
+    },
+    "full_cost_basis": "Planning estimate includes implementation, offline checks, independent CPU review and analysis in 120 CPU minutes; 900 seconds is full downstream GPU reservation including transfer/compile/prepare/validation/measurement and later causal follow-up, not kernel time. Frozen runner bounds/actual GPU cost still require review.",
+    "release_requires": "Independent separate CPU review job CPU_PASS; frozen files including guards, root-only host/command/review pin validation; no GPU descriptor is executable yet.",
+    "planned_review_id": "research.wring.rebase.review.01",
+    "planned_gpu_id": "research.wring.rebase.gpu.01",
+    "planning_score": {
+      "priority": 0.0022572032921154912,
+      "direct_expected_us": 0,
+      "information_expected_us": 0.27086439505385895,
+      "effective_value_us": 0.27086439505385895,
+      "cost_usd": 1.25,
+      "cpu_minutes": 120,
+      "age_multiplier": 1.0,
+      "assumptions": [
+        "Probabilities are subjective conditional priors, never measured speedups.",
+        "Scenario score benefit uses fixed same-job official reference arithmetic.",
+        "No H100 measurement is automatically a H200 forecast.",
+        "Unknown estimates are null and unrankable, not zero.",
+        "GPU seconds estimate includes full reservation wall time: transfer, compilation, prepare, validation and measurement; follow-up adds full follow-up reservation. CPU minutes include the planned CPU work chain.",
+        "All probabilities are subjective conditional priors, not measured speedups.",
+        "No H100-to-H200 performance transfer is inferred.",
+        "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains."
+      ],
+      "errors": [],
+      "rankable": true
+    },
+    "planning_rank_among_these_five": 4
+  }
+}

@@ -1,0 +1,580 @@
+{
+  "job_id": "smallm.cursor.v3.all5.01",
+  "disposition": "VALID_REGRESSION",
+  "validator": "root controller requested; worker13 independent local CPU recomputation + worker14 runtime audit",
+  "reason": "Valid complete all-five local H100 actual-policy measurement regresses vs rs32 on pooler32/unpooler32/o32; qkv32 paired tie and tiny qkv16 unchanged-GV win do not offset this or establish a cursor gain. No official/H200 promotion.",
+  "validation_summary": {
+    "inventory_files": 12,
+    "pinned_job_files": 28,
+    "raw_calls": 770,
+    "shapes": 5,
+    "basis_FP64_checks": 15,
+    "graph_mutation_checks": 75,
+    "strict_terminal_output_oracles": 30,
+    "balanced_pairs_per_shape": 30,
+    "all_state_invariant_evaluations_from_frozen_control_flow": 125,
+    "counter_baseline_views": 73,
+    "cursor_actually_selected_shapes": 3,
+    "cleanup_verified": true
+  },
+  "cleanup_verified": true,
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": " rk-s16w8z 7.87\nBAKE router m=16 rk-s16w8x 7.81\nBAKE router m=16 rk-s32x 8.00\nPICK router m=16 rk-s16w8z 7.87\nPROBE p1alt router m=16 rk-s16w8z 7.78 r6=8.80 delta=-1.02\nBAKE router m=32 r6 9.47\nBAKE router m=32 rk-s8z 8.10\nBAKE router m=32 rk-s16w8z 8.16\nPICK router m=32 rk-s8z 8.10\nPROBE p1alt router m=32 rk-s8z 8.06 r6=9.38 delta=-1.31\nPREP rq32 thread ready at 0s\nPREP rq32 bake starts at 53s\nBAKE pooler m=32 rq:t32s5hze-k4 21.70 (ok 3.1e-03) at 53s\nBAKE pooler m=32 rq:t32s6hze-k4 21.82 (ok 3.1e-03) at 54s\nBAKE pooler m=32 rq:t32s5hz-k4 21.79 (ok 3.2e-03) at 54s\nBAKE pooler m=32 r6 22.94 (before variants 23.55, after variants 22.94) at 54s\nPICK pooler m=32 rq:t32s5hze-k4 21.70\nBAKE pooler m=16 rq:t16s5hze-k4 21.73 (ok 3.2e-03) at 54s\nBAKE pooler m=16 rq:t16s6hze-k4 21.66 (ok 3.2e-03) at 54s\nBAKE pooler m=16 rq:t16s5hz-k4 21.73 (ok 3.2e-03) at 54s\nBAKE pooler m=16 r6 21.34 (before variants 21.44, after variants 21.34) at 54s\nPICK pooler m=16 r6 21.34\nBAKE qkv_gate m=32 rq:t32s5hze-k6 14.88 (ok 3.6e-03) at 54s\nBAKE qkv_gate m=32 rq:t32s5hze-k7 15.17 (ok 3.8e-03) at 54s\nBAKE qkv_gate m=32 rq:t32s5hz-k6 14.94 (ok 3.6e-03) at 54s\nBAKE qkv_gate m=32 rq:t32s6hze-k6 14.98 (ok 3.7e-03) at 55s\nBAKE qkv_gate m=32 r6 18.14 (before variants 18.21, after variants 18.14) at 55s\nPICK qkv_gate m=32 rq:t32s5hze-k6 14.88\nBAKE qkv_gate m=16 rq:t16s5hze-k6 14.66 (ok 3.6e-03) at 55s\nBAKE qkv_gate m=16 rq:t16s5ze-k6 14.91 (ok 3.6e-03) at 55s\nBAKE qkv_gate m=16 rq:t16s5hze-k7 14.91 (ok 3.8e-03) at 55s\nBAKE qkv_gate m=16 rq:t16s5ze-k7 15.01 (ok 3.8e-03) at 55s\nBAKE qkv_gate m=16 r6 14.62 (before variants 14.75, after variants 14.62) at 55s\nPICK qkv_gate m=16 r6 14.62\nBAKE unpooler m=32 rq:t32s5hze-k2 21.86 (ok 2.4e-03) at 55s\nBAKE unpooler m=32 rq:t32s6hze-k2 21.82 (ok 2.4e-03) at 55s\nBAKE unpooler m=32 rq:t32s6hz-k2 22.11 (ok 2.5e-03) at 55s\nBAKE unpooler m=32 r6 23.26 (before variants 23.62, after variants 23.26) at 55s\nPICK unpooler m=32 rq:t32s6hze-k2 21.82\nBAKE unpooler m=16 rq:t16s5hze-k2 21.79 (ok 2.4e-03) at 55s\nBAKE unpooler m=16 rq:t16s6hze-k2 21.86 (ok 2.4e-03) at 56s\nBAKE unpooler m=16 rq:t16s5hz-k2 21.95 (ok 2.4e-03) at 56s\nBAKE unpooler m=16 r6 21.73 (before variants 21.73, after variants 21.79) at 56s\nPICK unpooler m=16 r6 21.73\nBAKE o m=32 rq:t32s5hze-k2 9.86 (ok 2.4e-03) at 56s\nBAKE o m=32 rq:t32s6hze-k2 9.79 (ok 2.4e-03) at 56s\nBAKE o m=32 rq:t32s5ze-k2 9.86 (ok 2.4e-03) at 56s\nBAKE o m=32 r6 9.86 (before variants 9.86, after variants 9.86) at 56s\nPICK o m=32 r6 9.86\nBAKE o m=16 rq:t16s5hze-k2 9.73 (ok 2.5e-03) at 56s\nBAKE o m=16 rq:t16s6hze-k2 9.79 (ok 2.5e-03) at 56s\nBAKE o m=16 rq:t16s5ze-k2 9.76 (ok 2.4e-03) at 56s\nBAKE o m=16 r6 8.90 (before variants 8.90, after variants 8.90) at 56s\nPICK o m=16 r6 8.90\nBAKE o m=128 rq:h128s8e-k1 10.72 (ok 1.7e-03) at 56s\nBAKE o m=128 rq:h128s5-k1 11.01 (ok 1.7e-03) at 56s\nBAKE o m=128 r6 10.88 (before variants 10.94, after variants 10.88) at 56s\nPICK o m=128 rq:h128s8e-k1 10.72\nPREP rw compiled in 0s\nBAKE router m=128 r6 13.92\nBAKE router m=128 rp64k32s4 13.25\nBAKE router m=128 rw64k32s8 12.42\nBAKE router m=128 rw64k32s4z 11.84\nBAKE router m=128 rw64k32s8z 11.39\nBAKE router m=128 rw64k32r3x2 12.90\nBAKE router m=128 rw64k32r3x2z 12.19\nPROBE rszero router m=128 3.65\nPICK router m=128 rw64k32s8z 11.39\nBAKE router m=256 r6 15.01\nBAKE router m=256 rwv64k64s4x2 17.15\nBAKE router m=256 rw64k32r3x2 15.81\nBAKE router m=256 rw64k32r3x2z 14.62\nPICK router m=256 rw64k32r3x2z 14.62\nPREP done in 57s\nqkv32_basis_FP64_pw36\nqkv32_basis_FP64_rs32\nqkv32_basis_FP64_increment\nqkv32_timing\nqkv16_basis_FP64_pw36\nqkv16_basis_FP64_rs32\nqkv16_basis_FP64_increment\nqkv16_timing\npooler32_basis_FP64_pw36\npooler32_basis_FP64_rs32\npooler32_basis_FP64_increment\npooler32_timing\nunpooler32_basis_FP64_pw36\nunpooler32_basis_FP64_rs32\nunpooler32_basis_FP64_increment\nunpooler32_timing\no32_basis_FP64_pw36\no32_basis_FP64_rs32\no32_basis_FP64_increment\no32_timing\ncomplete\nTRIAL_EXIT okc-proj-smallm-cursor-v3-01 0\n2026-10-27T04:11:07Z\n",
+    "terminal_exit": 0
+  },
+  "terminal_exit": 0,
+  "comparison": {
+    "qkv32": {
+      "pw36": {
+        "paired_control_over_increment_median_ratio": 0.9979771076971928,
+        "paired_increment_gain_percent": -0.20228923028071666,
+        "paired_signed_control_minus_increment_us": -0.03200024366378784,
+        "paired_delta_distribution": {
+          "n": 30,
+          "median_us": -0.03200024366378784,
+          "min_us": -1.183999702334404,
+          "max_us": 1.0559996590018272,
+          "q25_us": -0.16000005416572094,
+          "q75_us": 0.1679996494203806,
+          "MAD_us": 0.14400016516447067
+        },
+        "paired_increment_win_tie_loss": [
+          11,
+          3,
+          16
+        ],
+        "F1_before_us": 15.072000212967396,
+        "F1_after_us": 15.00799972563982,
+        "F1_increment_us": 14.944000169634819,
+        "F1_signed_conservative_control_minus_increment_us": 0.06399955600500107,
+        "F1_signed_before_minus_increment_us": 0.12800004333257675,
+        "F1_signed_after_minus_increment_us": 0.06399955600500107
+      },
+      "rs32": {
+        "paired_control_over_increment_median_ratio": 1.0,
+        "paired_increment_gain_percent": 0.0,
+        "paired_signed_control_minus_increment_us": 0.0,
+        "paired_delta_distribution": {
+          "n": 30,
+          "median_us": 0.0,
+          "min_us": -0.8319998160004616,
+          "max_us": 0.9920010343194008,
+          "q25_us": -0.15200022608041763,
+          "q75_us": 0.12800004333257675,
+          "MAD_us": 0.14399969950318336
+        },
+        "paired_increment_win_tie_loss": [
+          14,
+          4,
+          12
+        ],
+        "F1_before_us": 15.072000212967396,
+        "F1_after_us": 15.104000456631184,
+        "F1_increment_us": 14.944000169634819,
+        "F1_signed_conservative_control_minus_increment_us": 0.12800004333257675,
+        "F1_signed_before_minus_increment_us": 0.12800004333257675,
+        "F1_signed_after_minus_increment_us": 0.1600002869963646
+      },
+      "actual_picks": {
+        "pw36": {
+          "path": "RQ",
+          "name": "t32s6hze",
+          "KS": 6,
+          "resources": [
+            168,
+            0,
+            99488
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123420567862784,
+            288
+          ],
+          "cursor_affected": true
+        },
+        "rs32": {
+          "path": "RQ",
+          "name": "t32s6hze",
+          "KS": 6,
+          "resources": [
+            168,
+            0,
+            99488
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123425275022336,
+            288
+          ],
+          "cursor_affected": true
+        },
+        "increment": {
+          "path": "RQ",
+          "name": "t32s5hze",
+          "KS": 6,
+          "resources": [
+            168,
+            0,
+            83080
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123416812453888,
+            288
+          ],
+          "cursor_affected": true
+        }
+      }
+    },
+    "qkv16": {
+      "pw36": {
+        "paired_control_over_increment_median_ratio": 1.0021810442887422,
+        "paired_increment_gain_percent": 0.21810442887422177,
+        "paired_signed_control_minus_increment_us": 0.03200024366378784,
+        "paired_delta_distribution": {
+          "n": 30,
+          "median_us": 0.03200024366378784,
+          "min_us": -1.1839987710118294,
+          "max_us": 0.9599989280104637,
+          "q25_us": -0.16000005416572094,
+          "q75_us": 0.17600040882825851,
+          "MAD_us": 0.19199959933757782
+        },
+        "paired_increment_win_tie_loss": [
+          16,
+          0,
+          14
+        ],
+        "F1_before_us": 14.879999682307243,
+        "F1_after_us": 14.976000413298607,
+        "F1_increment_us": 14.84800036996603,
+        "F1_signed_conservative_control_minus_increment_us": 0.031999312341213226,
+        "F1_signed_before_minus_increment_us": 0.031999312341213226,
+        "F1_signed_after_minus_increment_us": 0.12800004333257675
+      },
+      "rs32": {
+        "paired_control_over_increment_median_ratio": 1.0021692139673894,
+        "paired_increment_gain_percent": 0.21692139673894495,
+        "paired_signed_control_minus_increment_us": 0.03200024366378784,
+        "paired_delta_distribution": {
+          "n": 30,
+          "median_us": 0.03200024366378784,
+          "min_us": -1.2480011209845543,
+          "max_us": 1.1200010776519775,
+          "q25_us": -0.15199952758848667,
+          "q75_us": 0.18400046974420547,
+          "MAD_us": 0.1759999431669712
+        },
+        "paired_increment_win_tie_loss": [
+          15,
+          2,
+          13
+        ],
+        "F1_before_us": 15.072000212967396,
+        "F1_after_us": 14.879999682307243,
+        "F1_increment_us": 14.84800036996603,
+        "F1_signed_conservative_control_minus_increment_us": 0.031999312341213226,
+        "F1_signed_before_minus_increment_us": 0.22399984300136566,
+        "F1_signed_after_minus_increment_us": 0.031999312341213226
+      },
+      "actual_picks": {
+        "pw36": {
+          "path": "GV_no_counter",
+          "GV_instance": 15,
+          "GV_template": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "cursor_affected": false
+        },
+        "rs32": {
+          "path": "GV_no_counter",
+          "GV_instance": 15,
+          "GV_template": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "cursor_affected": false
+        },
+        "increment": {
+          "path": "GV_no_counter",
+          "GV_instance": 15,
+          "GV_template": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "cursor_affected": false
+        }
+      }
+    },
+    "pooler32": {
+      "pw36": {
+        "paired_control_over_increment_median_ratio": 1.0043700546801633,
+        "paired_increment_gain_percent": 0.4370054680163271,
+        "paired_signed_control_minus_increment_us": 0.09599979966878891,
+        "paired_delta_distribution": {
+          "n": 30,
+          "median_us": 0.09599979966878891,
+          "min_us": -0.3200005739927292,
+          "max_us": 1.5679989010095596,
+          "q25_us": -0.11999951675534248,
+          "q75_us": 0.3359992988407612,
+          "MAD_us": 0.23999903351068497
+        },
+        "paired_increment_win_tie_loss": [
+          17,
+          1,
+          12
+        ],
+        "F1_before_us": 22.016000002622604,
+        "F1_after_us": 21.91999927163124,
+        "F1_increment_us": 21.856000646948814,
+        "F1_signed_conservative_control_minus_increment_us": 0.06399862468242645,
+        "F1_signed_before_minus_increment_us": 0.15999935567378998,
+        "F1_signed_after_minus_increment_us": 0.06399862468242645
+      },
+      "rs32": {
+        "paired_control_over_increment_median_ratio": 0.9934918740883727,
+        "paired_increment_gain_percent": -0.6508125911627305,
+        "paired_signed_control_minus_increment_us": -0.14400016516447067,
+        "paired_delta_distribution": {
+          "n": 30,
+          "median_us": -0.14400016516447067,
+          "min_us": -0.7680002599954605,
+          "max_us": 0.4160013049840927,
+          "q25_us": -0.30400045216083527,
+          "q75_us": -0.03200024366378784,
+          "MAD_us": 0.14400016516447067
+        },
+        "paired_increment_win_tie_loss": [
+          7,
+          0,
+          23
+        ],
+        "F1_before_us": 21.824000403285027,
+        "F1_after_us": 21.75999991595745,
+        "F1_increment_us": 21.856000646948814,
+        "F1_signed_conservative_control_minus_increment_us": -0.09600073099136353,
+        "F1_signed_before_minus_increment_us": -0.03200024366378784,
+        "F1_signed_after_minus_increment_us": -0.09600073099136353
+      },
+      "actual_picks": {
+        "pw36": {
+          "path": "RQ",
+          "name": "t32s5hz",
+          "KS": 4,
+          "resources": [
+            168,
+            0,
+            83080
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123420567862272,
+            512
+          ],
+          "cursor_affected": false
+        },
+        "rs32": {
+          "path": "RQ",
+          "name": "t32s5hze",
+          "KS": 4,
+          "resources": [
+            168,
+            0,
+            83080
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123420567861760,
+            512
+          ],
+          "cursor_affected": true
+        },
+        "increment": {
+          "path": "RQ",
+          "name": "t32s5hze",
+          "KS": 4,
+          "resources": [
+            168,
+            0,
+            83080
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123425275170816,
+            512
+          ],
+          "cursor_affected": true
+        }
+      }
+    },
+    "unpooler32": {
+      "pw36": {
+        "paired_control_over_increment_median_ratio": 0.9834852162580332,
+        "paired_increment_gain_percent": -1.6514783741966799,
+        "paired_signed_control_minus_increment_us": -0.38400012999773026,
+        "paired_delta_distribution": {
+          "n": 30,
+          "median_us": -0.38400012999773026,
+          "min_us": -1.7920006066560745,
+          "max_us": 0.9599998593330383,
+          "q25_us": -0.7600001990795135,
+          "q75_us": -0.12799911201000214,
+          "MAD_us": 0.28800126165151596
+        },
+        "paired_increment_win_tie_loss": [
+          4,
+          0,
+          26
+        ],
+        "F1_before_us": 21.568000316619873,
+        "F1_after_us": 21.79200015962124,
+        "F1_increment_us": 21.95199951529503,
+        "F1_signed_conservative_control_minus_increment_us": -0.38399919867515564,
+        "F1_signed_before_minus_increment_us": -0.38399919867515564,
+        "F1_signed_after_minus_increment_us": -0.15999935567378998
+      },
+      "rs32": {
+        "paired_control_over_increment_median_ratio": 0.9842397624267838,
+        "paired_increment_gain_percent": -1.5760237573216207,
+        "paired_signed_control_minus_increment_us": -0.3519989550113678,
+        "paired_delta_distribution": {
+          "n": 30,
+          "median_us": -0.3519989550113678,
+          "min_us": -1.3759993016719818,
+          "max_us": 1.3120006769895554,
+          "q25_us": -0.527998898178339,
+          "q75_us": -0.10399939492344856,
+          "MAD_us": 0.22399984300136566
+        },
+        "paired_increment_win_tie_loss": [
+          3,
+          2,
+          25
+        ],
+        "F1_before_us": 21.695999428629875,
+        "F1_after_us": 21.79200015962124,
+        "F1_increment_us": 21.95199951529503,
+        "F1_signed_conservative_control_minus_increment_us": -0.2560000866651535,
+        "F1_signed_before_minus_increment_us": -0.2560000866651535,
+        "F1_signed_after_minus_increment_us": -0.15999935567378998
+      },
+      "actual_picks": {
+        "pw36": {
+          "path": "RQ",
+          "name": "t32s5hze",
+          "KS": 2,
+          "resources": [
+            168,
+            0,
+            83080
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123425276295168,
+            1024
+          ],
+          "cursor_affected": true
+        },
+        "rs32": {
+          "path": "RQ",
+          "name": "t32s5hze",
+          "KS": 2,
+          "resources": [
+            168,
+            0,
+            83080
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123420578860032,
+            1024
+          ],
+          "cursor_affected": true
+        },
+        "increment": {
+          "path": "RQ",
+          "name": "t32s6hze",
+          "KS": 2,
+          "resources": [
+            168,
+            0,
+            99488
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123425275171328,
+            1024
+          ],
+          "cursor_affected": true
+        }
+      }
+    },
+    "o32": {
+      "pw36": {
+        "paired_control_over_increment_median_ratio": 1.0,
+        "paired_increment_gain_percent": 0.0,
+        "paired_signed_control_minus_increment_us": 0.0,
+        "paired_delta_distribution": {
+          "n": 30,
+          "median_us": 0.0,
+          "min_us": -0.7999995723366737,
+          "max_us": 0.8319998160004616,
+          "q25_us": -0.14399969950318336,
+          "q75_us": 0.1600002869963646,
+          "MAD_us": 0.1600002869963646
+        },
+        "paired_increment_win_tie_loss": [
+          12,
+          4,
+          14
+        ],
+        "F1_before_us": 9.696000255644321,
+        "F1_after_us": 9.696000255644321,
+        "F1_increment_us": 9.759999811649323,
+        "F1_signed_conservative_control_minus_increment_us": -0.06399955600500107,
+        "F1_signed_before_minus_increment_us": -0.06399955600500107,
+        "F1_signed_after_minus_increment_us": -0.06399955600500107
+      },
+      "rs32": {
+        "paired_control_over_increment_median_ratio": 0.9885460274929251,
+        "paired_increment_gain_percent": -1.1453972507074917,
+        "paired_signed_control_minus_increment_us": -0.11199992150068283,
+        "paired_delta_distribution": {
+          "n": 30,
+          "median_us": -0.11199992150068283,
+          "min_us": -0.9599998593330383,
+          "max_us": 1.1519994586706161,
+          "q25_us": -0.22399984300136566,
+          "q75_us": 0.05599972791969776,
+          "MAD_us": 0.14400016516447067
+        },
+        "paired_increment_win_tie_loss": [
+          10,
+          0,
+          20
+        ],
+        "F1_before_us": 9.600000455975533,
+        "F1_after_us": 9.631999768316746,
+        "F1_increment_us": 9.759999811649323,
+        "F1_signed_conservative_control_minus_increment_us": -0.15999935567378998,
+        "F1_signed_before_minus_increment_us": -0.15999935567378998,
+        "F1_signed_after_minus_increment_us": -0.12800004333257675
+      },
+      "actual_picks": {
+        "pw36": {
+          "path": "GV_no_counter",
+          "GV_instance": 47,
+          "GV_template": [
+            1,
+            4,
+            1,
+            1,
+            4,
+            4,
+            1,
+            1,
+            2,
+            1
+          ],
+          "cursor_affected": false
+        },
+        "rs32": {
+          "path": "GV_no_counter",
+          "GV_instance": 47,
+          "GV_template": [
+            1,
+            4,
+            1,
+            1,
+            4,
+            4,
+            1,
+            1,
+            2,
+            1
+          ],
+          "cursor_affected": false
+        },
+        "increment": {
+          "path": "GV_no_counter",
+          "GV_instance": 46,
+          "GV_template": [
+            1,
+            4,
+            1,
+            1,
+            4,
+            4,
+            1,
+            1,
+            2,
+            0
+          ],
+          "cursor_affected": false
+        }
+      }
+    }
+  },
+  "counter_diagnosis": {
+    "new_prepare_v2_first_failure": "pw36/p1cnt/92",
+    "first_values": [
+      18864,
+      4716,
+      18864,
+      4716
+    ],
+    "dormant_nonzero_P1_views": 39,
+    "old_attempt_exact_failed_counter": "UNKNOWN; frozen v2 did not record a name"
+  },
+  "evidence_files": {
+    "proj_rsi/audits/smallm-v3-01/analysis.py": "b339e98f28eb70328f9dfe563b8d0dd8e36eee8083110a792946205a5f00378c",
+    "proj_rsi/audits/smallm-v3-01/analysis.json": "c3bdd42f496c278468105d1f6cfffb32124bb48347d7240f17e1cc184b866545",
+    "proj_rsi/audits/smallm-v3-01/report.md": "8e529093da2347b0d97f6c37da62b4a5254b8c1b57761c7a1cf284a6696dafce",
+    "proj_rsi/audits/smallm-v3-01/validation-manifest.json": "de321aa27dcd632a693242733d2c82d1d3e77a40e971e7066ca6ac6bf1e8a825",
+    "proj_rsi/audits/smallm-v3-independent.md": "6138ac2f57a625d90d3baaf063719a1d5cb86628fe013b6633202c5c93adfa1e",
+    "proj_rsi/audits/smallm-v3-runtime-validation.json": "c8f2f4ab6792a8b05b309613fa04ac8eb79360b164c6b51e48b74c6c9c280120",
+    "proj_rsi/audits/smallm_v3_runtime_validate.py": "b1df0fe9026132ab5ffb8a91c546c33f6c08a91490f4a2dea1d04a58d6c4d702",
+    "proj_rsi/scheduling/jobs/smallm-cursor-v3-01.json": "ab1da3227fbe0c5a2bcce1cd1a61b13cb56264840f0c5deb8933632461582a7a",
+    "results/proj-rsi/scheduler/artifacts/smallm.cursor.v3.all5.01/collection-1793074281123122605/inventory.json": "dbae290afc99e124ce4fe52c1e6e8e9c3d65abe8dfdd462d442b2496a3fa36c4"
+  },
+  "limits": [
+    "Actual SO binaries not collected; recorded hashes and source-bound JIT SASS/resource checks retained.",
+    "Successful final counter tensor values/digests not individually archived;125 executed invariant checks inferred from frozen source and successful complete control flow.",
+    "Fresh independent prepare picks differ; qkv32 and unpooler32 compare different ST, pooler32 pw36 uses non-EARLY variant, qkv16/o32 do not select cursor.",
+    "One local H100 attempt does not establish tiny gains as reproducible or predict official H200 score."
+  ],
+  "family_next_action": "Retain cursor family; matched-geometry isolation/new stack is separate source/attempt. Measured candidate is rs32+cursor, not PW37/PW38 full stack. No queue/source/protocol mutation by this evidence author."
+}

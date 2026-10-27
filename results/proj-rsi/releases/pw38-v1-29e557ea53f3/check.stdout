@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/home/ubuntu/okc/proj_rsi/__main__.py", line 93, in <module>
+    main()
+  File "/home/ubuntu/okc/proj_rsi/__main__.py", line 64, in main
+    print(run(args.candidate, "scored" if args.scored else "check", args.experiment, args.reserve, args.against))
+  File "/home/ubuntu/okc/proj_rsi/runner.py", line 142, in run
+    job_id = submit(path, kind, experiment, reserve)
+  File "/home/ubuntu/okc/proj_rsi/runner.py", line 70, in submit
+    ledger.attach_job(experiment, job_id, kind)
+  File "/home/ubuntu/okc/proj_rsi/ledger.py", line 85, in attach_job
+    exp = self._get(data, experiment_id)
+  File "/home/ubuntu/okc/proj_rsi/ledger.py", line 134, in _get
+    raise ValueError(f"unknown experiment {experiment_id}")
+ValueError: unknown experiment pw38

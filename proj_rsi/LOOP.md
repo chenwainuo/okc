@@ -1,11 +1,13 @@
 # muse_bf16_proj loop — head log
 
-Current head: Codex /root; four concurrent agents including head (hard runtime cap). One candidate directory per implementer; independent critic.
+Current head: Codex /root; up to ten Sol6.1 medium subagents plus head, one GPU slot. One candidate directory per implementer; independent critic.
 Current iteration authority: [ITERATION.md](ITERATION.md). User expects failures to be diagnosed and iterated. Historical family-wide CLOSE/NO_RETRY wording below is superseded; performance bars gate promotion of versions.
-Goal: official board under3000us. Verifiedbest rs32/job`fb548b5dc6f04696`,3200.615us. Latestpw36/job`e22a4b9d693d4902`9/9,3212.415us; no promotion. Currentqueue:`proj_rsi/queue.json`; resumestate:`handover_folder/12-codex-takeover.json`.
+Goal: official board under3000us. Verifiedbest rs32/job`fb548b5dc6f04696`,3200.615us. Latestpw36/job`e22a4b9d693d4902`9/9,3212.415us; no promotion. Current execution queue: `results/proj-rsi/scheduler/events.jsonl` ([operations](scheduling/OPERATIONS.md)); `proj_rsi/queue.json` is historical; resumestate:`handover_folder/12-codex-takeover.json`.
 Exactscore=4830.8/geomean(SGLang_load_sum/ours_load_sum) fromsamejob;62*geomean(ours) elsewhereinhistoryisapproximate, nottheofficialarithmetic. Historicalmodelroles/boardvaluesbelowarechronologicalevidence, notcurrentstate.
 Tools: `python3 -m proj_rsi {board,check,wait,result,status,lint,cpu-check,quota}`. Protocol: `proj_rsi/protocol.json`.
 History before this loop: `proj_rsi/archive/fable-LOG-2026-10-25.md` and `proj_rsi/submission/NOTE.md` (another session's summary).
+
+Live read-only dashboard: https://okc-kernel-operations.brinyspice130.chatgpt.site . Canonical [submission and gain tables](HISTORY.md). PW38 = PW36 + optional EH; cursor excluded after valid mixed/regressing local results. Whole-stack validation must precede any new official claim. NativeX4/STMX tiny parent gains are retained separately from actual incumbent losses.
 
 ## Iteration 0 — 2026-10-25 18:00 UTC: board arithmetic and the plan
 

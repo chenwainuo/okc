@@ -1,0 +1,196 @@
+{
+  "status": "CPU_INDEPENDENT_GO_FIXED_GEOMETRY_ONLY_GPU_UNRUN",
+  "driver_sha256": "fa8420608041ae6884518c95b44fb495b60262e5e498627ff74a2080e0b95c79",
+  "trial_manifest_sha256": "92121f07b0e4e895cdb9e5f1292971dd73776e9bb03b5e535364aefc6e47d9cc",
+  "closure": {
+    "pw38": 7,
+    "rs32_eh_backport": 27
+  },
+  "lab_files": 16,
+  "canonical_binary_gates": {
+    "parent": {
+      "2": {
+        "all_PC_predicate_instructions": "EXACT",
+        "instructions": 1792,
+        "EH": false
+      },
+      "3": {
+        "all_PC_predicate_instructions": "EXACT",
+        "instructions": 1832,
+        "EH": false
+      }
+    },
+    "eh": {
+      "65538": {
+        "all_PC_predicate_instructions": "EXACT",
+        "instructions": 1816,
+        "EH": true
+      },
+      "65539": {
+        "all_PC_predicate_instructions": "EXACT",
+        "instructions": 1856,
+        "EH": true
+      }
+    }
+  },
+  "wrong_role_instruction_rejections": {
+    "parent_wrong_role": "AssertionError((2, 'expected exactly one kernel', 0))",
+    "parent_changed_instruction": "AssertionError(('parent', 3, 'actual JIT differs from CPU canonical'))",
+    "eh_wrong_role": "AssertionError((65538, 'expected exactly one kernel', 0))",
+    "eh_changed_instruction": "AssertionError(('eh', 65539, 'actual JIT differs from CPU canonical'))"
+  },
+  "EH_lifetime": {
+    "bitmap": {
+      "status": "PASS_16384_OUTPUT_BF16_ONCE",
+      "half_slabs": [
+        {
+          "WG": 0,
+          "half": 0,
+          "bytes": 8192,
+          "source_range": [
+            0,
+            8192
+          ],
+          "global_token_range": [
+            0,
+            64
+          ],
+          "global_channel_range": [
+            0,
+            64
+          ]
+        },
+        {
+          "WG": 0,
+          "half": 1,
+          "bytes": 8192,
+          "source_range": [
+            8192,
+            16384
+          ],
+          "global_token_range": [
+            64,
+            128
+          ],
+          "global_channel_range": [
+            0,
+            64
+          ]
+        },
+        {
+          "WG": 1,
+          "half": 0,
+          "bytes": 8192,
+          "source_range": [
+            16384,
+            24576
+          ],
+          "global_token_range": [
+            0,
+            64
+          ],
+          "global_channel_range": [
+            64,
+            128
+          ]
+        },
+        {
+          "WG": 1,
+          "half": 1,
+          "bytes": 8192,
+          "source_range": [
+            24576,
+            32768
+          ],
+          "global_token_range": [
+            64,
+            128
+          ],
+          "global_channel_range": [
+            64,
+            128
+          ]
+        }
+      ],
+      "first_TMA_vs_second_STSM": "DISJOINT_8KiB_RANGES_PER_WG",
+      "descriptor_box": [
+        64,
+        64
+      ],
+      "no_alias_until_both_TMA_reads_complete": true
+    },
+    "physical": [
+      {
+        "flag": 65539,
+        "EH": true,
+        "static_STSM": 8,
+        "static_reduce_issues": 2,
+        "WGMMA_drain_before_STSM": "PASS",
+        "both_TMA_reads_drain_before_exit": "PASS",
+        "half0_issue_before_half1_STSM": true
+      },
+      {
+        "flag": 65538,
+        "EH": true,
+        "static_STSM": 8,
+        "static_reduce_issues": 2,
+        "WGMMA_drain_before_STSM": "PASS",
+        "both_TMA_reads_drain_before_exit": "PASS",
+        "half0_issue_before_half1_STSM": true
+      },
+      {
+        "flag": 3,
+        "EH": false,
+        "static_STSM": 8,
+        "static_reduce_issues": 1,
+        "WGMMA_drain_before_STSM": "PASS",
+        "both_TMA_reads_drain_before_exit": "PASS",
+        "half0_issue_before_half1_STSM": false
+      },
+      {
+        "flag": 2,
+        "EH": false,
+        "static_STSM": 8,
+        "static_reduce_issues": 1,
+        "WGMMA_drain_before_STSM": "PASS",
+        "both_TMA_reads_drain_before_exit": "PASS",
+        "half0_issue_before_half1_STSM": false
+      }
+    ]
+  },
+  "terminal": {
+    "status": "CPU_ADVERSARIAL_TERMINAL_PASS",
+    "negative_controls": {
+      "output": "('parent2', 'actual terminal output', 0, 'CPU synthetic exact recorded fixture')",
+      "NaN": "('eh2', 'nonfinite actual timed output')",
+      "currentX": "current X changed",
+      "W": "immutable W/packed/escape changed",
+      "packedW": "immutable W/packed/escape changed",
+      "escape": "immutable W/packed/escape changed",
+      "counter": "counter not reset",
+      "wrong_recorded_seed": "('parent2', 'actual terminal output', 3, 'CPU synthetic exact recorded fixture')",
+      "output_alias": "output alias"
+    },
+    "distinct_last_fixtures": "PASS",
+    "phase_order": "F1 then strict4 then paired then strict4 then mutations/profile",
+    "no_gate_mutation_replay": true
+  },
+  "source_delta_inverse_prefix": "PASS",
+  "counter_contract": "all4FLbit2active_selfzero_KSmax7_twoNBzero_between_calls",
+  "minimum_SM_for_complete_co_resident_grid": 128,
+  "F1_last_fixtures": {
+    "parent2": 240062,
+    "eh2": 240041,
+    "parent3": 240125,
+    "eh3": 240104
+  },
+  "counts": {
+    "per_shape_raw": 274,
+    "all4shapes_raw": 1096,
+    "terminal_oracles": 32,
+    "mutation_oracles": 80
+  },
+  "scope": "FIXED_GEOMETRY_EH_ONLY_NO_ACTUAL_SELECTED_POLICY_OR_FULLSTACK_SPEED_CLAIM",
+  "GPU_calls": 0,
+  "budget": "ROOT_ACCEPTED_INNER600_OUTER720_FOUR_SHAPES_ONLY_NO_EXECUTION_BY_REVIEWER"
+}

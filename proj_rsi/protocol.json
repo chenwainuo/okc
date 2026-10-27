@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "problem": "muse_bf16_proj",
   "purpose": "Head-driven RSI loop that rewrites the muse_bf16_proj kernel for this model's exact shapes. Every claim about speed comes from an okc job id; nothing else counts.",
   "goal": {
@@ -18,8 +18,8 @@
   },
   "roles": {
     "head": {
-      "model": "claude-fable-5-1",
-      "effort": "high",
+      "model": "Codex root (session model)",
+      "effort": "session default",
       "duties": [
         "reads every result",
         "does the board arithmetic",
@@ -31,7 +31,7 @@
       ]
     },
     "implementer": {
-      "model": "claude-opus-5-5",
+      "model": "gpt-6.1-sol",
       "effort": "medium",
       "duties": [
         "writes exactly one candidate directory from the brief",
@@ -40,7 +40,7 @@
       ]
     },
     "critic": {
-      "model": "claude-opus-5-5",
+      "model": "gpt-6.1-sol",
       "effort": "medium",
       "duties": [
         "different agent from the implementer",
@@ -58,14 +58,17 @@
     }
   },
   "loop": [
-    "1. head: read ledger + LOOP.md; recompute board projection (python3 -m proj_rsi board)",
-    "2. head: choose one experiment with an explicit ln-gain target and a kill bar per shape; write the brief into the candidate's hypothesis.json",
-    "3. implementer (opus, medium): write candidates/<id>/submission.py from the template; lint must pass",
-    "4. critic (opus, medium): review; head reads both; fix or reject before spending a check",
-    "5. head: python3 -m proj_rsi check candidates/<id>  (quota-aware; blocks until the job finishes)",
-    "6. head: python3 -m proj_rsi result <job>  -> per-shape table vs incumbent, bake-off log, board projection",
-    "7. head: record decision in LOOP.md; promote if the gate passes; stitch best-per-shape plan if useful",
-    "8. head: schedule the next iteration (quota reset at 00:00 UTC) and go to 1"
+    "profile current selected serving path; retain exact source/JIT, shape and hardware identity",
+    "measure same-run controls with all raw timings and complete correctness/state/terminal-output gates",
+    "write causal hypothesis, affected regions, expected score scenario, subjective probabilities and full cost",
+    "implement immutable version; record parent, composition requirements/conflicts and reversible delta",
+    "independent critic verifies exact executable closure and bounded driver before GPU admission",
+    "register reviewed job in durable ROI scheduler; root sole GPU launcher, one GPU slot",
+    "validate raw artifacts and cleanup; retain every signed result including tiny positives and invalid attempts",
+    "compare against actual selected serving incumbent; separately retain parent-relative progress",
+    "compose compatible gains into a concrete cumulative source, validate the whole stack and actual selected routes",
+    "only root releases official check/scoring after local validation, quota and source guards; archive immutable job ID and payload association",
+    "regenerate history tables; preserve unresolved or conflicting evidence and rank the next iteration"
   ],
   "candidate_contract": {
     "first_line": "# okc: problem=muse_bf16_proj",
@@ -132,32 +135,30 @@
     "judge_overhead": "yours_us is roughly kernel GPU time + 1.0-1.5 us after the judge subtracts about 4 us of replay cost; the practical floor for a tiny shape is about 2.5 us yours."
   },
   "runtime_authority": {
-    "updated_utc": "2026-10-26T23:02:20.349772+00:00",
-    "head": "Codex /root",
-    "models": "Useavailableinheritedmodel; rolemodelstringsbelowarehistoricalClaudehandoverpreferences, notavailable-runtimeclaims.",
-    "concurrent_agent_cap_including_head": 4,
-    "user_authorizes_agents_up_to": 8,
-    "queue": "proj_rsi/queue.json",
-    "ledger": "results/proj-rsi/ledger.json",
-    "handover": "handover_folder/12-codex-takeover.json",
-    "override": "Latestuserconfirms3msgoal. Reviewed65/65pw36usedoneexpiringscoredslotwith0checks;9/9officialtests+timingcomplete. Noautomaticpromotionorrepeat. Midnightwaitercancelled.",
-    "latest_user_override": "Diagnose and iterate failed implementations. Closed labels in historical documents refer to tested versions unless supported family-wide evidence says otherwise."
+    "cpu_agents": 10,
+    "gpu_slots": 1,
+    "subagent_model": "gpt-6.1-sol",
+    "reasoning_effort": "medium",
+    "scheduler": "proj_rsi/scheduling/OPERATIONS.md",
+    "durable_state": "results/proj-rsi/scheduler/events.jsonl",
+    "historical_queue_only": "proj_rsi/queue.json",
+    "dashboard": "https://okc-kernel-operations.brinyspice130.chatgpt.site",
+    "history": "proj_rsi/HISTORY.md",
+    "official_hardware": "H200; separate service/quota",
+    "local_hardware": "H10080GB",
+    "gpu_usd_per_hour": 5,
+    "owner": "root"
   },
   "iteration_policy": {
-    "authority": "User correction2026-10-26: failures expected; diagnose and reiterate rather than discard after one attempt. Supersedes historical one-run family-close/no-retry wording.",
-    "cycle": [
-      "profile actual incumbent and current version",
-      "measure complete valid outputs",
-      "state one causal hypothesis and predicted observations",
-      "implement one evidence-driven change",
-      "test precision/correctness/graph/lifetime",
-      "validate source and measurements independently",
-      "compare incumbent + previous version + new version",
-      "retain evidence and iterate next bottleneck"
-    ],
-    "threshold_scope": "Speed thresholds gate integration/promotion; missing them classifies a VERSION, not an entire family. Correctness/setup failures invalidate timings and require diagnosis before a valid rerun.",
-    "retain": "Never delete unsuccessful implementations/results; preserve source hashes and predecessor comparisons.",
-    "queue": "Rank next marginal ROI and information value, including fixes and experiments on existing families. Park only with explicit remaining-ROI evidence/resource reason and reopening criteria.",
-    "validity": "No timing/harness gaming, precision weakening, changing live source, or cherry-picked benchmark claims. Bounded job deadlines still apply."
+    "retain_all_small_gains": true,
+    "minimum_retention_gain_us": 0,
+    "parent_progress_is_not_incumbent_gain": true,
+    "failed_version_is_not_family_rejection": true,
+    "compiled_presence_is_not_actual_selection": true,
+    "cross_job_score_differences_are_not_additive_feature_deltas": true,
+    "composition_authority": "proj_rsi/changes.json",
+    "last_updated": "2026-10-27T04:47:36.335015+00:00",
+    "scored_submission_rule": "After source/correctness/graph/state checks pass and complete serving measurement improves, submit the cumulative candidate. User explicitly accepts small point-estimate improvements; no minimum microsecond/percentage or statistical-significance threshold.",
+    "measurement_uncertainty": "Record confidence intervals, conflicting estimators and comparator identity; uncertainty is reported, not an extra user approval gate."
   }
 }

@@ -1,0 +1,68 @@
+{
+  "version": "pw36_wring_rebase_v1",
+  "state": "CPU_WRING_REBASE_PASS_GPU_UNRUN_REVIEW_REQUIRED",
+  "GPU": "UNRUN_NO_CONTEXT_NO_EXTENSION_NO_PREPARE",
+  "family": "separate-wring-rebase",
+  "parent_source_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "historical_source_sha256": "d6acc979651d576159793a9a671aa1d84badbee547204e0cabbdfd5b67370396",
+  "extension_source_sha256": "1a614dcd721c6431900d25cc46fa3545110cfbed2d6dede6c940d5ad8c458443",
+  "files_base": "candidate_directory",
+  "external_files_base": "proj_rsi/",
+  "files": {
+    "README.md": "86fb1e513c4c178cd43ad9f0c6f1124595fd49bc9ecc03d90b4331642203a79d",
+    "build_patch.py": "11e47a3b3ffe764506347d243749f0e890a8a9341ba65269f42b8337d3ca6d48",
+    "control-resource.log": "f2b401b1ce53fd124f2945ba25ca0dcd40d7634f32c725c3ef5cf77a4baed764",
+    "control-sass.txt": "48bc9b042d560bd0abd44075c560428de073d79986949888c94339d9d04383aa",
+    "control.sm90a.cubin": "22fa5930e20c3d17267614f61953f36473d77d98a65239097a9bffbc4f5b8ea3",
+    "control_source.cu": "84fc4a87b80a293018ffe319d2797c0c6a3a2ae7831019523a3164aa1e3dc997",
+    "cpu-lab-proof.json": "997d80f7d09a9313a8bb739006d1858e4248157435f456b6adbc2309eaa2e0a3",
+    "cpu_lab_proof.py": "2e47b45240c7760e47d808cf92402fdca3f29d060e1868e3b13b04a4dea97cdd",
+    "delta.json": "7528409660785f9b1dfa202ec86c6aaaf57b3b1593d76806f9f0074d43a9c157",
+    "device-resource.log": "d941ee66f5c3b86afb6a77a47ae1093ac1554b63369a51a5bd7a2493bda91027",
+    "device.sm90a.cubin": "c1597eac903ac3b4d7623dc7d35ebe68b6032e9a496f47a044daa9eda4694fd7",
+    "device_source.cu": "2a20b3923dbc5af7ef88fcfe453aa91410ee5c74f9f682254803c973abdcf29c",
+    "extension_source.cu": "1a614dcd721c6431900d25cc46fa3545110cfbed2d6dede6c940d5ad8c458443",
+    "historical-mechanism.json": "261177ec03f17ebe7d6ca4340ce0d4922619a276fb35e25e1285f36da07f5595",
+    "history/incomplete-proof-harness/preflight.json": "ca6cb0113682a25e66c41099542be896f671476ee51311bf1f4ae6c5527f30bc",
+    "history/ptx-mnemonic-checker/preflight.json": "e3b5110e1d8d7bb9e1fde261416e44f2ce93c4ac2a45707936936e01d600580c",
+    "history/ptx-mnemonic-checker/preflight.py": "e06299ac6331786b5527f13ea13e8dc0e330c6594a597864558c642f3bd6a90a",
+    "preflight.json": "496bf4e5006e422c4bb4e8dc2c68f039697a63184e854cc746b93bdb74bd1eb7",
+    "preflight.py": "7f3a621a44f2d72c4b29f752338e56683f402b4ae2840aaf7f006370e504ed1f",
+    "protocol-proof.json": "02d7036860f548d3c86cb396f0c407e28a8629680f45155ec3c86e0bc56014ce",
+    "protocol_proof.py": "18c6aefc46b492d5c7cdd98f729382d0293e54d0699245d450ccf4e2fff66f35",
+    "sass.txt": "7bbc325a2d4e708ee297189aba9286d1085b0deca0e0fe3bd1213128170a9c48",
+    "submission.py": "207f5a1bdc4f5d7712d444d9c71e857643e6700451c88734fce898ac1fc1b7ab"
+  },
+  "external_files": {
+    "tools/wring_rebase_lab.py": "fd43d83540e2469be8bcd0d5c676b2a96c1ccbeab0e440b767603bcabd594924"
+  },
+  "resource_gate": {
+    "registers": 168,
+    "threads": 384,
+    "uniform_register_pool": 64512,
+    "dynamic_register_pool": 64512,
+    "local_bytes": 0,
+    "stack_bytes": 0,
+    "spill_bytes": 0,
+    "shared_bytes": {
+      "coupled": 144520,
+      "equal": 144560,
+      "split": 148656
+    },
+    "actual_optin_occupancy_min": 1,
+    "co_resident_CTA_count": 126
+  },
+  "runtime_budget_seconds": {
+    "inner": 240,
+    "outer": 300
+  },
+  "comparison": [
+    "actual_LOCAL_PW36_selected",
+    "coupled_x5w5_hint_zi",
+    "split_x5w5_hint_zi",
+    "split_x6w4_hint_zi"
+  ],
+  "forecast": "Unknown attainable gain; historical.38us near-noise evidence only, no additive or official claim",
+  "retention": "Retain all raw outcomes including tiny gains; no fixed gain cutoff or blanket family kill",
+  "release_requires": "Independent CPU review GO and root frozen launch/source/host guards; no GPU registration by author"
+}

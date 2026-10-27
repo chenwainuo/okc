@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/ubuntu/okc/proj_rsi/tools/rq11_actualescape.py", line 178, in <module>
+    p=argparse.ArgumentParser();p.add_argument('--seconds',type=int,default=180);p.add_argument('--output',type=Path,default=OUT/'actual-cpu-reference.json');args=p.parse_args();assert 1<=args.seconds<=300;run(args)
+  File "/home/ubuntu/okc/proj_rsi/tools/rq11_actualescape.py", line 136, in run
+    weights=fixture['generate_weights'](fixture['WEIGHTS_SEED'],device='cpu');assert all(not w.is_cuda for w in weights.values())
+  File "/home/ubuntu/okc/muse_bf16_proj/reference.py", line 47, in generate_weights
+    return {name: (torch.randn((n, k), generator=gen, device=device) / math.sqrt(k)).to(
+  File "/home/ubuntu/okc/muse_bf16_proj/reference.py", line 48, in <dictcomp>
+    torch.float32 if name in FP32_LAYERS else torch.bfloat16)
+NameError: name 'FP32_LAYERS' is not defined

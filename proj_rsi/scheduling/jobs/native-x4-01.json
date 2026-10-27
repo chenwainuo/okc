@@ -1,0 +1,137 @@
+{
+  "id": "native.x4.v1.01",
+  "resource": "gpu",
+  "kind": "optimization",
+  "state": "BACKLOG",
+  "author": "sol08",
+  "created_at": 1793075513.9881272,
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 7.950628540704201,
+      "p_gain": 0.04,
+      "p_valid": 0.8
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "not separately counted"
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE PRIOR ONLY: hypothetical 1us reduction of official U128 component versus actual incumbent yields exact same-job scenario7.950628540704201us. P(gain)=0.04, P(valid)=0.8 are judgment priors, not measured forecasts. Existing native31.856us versus local incumbent23.968us leaves a substantial gap; X4 depth/shared-footprint and STMatrix composition may regress or yield only parent-relative learning. No H100-to-H200 transfer or additive gain assumed.",
+    "confidence": "low; independently reviewed CPU source/codegen, runtime unrun",
+    "evidence": [
+      "proj_rsi/audits/sol07-x4-stmatrix-labs-independent.md",
+      "proj_rsi/audits/sol16-score-opportunity.json",
+      "proj_rsi/audits/sol08-tma-x4.md"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 300,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 15
+  },
+  "files": {
+    "proj_rsi/candidates/reverse_tma_x/manifest.json": "025f4a2de43f7c14a4ee4779dcb6a929974311b0380b433710ed4022beef50fc",
+    "proj_rsi/candidates/reverse_tma_x/prototype.py": "7356742f4c42c4a68f7bfd564ca324c7b55a44354664ae5f4fc9dd9718c48e74",
+    "proj_rsi/candidates/reverse_tma_x/kernel_body.cuh": "60a5aee42138bf84130121041f6aa37da60d6478fa2e5bbc328f546982de2d78",
+    "proj_rsi/candidates/reverse_tma_x/extension_source.cu": "ffd30a15ec5c1b5cc6fc1d550f7da512783f006f8a34cc37093ea18269d7e377",
+    "proj_rsi/candidates/reverse_tma_x/device_source.cu": "a7df6f6d658e25329c900ab8301316fdcb72cef3dc855bb50f916b2cd80a1e67",
+    "proj_rsi/candidates/reverse_tma_x/device.sm90a.cubin": "7773cf12f292d385086a0068b4615178104ea5a9e2b66bcc09ee053d75df4611",
+    "proj_rsi/candidates/reverse_tma_x/sass.txt": "be4e8a5fc177a2aa0eb11b26ddb1841df49f9015a51de8d256f46e3fd06802f8",
+    "proj_rsi/candidates/reverse_tma_x/resource.log": "f0c459f6c8619869727b1cfaaa51bc25df54bd44d34d53045d6b7b0ff6bdeaf4",
+    "proj_rsi/candidates/reverse_tma_x/proofs.py": "2062c01afe73b7932154d257ea39d92b55dc32318461c56a312f38e8180e34dc",
+    "proj_rsi/candidates/reverse_tma_x/proofs.json": "f3f8899283245606124827ae35e5f4f93a7c6613361e5daf8aafd1f00ed34077",
+    "proj_rsi/candidates/reverse_tma_x/liveness.py": "0feea4a19583f03d39e98979f0774562bb7d128f8c7266966f98a1b407633c0c",
+    "proj_rsi/candidates/reverse_tma_x/preflight.py": "493df67e967d06a214e3b027002468b449d4c9cbfba8452ddb5416c91870add6",
+    "proj_rsi/candidates/reverse_tma_x/preflight.json": "d7d64e4773ee33179cd29a00fc5aab7d56925dcd8e24e2e13f8cd4e13129e9fc",
+    "proj_rsi/candidates/reverse_tma_x/README.md": "248ceaee8d2dccab5c9516bef26667120dc544c89f42c36d3da72d347da170c2",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/manifest.json": "6785da2ec9881ce13148951daff2f8802d8e7bbe6c83abf588607092b3f97072",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/prototype.py": "6aea46a12fb72abc873e73454bb273aba062c5fd903cc53900804e3ebeabc551",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/kernel_body.cuh": "8e2bf5426f4d50093a6479bb00e03471759b0c0c14810c3ab8e9667903ef70e3",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/layout_proof.py": "8e3cf92dd7334466b8fc35cbe9ec9ec872c14594979d25eb167e9a4d8013d968",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/liveness.py": "402eb10d97ab6a186647a498255755d6a4dc733852b0e984c6d75f5c55934dd5",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/protocol_proof.py": "f363e5dac73fa385049088c75ea2af4bd94eb9966b3b53f8a2eb9b2a2741ef05",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/protocol-proof.json": "48fadcb8b7b5e25a51538e9a267facb731cdaffcf5b30c0620ce5dd632c5a515",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/preflight.py": "8eaa12266779b0984a6cbe23723e21c5fdebdc38ecefc22526df14b4434d580a",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/preflight.json": "b63abb0d1a407fb3d1d3a27a861bd9379a4e109ba3984dee3335401ff77437ed",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/extension_source.cu": "672dab448f74dbeecccd60b4070e8a6686c0533ae69f5827afd5a4283bb0cbd1",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/device_source.cu": "327f35765720bbb56c630819854d5631f51637d4e73b11d089ad31bb2bd9167e",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/resource.log": "9bae9186d34ab478a74bcafe6e129daa214a5aaf3369253920f4ad4e97c4b7a5",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/sass.txt": "5e2e65397434ddf14ee844cd9b020b422c290043c8d92e76049d79a739582324",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/lab.py": "5afa5159e9f8986d05150607d658b38e574039028390d6e97f5c74edb9a87a4a",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/README.md": "6ffbc7dea63abafbd9a2b40ecd3343bd82a33ffe7a33aa09d5a20f2ff01d067c",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/checker-history/initial-liveness.py": "ce0ba14ddd6a3cbdc08e9f907256933412ce74b4866e04ac98de3770b7d96a29",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/checker-history/initial-preflight.json": "e096f548bb05e51946c3bd2f04899f8cc6bce0a883ca087b0ff78038ace8a1df",
+    "proj_rsi/candidates/operand_reverse_dual_stmatrix/checker-history/README.md": "cc95a96a4265f0dc61e81792efeb0f933934f59104551f4de6c08405d95b78dc",
+    "proj_rsi/candidates/reverse_tma_x4/manifest.json": "d47ed1663eac87f5bcc05b5f17df8fa62e7c9e91780a13d02ce9b95ac0f05c8a",
+    "proj_rsi/candidates/reverse_tma_x4/prototype.py": "a942160d9269c70c10a9846e470c4c5f6802f6df783139a51b9a37254d24a8de",
+    "proj_rsi/candidates/reverse_tma_x4/kernel_body.cuh": "3bbfa1e128d61a7fd1ee62ec99d94b928ea73cd334c9d8e0021bab7caeae55e1",
+    "proj_rsi/candidates/reverse_tma_x4/extension_source.cu": "e8447cbf0c113618462f5cbddc61d7f1e438ada2efa43130531f96c9fde768d3",
+    "proj_rsi/candidates/reverse_tma_x4/device_source.cu": "31ad909c5e6975d9a2d46c5c69bab85d0be7c5bf7a30bb8b6b897afc2f0ce467",
+    "proj_rsi/candidates/reverse_tma_x4/device.sm90a.cubin": "931975b14feb89f9c9428e65658e439aaea5ad5367acf2f63c90fa49c089ca95",
+    "proj_rsi/candidates/reverse_tma_x4/sass.txt": "139f0e5768e392d9cd508a609b7bb6b7e89641df00898c7ce1d936242d386c06",
+    "proj_rsi/candidates/reverse_tma_x4/resource.log": "38cb69d2319d6ab6c4996806ed24f66c2d1112b3ff6bbfdad57a4235f3a18d5c",
+    "proj_rsi/candidates/reverse_tma_x4/proofs.py": "d0c17c64a49f6e909e0114641d458624a8947516d09d96bd59c743279cea242f",
+    "proj_rsi/candidates/reverse_tma_x4/proofs.json": "e2e24e5a5bfbd6bf08dc4ddd73ab71c3362ce4d4871541d69fb6f39a4c2a80e8",
+    "proj_rsi/candidates/reverse_tma_x4/liveness.py": "10900280e399a098555fa3c7e1190c57f1b18d241bae6b12e0183c73dade90c6",
+    "proj_rsi/candidates/reverse_tma_x4/preflight.py": "258892e25a1b65e5e1e026f1637776805a5f1aa46263bce67b86e06c27bc1715",
+    "proj_rsi/candidates/reverse_tma_x4/preflight.json": "5a0f34bc48178faa18bf2c1ac7e9d1338a05358d84551369af5bd8780665b224",
+    "proj_rsi/candidates/reverse_tma_x4/README.md": "a217139a36cdd9a7904dce9a20c0829ea4e6f7f30f03875acb51ed92db925950",
+    "proj_rsi/candidates/reverse_tma_x4_trial/manifest.json": "78fb77e4e42509c5f377a4314da8ea8db9bc598919cc5c625a20d7ecd64dc0df",
+    "proj_rsi/tools/native_x4_lab.py": "f8148b15ad1846ff9af2cb057a138362245958c1a0ae427ae3a3a3272cbac328",
+    "proj_rsi/candidates/reverse_tma_x4_trial/cpu_proof.py": "80b8dddff9e57e070edcf716e85d5786581310e09217d9ce84eece61dd8fd70e",
+    "proj_rsi/candidates/reverse_tma_x4_trial/native_x4_support.py": "b1c2cfbf32b2583b29850f48b4015260533530ea64da8518fb6520835d0af874",
+    "proj_rsi/candidates/reverse_tma_x4_trial/timed_output_gate_proof.py": "9c99902e2e0c08873ca8f379208254d757e693e5cc0d0401c7cedd33c894496b",
+    "proj_rsi/candidates/reverse_tma_x4_trial/cpu-proof.json": "0428a83b929f866218e62b6cd274497cc40fe51a71b276d33dee38ac2dc5524e",
+    "proj_rsi/candidates/reverse_tma_x4_trial/timed-output-gate-proof.json": "2e4b9c44aaaba1bac0c596e1a259d6e6a15c5e2d71e5675064e857c6854b3ee3",
+    "proj_rsi/candidates/reverse_tma_x4_trial/README.md": "8ee960e0aff4e93718a19278abb7481391d72b593acb68294e9a21eaea492596",
+    "proj_rsi/candidates/rs32/submission.py": "a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad",
+    "proj_rsi/candidates/pw36/submission.py": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "muse_bf16_proj/baseline.py": "39f52ea5b65505958aa9dee9c8129dd394cbba4e670046f862b5a88ce91a0574",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67"
+  },
+  "review": {
+    "actor": "sol07",
+    "path": "proj_rsi/scheduling/reviews/native-x4-01.md",
+    "sha256": "4183d85feac8b8084ac065e8eea522f9cf73c38032dec8a1c661dc4b7442596d",
+    "decision": "GO"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-native-x4-01",
+    "inner_seconds": 240,
+    "outer_seconds": 300,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/tools/native_x4_lab.py",
+      "--json",
+      "/okc/logs/scheduler/native-x4-01/result.json"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/native-x4-01"
+    ]
+  },
+  "annotations": {
+    "review_original": "proj_rsi/audits/sol07-x4-stmatrix-labs-independent.md",
+    "review_original_sha256": "4183d85feac8b8084ac065e8eea522f9cf73c38032dec8a1c661dc4b7442596d",
+    "review_copy_byte_identical": true,
+    "expected_wall_basis": "300s conservative full reservation estimate includes transfer, compile, actual prepare, validation, measurement and cleanup; inner240/outer300 are exact independently admitted hard caps.",
+    "scope": "U128 unpooler, actual selected local pw36 incumbent + DS fresh pack/main + native X2 parent + new variant;295 raw calls,8 strict terminal oracles,20 retained-graph mutations",
+    "promotion": "No automatic promotion; whole-pipeline actual-incumbent comparison and independent numerical/JIT/graph/counter/terminal/cleanup gates required; full official H200 gate remains separate.",
+    "native_raw_mover": "UNPROBED; do not invent native XP or raw-bit GPU pass"
+  }
+}

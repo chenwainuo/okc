@@ -1,0 +1,107 @@
+{
+  "id": "research.cursor.matchedgeometry.readiness.01",
+  "resource": "cpu",
+  "kind": "implementation",
+  "state": "BACKLOG",
+  "author": "sol13",
+  "created_at": 1793075695.9612088,
+  "depends_on": [
+    {
+      "id": "smallm.cursor.v3.all5.01",
+      "accepted_dispositions": [
+        "VALID_REGRESSION",
+        "VALID_NO_GAIN",
+        "VALID_GAIN"
+      ]
+    }
+  ],
+  "write_paths": [
+    "proj_rsi/tools/smallm_matched_geometry_lab.py",
+    "proj_rsi/candidates/smallm_matched_geometry_trial"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 5.209657099721426,
+      "p_resolve": 0.8,
+      "p_followup_gain": 0.1,
+      "unblocks": [
+        "research.cursor.matchedgeometry.review.01",
+        "research.cursor.matchedgeometry.gpu.01"
+      ],
+      "decision": "Does cursor code alone lose on matched pooler/ST5, or are qkv/unpooler changes predominantly bake-policy selection? Use answer to retain/revert only the specific stack cursor version."
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains.",
+    "confidence": "low; omitted historical mechanisms and readiness gaps, no new measured speedup",
+    "evidence": [
+      "proj_rsi/audits/smallm-v3-01/report.md",
+      "proj_rsi/audits/smallm-v3-01/analysis.json",
+      "proj_rsi/audits/sol04-smallm-increment.md",
+      "proj_rsi/audits/sol16-score-opportunity.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 600,
+    "cpu_minutes": 90
+  },
+  "annotations": {
+    "family": "cursor-matched-geometry",
+    "current_owner": "unassigned",
+    "readiness": "Needs new diagnostic harness and independent review. Current all-five rs32+cursor version is valid local regression; it does not measure PW37/PW38 stack.",
+    "causal_hypothesis": "Fresh bake ST5/ST6 selection confounds current cursor result; a fixed-geometry paired comparison can distinguish recurrence cost from autotuner selection.",
+    "comparator": "Frozen rs32 versus frozen rs32+cursor at exactly matched t32s5hze/t32s6hze KS6(qkv32),KS4(pooler32),KS2(unpooler32); include actual prepared PW36/rs32 kernel_fn separately. qkv16/o32 only claim cursor effect when actually RQ selected.",
+    "required_next_work": [
+      "Build a new immutable mechanism-only lab without modifying v3/candidate or overriding production dispatch. Instantiate only the declared matched variants for diagnostic comparisons; log their difference from actual fresh selected kernel_fn.",
+      "Retain current codegen/source/counter/storage-alias gates, full-K basis/FP64, all mutation/poison/current-input checks and immediate final timed output before replay.",
+      "Use balanced paired seeds and F1 before/after controls, retain raw nanosecond quantization and signed tiny wins/losses; freeze cost/review/command before GPU release."
+    ],
+    "required_output_artifacts": [
+      "proj_rsi/tools/smallm_matched_geometry_lab.py",
+      "proj_rsi/candidates/smallm_matched_geometry_trial/manifest.json",
+      "proj_rsi/candidates/smallm_matched_geometry_trial/cpu-proof.json",
+      "proj_rsi/candidates/smallm_matched_geometry_trial/README.md"
+    ],
+    "conditional_score_scenario": {
+      "official_job": "fb548b5dc6f04696",
+      "official_score_us": 3200.6150084373335,
+      "delta_load_us": {
+        "decode 16": 0.1,
+        "decode 32": 0.4
+      },
+      "scenario_score_us": 5.209657099721426,
+      "formula": "S0 - S0*exp(sum(log1p(-delta_load/load_sum))/6)",
+      "meaning": "Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer."
+    },
+    "full_cost_basis": "Planning estimate includes implementation, offline checks, independent CPU review and analysis in 90 CPU minutes; 600 seconds is full downstream GPU reservation including transfer/compile/prepare/validation/measurement and later causal follow-up, not kernel time. Frozen runner bounds/actual GPU cost still require review.",
+    "release_requires": "Independent separate CPU review job CPU_PASS; frozen files including guards, root-only host/command/review pin validation; no GPU descriptor is executable yet.",
+    "planned_review_id": "research.cursor.matchedgeometry.review.01",
+    "planned_gpu_id": "research.cursor.matchedgeometry.gpu.01",
+    "planning_score": {
+      "priority": 0.00463080631086349,
+      "direct_expected_us": 0,
+      "information_expected_us": 0.4167725679777141,
+      "effective_value_us": 0.4167725679777141,
+      "cost_usd": 0.8333333333333334,
+      "cpu_minutes": 90,
+      "age_multiplier": 1.0,
+      "assumptions": [
+        "Probabilities are subjective conditional priors, never measured speedups.",
+        "Scenario score benefit uses fixed same-job official reference arithmetic.",
+        "No H100 measurement is automatically a H200 forecast.",
+        "Unknown estimates are null and unrankable, not zero.",
+        "GPU seconds estimate includes full reservation wall time: transfer, compilation, prepare, validation and measurement; follow-up adds full follow-up reservation. CPU minutes include the planned CPU work chain.",
+        "All probabilities are subjective conditional priors, not measured speedups.",
+        "No H100-to-H200 performance transfer is inferred.",
+        "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains."
+      ],
+      "errors": [],
+      "rankable": true
+    },
+    "planning_rank_among_these_five": 2
+  }
+}

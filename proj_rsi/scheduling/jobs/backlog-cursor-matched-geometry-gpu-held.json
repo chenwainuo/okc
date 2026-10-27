@@ -1,0 +1,155 @@
+{
+  "id": "research.cursor.matchedgeometry.gpu.01",
+  "resource": "gpu",
+  "kind": "diagnostic",
+  "state": "HELD",
+  "author": "sol13",
+  "created_at": 1793075695.9612088,
+  "depends_on": [
+    {
+      "id": "research.cursor.matchedgeometry.readiness.01",
+      "accepted_dispositions": [
+        "CPU_PASS"
+      ]
+    },
+    {
+      "id": "research.cursor.matchedgeometry.review.01",
+      "accepted_dispositions": [
+        "CPU_PASS"
+      ]
+    }
+  ],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 5.209657099721426,
+      "p_resolve": 0.8,
+      "p_followup_gain": 0.1,
+      "unblocks": [
+        "research.cursor.matchedgeometry.followup.01"
+      ],
+      "decision": "Does cursor code alone lose on matched pooler/ST5, or are qkv/unpooler changes predominantly bake-policy selection? Use answer to retain/revert only the specific stack cursor version."
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains. Cost now charges full1200s reserved guard envelope, not obsolete600/900s planning; downstream1200s full reservation is a contingent integration/confirmation chain allowance.",
+    "confidence": "low; CPU-admitted and independently GO-reviewed, GPU outcome unmeasured",
+    "evidence": [
+      "proj_rsi/audits/smallm-v3-01/report.md",
+      "proj_rsi/audits/smallm-v3-01/analysis.json",
+      "proj_rsi/audits/sol04-smallm-increment.md",
+      "proj_rsi/audits/sol16-score-opportunity.json",
+      "proj_rsi/scheduling/reviews/cursor-matched-geometry.md",
+      "proj_rsi/candidates/smallm_matched_geometry_trial/manifest.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 1200,
+    "followup_gpu_seconds": 1200,
+    "cpu_minutes": 30
+  },
+  "annotations": {
+    "readiness": "Frozen runnable independent GO. Root UPDATE existing same canonical job ID; retain HELD until canonical readiness/review CPU_PASS dependencies recorded, then explicitly release. Never register a duplicate ID.",
+    "comparator": "Frozen rs32 versus frozen rs32+cursor at exactly matched t32s5hze/t32s6hze KS6(qkv32),KS4(pooler32),KS2(unpooler32); include actual prepared PW36/rs32 kernel_fn separately. qkv16/o32 only claim cursor effect when actually RQ selected.",
+    "planning_chain_gpu_seconds": 600,
+    "planning_only_not_dispatch_cost": true,
+    "required_runtime_gates": [
+      "source/installed guards and actual JIT resources before first candidate math",
+      "actual declared weights and source-bound active/dormant counter contracts",
+      "full-K basis/FP64/task and fresh/current/zero/poison/immutability",
+      "strict actual final timed output before replay or mutation",
+      "balanced paired/F1 raw samples and named cleanup",
+      "root validation; never promote from exit0"
+    ],
+    "next_after_failure": "Retain artifacts/source identity, diagnose concrete failure or valid regression, new attempt for repairs; no family retirement or presumed additive gains.",
+    "independent_review_pending": false,
+    "scope": "Three M32 matched ST5/ST6 parent/cursor pairs + actual PW36/rs32/cursor references;1386raw/42terminal/105mutations; no official/fullstack inference.",
+    "output_path_contract": "Driver requires NONEXISTENT child /okc/logs/scheduler/cursor-matched-geometry-01/run (exist_ok=False). Do not precreate child. Collect artifact parent and scheduler hostlog; parent may be created by driver, not by this descriptor author.",
+    "full_cost_basis": "Current GPU cost1200s charges entire reserved outer guard including source transfer/compile/prepare/all correctness/JIT/profile/timing/cleanup; inner1140 outer1200 exact independently GO-reviewed. Contingent downstream1200s prices actual selected-policy/fullstack validation or matched confirmation only if current result warrants it.30CPUmin review/harvest/analysis; probabilities remain subjective low-confidence, no H100-to-H200 forecast.",
+    "current_gpu_measurement": "UNRUN; CPU_PASS and source review are not performance admission",
+    "validity_prior": "direct scenario0 so direct.p_valid1 does not forecast a gain; information resolution prior includes measurement validity risk. Root later validates every sample/correctness/cleanup before assigning disposition.",
+    "reviewed_planning_score": {
+      "priority": 0.1251963633376037,
+      "direct_expected_us": 0,
+      "information_expected_us": 0.4167725679777141,
+      "effective_value_us": 0.4167725679777141,
+      "cost_usd": 3.3333333333333335,
+      "cpu_minutes": 30,
+      "age_multiplier": 1.0013164089716695,
+      "assumptions": [
+        "Probabilities are subjective conditional priors, never measured speedups.",
+        "Scenario score benefit uses fixed same-job official reference arithmetic.",
+        "No H100 measurement is automatically a H200 forecast.",
+        "Unknown estimates are null and unrankable, not zero.",
+        "GPU seconds estimate includes full reservation wall time: transfer, compilation, prepare, validation and measurement; follow-up adds full follow-up reservation. CPU minutes include the planned CPU work chain.",
+        "All probabilities are subjective conditional priors, not measured speedups.",
+        "No H100-to-H200 performance transfer is inferred.",
+        "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains. Cost now charges full1200s reserved guard envelope, not obsolete600/900s planning; downstream1200s full reservation is a contingent integration/confirmation chain allowance."
+      ],
+      "errors": [],
+      "rankable": true
+    }
+  },
+  "files": {
+    "proj_rsi/candidates/smallm_increment/submission.py": "0d0ef30a495de725139fd8a401ed0c7a239d0ef10e7c41a8b4f9a6c2d37c1737",
+    "proj_rsi/candidates/smallm_increment/before.sass": "954129b56310ee37153226d9111713ec9e8d9e70a0a4209a4e9949db4346e856",
+    "proj_rsi/candidates/smallm_increment/after.sass": "cbdb0f7bd36df781de5fb0c9fe784d6a13b031945570697b4d6abdd586077d39",
+    "proj_rsi/candidates/smallm_increment/manifest.json": "f19bb9bea9e5937d775d97bd0a98232d95470e4c92ca8c0d2caaa674f3767d7f",
+    "proj_rsi/candidates/smallm_increment/delta.json": "9513bc03fc5288d670b8b3c2a519ef63e3d03b90391e5d8ebaf7419276ad4d17",
+    "proj_rsi/candidates/smallm_increment/before.cubin": "7fcd137b712528cab1a86c863447fff6b98b86fa17b2f7a7c18beb6a5d7dc286",
+    "proj_rsi/candidates/smallm_increment/after.cubin": "bf86196f5f636b73dc8e0c26e35965ada93573bca1eeb5c1d88d895d20ec7410",
+    "proj_rsi/audits/sol10-smallm-integration.md": "7bde2914319630781a1161d1d1ed5248696d933bddb98eee7eb7f4be9c2341ed",
+    "proj_rsi/tools/smallm_increment_lab_v3.py": "bdc7cb89f1d0afa1604bc855601ceb6fe46f0c5237de5025f18800ba67062f2f",
+    "proj_rsi/audits/sol13-counter-repair.md": "ba570c39b8fa7379fb09ea3f53f6ade86bd6ceca070cd08f7d998f8b7e66fa3d",
+    "proj_rsi/candidates/smallm_increment_trial_v3/history/manifest_v2.json": "7c5e90b6b6854f89a58affac6c6bdf8fe14b8578e7ca9ae2784764d6fc7e6235",
+    "proj_rsi/candidates/smallm_increment_trial_v3/history/measurement-history/v1-info-routing-hold/audit.md": "5725eb1711efac47cbcc9387879d19918805b1105a1cbfa6befc4993eadddd22",
+    "proj_rsi/candidates/smallm_increment_trial_v3/history/measurement-history/v1-info-routing-hold/cpu-proof.json": "ab3e4f37ccfc40a421a63f0b56eff92027bbccc01d213733ff07665ce648b16a",
+    "proj_rsi/candidates/smallm_increment_trial_v3/history/measurement-history/v1-info-routing-hold/lab.py": "196956deb52a1378361493a28f0eec3f843cabcdea265a5e0d39d3a16cbb4786",
+    "proj_rsi/candidates/smallm_increment_trial_v3/history/measurement-history/v1-info-routing-hold/manifest.json": "040a33edafebb4dd2c662332613b542a9bae77f64255d3b29a61572e37379359",
+    "proj_rsi/candidates/smallm_increment_trial_v3/history/smallm_increment_lab_v2.py": "5f1534620d3e62d017fbd8a167b7763aed0d8656ac938bcca8411572c778a308",
+    "proj_rsi/candidates/smallm_increment_trial_v3/history/failed-attempt01-provenance.json": "53604199fd38fe552b137595046d9430d820bdf4972cd9400cfdce5b10b4cefe",
+    "proj_rsi/candidates/smallm_increment_trial_v3/manifest.json": "e9fa7ba4aaa1cfb5b9075701164fa0d50340044de106f819756ccb377c273c33",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "proj_rsi/tools/smallm_matched_geometry_lab.py": "c6219b3b2114f34bf23a21d047aefcfa6cc23f46df6d01ae4bea45cfeeb41fc3",
+    "proj_rsi/candidates/smallm_matched_geometry_trial/cpu_proof.py": "b6193562204f4c9b1f20dc58a25424f9de25c799e8771492c76d38f71d441de2",
+    "proj_rsi/candidates/smallm_matched_geometry_trial/README.md": "da9e4891028f458d4ab4c69f8887e20964fa4713abb074f35a26ae11e80319aa",
+    "proj_rsi/candidates/smallm_matched_geometry_trial/cpu-proof.json": "5867ee283d5d97f5633b2bb243a450b24deaf6bad008f7f488156d19d3add766",
+    "proj_rsi/candidates/smallm_matched_geometry_trial/support.py": "4a3dcd35737651f9a358fe42cbdd2a03f4ef1882185c1c3bd6b5495fe50cb84f",
+    "proj_rsi/candidates/smallm_matched_geometry_trial/manifest.json": "fe5282b9872db72582bd737ac63fa7dc86da3e0db1399f25ca1e3db321aa23d0",
+    "proj_rsi/scheduling/reviews/cursor-matched-geometry.md": "e5cc925206166c6937ec02b0dcfb7ac875becf68ca942961f630473265a08670",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/audits/cursor-matched-geometry-independent.md": "e503e739a400a8b4e14db6f6cdab574e74e5bd42113879a3ecaa5f1973109ec0"
+  },
+  "review": {
+    "actor": "sol07",
+    "path": "proj_rsi/scheduling/reviews/cursor-matched-geometry.md",
+    "sha256": "e5cc925206166c6937ec02b0dcfb7ac875becf68ca942961f630473265a08670",
+    "decision": "GO"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-cursor-matched-geometry-01",
+    "inner_seconds": 1140,
+    "outer_seconds": 1200,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/tools/smallm_matched_geometry_lab.py",
+      "--output",
+      "/okc/logs/scheduler/cursor-matched-geometry-01/run",
+      "--root-review-token",
+      "/okc/proj_rsi/scheduling/reviews/cursor-matched-geometry.md"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/cursor-matched-geometry-01"
+    ]
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "id": "research.wring.rebase.gpu.01",
+  "resource": "gpu",
+  "kind": "diagnostic",
+  "state": "BACKLOG",
+  "author": "sol13",
+  "created_at": 1793075695.9612088,
+  "depends_on": [
+    {
+      "id": "research.wring.rebase.readiness.01",
+      "accepted_dispositions": [
+        "CPU_PASS"
+      ]
+    },
+    {
+      "id": "research.wring.rebase.review.01",
+      "accepted_dispositions": [
+        "CPU_PASS"
+      ]
+    }
+  ],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 3.009604389487322,
+      "p_resolve": 0.6,
+      "p_followup_gain": 0.15,
+      "unblocks": [
+        "research.wring.rebase.followup.01"
+      ],
+      "decision": "Does the narrowly recovered x6w4 mechanism retain a real complete-kernel QKV128 advantage against current PW36, or was the historical ~.38us observation noise/old geometry?"
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL INFORMATION PRIOR ONLY. This diagnostic has zero direct speed benefit. Scenario3.009604389487322us is conditional official-score arithmetic for the historical QKV128 ~0.38us question, not a predicted or newly measured attainable gain. Presolve0.6 and Pfollowupgain0.15 are judgment priors; no H100-to-H200 transfer or counter/geometry additivity. Charge300s full normal guard reservation plus the existing planned900s downstream reservation and20CPUminutes;900s is not permission to extend this240/300 trial cap.",
+    "confidence": "low; frozen CPU source/codegen/protocol now available, independent executable review and runtime unresolved",
+    "evidence": [
+      "proj_rsi/audits/mx-h100.md",
+      "proj_rsi/candidates/rs128b/submission.py",
+      "proj_rsi/audits/current-leaderboard-gains-completeness.json",
+      "proj_rsi/audits/sol16-score-opportunity.json",
+      "proj_rsi/candidates/pw36_wring_rebase/manifest.json",
+      "proj_rsi/candidates/pw36_wring_rebase/README.md",
+      "proj_rsi/candidates/pw36_wring_rebase/cpu-lab-proof.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 300,
+    "followup_gpu_seconds": 900,
+    "cpu_minutes": 20
+  },
+  "annotations": {
+    "readiness": "Exact frozen kernel/driver/source closure pinned and normal240/300 literal command supplied. HELD until sol09 independent executable GO review hash and both existing CPU dependencies are accepted; root alone releases/registers updates/dispatches.",
+    "comparator": "New narrow rebase onto frozen PW36, QKV128 KS7, coupled current control versus equal-depth split x5w5 control versus historical x6w4. Same codec/math/output, explicit depth-change confounds; no broad depth sweep.",
+    "planning_chain_gpu_seconds": 900,
+    "planning_only_not_dispatch_cost": true,
+    "required_runtime_gates": [
+      "source/installed guards and actual JIT resources before first candidate math",
+      "actual declared weights and source-bound active/dormant counter contracts",
+      "full-K basis/FP64/task and fresh/current/zero/poison/immutability",
+      "strict actual final timed output before replay or mutation",
+      "balanced paired/F1 raw samples and named cleanup",
+      "root validation; never promote from exit0"
+    ],
+    "next_after_failure": "Retain artifacts/source identity, diagnose concrete failure or valid regression, new attempt for repairs; no family retirement or presumed additive gains.",
+    "expected_wall_basis": "300s conservative complete execution reservation (transfer, compile, actual serving prepare, correctness, timing, cleanup), plus existing900s planned follow-up reservation;20CPUminutes subjective analysis/next-step chain cost. Actual cold compile/prepare may exceed normalcap; preserve timeout as invalid, no silent deadline escalation.",
+    "frozen_manifest_sha256": "20ffb258d67a4ed205298103e0e34e9f06d929957c4cc670dd5985deccc1c299",
+    "frozen_submission_sha256": "207f5a1bdc4f5d7712d444d9c71e857643e6700451c88734fce898ac1fc1b7ab",
+    "frozen_driver_sha256": "fd43d83540e2469be8bcd0d5c676b2a96c1ccbeab0e440b767603bcabd594924",
+    "pending_review_hash": true,
+    "review_state_policy": "Descriptor intentionally retains HOLD regardless of file arrival; root verifies independent GO content/hash and CPU_PASS dependencies before release. A missing review hash is null, never a fake digest.",
+    "source_closure_scope": "All manifest-local and external files + frozen actual PW36, historical rs128b source, reference/checks/baseline, and both source-pinned host/container guards.",
+    "runtime_scope": "QKV128 KS7 actual freshly prepared PW36 serving arm plus three explicitly mechanism-labelled complete kernels (coupled x5w5, split x5w5, split x6w4). These do not force or alter production bake picks.295 raw calls,8 strict terminal oracles,20 actual-graph mutations.",
+    "counter_scope": "Source-proven full-width ZI active36-int32 prefix for NB18. Each mechanism arm has72visible integers (36active+36dormant) plus8guard integers on either side; dormant tails/guards and all unrelated prepare counters preserve baseline by physical storage identity. Actual selected incumbent variant/fallback guard remains mandatory.",
+    "retention": "Preserve every valid tiny gain/no-gain/regression and all invalid artifacts; status text/exit0 is not promotion or official score evidence."
+  },
+  "files": {
+    "proj_rsi/candidates/pw36_wring_rebase/manifest.json": "20ffb258d67a4ed205298103e0e34e9f06d929957c4cc670dd5985deccc1c299",
+    "proj_rsi/candidates/pw36_wring_rebase/README.md": "86fb1e513c4c178cd43ad9f0c6f1124595fd49bc9ecc03d90b4331642203a79d",
+    "proj_rsi/candidates/pw36_wring_rebase/build_patch.py": "11e47a3b3ffe764506347d243749f0e890a8a9341ba65269f42b8337d3ca6d48",
+    "proj_rsi/candidates/pw36_wring_rebase/control-resource.log": "f2b401b1ce53fd124f2945ba25ca0dcd40d7634f32c725c3ef5cf77a4baed764",
+    "proj_rsi/candidates/pw36_wring_rebase/control-sass.txt": "48bc9b042d560bd0abd44075c560428de073d79986949888c94339d9d04383aa",
+    "proj_rsi/candidates/pw36_wring_rebase/control.sm90a.cubin": "22fa5930e20c3d17267614f61953f36473d77d98a65239097a9bffbc4f5b8ea3",
+    "proj_rsi/candidates/pw36_wring_rebase/control_source.cu": "84fc4a87b80a293018ffe319d2797c0c6a3a2ae7831019523a3164aa1e3dc997",
+    "proj_rsi/candidates/pw36_wring_rebase/cpu-lab-proof.json": "997d80f7d09a9313a8bb739006d1858e4248157435f456b6adbc2309eaa2e0a3",
+    "proj_rsi/candidates/pw36_wring_rebase/cpu_lab_proof.py": "2e47b45240c7760e47d808cf92402fdca3f29d060e1868e3b13b04a4dea97cdd",
+    "proj_rsi/candidates/pw36_wring_rebase/delta.json": "7528409660785f9b1dfa202ec86c6aaaf57b3b1593d76806f9f0074d43a9c157",
+    "proj_rsi/candidates/pw36_wring_rebase/device-resource.log": "d941ee66f5c3b86afb6a77a47ae1093ac1554b63369a51a5bd7a2493bda91027",
+    "proj_rsi/candidates/pw36_wring_rebase/device.sm90a.cubin": "c1597eac903ac3b4d7623dc7d35ebe68b6032e9a496f47a044daa9eda4694fd7",
+    "proj_rsi/candidates/pw36_wring_rebase/device_source.cu": "2a20b3923dbc5af7ef88fcfe453aa91410ee5c74f9f682254803c973abdcf29c",
+    "proj_rsi/candidates/pw36_wring_rebase/extension_source.cu": "1a614dcd721c6431900d25cc46fa3545110cfbed2d6dede6c940d5ad8c458443",
+    "proj_rsi/candidates/pw36_wring_rebase/historical-mechanism.json": "261177ec03f17ebe7d6ca4340ce0d4922619a276fb35e25e1285f36da07f5595",
+    "proj_rsi/candidates/pw36_wring_rebase/history/incomplete-proof-harness/preflight.json": "ca6cb0113682a25e66c41099542be896f671476ee51311bf1f4ae6c5527f30bc",
+    "proj_rsi/candidates/pw36_wring_rebase/history/ptx-mnemonic-checker/preflight.json": "e3b5110e1d8d7bb9e1fde261416e44f2ce93c4ac2a45707936936e01d600580c",
+    "proj_rsi/candidates/pw36_wring_rebase/history/ptx-mnemonic-checker/preflight.py": "e06299ac6331786b5527f13ea13e8dc0e330c6594a597864558c642f3bd6a90a",
+    "proj_rsi/candidates/pw36_wring_rebase/preflight.json": "496bf4e5006e422c4bb4e8dc2c68f039697a63184e854cc746b93bdb74bd1eb7",
+    "proj_rsi/candidates/pw36_wring_rebase/preflight.py": "7f3a621a44f2d72c4b29f752338e56683f402b4ae2840aaf7f006370e504ed1f",
+    "proj_rsi/candidates/pw36_wring_rebase/protocol-proof.json": "02d7036860f548d3c86cb396f0c407e28a8629680f45155ec3c86e0bc56014ce",
+    "proj_rsi/candidates/pw36_wring_rebase/protocol_proof.py": "18c6aefc46b492d5c7cdd98f729382d0293e54d0699245d450ccf4e2fff66f35",
+    "proj_rsi/candidates/pw36_wring_rebase/sass.txt": "7bbc325a2d4e708ee297189aba9286d1085b0deca0e0fe3bd1213128170a9c48",
+    "proj_rsi/candidates/pw36_wring_rebase/submission.py": "207f5a1bdc4f5d7712d444d9c71e857643e6700451c88734fce898ac1fc1b7ab",
+    "proj_rsi/tools/wring_rebase_lab.py": "fd43d83540e2469be8bcd0d5c676b2a96c1ccbeab0e440b767603bcabd594924",
+    "proj_rsi/candidates/pw36/submission.py": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+    "proj_rsi/candidates/rs128b/submission.py": "d6acc979651d576159793a9a671aa1d84badbee547204e0cabbdfd5b67370396",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "muse_bf16_proj/baseline.py": "39f52ea5b65505958aa9dee9c8129dd394cbba4e670046f862b5a88ce91a0574",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/scheduling/reviews/wring-rebase-01.md": "ba8c408a0b952614c4beea9a20a436c30e97881427029205cc0bcbfb44992dba"
+  },
+  "review": {
+    "actor": "sol09",
+    "path": "proj_rsi/scheduling/reviews/wring-rebase-01.md",
+    "sha256": "ba8c408a0b952614c4beea9a20a436c30e97881427029205cc0bcbfb44992dba",
+    "decision": "GO"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-wring-rebase-01",
+    "inner_seconds": 240,
+    "outer_seconds": 300,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/tools/wring_rebase_lab.py",
+      "--json",
+      "/okc/logs/scheduler/wring-rebase-01/result.json"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/wring-rebase-01"
+    ]
+  }
+}

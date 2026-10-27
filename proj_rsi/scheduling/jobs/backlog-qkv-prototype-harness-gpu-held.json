@@ -1,0 +1,172 @@
+{
+  "id": "research.qkv.split4.harness.gpu.01",
+  "resource": "gpu",
+  "kind": "diagnostic",
+  "state": "HELD",
+  "author": "sol13",
+  "created_at": 1793075695.9612088,
+  "depends_on": [
+    {
+      "id": "research.qkv.split4.harness.readiness.01",
+      "accepted_dispositions": [
+        "CPU_PASS"
+      ]
+    },
+    {
+      "id": "research.qkv.split4.harness.review.01",
+      "accepted_dispositions": [
+        "CPU_PASS"
+      ]
+    }
+  ],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 7.950628540704201,
+      "p_resolve": 0.55,
+      "p_followup_gain": 0.1,
+      "unblocks": [
+        "research.qkv.split4.harness.followup.01"
+      ],
+      "decision": "Can144-CTA split coverage repay fresh packing plus explicit FP32 reduction against actual current selected QKV128 incumbent?"
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains. Cost now charges full1200s reserved guard envelope, not obsolete600/900s planning; downstream1200s full reservation is a contingent integration/confirmation chain allowance.",
+    "confidence": "low; CPU-admitted and independently GO-reviewed, GPU outcome unmeasured",
+    "evidence": [
+      "proj_rsi/audits/sol15-qkv-runtime.md",
+      "proj_rsi/audits/sol05-qkv-coverage.md",
+      "proj_rsi/candidates/group8_qkv_trial/manifest.json",
+      "proj_rsi/audits/sol16-score-opportunity.json",
+      "proj_rsi/scheduling/reviews/qkv-runtime-01.md",
+      "proj_rsi/candidates/group8_qkv_runtime_trial/manifest.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 1200,
+    "followup_gpu_seconds": 1200,
+    "cpu_minutes": 30
+  },
+  "annotations": {
+    "readiness": "Frozen runnable independent GO. Root UPDATE existing same canonical job ID; retain HELD until canonical readiness/review CPU_PASS dependencies recorded, then explicitly release. Never register a duplicate ID.",
+    "comparator": "Actual fresh PW36 prepare/kernel_fn QKV128 (historical rq s4s5hz KS7 is not assumed) plus equivalent prepared QKV RQ control, versus Pipeline fresh pack->split4 main->ascending FP32 reduction. Never Lt-only or failed unpooler comparator.",
+    "planning_chain_gpu_seconds": 900,
+    "planning_only_not_dispatch_cost": true,
+    "required_runtime_gates": [
+      "source/installed guards and actual JIT resources before first candidate math",
+      "actual declared weights and source-bound active/dormant counter contracts",
+      "full-K basis/FP64/task and fresh/current/zero/poison/immutability",
+      "strict actual final timed output before replay or mutation",
+      "balanced paired/F1 raw samples and named cleanup",
+      "root validation; never promote from exit0"
+    ],
+    "next_after_failure": "Retain artifacts/source identity, diagnose concrete failure or valid regression, new attempt for repairs; no family retirement or presumed additive gains.",
+    "independent_review_pending": false,
+    "scope": "QKV128 M128/N2304/K8192 actual PW36/rs32 controls versus fresh pack+split4 main+ordered FP32 reduction;210raw; actual XP/partial/final output gates. No selected-policy/official gain inferred from forced candidate.",
+    "output_path_contract": "Driver requires NONEXISTENT child /okc/logs/scheduler/qkv-runtime-01/run (exist_ok=False). Do not precreate child. Collect artifact parent and scheduler hostlog; parent may be created by driver, not by this descriptor author.",
+    "full_cost_basis": "Current GPU cost1200s charges entire reserved outer guard including source transfer/compile/prepare/all correctness/JIT/profile/timing/cleanup; inner1140 outer1200 exact independently GO-reviewed. Contingent downstream1200s prices actual selected-policy/fullstack validation or matched confirmation only if current result warrants it.30CPUmin review/harvest/analysis; probabilities remain subjective low-confidence, no H100-to-H200 forecast.",
+    "current_gpu_measurement": "UNRUN; CPU_PASS and source review are not performance admission",
+    "validity_prior": "direct scenario0 so direct.p_valid1 does not forecast a gain; information resolution prior includes measurement validity risk. Root later validates every sample/correctness/cleanup before assigning disposition.",
+    "reviewed_planning_score": {
+      "priority": 0.13135806499913025,
+      "direct_expected_us": 0,
+      "information_expected_us": 0.43728456973873114,
+      "effective_value_us": 0.43728456973873114,
+      "cost_usd": 3.3333333333333335,
+      "cpu_minutes": 30,
+      "age_multiplier": 1.001316412617487,
+      "assumptions": [
+        "Probabilities are subjective conditional priors, never measured speedups.",
+        "Scenario score benefit uses fixed same-job official reference arithmetic.",
+        "No H100 measurement is automatically a H200 forecast.",
+        "Unknown estimates are null and unrankable, not zero.",
+        "GPU seconds estimate includes full reservation wall time: transfer, compilation, prepare, validation and measurement; follow-up adds full follow-up reservation. CPU minutes include the planned CPU work chain.",
+        "All probabilities are subjective conditional priors, not measured speedups.",
+        "No H100-to-H200 performance transfer is inferred.",
+        "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains. Cost now charges full1200s reserved guard envelope, not obsolete600/900s planning; downstream1200s full reservation is a contingent integration/confirmation chain allowance."
+      ],
+      "errors": [],
+      "rankable": true
+    }
+  },
+  "files": {
+    "muse_bf16_proj/baseline.py": "39f52ea5b65505958aa9dee9c8129dd394cbba4e670046f862b5a88ce91a0574",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/submission.py": "964eed6cfef28ad2dc28ca05487a0bf28f7183ba12470eb82acc152cc5a25154",
+    "proj_rsi/candidates/group8_qkv/build_cpu.py": "0a2dfd4322a493d49ed6cb2d155361ac18d8a4464855f918465bac6bcf1fa235",
+    "proj_rsi/candidates/group8_qkv/compile.json": "b6128433f3dc2bc994528807202fb774b9c3aa5fba91dfc61a22114d4d8d1e02",
+    "proj_rsi/candidates/group8_qkv/coverage_arithmetic.json": "4d5e1b8e9a60190928a634afe25957713d93a88fa6d49fca7077c3a0c307cc37",
+    "proj_rsi/candidates/group8_qkv/device.sm90a.cubin": "42142077f844bb46a181a472659c7b525778f37ea0efc361d75ea2b9950397ac",
+    "proj_rsi/candidates/group8_qkv/device_source.cu": "d568e2612056b5bb37a1ebaadeb5c50d5c63345a736d660b144c25f4dac0d864",
+    "proj_rsi/candidates/group8_qkv/manifest.json": "7e85c8281c912e983aaaee09c6e48a3b9c18d8e9da08bd839740e4802b97aa52",
+    "proj_rsi/candidates/group8_qkv/proofs.json": "83d0c1d3a05bacf432fb7d92f011666231b1f4f29ef3cd94225f519ff78de306",
+    "proj_rsi/candidates/group8_qkv/proofs.py": "2b02d3db8a5e28bf43c9a3754115f230da0aca6afd06e85694840fe1de7a516c",
+    "proj_rsi/candidates/group8_qkv/resource.log": "8c69d2592f67b651142f515072190f8a071b666cd812163c9667338df46a49ca",
+    "proj_rsi/candidates/group8_qkv/sass.txt": "2ce6532653e20943bfd8b74969999d4497d62a76bafe07220c6937f66530e95e",
+    "proj_rsi/candidates/group8_qkv_runtime_trial/README.md": "c8fa74e597c9b739fda703f37dce919f3d149af28fbb229c442f134377c68759",
+    "proj_rsi/candidates/group8_qkv_trial/cpu_check.json": "f934d309b5175004dc45dd853804daa5be0e8dd4e80b821f7abf157b71d5606f",
+    "proj_rsi/candidates/group8_qkv_trial/extension.cpu.o": "a99bba9a6a6e4bc0a85b3fb791d80caeb479c01ea7c142d091cd640543b608f7",
+    "proj_rsi/candidates/group8_qkv_trial/extension_source.cu": "29f7f11bdf3246e66b9419fce4003cb27c22a4cf263a3d1f15c0f3770371f1a2",
+    "proj_rsi/candidates/group8_qkv_trial/failures/attempt1-cpu_check.json": "97a50c704b9282aff2566151b96b92641e4224e86f7ead75ffa2c8e45bbe0b5e",
+    "proj_rsi/candidates/group8_qkv_trial/failures/attempt1-host_compile.log": "fe50eaaf5dafb81fa6ef50cd4b546f401171fc6f532e57addc4909182a223300",
+    "proj_rsi/candidates/group8_qkv_trial/failures/attempt2-cpu_check.json": "97a50c704b9282aff2566151b96b92641e4224e86f7ead75ffa2c8e45bbe0b5e",
+    "proj_rsi/candidates/group8_qkv_trial/failures/attempt2-host_compile.log": "8a8f01bf7751ee42360799b540c76f0012f5327a4bb97d619e6ca947ac4dd4e6",
+    "proj_rsi/candidates/group8_qkv_trial/host.cuh": "306be7e5cbd0308843f66580fa8d6d19ae0b3b6eedfa8ba07f4e9a1216c13fab",
+    "proj_rsi/candidates/group8_qkv_trial/host.sass": "328f274a9f77dd20705262f0953399ce5e557933c5d8bfbdad9aa0334f764ecf",
+    "proj_rsi/candidates/group8_qkv_trial/host_compile.log": "49325a2e65391087bf7f219ba1004576d3174ff085205f966a550f50ae6bddb7",
+    "proj_rsi/candidates/group8_qkv_trial/manifest.json": "0bbd14bac0df1d1bcc7e55a30ffccf98d206d4e7d0203051b510ceb3dfcf83d3",
+    "proj_rsi/candidates/group8_qkv_trial/runtime.py": "83d667c57b1a488cf33fcc088823b7873a445959ab0d31b56b268066c2120e45",
+    "proj_rsi/candidates/operand_reverse_group8/liveness.py": "7f71eabcb05a358547d22390fd6874e148ca2379ffaa394c9ad45390e18586cc",
+    "proj_rsi/candidates/pw36/submission.py": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+    "proj_rsi/candidates/rs32/submission.py": "a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad",
+    "proj_rsi/candidates/smallm_increment/submission.py": "0d0ef30a495de725139fd8a401ed0c7a239d0ef10e7c41a8b4f9a6c2d37c1737",
+    "proj_rsi/tools/group8_qkv_runtime_lab.py": "a218e39867c56d1e66cab7d7fb08f245ed7181be59d64db2220e1d3f1b9d4746",
+    "proj_rsi/tools/smallm_increment_lab_v3.py": "bdc7cb89f1d0afa1604bc855601ceb6fe46f0c5237de5025f18800ba67062f2f",
+    "proj_rsi/candidates/group8_qkv_runtime_trial/test_cpu.py": "77e1e10f3f94d0cca59d7479beb8f5cfc82d30c640ef658119ce3386d8bdc59f",
+    "proj_rsi/candidates/group8_qkv_runtime_trial/cpu-proof.json": "6b25ded12d913f77e4666b26bd050d22bb634b0916b68151f4878027020172c5",
+    "proj_rsi/candidates/group8_qkv_runtime_trial/history/v1-43402311/manifest.json": "fe064b6075d10fd9abb6d6537dc91c65a38a701852bb4de9df2470985c202053",
+    "proj_rsi/candidates/group8_qkv_runtime_trial/history/v1-43402311/driver.py": "43402311c4680680a3e8d77f87793d508e813189995854fcb88e2b1a7a3445c3",
+    "proj_rsi/candidates/group8_qkv_runtime_trial/history/v1-43402311/README.md": "774eb3e3517afc2c4ee1a1fb12a4d502df711f51a693851bd7dc1e1c2afdda00",
+    "proj_rsi/candidates/group8_qkv_runtime_trial/history/v1-43402311/cpu-proof.json": "6b25ded12d913f77e4666b26bd050d22bb634b0916b68151f4878027020172c5",
+    "proj_rsi/candidates/group8_qkv_runtime_trial/history/v1-43402311/test_cpu.py": "4d2630bac1c02c7c91d243a97fa5073b046401c231d86cc08efa0862ef177a5c",
+    "proj_rsi/candidates/group8_qkv_runtime_trial/manifest.json": "efff5355c0609e283dfdba6fa24aff538a6bb3384bd4ccdc4e8eea15d05bb129",
+    "proj_rsi/scheduling/reviews/qkv-runtime-01.md": "96084bb798992cabd524e2afa9a6111873fae9884dc7eb6cff425b6015c82319",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/audits/qkv-runtime-review/review-cpu.json": "1c6e46489a21ebfb9bf3ab06f57038cab06fc97731825db9b3df3bbd15402cd2",
+    "proj_rsi/audits/qkv-runtime-review/negative-checks.json": "1c8a074bed2b30cac0e8676a3832bf3405e47625966cf3eb238f472aa7a932f8"
+  },
+  "review": {
+    "actor": "sol09",
+    "path": "proj_rsi/scheduling/reviews/qkv-runtime-01.md",
+    "sha256": "96084bb798992cabd524e2afa9a6111873fae9884dc7eb6cff425b6015c82319",
+    "decision": "GO"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-qkv-runtime-01",
+    "inner_seconds": 1140,
+    "outer_seconds": 1200,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/tools/group8_qkv_runtime_lab.py",
+      "--output",
+      "/okc/logs/scheduler/qkv-runtime-01/run",
+      "--root-review-token",
+      "/okc/proj_rsi/scheduling/reviews/qkv-runtime-01.md"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/qkv-runtime-01"
+    ]
+  }
+}

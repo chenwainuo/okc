@@ -1,0 +1,93 @@
+{
+  "status": "CPU_EH_SAME_GEOMETRY_LAB_PASS_GPU_UNRUN",
+  "sources": {
+    "parent": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+    "eh": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e"
+  },
+  "shapes": {
+    "qkv_gate": [
+      2304,
+      8192,
+      7
+    ],
+    "pooler": [
+      4096,
+      8192,
+      4
+    ],
+    "unpooler": [
+      8192,
+      4096,
+      2
+    ],
+    "o": [
+      8192,
+      1024,
+      2
+    ]
+  },
+  "canonical_all_PC_gates": {
+    "parent": {
+      "2": {
+        "all_PC_predicate_instructions": "EXACT",
+        "instructions": 1792,
+        "EH": false
+      },
+      "3": {
+        "all_PC_predicate_instructions": "EXACT",
+        "instructions": 1832,
+        "EH": false
+      }
+    },
+    "eh": {
+      "65538": {
+        "all_PC_predicate_instructions": "EXACT",
+        "instructions": 1816,
+        "EH": true
+      },
+      "65539": {
+        "all_PC_predicate_instructions": "EXACT",
+        "instructions": 1856,
+        "EH": true
+      }
+    }
+  },
+  "wrong_source_and_instruction_rejections": {
+    "parent_wrong_source": "AssertionError((2, 'expected exactly one kernel', 0))",
+    "parent_instruction_drift": "AssertionError(('parent', 3, 'actual JIT differs from CPU canonical'))",
+    "eh_wrong_source": "AssertionError((65538, 'expected exactly one kernel', 0))",
+    "eh_instruction_drift": "AssertionError(('eh', 65539, 'actual JIT differs from CPU canonical'))"
+  },
+  "terminal": {
+    "status": "CPU_ADVERSARIAL_TERMINAL_PASS",
+    "negative_controls": {
+      "output": "('parent2', 'actual terminal output', 0, 'CPU synthetic exact recorded fixture')",
+      "NaN": "('eh2', 'nonfinite actual timed output')",
+      "currentX": "current X changed",
+      "W": "immutable W/packed/escape changed",
+      "packedW": "immutable W/packed/escape changed",
+      "escape": "immutable W/packed/escape changed",
+      "counter": "counter not reset",
+      "wrong_recorded_seed": "('parent2', 'actual terminal output', 3, 'CPU synthetic exact recorded fixture')",
+      "output_alias": "output alias"
+    },
+    "distinct_last_fixtures": "PASS",
+    "phase_order": "F1 then strict4 then paired then strict4 then mutations/profile",
+    "no_gate_mutation_replay": true
+  },
+  "per_shape_counts": {
+    "F1": 126,
+    "paired": 128,
+    "warmup": 20,
+    "all_raw": 274,
+    "terminal_oracles": 8,
+    "mutations": 20
+  },
+  "total_four_shapes": {
+    "all_raw": 1096,
+    "terminal_oracles": 32,
+    "mutations": 80
+  },
+  "scope": "FIXED_GEOMETRY_RESEARCH_NOT_SELECTED_POLICY_OR_FULLSTACK_WIN",
+  "GPU": "UNRUN_NO_CONTEXT_NO_EXTENSION_NO_PREPARE"
+}

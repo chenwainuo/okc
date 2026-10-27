@@ -1,0 +1,68 @@
+{
+  "id": "research.rq11.actualescape.gpu.01",
+  "resource": "gpu",
+  "kind": "diagnostic",
+  "state": "HELD",
+  "author": "sol13",
+  "created_at": 1793075695.9612088,
+  "depends_on": [
+    {
+      "id": "research.rq11.actualescape.readiness.01",
+      "accepted_dispositions": [
+        "CPU_PASS"
+      ]
+    },
+    {
+      "id": "research.rq11.actualescape.review.01",
+      "accepted_dispositions": [
+        "CPU_PASS"
+      ]
+    }
+  ],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 7.950628540704201,
+      "p_resolve": 0.7,
+      "p_followup_gain": 0.01,
+      "unblocks": [
+        "research.rq11.actualescape.followup.01"
+      ],
+      "decision": "Do actual task W and selected geometry retain any net byte advantage after exact old/new escape allocations, and is it worth a separate producer/decode causal test?"
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains.",
+    "confidence": "low; omitted historical mechanisms and readiness gaps, no new measured speedup",
+    "evidence": [
+      "proj_rsi/audits/sol17-rq11-feasibility.md",
+      "proj_rsi/candidates/rq11_codec/hypothesis.json",
+      "proj_rsi/candidates/rq11_codec/cpu-results.json",
+      "muse_bf16_proj/reference.py",
+      "proj_rsi/audits/sol16-score-opportunity.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": null,
+    "followup_gpu_seconds": null,
+    "cpu_minutes": null
+  },
+  "annotations": {
+    "readiness": "HELD/unrankable/executable unknown. Exact files, independent GO review, launch argv/container/deadlines/artifacts and full GPU cost intentionally absent until readiness/review complete. No registration or launch by descriptor author.",
+    "comparator": "Stock frozen PW36/RQ12 actual selected geometry and actual CUDA fixture W versus rq11-wordplanes-v1 exact same W/KS/NB grouping; compare payload+old/new CSR+guard+metadata, not raw11/12 or NumPy synthetic means.",
+    "planning_chain_gpu_seconds": 1500,
+    "planning_only_not_dispatch_cost": true,
+    "required_runtime_gates": [
+      "source/installed guards and actual JIT resources before first candidate math",
+      "actual declared weights and source-bound active/dormant counter contracts",
+      "full-K basis/FP64/task and fresh/current/zero/poison/immutability",
+      "strict actual final timed output before replay or mutation",
+      "balanced paired/F1 raw samples and named cleanup",
+      "root validation; never promote from exit0"
+    ],
+    "next_after_failure": "Retain artifacts/source identity, diagnose concrete failure or valid regression, new attempt for repairs; no family retirement or presumed additive gains."
+  }
+}

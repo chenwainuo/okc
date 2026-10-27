@@ -134,6 +134,7 @@ def immediate_timed_output_checks(outputs, x, config, w, packed_workspaces, pack
                                   fixtures, last_timed_input, final_record, immutable, counters, incumbent_counter):
     # This function performs reads/checks only: no X/out/XP write, graph replay,
     # output repair, profile, or recapture is permitted before this gate passes.
+    assert not packed_workspaces and pack_index is None,"XP_FORBIDDEN_ALL_NATIVE_ARMS"
     assert set(last_timed_input)==set(outputs)=={"incumbent","native","x4","stmx","new"}
     assert torch.equal(x,fixtures[final_record["input_seed"]]),"timed X changed"
     checks=[]

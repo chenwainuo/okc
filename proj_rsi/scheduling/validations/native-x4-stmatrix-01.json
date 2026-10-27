@@ -1,0 +1,191 @@
+{
+  "job_id": "native.x4.stmatrix.v1.01",
+  "recommended_disposition": "VALID_REGRESSION",
+  "final_disposition_authority": "root controller; independent evidence only, no scheduler state change",
+  "validator": "worker18 independent CPU source/JIT/raw/output-evidence review",
+  "reason": "Composed X4+STMatrix loses actual selected local incumbent by7.088us median paired difference (0/40 wins). Native-parent improvement is0.239998us paired/0.224000us F1. Tiny paired improvements versus X4 (+0.064000us) and STMatrix (+0.128001us) reverse sign in conservative F1 (both\u22120.064000us); retain mixed evidence without additive/robust gain claim.",
+  "validation_summary": {
+    "inventory_files": 6,
+    "dispatch_source_pins_including_review": 118,
+    "descriptor_file_pins": 117,
+    "raw_calls": 414,
+    "candidate_actual_JIT_gates": 4,
+    "actual_graph_profiles": 5,
+    "strict_terminal_output_oracles": 10,
+    "graph_mutation_oracles": 25,
+    "basis_FP64_policies": 5,
+    "analysis_negative_controls": 7,
+    "terminal_CPU_negative_controls": 9,
+    "cleanup_verified_from_archive": true
+  },
+  "terminal_exit": 0,
+  "cleanup_verified": true,
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "terminal_exit": 0
+  },
+  "comparison": {
+    "status": "INDEPENDENT_RECOMPUTATION_PASS",
+    "attempt_status": "NATIVE_X4_STMX_PROGRESS_DIAGNOSE_NEXT_LIMIT",
+    "raw_calls": 414,
+    "actual_JIT_gates_reexecuted_from_saved_SASS": 4,
+    "current_pointer_descriptor_source_pin": "PASS",
+    "strict_terminal_oracles": 10,
+    "mutation_oracles": 25,
+    "F1_medians_us": {
+      "incumbent_before": 24.224000051617622,
+      "native_before": 31.488001346588135,
+      "x4_before": 31.039999797940254,
+      "stmx_before": 31.039999797940254,
+      "new": 31.10400028526783,
+      "stmx_after": 31.10400028526783,
+      "x4_after": 31.072000041604042,
+      "native_after": 31.328000128269196,
+      "incumbent_after": 24.09599907696247
+    },
+    "paired_policy_medians_us": {
+      "incumbent": 24.159999564290047,
+      "native": 31.55200183391571,
+      "x4": 31.39200061559677,
+      "stmx": 31.440000981092453,
+      "new": 31.360000371932983
+    },
+    "F1_new_gain_us": {
+      "incumbent": -7.008001208305359,
+      "native": 0.22399984300136566,
+      "x4": -0.06400048732757568,
+      "stmx": -0.06400048732757568
+    },
+    "F1_new_median_ratio": {
+      "incumbent": 0.7746913212438259,
+      "native": 1.0072016409769473,
+      "x4": 0.9979423711824653,
+      "stmx": 0.9979423711824653
+    },
+    "paired_new_median_gain_us": {
+      "incumbent": -7.087999954819679,
+      "native": 0.23999810218811035,
+      "x4": 0.06400048732757568,
+      "stmx": 0.12800097465515137
+    },
+    "paired_new_median_ratio": {
+      "incumbent": 0.7732376356386048,
+      "native": 1.0076364086037821,
+      "x4": 1.0020397958984195,
+      "stmx": 1.004092112437481
+    },
+    "paired_new_wins": {
+      "incumbent": 0,
+      "native": 30,
+      "x4": 23,
+      "stmx": 27
+    },
+    "paired_distributions": {
+      "incumbent": {
+        "median_control_minus_new_us": -7.087999954819679,
+        "min_us": -8.320000022649765,
+        "max_us": -5.600001662969589,
+        "MAD_us": 0.31999964267015457,
+        "win_tie_loss": [
+          0,
+          0,
+          40
+        ]
+      },
+      "native": {
+        "median_control_minus_new_us": 0.23999810218811035,
+        "min_us": -0.9279996156692505,
+        "max_us": 1.4720018953084946,
+        "MAD_us": 0.3359997645020485,
+        "win_tie_loss": [
+          30,
+          0,
+          10
+        ]
+      },
+      "x4": {
+        "median_control_minus_new_us": 0.06400048732757568,
+        "min_us": -1.3120006769895554,
+        "max_us": 1.024000346660614,
+        "MAD_us": 0.15999935567378998,
+        "win_tie_loss": [
+          23,
+          3,
+          14
+        ]
+      },
+      "stmx": {
+        "median_control_minus_new_us": 0.12800097465515137,
+        "min_us": -0.5759987980127335,
+        "max_us": 1.2800004333257675,
+        "MAD_us": 0.3040023148059845,
+        "win_tie_loss": [
+          27,
+          2,
+          11
+        ]
+      }
+    },
+    "source_composition": "EXACT_COMMUTATIVITY_NOT_SPEED_ADDITIVITY",
+    "raw_native_X_bits": "ALL_NATIVE_VARIANTS_UNPROBED_EXPLICIT_LIMIT",
+    "official_score": "NOT_MEASURED",
+    "result_sha256": "9876f38dd0ea9940dd9f22ef8dd9bfb3b56c9d6faab515f6b2e790df2715dd24",
+    "inventory_sha256": "b851ff4601e0f719bd4dac251ea8509116815cd94211eb21e46e77402b5af70f",
+    "inventory_files": 6,
+    "source_pins": 118,
+    "analysis_negative_controls": {
+      "raw_seed": "REJECTED",
+      "raw_timing": "REJECTED",
+      "paired_gain": "REJECTED",
+      "strict_terminal_fixture": "REJECTED",
+      "mutation_poison": "REJECTED",
+      "resource_smem": "REJECTED",
+      "actual_JIT_instruction": "REJECTED"
+    },
+    "terminal_gate_CPU_negative_controls": {
+      "output": "('x4', 'immediate actual timed output', 2, 'CPU_SYNTHETIC_NOT_HARDWARE')",
+      "unauthorized_XP": "XP_FORBIDDEN_ALL_NATIVE_ARMS",
+      "currentX": "timed X changed",
+      "weight": "W/packed/escape modified during timing",
+      "packed": "W/packed/escape modified during timing",
+      "escape": "W/packed/escape modified during timing",
+      "counter": "candidate counter not reset",
+      "incumbent_counter": "incumbent counter not reset",
+      "wrong_per_policy_seed": "('native', 'immediate actual timed output', 4, 'CPU_SYNTHETIC_NOT_HARDWARE')"
+    },
+    "terminal_exit": 0,
+    "cleanup_observation": {
+      "cleanup_failed": false,
+      "compute_pids": [],
+      "container_exists": false,
+      "containers": [],
+      "gpu_memory_mib": 0,
+      "guard_pids": [],
+      "host_log_exists": true,
+      "terminal_exit": 0
+    }
+  },
+  "artifacts": {
+    "collection": "results/proj-rsi/scheduler/artifacts/native.x4.stmatrix.v1.01/collection-1793076290456608602",
+    "analysis": "proj_rsi/audits/native-x4-stmatrix-01/analysis.json",
+    "report": "proj_rsi/audits/native-x4-stmatrix-01/report.md",
+    "reproducer": "proj_rsi/audits/native-x4-stmatrix-01/analysis.py"
+  },
+  "official_promotion": false,
+  "future_speed_forecast": "NONE",
+  "speed_additivity": "NOT_ASSUMED",
+  "native_raw_mover_bits": "UNPROBED_ALL_FOUR_NATIVE_ARMS",
+  "review_GPU_actions": 0,
+  "limits": [
+    "Four saved candidate SASS artifacts independently rechecked against source-qualified canonical streams; incumbent has frozen source/actual selected profile identity, no separate retained SASS gate.",
+    "Loaded shared-object hashes are recorded but shared objects are not retained in six-file inventory, preventing independent redisassembly.",
+    "No retained output tensors or independent numerical GPU rerun; check source-bound driver records and gate semantics.",
+    "Fixed-CFG/layout/source composition proof is not general SASS interpretation or proof of performance additivity."
+  ]
+}

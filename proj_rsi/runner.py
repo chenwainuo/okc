@@ -8,9 +8,14 @@ without knowing the candidate directory.
 from __future__ import annotations
 
 import json
+import hashlib
+import os
+import re
 import shutil
 import subprocess
+import tempfile
 import time
+import uuid
 from pathlib import Path
 
 from .ledger import ROOT, Ledger
@@ -21,15 +26,55 @@ JOBS = ROOT / "results" / "proj-rsi" / "jobs"
 PROBLEM = "muse_bf16_proj"
 
 
+class OkcResponseError(RuntimeError):
+    """Retain malformed CLI output for submission recovery, without retrying."""
+
+    def __init__(self, message, proc):
+        super().__init__(message)
+        self.raw_response = {"stdout": proc.stdout, "stderr": proc.stderr, "returncode": proc.returncode}
+
+
+class SubmissionRecoveryError(RuntimeError):
+    """An external request was issued: inspect the receipt, never blindly retry."""
+
+
 def okc(*args: str, timeout: int = 900) -> dict:
     cmd = ["okc", *args, "--json"]
     proc = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
     if proc.returncode != 0 and not proc.stdout.strip():
-        raise RuntimeError(f"{' '.join(cmd)} failed: {proc.stderr.strip()}")
+        raise OkcResponseError(f"{' '.join(cmd)} failed: {proc.stderr.strip()}", proc)
     try:
         return json.loads(proc.stdout)
     except json.JSONDecodeError:
-        raise RuntimeError(f"{' '.join(cmd)} returned non-JSON: {proc.stdout[:400]} {proc.stderr[:400]}")
+        raise OkcResponseError(f"{' '.join(cmd)} returned non-JSON: {proc.stdout[:400]} {proc.stderr[:400]}", proc) from None
+
+
+def _atomic_receipt(path: Path, data: dict) -> None:
+    """Commit JSON with file fsync, atomic replacement and directory fsync."""
+    encoded = json.dumps(data, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+    fd, temporary = tempfile.mkstemp(prefix="." + path.name + ".", dir=path.parent)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(encoded)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+        directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(directory)
+        finally:
+            os.close(directory)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+def _job_id(response) -> str | None:
+    if not isinstance(response, dict):
+        return None
+    value = response.get("job_id") or response.get("job") or response.get("id")
+    # A returned identifier must never control receipt paths through traversal.
+    return value if isinstance(value, str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,127}", value) else None
 
 
 def quota() -> dict:
@@ -51,8 +96,23 @@ def candidate_file(candidate: str | Path) -> Path:
 
 
 def submit(candidate: str | Path, kind: str = "check", experiment: str | None = None, reserve: int = 0) -> str:
-    """Lint, quota-check, submit with --no-wait, record the job id. Returns the job id."""
+    """Validate locally, submit once, durably receipt, then attach ledger metadata.
+
+    Once the external call starts, failure is not permission to resubmit. The
+    unique attempt receipt survives ledger failures; the legacy job-named receipt
+    is also retained. Neither error path automatically repeats the request.
+    """
     path = candidate_file(candidate)
+    ledger = Ledger()
+    if experiment:
+        # This used to run only after an accepted external job, losing its ID
+        # when a misspelled/unregistered experiment failed attach_job().
+        ledger._get(ledger.load(), experiment)
+    try:
+        candidate_name = str(path.relative_to(ROOT))
+    except ValueError:
+        candidate_name = str(path)
+    source_sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
     lint = check_file(path)
     if not lint["ok"]:
         raise RuntimeError("lint failed: " + json.dumps(lint["findings"]))
@@ -61,17 +121,55 @@ def submit(candidate: str | Path, kind: str = "check", experiment: str | None = 
     if left <= reserve:
         raise RuntimeError(f"{kind} quota: {left} left, reserve {reserve}; wait for 00:00 UTC")
     verb = "check" if kind == "check" else "submit"
-    result = okc(verb, PROBLEM, str(path), "--no-wait")
-    job_id = result.get("job_id") or result.get("job") or result.get("id")
-    if not job_id:
-        raise RuntimeError(f"no job id in {result}")
-    ledger = Ledger()
-    if experiment:
-        ledger.attach_job(experiment, job_id, kind)
     JOBS.mkdir(parents=True, exist_ok=True)
-    (JOBS / f"{job_id}.submitted.json").write_text(json.dumps({
-        "job": job_id, "kind": kind, "candidate": str(path.relative_to(ROOT)), "experiment": experiment,
-        "submitted_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "quota_before": limits}, indent=2))
+    attempt = uuid.uuid4().hex
+    intent_path = JOBS / f"attempt-{attempt}.intent.json"
+    receipt_path = JOBS / f"attempt-{attempt}.response.json"
+    metadata = {
+        "receipt_schema_version": 1, "attempt_id": attempt, "problem": PROBLEM,
+        "job": None, "kind": kind, "verb": verb,
+        "candidate": candidate_name, "source_sha256": source_sha256, "experiment": experiment,
+        "submitted_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "quota_before": limits, "quota_bucket": "checks" if kind == "check" else "scored",
+    }
+    # Establish a writable, durable recovery location BEFORE the external call.
+    _atomic_receipt(intent_path, {**metadata, "status": "submission_intent",
+                                 "recovery_note": "An intent alone does not prove whether the external request was issued; never retry blindly."})
+    try:
+        result = okc(verb, PROBLEM, str(path), "--no-wait")
+    except Exception as error:
+        response = getattr(error, "raw_response", None)
+        try:
+            _atomic_receipt(receipt_path, {**metadata, "status": "submission_outcome_unknown", "submit_response": response})
+        except Exception:
+            receipt_path = intent_path
+        raise SubmissionRecoveryError(
+            f"Submission outcome unknown; recovery receipt: {receipt_path}. "
+            "The request may already have been accepted. Never retry blindly; recover its existing job ID first."
+        ) from error
+    job_id = _job_id(result)
+    receipt = {**metadata, "job": job_id, "response_received_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+               "status": "accepted" if job_id else "submission_outcome_unknown", "submit_response": result}
+    try:
+        # Do this before ANY ledger write or fallible legacy bookkeeping. The
+        # unique receipt is never overwritten by another attempt with the same ID.
+        _atomic_receipt(receipt_path, receipt)
+        if not job_id:
+            raise SubmissionRecoveryError(
+                f"Submission response has no safe job ID; recovery receipt: {receipt_path}. "
+                "The request may already have been accepted. Never retry blindly; recover its existing job ID first."
+            )
+        _atomic_receipt(JOBS / f"{job_id}.submitted.json", receipt)
+        if experiment:
+            ledger.attach_job(experiment, job_id, kind)
+    except SubmissionRecoveryError:
+        raise
+    except Exception as error:
+        identity = f"Accepted job {job_id}" if job_id else "Submission outcome unknown"
+        raise SubmissionRecoveryError(
+            f"{identity}; local bookkeeping failed. Recovery receipt: {receipt_path} "
+            f"(pre-submit intent: {intent_path}). Never retry blindly; recover or wait for the existing job instead."
+        ) from error
     return job_id
 
 

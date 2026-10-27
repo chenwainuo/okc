@@ -1,0 +1,98 @@
+{
+  "id": "research.qkv.split4.harness.readiness.01",
+  "resource": "cpu",
+  "kind": "implementation",
+  "state": "BACKLOG",
+  "author": "sol13",
+  "created_at": 1793075695.9612088,
+  "depends_on": [],
+  "write_paths": [
+    "proj_rsi/tools/group8_qkv_measure_lab.py",
+    "proj_rsi/candidates/group8_qkv_measure_trial"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 7.950628540704201,
+      "p_resolve": 0.55,
+      "p_followup_gain": 0.1,
+      "unblocks": [
+        "research.qkv.split4.harness.review.01",
+        "research.qkv.split4.harness.gpu.01"
+      ],
+      "decision": "Can144-CTA split coverage repay fresh packing plus explicit FP32 reduction against actual current selected QKV128 incumbent?"
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains.",
+    "confidence": "low; omitted historical mechanisms and readiness gaps, no new measured speedup",
+    "evidence": [
+      "proj_rsi/audits/sol15-qkv-runtime.md",
+      "proj_rsi/audits/sol05-qkv-coverage.md",
+      "proj_rsi/candidates/group8_qkv_trial/manifest.json",
+      "proj_rsi/audits/sol16-score-opportunity.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 900,
+    "cpu_minutes": 100
+  },
+  "annotations": {
+    "family": "qkv-prototype-harness",
+    "current_owner": "unassigned",
+    "readiness": "Existing host wrapper is CPU-admitted, GPU link/load/actual-W and timing runner unrun. Fresh harness/review needed; do not call the prototype absent or already measured.",
+    "causal_hypothesis": "QKV128 split4 raises CTA coverage to144 but must pay fresh2MiB packing,4.5MiB FP32 partial workspace and reduction; complete graph could differ from unpooler group8 behavior.",
+    "comparator": "Actual fresh PW36 prepare/kernel_fn QKV128 (historical rq s4s5hz KS7 is not assumed) plus equivalent prepared QKV RQ control, versus Pipeline fresh pack->split4 main->ascending FP32 reduction. Never Lt-only or failed unpooler comparator.",
+    "required_next_work": [
+      "Runtime.Pipeline wrapper and CPU-only lab already exist; do NOT repeat their implementation. Missing artifact is a real timing/correctness harness; build new tools/group8_qkv_measure_lab.py around the frozen wrapper.",
+      "Inspect actual JIT SO/SASS/resources/physical A/D lifetime before candidate math, validate actual W lossless pack/unpack/CSR capacity, all8192 basis columns/FP64/task output.",
+      "Retain X/XP/partial/output/metadata lifetime through exactly three graph nodes; poison/check XP, partial and output, validate final timed output AND XP before overwrite/replay; parent counters keep source contracts.",
+      "Report all-node paired/F1 timings against actual selected incumbent and full reservation cost; no performance claim from offline compile or occupancy count."
+    ],
+    "required_output_artifacts": [
+      "proj_rsi/tools/group8_qkv_measure_lab.py",
+      "proj_rsi/candidates/group8_qkv_measure_trial/manifest.json",
+      "proj_rsi/candidates/group8_qkv_measure_trial/cpu-proof.json",
+      "proj_rsi/candidates/group8_qkv_measure_trial/README.md"
+    ],
+    "conditional_score_scenario": {
+      "official_job": "fb548b5dc6f04696",
+      "official_score_us": 3200.6150084373335,
+      "delta_load_us": {
+        "verify 16": 1.0
+      },
+      "scenario_score_us": 7.950628540704201,
+      "formula": "S0 - S0*exp(sum(log1p(-delta_load/load_sum))/6)",
+      "meaning": "Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer."
+    },
+    "full_cost_basis": "Planning estimate includes implementation, offline checks, independent CPU review and analysis in 100 CPU minutes; 900 seconds is full downstream GPU reservation including transfer/compile/prepare/validation/measurement and later causal follow-up, not kernel time. Frozen runner bounds/actual GPU cost still require review.",
+    "release_requires": "Independent separate CPU review job CPU_PASS; frozen files including guards, root-only host/command/review pin validation; no GPU descriptor is executable yet.",
+    "planned_review_id": "research.qkv.split4.harness.review.01",
+    "planned_gpu_id": "research.qkv.split4.harness.gpu.01",
+    "planning_score": {
+      "priority": 0.004372845697387311,
+      "direct_expected_us": 0,
+      "information_expected_us": 0.43728456973873114,
+      "effective_value_us": 0.43728456973873114,
+      "cost_usd": 1.25,
+      "cpu_minutes": 100,
+      "age_multiplier": 1.0,
+      "assumptions": [
+        "Probabilities are subjective conditional priors, never measured speedups.",
+        "Scenario score benefit uses fixed same-job official reference arithmetic.",
+        "No H100 measurement is automatically a H200 forecast.",
+        "Unknown estimates are null and unrankable, not zero.",
+        "GPU seconds estimate includes full reservation wall time: transfer, compilation, prepare, validation and measurement; follow-up adds full follow-up reservation. CPU minutes include the planned CPU work chain.",
+        "All probabilities are subjective conditional priors, not measured speedups.",
+        "No H100-to-H200 performance transfer is inferred.",
+        "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains."
+      ],
+      "errors": [],
+      "rankable": true
+    },
+    "planning_rank_among_these_five": 3
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "job_id": "pw38.stack.fullscope.01",
+  "disposition": "VALID_GAIN",
+  "validator": "worker07 independent local CPU inventory/source/JIT/raw/schedule/gate evidence review",
+  "reason": "Complete local stack validity passes; small descriptive full-policy paired load ratios favor PW38 versus RS32/PW36, with mixed per-shape effects and unresolved uncertainty. This is not official-score or isolated EH admission. Exact source is ready for root-requested official unscored check.",
+  "validation_summary": {
+    "inventory_files": 48,
+    "source_pins": 49,
+    "checks": 222,
+    "raw_calls": 4350,
+    "terminal_oracles": 180,
+    "mutations": 360,
+    "actual_JIT_records": 15,
+    "EH_selected": [
+      "verify16/qkv_gate",
+      "verify16/pooler"
+    ]
+  },
+  "cleanup_verified": true,
+  "terminal_exit": 0,
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "terminal_exit": 0
+  },
+  "comparison": {
+    "local_geomean_control_over_pw38_load_ratio": {
+      "rs32": 1.0053466640605007,
+      "pw36": 1.0049392035819509
+    },
+    "local_F1_geomean_control_over_pw38_load_ratio": {
+      "rs32": 1.0074624539842931,
+      "pw36": 1.0025104708967445
+    },
+    "limit": "Local H100 full-policy screening using per-shape paired medians in separate windows; not official SGLang/H200 score, not isolated EH contribution."
+  },
+  "artifacts": {
+    "result_sha256": "77662725700bf16604b57d6ceb430b174582591343d645d66d79635c19e3a18a",
+    "inventory_sha256": "c75c677f6ca0ad838a8726016a9da0377393eae9cc9d30f472b5691a30904eae",
+    "report": "proj_rsi/audits/pw38-stack-independent.md",
+    "analysis": "proj_rsi/audits/pw38-stack-independent.json",
+    "reproducer": "proj_rsi/audits/pw38-stack-independent.py"
+  },
+  "next_official_unscored_check_readiness": "GO_EXACT_29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+  "official_score_measured": false,
+  "official_submission_authorized": false,
+  "automatic_promotion": false
+}

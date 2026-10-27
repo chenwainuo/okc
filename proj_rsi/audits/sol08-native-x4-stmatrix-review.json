@@ -1,0 +1,107 @@
+{
+  "state": "INDEPENDENT_CPU_FIVE_ARM_REVIEW_PASS_GPU_UNRUN",
+  "driver_sha256": "8a03bc71dd33ff5f128462f09fc857255add7af545ee0000b73e194c374a731b",
+  "trial_manifest_sha256": "272472a51bf489243876d78b91b2b7df6f5aeb27e7db6e869e5e91276a117b2e",
+  "artifact_roots": {
+    "reverse_tma_x": {
+      "manifest_sha256": "025f4a2de43f7c14a4ee4779dcb6a929974311b0380b433710ed4022beef50fc",
+      "files": 13
+    },
+    "reverse_tma_x4": {
+      "manifest_sha256": "d47ed1663eac87f5bcc05b5f17df8fa62e7c9e91780a13d02ce9b95ac0f05c8a",
+      "files": 13
+    },
+    "reverse_tma_x_stmatrix": {
+      "manifest_sha256": "2c132b82a854e476f433335462b2122f21bc3cb490dec6f2b691c01cd9775045",
+      "files": 19
+    },
+    "reverse_tma_x4_stmatrix": {
+      "manifest_sha256": "11892b99e5e7b87c6e7413202701f18f1a2fe0407596d8e7dea184881981b22c",
+      "files": 21
+    }
+  },
+  "callbacks_shuffled_order_and_module_restore": "PASS",
+  "canonical_gates": {
+    "stmx": {
+      "canonical_instructions": 1064,
+      "status": "PASS_ALL_ACTUAL_MAIN_BINARIES"
+    },
+    "new": {
+      "canonical_instructions": 1096,
+      "status": "PASS_ALL_ACTUAL_MAIN_BINARIES"
+    },
+    "native": {
+      "canonical_instructions": 1104,
+      "status": "PASS_ALL_ACTUAL_MAIN_BINARIES"
+    },
+    "x4": {
+      "canonical_instructions": 1136,
+      "status": "PASS_ALL_ACTUAL_MAIN_BINARIES"
+    }
+  },
+  "terminal_adversarial_negative_count": 9,
+  "measurement_trace": {
+    "calls": 414,
+    "mode_counts": {
+      "warmup": 25,
+      "F1": 189,
+      "paired": 200
+    },
+    "strict_boundaries": [
+      {
+        "trace_calls_before_gate": 214,
+        "per_label_last_fixture": {
+          "incumbent": 240188,
+          "native": 240167,
+          "x4": 240146,
+          "stmx": 240125,
+          "new": 240104
+        }
+      },
+      {
+        "trace_calls_before_gate": 414,
+        "per_label_last_fixture": {
+          "incumbent": 250039,
+          "native": 250039,
+          "x4": 250039,
+          "stmx": 250039,
+          "new": 250039
+        }
+      }
+    ],
+    "orders": {
+      "incumbent,native,x4,stmx,new": 4,
+      "native,x4,stmx,new,incumbent": 4,
+      "x4,stmx,new,incumbent,native": 4,
+      "stmx,new,incumbent,native,x4": 4,
+      "new,incumbent,native,x4,stmx": 4,
+      "new,stmx,x4,native,incumbent": 4,
+      "stmx,x4,native,incumbent,new": 4,
+      "x4,native,incumbent,new,stmx": 4,
+      "native,incumbent,new,stmx,x4": 4,
+      "incumbent,new,stmx,x4,native": 4
+    },
+    "every_label_each_position": 8,
+    "every_directed_pair_precedence": 20
+  },
+  "descriptor_file_pins_checked": 117,
+  "limits": "CPU trace stubs and exact code/source review; no GPU or runtime/performance claim",
+  "independent_wrong_label_and_instruction_controls": {
+    "native_given_x4": "AssertionError(('native', 'JIT main differs from frozen CPU cubin semantic instruction stream'))",
+    "native_given_stmx": "AssertionError(('native', 'JIT main differs from frozen CPU cubin semantic instruction stream'))",
+    "native_given_new": "AssertionError(('native', 'JIT main differs from frozen CPU cubin semantic instruction stream'))",
+    "native_instruction_tamper": "AssertionError(('native', 'JIT main differs from frozen CPU cubin semantic instruction stream'))",
+    "x4_given_native": "AssertionError(('expected exactly one main', 'rq_tma_x4', 0))",
+    "x4_given_stmx": "AssertionError(('expected exactly one main', 'rq_tma_x4', 0))",
+    "x4_given_new": "AssertionError(('x4', 'JIT main differs from frozen CPU cubin semantic instruction stream'))",
+    "x4_instruction_tamper": "AssertionError(('x4', 'JIT main differs from frozen CPU cubin semantic instruction stream'))",
+    "stmx_given_native": "AssertionError(('expected exactly one main', 'rq_tma_x_stmx', 0))",
+    "stmx_given_x4": "AssertionError(('expected exactly one main', 'rq_tma_x_stmx', 0))",
+    "stmx_given_new": "AssertionError(('expected exactly one main', 'rq_tma_x_stmx', 0))",
+    "stmx_instruction_tamper": "AssertionError(('stmx', 'JIT main differs from frozen CPU cubin semantic instruction stream'))",
+    "new_given_native": "AssertionError(('expected exactly one main', 'rq_tma_x4_stmx', 0))",
+    "new_given_x4": "AssertionError(('expected exactly one main', 'rq_tma_x4_stmx', 0))",
+    "new_given_stmx": "AssertionError(('expected exactly one main', 'rq_tma_x4_stmx', 0))",
+    "new_instruction_tamper": "AssertionError(('new', 'JIT main differs from frozen CPU cubin semantic instruction stream'))"
+  }
+}

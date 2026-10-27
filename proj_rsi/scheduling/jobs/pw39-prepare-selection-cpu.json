@@ -1,0 +1,52 @@
+{
+  "id": "research.prepare.selection.pw39.readiness.01",
+  "resource": "cpu",
+  "kind": "optimization",
+  "state": "BACKLOG",
+  "author": "sol12",
+  "created_at": 1793077287.5148754,
+  "depends_on": [
+    {
+      "id": "pw38.stack.fullscope.01",
+      "accepted_dispositions": [
+        "VALID_GAIN",
+        "VALID_NO_GAIN",
+        "VALID_REGRESSION"
+      ]
+    }
+  ],
+  "write_paths": [
+    "proj_rsi/candidates/pw39",
+    "proj_rsi/audits/pw39-prepare-selection.md"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 20,
+      "p_gain": 0.4,
+      "p_valid": 0.8
+    },
+    "information": {
+      "scenario_score_us": 20,
+      "p_resolve": 0.5,
+      "p_followup_gain": 0.4,
+      "unblocks": [
+        "research.prepare.selection.pw39.gpu.01"
+      ],
+      "decision": "Does bounded confirmation of close bake finalists reduce selection regressions while preserving prepare limits and current kernels?"
+    },
+    "basis": "Subjective low-confidence planning only. Existing full PW38 suite shows pooler32 -0.240/-0.128us against RS32/PW36 with all17 common RQ instruction streams unchanged. Twenty score-us is a conditional scenario, not a measured causal gain or H100-to-H200 forecast.",
+    "confidence": "low; observed selection variability, mechanism untested",
+    "evidence": [
+      "proj_rsi/audits/pw38-stack-01/report.md"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 600,
+    "cpu_minutes": 60
+  },
+  "annotations": {
+    "preserve": "FrozenPW38/source29e557 and acceptedofficialchecka3ed4ce5886a4415 untouched; newversion/source only",
+    "scope": "Bounded close-finalist confirmation; allcontrols/kernelmath/compilethreadjoins/internal240s budget retained; no automatic GPU/official promotion"
+  }
+}

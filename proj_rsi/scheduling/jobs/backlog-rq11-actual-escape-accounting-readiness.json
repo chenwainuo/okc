@@ -1,0 +1,99 @@
+{
+  "id": "research.rq11.actualescape.readiness.01",
+  "resource": "cpu",
+  "kind": "implementation",
+  "state": "BACKLOG",
+  "author": "sol13",
+  "created_at": 1793075695.9612088,
+  "depends_on": [],
+  "write_paths": [
+    "proj_rsi/tools/rq11_accounting_lab.py",
+    "proj_rsi/candidates/rq11_accounting_trial"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 7.950628540704201,
+      "p_resolve": 0.7,
+      "p_followup_gain": 0.01,
+      "unblocks": [
+        "research.rq11.actualescape.review.01",
+        "research.rq11.actualescape.gpu.01"
+      ],
+      "decision": "Do actual task W and selected geometry retain any net byte advantage after exact old/new escape allocations, and is it worth a separate producer/decode causal test?"
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains.",
+    "confidence": "low; omitted historical mechanisms and readiness gaps, no new measured speedup",
+    "evidence": [
+      "proj_rsi/audits/sol17-rq11-feasibility.md",
+      "proj_rsi/candidates/rq11_codec/hypothesis.json",
+      "proj_rsi/candidates/rq11_codec/cpu-results.json",
+      "muse_bf16_proj/reference.py",
+      "proj_rsi/audits/sol16-score-opportunity.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 1500,
+    "cpu_minutes": 60
+  },
+  "annotations": {
+    "family": "rq11-actual-escape-accounting",
+    "current_owner": "unassigned",
+    "readiness": "Synthetic codec/proof/offline SASS exists; actual CUDA fixture accounting and extractor missing. No attained byte ratio or serving gain known.",
+    "causal_hypothesis": "Synthetic11-bit stream saves only1.6-5.0% after escape padding and adds decoder/walker instructions; actual task-weight old/new CAP totals can falsify value before integration.",
+    "comparator": "Stock frozen PW36/RQ12 actual selected geometry and actual CUDA fixture W versus rq11-wordplanes-v1 exact same W/KS/NB grouping; compare payload+old/new CSR+guard+metadata, not raw11/12 or NumPy synthetic means.",
+    "required_next_work": [
+      "Build CPU accounting/provenance harness around existing exact codec and current stock _rqpack/_rqesc; do not rewrite proven decoder or integrate a serving kernel.",
+      "A CPU reference.generate_weights(seed,device=cpu) draw is NOT identical to CUDA RNG. Require actual CUDA-generated task W hashes/counts from a separately reviewed root GPU extractor, or archived exact tensor provenance; missing actual fixture remains UNKNOWN.",
+      "Compute exact per-geometry old/new max-list CAP, full escape distributions/tails, sentinel/guard/alignment/allocation and overflow/finite/fallback gates; retain bit-exact unpack proof.",
+      "If real total bytes do not improve, preserve result and avoid GPU integration. If bytes improve, proposal must separately isolate producer byte effect from decode/escape cost and price full follow-up GPU chain."
+    ],
+    "required_output_artifacts": [
+      "proj_rsi/tools/rq11_accounting_lab.py",
+      "proj_rsi/candidates/rq11_accounting_trial/manifest.json",
+      "proj_rsi/candidates/rq11_accounting_trial/cpu-proof.json",
+      "proj_rsi/candidates/rq11_accounting_trial/README.md"
+    ],
+    "conditional_score_scenario": {
+      "official_job": "fb548b5dc6f04696",
+      "official_score_us": 3200.6150084373335,
+      "delta_load_us": {
+        "verify 16": 1.0
+      },
+      "scenario_score_us": 7.950628540704201,
+      "formula": "S0 - S0*exp(sum(log1p(-delta_load/load_sum))/6)",
+      "meaning": "Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer."
+    },
+    "full_cost_basis": "Planning estimate includes implementation, offline checks, independent CPU review and analysis in 60 CPU minutes; 1500 seconds is full downstream GPU reservation including transfer/compile/prepare/validation/measurement and later causal follow-up, not kernel time. Frozen runner bounds/actual GPU cost still require review.",
+    "release_requires": "Independent separate CPU review job CPU_PASS; frozen files including guards, root-only host/command/review pin validation; no GPU descriptor is executable yet.",
+    "planned_review_id": "research.rq11.actualescape.review.01",
+    "planned_gpu_id": "research.rq11.actualescape.gpu.01",
+    "planning_score": {
+      "priority": 0.0009275733297488234,
+      "direct_expected_us": 0,
+      "information_expected_us": 0.055654399784929406,
+      "effective_value_us": 0.055654399784929406,
+      "cost_usd": 2.0833333333333335,
+      "cpu_minutes": 60,
+      "age_multiplier": 1.0,
+      "assumptions": [
+        "Probabilities are subjective conditional priors, never measured speedups.",
+        "Scenario score benefit uses fixed same-job official reference arithmetic.",
+        "No H100 measurement is automatically a H200 forecast.",
+        "Unknown estimates are null and unrankable, not zero.",
+        "GPU seconds estimate includes full reservation wall time: transfer, compilation, prepare, validation and measurement; follow-up adds full follow-up reservation. CPU minutes include the planned CPU work chain.",
+        "All probabilities are subjective conditional priors, not measured speedups.",
+        "No H100-to-H200 performance transfer is inferred.",
+        "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains."
+      ],
+      "errors": [],
+      "rankable": true
+    },
+    "planning_rank_among_these_five": 5
+  }
+}

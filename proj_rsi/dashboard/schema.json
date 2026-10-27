@@ -1,0 +1,838 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "projection-dashboard-snapshot-v1",
+  "title": "Sanitized read-only projection dashboard snapshot",
+  "description": "No command, launch argv, host, env, log, token, raw observation or internal file path fields are exported. Recorded queue state is not process liveness.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "generated_at": {
+      "type": "number"
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "history": {
+          "$ref": "#/$defs/freshness"
+        },
+        "scheduler": {
+          "$ref": "#/$defs/freshness"
+        },
+        "agents": {
+          "$ref": "#/$defs/freshness"
+        },
+        "hardware": {
+          "$ref": "#/$defs/freshness"
+        }
+      },
+      "required": [
+        "history",
+        "scheduler",
+        "agents",
+        "hardware"
+      ]
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "best_score_us": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "best_job_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "submissions": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "checks": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "findings": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "candidates": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "cpu_capacity": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gpu_capacity": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "best_score_us",
+        "best_job_id",
+        "submissions",
+        "checks",
+        "findings",
+        "candidates",
+        "cpu_capacity",
+        "gpu_capacity"
+      ]
+    },
+    "agents": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/agent"
+          }
+        },
+        "capacity": {
+          "const": 10
+        },
+        "observed_count": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "items",
+        "capacity",
+        "observed_count"
+      ]
+    },
+    "hardware": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "idle",
+            "busy",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "gpu_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "memory_used_mb": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "process_count": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "gpu_name",
+        "memory_used_mb",
+        "process_count"
+      ]
+    },
+    "queue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "cpu": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "BACKLOG": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "READY": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "RUNNING": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "VALIDATING": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "DONE": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "HELD": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "CANCELLED": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "BACKLOG",
+                "READY",
+                "RUNNING",
+                "VALIDATING",
+                "DONE",
+                "HELD",
+                "CANCELLED"
+              ]
+            },
+            "gpu": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "BACKLOG": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "READY": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "RUNNING": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "VALIDATING": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "DONE": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "HELD": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "CANCELLED": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "BACKLOG",
+                "READY",
+                "RUNNING",
+                "VALIDATING",
+                "DONE",
+                "HELD",
+                "CANCELLED"
+              ]
+            }
+          },
+          "required": [
+            "cpu",
+            "gpu"
+          ]
+        },
+        "jobs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/job"
+          }
+        },
+        "sequence": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "state_source": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "counts",
+        "jobs",
+        "sequence",
+        "state_source"
+      ]
+    },
+    "submissions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/official"
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/official"
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/candidate"
+      }
+    }
+  },
+  "$defs": {
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "observed_at": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "age_seconds": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "stale": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "last_event_at": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "source",
+        "status",
+        "observed_at",
+        "age_seconds",
+        "stale"
+      ]
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "running",
+            "idle",
+            "completed",
+            "errored",
+            "interrupted",
+            "pending",
+            "shutdown",
+            "unknown"
+          ]
+        },
+        "observed_at": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "age_seconds": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "stale": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "observed_at",
+        "age_seconds",
+        "stale"
+      ]
+    },
+    "job": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "state": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "author": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "disposition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "resource": {
+          "enum": [
+            "cpu",
+            "gpu",
+            "unknown"
+          ]
+        },
+        "created_at": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "review": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "decision": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "independent": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "decision",
+            "independent"
+          ]
+        },
+        "readiness": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "descriptor_valid": {
+              "type": "boolean"
+            },
+            "reasons_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "descriptor_valid",
+            "reasons_count",
+            "note"
+          ]
+        },
+        "roi": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "priority": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "direct_expected_us": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "information_expected_us": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "effective_value_us": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "cost_usd": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "cpu_minutes": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "age_multiplier": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "rankable": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "priority",
+            "direct_expected_us",
+            "information_expected_us",
+            "effective_value_us",
+            "cost_usd",
+            "cpu_minutes",
+            "age_multiplier",
+            "rankable"
+          ]
+        },
+        "outcome": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "status"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "state",
+        "author",
+        "disposition",
+        "resource",
+        "created_at",
+        "updated_at",
+        "review",
+        "readiness",
+        "roi",
+        "outcome"
+      ]
+    },
+    "official": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "job_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "submitted_utc": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "candidate": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "stack_description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "archive_status": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "score_us": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "passed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "compiled_features": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "selected_features": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "job_id",
+        "submitted_utc",
+        "candidate",
+        "stack_description",
+        "archive_status",
+        "score_us",
+        "passed",
+        "compiled_features",
+        "selected_features"
+      ]
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "classification": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "current_inclusion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scope": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "finding": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "next_action": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "stacked_versions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "score_tested_jobs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "classification",
+        "current_inclusion",
+        "scope",
+        "finding",
+        "next_action",
+        "stacked_versions",
+        "score_tested_jobs"
+      ]
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parent": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "compiled_features": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "leaderboard_submitted": {
+          "type": "boolean"
+        },
+        "official_jobs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "parent",
+        "status",
+        "description",
+        "compiled_features",
+        "leaderboard_submitted",
+        "official_jobs"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "generated_at",
+    "sources",
+    "summary",
+    "agents",
+    "hardware",
+    "queue",
+    "submissions",
+    "checks",
+    "findings",
+    "candidates"
+  ]
+}

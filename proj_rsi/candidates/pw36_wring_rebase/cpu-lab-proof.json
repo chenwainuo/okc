@@ -1,0 +1,107 @@
+{
+  "state": "CPU_LAB_PROOFS_PASS_GPU_UNRUN",
+  "lab_sha256": "fd43d83540e2469be8bcd0d5c676b2a96c1ccbeab0e440b767603bcabd594924",
+  "terminal": {
+    "status": "PASS_READONLY_OWN_FIXTURE_TERMINAL_GATE",
+    "negative_controls": {
+      "output": "('equal', 'terminal own-fixture mismatch', 2, 'CPU ownfixture oracle')",
+      "nonfinite": "('split', 'nonfinite terminal output')",
+      "currentX": "current X differs from last actual call",
+      "wrong_own_fixture": "('equal', 'terminal own-fixture mismatch', 3, 'CPU ownfixture oracle')",
+      "weight": "immutable altered",
+      "active_counter": "active counter altered",
+      "dormant_counter": "dormant counter altered"
+    },
+    "valid": {
+      "checks": [
+        {
+          "label": "incumbent",
+          "input_seed": 0,
+          "result": "CPU ownfixture oracle"
+        },
+        {
+          "label": "coupled",
+          "input_seed": 1,
+          "result": "CPU ownfixture oracle"
+        },
+        {
+          "label": "equal",
+          "input_seed": 2,
+          "result": "CPU ownfixture oracle"
+        },
+        {
+          "label": "split",
+          "input_seed": 3,
+          "result": "CPU ownfixture oracle"
+        }
+      ],
+      "current_X_matches_last_call": true,
+      "before_any_replay_or_mutation": true
+    }
+  },
+  "measurement": {
+    "status": "PASS_EXACT_MEASUREMENT_CONTROL_FLOW_FAKE_EVENTS",
+    "counts": {
+      "warmup": 20,
+      "F1": 147,
+      "paired": 128
+    },
+    "terminal_oracles": 8,
+    "balanced_each_position": 8,
+    "contrasts": [
+      "incumbent_minus_split",
+      "coupled_minus_equal",
+      "coupled_minus_split",
+      "equal_minus_split",
+      "incumbent_minus_equal",
+      "incumbent_minus_coupled"
+    ]
+  },
+  "counters": {
+    "status": "PASS_FULL_STORAGE_IDENTITY_ACTIVE_PREFIX_AND_DORMANT_GUARDS",
+    "negative_controls": {
+      "active": "active RQ counter not reset",
+      "dormant": "dormant counter tail/guards changed",
+      "prefixguard": "dormant counter tail/guards changed",
+      "suffixguard": "dormant counter tail/guards changed",
+      "unrelated_nonzero_baseline": "unrelated counter storage changed"
+    },
+    "active_ints": 36,
+    "visible_dormant_ints": 36,
+    "guard_ints_each": 8,
+    "nonzero_unrelated_baseline_preserved": true
+  },
+  "binary": {
+    "status": "PASS_CANONICAL_STREAM_TAMPER_AND_WRONG_CONTROL_REJECTION",
+    "tampered_arms": [
+      [
+        128,
+        5,
+        1,
+        0,
+        0,
+        0,
+        3
+      ],
+      [
+        128,
+        5,
+        1,
+        0,
+        0,
+        0,
+        1283
+      ],
+      [
+        128,
+        6,
+        1,
+        0,
+        0,
+        0,
+        1027
+      ]
+    ]
+  },
+  "GPU": "UNRUN_NO_CONTEXT_NO_EXTENSION_NO_PREPARE"
+}

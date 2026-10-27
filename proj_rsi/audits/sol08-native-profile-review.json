@@ -1,0 +1,84 @@
+{
+  "state": "INDEPENDENT_NATIVE_PROFILE_REVIEW_CPU_PASS_GPU_UNRUN",
+  "driver_sha256": "16e7502719383460c833b1319de5764f455ab78bfecc8cccb8ec745a697c5a1b",
+  "descriptor_pins_checked": 65,
+  "strict_NCU_target_index": 33,
+  "NVTX_replay_order": [
+    "DP_graph_2nodes",
+    "NX_graph_1node"
+  ],
+  "selected_expected_nodes": [
+    "rx_pack",
+    "rq_px_dp",
+    "rq_tma_x"
+  ],
+  "immediate_postrange_no_replay_or_workspace_write": "PASS",
+  "guard_seconds": {
+    "inner": 240,
+    "outer": 300
+  },
+  "maps": {
+    "DP": {
+      "role_branch": "@P1 BRA 0x1de0",
+      "math_PCs": 324,
+      "producer_PCs": 339,
+      "common_PCs": 185,
+      "TRYWAIT_sites": 12,
+      "wait_classes": [
+        "math_Bfull",
+        "producer_Bempty",
+        "producer_Wfull"
+      ],
+      "sites": {
+        "math_bar5": 0,
+        "math_LDSM": 0,
+        "math_TMA": 0,
+        "math_LDG128": 16,
+        "math_fence": 4,
+        "math_wait1": 4,
+        "math_wait0": 1,
+        "math_proxy": 1,
+        "producer_owner_barriers": 2,
+        "common_setup_LDG128": 16
+      }
+    },
+    "NX": {
+      "role_branch": "@P0 BRA 0x2cf0",
+      "math_PCs": 580,
+      "producer_PCs": 335,
+      "common_PCs": 189,
+      "TRYWAIT_sites": 28,
+      "wait_classes": [
+        "math_Bfull",
+        "math_Xfull",
+        "producer_Bempty",
+        "producer_Wfull"
+      ],
+      "sites": {
+        "math_bar5": 8,
+        "math_LDSM": 32,
+        "math_TMA": 8,
+        "math_LDG128": 0,
+        "math_fence": 4,
+        "math_wait1": 4,
+        "math_wait0": 1,
+        "math_proxy": 9,
+        "producer_owner_barriers": 2
+      }
+    }
+  },
+  "CPU_runtime_guard": "PASS_NO_TORCH_CUDA_OR_CPP_EXTENSION_CALLS_NO_CONTEXT_INITIALIZED",
+  "limits": "Actual .ncu-rep selected node count/IDs, raw/source exports, sampled-role sufficiency and postcapture driver success remain runtime validation requirements",
+  "independent_selected_postrange_oracle_adversarial_controls": {
+    "NaN": "AssertionError('NX selected output retains poison/Inf')",
+    "wrong_output": "AssertionError(('DP', 'synthetic exact output'))",
+    "XP": "AssertionError()",
+    "forbidden_NX_XP": "AssertionError()",
+    "X": "AssertionError()",
+    "W": "AssertionError()",
+    "packed": "AssertionError()",
+    "escape": "AssertionError()",
+    "counter": "AssertionError()"
+  },
+  "selected_oracle_CPU_fixture_scope": "Exact extracted loop; CPU tensors and CPU arange proxy; no CUDA or GPU numeric claim"
+}

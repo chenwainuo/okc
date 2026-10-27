@@ -1,0 +1,71 @@
+okc job a3ed4ce5886a4415  status=ok passed=True tests=9/9 score=3193.637501792908 speedup=1.5126325380660732 ci=[1.489943049995082, 1.5353220261370641]
+load       layer        m    yours   sglang     sol  speedup vs incumbent
+decode 1   qkv_gate     1     9.23    14.06    7.87   1.523x 
+decode 1   o            1     4.96     6.66    3.50   1.342x 
+decode 1   pooler       1    13.70    21.62   13.99   1.577x 
+decode 1   unpooler     1     4.50     7.23    1.75   1.608x 
+decode 1   router       1     3.70    10.43    1.75   2.820x 
+decode 1   SUM               36.09    60.00           1.662x
+decode 16  qkv_gate    16    10.13    14.03    7.93   1.386x 
+decode 16  o           16     5.54     6.85    3.56   1.237x 
+decode 16  pooler      16    14.28    21.71   14.06   1.520x 
+decode 16  unpooler    16    14.34    18.46   14.06   1.287x 
+decode 16  router      16     4.72    15.23    1.81   3.225x 
+decode 16  SUM               49.01    76.29           1.557x
+decode 32  qkv_gate    32    10.41    14.48    8.00   1.390x 
+decode 32  o           32     6.29     6.69    3.62   1.063x 
+decode 32  pooler      32    15.08    21.89   14.14   1.451x 
+decode 32  unpooler    32    15.29    19.01   14.14   1.243x 
+decode 32  router      32     4.96    15.17    1.86   3.055x 
+decode 32  SUM               52.04    77.23           1.484x
+verify 1   qkv_gate     8     9.55    14.14    7.90   1.481x 
+verify 1   o            8     5.39     6.69    3.53   1.242x 
+verify 1   pooler       8    13.98    21.52   14.02   1.539x 
+verify 1   unpooler     8     4.27     7.09    1.76   1.658x 
+verify 1   router       8     4.59    25.90    1.78   5.645x 
+verify 1   SUM               37.78    75.34           1.994x
+verify 16  qkv_gate   128    13.36    17.30    8.42   1.294x 
+verify 16  o          128     7.14     7.34    3.99   1.029x 
+verify 16  pooler     128    18.56    25.36   14.64   1.366x 
+verify 16  unpooler   128    18.63    19.98   14.64   1.073x 
+verify 16  router     128     7.81    16.48    2.21   2.111x 
+verify 16  SUM               65.49    86.46           1.320x
+verify 32  qkv_gate   256    18.65    20.19    9.77   1.082x 
+verify 32  o          256     9.60     9.52    4.48   0.992x 
+verify 32  pooler     256    25.13    30.18   17.37   1.201x 
+verify 32  unpooler   256    23.47    24.51   17.37   1.044x 
+verify 32  router     256     9.47    17.87    2.68   1.887x 
+verify 32  SUM               86.33   102.27           1.185x
+speedup 1.5126x  score 3193.6 us  ln-gain still needed for 3000: 0.375
+
+profiles:
+decode 1   qkv_gate  | void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.5 µs 100.0%      1
+decode 1   o         | void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.0 µs 100.0%      1
+decode 1   pooler    | void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         14.2 µs 100.0%      1
+decode 1   unpooler  | void gv<1, 1, 2, 1, 16, 4, 1, 1, 0, 0>(G)                          3.6 µs 100.0%      1
+decode 1   router    | void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.6 µs 100.0%      1
+decode 16  qkv_gate  | void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.3 µs 100.0%      1
+decode 16  o         | void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           5.1 µs 100.0%      1
+decode 16  pooler    | void gv<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                         14.2 µs 100.0%      1
+decode 16  unpooler  | void gv<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                         14.6 µs 100.0%      1
+decode 16  router    | void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.7 µs 100.0%      1
+decode 32  qkv_gate  | void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.3 µs 100.0%      1
+decode 32  o         | void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                5.7 µs 100.0%      1
+decode 32  pooler    | void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.8 µs 100.0%      1
+decode 32  unpooler  | void rq<32, 6, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)                15.6 µs 100.0%      1
+decode 32  router    | void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.2 µs 100.0%      1
+verify 1   qkv_gate  | void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.0 µs 100.0%      1
+verify 1   o         | void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.0 µs 100.0%      1
+verify 1   pooler    | void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         13.8 µs 100.0%      1
+verify 1   unpooler  | void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.4 µs 100.0%      1
+verify 1   router    | void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.6 µs 100.0%      1
+verify 16  qkv_gate  | void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           13.2 µs 100.0%      1
+verify 16  o         | nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN                            5.4 µs 100.0%      1
+verify 16  pooler    | void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           19.6 µs 100.0%      1
+verify 16  unpooler  | nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopB_NNN                     18.9 µs 100.0%      1
+verify 16  router    | void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.1 µs 100.0%      1
+verify 32  qkv_gate  | nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           19.2 µs 100.0%      1
+verify 32  o         | nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT                           8.2 µs 100.0%      1
+verify 32  pooler    | nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           24.1 µs 100.0%      1
+verify 32  unpooler  | nvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN                    23.5 µs 100.0%      1
+verify 32  router    | void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       8.2 µs 100.0%      1

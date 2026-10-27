@@ -1,0 +1,97 @@
+{
+  "id": "research.eh.samegeometry.readiness.01",
+  "resource": "cpu",
+  "kind": "implementation",
+  "state": "HELD",
+  "author": "sol13",
+  "created_at": 1793075695.9612088,
+  "depends_on": [],
+  "write_paths": [
+    "proj_rsi/tools/eh_same_geometry_lab.py",
+    "proj_rsi/candidates/eh_same_geometry_trial"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 4.7585015873737575,
+      "p_resolve": 0.8,
+      "p_followup_gain": 0.2,
+      "unblocks": [
+        "research.eh.samegeometry.review.01",
+        "research.eh.samegeometry.gpu.01"
+      ],
+      "decision": "Does historical EH itself retain even a tiny complete-kernel gain against same-geometry current PW36, before claiming cumulative PW38 selection/stack gains?"
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains.",
+    "confidence": "low; omitted historical mechanisms and readiness gaps, no new measured speedup",
+    "evidence": [
+      "proj_rsi/audits/eh-backport.md",
+      "proj_rsi/candidates/rs32_eh_backport/README.md",
+      "proj_rsi/audits/mx-h100.md",
+      "proj_rsi/audits/sol16-score-opportunity.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 600,
+    "cpu_minutes": 60
+  },
+  "annotations": {
+    "family": "eh-same-geometry",
+    "current_owner": "sol08",
+    "readiness": "HELD only to avoid duplicate scheduling: sol08 already owns current CPU work; root may import historical completion using this canonical task ID.",
+    "causal_hypothesis": "Two token-half TMA reductions may overlap EH half1 stores with half0 drain without changing W/math; recover historical tiny positives against current PW36 same geometry.",
+    "comparator": "Mechanism-only PW36 control FL2/3 versus recovered EH FL65538/65539 at M128/ST5/KS pooler4,qkv7,unpooler2,o2; match nonEH control opcode identity. Include current PW38 carriers explicitly; no full prepared-policy claim from forced variants.",
+    "required_next_work": [
+      "Existing owner sol08 is already implementing this package; do not launch a duplicate CPU task. Freeze tools/eh_same_geometry_lab.py and candidates/eh_same_geometry_trial/manifest.json,cpu_proof.py,README.md.",
+      "Bind recovered EH-only source delta to current PW36/PW38, preserve nonEH control exact SASS, same M128/ST5/KS/flags except EH bit16; keep separate-W-ring bits8..15 zero.",
+      "Prove output-coordinate two-half ownership, shared proxy publication/read retirement, zero counter handshake, stage/resources and actual JIT-before-first-math checks; independent reviewer GO precedes bounded paired/F1 root GPU trial."
+    ],
+    "required_output_artifacts": [
+      "proj_rsi/tools/eh_same_geometry_lab.py",
+      "proj_rsi/candidates/eh_same_geometry_trial/manifest.json",
+      "proj_rsi/candidates/eh_same_geometry_trial/cpu_proof.py",
+      "proj_rsi/candidates/eh_same_geometry_trial/README.md"
+    ],
+    "conditional_score_scenario": {
+      "official_job": "fb548b5dc6f04696",
+      "official_score_us": 3200.6150084373335,
+      "delta_load_us": {
+        "verify 16": 0.6
+      },
+      "scenario_score_us": 4.7585015873737575,
+      "formula": "S0 - S0*exp(sum(log1p(-delta_load/load_sum))/6)",
+      "meaning": "Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer."
+    },
+    "full_cost_basis": "Planning estimate includes implementation, offline checks, independent CPU review and analysis in 60 CPU minutes; 600 seconds is full downstream GPU reservation including transfer/compile/prepare/validation/measurement and later causal follow-up, not kernel time. Frozen runner bounds/actual GPU cost still require review.",
+    "release_requires": "Independent separate CPU review job CPU_PASS; frozen files including guards, root-only host/command/review pin validation; no GPU descriptor is executable yet.",
+    "planned_review_id": "research.eh.samegeometry.review.01",
+    "planned_gpu_id": "research.eh.samegeometry.gpu.01",
+    "planning_score": {
+      "priority": 0.012689337566330023,
+      "direct_expected_us": 0,
+      "information_expected_us": 0.7613602539798013,
+      "effective_value_us": 0.7613602539798013,
+      "cost_usd": 0.8333333333333334,
+      "cpu_minutes": 60,
+      "age_multiplier": 1.0,
+      "assumptions": [
+        "Probabilities are subjective conditional priors, never measured speedups.",
+        "Scenario score benefit uses fixed same-job official reference arithmetic.",
+        "No H100 measurement is automatically a H200 forecast.",
+        "Unknown estimates are null and unrankable, not zero.",
+        "GPU seconds estimate includes full reservation wall time: transfer, compilation, prepare, validation and measurement; follow-up adds full follow-up reservation. CPU minutes include the planned CPU work chain.",
+        "All probabilities are subjective conditional priors, not measured speedups.",
+        "No H100-to-H200 performance transfer is inferred.",
+        "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains."
+      ],
+      "errors": [],
+      "rankable": true
+    },
+    "planning_rank_among_these_five": 1
+  }
+}

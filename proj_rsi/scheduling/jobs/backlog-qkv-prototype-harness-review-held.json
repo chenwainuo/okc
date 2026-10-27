@@ -1,0 +1,59 @@
+{
+  "id": "research.qkv.split4.harness.review.01",
+  "resource": "cpu",
+  "kind": "review",
+  "state": "HELD",
+  "author": "sol13",
+  "created_at": 1793075695.9612088,
+  "depends_on": [
+    {
+      "id": "research.qkv.split4.harness.readiness.01",
+      "accepted_dispositions": [
+        "CPU_PASS"
+      ]
+    }
+  ],
+  "write_paths": [
+    "proj_rsi/scheduling/reviews/qkv-prototype-harness.md"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 7.950628540704201,
+      "p_resolve": 0.55,
+      "p_followup_gain": 0.1,
+      "unblocks": [
+        "research.qkv.split4.harness.gpu.01"
+      ],
+      "decision": "Can144-CTA split coverage repay fresh packing plus explicit FP32 reduction against actual current selected QKV128 incumbent?"
+    },
+    "basis": "SUBJECTIVE LOW-CONFIDENCE CONDITIONAL PRIOR ONLY. Conditional arithmetic only; neither predicted nor measured attainable gain; no H100-to-H200 transfer. Resolution and follow-up gain probabilities are author priors, not frequencies. Full CPU chain and estimated GPU reservation are charged; no sum of scores counts several stages as independent achieved gains.",
+    "confidence": "low; omitted historical mechanisms and readiness gaps, no new measured speedup",
+    "evidence": [
+      "proj_rsi/audits/sol15-qkv-runtime.md",
+      "proj_rsi/audits/sol05-qkv-coverage.md",
+      "proj_rsi/candidates/group8_qkv_trial/manifest.json",
+      "proj_rsi/audits/sol16-score-opportunity.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 900,
+    "cpu_minutes": null
+  },
+  "annotations": {
+    "readiness": "HELD until author package frozen and a reviewer independent of implementation owner is assigned. Review effort unknown; do not silently price zero or dispatch.",
+    "comparator": "Actual fresh PW36 prepare/kernel_fn QKV128 (historical rq s4s5hz KS7 is not assumed) plus equivalent prepared QKV RQ control, versus Pipeline fresh pack->split4 main->ascending FP32 reduction. Never Lt-only or failed unpooler comparator.",
+    "requires": [
+      "all declared output artifacts frozen and hash-pinned",
+      "independent source/indexing/lifetime/resource/actual-JIT/final-output/counter contract review",
+      "explicit GO/HOLD with proposed full reservation cost and exact root launch argv"
+    ],
+    "implementation_owner": "unassigned",
+    "no_execution_authorized": true
+  }
+}
