@@ -1,0 +1,60 @@
+{
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T21:48:57Z\ntorch_import_and_device\ncompile_two_functions\n[1/3] c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=gv_unpool16_deltakey_e418b7d8bc4d29788ff7 -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -fPIC -std=c++17 -c /root/.cache/torch_extensions/gv_unpool16_deltakey_e418b7d8bc4d29788ff7/main.cpp -o main.o \n[2/3] /usr/local/cuda/bin/nvcc --generate-dependencies-with-compile --dependency-output cuda.cuda.o.d -DTORCH_EXTENSION_NAME=gv_unpool16_deltakey_e418b7d8bc4d29788ff7 -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_90a,code=sm_90a --compiler-options '-fPIC' -O3 -lineinfo -gencode=arch=compute_90a,code=sm_90a -std=c++17 -c /root/.cache/torch_extensions/gv_unpool16_deltakey_e418b7d8bc4d29788ff7/cuda.cu -o cuda.cuda.o \n[3/3] c++ main.o cuda.cuda.o -shared -L/opt/conda/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o gv_unpool16_deltakey_e418b7d8bc4d29788ff7.so\nactual_task_weight_and_pack\nfixed_unpooler_M16\ncomplete\nTRIAL_EXIT okc-proj-gv-unpool16-deltakey-01 0\n2026-10-27T21:49:49Z\n",
+    "terminal_exit": 0
+  },
+  "collected_at": 1793137804.6028361,
+  "dispatch": {
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv-unpool16-deltakey-01"
+    ],
+    "claimed_at": 1793137726.845404,
+    "container": "okc-proj-gv-unpool16-deltakey-01",
+    "controller_owner": "root",
+    "guard_pid": 597399,
+    "host": "root@107.170.6.60",
+    "host_log": "/root/okc/logs/scheduler/research.gv.unpool16.deltakey.01.host.log",
+    "job_id": "research.gv.unpool16.deltakey.01",
+    "launch_requested_at": 1793137736.1735446,
+    "phase": "RUNNING",
+    "remote_repo": "/root/okc",
+    "source_pins": {
+      "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+      "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+      "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/README.md": "717ffe40e8860376b8ca9f50baa20a382e7e16c47ea7a9dd093d88498ba08fa4",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/binding-compile-proof.json": "404ee2ee65f14dfacaba0aeb8de2aead04fd16d96456dcd3b99b155d9f564165",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/binding.cu": "6143e7477b58d4578aa61e9041c4cbf599245c3bc7c1057b18da8a384c05d963",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/driver-delta.json": "d578f0b477e2082f41c44e5888f02296fed78c11b555e781cd99016917b3efb9",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/driver.py": "2b1598520ee759c336b129398f6584b57695f500bed8977b0432a8196223cd27",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/harness-cpu-proof.json": "54bafa2714f6062c25715bf83376ea6729eff0e754d0994e5d79a42abdc5973f",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/helper.cuh": "208d2c5a2cf436d085aece1d0dd5a577bb5c48119cb18d24a66ced3e47920b29",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/manifest.json": "b212cee6f9b11e97c480be47496406434a64e0762ae89521a3998f0b4c302ca7",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/pilot.cu": "9e27698d8284249a03f5f27b78052f1447067c3a5663266ee83e20926840f671",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/proof.json": "9c87b4bc9770d75c4963e5f6854d9eb3815248c955b951dda568bf4b0ab9dc61",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/submission.py": "713c46b37e50f71410ef4c7116f7fcb94bea71bd7b64c7f33d2a9e0d93e24f6c",
+      "proj_rsi/scheduling/reviews/gv-unpool16-deltakey-01.md": "cf736c9c267dc12537bdfda8a5f3405a9237713ab67f6ac1d8e504075c937801",
+      "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+      "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5"
+    }
+  },
+  "files": {
+    "logs/scheduler/gv-unpool16-deltakey-01/run/actual.cu": "e418b7d8bc4d29788ff725cbeea65430b4745b7ea0ab07d0416dba4f13d4e1da",
+    "logs/scheduler/gv-unpool16-deltakey-01/run/actual.so": "d1c06fd80d1f5391986c5257765851e95eb749ded49129601a5183b0871f3c49",
+    "logs/scheduler/gv-unpool16-deltakey-01/run/raw.jsonl": "9168d4d240e49cc979d2e238b353d9664c92f62c89f8f86b255db614148a777d",
+    "logs/scheduler/gv-unpool16-deltakey-01/run/result.json": "86894c57e68491f55fd2797e5a33c1d55cc1819a63012afdce2366d501945301",
+    "logs/scheduler/research.gv.unpool16.deltakey.01.host.log": "7548dfd98bc62f33e997556978bd2e06fd7baf5928e8dcaf5f0aafab72f416eb"
+  },
+  "job_id": "research.gv.unpool16.deltakey.01",
+  "missing": [],
+  "symlinks_not_followed_or_materialized": {},
+  "terminal_exit": 0,
+  "validation": "ROOT_VALIDATION_REQUIRED_NO_PERFORMANCE_ADMISSION"
+}

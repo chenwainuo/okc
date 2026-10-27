@@ -25,92 +25,281 @@
     "past_MoE_results": "historical archive only; retained in history_catalog without active optimization priority",
     "quota_assumptions": null
   },
-  "ranking_method": "Root-directed projection planning ranks: rolledGVkeyedhalf1, actual-selectedRQ32loop2, actual-selectedGV16repair/decode3, source-pinned historical-positive audit4/support. Within targets, weights use exact official scored-route sensitivity. Expected gains/probabilities/costs unknown => numeric expected ROI unrankable. RuntimeREADY is0 per root21:33 observation; CPU assignment/review is not GPU readiness.",
+  "ranking_method": "Projection-only planning view:completedcomposedCHECK requires bounded follow-up diagnosis/unpriced newcontrol;RQscope knownfixedgainbutcombinedwholeloss;GV16reuseSOrobustnessCPUpreparation;versionedfailureauditsupport. Rootlatestlocalqueue0since1715 remains last runtimeobservation. Sourcecomposition andactualpartialexposure are measured; no officialincumbentgain or sumofisolatedeffects.",
   "active_opportunities": [
     {
       "problem": "muse_bf16_proj",
       "actual_runtime_READY": false,
-      "runtime_readiness_source": "Root-reported actual checkpoint21:33UTC:0READY; CPU/review readiness is distinct",
+      "runtime_readiness_source": "Root observes0localGPUqueue since1715; this is a separate officialCHECK",
       "expected_score_gain_us": null,
       "p_gain": null,
       "p_valid": null,
       "numeric_expected_ROI": null,
       "dispatch_authority": "root coordinator and existing exclusive GPU worker",
       "priority_rank": 1,
-      "id": "projection.gv53.keyed_half",
-      "title": "Rolled GV keyed-half repair screen",
-      "work_kind": "implementation_screen",
-      "planning_readiness": "CPU_SOURCE_NATIVE_PROOF_READY_RUNTIME_STATUS_UNKNOWN",
+      "id": "projection.gv53.rq_unpooler32.composition",
+      "title": "GV53 + scoped RQ unpooler32 composed CHECK",
+      "work_kind": "completed_transfer_diagnosis_followup_unpriced",
+      "planning_readiness": "COMPOSED_CHECK_COMPLETE_WHOLE_REGRESSION_PARTIAL_EXPOSURE",
       "target_cells": [
         {
+          "index": 2,
           "load": "decode 1",
-          "layer": "pooler",
           "m": 1,
-          "selected_family": "gv_predxor",
-          "score_elasticity": 0.06461677550304479
+          "layer": "pooler",
+          "family": "gv_predxor",
+          "target_family": "GV",
+          "scored_latency_us": 13.714963545591969,
+          "equal_log_load_weight": 0.16666666666666666,
+          "within_load_latency_fraction": 0.3877006530182687,
+          "score_elasticity": 0.06461677550304479,
+          "weighted_latency_us": 2.2858272575986613,
+          "GV_predxor_selected": true,
+          "GV_template": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            0,
+            3
+          ],
+          "RQ_flags": null,
+          "actual_kernel_names": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s",
+          "bindings": [
+            {
+              "name": "kernel_fn",
+              "ordinal": 143,
+              "line": 4299,
+              "end_line": 4316,
+              "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+              "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+              "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+              "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+            },
+            {
+              "name": "GVCU",
+              "ordinal": 10,
+              "line": 529,
+              "end_line": 2120,
+              "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+              "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+              "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+              "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+            },
+            {
+              "name": "_gvcall",
+              "ordinal": 69,
+              "line": 2444,
+              "end_line": 2456,
+              "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+              "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+              "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+              "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+            }
+          ],
+          "conditional_10pct_case_latency_cut_score_gain_us": 20.73733469344552,
+          "rank": 1
         },
         {
+          "index": 17,
           "load": "verify 1",
-          "layer": "pooler",
           "m": 8,
-          "selected_family": "gv_predxor",
-          "score_elasticity": 0.06114547809541188
+          "layer": "pooler",
+          "family": "gv_predxor",
+          "target_family": "GV",
+          "scored_latency_us": 13.536974268757183,
+          "equal_log_load_weight": 0.16666666666666666,
+          "within_load_latency_fraction": 0.3668728685724713,
+          "score_elasticity": 0.06114547809541188,
+          "weighted_latency_us": 2.2561623781261972,
+          "GV_predxor_selected": true,
+          "GV_template": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            0,
+            3
+          ],
+          "RQ_flags": null,
+          "actual_kernel_names": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.8 \u00b5s 100.0%      1\ntotal                                                             13.8 \u00b5s",
+          "bindings": [
+            {
+              "name": "kernel_fn",
+              "ordinal": 143,
+              "line": 4299,
+              "end_line": 4316,
+              "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+              "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+              "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+              "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+            },
+            {
+              "name": "GVCU",
+              "ordinal": 10,
+              "line": 529,
+              "end_line": 2120,
+              "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+              "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+              "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+              "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+            },
+            {
+              "name": "_gvcall",
+              "ordinal": 69,
+              "line": 2444,
+              "end_line": 2456,
+              "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+              "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+              "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+              "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+            }
+          ],
+          "conditional_10pct_case_latency_cut_score_gain_us": 19.605740964969755,
+          "rank": 2
+        },
+        {
+          "index": 13,
+          "load": "decode 32",
+          "m": 32,
+          "layer": "unpooler",
+          "family": "rq",
+          "target_family": "rq",
+          "scored_latency_us": 15.059097119932208,
+          "equal_log_load_weight": 0.16666666666666666,
+          "within_load_latency_fraction": 0.28885594547015897,
+          "score_elasticity": 0.04814265757835983,
+          "weighted_latency_us": 2.5098495199887014,
+          "GV_predxor_selected": false,
+          "GV_template": null,
+          "RQ_flags": 35,
+          "actual_kernel_names": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "scored_kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s",
+          "bindings": [
+            {
+              "name": "kernel_fn",
+              "ordinal": 143,
+              "line": 4299,
+              "end_line": 4316,
+              "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+              "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+              "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+              "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+            },
+            {
+              "name": "RQCU",
+              "ordinal": 149,
+              "line": 4479,
+              "end_line": 5109,
+              "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
+              "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
+              "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+              "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+            },
+            {
+              "name": "_rqcall",
+              "ordinal": 168,
+              "line": 5246,
+              "end_line": 5247,
+              "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
+              "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
+              "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+              "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+            }
+          ],
+          "conditional_10pct_case_latency_cut_score_gain_us": 15.385046469639747,
+          "rank": 7
         }
       ],
-      "hypothesis": "Reduce redundant packed escape target decoding in the exact scored rolled pooler M1/M8 repair path while preserving ignored-half semantics and execution order. Static instruction change is not a measured gain.",
-      "next_falsifier": "Matched current-source direct screen on poolerM1/M8 with exact tuple/current input/own timed output and source+resource evidence; preserve signed AB/BA/F1. Then test actual selected policy against GV9916 before any release.",
+      "hypothesis": "GV53existing-target replacement andscopedunpoolerRQ descriptoroffset are source-compatible, but standaloneofficialGV53 wholeloss and localmixedsigns constrain the combined transfer. ActualnewRQselection/validity/normalizedscore must come from the composed CHECK; no additivegain assumption.",
+      "next_falsifier": "NewRQflags131107 and keyedM8 actually executed; M1 chose oldunrolledpredxor. WholeCHECK3182.348773us loses incumbent. Diagnose only exactroute/normalization/selector questions supported by own artifacts; price any new scoped control before admission. No additivegain or automaticrepeat.",
       "evidence": [
         {
-          "path": "proj_rsi/candidates/gv53_keyed_half_v1/source-proof.json",
-          "sha256": "fd1bf9cd96174bf70d7795ba4e8fe6484b02291157feaccb190c3457df6d01cd"
+          "path": "results/proj-rsi/releases/gv53-rq-unpooler32-stack-v1-f018932999fb/release.json",
+          "sha256": "8f9c435eca1b0d83e44c52255a367a7273709cfddfb04174276c425874d99fdc"
         },
         {
-          "path": "proj_rsi/candidates/gv53_keyed_half_v1/cpu-proof.json",
-          "sha256": "f9f3c2072f9136560240dec5e182f412c9bf523f96ca672d1d64b7aa91eafc43"
+          "path": "proj_rsi/audits/projection-GV53-RQv4-stack-v3/source-check/source-proof.json",
+          "sha256": "e832625b91e921027efc7dddb2655fe859d46c84d2629053e3fd05485f98c28c"
         },
         {
-          "path": "proj_rsi/audits/selected-hotpaths-gv9916/report.json",
-          "sha256": "e6196ca87583ce8e8ba117636ffc157ef154f15971252dfb94ebaee351976e20"
+          "path": "proj_rsi/audits/gv53-keyed-half-result/analysis.json",
+          "sha256": "8c9c71c28a422f26a3b94969e9c174391a69fcbdcdca2c39e50712891f5ef530"
+        },
+        {
+          "path": "proj_rsi/candidates/rq_descriptor_offset_trial_v1/actual-analysis/analysis.json",
+          "sha256": "8620b6a0583217342c68c10ed38a65fdbe7dbd00d70f40b6bbd0f08eb0b99877"
+        },
+        {
+          "path": "results/proj-rsi/jobs/71a76a2c3fcd431f.json",
+          "sha256": "7f5e6420b0dbf7d4580703f60685c8419fd8d9ea8f07b72877e6a2f5857bf091"
         }
       ],
-      "source_sha256": "239b530cf7eead0a2dbf0af5c29aea4ba02e449500eb80e45b255b361cf2f900",
+      "source_sha256": "f018932999fbaed6600b330f3002749a2e423038fd925e27036ac3c1e6183d1e",
       "parent_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
-      "static_nonNOP_delta": -3,
-      "registers": 64,
-      "spills_or_local_stack": 0,
-      "target_score_elasticity": 0.12576225359845666,
-      "conditional_scenario": {
-        "assumed_target_latency_reduction_fraction": 0.01,
-        "same_official_job_score_reduction_us": 3.9753720956731944,
-        "measured_or_forecast": false
+      "reviewed_wall_cap_seconds": null,
+      "last_reported_worker_state": null,
+      "GPU_execution_confirmed": null,
+      "source_composed": true,
+      "measured_combined_gain": false,
+      "actual_RQ_newoption_selected": true,
+      "official_passed": true,
+      "source_components": [
+        {
+          "source_sha256": "239b530cf7eead0a2dbf0af5c29aea4ba02e449500eb80e45b255b361cf2f900",
+          "label": "GV53keyedhalf existingtargets"
+        },
+        {
+          "source_sha256": "963cbcde11f4fc89ce38fd05601ba3492f6dd11cb45b39cd3a83e6b863221809",
+          "label": "RQscopedv4 strictpositiveonlynewunpooler32option"
+        }
+      ],
+      "official_combined_measurement": true,
+      "achieved_measured_gain_stack": false,
+      "score_us": 3182.3487733684065,
+      "actual_GV53_keyed_M1_selected": false,
+      "actual_GV53_keyed_M8_selected": true,
+      "combined_own_result": {
+        "path": "results/proj-rsi/jobs/71a76a2c3fcd431f.json",
+        "sha256": "7f5e6420b0dbf7d4580703f60685c8419fd8d9ea8f07b72877e6a2f5857bf091"
       },
-      "reviewed_wall_cap_seconds": null
+      "actual_selected_kernel_reports": {
+        "poolerM1": "gv_predxor<1,1,2,1,8,16,1,1,0,1>",
+        "poolerM8": "gv_keyed<1,1,1,2,16,8,1,1,0,3>",
+        "unpoolerM32": "rq<32,6,1,0,0,0,131107>"
+      }
     },
     {
       "problem": "muse_bf16_proj",
       "actual_runtime_READY": false,
-      "runtime_readiness_source": "Root-reported actual checkpoint21:33UTC:0READY; CPU/review readiness is distinct",
+      "runtime_readiness_source": "No localGPUqueue entry; source-onlyGO is not launch/readiness",
       "expected_score_gain_us": null,
       "p_gain": null,
       "p_valid": null,
       "numeric_expected_ROI": null,
       "dispatch_authority": "root coordinator and existing exclusive GPU worker",
       "priority_rank": 2,
-      "id": "projection.rq32.selected_loop",
-      "title": "RQ32 selected pooler/unpooler escape and loop scheduling",
+      "id": "projection.rq32.unpooler_only_scope",
+      "title": "Scoped RQ unpooler32 source and actual-selection follow-up",
       "work_kind": "mechanism_and_implementation",
-      "planning_readiness": "CPU_IMPLEMENTATION_ASSIGNED_NO_RUNTIME_READY_JOB",
+      "planning_readiness": "SCOPED_SOURCE_EXERCISED_IN_COMPOSED_CHECK_NO_ISOLATED_POLICY_GAIN",
       "target_cells": [
-        {
-          "load": "decode 32",
-          "layer": "pooler",
-          "m": 32,
-          "selected_family": "rq",
-          "score_elasticity": 0.04962468467383463,
-          "actual_stage_count": 6,
-          "actual_flags": 35,
-          "actual_KS": 4
-        },
         {
           "load": "decode 32",
           "layer": "unpooler",
@@ -123,44 +312,45 @@
         }
       ],
       "hypothesis": "Target selected RQ producers/escape repair and stage geometry using actual flags/KS, not an unselected template or a faster-than-failed-parent comparison.",
-      "next_falsifier": "Pin actual selected ST6/FL35/KS4(pooler32) andKS2(unpooler32); implement one bounded changed-loop candidate versus current GV9916 source, preserving real timed graph numerics/mutation/output and every signed sample. Prior generic cursor results do not establish a win.",
+      "next_falsifier": "Frozenv4 newunpooler32variant flags131107 executed in f018 composed CHECK;wholecombinedscorestillloses3157best. Preserve fixed+.048/F1+.080 alongside broaderpoolernegative. Separate actual-source exposure from an isolated current-policy/official gain; no localGPUproposal/readiness is implied.",
       "evidence": [
         {
-          "path": "proj_rsi/audits/selected-hotpaths-gv9916/report.json",
-          "sha256": "e6196ca87583ce8e8ba117636ffc157ef154f15971252dfb94ebaee351976e20"
+          "path": "proj_rsi/candidates/rq_unpooler32_descriptor_offset_v4/proposal.json",
+          "sha256": "b065f6c017763145e7f3d22d39eda8b51853ccdd0b5fb2cf3fe29926b714e1c2"
         },
         {
-          "path": "proj_rsi/audits/submission-stack-20261027/analysis.json",
-          "sha256": "462a2e0e090b58c991247d4564dc5381d583f3c31d6db7ccd9ddd7965967c4aa"
+          "path": "proj_rsi/candidates/rq_unpooler32_descriptor_offset_v4/source-review.json",
+          "sha256": "18567e5d4239be53becdae454187421826c0f76a09e4f4b90f36ccb1956088dd"
+        },
+        {
+          "path": "proj_rsi/candidates/rq_descriptor_offset_trial_v1/actual-analysis/done-evidence.json",
+          "sha256": "e13e95a0c998ac5b929e79b36f802106d996fcf3c000623333b85c40a7e3d58b"
         }
       ],
-      "target_score_elasticity": 0.09776734225219447,
-      "conditional_scenario": {
-        "assumed_target_latency_reduction_fraction": 0.1,
-        "same_official_job_score_reduction_us": 31.648156381244583,
-        "measured_or_forecast": false
-      },
+      "target_score_elasticity": 0.04814265757835983,
       "reviewed_wall_cap_seconds": null,
       "family_context": {
         "all_selected_RQ_cases": 7,
         "all_selected_RQ_score_elasticity": 0.2642671831574968,
         "family_10pct_latency_cut_score_scenario_us": 85.2637068613949
-      }
+      },
+      "source_sha256": "963cbcde11f4fc89ce38fd05601ba3492f6dd11cb45b39cd3a83e6b863221809",
+      "actual_selected_in_combined_CHECK": true
     },
     {
       "problem": "muse_bf16_proj",
       "actual_runtime_READY": false,
-      "runtime_readiness_source": "Root-reported actual checkpoint21:33UTC:0READY; CPU/review readiness is distinct",
+      "runtime_readiness_source": "Root reports0localGPUqueue since1715; newrobustnessproposal inCPUpreparation",
       "expected_score_gain_us": null,
       "p_gain": null,
       "p_valid": null,
       "numeric_expected_ROI": null,
       "dispatch_authority": "root coordinator and existing exclusive GPU worker",
       "priority_rank": 3,
-      "id": "projection.gv16.repair_decode",
-      "title": "GV16 selected predxor repair/decode specialization",
+      "id": "projection.gv16.reuse_SO_robustness",
+      "title": "GV16 unpooler reuse-SO robustness proposal",
       "work_kind": "implementation_screen",
-      "planning_readiness": "CPU_IMPLEMENTATION_ASSIGNED_NO_RUNTIME_READY_JOB",
+      "planning_readiness": "CPU_PREPARATION_NOT_ADMITTED",
       "target_cells": [
         {
           "load": "decode 16",
@@ -183,8 +373,41 @@
           "static_instruction_count": 2080,
           "registers": 110,
           "static_P2R": 16
+        }
+      ],
+      "target_score_elasticity": 0.048562831878118835,
+      "hypothesis": "A targeted repair/decode scheduling specialization may shorten selected GV16 work. Static SASS and register counts identify a bounded codegen question; no measured gain or dynamic-loop attribution exists.",
+      "next_falsifier": "Reuse exactmeasuredSO/source in a separately frozen matchedworkload/order robustness test that resolves primarypaired-.080versusF1+.096. Reprice totalcost/information value before admission; do not rerun unchanged work solely to occupy GPU.",
+      "reviewed_wall_cap_seconds": null,
+      "evidence": [
+        {
+          "path": "proj_rsi/audits/selected-hotpaths-gv9916/report.json",
+          "sha256": "e6196ca87583ce8e8ba117636ffc157ef154f15971252dfb94ebaee351976e20"
         },
         {
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "path": "proj_rsi/audits/gv-unpool16-deltakey-result/analysis.json",
+          "sha256": "14814ad1618a1947d93a7cce2dce2af9a1e1a23e371bf94bbce25c8fa4c18234"
+        }
+      ],
+      "potential_pair_score_elasticity_not_executable": 0.0968546328927802,
+      "reported_unpooler_codegen": {
+        "control_static_instructions": 2080,
+        "candidate_static_instructions": 1992,
+        "control_registers": 110,
+        "candidate_registers": 108,
+        "stack_or_spills": 0,
+        "P2R": 16,
+        "SHFL": 17,
+        "HMMA": 128,
+        "source": "Hotloop author report; frozen proof path pending",
+        "performance_measured": false
+      },
+      "excluded_pooler_cell": {
+        "cell": {
           "load": "decode 16",
           "layer": "pooler",
           "m": 16,
@@ -205,27 +428,20 @@
           "static_instruction_count": 2000,
           "registers": 128,
           "static_P2R": 16
-        }
-      ],
-      "target_score_elasticity": 0.0968546328927802,
-      "hypothesis": "A targeted repair/decode scheduling specialization may shorten selected GV16 work. Static SASS and register counts identify a bounded codegen question; no measured gain or dynamic-loop attribution exists.",
-      "next_falsifier": "Compile and inspect only two exact selected M16 native functions against frozen501d source. Measure one supported change with actual controls; pooler at128registers makes liveness/spill risk explicit. Reuse unchanged codec/math proof and retain every signed runtime result.",
-      "reviewed_wall_cap_seconds": null,
-      "evidence": [
-        {
-          "path": "proj_rsi/audits/selected-hotpaths-gv9916/report.json",
-          "sha256": "e6196ca87583ce8e8ba117636ffc157ef154f15971252dfb94ebaee351976e20"
         },
-        {
-          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
-          "sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
-        }
-      ]
+        "reason": "Negative codegen:2000\u21921920 instructions but48Bstack and reported96Bspillstores+loads. Preserve this version; not in executable scope.",
+        "frozen_proof_pending": true
+      },
+      "completed_parent_result": {
+        "path": "proj_rsi/audits/gv-unpool16-deltakey-result/analysis.json",
+        "sha256": "14814ad1618a1947d93a7cce2dce2af9a1e1a23e371bf94bbce25c8fa4c18234"
+      },
+      "measured_gain_stack": false
     },
     {
       "problem": "muse_bf16_proj",
       "actual_runtime_READY": false,
-      "runtime_readiness_source": "Root-reported actual checkpoint21:33UTC:0READY; CPU/review readiness is distinct",
+      "runtime_readiness_source": "Supportauditproduced noexecutable or GPUjob",
       "expected_score_gain_us": null,
       "p_gain": null,
       "p_valid": null,
@@ -233,12 +449,12 @@
       "dispatch_authority": "root coordinator and existing exclusive GPU worker",
       "priority_rank": 4,
       "id": "projection.recover_unstacked_positive",
-      "title": "Audit route-specific historical positives against current selections",
+      "title": "Versioned projection failure diagnosis and recovery support",
       "work_kind": "evidence_audit",
-      "planning_readiness": "VERSIONED_SUPPORTING_AUDIT_COMPLETE_NO_NEW_EXECUTABLE_READY",
+      "planning_readiness": "CORRECTED_V2_AUDIT_COMPLETE_SUPPORT_ONLY",
       "target_cells": [],
       "hypothesis": "Recover comparator-specific tiny positives without treating bake observations or losing whole packages as deployable increments. O32 margin and private EH observations need exact current selected-route retesting.",
-      "next_falsifier": "Use the versioned recovery audit to scope an exact route-only experiment against current selected GV9916. Two selected local target positives and one explicitly unselected fixed diagnostic are conditional recoveries, not three proven deployable increments. No new executable or runtimeREADY job was produced.",
+      "next_falsifier": "Use correctedv2 andversionedO32/keyed-half transfer supplements to distinguish proven setup/selection facts from UNKNOWN causalperformance attribution. Later jobs are not retroactively inside the frozen150record capture.",
       "evidence": [
         {
           "path": "proj_rsi/audits/gv-o32-positive-policy-result/analysis.json",
@@ -255,6 +471,22 @@
         {
           "path": "audits/projection-positive-recovery-20261027/independent-evidence.json",
           "sha256": "3f4b9687ee316356f4d70403ad480bc7325bd59c5bf1e475aa3ca8945c7465d1"
+        },
+        {
+          "path": "audits/projection-failure-diagnosis-20261027/LATEST.json",
+          "sha256": "85916e4dd151e4ff69739bfd38c87bd2cedf645d82907da842e645d79fcbbaca"
+        },
+        {
+          "path": "audits/projection-failure-diagnosis-20261027/report-v2.json",
+          "sha256": "9adbfdffa5219d855f15d749a30c5a9f42847cbf05672d631accb4c42cdb9d7d"
+        },
+        {
+          "path": "audits/projection-failure-diagnosis-20261027/supplement-o32-transfer-v1.json",
+          "sha256": "12ee749115721c73e75e841da736a2496b16f1a5c895badbea14a5d542f7178c"
+        },
+        {
+          "path": "proj_rsi/audits/gv53-keyed-half-official-diagnosis-v1/analysis.json",
+          "sha256": "98633eaf3b6b337b22bbde9a8ea570a88ccd56d2bb2c1662720dcfed5eab803a"
         }
       ],
       "direct_score_gain_us": 0,
@@ -346,7 +578,31 @@
         "same_job_final_bake_label_matches_positive_mode": 321,
         "same_job_final_bake_label_different": 745,
         "caution": "Bake-label match is not current scored dispatch and can be superseded downstream. Rounded r6-control bakes are not paired incremental feature evidence."
-      }
+      },
+      "failure_audit_index": {
+        "path": "audits/projection-failure-diagnosis-20261027/LATEST.json",
+        "sha256": "85916e4dd151e4ff69739bfd38c87bd2cedf645d82907da842e645d79fcbbaca"
+      },
+      "failure_audit_coverage": {
+        "canonical_official_jobs": 68,
+        "own_result_official_supplements": 1,
+        "official_jobs": 69,
+        "projection_queue_records": 81,
+        "projection_queue_GPU_records": 56,
+        "local_catalog_only_attempts": 0,
+        "source_versions": 188,
+        "projection_local_observation_rows": 496,
+        "projection_findings": 61,
+        "attempt_records": 150,
+        "unknown_source_failed_official_jobs": 5,
+        "failed_official_without_archive": 4,
+        "caveat": "Complete over these frozen canonical/queue inputs, not an assertion that every private/unlogged experiment is known. CPU readiness/HELD/version records are not counted as runtime failures. Collection replicas are not invented as separate executions."
+      },
+      "scope_clarifications": [
+        "OldsplitCTA nonselection refersbb4b/eb56/55f7,not239bkeyed-half replacement; newkernelactuallyserved in ac492 CHECK.",
+        "CURRENT_STACK O32FL34was correct; initialdiscrepancyclaimwasmisreading. OfficialO32CHECK targetFL34\u219235 differslocalGV45\u2192ST6.",
+        "O32intendedtargetimproves butwholeloses;12changedreportedpaths/18same andnormalization differ. Cause remains bounded/UNKNOWN, notforcedfromloss."
+      ]
     }
   ],
   "selected_case_sensitivity": [
@@ -2200,9 +2456,411 @@
   "loop_contract": "proj_rsi/ITERATION.md",
   "loop": "profile -> measure -> hypothesis -> optimize/reimplement -> test -> validate -> stack -> submit measured gains -> learn -> reprioritize -> repeat; deliberate idle<=10s",
   "runtime_observation": {
-    "ready_count": 0,
-    "as_of_utc": "2026-10-27T21:33:00Z",
-    "source": "Root coordinator reported read of actual worker checkpoint at21:33 UTC in this conversation; this CPU view did not query/mutate runtime authority",
-    "observation_not_permanent": true
+    "source": "Fresh root coordinator report in this conversation",
+    "queue_sequence": 1715,
+    "eligible_GPU_queue_count": 0,
+    "actual_runtime_READY_count": 0,
+    "physical_GPU_utilization": null,
+    "observation_not_permanent": true,
+    "scope": "Local exclusive GPU queue only; remote official CHECKs are separate activity"
+  },
+  "view_updated_at_utc": "2026-10-27T22:09:11.549360+00:00",
+  "official_activity": [
+    {
+      "problem": "muse_bf16_proj",
+      "job_id": "ac49231d41d441f6",
+      "mode": "check",
+      "status": "COMPLETED_ROOT_REFINE",
+      "score_us": 3225.893245547708,
+      "passed": true,
+      "tests_passed": 9,
+      "tests": 9,
+      "source_sha256": "239b530cf7eead0a2dbf0af5c29aea4ba02e449500eb80e45b255b361cf2f900",
+      "own_result": {
+        "path": "results/proj-rsi/jobs/ac49231d41d441f6.json",
+        "sha256": "8803ce8c782e2950b986849dc02de23691b3f34860ed67fa8e4b5ae32982a0c7"
+      },
+      "receipt": {
+        "path": "results/proj-rsi/jobs/ac49231d41d441f6.submitted.json",
+        "sha256": "caa4dbe26ba916147dac87fec8633fdab1d25cfa2a9a9b7585f68a94168b5adb"
+      },
+      "leaderboard_submission": false,
+      "best_updated": false
+    },
+    {
+      "problem": "muse_bf16_proj",
+      "job_id": "dc78c2473d204a92",
+      "mode": "check",
+      "status": "COMPLETED_ROOT_REFINE",
+      "score_us": 3191.721918275971,
+      "passed": true,
+      "tests_passed": 9,
+      "tests": 9,
+      "source_sha256": "e0f1f712868f8a092a5e96c010420fcc92562291b051d391c9bc77abf0f5bba2",
+      "own_result": {
+        "path": "results/proj-rsi/jobs/dc78c2473d204a92.json",
+        "sha256": "738b771716dbdf40f55b17f4d7ad6c88ee1fc8bc4426181262491bda08e16069"
+      },
+      "receipt": {
+        "path": "results/proj-rsi/jobs/dc78c2473d204a92.submitted.json",
+        "sha256": "dc514ea3f15a6a7246b920af8df9d0b6231ed65f23ac12ea5264844341ee3ae5"
+      },
+      "leaderboard_submission": false,
+      "best_updated": false
+    },
+    {
+      "problem": "muse_bf16_proj",
+      "job_id": "71a76a2c3fcd431f",
+      "mode": "check",
+      "status": "COMPLETED_OWN_RESULT_WHOLE_POLICY_REGRESSION",
+      "submitted_at_utc": "2026-10-27T22:06:04Z",
+      "source_sha256": "f018932999fbaed6600b330f3002749a2e423038fd925e27036ac3c1e6183d1e",
+      "receipt": {
+        "path": "results/proj-rsi/jobs/71a76a2c3fcd431f.submitted.json",
+        "sha256": "de908d9ad10e4b90fab8ad9a55a24beec0e7ad778221f938134ee19aff03c741"
+      },
+      "release": {
+        "path": "results/proj-rsi/releases/gv53-rq-unpooler32-stack-v1-f018932999fb/release.json",
+        "sha256": "8f9c435eca1b0d83e44c52255a367a7273709cfddfb04174276c425874d99fdc"
+      },
+      "score_us": 3182.3487733684065,
+      "passed": true,
+      "tests_passed": 9,
+      "leaderboard_submission": false,
+      "best_updated": false,
+      "outcome": "VALID_CHECK_NOT_INCUMBENT_GAIN",
+      "source_composed": true,
+      "tests": 9,
+      "own_result": {
+        "path": "results/proj-rsi/jobs/71a76a2c3fcd431f.json",
+        "sha256": "7f5e6420b0dbf7d4580703f60685c8419fd8d9ea8f07b72877e6a2f5857bf091"
+      },
+      "official_combined_measurement": true,
+      "actual_RQ_newoption_selected": true,
+      "actual_GV53_keyed_M1_selected": false,
+      "actual_GV53_keyed_M8_selected": true,
+      "achieved_measured_gain_stack": false
+    }
+  ],
+  "failure_audit": {
+    "problem": "muse_bf16_proj",
+    "work_kind": "supporting_failure_audit",
+    "owner": "moe_result_repair",
+    "planning_readiness": "VERSIONED_CORRECTED_V2_DELIVERED",
+    "direct_score_gain_us": 0,
+    "artifact": {
+      "path": "audits/projection-failure-diagnosis-20261027/LATEST.json",
+      "sha256": "85916e4dd151e4ff69739bfd38c87bd2cedf645d82907da842e645d79fcbbaca"
+    },
+    "base_reports_preserved": [
+      "report.md",
+      "report.json"
+    ],
+    "required_supplements": [
+      "supplement-o32-transfer-v1.json"
+    ],
+    "capture_coverage": {
+      "canonical_official_jobs": 68,
+      "own_result_official_supplements": 1,
+      "official_jobs": 69,
+      "projection_queue_records": 81,
+      "projection_queue_GPU_records": 56,
+      "local_catalog_only_attempts": 0,
+      "source_versions": 188,
+      "projection_local_observation_rows": 496,
+      "projection_findings": 61,
+      "attempt_records": 150,
+      "unknown_source_failed_official_jobs": 5,
+      "failed_official_without_archive": 4,
+      "caveat": "Complete over these frozen canonical/queue inputs, not an assertion that every private/unlogged experiment is known. CPU readiness/HELD/version records are not counted as runtime failures. Collection replicas are not invented as separate executions."
+    },
+    "performance_claim": false
+  },
+  "completed_projection_results": [
+    {
+      "problem": "muse_bf16_proj",
+      "job_id": "research.gv53.keyed.half.fixed.01",
+      "disposition": "DONE_VALID_GAIN_FIXED_SCOPE",
+      "source_sha256": "239b530cf7eead0a2dbf0af5c29aea4ba02e449500eb80e45b255b361cf2f900",
+      "cells": [
+        {
+          "m": 1,
+          "F1_control_before_us": 20.896000787615776,
+          "F1_new_us": 22.36800082027912,
+          "F1_control_after_us": 22.112000733613968,
+          "F1_endpoint_average_control_minus_new_us": -0.8640000596642494,
+          "F1_conservative_min_endpoint_control_minus_new_us": -1.4720000326633453,
+          "paired_median_control_minus_new_us": 0.06399955600500107,
+          "paired_AB_median_control_minus_new_us": 0.12800004333257675,
+          "paired_BA_median_control_minus_new_us": 0.01600012183189392,
+          "paired_new_wins": 14,
+          "paired_control_wins": 9,
+          "paired_ties": 1,
+          "paired_arm_medians_us": {
+            "control": 22.223999723792076,
+            "keyed": 22.23999984562397
+          },
+          "difference_of_marginal_paired_medians_control_minus_new_us": -0.01600012183189392,
+          "paired_differences_all_us": [
+            0.47999992966651917,
+            0.28800033032894135,
+            0.12800097465515137,
+            0.03200024366378784,
+            -0.09600073099136353,
+            0.22399984300136566,
+            0.5440004169940948,
+            0.0959988683462143,
+            0.35200081765651703,
+            0.1600012183189392,
+            0.31999871134757996,
+            -0.38400106132030487,
+            -0.22399984300136566,
+            0.0,
+            0.12799911201000214,
+            0.4800017923116684,
+            0.03200024366378784,
+            -0.1600012183189392,
+            -0.0959988683462143,
+            -0.09600073099136353,
+            -0.03200024366378784,
+            -0.03200024366378784,
+            0.22399984300136566,
+            -0.38400106132030487
+          ]
+        },
+        {
+          "m": 8,
+          "F1_control_before_us": 21.63200080394745,
+          "F1_new_us": 21.407999098300934,
+          "F1_control_after_us": 21.536000072956085,
+          "F1_endpoint_average_control_minus_new_us": 0.17600134015083313,
+          "F1_conservative_min_endpoint_control_minus_new_us": 0.12800097465515137,
+          "paired_median_control_minus_new_us": 0.22399984300136566,
+          "paired_AB_median_control_minus_new_us": 0.28800033032894135,
+          "paired_BA_median_control_minus_new_us": 0.14400016516447067,
+          "paired_new_wins": 16,
+          "paired_control_wins": 8,
+          "paired_ties": 0,
+          "paired_arm_medians_us": {
+            "control": 21.71199955046177,
+            "keyed": 21.487999707460403
+          },
+          "difference_of_marginal_paired_medians_control_minus_new_us": 0.22399984300136566,
+          "paired_differences_all_us": [
+            -0.15999935567378998,
+            0.35200081765651703,
+            0.38399919867515564,
+            0.03200024366378784,
+            -0.12799911201000214,
+            0.2560000866651535,
+            -0.19199959933757782,
+            0.19199959933757782,
+            0.3519989550113678,
+            1.0559987276792526,
+            -0.4159994423389435,
+            0.4479996860027313,
+            0.3200005739927292,
+            0.03200024366378784,
+            0.28800033032894135,
+            0.44800154864788055,
+            -0.4479996860027313,
+            -0.03200024366378784,
+            0.28800033032894135,
+            -0.3200005739927292,
+            1.3440009206533432,
+            0.09600073099136353,
+            0.8000005036592484,
+            -0.2560000866651535
+          ]
+        }
+      ],
+      "evidence": {
+        "path": "proj_rsi/audits/gv53-keyed-half-result/analysis.json",
+        "sha256": "8c9c71c28a422f26a3b94969e9c174391a69fcbdcdca2c39e50712891f5ef530"
+      },
+      "limits": "M1paired+.064/F1-.864/marginalmedian-.016;M8paired+.224/F1+.176. Existingtargetimplementation replacement, not oldsplitCTA nonselection. No actualpolicy or official gain."
+    },
+    {
+      "problem": "muse_bf16_proj",
+      "job_id": "research.rq.descriptor.offset.fixed.01",
+      "disposition": "DONE_VALID_GAIN_UNPOOLER_ONLY",
+      "cells": {
+        "pooler": {
+          "paired": {
+            "complete_pairs": 16,
+            "signed_deltas_us": [
+              -0.09600073099136353,
+              0.12799911201000214,
+              0.3200005739927292,
+              -1.3120006769895554,
+              -0.4479996860027313,
+              -0.38399919867515564,
+              -0.4479996860027313,
+              -0.512000173330307,
+              -0.7680002599954605,
+              -0.35200081765651703,
+              1.2480001896619797,
+              -0.03200024366378784,
+              -0.06400048732757568,
+              -0.4159994423389435,
+              0.0,
+              0.38400106132030487
+            ],
+            "median_control_minus_offset_us": -0.22400077432394028,
+            "median_control_over_offset": 0.9900304297081053,
+            "offset_wins": 4,
+            "offset_losses": 11,
+            "ties": 1,
+            "control_first": 8,
+            "offset_first": 8
+          },
+          "F1": {
+            "control_before_minus_offset_us": 0.1600012183189392,
+            "control_after_minus_offset_us": 0.0,
+            "endpoint_average_control_minus_offset_us": 0.0800006091594696
+          },
+          "geometry": [
+            32,
+            6,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 4
+        },
+        "unpooler": {
+          "paired": {
+            "complete_pairs": 16,
+            "signed_deltas_us": [
+              1.024000346660614,
+              0.864000990986824,
+              -1.0239984840154648,
+              0.0,
+              -0.0959988683462143,
+              0.5440004169940948,
+              0.31999871134757996,
+              1.0880008339881897,
+              -0.3200005739927292,
+              -0.3519989550113678,
+              -0.6399992853403091,
+              0.06400048732757568,
+              0.38399919867515564,
+              0.9279996156692505,
+              -1.536000519990921,
+              0.03200024366378784
+            ],
+            "median_control_minus_offset_us": 0.04800036549568176,
+            "median_control_over_offset": 1.002143012632727,
+            "offset_wins": 9,
+            "offset_losses": 6,
+            "ties": 1,
+            "control_first": 8,
+            "offset_first": 8
+          },
+          "F1": {
+            "control_before_minus_offset_us": 0.06400048732757568,
+            "control_after_minus_offset_us": 0.09600073099136353,
+            "endpoint_average_control_minus_offset_us": 0.0800006091594696
+          },
+          "geometry": [
+            32,
+            6,
+            1,
+            0,
+            0,
+            0,
+            35
+          ],
+          "KS": 2
+        }
+      },
+      "evidence": {
+        "path": "proj_rsi/candidates/rq_descriptor_offset_trial_v1/actual-analysis/analysis.json",
+        "sha256": "8620b6a0583217342c68c10ed38a65fdbe7dbd00d70f40b6bbd0f08eb0b99877"
+      },
+      "limits": "Unpooler+.048/F1+.080;pooler-.224/F1+.080, fixedscoredselectedgeometryonly;unscopednegativeversionpreserved."
+    },
+    {
+      "problem": "muse_bf16_proj",
+      "job_id": "research.gv.unpool16.deltakey.01",
+      "disposition": "DONE_VALID_REGRESSION_PRIMARY_PAIRED",
+      "timing": {
+        "sign": "control_minus_deltakey_us,positivefavorsnew",
+        "paired_delta_us": -0.07999967783689499,
+        "paired_control_over_new_ratio": 0.9965819022059985,
+        "win_tie_loss": [
+          7,
+          2,
+          15
+        ],
+        "delta_range_us": [
+          -1.4079995453357697,
+          1.5999991446733475
+        ],
+        "F1_medians_us": {
+          "control_before": 22.207999601960182,
+          "deltakey": 22.175999358296394,
+          "control_after": 22.336000576615334
+        },
+        "F1_before_minus_new_us": 0.03200024366378784,
+        "F1_after_minus_new_us": 0.1600012183189392,
+        "F1_endpoint_average_minus_new_us": 0.09600073099136353
+      },
+      "actual_resources": {
+        "control": {
+          "registers": 110,
+          "local": 0,
+          "user_static": 0,
+          "max_dynamic": 5120,
+          "max_threads": 128,
+          "occupancy": 4,
+          "device_reserved": 1024,
+          "arm_echo": 0
+        },
+        "deltakey": {
+          "registers": 108,
+          "local": 0,
+          "user_static": 0,
+          "max_dynamic": 5120,
+          "max_threads": 128,
+          "occupancy": 4,
+          "device_reserved": 1024,
+          "arm_echo": 1
+        }
+      },
+      "evidence": {
+        "path": "proj_rsi/audits/gv-unpool16-deltakey-result/analysis.json",
+        "sha256": "14814ad1618a1947d93a7cce2dce2af9a1e1a23e371bf94bbce25c8fa4c18234"
+      },
+      "limits": "Paired-.080 (7W2T15L),F1+.096;110\u2192108regs,occupancy4both,notameasuredgainstack."
+    }
+  ],
+  "historical_keyed_half_conditional_priors": {
+    "author_roi": {
+      "path": "proj_rsi/candidates/gv53_keyed_half_v1/roi.json",
+      "sha256": "6a98196507cff94f2d028a57b6aade40b8b23ec511892b29a0e494fb5a27b8a8"
+    },
+    "subjective_queue_priors": {
+      "p_gain": 0.15,
+      "p_valid": 0.9,
+      "not_measured_probabilities": true
+    },
+    "budget": {
+      "GPU_inner_seconds": 120,
+      "GPU_outer_seconds": 180,
+      "GPU_seconds_charged": 180,
+      "CPU_minutes_planning": 10,
+      "followup_GPU_seconds": 0
+    },
+    "numeric_expected_ROI": {
+      "kind": "subjective_prior_weighted_conditional_scenario_not_measured_or_forecast",
+      "scenario_score_us": 2.9161139478576454,
+      "prior_weighted_conditional_value_us": 0.39367538296078214,
+      "GPU_cost_USD_at_5_per_hour": 0.25,
+      "conditional_value_us_per_GPU_USD": 1.5747015318431286,
+      "scope": "Scheduling decision input only; actual speedup remains unknown"
+    }
   }
 }

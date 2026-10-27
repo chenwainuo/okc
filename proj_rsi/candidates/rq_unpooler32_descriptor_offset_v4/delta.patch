@@ -1,0 +1,70 @@
+--- inc501d
++++ rq_unpooler32_descriptor_offset_v4
+@@ -4472,6 +4472,7 @@
+     ("h128s8z", 128, 8, 1, 0, 0, 0, 18),
+     ("s4s5zEH", 128, 5, 1, 0, 0, 0, 65538),
+     ("s4s5hzEH", 128, 5, 1, 0, 0, 0, 65539),
++    ("t32s6hze_offset_unpool", 32, 6, 1, 0, 0, 0, 131107),
+ ]
+ RQI = {v[0]: i for i, v in enumerate(RQV)}
+ RQTOL = {1: 4e-3, 2: 5e-3, 3: 6e-3, 4: 6e-3, 5: 7e-3, 6: 7e-3, 7: 8e-3, 8: 8e-3, 9: 8e-3}  # judge 1e-2 (rows 5x)
+@@ -4791,6 +4792,9 @@
+     }
+     RQ_T1(3);
+   };
++  // Descriptor-only cursor for exact inc501d scored RQ M16/M32 types.
++  constexpr bool MMA_DESC_CURSOR = NT == 32 && ST == 6 && GS == 1 && PRB == 0 && WM == 0 && INS == 0 && FL == 131107;
++  uint32_t mma_offset = 0;
+   auto mma = [&](int G, auto NSC, uint32_t (&A)[GS][16]) {  // NSC: compile-time stage count of this round
+     constexpr int NS = decltype(NSC)::value;
+     rq_facc<ND>(D);
+@@ -4798,13 +4802,14 @@
+ #pragma unroll
+     for (int j = 0; j < NS; j++) {
+       const int s = GS * G + j;
+-      const uint64_t d = xd0 + (uint64_t)(((RES ? 0 : s % ST) * XB) >> 4);
++      const uint64_t d = xd0 + (MMA_DESC_CURSOR ? uint64_t(mma_offset) : uint64_t(((RES ? 0 : s % ST) * XB) >> 4));
+ #pragma unroll
+       for (int q = 0; q < 4; q++) rq_wgmma<NT>(D, A[j] + 4 * q, d + 2 * q, (s | q) != 0);
+     }
+     asm volatile("wgmma.commit_group.sync.aligned;\n" ::: "memory");
+     rq_facc<ND>(D);
+     if (INS && G == 0) gtw0 = rq_gt();
++    if (MMA_DESC_CURSOR) { mma_offset += XB >> 4; if (mma_offset == ST * (XB >> 4)) mma_offset = 0; }
+     RQ_T1(5);
+   };
+   auto fa = [&](uint32_t (&A)[GS][16]) {
+@@ -5066,6 +5071,10 @@
+     return info == 1 ? a.numRegs : info == 2 ? (int)a.localSizeBytes : C::SMEM;
+   }
+   if (p.m < 1 || p.m > NT || KS < 1 || p.KC / KS < GS || KS > 64) return -4;
++  if constexpr (FL == 131107) {
++    static_assert(NT == 32 && ST == 6 && GS == 1 && PRB == 0 && WM == 0 && INS == 0, "unpooler-only descriptor variant");
++    if (p.m != 32 || p.N != 8192 || p.K != 4096 || p.KC != 64 || KS != 2 || p.walias != 0) return -46;
++  }
+   if constexpr (NT == 32 && (ST == 4 || ST == 5) && FL == 52) {
+     if (p.m != 32 || p.N != 8192 || p.K != 1024 || p.KC != 16 || KS != 1 || p.walias != 0) return -45;
+   }
+@@ -5384,10 +5393,10 @@
+     ("o", 128): [("h128s8e", 1), ("h128s5", 1)],
+     ("pooler", 32): [("t32s5hze", 4), ("t32s6hze", 4), ("t32s5hz", 4)],
+     ("pooler", 16): [("t16s5hze", 4), ("t16s6hze", 4), ("t16s5hz", 4)],
+-    ("unpooler", 32): [("t32s5hze", 2), ("t32s6hze", 2), ("t32s6hz", 2)],
++    ("unpooler", 32): [("t32s5hze", 2), ("t32s6hze", 2), ("t32s6hz", 2), ("t32s6hze_offset_unpool", 2)],
+     ("unpooler", 16): [("t16s5hze", 2), ("t16s6hze", 2), ("t16s5hz", 2)],
+ }
+-RQPROD2 = list(dict.fromkeys(nm for ps in RQSBAKE.values() for nm, _ in ps))
++RQPROD2 = list(dict.fromkeys(nm for ps in RQSBAKE.values() for nm, _ in ps if nm != "t32s6hze_offset_unpool")) + ["t32s6hze_offset_unpool"]
+ _rqthr2 = []
+ 
+ 
+@@ -5473,7 +5482,8 @@
+             best = (iname, None, min(ia, ib))
+             print("BAKE %s m=%d %s %.2f (before variants %.2f, after variants %.2f) at %.0fs" % (layer, m, iname, best[2], ia, ib, time.time() - _T0), flush=True)
+             for us, tag, p in sorted(cands, key=lambda c: c[0]):
+-                if us < best[2] * MARGIN:
++                margin = 1.0 if layer == "unpooler" and m == 32 and tag == "t32s6hze_offset_unpool-k2" else MARGIN
++                if us < best[2] * margin:
+                     best = ("rq:" + tag, p, us)
+                 break
+             if best[1] is not None:

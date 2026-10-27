@@ -1,0 +1,21 @@
+/home/ubuntu/.local/lib/python3.10/site-packages/torch/include/torch/headeronly/util/BFloat16.h(110): warning #20013-D: calling a constexpr __host__ function("bit_cast") from a __host__ __device__ function("round_to_nearest_even") is not allowed. The experimental flag '--expt-relaxed-constexpr' can be used to allow this.
+      const uint32_t U32 = c10::bit_cast<uint32_t>(src);
+                           ^
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+/home/ubuntu/.local/lib/python3.10/site-packages/torch/include/torch/headeronly/util/BFloat16.h(110): warning #20015-D: calling a constexpr __host__ function from a __host__ __device__ function is not allowed. The experimental flag '--expt-relaxed-constexpr' can be used to allow this.
+      const uint32_t U32 = c10::bit_cast<uint32_t>(src);
+                                                  ^
+
+ptxas info    : 11 bytes gmem
+ptxas info    : Compiling entry function '_Z20gv_unpool16_deltakeyILi1ELi2ELi2ELi1ELi4ELi16ELi1ELi1ELi2ELi1EEv1G' for 'sm_90a'
+ptxas info    : Function properties for _Z20gv_unpool16_deltakeyILi1ELi2ELi2ELi1ELi4ELi16ELi1ELi1ELi2ELi1EEv1G
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 108 registers, used 1 barriers
+ptxas info    : Compile time = 79.210 ms
+ptxas info    : Compiling entry function '_Z10gv_predxorILi1ELi2ELi2ELi1ELi4ELi16ELi1ELi1ELi2ELi1EEv1G' for 'sm_90a'
+ptxas info    : Function properties for _Z10gv_predxorILi1ELi2ELi2ELi1ELi4ELi16ELi1ELi1ELi2ELi1EEv1G
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 110 registers, used 1 barriers
+ptxas info    : Compile time = 86.227 ms

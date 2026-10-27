@@ -1,0 +1,34 @@
+[
+  [
+    "  auto mma = [&](int G, auto NSC, uint32_t (&A)[GS][16]) {  // NSC: compile-time stage count of this round",
+    "  // Descriptor-only cursor for exact inc501d scored RQ M16/M32 types.\n  constexpr bool MMA_DESC_CURSOR = NT == 32 && ST == 6 && GS == 1 && PRB == 0 && WM == 0 && INS == 0 && FL == 131107;\n  uint32_t mma_offset = 0;\n  auto mma = [&](int G, auto NSC, uint32_t (&A)[GS][16]) {  // NSC: compile-time stage count of this round"
+  ],
+  [
+    "      const uint64_t d = xd0 + (uint64_t)(((RES ? 0 : s % ST) * XB) >> 4);",
+    "      const uint64_t d = xd0 + (MMA_DESC_CURSOR ? uint64_t(mma_offset) : uint64_t(((RES ? 0 : s % ST) * XB) >> 4));"
+  ],
+  [
+    "    if (INS && G == 0) gtw0 = rq_gt();\n    RQ_T1(5);",
+    "    if (INS && G == 0) gtw0 = rq_gt();\n    if (MMA_DESC_CURSOR) { mma_offset += XB >> 4; if (mma_offset == ST * (XB >> 4)) mma_offset = 0; }\n    RQ_T1(5);"
+  ],
+  [
+    "    (\"s4s5hzEH\", 128, 5, 1, 0, 0, 0, 65539),\n]",
+    "    (\"s4s5hzEH\", 128, 5, 1, 0, 0, 0, 65539),\n    (\"t32s6hze_offset_unpool\", 32, 6, 1, 0, 0, 0, 131107),\n]"
+  ],
+  [
+    "    (\"unpooler\", 32): [(\"t32s5hze\", 2), (\"t32s6hze\", 2), (\"t32s6hz\", 2)],",
+    "    (\"unpooler\", 32): [(\"t32s5hze\", 2), (\"t32s6hze\", 2), (\"t32s6hz\", 2), (\"t32s6hze_offset_unpool\", 2)],"
+  ],
+  [
+    "RQPROD2 = list(dict.fromkeys(nm for ps in RQSBAKE.values() for nm, _ in ps))",
+    "RQPROD2 = list(dict.fromkeys(nm for ps in RQSBAKE.values() for nm, _ in ps if nm != \"t32s6hze_offset_unpool\")) + [\"t32s6hze_offset_unpool\"]"
+  ],
+  [
+    "  if (p.m < 1 || p.m > NT || KS < 1 || p.KC / KS < GS || KS > 64) return -4;",
+    "  if (p.m < 1 || p.m > NT || KS < 1 || p.KC / KS < GS || KS > 64) return -4;\n  if constexpr (FL == 131107) {\n    static_assert(NT == 32 && ST == 6 && GS == 1 && PRB == 0 && WM == 0 && INS == 0, \"unpooler-only descriptor variant\");\n    if (p.m != 32 || p.N != 8192 || p.K != 4096 || p.KC != 64 || KS != 2 || p.walias != 0) return -46;\n  }"
+  ],
+  [
+    "            for us, tag, p in sorted(cands, key=lambda c: c[0]):\n                if us < best[2] * MARGIN:\n                    best = (\"rq:\" + tag, p, us)\n                break",
+    "            for us, tag, p in sorted(cands, key=lambda c: c[0]):\n                margin = 1.0 if layer == \"unpooler\" and m == 32 and tag == \"t32s6hze_offset_unpool-k2\" else MARGIN\n                if us < best[2] * margin:\n                    best = (\"rq:\" + tag, p, us)\n                break"
+  ]
+]

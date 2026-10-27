@@ -1,0 +1,1257 @@
+{
+  "state": "O32_TRANSFER_ARITHMETIC_AND_PROFILE_SUPPLEMENT_NO_CAUSAL_GAIN",
+  "jobs": {
+    "incumbent": {
+      "job": "9916d34357b745cf",
+      "summary": {
+        "error": null,
+        "passed": true,
+        "score_us": 3157.0384036526784,
+        "speedup": 1.5301682723944021,
+        "speedup_ci": [
+          1.507215748308486,
+          1.553120796480318
+        ],
+        "status": "ok",
+        "tests": 9,
+        "tests_passed": 9
+      },
+      "source": {
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76"
+      },
+      "six_load_sums_us": {
+        "median_ns": {
+          "decode 1": 35.37513656172694,
+          "decode 16": 49.232351680393236,
+          "decode 32": 52.13358892586106,
+          "verify 1": 36.89827029573084,
+          "verify 16": 64.72269093974806,
+          "verify 32": 83.16935461193948
+        },
+        "median_raw_ns": {
+          "decode 1": 55.39200035855174,
+          "decode 16": 68.67199949920177,
+          "decode 32": 72.31999933719635,
+          "verify 1": 56.41600023955107,
+          "verify 16": 84.7199996933341,
+          "verify 32": 103.58399897813797
+        },
+        "baseline_ns": {
+          "decode 1": 60.160000808537006,
+          "decode 16": 76.6719994135201,
+          "decode 32": 76.8480016849935,
+          "verify 1": 75.88799903169274,
+          "verify 16": 85.90400172397494,
+          "verify 32": 100.17600143328309
+        },
+        "baseline_raw_ns": {
+          "decode 1": 80.28800040483475,
+          "decode 16": 96.15999925881624,
+          "decode 32": 96.94400057196617,
+          "verify 1": 95.40800005197525,
+          "verify 16": 105.90400081127882,
+          "verify 32": 120.72000093758106
+        }
+      },
+      "score_recomputed_us": 3157.0384036526784
+    },
+    "O32_CHECK": {
+      "job": "dc78c2473d204a92",
+      "summary": {
+        "error": null,
+        "passed": true,
+        "score_us": 3191.721918275971,
+        "speedup": 1.5135403784203694,
+        "speedup_ci": [
+          1.4908372727440637,
+          1.5362434840966748
+        ],
+        "status": "ok",
+        "tests": 9,
+        "tests_passed": 9
+      },
+      "source": {
+        "path": "results/proj-rsi/releases/gv-o32-positive-selection-v1-e0f1f712868f/profiles/submission.dc78c2473d204a92.json",
+        "sha256": "738b771716dbdf40f55b17f4d7ad6c88ee1fc8bc4426181262491bda08e16069"
+      },
+      "six_load_sums_us": {
+        "median_ns": {
+          "decode 1": 35.52790823483551,
+          "decode 16": 48.36038775778849,
+          "decode 32": 52.97137865998334,
+          "verify 1": 36.92266252634382,
+          "verify 16": 64.96262199614037,
+          "verify 32": 84.67327008533323
+        },
+        "median_raw_ns": {
+          "decode 1": 55.37599977105856,
+          "decode 16": 68.23999993503094,
+          "decode 32": 71.93600106984377,
+          "verify 1": 56.239998899400234,
+          "verify 16": 84.79999983683228,
+          "verify 32": 103.99999842047691
+        },
+        "baseline_ns": {
+          "decode 1": 58.76800091937184,
+          "decode 16": 74.91199765354395,
+          "decode 32": 76.83199970051646,
+          "verify 1": 74.57599835470319,
+          "verify 16": 86.25600021332502,
+          "verify 32": 102.12799906730652
+        },
+        "baseline_raw_ns": {
+          "decode 1": 78.60800065100193,
+          "decode 16": 94.91199906915426,
+          "decode 32": 95.84000054746866,
+          "verify 1": 93.96799840033054,
+          "verify 16": 106.12799972295761,
+          "verify 32": 121.39199953526258
+        }
+      },
+      "score_recomputed_us": 3191.721918275971
+    }
+  },
+  "all30_route_comparisons": [
+    {
+      "load": "decode 1",
+      "layer": "qkv_gate",
+      "m": 1,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 12.927999719977379,
+      "CHECK_raw_us": 13.088000006973743,
+      "raw_CHECK_minus_incumbent_us": 0.1600002869963646,
+      "incumbent_calibrated_us": 8.79496920496118,
+      "CHECK_calibrated_us": 9.300902192408884,
+      "calibrated_CHECK_minus_incumbent_us": 0.5059329874477043,
+      "incumbent_reference_us": 14.431999996304512,
+      "CHECK_reference_us": 14.015999622642994,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.3 \u00b5s 100.0%      1\ntotal                                                              9.3 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.5 \u00b5s 100.0%      1\ntotal                                                              9.5 \u00b5s"
+    },
+    {
+      "load": "decode 1",
+      "layer": "o",
+      "m": 1,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 9.151999838650227,
+      "CHECK_raw_us": 9.135999716818333,
+      "raw_CHECK_minus_incumbent_us": -0.01600012183189392,
+      "incumbent_calibrated_us": 5.135565320514631,
+      "CHECK_calibrated_us": 5.112231483690789,
+      "calibrated_CHECK_minus_incumbent_us": -0.02333383682384283,
+      "incumbent_reference_us": 6.752000190317631,
+      "CHECK_reference_us": 6.8160006776452065,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.0 \u00b5s 100.0%      1\ntotal                                                              4.0 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           3.9 \u00b5s 100.0%      1\ntotal                                                              3.9 \u00b5s"
+    },
+    {
+      "load": "decode 1",
+      "layer": "pooler",
+      "m": 1,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 17.632000148296356,
+      "CHECK_raw_us": 17.56799966096878,
+      "raw_CHECK_minus_incumbent_us": -0.06400048732757568,
+      "incumbent_calibrated_us": 13.714963545591969,
+      "CHECK_calibrated_us": 13.51440222809304,
+      "calibrated_CHECK_minus_incumbent_us": -0.20056131749892847,
+      "incumbent_reference_us": 21.56800078228116,
+      "CHECK_reference_us": 20.623999647796154,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 15.0 \u00b5s 100.0%      1\ntotal                                                             15.0 \u00b5s"
+    },
+    {
+      "load": "decode 1",
+      "layer": "unpooler",
+      "m": 1,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 8.128000423312187,
+      "CHECK_raw_us": 8.00000037997961,
+      "raw_CHECK_minus_incumbent_us": -0.12800004333257675,
+      "incumbent_calibrated_us": 4.137310038096525,
+      "CHECK_calibrated_us": 4.050395440538429,
+      "calibrated_CHECK_minus_incumbent_us": -0.08691459755809683,
+      "incumbent_reference_us": 6.976000033318996,
+      "CHECK_reference_us": 7.008000742644072,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)                   3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.0 \u00b5s 100.0%      1\ntotal                                                              3.0 \u00b5s"
+    },
+    {
+      "load": "decode 1",
+      "layer": "router",
+      "m": 1,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+      ],
+      "CHECK_kernel_sequence": [
+        "void rr<1, 2, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 7.552000228315592,
+      "CHECK_raw_us": 7.584000006318092,
+      "raw_CHECK_minus_incumbent_us": 0.031999778002500534,
+      "incumbent_calibrated_us": 3.5923284525626302,
+      "CHECK_calibrated_us": 3.5499768901043653,
+      "calibrated_CHECK_minus_incumbent_us": -0.04235156245826511,
+      "incumbent_reference_us": 10.431999806314707,
+      "CHECK_reference_us": 10.304000228643417,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.7 \u00b5s 100.0%      1\ntotal                                                              2.7 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rr<1, 2, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.5 \u00b5s 100.0%      1\ntotal                                                              2.5 \u00b5s"
+    },
+    {
+      "load": "decode 16",
+      "layer": "qkv_gate",
+      "m": 16,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 13.952000066637993,
+      "CHECK_raw_us": 13.807999901473522,
+      "raw_CHECK_minus_incumbent_us": -0.14400016516447067,
+      "incumbent_calibrated_us": 10.133088999632148,
+      "CHECK_calibrated_us": 10.090041813212798,
+      "calibrated_CHECK_minus_incumbent_us": -0.043047186419351416,
+      "incumbent_reference_us": 14.431999530643225,
+      "CHECK_reference_us": 14.063999522477388,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.0 \u00b5s 100.0%      1\ntotal                                                             10.0 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.8 \u00b5s 100.0%      1\ntotal                                                              9.8 \u00b5s"
+    },
+    {
+      "load": "decode 16",
+      "layer": "o",
+      "m": 16,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 9.40799992531538,
+      "CHECK_raw_us": 9.503999724984169,
+      "raw_CHECK_minus_incumbent_us": 0.09599979966878891,
+      "incumbent_calibrated_us": 5.595060884214828,
+      "CHECK_calibrated_us": 5.597620538897934,
+      "calibrated_CHECK_minus_incumbent_us": 0.0025596546831066005,
+      "incumbent_reference_us": 7.0399995893239975,
+      "CHECK_reference_us": 6.943999789655209,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.9 \u00b5s 100.0%      1\ntotal                                                              4.9 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           5.1 \u00b5s 100.0%      1\ntotal                                                              5.1 \u00b5s"
+    },
+    {
+      "load": "decode 16",
+      "layer": "pooler",
+      "m": 16,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 18.0479995906353,
+      "CHECK_raw_us": 17.823999747633934,
+      "raw_CHECK_minus_incumbent_us": -0.22399984300136566,
+      "incumbent_calibrated_us": 14.265113585000279,
+      "CHECK_calibrated_us": 13.55370095882808,
+      "calibrated_CHECK_minus_incumbent_us": -0.7114126261721995,
+      "incumbent_reference_us": 21.69600035995245,
+      "CHECK_reference_us": 20.655999425798655,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                 14.2 \u00b5s 100.0%      1\ntotal                                                             14.2 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                 13.9 \u00b5s 100.0%      1\ntotal                                                             13.9 \u00b5s"
+    },
+    {
+      "load": "decode 16",
+      "layer": "unpooler",
+      "m": 16,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 18.52799952030182,
+      "CHECK_raw_us": 18.464000895619392,
+      "raw_CHECK_minus_incumbent_us": -0.06399862468242645,
+      "incumbent_calibrated_us": 14.34517450571615,
+      "CHECK_calibrated_us": 14.218366078240283,
+      "calibrated_CHECK_minus_incumbent_us": -0.12680842747586576,
+      "incumbent_reference_us": 18.368000630289316,
+      "CHECK_reference_us": 18.30400014296174,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                 14.2 \u00b5s 100.0%      1\ntotal                                                             14.2 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                 14.6 \u00b5s 100.0%      1\ntotal                                                             14.6 \u00b5s"
+    },
+    {
+      "load": "decode 16",
+      "layer": "router",
+      "m": 16,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 8.736000396311283,
+      "CHECK_raw_us": 8.63999966531992,
+      "raw_CHECK_minus_incumbent_us": -0.09600073099136353,
+      "incumbent_calibrated_us": 4.8939137058298305,
+      "CHECK_calibrated_us": 4.900658368609402,
+      "calibrated_CHECK_minus_incumbent_us": 0.006744662779571627,
+      "incumbent_reference_us": 15.13599930331111,
+      "CHECK_reference_us": 14.943998772650957,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  3.9 \u00b5s 100.0%      1\ntotal                                                              3.9 \u00b5s"
+    },
+    {
+      "load": "decode 32",
+      "layer": "qkv_gate",
+      "m": 32,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 14.22400027513504,
+      "CHECK_raw_us": 14.112000353634357,
+      "raw_CHECK_minus_incumbent_us": -0.11199992150068283,
+      "incumbent_calibrated_us": 9.556633372314327,
+      "CHECK_calibrated_us": 10.43195753656601,
+      "calibrated_CHECK_minus_incumbent_us": 0.8753241642516824,
+      "incumbent_reference_us": 13.95200053229928,
+      "CHECK_reference_us": 14.319999609142542,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.8 \u00b5s 100.0%      1\ntotal                                                              9.8 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.1 \u00b5s 100.0%      1\ntotal                                                             10.1 \u00b5s"
+    },
+    {
+      "load": "decode 32",
+      "layer": "o",
+      "m": 32,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 10.495999827980995,
+      "CHECK_raw_us": 10.400000028312206,
+      "raw_CHECK_minus_incumbent_us": -0.09599979966878891,
+      "incumbent_calibrated_us": 6.765882458653126,
+      "CHECK_calibrated_us": 6.638172054878721,
+      "calibrated_CHECK_minus_incumbent_us": -0.12771040377440476,
+      "incumbent_reference_us": 7.104000076651573,
+      "CHECK_reference_us": 7.11999973282218,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)                5.1 \u00b5s 100.0%      1\ntotal                                                              5.1 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                5.6 \u00b5s 100.0%      1\ntotal                                                              5.6 \u00b5s"
+    },
+    {
+      "load": "decode 32",
+      "layer": "pooler",
+      "m": 32,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 19.53599974513054,
+      "CHECK_raw_us": 19.37600038945675,
+      "raw_CHECK_minus_incumbent_us": -0.15999935567378998,
+      "incumbent_calibrated_us": 15.522677468167032,
+      "CHECK_calibrated_us": 15.525487994931543,
+      "calibrated_CHECK_minus_incumbent_us": 0.002810526764511451,
+      "incumbent_reference_us": 21.760000847280025,
+      "CHECK_reference_us": 21.311999764293432,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.5 \u00b5s 100.0%      1\ntotal                                                             15.5 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s"
+    },
+    {
+      "load": "decode 32",
+      "layer": "unpooler",
+      "m": 32,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 19.007999449968338,
+      "CHECK_raw_us": 19.088000059127808,
+      "raw_CHECK_minus_incumbent_us": 0.0800006091594696,
+      "incumbent_calibrated_us": 15.059097119932208,
+      "CHECK_calibrated_us": 15.191700265796845,
+      "calibrated_CHECK_minus_incumbent_us": 0.13260314586463573,
+      "incumbent_reference_us": 18.735999707132578,
+      "CHECK_reference_us": 18.752000760287046,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s"
+    },
+    {
+      "load": "decode 32",
+      "layer": "router",
+      "m": 32,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<2, 4, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 9.056000038981438,
+      "CHECK_raw_us": 8.960000239312649,
+      "raw_CHECK_minus_incumbent_us": -0.09599979966878891,
+      "incumbent_calibrated_us": 5.229298506794368,
+      "CHECK_calibrated_us": 5.18406080781021,
+      "calibrated_CHECK_minus_incumbent_us": -0.04523769898415776,
+      "incumbent_reference_us": 15.296000521630049,
+      "CHECK_reference_us": 15.327999833971262,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.3 \u00b5s 100.0%      1\ntotal                                                              4.3 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 4, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.1 \u00b5s 100.0%      1\ntotal                                                              4.1 \u00b5s"
+    },
+    {
+      "load": "verify 1",
+      "layer": "qkv_gate",
+      "m": 8,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 13.07199988514185,
+      "CHECK_raw_us": 13.120000250637531,
+      "raw_CHECK_minus_incumbent_us": 0.04800036549568176,
+      "incumbent_calibrated_us": 9.159501030123945,
+      "CHECK_calibrated_us": 9.295827860885321,
+      "calibrated_CHECK_minus_incumbent_us": 0.1363268307613762,
+      "incumbent_reference_us": 14.671999961137772,
+      "CHECK_reference_us": 13.951999135315418,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.1 \u00b5s 100.0%      1\ntotal                                                              9.1 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          8.8 \u00b5s 100.0%      1\ntotal                                                              8.8 \u00b5s"
+    },
+    {
+      "load": "verify 1",
+      "layer": "o",
+      "m": 8,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 9.216000325977802,
+      "CHECK_raw_us": 9.16799996048212,
+      "raw_CHECK_minus_incumbent_us": -0.04800036549568176,
+      "incumbent_calibrated_us": 5.3366173527983936,
+      "CHECK_calibrated_us": 5.3309859435380025,
+      "calibrated_CHECK_minus_incumbent_us": -0.005631409260391592,
+      "incumbent_reference_us": 6.752000190317631,
+      "CHECK_reference_us": 6.84799998998642,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           3.8 \u00b5s 100.0%      1\ntotal                                                              3.8 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           4.0 \u00b5s 100.0%      1\ntotal                                                              4.0 \u00b5s"
+    },
+    {
+      "load": "verify 1",
+      "layer": "pooler",
+      "m": 8,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 17.59999990463257,
+      "CHECK_raw_us": 17.503999173641205,
+      "raw_CHECK_minus_incumbent_us": -0.09600073099136353,
+      "incumbent_calibrated_us": 13.536974268757183,
+      "CHECK_calibrated_us": 13.68889056919022,
+      "calibrated_CHECK_minus_incumbent_us": 0.15191630043303667,
+      "incumbent_reference_us": 21.16800006479025,
+      "CHECK_reference_us": 20.752000156790018,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.8 \u00b5s 100.0%      1\ntotal                                                             13.8 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 14.3 \u00b5s 100.0%      1\ntotal                                                             14.3 \u00b5s"
+    },
+    {
+      "load": "verify 1",
+      "layer": "unpooler",
+      "m": 8,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 8.208000101149082,
+      "CHECK_raw_us": 8.031999692320824,
+      "raw_CHECK_minus_incumbent_us": -0.17600040882825851,
+      "incumbent_calibrated_us": 4.399116231812419,
+      "CHECK_calibrated_us": 4.096357704931383,
+      "calibrated_CHECK_minus_incumbent_us": -0.3027585268810362,
+      "incumbent_reference_us": 7.11999973282218,
+      "CHECK_reference_us": 6.976000033318996,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)                   3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s"
+    },
+    {
+      "load": "verify 1",
+      "layer": "router",
+      "m": 8,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 8.320000022649765,
+      "CHECK_raw_us": 8.415999822318554,
+      "raw_CHECK_minus_incumbent_us": 0.09599979966878891,
+      "incumbent_calibrated_us": 4.466061412238903,
+      "CHECK_calibrated_us": 4.510600447798896,
+      "calibrated_CHECK_minus_incumbent_us": 0.04453903555999295,
+      "incumbent_reference_us": 26.175999082624912,
+      "CHECK_reference_us": 26.047999039292336,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.5 \u00b5s 100.0%      1\ntotal                                                              3.5 \u00b5s"
+    },
+    {
+      "load": "verify 16",
+      "layer": "qkv_gate",
+      "m": 128,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 16.815999522805214,
+      "CHECK_raw_us": 16.704000532627106,
+      "raw_CHECK_minus_incumbent_us": -0.11199899017810822,
+      "incumbent_calibrated_us": 13.095674200334908,
+      "CHECK_calibrated_us": 12.967894803420805,
+      "calibrated_CHECK_minus_incumbent_us": -0.12777939691410392,
+      "incumbent_reference_us": 17.08799973130226,
+      "CHECK_reference_us": 17.088000662624836,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               12.3 \u00b5s 100.0%      1\ntotal                                                             12.3 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           12.4 \u00b5s 100.0%      1\ntotal                                                             12.4 \u00b5s"
+    },
+    {
+      "load": "verify 16",
+      "layer": "o",
+      "m": 128,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN"
+      ],
+      "CHECK_kernel_sequence": [
+        "nvjet_sm90_tst_64x128_64x8_1x1_v_bz_NNN"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 11.119999922811985,
+      "CHECK_raw_us": 11.183999944478273,
+      "raw_CHECK_minus_incumbent_us": 0.06400002166628838,
+      "incumbent_calibrated_us": 7.358760995765836,
+      "CHECK_calibrated_us": 7.131674564449424,
+      "calibrated_CHECK_minus_incumbent_us": -0.227086431316412,
+      "incumbent_reference_us": 7.7760000713169575,
+      "CHECK_reference_us": 7.423999719321728,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN                            5.5 \u00b5s 100.0%      1\ntotal                                                              5.5 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_64x128_64x8_1x1_v_bz_NNN                            5.7 \u00b5s 100.0%      1\ntotal                                                              5.7 \u00b5s"
+    },
+    {
+      "load": "verify 16",
+      "layer": "pooler",
+      "m": 128,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 22.6879995316267,
+      "CHECK_raw_us": 22.6879995316267,
+      "raw_CHECK_minus_incumbent_us": 0.0,
+      "incumbent_calibrated_us": 17.97685415312117,
+      "CHECK_calibrated_us": 18.538987439472336,
+      "calibrated_CHECK_minus_incumbent_us": 0.562133286351167,
+      "incumbent_reference_us": 24.560000747442245,
+      "CHECK_reference_us": 25.42399987578392,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               18.7 \u00b5s 100.0%      1\ntotal                                                             18.7 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           18.5 \u00b5s 100.0%      1\ntotal                                                             18.5 \u00b5s"
+    },
+    {
+      "load": "verify 16",
+      "layer": "unpooler",
+      "m": 128,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT"
+      ],
+      "CHECK_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x2_v_bz_NNN"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 22.60800078511238,
+      "CHECK_raw_us": 22.752000018954277,
+      "raw_CHECK_minus_incumbent_us": 0.14399923384189606,
+      "incumbent_calibrated_us": 18.543867084653822,
+      "CHECK_calibrated_us": 18.83198489782415,
+      "calibrated_CHECK_minus_incumbent_us": 0.2881178131703273,
+      "incumbent_reference_us": 19.920000806450844,
+      "CHECK_reference_us": 20.031999796628952,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT                     19.6 \u00b5s 100.0%      1\ntotal                                                             19.6 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_v_bz_NNN                           18.4 \u00b5s 100.0%      1\ntotal                                                             18.4 \u00b5s"
+    },
+    {
+      "load": "verify 16",
+      "layer": "router",
+      "m": 128,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+      ],
+      "CHECK_kernel_sequence": [
+        "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 11.487999930977821,
+      "CHECK_raw_us": 11.471999809145927,
+      "raw_CHECK_minus_incumbent_us": -0.01600012183189392,
+      "incumbent_calibrated_us": 7.747534505872321,
+      "CHECK_calibrated_us": 7.492080290973652,
+      "calibrated_CHECK_minus_incumbent_us": -0.2554542148986684,
+      "incumbent_reference_us": 16.560000367462635,
+      "CHECK_reference_us": 16.288000158965588,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.2 \u00b5s 100.0%      1\ntotal                                                              6.2 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.1 \u00b5s 100.0%      1\ntotal                                                              6.1 \u00b5s"
+    },
+    {
+      "load": "verify 32",
+      "layer": "qkv_gate",
+      "m": 256,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN"
+      ],
+      "CHECK_kernel_sequence": [
+        "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 22.463999688625336,
+      "CHECK_raw_us": 22.1599992364645,
+      "raw_CHECK_minus_incumbent_us": -0.30400045216083527,
+      "incumbent_calibrated_us": 18.21574869548997,
+      "CHECK_calibrated_us": 18.28309743046599,
+      "calibrated_CHECK_minus_incumbent_us": 0.06734873497601802,
+      "incumbent_reference_us": 19.36000119894743,
+      "CHECK_reference_us": 20.192000083625317,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           19.5 \u00b5s 100.0%      1\ntotal                                                             19.5 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           18.7 \u00b5s 100.0%      1\ntotal                                                             18.7 \u00b5s"
+    },
+    {
+      "load": "verify 32",
+      "layer": "o",
+      "m": 256,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN"
+      ],
+      "CHECK_kernel_sequence": [
+        "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 12.896000407636166,
+      "CHECK_raw_us": 13.21600005030632,
+      "raw_CHECK_minus_incumbent_us": 0.31999964267015457,
+      "incumbent_calibrated_us": 8.71765978318988,
+      "CHECK_calibrated_us": 9.40933083740804,
+      "calibrated_CHECK_minus_incumbent_us": 0.6916710542181609,
+      "incumbent_reference_us": 9.279999881982803,
+      "CHECK_reference_us": 9.599999990314245,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN                     8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT                           8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s"
+    },
+    {
+      "load": "verify 32",
+      "layer": "pooler",
+      "m": 256,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+      ],
+      "CHECK_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 28.07999961078167,
+      "CHECK_raw_us": 28.36799994111061,
+      "raw_CHECK_minus_incumbent_us": 0.28800033032894135,
+      "incumbent_calibrated_us": 24.084211796200766,
+      "CHECK_calibrated_us": 24.639451049425137,
+      "calibrated_CHECK_minus_incumbent_us": 0.5552392532243721,
+      "incumbent_reference_us": 29.567998833954334,
+      "CHECK_reference_us": 30.20800044760108,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           24.5 \u00b5s 100.0%      1\ntotal                                                             24.5 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           25.6 \u00b5s 100.0%      1\ntotal                                                             25.6 \u00b5s"
+    },
+    {
+      "load": "verify 32",
+      "layer": "unpooler",
+      "m": 256,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "nvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN"
+      ],
+      "CHECK_kernel_sequence": [
+        "nvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 27.087999507784843,
+      "CHECK_raw_us": 27.103999629616737,
+      "raw_CHECK_minus_incumbent_us": 0.01600012183189392,
+      "incumbent_calibrated_us": 23.087707336283085,
+      "CHECK_calibrated_us": 23.06863262051094,
+      "calibrated_CHECK_minus_incumbent_us": -0.01907471577214528,
+      "incumbent_reference_us": 24.336000438779593,
+      "CHECK_reference_us": 24.575999472290277,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN                    23.6 \u00b5s 100.0%      1\ntotal                                                             23.6 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN                    23.8 \u00b5s 100.0%      1\ntotal                                                             23.8 \u00b5s"
+    },
+    {
+      "load": "verify 32",
+      "layer": "router",
+      "m": 256,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+      ],
+      "CHECK_kernel_sequence": [
+        "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 13.055999763309956,
+      "CHECK_raw_us": 13.151999562978745,
+      "raw_CHECK_minus_incumbent_us": 0.09599979966878891,
+      "incumbent_calibrated_us": 9.06402700077578,
+      "CHECK_calibrated_us": 9.272758147523115,
+      "calibrated_CHECK_minus_incumbent_us": 0.2087311467473337,
+      "incumbent_reference_us": 17.63200107961893,
+      "CHECK_reference_us": 17.5519990734756,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       8.0 \u00b5s 100.0%      1\ntotal                                                              8.0 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       8.0 \u00b5s 100.0%      1\ntotal                                                              8.0 \u00b5s"
+    }
+  ],
+  "reported_kernel_sequence_changes": 12,
+  "reported_same_kernel_sequences": 18,
+  "same_case_seed_all30": false,
+  "O32": {
+    "load": "decode 32",
+    "layer": "o",
+    "m": 32,
+    "same_case_seed": false,
+    "incumbent_kernel_sequence": [
+      "void rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)"
+    ],
+    "CHECK_kernel_sequence": [
+      "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+    ],
+    "reported_sequence_changed": true,
+    "incumbent_raw_us": 10.495999827980995,
+    "CHECK_raw_us": 10.400000028312206,
+    "raw_CHECK_minus_incumbent_us": -0.09599979966878891,
+    "incumbent_calibrated_us": 6.765882458653126,
+    "CHECK_calibrated_us": 6.638172054878721,
+    "calibrated_CHECK_minus_incumbent_us": -0.12771040377440476,
+    "incumbent_reference_us": 7.104000076651573,
+    "CHECK_reference_us": 7.11999973282218,
+    "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)                5.1 \u00b5s 100.0%      1\ntotal                                                              5.1 \u00b5s",
+    "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                5.6 \u00b5s 100.0%      1\ntotal                                                              5.6 \u00b5s"
+  },
+  "six_load_arithmetic": [
+    {
+      "load": "decode 1",
+      "incumbent_candidate_us": 35.37513656172694,
+      "CHECK_candidate_us": 35.52790823483551,
+      "candidate_delta_us": 0.15277167310856754,
+      "incumbent_reference_us": 60.160000808537006,
+      "CHECK_reference_us": 58.76800091937184,
+      "reference_delta_us": -1.391999889165163,
+      "exact_log_score_ratio_contribution": 0.004619917848550765
+    },
+    {
+      "load": "decode 16",
+      "incumbent_candidate_us": 49.232351680393236,
+      "CHECK_candidate_us": 48.36038775778849,
+      "candidate_delta_us": -0.8719639226047491,
+      "incumbent_reference_us": 76.6719994135201,
+      "CHECK_reference_us": 74.91199765354395,
+      "reference_delta_us": -1.7600017599761486,
+      "exact_log_score_ratio_contribution": 0.0008920995666755234
+    },
+    {
+      "load": "decode 32",
+      "incumbent_candidate_us": 52.13358892586106,
+      "CHECK_candidate_us": 52.97137865998334,
+      "candidate_delta_us": 0.8377897341222749,
+      "incumbent_reference_us": 76.8480016849935,
+      "CHECK_reference_us": 76.83199970051646,
+      "reference_delta_us": -0.016001984477043152,
+      "exact_log_score_ratio_contribution": 0.0026917585015681493
+    },
+    {
+      "load": "verify 1",
+      "incumbent_candidate_us": 36.89827029573084,
+      "CHECK_candidate_us": 36.92266252634382,
+      "candidate_delta_us": 0.02439223061298179,
+      "incumbent_reference_us": 75.88799903169274,
+      "CHECK_reference_us": 74.57599835470319,
+      "reference_delta_us": -1.3120006769895554,
+      "exact_log_score_ratio_contribution": 0.003016781241064441
+    },
+    {
+      "load": "verify 16",
+      "incumbent_candidate_us": 64.72269093974806,
+      "CHECK_candidate_us": 64.96262199614037,
+      "candidate_delta_us": 0.23993105639230805,
+      "incumbent_reference_us": 85.90400172397494,
+      "CHECK_reference_us": 86.25600021332502,
+      "reference_delta_us": 0.3519984893500805,
+      "exact_log_score_ratio_contribution": -6.48332031082378e-05
+    },
+    {
+      "load": "verify 32",
+      "incumbent_candidate_us": 83.16935461193948,
+      "CHECK_candidate_us": 84.67327008533323,
+      "candidate_delta_us": 1.5039154733937465,
+      "incumbent_reference_us": 100.17600143328309,
+      "CHECK_reference_us": 102.12799906730652,
+      "reference_delta_us": 1.951997634023428,
+      "exact_log_score_ratio_contribution": -0.00022954060199187448
+    }
+  ],
+  "normalized_score_decomposition": {
+    "candidate_vector_geometric_factor": 1.0041190902826516,
+    "reference_vector_geometric_factor": 1.0068388320373056,
+    "product_equals_actual_score_ratio": 1.0109860920865466,
+    "candidate_vector_only_fixed_old_reference_score_us": 3170.042529863122,
+    "caution": "Exact arithmetic on two independent official jobs, not a causal treatment estimate. Do not call fixed-reference counterfactual an official score."
+  },
+  "largest_calibrated_route_cost_increases": [
+    {
+      "load": "decode 32",
+      "layer": "qkv_gate",
+      "m": 32,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 14.22400027513504,
+      "CHECK_raw_us": 14.112000353634357,
+      "raw_CHECK_minus_incumbent_us": -0.11199992150068283,
+      "incumbent_calibrated_us": 9.556633372314327,
+      "CHECK_calibrated_us": 10.43195753656601,
+      "calibrated_CHECK_minus_incumbent_us": 0.8753241642516824,
+      "incumbent_reference_us": 13.95200053229928,
+      "CHECK_reference_us": 14.319999609142542,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.8 \u00b5s 100.0%      1\ntotal                                                              9.8 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.1 \u00b5s 100.0%      1\ntotal                                                             10.1 \u00b5s"
+    },
+    {
+      "load": "verify 32",
+      "layer": "o",
+      "m": 256,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN"
+      ],
+      "CHECK_kernel_sequence": [
+        "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 12.896000407636166,
+      "CHECK_raw_us": 13.21600005030632,
+      "raw_CHECK_minus_incumbent_us": 0.31999964267015457,
+      "incumbent_calibrated_us": 8.71765978318988,
+      "CHECK_calibrated_us": 9.40933083740804,
+      "calibrated_CHECK_minus_incumbent_us": 0.6916710542181609,
+      "incumbent_reference_us": 9.279999881982803,
+      "CHECK_reference_us": 9.599999990314245,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN                     8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT                           8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s"
+    },
+    {
+      "load": "verify 16",
+      "layer": "pooler",
+      "m": 128,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 22.6879995316267,
+      "CHECK_raw_us": 22.6879995316267,
+      "raw_CHECK_minus_incumbent_us": 0.0,
+      "incumbent_calibrated_us": 17.97685415312117,
+      "CHECK_calibrated_us": 18.538987439472336,
+      "calibrated_CHECK_minus_incumbent_us": 0.562133286351167,
+      "incumbent_reference_us": 24.560000747442245,
+      "CHECK_reference_us": 25.42399987578392,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               18.7 \u00b5s 100.0%      1\ntotal                                                             18.7 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           18.5 \u00b5s 100.0%      1\ntotal                                                             18.5 \u00b5s"
+    },
+    {
+      "load": "verify 32",
+      "layer": "pooler",
+      "m": 256,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+      ],
+      "CHECK_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 28.07999961078167,
+      "CHECK_raw_us": 28.36799994111061,
+      "raw_CHECK_minus_incumbent_us": 0.28800033032894135,
+      "incumbent_calibrated_us": 24.084211796200766,
+      "CHECK_calibrated_us": 24.639451049425137,
+      "calibrated_CHECK_minus_incumbent_us": 0.5552392532243721,
+      "incumbent_reference_us": 29.567998833954334,
+      "CHECK_reference_us": 30.20800044760108,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           24.5 \u00b5s 100.0%      1\ntotal                                                             24.5 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           25.6 \u00b5s 100.0%      1\ntotal                                                             25.6 \u00b5s"
+    },
+    {
+      "load": "decode 1",
+      "layer": "qkv_gate",
+      "m": 1,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 12.927999719977379,
+      "CHECK_raw_us": 13.088000006973743,
+      "raw_CHECK_minus_incumbent_us": 0.1600002869963646,
+      "incumbent_calibrated_us": 8.79496920496118,
+      "CHECK_calibrated_us": 9.300902192408884,
+      "calibrated_CHECK_minus_incumbent_us": 0.5059329874477043,
+      "incumbent_reference_us": 14.431999996304512,
+      "CHECK_reference_us": 14.015999622642994,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.3 \u00b5s 100.0%      1\ntotal                                                              9.3 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.5 \u00b5s 100.0%      1\ntotal                                                              9.5 \u00b5s"
+    },
+    {
+      "load": "verify 16",
+      "layer": "unpooler",
+      "m": 128,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT"
+      ],
+      "CHECK_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x2_v_bz_NNN"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 22.60800078511238,
+      "CHECK_raw_us": 22.752000018954277,
+      "raw_CHECK_minus_incumbent_us": 0.14399923384189606,
+      "incumbent_calibrated_us": 18.543867084653822,
+      "CHECK_calibrated_us": 18.83198489782415,
+      "calibrated_CHECK_minus_incumbent_us": 0.2881178131703273,
+      "incumbent_reference_us": 19.920000806450844,
+      "CHECK_reference_us": 20.031999796628952,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT                     19.6 \u00b5s 100.0%      1\ntotal                                                             19.6 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_v_bz_NNN                           18.4 \u00b5s 100.0%      1\ntotal                                                             18.4 \u00b5s"
+    }
+  ],
+  "largest_raw_route_cost_increases": [
+    {
+      "load": "verify 32",
+      "layer": "o",
+      "m": 256,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN"
+      ],
+      "CHECK_kernel_sequence": [
+        "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 12.896000407636166,
+      "CHECK_raw_us": 13.21600005030632,
+      "raw_CHECK_minus_incumbent_us": 0.31999964267015457,
+      "incumbent_calibrated_us": 8.71765978318988,
+      "CHECK_calibrated_us": 9.40933083740804,
+      "calibrated_CHECK_minus_incumbent_us": 0.6916710542181609,
+      "incumbent_reference_us": 9.279999881982803,
+      "CHECK_reference_us": 9.599999990314245,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN                     8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT                           8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s"
+    },
+    {
+      "load": "verify 32",
+      "layer": "pooler",
+      "m": 256,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+      ],
+      "CHECK_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 28.07999961078167,
+      "CHECK_raw_us": 28.36799994111061,
+      "raw_CHECK_minus_incumbent_us": 0.28800033032894135,
+      "incumbent_calibrated_us": 24.084211796200766,
+      "CHECK_calibrated_us": 24.639451049425137,
+      "calibrated_CHECK_minus_incumbent_us": 0.5552392532243721,
+      "incumbent_reference_us": 29.567998833954334,
+      "CHECK_reference_us": 30.20800044760108,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           24.5 \u00b5s 100.0%      1\ntotal                                                             24.5 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           25.6 \u00b5s 100.0%      1\ntotal                                                             25.6 \u00b5s"
+    },
+    {
+      "load": "decode 1",
+      "layer": "qkv_gate",
+      "m": 1,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 12.927999719977379,
+      "CHECK_raw_us": 13.088000006973743,
+      "raw_CHECK_minus_incumbent_us": 0.1600002869963646,
+      "incumbent_calibrated_us": 8.79496920496118,
+      "CHECK_calibrated_us": 9.300902192408884,
+      "calibrated_CHECK_minus_incumbent_us": 0.5059329874477043,
+      "incumbent_reference_us": 14.431999996304512,
+      "CHECK_reference_us": 14.015999622642994,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.3 \u00b5s 100.0%      1\ntotal                                                              9.3 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.5 \u00b5s 100.0%      1\ntotal                                                              9.5 \u00b5s"
+    },
+    {
+      "load": "verify 16",
+      "layer": "unpooler",
+      "m": 128,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT"
+      ],
+      "CHECK_kernel_sequence": [
+        "nvjet_sm90_tst_128x64_64x8_1x2_v_bz_NNN"
+      ],
+      "reported_sequence_changed": true,
+      "incumbent_raw_us": 22.60800078511238,
+      "CHECK_raw_us": 22.752000018954277,
+      "raw_CHECK_minus_incumbent_us": 0.14399923384189606,
+      "incumbent_calibrated_us": 18.543867084653822,
+      "CHECK_calibrated_us": 18.83198489782415,
+      "calibrated_CHECK_minus_incumbent_us": 0.2881178131703273,
+      "incumbent_reference_us": 19.920000806450844,
+      "CHECK_reference_us": 20.031999796628952,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT                     19.6 \u00b5s 100.0%      1\ntotal                                                             19.6 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_v_bz_NNN                           18.4 \u00b5s 100.0%      1\ntotal                                                             18.4 \u00b5s"
+    },
+    {
+      "load": "decode 16",
+      "layer": "o",
+      "m": 16,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 9.40799992531538,
+      "CHECK_raw_us": 9.503999724984169,
+      "raw_CHECK_minus_incumbent_us": 0.09599979966878891,
+      "incumbent_calibrated_us": 5.595060884214828,
+      "CHECK_calibrated_us": 5.597620538897934,
+      "calibrated_CHECK_minus_incumbent_us": 0.0025596546831066005,
+      "incumbent_reference_us": 7.0399995893239975,
+      "CHECK_reference_us": 6.943999789655209,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.9 \u00b5s 100.0%      1\ntotal                                                              4.9 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           5.1 \u00b5s 100.0%      1\ntotal                                                              5.1 \u00b5s"
+    },
+    {
+      "load": "verify 1",
+      "layer": "router",
+      "m": 8,
+      "same_case_seed": false,
+      "incumbent_kernel_sequence": [
+        "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+      ],
+      "CHECK_kernel_sequence": [
+        "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+      ],
+      "reported_sequence_changed": false,
+      "incumbent_raw_us": 8.320000022649765,
+      "CHECK_raw_us": 8.415999822318554,
+      "raw_CHECK_minus_incumbent_us": 0.09599979966878891,
+      "incumbent_calibrated_us": 4.466061412238903,
+      "CHECK_calibrated_us": 4.510600447798896,
+      "calibrated_CHECK_minus_incumbent_us": 0.04453903555999295,
+      "incumbent_reference_us": 26.175999082624912,
+      "CHECK_reference_us": 26.047999039292336,
+      "incumbent_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+      "CHECK_profile_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.5 \u00b5s 100.0%      1\ntotal                                                              3.5 \u00b5s"
+    }
+  ],
+  "largest_normalized_load_cost_contributors": [
+    {
+      "load": "decode 1",
+      "incumbent_candidate_us": 35.37513656172694,
+      "CHECK_candidate_us": 35.52790823483551,
+      "candidate_delta_us": 0.15277167310856754,
+      "incumbent_reference_us": 60.160000808537006,
+      "CHECK_reference_us": 58.76800091937184,
+      "reference_delta_us": -1.391999889165163,
+      "exact_log_score_ratio_contribution": 0.004619917848550765
+    },
+    {
+      "load": "verify 1",
+      "incumbent_candidate_us": 36.89827029573084,
+      "CHECK_candidate_us": 36.92266252634382,
+      "candidate_delta_us": 0.02439223061298179,
+      "incumbent_reference_us": 75.88799903169274,
+      "CHECK_reference_us": 74.57599835470319,
+      "reference_delta_us": -1.3120006769895554,
+      "exact_log_score_ratio_contribution": 0.003016781241064441
+    },
+    {
+      "load": "decode 32",
+      "incumbent_candidate_us": 52.13358892586106,
+      "CHECK_candidate_us": 52.97137865998334,
+      "candidate_delta_us": 0.8377897341222749,
+      "incumbent_reference_us": 76.8480016849935,
+      "CHECK_reference_us": 76.83199970051646,
+      "reference_delta_us": -0.016001984477043152,
+      "exact_log_score_ratio_contribution": 0.0026917585015681493
+    },
+    {
+      "load": "decode 16",
+      "incumbent_candidate_us": 49.232351680393236,
+      "CHECK_candidate_us": 48.36038775778849,
+      "candidate_delta_us": -0.8719639226047491,
+      "incumbent_reference_us": 76.6719994135201,
+      "CHECK_reference_us": 74.91199765354395,
+      "reference_delta_us": -1.7600017599761486,
+      "exact_log_score_ratio_contribution": 0.0008920995666755234
+    },
+    {
+      "load": "verify 16",
+      "incumbent_candidate_us": 64.72269093974806,
+      "CHECK_candidate_us": 64.96262199614037,
+      "candidate_delta_us": 0.23993105639230805,
+      "incumbent_reference_us": 85.90400172397494,
+      "CHECK_reference_us": 86.25600021332502,
+      "reference_delta_us": 0.3519984893500805,
+      "exact_log_score_ratio_contribution": -6.48332031082378e-05
+    },
+    {
+      "load": "verify 32",
+      "incumbent_candidate_us": 83.16935461193948,
+      "CHECK_candidate_us": 84.67327008533323,
+      "candidate_delta_us": 1.5039154733937465,
+      "incumbent_reference_us": 100.17600143328309,
+      "CHECK_reference_us": 102.12799906730652,
+      "reference_delta_us": 1.951997634023428,
+      "exact_log_score_ratio_contribution": -0.00022954060199187448
+    }
+  ],
+  "erratum": {
+    "supersedes": "report.json / attempts[attempt_id=dc78c2473d204a92] / proven_facts sentence claiming CURRENT_STACK generic incumbentFL35 differs from rawprofileFL34",
+    "correction": "That claim was my misreading. CURRENT_STACK.md line45 correctly names t32s5ze with HALF=False, consistent withFL34. Its FL35 lines76\u201377 concern pooler/unpooler, notO32. Raw officialO32FL34\u219235 and positive cross-job O32 target points remain correct.",
+    "canonical_or_frozen_sources_changed": false
+  },
+  "interpretation_limits": [
+    "Reported kernel-name equality does not prove same vendor config, geometry, allocation or full selected plan.",
+    "Different reported paths are concrete selection/context changes, not proof the O32 source edit caused every change.",
+    "Cross-job target improvement and reference-vector arithmetic do not prove whole-source causality or an implementation bug.",
+    "Both jobs pass9/9; performance/selection/timing bugs are still not excluded."
+  ],
+  "next_small_falsifier": "Prioritize the changed verify32/o vendor path (+0.320us raw,+0.692us calibrated) for a same-input current-incumbent-vs-new-selected-plan comparison. Decode32/qkv_gate keeps its reported kernel and improves raw while calibrated worsens, so inspect calibration/reference/context accounting before proposing a qkv kernel fix. O32 itself improves in this cross-job point; keep intended O32 change separate from collateral paths. No automatic rerun or hardcoded winner.",
+  "loop": "profile->measure->hypothesis->optimize/reimplement->test->validate->stack->submit measuredgains->learn->reprioritize->repeat; idle<=10s; proj_rsi/ITERATION.md"
+}

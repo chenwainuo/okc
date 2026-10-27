@@ -1,0 +1,49 @@
+{
+  "state": "CPU_DIAGNOSIS_NOT_ACTUAL_OFFICIAL_BINARY",
+  "source_sha256": "239b530cf7eead0a2dbf0af5c29aea4ba02e449500eb80e45b255b361cf2f900",
+  "helper_source_exact": true,
+  "target_body_source_exact": true,
+  "actual_official_SO_SASS_available": false,
+  "production_config": "_gvext extra_cuda_cflags=[-O3,-lineinfo]; architecture externally inferred/unarchived; full moduleinstantiatesGVI.",
+  "lab_config": "Explicitcompute90a/sm90a; sameO3/lineinfo; direct2functionbinding.",
+  "target_comparisons": {
+    "90": {
+      "argv": [
+        "/usr/local/cuda-12.8/bin/nvcc",
+        "-std=c++17",
+        "-O3",
+        "-lineinfo",
+        "-gencode=arch=compute_90,code=sm_90",
+        "-Xptxas=-v",
+        "-c",
+        "/home/ubuntu/okc/proj_rsi/audits/gv53-keyed-half-official-diagnosis-v1/production-target.cu",
+        "-o",
+        "/home/ubuntu/okc/proj_rsi/audits/gv53-keyed-half-official-diagnosis-v1/production-sm90.o"
+      ],
+      "wall_s": 1.4922084137797356,
+      "native_target_exact_PC_predicate_encoding_vs_lab_sm90a": true,
+      "nonNOP": 345,
+      "slots": 360,
+      "register_resource_excerpt": " Function _Z8gv_keyedILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G:\n  REG:64 STACK:0 SHARED:1024 LOCAL:0 CONSTANT[0]:616 TEXTURE:0 SURFACE:0 SAMPLER:0\n Function _Z10gv_predxorILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G:\n  REG:64 STACK:0 SHARED:10"
+    },
+    "90a": {
+      "argv": [
+        "/usr/local/cuda-12.8/bin/nvcc",
+        "-std=c++17",
+        "-O3",
+        "-lineinfo",
+        "-gencode=arch=compute_90a,code=sm_90a",
+        "-Xptxas=-v",
+        "-c",
+        "/home/ubuntu/okc/proj_rsi/audits/gv53-keyed-half-official-diagnosis-v1/production-target.cu",
+        "-o",
+        "/home/ubuntu/okc/proj_rsi/audits/gv53-keyed-half-official-diagnosis-v1/production-sm90a.o"
+      ],
+      "wall_s": 1.5397830419242382,
+      "native_target_exact_PC_predicate_encoding_vs_lab_sm90a": true,
+      "nonNOP": 345,
+      "slots": 360,
+      "register_resource_excerpt": " Function _Z8gv_keyedILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G:\n  REG:64 STACK:0 SHARED:1024 LOCAL:0 CONSTANT[0]:616 TEXTURE:0 SURFACE:0 SAMPLER:0\n Function _Z10gv_predxorILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G:\n  REG:64 STACK:0 SHARED:10"
+    }
+  }
+}

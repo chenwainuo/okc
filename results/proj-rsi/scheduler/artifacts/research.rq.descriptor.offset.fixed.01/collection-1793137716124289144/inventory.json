@@ -1,0 +1,58 @@
+{
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T21:47:17Z\ntorch_and_exact_two_function_compile\n[1/3] c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=rq_offset_fixed_b9ce4596f79c85acdc -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -fPIC -std=c++17 -c /root/.cache/torch_extensions/rq_offset_fixed_b9ce4596f79c85acdc/main.cpp -o main.o \n[2/3] /usr/local/cuda/bin/nvcc --generate-dependencies-with-compile --dependency-output cuda.cuda.o.d -DTORCH_EXTENSION_NAME=rq_offset_fixed_b9ce4596f79c85acdc -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_90a,code=sm_90a --compiler-options '-fPIC' -gencode=arch=compute_90a,code=sm_90a -O3 -DNDEBUG --expt-relaxed-constexpr -std=c++17 -c /root/.cache/torch_extensions/rq_offset_fixed_b9ce4596f79c85acdc/cuda.cu -o cuda.cuda.o \n[3/3] c++ main.o cuda.cuda.o -shared -L/opt/conda/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o rq_offset_fixed_b9ce4596f79c85acdc.so\ntask_weights_and_original_codec\npack_and_validate_pooler\ncapture_and_measure_pooler\npack_and_validate_unpooler\ncapture_and_measure_unpooler\ncomplete\nTRIAL_EXIT okc-proj-rq-descriptor-offset-fixed-01 0\n2026-10-27T21:48:10Z\n",
+    "terminal_exit": 0
+  },
+  "collected_at": 1793137717.0634987,
+  "dispatch": {
+    "artifacts": [
+      "/root/okc/logs/scheduler/rq-descriptor-offset-fixed-01"
+    ],
+    "claimed_at": 1793137627.073334,
+    "container": "okc-proj-rq-descriptor-offset-fixed-01",
+    "controller_owner": "root",
+    "guard_pid": 596006,
+    "host": "root@107.170.6.60",
+    "host_log": "/root/okc/logs/scheduler/research.rq.descriptor.offset.fixed.01.host.log",
+    "job_id": "research.rq.descriptor.offset.fixed.01",
+    "launch_requested_at": 1793137636.4767966,
+    "phase": "RUNNING",
+    "remote_repo": "/root/okc",
+    "source_pins": {
+      "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+      "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+      "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+      "proj_rsi/candidates/rq_descriptor_offset_trial_v1/binding.cu": "965909254c4e25f54703220de4cddb61438cf25a15395a15ebe7b203ff7ca559",
+      "proj_rsi/candidates/rq_descriptor_offset_trial_v1/codec.py": "289d1855a673cafd1d7edfde028d40db00a93da825e6561b6b0d9d9fad9d8fd7",
+      "proj_rsi/candidates/rq_descriptor_offset_trial_v1/driver.py": "4fffe34745e4511ae2a7fc03242740a3179689437e374057ff6b8fe36ab5cb30",
+      "proj_rsi/candidates/rq_descriptor_offset_trial_v1/manifest.json": "ceb7238dc9ffa271813e9c10df7d8e376c6630983a4ad3b23ef58b359968f2ca",
+      "proj_rsi/candidates/rq_descriptor_offset_trial_v1/scored-selected.json": "92c70047ad57d354aa4af4a609124a6e56176b11a30d8dee5956ac3a8dc76cc0",
+      "proj_rsi/candidates/rq_descriptor_offset_trial_v1/trial.cu": "b9ce4596f79c85acdc831610e3ace2cd8b7dfaa8d11a5506697c5e3802efb867",
+      "proj_rsi/candidates/rq_mma_descriptor_offset_inc501d_v2/compile-proof.json": "38bfaa64a55bbad76df0f385b2c1e058d7914ca1cac76efbdd80e3e064732747",
+      "proj_rsi/candidates/rq_mma_descriptor_offset_inc501d_v2/source-proof.json": "603036ea730c6ec3b1da53ca5f55d2689ed20c552c2b3cdefb44c3ca9b5d7757",
+      "proj_rsi/candidates/rq_mma_descriptor_offset_inc501d_v2/submission.py": "c26284f59a5939221f082adf07677653f1f1d7e84099ec1e323cfea8de4c8cc9",
+      "proj_rsi/scheduling/reviews/rq-descriptor-offset-fixed-01.md": "e4974eb2b13ed2c885e1da437cd16fa5f61f7e9725ae58bac946d7fae9d63643",
+      "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+      "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5"
+    }
+  },
+  "files": {
+    "logs/scheduler/research.rq.descriptor.offset.fixed.01.host.log": "270dc882704b302da1e34e026cb9b5c2384ed61d8bd92fe324394006af23baeb",
+    "logs/scheduler/rq-descriptor-offset-fixed-01/run/actual.cu": "b9ce4596f79c85acdc831610e3ace2cd8b7dfaa8d11a5506697c5e3802efb867",
+    "logs/scheduler/rq-descriptor-offset-fixed-01/run/actual.so": "ab6c3ad71701098713f7c3435439f905c4d482ae66a995948bfcda254494a32f",
+    "logs/scheduler/rq-descriptor-offset-fixed-01/run/raw.jsonl": "168df966a8674b588e1ad6748f77fcef32c3b17ea1fb0b17906cadc42f677eba",
+    "logs/scheduler/rq-descriptor-offset-fixed-01/run/result.json": "cc2a73ef2a8d73cfce0844fd5e71fb77d58228b8dbcafcd93dd026529e93f593"
+  },
+  "job_id": "research.rq.descriptor.offset.fixed.01",
+  "missing": [],
+  "symlinks_not_followed_or_materialized": {},
+  "terminal_exit": 0,
+  "validation": "ROOT_VALIDATION_REQUIRED_NO_PERFORMANCE_ADMISSION"
+}

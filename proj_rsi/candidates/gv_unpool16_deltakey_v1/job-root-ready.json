@@ -1,0 +1,114 @@
+{
+  "id": "research.gv.unpool16.deltakey.01",
+  "resource": "gpu",
+  "kind": "optimization",
+  "state": "BACKLOG",
+  "author": "hotloop_counters",
+  "created_at": 1793137540.5474305,
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 0.9
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "Measure actualscoredunpoolerM16currentpredxor vs lane-relativekey atsamegeometry/math; directlydiscriminate static88instructionreductionwithoutfurtherproofcampaign."
+    },
+    "basis": "Current501dH200selectedunpoolM16 has4.856283%scoreelasticity (coverageNOTgainforecast). Native2080to1992instructions/110to108registers/zero localstack,unchangedP2R/SHFL/LDG/HMMA; dynamicgainunknown. PoolerM16spillversionpreserved/excluded.",
+    "confidence": "unknown",
+    "evidence": [
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/proof.json",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/README.md",
+      "proj_rsi/audits/selected-hotpaths-gv9916/report.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 150,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 10
+  },
+  "files": {
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/submission.py": "713c46b37e50f71410ef4c7116f7fcb94bea71bd7b64c7f33d2a9e0d93e24f6c",
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/helper.cuh": "208d2c5a2cf436d085aece1d0dd5a577bb5c48119cb18d24a66ced3e47920b29",
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/pilot.cu": "9e27698d8284249a03f5f27b78052f1447067c3a5663266ee83e20926840f671",
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/driver.py": "2b1598520ee759c336b129398f6584b57695f500bed8977b0432a8196223cd27",
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/driver-delta.json": "d578f0b477e2082f41c44e5888f02296fed78c11b555e781cd99016917b3efb9",
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/binding.cu": "6143e7477b58d4578aa61e9041c4cbf599245c3bc7c1057b18da8a384c05d963",
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/README.md": "717ffe40e8860376b8ca9f50baa20a382e7e16c47ea7a9dd093d88498ba08fa4",
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/proof.json": "9c87b4bc9770d75c4963e5f6854d9eb3815248c955b951dda568bf4b0ab9dc61",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/harness-cpu-proof.json": "54bafa2714f6062c25715bf83376ea6729eff0e754d0994e5d79a42abdc5973f",
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/binding-compile-proof.json": "404ee2ee65f14dfacaba0aeb8de2aead04fd16d96456dcd3b99b155d9f564165",
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/manifest.json": "b212cee6f9b11e97c480be47496406434a64e0762ae89521a3998f0b4c302ca7",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/scheduling/reviews/gv-unpool16-deltakey-01.md": "cf736c9c267dc12537bdfda8a5f3405a9237713ab67f6ac1d8e504075c937801"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-gv-unpool16-deltakey-01",
+    "inner_seconds": 90,
+    "outer_seconds": 150,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/gv_unpool16_deltakey_v1/driver.py",
+      "--output",
+      "/okc/logs/scheduler/gv-unpool16-deltakey-01/run",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/gv-unpool16-deltakey-01.md"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv-unpool16-deltakey-01"
+    ]
+  },
+  "annotations": {
+    "state": "HOLD_FOCUSED_GV_CODEC_REVIEW_PENDING",
+    "scope": {
+      "fixed_cells": 1,
+      "native_functions": 2,
+      "timed_calls": 81,
+      "warmups": 10,
+      "own_terminal_oracles": 4,
+      "retained_mutations": 10,
+      "basis_columns": 16,
+      "full_prepare": 0,
+      "profiler": 0
+    },
+    "bounds": {
+      "inner_seconds": 90,
+      "outer_seconds": 150,
+      "profile": false
+    },
+    "reused": "KnownGV53driver with layer/shape/geometry/resourcebounds+exacthostcleanup tail,sourcekeysemanticproof; no broadcodec/math/all95proof",
+    "source_review": {
+      "path": "proj_rsi/candidates/gv_unpool16_deltakey_v1/proof.json",
+      "sha256": "9c87b4bc9770d75c4963e5f6854d9eb3815248c955b951dda568bf4b0ab9dc61"
+    },
+    "limitations": "Fixedactualscoredgeometry,notfreshselection/fullpolicy/officialclaim; allmixedsignspreserved; runtimeresourcesrawsavedbeforechecks",
+    "problem": "muse_bf16_proj",
+    "review_binding": "Independent focused GO pinned; frozen source/proposal unchanged; root owns GPU/queue."
+  },
+  "review": {
+    "actor": "gv_codec_frontier",
+    "path": "proj_rsi/scheduling/reviews/gv-unpool16-deltakey-01.md",
+    "sha256": "cf736c9c267dc12537bdfda8a5f3405a9237713ab67f6ac1d8e504075c937801",
+    "decision": "GO"
+  },
+  "problem": "muse_bf16_proj"
+}

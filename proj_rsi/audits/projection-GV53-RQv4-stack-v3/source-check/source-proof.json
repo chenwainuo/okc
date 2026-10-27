@@ -1,0 +1,90 @@
+{
+  "state": "CPU_SOURCE_COMPOSITION_ONLY_GPU_UNRUN",
+  "problem": "muse_bf16_proj",
+  "parent": {
+    "path": "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py",
+    "sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+  },
+  "branches": [
+    {
+      "id": "GV53_keyed_half",
+      "kind": "gv53_keyed_half",
+      "path": "proj_rsi/candidates/gv53_keyed_half_v1/submission.py",
+      "sha256": "239b530cf7eead0a2dbf0af5c29aea4ba02e449500eb80e45b255b361cf2f900"
+    },
+    {
+      "id": "RQ_unpooler32_offset_v4",
+      "kind": "rq_offset_v4",
+      "path": "proj_rsi/candidates/rq_unpooler32_descriptor_offset_v4/submission.py",
+      "sha256": "963cbcde11f4fc89ce38fd05601ba3492f6dd11cb45b39cd3a83e6b863221809",
+      "delta_path": "proj_rsi/candidates/rq_unpooler32_descriptor_offset_v4/delta.json",
+      "delta_sha256": "e821aff22e1af07978234905857f8e548ecdae78e2b5be2194ffbc391760a3b7"
+    }
+  ],
+  "source_sha256": "f018932999fbaed6600b330f3002749a2e423038fd925e27036ac3c1e6183d1e",
+  "per_branch_exact_reproduction": true,
+  "strict_inverse_to_501d": true,
+  "raw_fragment_order_hashes": {
+    "GV53_keyed_half,RQ_unpooler32_offset_v4": "f018932999fbaed6600b330f3002749a2e423038fd925e27036ac3c1e6183d1e",
+    "RQ_unpooler32_offset_v4,GV53_keyed_half": "f018932999fbaed6600b330f3002749a2e423038fd925e27036ac3c1e6183d1e"
+  },
+  "raw_order_unique_sources": 1,
+  "canonical_order_hashes": {
+    "GV53_keyed_half,RQ_unpooler32_offset_v4": "f018932999fbaed6600b330f3002749a2e423038fd925e27036ac3c1e6183d1e",
+    "RQ_unpooler32_offset_v4,GV53_keyed_half": "f018932999fbaed6600b330f3002749a2e423038fd925e27036ac3c1e6183d1e"
+  },
+  "all_normalized_orders_exact": true,
+  "overlap_resolution": {
+    "raw_full_GVCU_replacement": "Only GV53 changes GVCU; RQv4 is applied as eight pinned fragments including its separate host catalogs.",
+    "shared_pre_p1zero_insertion": "Only GV53 inserts here in this pair; both raw and canonical two orders are byte-identical.",
+    "shared_JIT_identity": "Only GV53 changes _gvext; one composition identity is assigned. _rqext remains exact and hashes generated RQ source; _rqsbake has exactly the scoped margin edit.",
+    "other_overlaps": "Rejected; no automatic resolution."
+  },
+  "changed_original_AST_nodes": [
+    "GVCU",
+    "_gvext",
+    "RQV",
+    "RQCU",
+    "RQSBAKE",
+    "RQPROD2",
+    "_rqsbake"
+  ],
+  "unchanged_original_AST_nodes": 169,
+  "JIT_marker": "load_inline(\"projection_stack_e3c4ba2d1cb1d192_%x\"",
+  "scoped_RQ_metadata": {
+    "old_RQV_tuples_and_indices_exact": true,
+    "only_new_variant": [
+      "t32s6hze_offset_unpool",
+      32,
+      6,
+      1,
+      0,
+      0,
+      0,
+      131107
+    ],
+    "only_changed_bake_cell": [
+      "unpooler",
+      32
+    ],
+    "KS": 2,
+    "old_RQPROD2_indices_exact": true,
+    "new_RQPROD2_index": 13,
+    "unchanged_functions": [
+      "_rqext",
+      "_rqstart",
+      "_rqsrc"
+    ],
+    "_rqsbake_only_delta": "Exact new unpooler32-k2 tag uses factor1.0 with strict less-than; all old candidates retain MARGIN0.99; removing that fragment restores exact parent function.",
+    "JIT_scope": "GV gets composition namespace; unchanged _rqext derives RQ cache identity from generated source.",
+    "selection": "New alternative offered only to actual unpoolerM32; no forced selection or performance inference."
+  },
+  "limits": [
+    "CPU source compatibility only; no native recompile or GPU validation performed.",
+    "Clone contents copied from exact frozen descendants of501d, not regenerated from evolving kernel text.",
+    "GV53poolerM1/M8 and added RQunpoolerM32 runtime domains are distinct; actual preparation choices and selection still require receipts.",
+    "RQv4 adds one new RQV/RQSBAKE/RQPROD2 option; old tuple/switch indices remain exact. _rqext stays exact; _rqsbake changes only the explicit guarded new-option strict-positive margin.",
+    "Source composition does not imply selected execution, correctness of the combined binary, additive timing, local/official improvement or authorization to dispatch.",
+    "Root chooses measured validated branches and measures actual stack against its parent and incumbent; no new universal review or minimum-size gate."
+  ]
+}

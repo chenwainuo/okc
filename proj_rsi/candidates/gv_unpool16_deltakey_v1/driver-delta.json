@@ -1,0 +1,171 @@
+{
+  "parent": "proj_rsi/candidates/gv53_maskgate_trial_v1/driver.py",
+  "parent_sha256": "b62060251331487b17af1b124499779eda111fbc159b2e91eb4ff40205da3b60",
+  "edits": [
+    {
+      "name": "doc",
+      "before": "Two fixed GV53 cells, no full prepare/profiler/SASS campaign; root-only GPU run.",
+      "after": "One official selected unpoolerM16 fixedpair, no fullprepare/profiler; root-only GPU."
+    },
+    {
+      "name": "source",
+      "before": "CAND=ROOT/'proj_rsi/candidates/gv53_maskgate_v1'",
+      "after": "CAND=D"
+    },
+    {
+      "name": "lexical-maskgate",
+      "kind": "all",
+      "before": "maskgate",
+      "after": "deltakey",
+      "count": 8
+    },
+    {
+      "name": "rename-gv53_-0",
+      "before": "gv53_",
+      "after": "gv_unpool16_"
+    },
+    {
+      "name": "rename-GV53-0",
+      "before": "GV53",
+      "after": "GVunpool16"
+    },
+    {
+      "name": "lexical-pooler",
+      "kind": "all",
+      "before": "pooler",
+      "after": "unpooler",
+      "count": 12
+    },
+    {
+      "name": "target-dimension-swap",
+      "kind": "all",
+      "before": "8192",
+      "after": "SWAP_K_MARKER",
+      "count": 4
+    },
+    {
+      "name": "target-dimension-swap",
+      "kind": "all",
+      "before": "4096",
+      "after": "8192",
+      "count": 3
+    },
+    {
+      "name": "target-dimension-swap",
+      "kind": "all",
+      "before": "SWAP_K_MARKER",
+      "after": "4096",
+      "count": 4
+    },
+    {
+      "name": "basis-stride",
+      "before": "columns=list(range(0,4096,128))",
+      "after": "columns=list(range(0,4096,64))"
+    },
+    {
+      "name": "basis-last",
+      "before": "[0,1,31,32,63,64,511,512,8191]",
+      "after": "[0,1,31,32,63,64,511,512,4095]"
+    },
+    {
+      "name": "only-M16",
+      "before": "for m in (1,8):",
+      "after": "for m in (16,):"
+    },
+    {
+      "name": "escape-pack-shape",
+      "before": "escape=env['_gvesc'](esc7,256,(2,16,8,1,1,0))",
+      "after": "escape=env['_gvesc'](esc7,512,(1,4,16,1,1,2))"
+    },
+    {
+      "name": "escape-pack-receipt",
+      "before": "'geometry':[2,16,8,1,1,0]",
+      "after": "'geometry':[1,4,16,1,1,2]"
+    },
+    {
+      "name": "compile-symbol-receipt",
+      "before": "'native_symbols':['gv_predxor<1,1,1,2,16,8,1,1,0,3>','gv_deltakey<1,1,1,2,16,8,1,1,0,3>']",
+      "after": "'native_symbols':['gv_predxor<1,2,2,1,4,16,1,1,2,1>','gv_unpool16_deltakey<1,2,2,1,4,16,1,1,2,1>']"
+    },
+    {
+      "name": "actual-supported-resources",
+      "before": "a['registers']==64 and a['local']==0 and a['user_static']==0 and a['max_dynamic']>=17408 and a['max_threads']>=1024 and a['occupancy']>=1",
+      "after": "0<a['registers']<=128 and a['local']>=0 and a['user_static']>=0 and a['max_dynamic']>=5120 and a['max_threads']>=128 and a['occupancy']>=1"
+    },
+    {
+      "name": "budget",
+      "before": "<120,'inner120s admission exhausted'",
+      "after": "<90,'inner90s admission exhausted'"
+    },
+    {
+      "name": "cpu-scope",
+      "before": "'fixed_cells':2,'timed_calls':162,'warmup_calls':20,'own_terminal_sites':8,'mutations':20",
+      "after": "'fixed_cells':1,'timed_calls':81,'warmup_calls':10,'own_terminal_sites':4,'mutations':10"
+    },
+    {
+      "name": "final-state",
+      "before": "'TWO_FIXED_CELLS_COMPLETE_ROOT_REVIEW_REQUIRED'",
+      "after": "'ONE_FIXED_UNPOOLER16_CELL_COMPLETE_ROOT_REVIEW_REQUIRED'"
+    },
+    {
+      "name": "scope",
+      "before": "Fixed GVunpool16 implementation comparison only, not selected policy or official score",
+      "after": "Fixed exact current-selected unpoolerM16 template implementation comparison, not fresh policy or official score"
+    },
+    {
+      "name": "doc-label",
+      "before": "ununpoolerM16",
+      "after": "unpoolerM16"
+    },
+    {
+      "name": "cleanup-hook-module",
+      "before": "CAND=D\n",
+      "after": "CAND=D\nCLEANUP_HOOK=None\n"
+    },
+    {
+      "name": "cleanup-declaration",
+      "before": "DECL='int64_t attrs",
+      "after": "DECL='std::vector<int64_t> clear_blas_cache();\\nint64_t attrs"
+    },
+    {
+      "name": "cleanup-global",
+      "before": "def run(args):\n",
+      "after": "def run(args):\n    global CLEANUP_HOOK\n"
+    },
+    {
+      "name": "cleanup-export",
+      "before": "functions=['run','attrs'],",
+      "after": "functions=['run','attrs','clear_blas_cache'],"
+    },
+    {
+      "name": "bind-cleanup-hook",
+      "before": "        result['cost']['compile_and_load_seconds']=time.monotonic()-begin",
+      "after": "        CLEANUP_HOOK=ext.clear_blas_cache\n        result['cost']['compile_and_load_seconds']=time.monotonic()-begin"
+    },
+    {
+      "name": "one-boundary-basis-launch-per-arm",
+      "before": "def basis_columns():\n    columns=list(range(0,4096,64))\n    columns[:9]=[0,1,31,32,63,64,511,512,4095]\n    assert len(columns)==len(set(columns))==64\n    return columns",
+      "after": "def basis_columns():\n    columns=[0,1,15,16,31,32,63,64,127,128,511,512,1023,1024,4094,4095]\n    assert len(columns)==len(set(columns))==16\n    return columns"
+    },
+    {
+      "name": "CPU-basis-count",
+      "before": "assert len(basis_columns())==64",
+      "after": "assert len(basis_columns())==16"
+    },
+    {
+      "name": "runtime-basis-count",
+      "before": "for start in range(0,64,m):",
+      "after": "for start in range(0,len(columns),m):"
+    },
+    {
+      "name": "reuse-c12-self-check",
+      "before": "        assert torch.equal(env['_unc12'](packed,table,esc6,1),env['_frag_bits'](fr))\n        esc7=torch.cat",
+      "after": "        esc7=torch.cat"
+    },
+    {
+      "name": "postdrain-run-scope-BLASmap-strict0",
+      "before": "def main():\n    p=argparse.ArgumentParser();p.add_argument('--cpu-check',action='store_true');p.add_argument('--output',type=Path);p.add_argument('--review',type=Path);args=p.parse_args()\n    if args.cpu_check:print(json.dumps(cpu_check(),indent=2));return\n    assert args.output and args.review;run(args)",
+      "after": "def main():\n    p=argparse.ArgumentParser();p.add_argument('--cpu-check',action='store_true');p.add_argument('--output',type=Path);p.add_argument('--review',type=Path);args=p.parse_args()\n    if args.cpu_check:print(json.dumps(cpu_check(),indent=2));return\n    assert args.output and args.review\n    error=None\n    try:run(args)\n    except BaseException as exc:error=repr(exc)\n    import gc\n    gc.collect();torch=sys.modules.get('torch')\n    if torch is not None and torch.cuda.is_initialized():\n        torch.cuda.synchronize();before={'allocated':torch.cuda.memory_allocated(),'reserved':torch.cuda.memory_reserved()}\n        evidence=None;clear_error=None\n        try:\n            if CLEANUP_HOOK is not None:evidence=list(map(int,CLEANUP_HOOK()))\n        except BaseException as exc:clear_error=repr(exc)\n        gc.collect();torch.cuda.empty_cache();torch.cuda.synchronize()\n        cleanup={'allocated':torch.cuda.memory_allocated(),'reserved':torch.cuda.memory_reserved(),'before_blas_clear':before,'blas_map_entries_workspace_bytes_after':evidence,'clear_error':clear_error,'after_run_scope_and_drain':True}\n        if (args.output/'result.json').exists():\n            result=json.loads((args.output/'result.json').read_text());result['post_scope_cleanup']=cleanup\n            if cleanup['allocated']!=0 or clear_error is not None:result['state']='INVALID_CLEANUP'\n            dump(args.output/'result.json',result)\n        assert cleanup['allocated']==0 and clear_error is None,cleanup\n        if error is None:assert evidence is not None and len(evidence)==3 and evidence[2]==0,cleanup\n    if error:raise RuntimeError(error)"
+    }
+  ]
+}
