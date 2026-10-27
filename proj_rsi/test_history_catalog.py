@@ -66,7 +66,7 @@ class HistoryTests(unittest.TestCase):
   self.assertEqual(partial['archive_status'],'ARCHIVED_PARTIAL')
  def test_no_small_positive_threshold_and_no_duplicate_feature_inflation(self):
   cat=self.catalog;observations=cat['positive_observations']
-  self.assertEqual(len(cat['improvements']),81)
+  self.assertEqual(len(cat['improvements']),87)
   original=[r for r in observations if r['catalog_cohort']=='initial_45_job_audit']
   self.assertEqual(len(original),224)
   self.assertGreater(len(observations),224)
@@ -113,7 +113,7 @@ class HistoryTests(unittest.TestCase):
    self.assertEqual(row['score_tested_jobs'],[])
    self.assertIsNone(row['official_score_us'])
    self.assertTrue(all('sha256' in ref for ref in row['evidence']))
-  self.assertEqual(len(self.catalog['local_paired_observations']),1187)
+  self.assertEqual(len(self.catalog['local_paired_observations']),1412)
  def test_normalized_release_profile_discovered_without_candidate_directory(self):
   with tempfile.TemporaryDirectory() as directory:
    root=Path(directory);path=root/'results/proj-rsi/releases/frozen-v1/profiles/submission.pending.json'
@@ -374,6 +374,28 @@ class HistoryTests(unittest.TestCase):
    found=discover_candidates(root)
    self.assertEqual(found['unregistered_candidates'],['new_preparation']);self.assertEqual(found['registered_count'],1)
    self.assertEqual(found['missing_registered_candidates'],[]);self.assertEqual(config.read_bytes(),before)
+ def test_completed_quarter_sparse_and_lane_cut_keeps_all_mixed_signs(self):
+  points=self.catalog['local_paired_observations']
+  quarter=[r for r in points if r['attempt_id']=='research.gv53.quarter.stream.fixed.01']
+  self.assertEqual(len(quarter),25);summary=next(r for r in quarter if r['pairs']==24)
+  self.assertLess(summary['gain_us'],0);self.assertGreater(summary['F1_gain_us'],0);self.assertLess(summary['F1_conservative_gain_us'],0)
+  sparse=[r for r in points if r['attempt_id']=='research.gv53.quarter.sparse.fixed.01']
+  self.assertEqual(len(sparse),75)
+  self.assertTrue(all(r['gain_us']<0 and r['F1_gain_us']<0 for r in sparse if r['pairs']==24))
+  lane=[r for r in points if r['attempt_id']=='research.gv.unpool16.lanebase.01'];self.assertEqual(len(lane),25)
+  summary=next(r for r in lane if r['pairs']==24);self.assertEqual(summary['gain_us'],0)
+  self.assertLess(summary['F1_before_gain_us'],0);self.assertGreater(summary['F1_after_gain_us'],0)
+ def test_thin_ABI_variability_not_admitted_as_native_gain(self):
+  rows=[r for r in self.catalog['local_paired_observations'] if r['attempt_id']=='research.gv53.thin.cabi.validation.01']
+  self.assertEqual(len(rows),100);self.assertTrue(any(r['gain_us']>0 for r in rows));self.assertTrue(any(r['gain_us']<0 for r in rows))
+  self.assertTrue(all(r['performance_admitted'] is False and not r['shipping_gain'] for r in rows))
+  data=self.catalog['projection_completed_2313_cut']['cut_cabi'];self.assertIsNone(data['build_seconds']['paired_build_savings'])
+ def test_weight_capacity_and_profile_diagnostics_have_no_speed_rows(self):
+  keys=('research.gv.top8.exponent.stats.01','research.gv53.exactso.counters.01')
+  self.assertFalse(any(r['attempt_id'] in keys for r in self.catalog['local_paired_observations']))
+  profile=self.catalog['projection_completed_2313_cut']['cut_profile']
+  self.assertIsNone(profile['gain_us']);self.assertIsNone(profile['repair_time_fraction'])
+  self.assertEqual(len(profile['arms']),3);self.assertTrue(all(len(r['metrics'])==12 for r in profile['arms']))
  def test_server_content_hash_not_claimed_equal_to_local_sha(self):
   row=next(r for r in self.catalog['submissions'] if r['candidate']=='rs32')
   self.assertNotEqual(row['source']['sha256'],row['api_content_hash'])
@@ -381,7 +403,7 @@ class HistoryTests(unittest.TestCase):
   self.assertTrue(all(r['causal_delta_vs_other_jobs_us'] is None for r in self.catalog['all_official_jobs']))
  def test_csv_roundtrip_preserves_all_rows_and_structured_evidence(self):
   outputs=render(self.catalog)
-  expected={'submissions':len(self.catalog['submissions']),'checks':len(self.catalog['checks']),'all_official_jobs':len(self.catalog['all_official_jobs']),'improvements':81,'positive_observations':len(self.catalog['positive_observations']),'local_observations':1187,'candidates':self.catalog['counts']['candidates']}
+  expected={'submissions':len(self.catalog['submissions']),'checks':len(self.catalog['checks']),'all_official_jobs':len(self.catalog['all_official_jobs']),'improvements':87,'positive_observations':len(self.catalog['positive_observations']),'local_observations':1412,'candidates':self.catalog['counts']['candidates']}
   for table,count in expected.items():
    rows=list(csv.DictReader(io.StringIO(outputs[f'proj_rsi/tables/{table}.csv'])))
    self.assertEqual(len(rows),count,table)

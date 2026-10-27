@@ -1,0 +1,77 @@
+{
+  "parent_driver": "/home/ubuntu/okc/proj_rsi/candidates/gv53_keyed_half_v1/driver.py",
+  "parent_sha256": "1cef9a69cf7e97ca7d784619e12b4cd4afdb0bda3d480c9344b5007b57c0b87c",
+  "new_sha256": "5a55b7d4f96b87d19624eb71e4137f054b8ef154071c863282b0e6adf73adf36",
+  "exact_edits": [
+    {
+      "old": "Two fixed GV53 cells",
+      "new": "One fixed M8 quarter-stream cell"
+    },
+    {
+      "old": "CAND=D",
+      "new": "CAND=D.parent/\"gv53_quarter_stream_v1\""
+    },
+    {
+      "old": "LABELS=('control','keyed')",
+      "new": "LABELS=('control','quarter')"
+    },
+    {
+      "old": "'fixed_cells':2,'timed_calls':162,'warmup_calls':20,'own_terminal_sites':8,'mutations':20",
+      "new": "'fixed_cells':1,'timed_calls':81,'warmup_calls':10,'own_terminal_sites':4,'mutations':10"
+    },
+    {
+      "old": "'source_sha256':sha(CAND/'submission.py')",
+      "new": "'source_sha256':sha(CAND/'pilot.cu')"
+    },
+    {
+      "old": "time.monotonic()-started<120,'inner120s admission exhausted'",
+      "new": "time.monotonic()-started<90,'inner90s admission exhausted'"
+    },
+    {
+      "old": "weights=reference.generate_weights(reference.WEIGHTS_SEED)",
+      "new": "w_seed=reference.WEIGHTS_SEED+193;weights=reference.generate_weights(w_seed)"
+    },
+    {
+      "old": "immutable=[('pooler',weights['pooler'],weights['pooler'].clone()),('packed',packed,packed.clone()),('escape',escape,escape.clone())]",
+      "new": "sys.path.insert(0,str(CAND));from transport import pack_bank,unpack_group\n        old_words=escape.detach().cpu().tolist()\n        begin_transport=time.monotonic();new_words=pack_bank(old_words);assert new_words is not None\n        assert len(new_words)==len(old_words)==131072\n        record_count=0\n        for offset in range(0,len(old_words),32):\n            accepted=[int(v)&0xffffffff for v in old_words[offset:offset+32]if (int(v)&0xffffffff)!=0xffffffff]\n            expected=sorted(accepted,key=lambda v:(v>>20,(v>>13)&3))\n            assert unpack_group(new_words[offset:offset+32])==expected,('actual accepted escape mapping',offset)\n            record_count+=len(accepted)\n        quarter_escape=torch.tensor([v if v<2**31 else v-2**32 for v in new_words],dtype=torch.int32,device=escape.device)\n        assert quarter_escape.data_ptr()!=escape.data_ptr() and quarter_escape.numel()==escape.numel()\n        escapes={'control':escape,'quarter':quarter_escape}\n        result['transport']={'bytes_per_warpgroup':128,'groups':len(old_words)//32,'capacity_per_group':32,'record_count':record_count,'actual_accepted_records_exact_after_stable_bucketing':True,'original_overflow_rejection_preserved':True,'parent_bank_sha256':hashlib.sha256(escape.cpu().numpy().tobytes()).hexdigest(),'quarter_bank_sha256':hashlib.sha256(quarter_escape.cpu().numpy().tobytes()).hexdigest(),'separate_bank_pointers':True,'outside_timed_region':True,'host_transform_and_actual_mapping_check_seconds':time.monotonic()-begin_transport}\n        immutable=[('pooler',weights['pooler'],weights['pooler'].clone()),('packed',packed,packed.clone()),('parent_escape',escape,escape.clone()),('quarter_escape',quarter_escape,quarter_escape.clone())]"
+    },
+    {
+      "old": "'W_seed':reference.WEIGHTS_SEED",
+      "new": "'W_seed':w_seed"
+    },
+    {
+      "old": "for m in (1,8):",
+      "new": "for m in (8,):"
+    },
+    {
+      "old": "ext.run(LABELS.index(arm),packed,escape,x,out,wb[16:-16],cb[16:-16],table)",
+      "new": "ext.run(LABELS.index(arm),packed,escapes[arm],x,out,wb[16:-16],cb[16:-16],table)"
+    },
+    {
+      "old": "'TWO_FIXED_CELLS_COMPLETE_ROOT_REVIEW_REQUIRED'",
+      "new": "'ONE_FIXED_M8_CELL_COMPLETE_ROOT_REVIEW_REQUIRED'"
+    }
+  ],
+  "uniform_label_replacement": {
+    "old": "keyed",
+    "new": "quarter"
+  },
+  "retained_protocol": [
+    "schedule",
+    "sameXfixtures",
+    "guarded arenas",
+    "normal/outlier/zero/boundary oracle",
+    "own F1 and paired terminals",
+    "graph current-input mutation",
+    "actual attrs legal residency only",
+    "postscope drained BLAS cleanup"
+  ],
+  "changed_scope": [
+    "M8 only",
+    "one prospective W seed offset193",
+    "actual oldescape stable quarter-bank transport+mapping outside timing",
+    "distinct perarm escape bank",
+    "90s inner"
+  ],
+  "no_GPU": true
+}
