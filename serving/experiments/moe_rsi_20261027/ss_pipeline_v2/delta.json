@@ -1,0 +1,35 @@
+{
+  "parent_manifest_sha256": "491fad9f17bd53f6b193517920c6ea0084f22a4b5052e45c31e00cfac2c94370",
+  "parent_directory": "serving/experiments/moe_rsi_20261027/ss_pipeline_v1",
+  "numeric_change": {
+    "old": "BF16(q*sf*2^-119), BF16(acc), BF16(rawgs*2^119)",
+    "new": "BF16(q*sf), BF16(acc), BF16(rawgs)",
+    "boundaries_unchanged": [
+      "BF16 dequant product",
+      "FP32MMA",
+      "BF16cast-beforeBF16globalmultiply"
+    ],
+    "equivalence_limit": "Power-of-two correspondence only when no input/product/accumulator/intermediate overflow, underflow or denormal handling differences; full numerical identity not claimed."
+  },
+  "edits": [
+    {
+      "file": "kernel.cuh",
+      "id": "canonical-decode",
+      "before": "// Exact existing Marlin FE2M1 skip_flop conversion and FE4M3 processed-scale conversion.\n__device__ __forceinline__ void dequant(int q,__nv_bfloat162* f){\n int a=(q&0x80008000)|((q&0x70007000)>>6);q<<=4;\n int b=(q&0x80008000)|((q&0x70007000)>>6);\n f[1]=*reinterpret_cast<__nv_bfloat162*>(&a);f[0]=*reinterpret_cast<__nv_bfloat162*>(&b);\n}\n__device__ __forceinline__ void scale(int q,__nv_bfloat162* f){\n int a=((q&0x80008000)>>1)|((q&0x7F007F00)>>4);q<<=8;\n int b=((q&0x80008000)>>1)|((q&0x7F007F00)>>4);\n f[1]=*reinterpret_cast<__nv_bfloat162*>(&a);f[0]=*reinterpret_cast<__nv_bfloat162*>(&b);\n}\n",
+      "after": "// Canonical NVFP4 numeric representation, no compensating 2^-119 bias.\n// Pure bit helpers are host/device so CPU tests compile the exact functions.\n__host__ __device__ __forceinline__ uint16_t e2m1_bits(uint32_t code){\n uint32_t m=code&7u,sign=(code&8u)<<12;\n return uint16_t(sign|(m>=2u?(0x3f00u+(m<<6)):(m?0x3f00u:0u)));\n}\n__host__ __device__ __forceinline__ uint16_t raw_scale_bits(uint32_t code){\n uint32_t e=(code>>3)&15u,m=code&7u,sign=(code&128u)<<8;\n if(e==15u&&m==7u)return uint16_t(sign|0x7fc0u); // FP8 NaNs remain nonfinite.\n if(e)return uint16_t(sign|((e+120u)<<7)|(m<<4));\n uint32_t sub=m>=4u?(0x3c00u+((m-4u)<<5)):m==3u?0x3bc0u:m==2u?0x3b80u:m==1u?0x3b00u:0u;\n return uint16_t(sign|sub); // includes signedzero and all seven FP8 subnormals.\n}\n__device__ __forceinline__ void dequant(int q,__nv_bfloat162* f){\n uint32_t u=uint32_t(q);\n uint32_t a=uint32_t(e2m1_bits((u>>8)&15u))|(uint32_t(e2m1_bits((u>>24)&15u))<<16);\n uint32_t b=uint32_t(e2m1_bits((u>>12)&15u))|(uint32_t(e2m1_bits((u>>28)&15u))<<16);\n f[0]=*reinterpret_cast<__nv_bfloat162*>(&a);f[1]=*reinterpret_cast<__nv_bfloat162*>(&b);\n}\n__device__ __forceinline__ void scale(int q,__nv_bfloat162* f){\n B a=__ushort_as_bfloat16(raw_scale_bits(uint32_t(q)&255u));\n B b=__ushort_as_bfloat16(raw_scale_bits((uint32_t(q)>>8)&255u));\n f[0]=__bfloat162bfloat162(a);f[1]=__bfloat162bfloat162(b);\n}\n"
+    },
+    {
+      "file": "kernel.cuh",
+      "id": "kernel-namespace",
+      "before": "namespace moe_ss {",
+      "after": "namespace moe_ss_v2 {"
+    },
+    {
+      "file": "adapter.py",
+      "id": "raw-scales-and-global",
+      "before": "    from sglang.srt.layers.quantization.marlin_utils_fp4 import nvfp4_marlin_process_global_scale\n    assert raw_weight.dtype==torch.uint8 and raw_weight.ndim==3\n    e,n,kp=raw_weight.shape\n    assert kp==2048 and n%64==0 and tuple(raw_scale.shape)==(e,n,256)\n    assert raw_scale.dtype==torch.float8_e4m3fn and tuple(raw_global.shape)==(e,)\n    assert raw_weight.is_cuda and raw_scale.device==raw_weight.device==raw_global.device\n    assert torch.cuda.get_device_capability(raw_weight.device)==(9,0)\n    # Same steps as nvfp4_marlin_process_scales before its physical permutation.\n    # The return needs byte upper8 of int16 shift1, not a numeric E4M3 cast.\n    half=(raw_scale.to(torch.float16)*128).view(torch.int16)\n    processed=(((half.to(torch.int32)<<1)>>8)&255).to(torch.uint8).contiguous()\n    global_processed=nvfp4_marlin_process_global_scale(raw_global.to(torch.bfloat16)).contiguous()\n",
+      "after": "    assert raw_weight.dtype==torch.uint8 and raw_weight.ndim==3\n    e,n,kp=raw_weight.shape\n    assert kp==2048 and n%64==0 and tuple(raw_scale.shape)==(e,n,256)\n    assert raw_scale.dtype==torch.float8_e4m3fn and tuple(raw_global.shape)==(e,)\n    assert raw_weight.is_cuda and raw_scale.device==raw_weight.device==raw_global.device\n    assert torch.cuda.get_device_capability(raw_weight.device)==(9,0)\n    # Preserve raw FP8 bytes, including signedzero/subnormals/NaNs. No lossy\n    # HALF\u2192byte Marlin scale format and no compensating exponent bias.\n    processed=raw_scale.view(torch.uint8).contiguous()\n    global_processed=raw_global.to(torch.bfloat16).contiguous()\n"
+    }
+  ],
+  "other_changes": "Unique v2 namespace/module names and proof/compile bindings; unchanged pipeline/gather/rings/math operation order."
+}

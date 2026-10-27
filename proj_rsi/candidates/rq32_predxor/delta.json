@@ -1,0 +1,16 @@
+{
+  "parent_source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+  "parent_manifest_sha256": "988214460a032f11d620801f2661c32cbe9ca9572fe4f40ab0bbe931aa61ae02",
+  "edits": [
+    {
+      "id": "append-distinct-predicated-helper",
+      "before": "__device__ __forceinline__ unsigned long long rq_gt()",
+      "after": "// rq32_predxor: keep entry order/window; predicate the target register XOR directly.\n__device__ __forceinline__ void rq_fix_pred(uint32_t (&A)[16], int seq, uint32_t& nx, uint32_t& nxs, int& ei, uint32_t& ec, const uint32_t* el, int lane) {\n  while (nxs == (uint32_t)seq) {\n    const uint32_t target = (nx >> 12) & 31, reg = (nx >> 8) & 15;\n    const uint32_t xr = (nx & 0x7fu) << (8 + ((nx >> 7) & 1) * 16);\n    asm volatile(\"{\\n.reg .pred pl, pr;\\n.reg .u32 mask, ri;\\nmov.u32 mask, %16;\\nmov.u32 ri, %19;\\nsetp.eq.u32 pl, %17, %18;\\n\"\n      \"setp.eq.and.u32 pr, ri, 0, pl; @pr xor.b32 %0, %0, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 1, pl; @pr xor.b32 %1, %1, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 2, pl; @pr xor.b32 %2, %2, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 3, pl; @pr xor.b32 %3, %3, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 4, pl; @pr xor.b32 %4, %4, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 5, pl; @pr xor.b32 %5, %5, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 6, pl; @pr xor.b32 %6, %6, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 7, pl; @pr xor.b32 %7, %7, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 8, pl; @pr xor.b32 %8, %8, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 9, pl; @pr xor.b32 %9, %9, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 10, pl; @pr xor.b32 %10, %10, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 11, pl; @pr xor.b32 %11, %11, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 12, pl; @pr xor.b32 %12, %12, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 13, pl; @pr xor.b32 %13, %13, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 14, pl; @pr xor.b32 %14, %14, mask;\\n\"\n      \"setp.eq.and.u32 pr, ri, 15, pl; @pr xor.b32 %15, %15, mask;\\n\"\n      \"}\\n\"\n      : \"+r\"(A[0]), \"+r\"(A[1]), \"+r\"(A[2]), \"+r\"(A[3]), \"+r\"(A[4]), \"+r\"(A[5]), \"+r\"(A[6]), \"+r\"(A[7]), \"+r\"(A[8]), \"+r\"(A[9]), \"+r\"(A[10]), \"+r\"(A[11]), \"+r\"(A[12]), \"+r\"(A[13]), \"+r\"(A[14]), \"+r\"(A[15])\n      : \"r\"(xr), \"r\"(lane), \"r\"(target), \"r\"(reg));\n    ++ei;\n    if ((ei & 31) == 0) ec = __ldg(el + ei + lane);\n    nx = __shfl_sync(0xffffffffu, ec, ei & 31);\n    nxs = nx >> 17;\n  }\n}\n__device__ __forceinline__ unsigned long long rq_gt()"
+    },
+    {
+      "id": "selected-NT32-types-only",
+      "before": "          rq_fix(A[j], GS * G + j, nx, nxs, ei, ec, el, lane);",
+      "after": "          if constexpr (NT == 32 && (ST == 5 || ST == 6) && GS == 1 && PRB == 0 && WM == 0 && INS == 0 && FL == 35)\n            rq_fix_pred(A[j], GS * G + j, nx, nxs, ei, ec, el, lane);\n          else rq_fix(A[j], GS * G + j, nx, nxs, ei, ec, el, lane);"
+    }
+  ]
+}

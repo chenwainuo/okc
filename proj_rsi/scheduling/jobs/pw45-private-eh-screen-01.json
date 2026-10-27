@@ -1,0 +1,97 @@
+{
+  "id": "pw45.privateeh.screen.01",
+  "resource": "gpu",
+  "kind": "diagnostic",
+  "state": "BACKLOG",
+  "author": "process_history_audit",
+  "created_at": 1793124062.6396053,
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 1,
+      "p_resolve": 0.7,
+      "p_followup_gain": 0.2,
+      "unblocks": [
+        "pw45.privateeh.fullpolicy.followup.01"
+      ],
+      "decision": "Measure private EH against actual current selected M128 QKV/pooler paths; choose whether to refine selection and run one combined full-policy verification. Retain every signed point without a minimum-gain gate."
+    },
+    "basis": "Subjective low-confidence information-only planning: hypothetical1score-us subsequent full-policy opportunity,70% resolution and20% followup gain probability; no measured gain or H100-to-H200 prediction. Full360s screen cap +720s planned full-policy followup +30CPUmin for existing proof reuse/focused review/analysis. Exact numerical scenario is illustrative, not derived from static barrier cost.",
+    "confidence": "low",
+    "evidence": [
+      "proj_rsi/candidates/pw45_private_eh_screen_v1/PLAN.md",
+      "proj_rsi/audits/pw45-private-eh-screen-independent.md"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 360,
+    "followup_gpu_seconds": 720,
+    "cpu_minutes": 30
+  },
+  "files": {
+    "proj_rsi/candidates/pw45_private_eh_screen_v1/pw45.submission.py": "196da9966ca2452a94ad370cf025a095e6abf853c35eb9d245d06953e1e15595",
+    "proj_rsi/candidates/pw45_private_eh_screen_v1/build.py": "12b1c3fda809d2b203dd7df7544daf2e068fd0d9c7a3c94048eddb3e518af981",
+    "proj_rsi/candidates/pw45_private_eh_screen_v1/rq32_predxor.submission.py": "8140168cb95bb196da60f1ea3adc5998288ff9f98af96b974700bc493d246d64",
+    "proj_rsi/candidates/pw45_private_eh_screen_v1/screen.py": "5a730530426a2671ae1f0143f3c3ec7b166409e30dee57b19c0f03aabfa7bab3",
+    "proj_rsi/candidates/pw45_private_eh_screen_v1/composition.json": "0ec3633508f33997afddc854227844888958f7803122fb8682f2b15d37aa157c",
+    "proj_rsi/candidates/pw45_private_eh_screen_v1/PLAN.md": "39f1878ed35d61afb8528bbcb030f19e9deedd5a01f05552ac3fd16b6cfd1b7d",
+    "proj_rsi/tools/pw44_stack_lab_v2.py": "70e718c61ff5045de59ded07058e33967fd7af38467eadc2da206daa6a21a034",
+    "proj_rsi/tools/pw45_stack_lab.py": "203da0f6987613d68a84d1a18064466d427baecf173d3d2426c9d897786d649d",
+    "proj_rsi/candidates/pw44_trial_v2/mechanism.py": "0b62e80d64463fe9a8a61ccf767f7f85e7bf1503e7b1bd4486ea259f5413183b",
+    "proj_rsi/candidates/pw45_trial/support.py": "dc4286bc47af139767e860fd602b3d385a847eada81d1a90d05a385644e15e24",
+    "proj_rsi/candidates/pw44/sass.txt": "07c39171390eb4ef0f2cf81ae0c78603572cdb8b606d4757c1e6e9448d9b87fc",
+    "proj_rsi/candidates/pw44/cpu_proof.py": "551c24a67647eb0dd3f56572150218a55d81c0c5c8212e303bc070323b19d3bb",
+    "proj_rsi/candidates/pw40/cpu_proof.py": "79851ca7046c87e9d92c5541fdd7f20c0dc4f86b75b921802834d7770147aa66",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "proj_rsi/candidates/pw45/submission.py": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+    "proj_rsi/candidates/rq32_predxor/submission.py": "cb7df808539190dac72c4aef85589f72bb1849465933871c0ef8febfe3a26210",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/candidates/pw44/delta.json": "7bf96c4400238cffed9c67cc952f1e443e909b8663f3ccd88625abb1bfe3b65e",
+    "proj_rsi/candidates/pw45_private_eh_screen_v1/screen-manifest.json": "2a03eb1d3a0535d8e45ae64daf4f41f6c1f93d898c8ffb06f9c7de694225e930",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67"
+  },
+  "review": {
+    "actor": "queue_continuity",
+    "decision": "GO",
+    "path": "proj_rsi/audits/pw45-private-eh-screen-independent.md",
+    "sha256": "e5552d023c2bd754ba82e8265c4321468aaaa47700c18756d35a3d7859d5a0b6"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-pw45-private-eh-screen-01",
+    "inner_seconds": 240,
+    "outer_seconds": 360,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/pw45_private_eh_screen_v1/screen.py",
+      "--parent",
+      "pw45",
+      "--output",
+      "/okc/logs/scheduler/pw45-private-eh-screen-01/run"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/pw45-private-eh-screen-01"
+    ]
+  },
+  "annotations": {
+    "status": "INDEPENDENT_ADAPTER_GO_DRAFT_ONLY_NOT_REGISTERED_OR_LAUNCHED",
+    "parent_choice": "pw45 default; root must choose actual current parent. Independent review also covers rq32_predxor alternative.",
+    "source_review": "Reuse exact unchanged retained PW44/PW45/RQ32 source proofs; new composition strict inverse verified.",
+    "limits": "Two touched shapes only; no all30/official/promotion claim. No minimum gain/estimator agreement gate. Timeout invalid. No source or queue mutation authorized by this descriptor."
+  }
+}

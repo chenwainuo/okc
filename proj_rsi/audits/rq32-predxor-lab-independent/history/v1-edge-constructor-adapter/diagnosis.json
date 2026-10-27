@@ -1,0 +1,7 @@
+{
+  "scope": "Independent CPU adapter failure only, while author changed draft edge initializer",
+  "cause": "Old adapter redirected torch.full but new edge source uses Generator(device=cuda) and randint; CPU-only Torch rejected Generator before any CUDA context or kernel existed.",
+  "fix": "Explicit allowlisted CPU-only proxy for Generator/randint/full/dtypes; deny all other torch attributes including cuda.",
+  "GPU_contexts": 0,
+  "secondary_safe_failure": "Allowlist initially omitted pure equal/uint8; CPU proxy rejected it, then added explicitly."
+}

@@ -1,0 +1,22 @@
+{
+  "state": "COMPILE_ONLY_PASS_GPU_UNRUN",
+  "source_sha256": "96776ec0493b685a9e0c390be0d58380ccb2d5a8ca48001c237947adfa5cf94d",
+  "same_production_streams": 8,
+  "command": [
+    "/usr/local/cuda-12.8/bin/nvcc",
+    "-std=c++17",
+    "-O3",
+    "--expt-relaxed-constexpr",
+    "-gencode=arch=compute_90a,code=sm_90a",
+    "-I/home/ubuntu/.local/lib/python3.10/site-packages/torch/include",
+    "-I/home/ubuntu/.local/lib/python3.10/site-packages/torch/include/torch/csrc/api/include",
+    "-I/usr/include/python3.10",
+    "-c",
+    "/home/ubuntu/okc/tools/moe_ss_screen/offline-v2/screen.cu",
+    "-o",
+    "/home/ubuntu/okc/tools/moe_ss_screen/offline-v2/screen.o"
+  ],
+  "torch_imported": false,
+  "CUDA_calls": 0,
+  "link_or_extension_load": false
+}

@@ -1,0 +1,1 @@
+HOLD_GPU_ADMISSION for frozen lab e368600ecef4224e8ca2cf88b555d9071c0714c7e5b7cde66a8a9596c17131ec. Unchanged PW45 prepare removes gvc12 at submission.py:2448; mechanism.run nevertheless requires it. CPU proof missed the real prepared-state lifetime. No GPU was run. Preserve this snapshot; next revision reconstructs packs after actual prepare without changing selectors/clocks.

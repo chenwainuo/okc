@@ -1,0 +1,84 @@
+{
+  "version": "combined-direct-actual-policy-v1",
+  "state": "CPU_FROZEN_GPU_UNRUN_FOCUSED_REVIEW_REQUIRED",
+  "files": {
+    "proj_rsi/candidates/combined_policy_trial_v1/driver.py": "f10ca7bb54e59247ed095c3cdb6d604c96fed0e76772907fb2ce5b21ef63674f",
+    "proj_rsi/candidates/policy_integration_trial_v1/driver.py": "7edc849f7643cf66372c40902cf31b97742a1b1140b984b680199521b4a66ccc",
+    "proj_rsi/candidates/policy_integration_trial_v1/support.py": "dc4286bc47af139767e860fd602b3d385a847eada81d1a90d05a385644e15e24",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/candidates/pw45/submission.py": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/candidates/rq32_gv_predxor_pw45_v1/submission.py": "137e0dbce0f0126ef9c72d4b6e9b48e0448b02d0c397d9cc0ba927bac2d2a4a6",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67"
+  },
+  "derivation": {
+    "base_path": "proj_rsi/candidates/policy_integration_trial_v1/driver.py",
+    "base_sha256": "7edc849f7643cf66372c40902cf31b97742a1b1140b984b680199521b4a66ccc",
+    "edits": [
+      {
+        "name": "new-trial-path",
+        "before": "TRIAL=ROOT/'proj_rsi/candidates/policy_integration_trial_v1'",
+        "after": "TRIAL=ROOT/'proj_rsi/candidates/combined_policy_trial_v1'"
+      },
+      {
+        "name": "reuse-existing-counter-status-support",
+        "before": "sys.path.insert(0,str(TRIAL))\nimport support as S\nimport gv_support as G",
+        "after": "sys.path.insert(0,str(ROOT/'proj_rsi/candidates/policy_integration_trial_v1'))\nimport support as S"
+      },
+      {
+        "name": "frozen-combined-and-comparator-sources",
+        "before": "PINS={'pw45':'835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3','gv_predxor_pw45_v2':'501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9'}",
+        "after": "ALLOWED={'pw45':'835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3','gv_predxor_pw45_v2':'501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9','rq32_gv_predxor_pw45_v1':'137e0dbce0f0126ef9c72d4b6e9b48e0448b02d0c397d9cc0ba927bac2d2a4a6'}\nPINS={key:ALLOWED[key]for key in ('pw45','rq32_gv_predxor_pw45_v1')}"
+      },
+      {
+        "name": "focused-byte-derivation-check",
+        "before": "    import focused_check\n    return focused_check.check()\n",
+        "after": "    manifest=verify()\n    base=ROOT/manifest['derivation']['base_path'];expected=base.read_text()\n    assert sha(base)==manifest['derivation']['base_sha256']\n    for e in manifest['derivation']['edits']:\n        assert expected.count(e['before'])==1;expected=expected.replace(e['before'],e['after'],1)\n    assert expected==Path(__file__).read_text()\n    return {'state':'PASS_COMBINED_SOURCE_DERIVATION_GPU_UNRUN','pins':len(manifest['files']),'sources':PINS,'compiler_or_GPU_calls':0}\n"
+      },
+      {
+        "name": "original-JIT-build-and-source-receipt-only",
+        "before": "            def checked_build(*a,_build=original_build,_label=label,**kw):\n                name=kw.get('name',a[0] if a else None);original_cu=str(kw['cuda_sources']);cu=original_cu\n                rq='struct RqP' in cu;gv='static int64_t gvl(' in cu;dispatch=[];build_kw=dict(kw);build_a=list(a)\n                if rq:\n                    cu,dispatch=S.append_attrs(cu);build_kw['cuda_sources']=cu\n                    cpp=build_kw['cpp_sources'];declaration='int64_t pw45_labattrs(int64_t,int64_t);'\n                    build_kw['cpp_sources']=cpp+'\\n'+declaration if isinstance(cpp,str) else list(cpp)+[declaration]\n                    build_kw['functions']=list(build_kw['functions'])+['pw45_labattrs']\n                    name='pw45_gate_'+hashlib.sha256((cu+str(build_kw['cpp_sources'])+repr(build_kw.get('extra_cuda_cflags'))).encode()).hexdigest()[:24]\n                    if build_a:build_a[0]=name\n                    else:build_kw['name']=name\n                if gv:\n                    cu,helper_info=G.append_helpers(original_cu,mod,_label)\n                    build_kw['cuda_sources']=cu\n                    cpp=build_kw['cpp_sources'];decl=G.DECL\n                    build_kw['cpp_sources']=cpp+'\\n'+decl if isinstance(cpp,str) else list(cpp)+[decl]\n                    build_kw['functions']=list(build_kw['functions'])+['gvpred_attrs','gvpred_oldrun']\n                    name='gvpred_lab_'+_label+'_'+hashlib.sha256((cu+str(build_kw['cpp_sources'])+repr(build_kw.get('extra_cuda_cflags'))).encode()).hexdigest()[:20]\n                    if build_a:build_a[0]=name\n                    else:build_kw['name']=name\n                digest=hashlib.sha256(cu.encode()).hexdigest()\n                with lock:\n                    assert name not in registry or registry[name]==digest,('extension name collision',name)\n                    registry[name]=digest\n                ext=_build(*build_a,**build_kw)\n                sass=subprocess.check_output(['cuobjdump','--dump-sass',str(ext.__file__)],text=True,timeout=60)\n                resources=subprocess.check_output(['cuobjdump','--dump-resource-usage',str(ext.__file__)],text=True,timeout=60)\n                prefix=_label+'.'+str(name)\n                (args.output/(prefix+'.sass')).write_text(sass);(args.output/(prefix+'.resources')).write_text(resources)\n                (args.output/(prefix+'.original.cu')).write_text(original_cu);(args.output/(prefix+'.gated.cu')).write_text(cu)\n                __import__('shutil').copy2(ext.__file__,args.output/(prefix+'.so'))\n                actual_gate=None;live=[]\n                if rq:\n                    actual_gate=S.canonical_gate(original_cu,sass,resources)\n                    with lock:ext_geometries[id(ext)]=set(dispatch)\n                    for index,geometry in enumerate(dispatch):\n                        attr={key:int(ext.pw45_labattrs(index,field)) for key,field in [('regs',1),('local',2),('shared',3),('occupancy',4),('max_dynamic',5),('max_threads',6)]}\n                        live.append(S.check_attrs(geometry,attr))\n                gv_gate=None\n                if gv:gv_gate=G.actual_gate(original_cu,cu,sass,resources,ext,mod,_label)\n                with lock:\n                    result['jit'].append({'label':_label,'name':name,'original_source_sha256':hashlib.sha256(original_cu.encode()).hexdigest(),'source_sha256':digest,'so_sha256':sha(ext.__file__),'SASS_sha256':sha(args.output/(prefix+'.sass')),'before_return_to_prepare_math':True,'RQ_gate':actual_gate,'live_RQ_attrs':live,'GV_gate':gv_gate});save()\n                return ext\n",
+        "after": "            def checked_build(*a,_build=original_build,_label=label,**kw):\n                # Preserve exact original JIT arguments; archive source and actual binary identity only.\n                name=kw.get('name',a[0] if a else None);cu=str(kw['cuda_sources']);digest=hashlib.sha256(cu.encode()).hexdigest()\n                with lock:\n                    assert name not in registry or registry[name]==digest,('extension name collision',name)\n                    registry[name]=digest\n                ext=_build(*a,**kw);prefix=_label+'.'+str(name)\n                (args.output/(prefix+'.original.cu')).write_text(cu)\n                __import__('shutil').copy2(ext.__file__,args.output/(prefix+'.so'))\n                record={'label':_label,'name':name,'source_sha256':digest,'CPP_source_argument_sha256':hashlib.sha256(str(kw.get('cpp_sources')).encode()).hexdigest(),'cuda_flags':kw.get('extra_cuda_cflags'),'host_flags':kw.get('extra_cflags'),'so_sha256':sha(ext.__file__),'before_return_to_prepare_math':True,'original_JIT_arguments_unchanged':True}\n                with lock:result['jit'].append(record);save()\n                return ext\n"
+      },
+      {
+        "name": "remove-unrelated-canonical-RQ-union-gate",
+        "before": "            actual_args={tuple(a) for record in result['jit'] if record['label']==label for a in (record.get('RQ_gate') or {}).get('args',[])}\n            canonical=set(S.streams((S.CAND/'sass.txt').read_text()))\n            expected=canonical\n            assert actual_args==expected,('complete actual RQ functions must gate before serving',label,len(actual_args),len(expected))\n\n",
+        "after": ""
+      },
+      {
+        "name": "retain-actual-picks-without-profiler-inference",
+        "before": "        result['candidate_predxor_selected']=[name for name,e in result['shapes'].items() if G.selected_is_new(e['picks'][LABELS[-1]],LOADS[name.split('/')[0]],name.split('/')[1])]",
+        "after": "        result['candidate_actual_GV_picks']={name:e['picks'][LABELS[-1]]for name,e in result['shapes'].items()if e['picks'][LABELS[-1]]['family']=='GV'}"
+      },
+      {
+        "name": "choose-frozen-current-comparator-at-dispatch",
+        "before": "    p.add_argument('--pairs',type=int,default=32);p.add_argument('--f1-reps',type=int,default=11);p.add_argument('--cpu-artifacts',type=Path);args=p.parse_args()",
+        "after": "    p.add_argument('--pairs',type=int,default=32);p.add_argument('--f1-reps',type=int,default=11);p.add_argument('--cpu-artifacts',type=Path);p.add_argument('--control',choices=('pw45','gv_predxor_pw45_v2'),default='pw45');args=p.parse_args()\n    global PINS,LABELS\n    PINS={key:ALLOWED[key]for key in (args.control,'rq32_gv_predxor_pw45_v1')};LABELS=tuple(PINS)"
+      }
+    ]
+  },
+  "scope": {
+    "control_choices": [
+      "pw45",
+      "gv_predxor_pw45_v2"
+    ],
+    "candidate": "rq32_gv_predxor_pw45_v1",
+    "policies": 2,
+    "shapes": 30,
+    "task_checks": 148,
+    "raw_timing_calls": 2910,
+    "terminal_oracles": 120,
+    "mutations": 240,
+    "profiler_calls": 0,
+    "SASS_gates": 0,
+    "original_JIT_augmentation": false
+  },
+  "bounds": {
+    "inner_seconds": 900,
+    "outer_seconds": 1020,
+    "profile": false
+  },
+  "limits": "Source composition only before run. Both patch unions exact; original prepare/selector/timing/numeric/counter/cleanup flow inherited. No additive or official gain claim."
+}

@@ -1,0 +1,32 @@
+2026-10-27T17:50:23Z
+actual_JIT_and_resources
+ninja: no work to do.
+input_independent_banks
+mover_probe_all_K_slots
+edge_cases_all_instantiations
+all_K_basis_all_instantiations
+untimed_shared_cache13_dependency_chain
+Traceback (most recent call last):
+  File "/okc/proj_rsi/tools/moe_ss_pipeline_screen_v3.py", line 8, in <module>
+    try:runpy.run_path(str(Path(__file__).resolve().parents[2]/'tools/moe_ss_pipeline_screen_v3.py'),run_name='__main__')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 291, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/okc/tools/moe_ss_pipeline_screen_v3.py", line 468, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/okc/tools/moe_ss_pipeline_screen_v3.py", line 467, in main
+    assert args.output;run(args)
+                       ^^^^^^^^^
+  File "/okc/tools/moe_ss_pipeline_screen_v3.py", line 379, in run
+    chain_oracle(down['out'],fresh0)
+  File "/okc/tools/moe_ss_pipeline_screen_v3.py", line 378, in chain_oracle
+    return check(out,expected_down)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/okc/tools/moe_ss_pipeline_screen_v3.py", line 183, in check
+    else:assert bool((delta<=bound).all()),('predeclared screen numeric bound failed',float(delta.max()),int((delta>bound).sum()))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('predeclared screen numeric bound failed', 8.0, 360)
+TRIAL_EXIT okc-proj-moe-ss-stage-screen-v3-01 1
+2026-10-27T17:50:41Z

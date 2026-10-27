@@ -1,0 +1,211 @@
+{
+  "decision": "KEEP_PW45_INCUMBENT_PENDING_ONE_AUTHORIZED_RQ_SCORED_ATTEMPT_RETAIN_MIXED_EVIDENCE",
+  "check_job": "87044866f4494726",
+  "source_sha256": "cb7df808539190dac72c4aef85589f72bb1849465933871c0ef8febfe3a26210",
+  "profile_sha256": "e8dee6b7822e691dae726d7b8b3603423a8e415813710f8b63374afb2b840452",
+  "check_report_sha256": "b434f8e7523d9f6e98a2b35d41f1dca90e805b15217193dfdb38b667c5398c67",
+  "official": {
+    "error": null,
+    "passed": true,
+    "score_us": 3182.7212860205104,
+    "speedup": 1.5178206213715155,
+    "speedup_ci": [
+      1.4950533120509428,
+      1.5405879306920882
+    ],
+    "status": "ok",
+    "tests": 9,
+    "tests_passed": 9
+  },
+  "incumbent_score_us": 3179.285623687654,
+  "official_check_minus_incumbent_score_us": 3.435662332856282,
+  "actual_RQ_profile_routes": [
+    {
+      "case": {
+        "layer": "qkv_gate",
+        "load": "decode 16",
+        "m": 16,
+        "seed": 6853655468588822394,
+        "weight": 62
+      },
+      "args": [
+        16,
+        5,
+        1,
+        0,
+        0,
+        0,
+        35
+      ],
+      "predxor_selected": false
+    },
+    {
+      "case": {
+        "layer": "qkv_gate",
+        "load": "decode 32",
+        "m": 32,
+        "seed": 6854485632459324139,
+        "weight": 62
+      },
+      "args": [
+        32,
+        5,
+        1,
+        0,
+        0,
+        0,
+        35
+      ],
+      "predxor_selected": true
+    },
+    {
+      "case": {
+        "layer": "o",
+        "load": "decode 32",
+        "m": 32,
+        "seed": 6854651665233424491,
+        "weight": 62
+      },
+      "args": [
+        32,
+        6,
+        1,
+        0,
+        0,
+        0,
+        35
+      ],
+      "predxor_selected": true
+    },
+    {
+      "case": {
+        "layer": "pooler",
+        "load": "decode 32",
+        "m": 32,
+        "seed": 6854817698007524844,
+        "weight": 62
+      },
+      "args": [
+        32,
+        5,
+        1,
+        0,
+        0,
+        0,
+        35
+      ],
+      "predxor_selected": true
+    },
+    {
+      "case": {
+        "layer": "unpooler",
+        "load": "decode 32",
+        "m": 32,
+        "seed": 6854983730781625198,
+        "weight": 62
+      },
+      "args": [
+        32,
+        5,
+        1,
+        0,
+        0,
+        0,
+        35
+      ],
+      "predxor_selected": true
+    },
+    {
+      "case": {
+        "layer": "qkv_gate",
+        "load": "verify 16",
+        "m": 128,
+        "seed": 6856145960200327704,
+        "weight": 62
+      },
+      "args": [
+        128,
+        5,
+        1,
+        0,
+        0,
+        0,
+        3
+      ],
+      "predxor_selected": false
+    },
+    {
+      "case": {
+        "layer": "pooler",
+        "load": "verify 16",
+        "m": 128,
+        "seed": 6856478025748528429,
+        "weight": 62
+      },
+      "args": [
+        128,
+        5,
+        1,
+        0,
+        0,
+        0,
+        65538
+      ],
+      "predxor_selected": false
+    },
+    {
+      "case": {
+        "layer": "pooler",
+        "load": "verify 32",
+        "m": 256,
+        "seed": 6857308189619030259,
+        "weight": 62
+      },
+      "args": [
+        256,
+        4,
+        1,
+        0,
+        0,
+        0,
+        3
+      ],
+      "predxor_selected": false
+    }
+  ],
+  "local_same_run_actual_full30_speedup": {
+    "paired": 1.0056249783832558,
+    "F1": 1.0030822041573286
+  },
+  "same_job_BAKE": {
+    "pooler32": {
+      "new_ST5_KS4_us": 19.14,
+      "new_ST6_KS4_us": 19.2,
+      "unchanged_FL3_ST5_KS4_us": 19.55
+    },
+    "unpooler32": {
+      "new_ST5_KS2_us": 19.39,
+      "new_ST6_KS2_us": 19.46,
+      "unchanged_FL3_ST6_KS2_us": 19.55
+    },
+    "qkv32": {
+      "new_ST5_KS6_us": 15.36,
+      "new_ST5_KS7_us": 13.95,
+      "new_ST6_KS6_us": 14.4,
+      "unchanged_FL3_ST5_KS6_us": 14.69
+    },
+    "o32": {
+      "new_ST5_KS2_us": 10.72,
+      "new_ST6_KS2_us": 10.53,
+      "unchanged_FL34_ST5_KS2_us": 10.78
+    }
+  },
+  "limits": [
+    "No same-job exact parent-FL35 versus predxor-FL35 BAKE control exists. Different flags/KS/ST are not isolated predxor controls.",
+    "All4 official M32 projection routes actually select changed FL35 templates, not FL65571/EH.",
+    "Official check versus historical incumbent is cross-job package comparison; shape and score differences cannot be attributed additively to predxor.",
+    "Both small local gains and slight official loss retained; no family rejection or significance/minimum-gain threshold."
+  ],
+  "next": "Latest root process instruction authorizes one RQ scored attempt from the validated positive local full30 point despite the slight official CHECK loss. SUBMIT repeats task testing; CHECK is optional. Preserve this CHECK and incumbent; do not retry-fish. GV-only/combined marginal decisions remain separate.",
+  "decision_update": "Root explicitly changed process after this check interpretation: one scored RQ attempt is authorized; earlier recommendation against an identical scored run is superseded."
+}

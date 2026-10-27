@@ -1,0 +1,11 @@
+{
+  "state":"CPU_DRAFT_REVIEW_FAILURE_NO_GPU_ATTEMPT",
+  "cause":"Inherited three-arm timing loop indexed orders[i%6] after draft changed orders to two arms",
+  "old_hunk":"for index in orders[i%6]:row[LABELS[index]]=one(LABELS[index],9020+i,'paired')",
+  "new_hunk":"for index in S.policy_order(i):row[LABELS[index]]=one(LABELS[index],9020+i,'paired')",
+  "minimal_CPU_failure":"orders=[(0,1),(1,0)]; i=2; orders[i%6] raises IndexError",
+  "consequence_if_unrepaired":"Would fail at paired round2, before paired-terminal or performance admission",
+  "repair":"Bounded policy_order helper covers all32rounds and strict127row fixture/mode/label plan is checked by actual one()",
+  "preservation":"Minimal exact old/new literal hunk retained; initial whole draft was not frozen or GPU-run",
+  "reviewer":"sol12"
+}

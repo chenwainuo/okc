@@ -1,0 +1,150 @@
+{
+  "state": "CPU_LAB_PASS_GPU_UNRUN",
+  "sources": {
+    "pw45": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+    "gv_predxor_pw45_v2": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+  },
+  "GV": {
+    "pw45": {
+      "exact_original_functions": 96,
+      "exact_new_functions": 0,
+      "full_actual_SASS_PC_predicate_encoding": true,
+      "real_cuda_host_attributes_compile": true,
+      "query_compile_device_functions_exact": 8,
+      "appended_source_sha256": "b885d18fb85c04a064312d96aacd1c67399cb5f17508c9ede9211c0fae407378"
+    },
+    "gv_predxor_pw45_v2": {
+      "exact_original_functions": 96,
+      "exact_new_functions": 7,
+      "full_actual_SASS_PC_predicate_encoding": true,
+      "real_cuda_host_attributes_compile": true,
+      "query_compile_device_functions_exact": 15,
+      "appended_source_sha256": "e62459098a0344e1e12942fc522bef6fe1a5c11ed8d82b1ba82f16c3a8dd5a4e"
+    }
+  },
+  "actual_trace_binding": {
+    "source": "actual H100 PW38 trace02; GVCU source-equivalent to PW45",
+    "rows": [
+      {
+        "case": "decode1-pooler",
+        "actual_trace_pick": {
+          "family": "GV",
+          "id": 51,
+          "variant": [
+            1,
+            1,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "symbol": "_Z2gvILi1ELi1ELi2ELi2ELi8ELi16ELi1ELi1ELi0ELi1EEv1G",
+        "actual_PC_predicate_encoding": "EXACT_PW45",
+        "in_v2_scope": true
+      },
+      {
+        "case": "verify1-pooler",
+        "actual_trace_pick": {
+          "family": "GV",
+          "id": 0,
+          "variant": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "symbol": "_Z2gvILi1ELi1ELi2ELi1ELi8ELi16ELi1ELi1ELi0ELi1EEv1G",
+        "actual_PC_predicate_encoding": "EXACT_PW45",
+        "in_v2_scope": true
+      },
+      {
+        "case": "decode16-pooler",
+        "actual_trace_pick": {
+          "family": "GV",
+          "id": 15,
+          "variant": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "origin": "gv"
+        },
+        "symbol": "_Z2gvILi1ELi2ELi2ELi2ELi8ELi16ELi1ELi1ELi0ELi1EEv1G",
+        "actual_PC_predicate_encoding": "EXACT_PW45",
+        "in_v2_scope": true
+      },
+      {
+        "case": "decode16-unpooler",
+        "actual_trace_pick": {
+          "family": "GV",
+          "id": 64,
+          "variant": [
+            1,
+            2,
+            2,
+            1,
+            4,
+            16,
+            1,
+            1,
+            2,
+            1
+          ],
+          "origin": "gv"
+        },
+        "symbol": "_Z2gvILi1ELi2ELi2ELi1ELi4ELi16ELi1ELi1ELi2ELi1EEv1G",
+        "actual_PC_predicate_encoding": "EXACT_PW45",
+        "in_v2_scope": true
+      }
+    ],
+    "limits": "Source/PC identity only; no sampled instruction hotspot or GPU performance forecast"
+  },
+  "JIT_negatives": [
+    "pw45/wrong_resources",
+    "pw45/missing_main",
+    "gv_predxor_pw45_v2/wrong_predicate",
+    "gv_predxor_pw45_v2/wrong_resources",
+    "gv_predxor_pw45_v2/missing_main",
+    "wrong_label",
+    "extra_node",
+    "wrong_scope"
+  ],
+  "counter_negatives": [
+    "missing_ticket",
+    "dormant_word",
+    "wrong_flag"
+  ],
+  "terminal_negatives": [
+    "stale_seed",
+    "missing_arm",
+    "invalid_output",
+    "counter_mutation"
+  ],
+  "fixed_plan_per_geometry": 156,
+  "balanced_pairs": 32,
+  "fullpolicy_shapes": 30,
+  "scope_cases_per_policy": 74,
+  "GPU_API_calls": 0,
+  "production_imports": 0
+}

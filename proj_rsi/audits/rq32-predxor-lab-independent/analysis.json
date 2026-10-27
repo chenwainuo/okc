@@ -1,0 +1,108 @@
+{
+  "manifest_sha256": "e9a7cc0e9997499124d8b95f7890f69a8bdf1c4efa40afb5df01b7e9f7a04a3a",
+  "source_pins": 157,
+  "driver_sha256": "1087e50d3eb864be7955f3d8f1a81090e350fe0fc8b22591900f8e8edec6797a",
+  "author_CPU_proof": "EXACT_RECOMPUTED",
+  "author_tests": "21_PASS",
+  "fullpolicy": {
+    "state": "PASS_EXACT_PRODUCTION_DRIVER_TIMING_AST_CPU_FAKE_EVENTS",
+    "per_shape": 127,
+    "all30_raw": 3810,
+    "terminal_boundaries": [
+      [
+        "F1",
+        63,
+        {
+          "pw45": 42,
+          "rq32_predxor": 21
+        }
+      ],
+      [
+        "paired",
+        127,
+        {
+          "pw45": 74,
+          "rq32_predxor": 53
+        }
+      ]
+    ],
+    "AB_BA_each_position": 16
+  },
+  "edge": {
+    "state": "PASS_ACTUAL_EDGE_FUNCTION_AND_FROZEN_CODEC_CPU",
+    "records": [
+      {
+        "K": 8192,
+        "KS": 4,
+        "reduced_CPU_N": 128,
+        "real_launch_N": "4096pooler/8192unpooler_not_CPU_prevalence",
+        "metadata": {
+          "entries": 1026,
+          "stage0_unique_lane_word_half_owners": 1024,
+          "empty_other_tile_lists": true,
+          "stages": [
+            0,
+            1,
+            31
+          ],
+          "xor7": 24
+        },
+        "CAP": 1056,
+        "all_warp_groups": 32,
+        "nonempty_groups": [
+          0
+        ],
+        "payload": 1026,
+        "window_loads_including_initial": 33,
+        "refills": 32,
+        "full_exact_codec": true
+      },
+      {
+        "K": 4096,
+        "KS": 2,
+        "reduced_CPU_N": 128,
+        "real_launch_N": "4096pooler/8192unpooler_not_CPU_prevalence",
+        "metadata": {
+          "entries": 1026,
+          "stage0_unique_lane_word_half_owners": 1024,
+          "empty_other_tile_lists": true,
+          "stages": [
+            0,
+            1,
+            31
+          ],
+          "xor7": 24
+        },
+        "CAP": 1056,
+        "all_warp_groups": 16,
+        "nonempty_groups": [
+          0
+        ],
+        "payload": 1026,
+        "window_loads_including_initial": 33,
+        "refills": 32,
+        "full_exact_codec": true
+      }
+    ]
+  },
+  "terminal": {
+    "state": "PASS_INDEPENDENT_TERMINAL_POSITIVE_AND_7_NEGATIVES",
+    "negative_controls": {
+      "stale_output": "REJECT",
+      "nonfinite": "REJECT",
+      "output_alias": "REJECT",
+      "currentX": "REJECT",
+      "wrong_last_fixture": "REJECT",
+      "immutable": "REJECT",
+      "fullpolicy_joint_X_output_mutation": "REJECT"
+    }
+  },
+  "fixed": {
+    "calls_per_shape": 295,
+    "two_shapes": 2,
+    "total_raw": 590
+  },
+  "GPU_calls": 0,
+  "prepare_calls": 0,
+  "limits": "Fake timing is schedule proof only; CPU edge fixture does not assert actual CUDA bytes/bit correctness or prevalence."
+}

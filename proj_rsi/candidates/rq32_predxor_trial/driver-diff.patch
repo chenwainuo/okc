@@ -1,0 +1,197 @@
+--- proj_rsi/tools/pw45_stack_lab.py
++++ proj_rsi/tools/rq32_predxor_lab.py
+@@ -1,11 +1,11 @@
+-"""Pinned full-scope RS32/PW38/PW45 serving-policy lab; root-only GPU execution.
++"""Pinned full-scope actual PW45/RQpredxor serving-policy lab; root-only GPU execution.
+ --cpu-check uses only stdlib/AST. Fixed mechanism arms are separate from actual policy; no clock reset or selector mutation.
+ """
+ import argparse, ast, hashlib, importlib.util, json, re, statistics, subprocess, sys, threading, time, traceback
+ from pathlib import Path
+ ROOT=Path(__file__).resolve().parents[2]
+-TRIAL=ROOT/'proj_rsi/candidates/pw45_trial'
+-PINS={'rs32':'a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad','pw38':'29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e','pw45':'835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3'}
++TRIAL=ROOT/'proj_rsi/candidates/rq32_predxor_trial'
++PINS={'pw45':'835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3','rq32_predxor':'cb7df808539190dac72c4aef85589f72bb1849465933871c0ef8febfe3a26210'}
+ sys.path.insert(0,str(TRIAL))
+ import support as S
+ LABELS=tuple(PINS)
+@@ -202,10 +202,10 @@
+     canonical=(S.CAND/'sass.txt').read_text();synthetic=S.synthetic_resources(canonical)
+     all_gates={}
+     for label in LABELS:
+-        cu=S.cpu_factory(label);args=set(S.source_args(cu));subset=''.join('\n Function : '+entry['table'] for key,entry in S.streams(canonical).items() if key in args)
++        cu=S.cpu_factory(label);args=set(S.source_args(cu));table=S.streams((S.CAND.parent/label/'sass.txt').read_text());subset=''.join('\n Function : '+entry['table'] for key,entry in table.items() if key in args)
+         all_gates[label]=S.canonical_gate(cu,subset,synthetic)
+     import mechanism
+-    assert len(mechanism.plan())==210
++    assert len(mechanism.plan())==295
+     return {'all_original_source_factories_and_offline_canonical_gates':all_gates,'resource_transport_in_CPU_proof':'SYNTHETIC_CUOBJDUMP_FORMAT_NOT_GPU_ATTRS','router_source_switch_proof':router_cpu_proof(),'jit_negative_controls':jit_negative,'state':'CPU_STACK_LAB_PASS_GPU_UNRUN' ,'sources':PINS,'scope':{'timed_shapes':30,'normal_cases_per_arm':65,'exact_official_cases_per_arm':9},'counter_negatives':caught,'CUDA_API_calls':0,'production_imports':0}
+ 
+ def run(args):
+@@ -213,6 +213,7 @@
+     import torch
+     sys.path.insert(0,str(ROOT/'muse_bf16_proj'));import reference
+     args.output.mkdir(parents=True,exist_ok=False)
++    S.ARTIFACT_ROOT=args.output/'physical-storage'
+     result={'state':'RUNNING_NO_PERFORMANCE_ADMISSION','sources':PINS,'review_sha256':sha(args.review),'prepare':{},'jit':[],'jit_errors':[],'checks':[],'shapes':{},'raw':[]}
+     lock=threading.RLock();graphs_live=[]
+     def save():
+@@ -283,7 +284,7 @@
+             assert not any(error['label']==label for error in result['jit_errors']),('actual JIT/build gate failed',label)
+             actual_args={tuple(a) for record in result['jit'] if record['label']==label for a in (record.get('RQ_gate') or {}).get('args',[])}
+             canonical=set(S.streams((S.CAND/'sass.txt').read_text()))
+-            expected=canonical if label=='pw45' else canonical-{(32,4,1,0,0,0,52),(32,5,1,0,0,0,52)}
++            expected=canonical
+             if label=='rs32':expected-={(128,5,1,0,0,0,65538),(128,5,1,0,0,0,65539)}
+             assert actual_args==expected,('complete actual RQ functions must gate before serving',label,len(actual_args),len(expected))
+ 
+@@ -313,6 +314,14 @@
+                 view=(tensor_id(t),t.storage_offset(),tuple(t.shape),tuple(t.stride()))
+                 if view not in seen:seen.add(view);immutable.append((label+name,t,t.clone()))
+             save()
++        result['selected_target_admission']={}
++        for layer,expected_ks in (('pooler',4),('unpooler',2)):
++            result['selected_target_admission'][layer]={}
++            for label in LABELS:
++                info,_=pick(modules[label],states[label],layer,32,weights[layer].shape[0])
++                eligible=info['family']=='RQ' and tuple(info.get('variant',[])[1:8]) in S.TARGET and info.get('KS')==expected_ks
++                result['selected_target_admission'][layer][label]={'actual_pick':info,'is_selected_target_RQ':eligible,'interpretation':'selected-loop comparison eligible' if eligible else 'HOLD_LOOP_ATTRIBUTION_RETAIN_ACTUAL_POLICY_AND_FIXED_DATA'}
++        save()
+         # Every state must own distinct physical counter/workspace arenas.
+         allocations={}
+         for label,state in states.items():
+@@ -336,28 +345,29 @@
+                 assert torch.equal(data['x'].view(torch.uint8),x_before.view(torch.uint8))
+                 counter_check(before,counter_arena(state),plan,1);immutable_check()
+                 result['checks'].append({'label':label,'case':case,'official':index>=65,'oracle':message,'pick':info,'counter_contract':'PASS'});save()
+-        # Full o32 K=1024 basis and FP64 on each ACTUAL serving policy.
+-        result['actual_o32_basis']={}
++        # Full basis/FP64 for all4 affected M32 routes on each ACTUAL serving policy.
++        result['actual_affected_M32_basis']={}
+         for label in LABELS:
+-            mod,state=modules[label],states[label];config={'layer':'o','m':32,'n':8192,'k':1024}
+-            warm=reference.generate_input(32,'o',71501);mod.kernel_fn(warm,state);torch.cuda.synchronize()
+-            info,plan=counter_plan(mod,state,'o',32,8192,1024);before=counter_arena(state);calls=[0]
+-            def actual_fn(x,out):
+-                calls[0]+=1;xb=x.clone();out.copy_(mod.kernel_fn({'x':x,'config':config},state));assert torch.equal(x,xb);return 0
+-            gen=torch.Generator(device=weights['o'].device).manual_seed(71503)
+-            ok,msg=mod._rqval(actual_fn,weights['o'],32,8192,gen,1e-2);assert ok,(label,msg)
+-            torch.cuda.synchronize();counter_check(before,counter_arena(state),plan,calls[0]);immutable_check()
+-            result['actual_o32_basis'][label]={'pick':info,'all1024_basis':'EXACT','FP64_normal_outlier':msg,'calls':calls[0]};save()
++            mod,state=modules[label],states[label];result['actual_affected_M32_basis'][label]={}
++            for layer in ('pooler','unpooler','qkv_gate','o'):
++                w=weights[layer];n,k=w.shape;config={'layer':layer,'m':32,'n':n,'k':k}
++                warm=reference.generate_input(32,layer,71501);mod.kernel_fn(warm,state);torch.cuda.synchronize()
++                info,plan=counter_plan(mod,state,layer,32,n,k);before=counter_arena(state);calls=[0]
++                def actual_fn(x,out):
++                    calls[0]+=1;xb=x.clone();out.copy_(mod.kernel_fn({'x':x,'config':config},state));assert torch.equal(x.view(torch.uint8),xb.view(torch.uint8));return 0
++                gen=torch.Generator(device=w.device).manual_seed(71503)
++                ok,msg=mod._rqval(actual_fn,w,32,n,gen,1e-2);assert ok,(label,layer,msg)
++                torch.cuda.synchronize();counter_check(before,counter_arena(state),plan,calls[0]);immutable_check()
++                result['actual_affected_M32_basis'][label][layer]={'pick':info,'all_basis_columns':k,'onehot':'EXACT','FP64_normal_outlier':msg,'calls':calls[0]};save()
+         import mechanism
+         mechanism.run(sys.modules[__name__],torch,reference,modules,states,weights,result,graphs_live,save,ext_geometries)
+         immutable_check()
+         flush=torch.ones(64<<20,device='cuda',dtype=torch.float32);sink=torch.empty((),device='cuda')
+-        orders=[(0,1,2),(1,2,0),(2,0,1),(2,1,0),(1,0,2),(0,2,1)]
+         for load,m in LOADS.items():
+             for layer in LAYERS:
+                 name=load+'/'+layer;phase('timing_'+name)
+                 config={'m':m,'n':reference.out_features(layer,m),'k':reference.LAYERS[layer][1],'layer':layer}
+-                entry=result['shapes'][name]={'picks':{},'terminal_oracles':[],'mutations':[]}
++                entry=result['shapes'][name]={'picks':{},'terminal_oracles':[],'mutations':[],'capture_warmup':{'calls_per_label':2,'fixture_seed':9000}}
+                 work={};counts={label:0 for label in LABELS};baseline={};plans={}
+                 fixtures={seed:reference.generate_input(m,layer,seed)['x'] for seed in range(9000,9064)}
+                 for label in LABELS:
+@@ -365,6 +375,7 @@
+                     for _ in range(2):mod.kernel_fn({'x':x,'config':config},state)
+                     torch.cuda.synchronize();info,plan=counter_plan(mod,state,layer,m,config['n'],config['k'])
+                     entry['picks'][label]=info;plans[label]=plan
++                    entry['picks'][label]['affected_predxor_type']=info['family']=='RQ' and tuple(info['variant'][1:8]) in S.TARGET
+                     if info['family']=='RQ':
+                         rp=state['rq'][(layer,m)];ext=rp.get('mod',mod._rqmod[0])
+                         query_out=torch.empty((m,config['n']),device='cuda',dtype=torch.bfloat16)
+@@ -374,13 +385,15 @@
+                         assert attrs[2]==1024+st*(nt*128+(6144 if fl&16 else 12288))+24*st+16
+                         entry['picks'][label]['actual_regs_local_shared']=attrs
+                     baseline[label]=counter_arena(state)
++                    entry.setdefault('counter_baselines',{})[label]=S.arena_receipt(baseline[label])
++                    entry.setdefault('sink_baselines',{})[label]=S.sink_receipt(sys.modules[__name__],state,torch)
+                     g=torch.cuda.CUDAGraph();graphs_live.append(g)
+                     with torch.cuda.graph(g):out=mod.kernel_fn({'x':x,'config':config},state)
+                     torch.cuda.synchronize();counter_check(baseline[label],counter_arena(state),plan,0)
+                     work[label]=(x,out,g)
+-                assert len({item[0].data_ptr() for item in work.values()})==3
+-                assert len({item[1].data_ptr() for item in work.values()})==3
+-                last={}
++                assert len({item[0].data_ptr() for item in work.values()})==2
++                assert len({item[1].data_ptr() for item in work.values()})==2
++                last={};sample_index=[0];expected_plan=S.policy_plan()
+                 def oracle(label,fresh,kind):
+                     x,out,g=work[label]
+                     assert torch.equal(x.view(torch.uint8),fresh.view(torch.uint8))
+@@ -389,30 +402,33 @@
+                     counter_check(baseline[label],counter_arena(states[label]),plans[label],counts[label]);immutable_check()
+                     return message
+                 def one(label,seed,mode):
++                    assert expected_plan[sample_index[0]]=={'mode':mode,'label':label,'seed':seed};sample_index[0]+=1
+                     x,out,g=work[label];x.copy_(fixtures[seed]);torch.sum(flush,0,out=sink)
+                     a,b=torch.cuda.Event(enable_timing=True),torch.cuda.Event(enable_timing=True)
+                     a.record();g.replay();b.record();torch.cuda.synchronize();counts[label]+=1
+-                    us=a.elapsed_time(b)*1000;assert 0<us<float('inf')
++                    us=a.elapsed_time(b)*1000
++                    def invalid_elapsed(record):result.setdefault('invalid_measurements',[]).append(record);save()
++                    us=S.elapsed_gate(us,{'shape':name,'label':label,'seed':seed,'mode':mode},invalid_elapsed)
+                     row={'shape':name,'label':label,'seed':seed,'mode':mode,'us':us};result['raw'].append(row)
+                     with (args.output/'raw.jsonl').open('a') as journal:journal.write(json.dumps(row)+'\n');journal.flush()
+                     last[label]=seed;return us
+                 def terminal(kind):
+                     # Read exact terminal outputs before any graph replay or X/out mutation.
+-                    for label in LABELS:entry['terminal_oracles'].append({'label':label,'phase':kind,'seed':last[label],'oracle':oracle(label,fixtures[last[label]],kind)})
++                    for label in LABELS:entry['terminal_oracles'].append({'label':label,'phase':kind,'seed':last[label],'oracle':oracle(label,fixtures[last[label]],kind),'physical_counters':S.arena_receipt(counter_arena(states[label])),'physical_sinks':S.sink_receipt(sys.modules[__name__],states[label],torch)})
+                     save()
+                 f1={}
+                 for label in LABELS[:-1]:f1[label+'_before']=[one(label,9000+i,'F1') for i in range(args.f1_reps)]
+-                f1['pw45']=[one('pw45',9000+i,'F1') for i in range(args.f1_reps)]
++                f1['rq32_predxor']=[one('rq32_predxor',9000+i,'F1') for i in range(args.f1_reps)]
+                 for label in reversed(LABELS[:-1]):f1[label+'_after']=[one(label,9000+i,'F1') for i in range(args.f1_reps)]
+                 terminal('F1');entry['F1_medians_us']={key:statistics.median(values) for key,values in f1.items()}
+                 paired=[]
+                 for i in range(args.pairs):
+                     row={}
+-                    for index in orders[i%6]:row[LABELS[index]]=one(LABELS[index],9020+i,'paired')
++                    for index in S.policy_order(i):row[LABELS[index]]=one(LABELS[index],9020+i,'paired')
+                     paired.append(row)
+                 terminal('paired');entry['paired_all_samples']=paired
+-                entry['paired_control_minus_pw45_us']={label:statistics.median(row[label]-row['pw45'] for row in paired) for label in LABELS[:-1]}
+-                entry['paired_control_over_pw45_ratio']={label:statistics.median(row[label]/row['pw45'] for row in paired) for label in LABELS[:-1]}
++                entry['paired_control_minus_rq32_predxor_us']={label:statistics.median(row[label]-row['rq32_predxor'] for row in paired) for label in LABELS[:-1]}
++                entry['paired_control_over_rq32_predxor_ratio']={label:statistics.median(row[label]/row['rq32_predxor'] for row in paired) for label in LABELS[:-1]}
+                 # Separate retained-graph mutations AFTER both terminal gates; never repair timed outputs.
+                 probes=torch.zeros_like(fixtures[9000]);rows=torch.arange(m,device='cuda');probes[rows,(rows*37+19)%config['k']]=8
+                 mutations=[('zero',torch.zeros_like(probes)),('outliers',reference.generate_input(m,layer,9999,dist='outliers')['x']),('all_probes',probes),('fresh_normal',fixtures[9063])]
+@@ -442,10 +458,11 @@
+                     if selected['family']=='RQ':
+                         token='rq<'+', '.join(map(str,selected['variant'][1:8]))+'>'
+                         assert len(events)==1 and token in events[0],('RQ graph selected identity',name,label,events,token)
+-                    entry['actual_graph_profiles'][label]={'kernels':events,'nodes':len(events),'oracle':oracle(label,fresh,'profile_after_terminal_and_mutations')}
++                    entry['actual_graph_profiles'][label]={'kernels':events,'nodes':len(events),'oracle':oracle(label,fresh,'profile_after_terminal_and_mutations'),'logical_calls_since_baseline':counts[label],'physical_counters':S.arena_receipt(counter_arena(states[label])),'physical_sinks':S.sink_receipt(sys.modules[__name__],states[label],torch)}
+                 for x,out,g in work.values():torch.cuda.synchronize();g.reset();graphs_live.remove(g)
++                assert sample_index[0]==127
+                 entry['graphs']='RESET_AFTER_DRAIN';save()
+-        result['EH_selected']=[name for name,e in result['shapes'].items() if e['picks']['pw45'].get('name','').endswith('EH')]
++        result['EH_selected']=[name for name,e in result['shapes'].items() if e['picks']['rq32_predxor'].get('name','').endswith('EH')]
+         result['state']='FULL_LOCAL_STACK_VALIDATION_COMPLETE_ROOT_REVIEW_REQUIRED';result['official_score_claim']=False;phase('complete')
+     except BaseException:
+         result['state']='INVALID_NO_PERFORMANCE_ADMISSION';result['error']=traceback.format_exc();save();raise
+@@ -458,8 +475,8 @@
+ 
+ def main():
+     p=argparse.ArgumentParser();p.add_argument('--cpu-check',action='store_true');p.add_argument('--output',type=Path);p.add_argument('--review',type=Path)
+-    p.add_argument('--pairs',type=int,default=30);p.add_argument('--f1-reps',type=int,default=11);args=p.parse_args()
+-    assert args.pairs==30 and args.f1_reps==11,'freeze balanced declared sample counts'
++    p.add_argument('--pairs',type=int,default=32);p.add_argument('--f1-reps',type=int,default=21);args=p.parse_args()
++    assert args.pairs==32 and args.f1_reps==21,'freeze balanced declared sample counts'
+     if args.cpu_check:print(json.dumps(cpu_check(),indent=2));return
+     assert args.output;run(args)
+ if __name__=='__main__':main()

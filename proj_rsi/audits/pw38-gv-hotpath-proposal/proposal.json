@@ -1,0 +1,60 @@
+{
+  "state": "PROPOSAL_ONLY_UNIMPLEMENTED_UNMEASURED",
+  "source_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+  "experiments": [
+    {
+      "id": "research.gv.predicated-escape-repair.v1",
+      "rank": 1,
+      "scope": [
+        "poolerM1",
+        "poolerM8",
+        "poolerM16",
+        "unpoolerM16"
+      ],
+      "mechanism": "Same C12 escape cursor and XOR, explicit predicate per destination register; no empty guard or duplicated MMA",
+      "controls": [
+        "original fixed scored template",
+        "wrapper-only old repair",
+        "actual fresh prepared PW38"
+      ],
+      "next_action": "CPU implementation/exhaustive XOR proof and actualSASS/resources; noGPUreservation yet",
+      "attainable_gain_us": null
+    },
+    {
+      "id": "research.gv.partial-unroll4.m16.v1",
+      "rank": 2,
+      "scope": [
+        "poolerM16",
+        "unpoolerM16"
+      ],
+      "mechanism": "KU16 schedule grouped4 compile-time chunks\u00d74 runtime iterations, ST2 and arithmetic order retained",
+      "controls": [
+        "original fully unrolled KU16/ST2",
+        "loop-wrapper control",
+        "actual fresh prepared PW38",
+        "unchanged poolerM1/M8"
+      ],
+      "next_action": "OneU4 CPUcompile/lifetime/code-footprint discriminator; no neighboring unroll sweep",
+      "attainable_gain_us": null
+    }
+  ],
+  "required_after_individual_wins": "2x2 source-composition screen; whole-policy fullscope/official validation; retain all tiny/mixed effects",
+  "profile_limit": "No sampledhotPCs/dynamiccosts; actualbinaryfacts only; H100fresh picks may differ from scoredH200",
+  "coordination": {
+    "sol16": "exactscore/loadcoverage confirmed; sensitivity remains conditional only",
+    "sol14": "fresh30/top4runtime tracer adds kernel/call time, not PCsamples",
+    "sol09": "separateRQ32 loop proposals, noduplicateGVwork"
+  },
+  "evidence_sha256": {
+    "proj_rsi/current_leaderboard_stack.json": "a0047afad7d4fa9e36baa572af4dcab674e53cd3fad7c8474dca2f559a4fcc5f",
+    "results/proj-rsi/releases/pw38-v1-29e557ea53f3/submission.py": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+    "results/proj-rsi/releases/pw38-v1-29e557ea53f3/profiles/submission.a3f0ebf25a754c01.json": "f10842d067824979dad7afc954fab9269d4dad726c7cf9ddeaabbb1a48c54cfb",
+    "results/proj-rsi/scheduler/artifacts/research.pw45.gpu.01/collection-1793111000996134576/logs/scheduler/pw45-stack-01/run/result.json": "f6dbb69bf5359f1492170738a94977bf7e438a7faf132c455e598095fafad714",
+    "results/proj-rsi/scheduler/artifacts/research.pw45.gpu.01/collection-1793111000996134576/logs/scheduler/pw45-stack-01/run/pw38.gv20_7bb50cec.original.cu": "78124b5906d1531f8aa20273634ac00d11095f6cd7a61aa828ddff966e7f577e",
+    "results/proj-rsi/scheduler/artifacts/research.pw45.gpu.01/collection-1793111000996134576/logs/scheduler/pw45-stack-01/run/pw38.gv20_7bb50cec.gated.cu": "78124b5906d1531f8aa20273634ac00d11095f6cd7a61aa828ddff966e7f577e",
+    "results/proj-rsi/scheduler/artifacts/research.pw45.gpu.01/collection-1793111000996134576/logs/scheduler/pw45-stack-01/run/pw38.gv20_7bb50cec.sass": "132c222f4a675cabff91dc0188bff30c7d53c5fde5492f9006a69dde47f4470b",
+    "results/proj-rsi/scheduler/artifacts/research.pw45.gpu.01/collection-1793111000996134576/logs/scheduler/pw45-stack-01/run/pw38.gv20_7bb50cec.resources": "d770f90470f0649b2f80a42fe563346d69c812b7f011f33dfb282993d444aca2",
+    "results/proj-rsi/scheduler/artifacts/research.pw45.gpu.01/collection-1793111000996134576/logs/scheduler/pw45-stack-01/run/pw38.gv20_7bb50cec.so": "bbc47c17912db91c1089f8deb50c63ab9e59c54de374385023eadd73a060d701",
+    "proj_rsi/audits/pw42-emptyescape-02/report.md": "4bf0180135b9d4cca287084f087bb760051022852c5a22fe1d9e8030f71fa821"
+  }
+}

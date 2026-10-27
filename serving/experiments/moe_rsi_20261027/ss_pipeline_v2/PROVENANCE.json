@@ -1,0 +1,168 @@
+{
+  "id": "moe.both.ss-pipeline.v2",
+  "state": "CPU_NUMERIC_REPRESENTATION_REPAIR_GPU_UNRUN",
+  "goal": {
+    "objective": "3x the current benchmark",
+    "anchor_commit": "861333f",
+    "anchor_source_sha256": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5",
+    "anchor_report": "reports/2026-10-24-selected-validation.json",
+    "target_speedup": 3,
+    "verification": "paired comparison against frozen incumbent on original suite and independent holdouts; full serving score remains separately unproven",
+    "local_primary_batches": [
+      8,
+      32,
+      128,
+      256
+    ],
+    "regression_batches": [
+      1,
+      16,
+      64,
+      257,
+      384,
+      512,
+      513,
+      753,
+      3012,
+      16384
+    ],
+    "aggregation": "report every shape and geometric mean; never select winning subset",
+    "scope_caveat": "Local proxy is not the official serving benchmark. Full serving gain requires eight H200s and model validation.",
+    "baseline_medians": {
+      "1": 59.248000383377075,
+      "8": 137.2000053524971,
+      "16": 178.6240041255951,
+      "32": 231.6800057888031,
+      "64": 286.44800186157227,
+      "128": 350.76799988746643,
+      "256": 477.1679937839508,
+      "257": 473.64799678325653,
+      "384": 564.1120076179504,
+      "512": 638.8639807701111,
+      "513": 740.4319941997528,
+      "753": 847.4879860877991,
+      "3012": 2072.208046913147,
+      "16384": 9334.864139556885
+    }
+  },
+  "projection_milestone": "Separate3198us/3ms projection objective; not evidence of originalMoE3x objective.",
+  "facts": [
+    {
+      "source": "reports/2026-10-25-wgmma-pipeline-development.json",
+      "observed_primary_ratio": 0.5088606861176813,
+      "interpretation": "Valid regression; down-only engine cannot be promoted."
+    },
+    {
+      "source": "reports/2026-10-25-wgmma-token16-development.json",
+      "observed_mixed_ratio": 0.47365898151907726,
+      "interpretation": "All8/128/3012/16384sentinels regress; larger tile alone not evidence of win."
+    },
+    {
+      "source": "reports/2026-10-25-wgmma-pipeline-profile.json",
+      "qualified_PC_or_warp_samples": {
+        "long_scoreboard_percent": 41.803104,
+        "barrier_percent": 10.346706,
+        "tensor_active_percent": 3.6771
+      },
+      "interpretation": "Different counters have distinct denominators. No percentage-to-time conversion or intrinsic stall latency claim."
+    }
+  ],
+  "hypothesis": "Canonical unbiased decode repairs full finite raw-scale representation and avoids BF16weight denormals; producer/SS architecture remains an unmeasured performance hypothesis.",
+  "new_mechanism_vs_failed_family": "Samev1producer/math pipeline, nowexplicitlychanged numeric representation. Rawscales stayonebyte; no expandedBF16modelbank.",
+  "costs": [
+    "Additional8192Bshared weight stores perK64stage, plus async reads.",
+    "256threads/CTA rather than128; producer resources and barriers can offset overlap.",
+    "T64 applies only to existingblock64; sparse padding and largegrid remain potential losses.",
+    "Two losslessly repacked NVFP4 banks plus retained Marlin fallback storage; no BF16-expanded model bank.",
+    "Explicit outputzero for BOTH projections is timed; gate/up gains cannot omit it.",
+    "No SwiGLU/finalizer fusion or cross-expert normalization shortcuts.",
+    "Additional canonicalE2M1/rawE4M3 bit-decode ALU versus v1; timing unknown.",
+    "Noextra modelbank bytes: exactadditional local packed/scaled/global bank905969792bytes; temporary andretainedbanks separate.",
+    "Rawscale preparation avoids lossy HALF-byte transform; rawglobal noexponentcompensation."
+  ],
+  "transfer_limits": [
+    "CPU source/SASS/protocol do not establish actual BF16 numeric parity, throughput or occupancy.",
+    "FP32WGMMA reduction order may differ from Marlin; existing whole-reference/model tolerances remain mandatory.",
+    "All14 original shapes and independent holds unchanged; four/six developmental shapes are not goal completion.",
+    "Official8H200 model/TTFT/throughput-interactivity validation remains separate.",
+    "CPU numeric helpers are exact; actual devicepair packing/shared/WGMMA/FP32accum/epilogue andglobal extremes remain unprobed.",
+    "Normal/wide generator scope must not be silently relabelled as arbitrary checkpoint coverage."
+  ],
+  "external_pins": {
+    "docs/threefold-target.json": "2ab1c7fcae6aa452cffb372539d7c5325d301b92c935c85c4599a4ad1be2c4bc",
+    "docs/wgmma-full-goal-roadmap.json": "47a74e15b32a1b89b056e8e78b2d70c64dbaa33703e7e9d72f410f4babf09e97",
+    "docs/kernel-rewrite-plan.json": "af6ba1b48fc59f99397c1de8fc0051a64025f22d9404a16949e08e56142970db",
+    "reports/2026-10-24-selected-validation.json": "4541c1682f7adc919cd30579503687da09e83d34cc84a2dc8be3e8e18ae51157",
+    "reports/2026-10-25-wgmma-pipeline-development.json": "cbbace3e9fa1b84088970f669f77cac54a1bd842be63f24429f5de883345a770",
+    "reports/2026-10-25-wgmma-token16-development.json": "0c802f5f4df8424ee594d09c1980afa5b95a597a4eeab78e23e0400dd7030a44",
+    "reports/2026-10-25-wgmma-pipeline-profile.json": "c8044e0dd30fea65fc51feca39ae836023e93d983f0ba36222ad592af81a35a3",
+    "reports/2026-10-25-hardware-bs128.json": "d2f47265447dadc9dfa3b938ab147ac9f043251e22987d71140ff057028f9c7a",
+    "reports/2026-10-25-hardware-bs8.json": "a6ab703a577a427d1db44be8d6e9dd108e49439a43b41c35c8889cb3a6d3ee4c",
+    "serving/sglang/python/sglang/srt/layers/muse_spark_fp4_moe.py": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5",
+    "serving/sglang/python/sglang/srt/layers/quantization/marlin_utils_fp4.py": "a9011b5af7f8c9d25755d2ea4125e9fbdad06b862138be3ca27c85fc2f8a8e08",
+    "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin/dequant.h": "f07f0e1284431bd630d605b438c054509573c495d66d3a2b2e017396d84887a0",
+    "serving/sglang/python/sglang/srt/layers/moe/moe_runner/triton_utils/moe_align_block_size.py": "b9fe04c12c7ace9a32d7489907dda5ce4de7646d45713aec589e5e5cec6d1fee",
+    "serving/experiments/wgmma_variants/wgmma-token16-v5/routed_adapter.py": "5c5673a212512d78a2401b0b1ba6b3c64f0f264035f2941c5ec86facce14ba04",
+    "serving/experiments/wgmma_variants/wgmma-token16-v5/serving_wgmma_down.py": "0b5df011b4c51f9d4872ef9d73a33f0900e53be027227f340c325ce44ffe5811",
+    "benchmarks/serving_moe.py": "13285ce5b3409d6080f46bbd9ba452b63711f906c12640246552b3145b32744a",
+    "muse_moe_w4a16/baseline.py": "4fc48bd9cdfd749863c93a2dbf4e556e0c38fb04acc4fa48a53ef34cbf6c92a1",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_v1/manifest.json": "491fad9f17bd53f6b193517920c6ea0084f22a4b5052e45c31e00cfac2c94370",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_v1/kernel.cuh": "12167098f80ce14ee561df4c18cf57a3fa2406194d1f2368e87abe10ef3816a7",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_v1/adapter.py": "22b1de37bd6d7466b29a5866f9bf8cbaa7f42552102ab6e60c0f70ae181d7f2f",
+    "muse_moe_w4a16/nvfp4.py": "cfdf37c7bc14b10f7353aba7d4632f4767401b92b4b073941a8030d9a961aaaf",
+    "muse_moe_w4a16/reference.py": "a7e0b4fa86aa477a4e7bb5745b2b258954d72636b6da153bd239a717927cba44",
+    "proj_rsi/scheduling/reviews/moe-ss-pipeline-source-01.md": "649439f356e22f5e4e3f33d34f1f7acc745c9b4e0c0a1796c84558f9782a5ef0",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_v1/cpu_proof.py": "976e7520bea971bf729a97ef731c31f930a166e7bce4f248b34c1c597e4e52c6",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_v1/serving_both.py": "69f5c7ee7ec7d70bdc0f06ea5165bd374503e759a4d174167fdcb67436ef8d97",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_v1/gpu_screen_plan.json": "0150c001316e8ac02791749db64d90cc4a4744551db1e55a0d26ac3251c17df7"
+  },
+  "remaining": [
+    "independent kernel/layout/protocol/source review",
+    "actual JIT/hostlink/source/resource validation",
+    "all-K basis/FP64/task/normal/skew/outlier/duplicate/all-nonlocal/valid\u2192empty graph freshness tests",
+    "paired whole-expert actualanchor controls plus both-stage attribution",
+    "original14suite geometric mean and noninferiority, independent sessions/seeds/holdouts",
+    "8H200 fullserving/model/collectives/norm/router/TTFT/throughput"
+  ],
+  "immutable_anchor_bundle": {
+    "archive_path": "results/rsi/bundles/baseline-v2.tar.gz",
+    "archive_sha256": "a263b86eba62c39fbfa55b6ad580d28fc3119deec5a655919ab8cadfc4673eab",
+    "manifest_path": "results/rsi/bundles/baseline-v2.tar.gz.manifest.json",
+    "manifest_sha256": "a6405ec90466bbc5c13458382e6c5c6480dadecbbaf10feacd46b2101146f6a9",
+    "serving_member": "serving/sglang/python/sglang/srt/layers/muse_spark_fp4_moe.py",
+    "serving_member_sha256": "05ec9a8ad7ed86913b05667725f20c35a446d68af6f94f2ecc4900c5ac1228d5",
+    "copied_member": "frozen_anchor_serving.py.txt",
+    "limit": "Use entire frozen bundle for benchmark control, not source member alone. Read-only archive checked; no extraction onto live serving."
+  },
+  "parent_v1": {
+    "directory": "serving/experiments/moe_rsi_20261027/ss_pipeline_v1",
+    "manifest_sha256": "491fad9f17bd53f6b193517920c6ea0084f22a4b5052e45c31e00cfac2c94370",
+    "kernel_sha256": "12167098f80ce14ee561df4c18cf57a3fa2406194d1f2368e87abe10ef3816a7",
+    "source_only_GO": "proj_rsi/scheduling/reviews/moe-ss-pipeline-source-01.md",
+    "GO_sha256": "649439f356e22f5e4e3f33d34f1f7acc745c9b4e0c0a1796c84558f9782a5ef0",
+    "scope": "V1/sourceGO unchanged; inherited bit-transform proof did not establish all-finite numeric support."
+  },
+  "scale_domain_facts": {
+    "authoritative_generator": "muse_moe_w4a16/nvfp4.py random_weights: normalSF[8,448], wideSF[2^-6,448]",
+    "official_reference": "muse_moe_w4a16/reference.py generate_weights uses normal random_weights",
+    "raw01": "legal FP8subnormal=2^-9; outside those generated fixtures but allowed byquantize/dequantize and unknowncheckpoint scale domain",
+    "v1_failure": "HALF(sf*128)=0x3400 \u2192processed0x68 \u2192BF16scale0x0680, not .25; no claim of actual generated-benchmark failure",
+    "additional_risk": "Even corrected sf*128 retains tiny biased BF16multiplicands; v2 removes bias to avoid depending on HGMMA BF16denormal behavior."
+  },
+  "numeric_change": {
+    "old": "BF16(E2M1\u00d7processedscale with2^-119 bias), FP32MMA, BF16partial\u00d7BF16(rawgs\u00d72^119)",
+    "new": "BF16(E2M1\u00d7rawE4M3), FP32MMA, BF16partial\u00d7BF16(rawgs)",
+    "boundary_order": "BF16weight-product\u2192FP32MMA\u2192BF16cast-before-BF16globalmultiply retained",
+    "weight_domain": "All254finite E4M3bytes\u00d7all16 E2M1codes exactCPUbitresults; bothsignedzeros retained; raw\u00b1NaN\u2192signedquietBF16NaN",
+    "nonzero_weight_range": [
+      0.0009765625,
+      2688.0
+    ],
+    "equivalence_limit": "No blanket v1 numerical identity. Power2 correspondence requires no input/product/accumulator/intermediate underflow/overflow or differingdenormal treatment; complete model oracles mandatory.",
+    "known_counterexamples": [
+      "V1rawSF01",
+      "old biasedBF16partial underflows forcanonicalD2^-16",
+      "old compensatedglobal overflows forrawgs4096"
+    ]
+  }
+}

@@ -77,7 +77,7 @@
     "retrieve relevant prior lessons before proposing the next experiment; create concrete follow-up ideas linked to lesson/evidence IDs and ROI queue entries",
     "compare against actual selected serving incumbent; separately retain parent-relative progress",
     "compose compatible gains into a concrete cumulative source, validate the whole stack and actual selected routes",
-    "only root releases official check/scoring after local validation, quota and source guards; archive immutable job ID and payload association",
+    "root releases a single official scored attempt for each validated measured cumulative improvement; optional unscored check for a specific diagnostic or quota reason, not a universal duplicate run; archive exact source/job ID",
     "regenerate history tables; preserve unresolved or conflicting evidence and rank the next iteration"
   ],
   "candidate_contract": {
@@ -92,8 +92,8 @@
   },
   "gates": {
     "lint": "python3 -m proj_rsi lint <file> has no errors",
-    "check": "okc check passes 9/9 and the 30 timed shapes",
-    "promote_to_scored": "After correctness/source/quota validation, submit the identical source when its official check point score is below the actual incumbent. User explicitly accepts every measured positive; no minimum effect-size or confidence-interval significance gate. Preserve uncertainty and all signed regressions.",
+    "check": "Optional unscored official test/benchmark when useful for transfer diagnosis or conserving scored quota; not mandatory before submit, which runs correctness and benchmarking itself.",
+    "promote_to_scored": "After scoped source/correctness/graph/state validation and measured complete local serving improvement, submit exact cumulative bytes once under existing quota/user authorization. A prior official CHECK is optional. No minimum effect-size, confidence-interval or additional check-score gate; retain all contrary measurements and never repeat identical scored attempts to fish for timing.",
     "per_shape_win": "yours_us below the incumbent's yours_us on that shape; losses on any scored shape are reported and the path reverts to the incumbent's choice in the next stitch"
   },
   "budget": {
@@ -235,7 +235,7 @@
     "screen": "Bounded affected-shape correctness and same-run event timing first. Actual prepared state/module smoke, current X, own terminal output, relevant state lifetime, source/build/shape identity, exclusive lock, timeout and cleanup.",
     "targeted_diagnosis": "Assembly, basis sweeps, profiler counters and exhaustive proofs are targeted tools for a specific hypothesis or changed correctness hazard; not universal prerequisites to every screen.",
     "integration": "Test actual prepared cumulative policy against current incumbent across all required shapes. Validate source/graph/state/numerics and actual selection. Retain compatible wins and all signed regressions.",
-    "release": "Official check on exact validated bytes; score promptly when point score improves incumbent. No minimum effect or statistical significance gate. Preserve mixed evidence and no isolated-causality claim from package score.",
+    "release": "After scoped source/correctness/graph/state validation and measured complete local serving improvement, submit exact cumulative bytes once under existing quota/user authorization. A prior official CHECK is optional. No minimum effect-size, confidence-interval or additional check-score gate; retain all contrary measurements and never repeat identical scored attempts to fish for timing.",
     "reuse": "Review changed code once. Reuse unchanged source/build/toolchain-bound evidence; do not re-prove unrelated kernels or pin mutable test-duration logs as executable dependencies.",
     "parallel_bookkeeping": "Learning/history/dashboard/extra retrospective reviews are never hardware or submission dependencies. Preserve raw artifacts and brief outcome now; enrich asynchronously.",
     "scope": "Future descriptors/harness design. Existing frozen artifacts and admitted jobs retain their original contracts; no silent weakening of a running test."

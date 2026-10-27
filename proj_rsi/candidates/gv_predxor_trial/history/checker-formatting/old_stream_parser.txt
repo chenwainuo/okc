@@ -1,0 +1,2 @@
+def streams(text):
+ return {m[1]:m[2] for m in re.finditer(r'Function : (\S+)\n(.*?)(?=\n\s*Function :|\Z)',text,re.S)}

@@ -1,0 +1,166 @@
+{
+  "state": "TWO_CPU_PROPOSALS_NOT_IMPLEMENTED_NOT_QUEUED_GPU_UNRUN",
+  "source": "PW38 29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+  "scope": "Selected projection hotpaths only; not a full-model trace. Await agent14 fresh per-kernel trace before loop-dominance or expected-payoff claims.",
+  "targets": [
+    {
+      "layer": "pooler",
+      "m": 32,
+      "scored_main": [
+        32,
+        6,
+        1,
+        0,
+        0,
+        0,
+        35
+      ],
+      "KS": 4,
+      "scored_case_latency_us": 15.826435403605194,
+      "scored_kernel_trace_us": 15.6,
+      "fresh_PW45_control_main": [
+        32,
+        5,
+        1,
+        0,
+        0,
+        0,
+        35
+      ],
+      "KCS": 32,
+      "grid_CTA": 128
+    },
+    {
+      "layer": "unpooler",
+      "m": 32,
+      "scored_main": [
+        32,
+        6,
+        1,
+        0,
+        0,
+        0,
+        35
+      ],
+      "KS": 2,
+      "scored_case_latency_us": 15.431064965742554,
+      "scored_kernel_trace_us": 15.2,
+      "fresh_PW45_control_main": [
+        32,
+        5,
+        1,
+        0,
+        0,
+        0,
+        35
+      ],
+      "KCS": 32,
+      "grid_CTA": 128
+    }
+  ],
+  "common_facts": [
+    "Both target CTAs execute32k64 stages and both grids contain128CTAs, despite different N/K/KS.",
+    "Actual local loaded ST6 PC streams exactly equal the old parent binary; this is NOT an official H200 SASS dump. The local serving prepare selected ST5 instead.",
+    "Source WM0 decodes before issuing MMA, then loads next W, waits_group1 and retires previous X. This establishes order, not which operation dominates time."
+  ],
+  "prior_learning": {
+    "query_file": "proj_rsi/audits/rq-selected-loop-proposals/learning-query.json",
+    "query_text": "RQ selected M32 cursor slot phase recurrence escape register patch WM0 loop",
+    "direct_prior": "proj_rsi/audits/cursor-matched-geometry-01/report.md",
+    "old_change": "smallm_increment0d0ef30a only changes ldr slot/phase/fullwait and Wempty cursor; no descriptor/xempty recurrence",
+    "old_matched_control_minus_cursor_us": {
+      "pooler_ST5": {
+        "paired": -0.032,
+        "F1": -0.128
+      },
+      "pooler_ST6": {
+        "paired": -0.08,
+        "F1": -0.032
+      },
+      "unpooler_ST5": {
+        "paired": 0.08,
+        "F1": -0.128
+      },
+      "unpooler_ST6": {
+        "paired": 0.112,
+        "F1": -0.096
+      }
+    },
+    "limits": [
+      "Preserve positive unpooler paired observations alongside opposite F1 signs. All six matched F1 contrasts favored parent; actual prepared cursor lost pooler/unpooler to both controls.",
+      "Do not repeat generic ldr cursor and call it a new idea; retain old exact cursor as a diagnostic negative/mixed control.",
+      "Prior prepare reset its clock after prebuild; it is not cold official policy evidence or a source of absolute latency transfer.",
+      "New proposal must compare fresh actually selected PW38 and separately labeled scoredST6 geometry, never force localST6 and label it selected."
+    ]
+  },
+  "ideas": [
+    {
+      "rank": 1,
+      "id": "rq32.escape-predicated-xor.v1",
+      "change": "Within only the target NT32/ST5-or6/FL35 specialization, replace per-hit materialized xor masks (16 SEL-zero plus16 register XORs) and outer lane-divergent branch with explicit predicate-conjoined in-place XORs. For each i: p=(lane==entry_lane)&&(i==entry_reg); @p A[i]^=xor7<<(8+16*half). Keep warp-uniform while(seq==nextseq), ei/window refill, shfl and escape format unchanged. No dynamic A[index] or local memory.",
+      "source_anchors": [
+        "submission.py:4065 rq_fix",
+        "actual local ST6 SASS0x1aa0 BSSY/0x1ae0 target-lane BRA",
+        "actual0x1b90..0x1d90 SEL mask construction",
+        "actual0x1c90..0x1e50 XOR-register LOP3 sequence"
+      ],
+      "causal_hypothesis": "Removing mask temporaries and lane reconvergence could reduce issued escape-path instructions and register live ranges on real escape hits. Frequency/stall contribution is currently unmeasured; predication may compile identically or worse.",
+      "distinct_from_prior": "Does not replace ldr/fullwait/ring phase cursor. It changes only escape application encoding, retaining all escape positions and memory accesses.",
+      "first_discriminator": "CPU bitwise full register/lane/half/xor equivalence (finite feasibility already checked), then compile-only isolated new version: verify p-conjoined native XOR, fewer SEL/temporary live ranges, no local/spill or larger co-resident resource requirement. If NVCC reproduces current sequence, stop before GPU.",
+      "controlled_experiment": "At matched ST5 and ST6, compare original vs predicated-fix separately for pooler32/KS4 and unpooler32/KS2. Include original source-selected fresh PW38 whole kernel and keep scoredST6 fixed reference distinct. Use task W plus adversarial escaped lane/reg/half and32-entry refill-boundary fixtures; full8192/4096basis+FP64+all task tolerances. Later separate actual selector/full-stack validation only after a valid same-run result.",
+      "preserve": [
+        "384threads,232/40 dynamic policy, exact SMEM and grid,GS1/WM0,EARLY/HINT/ZI",
+        "all WGMMA values/order/commit/wait fences, ring full/empty arrival counts, TMA/store/counter protocol",
+        "full physical weights/pack/esc/counter/sink invariants, current-X bytes, fresh output/workspaces, immediate terminal oracles and drain/reset"
+      ],
+      "falsifier": "No SASS reduction, rare hits, more dependencies/predication, altered FP64/bit/counter/lifetime result, or valid same-run loss to selected main. Keep all negative and tiny positive outcomes.",
+      "predicted_gain_us": null,
+      "costs": [
+        "Potential extra predicate instructions and compiler scheduling/liveness regression",
+        "CPU source/compile/review needed; no GPU reservation requested here"
+      ]
+    },
+    {
+      "rank": 2,
+      "id": "rq32.descriptor-retire-cursor.v1",
+      "change": "Keep prior parent ldr/fullwait/Wempty source UNCHANGED. Replace only mma descriptor (s%ST)*XB/16 with a separate bounded descriptor offset advancing256 then wrapping atST*256; replace only xrel delayed (G%ST) with an independent retirement cursor advancing once per actual xrel call. Preserve WM0 call order: xrel(G-1) after wait1, final xrel(KCS-1) after wait0. No ring depth, GS, WM or unroll-factor change.",
+      "source_anchors": [
+        "submission.py:4293 xrel",
+        "submission.py:4331 mma descriptor d",
+        "submission.py:4375 WM0 wait1/xrel",
+        "submission.py:4428 final wait0/xrel",
+        "current0x2b20/0x3e10/0x3f70 and prior-cursor0x2a70/0x3d50/0x3e90 retain3magic-div6 IMAD.HI sites"
+      ],
+      "causal_hypothesis": "Remaining descriptor/retirement division-address dependencies may shorten without new data traffic. Prior ldr-cursor failure lowers confidence; saving arithmetic does not imply a measurable loop win. Exact PC-to-source association still needs instrumented compiler/trace work.",
+      "distinct_from_prior": "Existing delta modifies ldr and Wempty only; its after-SASS still contains all3div6 sites. This proposal instead leaves that tested ldr change out and targets descriptor plus delayed Xempty arithmetic.",
+      "first_discriminator": "CPU finite descriptor/retirement event equivalence already checked ST5/ST6,KCS1..128; next compile parent/oldldr-cursor/newdescriptor-retire separately. Admit only exact WGMMA/LDS/barrier/TMA event order, unchanged32-stage addresses/phases and no resource/stack/spill/occupancy regression. If residual IMADs merely move or total dependencies increase, do not spend GPU budget.",
+      "controlled_experiment": "Use original parent, old exact ldr-cursor and new-only descriptor-retirement version as3matched arms for both target shapes at separately labeled ST5/ST6. Compare each to fresh actual PW38 serving. Counterbalance/reverse F1 brackets and all paired orders over independent fixture batches; retain pooler negative prior, both signs and all raw rounds. Do not combine with idea1 until their separate contrasts are understood.",
+      "preserve": [
+        "ldr stage and phase sequence, W release timing, producer source/TMA/cache policy",
+        "descriptor bitfields and WGMMA A buffer retirement, full/Xempty counts and final drain",
+        "same numerical/current-input/counter/sink/immutable/terminal/resource gates as idea1"
+      ],
+      "falsifier": "Compiler branch/cursor live range costs outweigh remainder savings; modified descriptor/release event differs, or valid paired/F1 and actual-serving comparisons lose. No family retirement from one version.",
+      "predicted_gain_us": null,
+      "costs": [
+        "Two live cursor states and wrap predicates may raise dependency pressure",
+        "Old cursor is a diagnostic control, not automatic evidence new cursor wins"
+      ]
+    }
+  ],
+  "CPU_feasibility_proof": {
+    "path": "proj_rsi/audits/rq-selected-loop-proposals/proof.json",
+    "sha256": "a0169f48fe25a71b16f1179a9804ddc1f401e2aa08ea93a4ebaf868d5beaf4c7"
+  },
+  "evidence": {
+    "proj_rsi/candidates/pw38/submission.py": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+    "proj_rsi/audits/selected-hotpaths-pw38/report.json": "f6e93449ff9aaf81d9597fa2edb321e742c8434d94c152d10f5983b495858493",
+    "results/proj-rsi/scheduler/artifacts/research.pw45.gpu.01/collection-1793111000996134576/logs/scheduler/pw45-stack-01/run/pw38.pw45_gate_642a9249bb91f055ea50df2e.sass": "c3943f4a73f1e80d22a36a3edbc81463aa140b6ef7f88edf8b98218ac648e427",
+    "proj_rsi/candidates/smallm_increment/delta.json": "9513bc03fc5288d670b8b3c2a519ef63e3d03b90391e5d8ebaf7419276ad4d17",
+    "proj_rsi/candidates/smallm_increment/before.sass": "954129b56310ee37153226d9111713ec9e8d9e70a0a4209a4e9949db4346e856",
+    "proj_rsi/candidates/smallm_increment/after.sass": "cbdb0f7bd36df781de5fb0c9fe784d6a13b031945570697b4d6abdd586077d39",
+    "proj_rsi/audits/cursor-matched-geometry-01/report.md": "ad477d1dc17ce06c81cace13e72da00e41107edcc46a0927b824fabbe30e42bf",
+    "proj_rsi/learning_archive/registry-v4-9e7d3bf8.json": "9e7d3bf87909533c902960e2d9952e7268147396267c22ad9204640712cdd0c7"
+  },
+  "protocol": "No source edit, compile, GPU, API, queue or git action. Proposed conditional gains and actual costs are unknown.14freshtrace pending;08 owns distinct selectedGV focus."
+}

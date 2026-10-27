@@ -1,0 +1,4026 @@
+{
+  "state": "INVALID_SCREEN_NO_PERFORMANCE_ADMISSION",
+  "inputs": {
+    "screen_manifest_sha256": "d5eeab0c28cc00b29d899401579885fc8e6bde27125c21b96ae2f1d7b387d6bd",
+    "source_manifest_sha256": "aff45d7c45e62296045c51b800adfcf2fafcc8204758fcceb2e265606afe5d1f",
+    "review_sha256": "e8a0046bad1799fd5b8813fc04a0b63ca326a45786e8f275009472253548e208"
+  },
+  "scope": "isolated both-projection prerequisite; NOT full MoE/stock comparison/3x/official",
+  "image": "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel",
+  "torch": "2.8.0+cu128",
+  "cuda": "12.8",
+  "device": {
+    "name": "NVIDIA H100 80GB HBM3",
+    "SMs": 132,
+    "memory": 85017493504,
+    "UUID": "54a7daab-fe3e-c7fc-7f7c-6fbc40145a22"
+  },
+  "started_at": 1793123429.5051255,
+  "startup_preflight_before_result_seconds": 2.5223443508148193,
+  "external_wall_unknown": "interpreter/module import, container/lock/transfer outside run-entry; root outer timestamps are charged wall",
+  "checks": [
+    {
+      "kind": "hardware_dequant_shared_gather",
+      "DIV": 8,
+      "T": 8,
+      "all64_K64stages": true,
+      "experts": [
+        0,
+        31
+      ],
+      "Ntiles": "first/middle/last",
+      "deterministic_first_tile_q_scale_pairs": 4064,
+      "exact_raw_BF16_bytes_including_signed_zero": true
+    },
+    {
+      "kind": "hardware_dequant_shared_gather",
+      "DIV": 8,
+      "T": 16,
+      "all64_K64stages": true,
+      "experts": [
+        0,
+        31
+      ],
+      "Ntiles": "first/middle/last",
+      "deterministic_first_tile_q_scale_pairs": 4064,
+      "exact_raw_BF16_bytes_including_signed_zero": true
+    },
+    {
+      "kind": "hardware_dequant_shared_gather",
+      "DIV": 8,
+      "T": 32,
+      "all64_K64stages": true,
+      "experts": [
+        0,
+        31
+      ],
+      "Ntiles": "first/middle/last",
+      "deterministic_first_tile_q_scale_pairs": 4064,
+      "exact_raw_BF16_bytes_including_signed_zero": true
+    },
+    {
+      "kind": "hardware_dequant_shared_gather",
+      "DIV": 8,
+      "T": 64,
+      "all64_K64stages": true,
+      "experts": [
+        0,
+        31
+      ],
+      "Ntiles": "first/middle/last",
+      "deterministic_first_tile_q_scale_pairs": 4064,
+      "exact_raw_BF16_bytes_including_signed_zero": true
+    },
+    {
+      "kind": "hardware_dequant_shared_gather",
+      "DIV": 1,
+      "T": 8,
+      "all64_K64stages": true,
+      "experts": [
+        0,
+        31
+      ],
+      "Ntiles": "first/middle/last",
+      "deterministic_first_tile_q_scale_pairs": 4064,
+      "exact_raw_BF16_bytes_including_signed_zero": true
+    },
+    {
+      "kind": "hardware_dequant_shared_gather",
+      "DIV": 1,
+      "T": 16,
+      "all64_K64stages": true,
+      "experts": [
+        0,
+        31
+      ],
+      "Ntiles": "first/middle/last",
+      "deterministic_first_tile_q_scale_pairs": 4064,
+      "exact_raw_BF16_bytes_including_signed_zero": true
+    },
+    {
+      "kind": "hardware_dequant_shared_gather",
+      "DIV": 1,
+      "T": 32,
+      "all64_K64stages": true,
+      "experts": [
+        0,
+        31
+      ],
+      "Ntiles": "first/middle/last",
+      "deterministic_first_tile_q_scale_pairs": 4064,
+      "exact_raw_BF16_bytes_including_signed_zero": true
+    },
+    {
+      "kind": "hardware_dequant_shared_gather",
+      "DIV": 1,
+      "T": 64,
+      "all64_K64stages": true,
+      "experts": [
+        0,
+        31
+      ],
+      "Ntiles": "first/middle/last",
+      "deterministic_first_tile_q_scale_pairs": 4064,
+      "exact_raw_BF16_bytes_including_signed_zero": true
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 8,
+      "block_m": 8,
+      "m": 9,
+      "routes": "balanced",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 1.1916438341140747,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.19736115634441376,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 0.5999440550804138,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99089,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 8,
+      "block_m": 8,
+      "m": 17,
+      "routes": "skew",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 0.3355855941772461,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.125,
+            "max_relative_nonzero": 0.4157107472419739,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 2.295691967010498,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99097,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 8,
+      "block_m": 8,
+      "m": 7,
+      "routes": "duplicates",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.0742543414235115,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.4653826355934143,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.11457832157611847,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99087,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 8,
+      "block_m": 8,
+      "m": 5,
+      "routes": "mixed",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.028776761144399643,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.0486716628074646,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.016853908076882362,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99085,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 8,
+      "block_m": 8,
+      "m": 1,
+      "routes": "one",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.007042246870696545,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0078125,
+            "max_relative_nonzero": 0.013793003745377064,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.03370468690991402,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99081,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 8,
+      "block_m": 8,
+      "m": 9,
+      "routes": "empty",
+      "oracle": {
+        "max_abs": 0.0,
+        "max_relative_nonzero": 0.0,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99089,
+      "valid_to_empty": false,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 8,
+      "block_m": 8,
+      "m": 17,
+      "routes": "tail",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.007092198356986046,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.03749975189566612,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.03007507137954235,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99097,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 16,
+      "m": 9,
+      "routes": "balanced",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 1.1916438341140747,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 1.3502806425094604,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 1.149972677230835,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99169,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 16,
+      "m": 17,
+      "routes": "skew",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 0.3355855941772461,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.5595611333847046,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 0.1956462264060974,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99177,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 16,
+      "m": 7,
+      "routes": "duplicates",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.0742543414235115,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 1.2631688117980957,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.06849216669797897,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99167,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 16,
+      "m": 5,
+      "routes": "mixed",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.028776761144399643,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.14875517785549164,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.1202172040939331,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99165,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 16,
+      "m": 1,
+      "routes": "one",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.007042246870696545,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.00769227696582675,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.009852204471826553,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99161,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 16,
+      "m": 9,
+      "routes": "empty",
+      "oracle": {
+        "max_abs": 0.0,
+        "max_relative_nonzero": 0.0,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99169,
+      "valid_to_empty": false,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 16,
+      "m": 17,
+      "routes": "tail",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.013698581606149673,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.08332604914903641,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.02941131219267845,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99177,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 32,
+      "block_m": 32,
+      "m": 9,
+      "routes": "balanced",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 1.1916438341140747,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.5318389534950256,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 1.2154202461242676,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99329,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 32,
+      "block_m": 32,
+      "m": 17,
+      "routes": "skew",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 0.3355855941772461,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.14592143893241882,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 0.07053819298744202,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99337,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 32,
+      "block_m": 32,
+      "m": 7,
+      "routes": "duplicates",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.0742543414235115,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.12073380500078201,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 1.70941162109375,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99327,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 32,
+      "block_m": 32,
+      "m": 5,
+      "routes": "mixed",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.028776761144399643,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0078125,
+            "max_relative_nonzero": 0.04132159799337387,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.07946798950433731,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99325,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 32,
+      "block_m": 32,
+      "m": 1,
+      "routes": "one",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.007042246870696545,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.016460834071040154,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.010810795240104198,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99321,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 32,
+      "block_m": 32,
+      "m": 9,
+      "routes": "empty",
+      "oracle": {
+        "max_abs": 0.0,
+        "max_relative_nonzero": 0.0,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99329,
+      "valid_to_empty": false,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 32,
+      "block_m": 32,
+      "m": 17,
+      "routes": "tail",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.028776761144399643,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.02666647918522358,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.01877915859222412,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99337,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 48,
+      "m": 9,
+      "routes": "balanced",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 1.1916438341140747,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.2126535326242447,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.5,
+            "max_relative_nonzero": 0.8457569479942322,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99489,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 48,
+      "m": 17,
+      "routes": "skew",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 0.3355855941772461,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.33887308835983276,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 3.1206295490264893,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99497,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 48,
+      "m": 7,
+      "routes": "duplicates",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.0742543414235115,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.03333321958780289,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 3.0236175060272217,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99487,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 48,
+      "m": 5,
+      "routes": "mixed",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.028776761144399643,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 1.268559217453003,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.011494236066937447,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99485,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 48,
+      "m": 1,
+      "routes": "one",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.007042246870696545,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0078125,
+            "max_relative_nonzero": 0.022900398820638657,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.012986969202756882,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99481,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 48,
+      "m": 9,
+      "routes": "empty",
+      "oracle": {
+        "max_abs": 0.0,
+        "max_relative_nonzero": 0.0,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99489,
+      "valid_to_empty": false,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 16,
+      "block_m": 48,
+      "m": 17,
+      "routes": "tail",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.028776761144399643,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.07049765437841415,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.06711362302303314,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99497,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 64,
+      "block_m": 64,
+      "m": 9,
+      "routes": "balanced",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 1.1916438341140747,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.7835469245910645,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 0.5262867212295532,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99649,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 64,
+      "block_m": 64,
+      "m": 17,
+      "routes": "skew",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 0.3355855941772461,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.11855413764715195,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 0.49353665113449097,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99657,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 64,
+      "block_m": 64,
+      "m": 7,
+      "routes": "duplicates",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.0742543414235115,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.029196634888648987,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.7599433064460754,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99647,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 64,
+      "block_m": 64,
+      "m": 5,
+      "routes": "mixed",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.028776761144399643,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.00390625,
+            "max_relative_nonzero": 0.5033541321754456,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.125,
+            "max_relative_nonzero": 0.024999966844916344,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99645,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 64,
+      "block_m": 64,
+      "m": 1,
+      "routes": "one",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.007042246870696545,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.00390625,
+            "max_relative_nonzero": 0.006097560748457909,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.008368200622498989,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99641,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 64,
+      "block_m": 64,
+      "m": 9,
+      "routes": "empty",
+      "oracle": {
+        "max_abs": 0.0,
+        "max_relative_nonzero": 0.0,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99649,
+      "valid_to_empty": false,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 8,
+      "T": 64,
+      "block_m": 64,
+      "m": 17,
+      "routes": "tail",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.028776761144399643,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.20340411365032196,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.05343340337276459,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 99657,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 8,
+      "block_m": 8,
+      "m": 9,
+      "routes": "balanced",
+      "oracle": {
+        "max_abs": 0.03125,
+        "max_relative_nonzero": 0.038094475865364075,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.1351274698972702,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.012658228166401386,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92089,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 8,
+      "block_m": 8,
+      "m": 17,
+      "routes": "skew",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 0.9238530397415161,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 1.4171143770217896,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 0.03174576908349991,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92097,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 8,
+      "block_m": 8,
+      "m": 7,
+      "routes": "duplicates",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.013452851213514805,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0078125,
+            "max_relative_nonzero": 0.05263061076402664,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.1034473404288292,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92087,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 8,
+      "block_m": 8,
+      "m": 5,
+      "routes": "mixed",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.01315789483487606,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0078125,
+            "max_relative_nonzero": 0.021276475861668587,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.021164005622267723,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92085,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 8,
+      "block_m": 8,
+      "m": 1,
+      "routes": "one",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.012903138063848019,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.00390625,
+            "max_relative_nonzero": 0.009950196370482445,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0001220703125,
+            "max_relative_nonzero": 0.0066225104965269566,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92081,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 8,
+      "block_m": 8,
+      "m": 9,
+      "routes": "empty",
+      "oracle": {
+        "max_abs": 0.0,
+        "max_relative_nonzero": 0.0,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92089,
+      "valid_to_empty": false,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 8,
+      "block_m": 8,
+      "m": 17,
+      "routes": "tail",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.1379210501909256,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.016064122319221497,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.10195742547512054,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92097,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 16,
+      "m": 9,
+      "routes": "balanced",
+      "oracle": {
+        "max_abs": 0.03125,
+        "max_relative_nonzero": 0.038094475865364075,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.008733621798455715,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.012711849994957447,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92169,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 16,
+      "m": 17,
+      "routes": "skew",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 0.9238530397415161,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.2751600444316864,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 0.1125819981098175,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92177,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 16,
+      "m": 7,
+      "routes": "duplicates",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.013452851213514805,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.20323815941810608,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.07926778495311737,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92167,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 16,
+      "m": 5,
+      "routes": "mixed",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.01315789483487606,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0078125,
+            "max_relative_nonzero": 0.03636317700147629,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.012987012974917889,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92165,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 16,
+      "m": 1,
+      "routes": "one",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.012903138063848019,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0078125,
+            "max_relative_nonzero": 0.010204080492258072,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.0043859644792973995,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92161,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 16,
+      "m": 9,
+      "routes": "empty",
+      "oracle": {
+        "max_abs": 0.0,
+        "max_relative_nonzero": 0.0,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92169,
+      "valid_to_empty": false,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 16,
+      "m": 17,
+      "routes": "tail",
+      "oracle": {
+        "max_abs": 0.03125,
+        "max_relative_nonzero": 0.13418938219547272,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.03999888151884079,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.05263093486428261,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92177,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 32,
+      "block_m": 32,
+      "m": 9,
+      "routes": "balanced",
+      "oracle": {
+        "max_abs": 0.03125,
+        "max_relative_nonzero": 0.038094475865364075,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.02766786888241768,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.03968187794089317,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92329,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 32,
+      "block_m": 32,
+      "m": 17,
+      "routes": "skew",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 0.9238530397415161,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.028168875724077225,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.125,
+            "max_relative_nonzero": 0.04516121372580528,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92337,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 32,
+      "block_m": 32,
+      "m": 7,
+      "routes": "duplicates",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.013452851213514805,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.11310499906539917,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.29256319999694824,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92327,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 32,
+      "block_m": 32,
+      "m": 5,
+      "routes": "mixed",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.01315789483487606,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.007575757801532745,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.01999995857477188,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92325,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 32,
+      "block_m": 32,
+      "m": 1,
+      "routes": "one",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.012903138063848019,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0078125,
+            "max_relative_nonzero": 0.009389624930918217,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.00775193702429533,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92321,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 32,
+      "block_m": 32,
+      "m": 9,
+      "routes": "empty",
+      "oracle": {
+        "max_abs": 0.0,
+        "max_relative_nonzero": 0.0,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92329,
+      "valid_to_empty": false,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 32,
+      "block_m": 32,
+      "m": 17,
+      "routes": "tail",
+      "oracle": {
+        "max_abs": 0.03125,
+        "max_relative_nonzero": 0.13418938219547272,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.04053996875882149,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.03535334765911102,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92337,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 48,
+      "m": 9,
+      "routes": "balanced",
+      "oracle": {
+        "max_abs": 0.03125,
+        "max_relative_nonzero": 0.038094475865364075,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.20888109505176544,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.3390313684940338,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92489,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 48,
+      "m": 17,
+      "routes": "skew",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 0.9238530397415161,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.06976573914289474,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.25,
+            "max_relative_nonzero": 0.6666544079780579,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92497,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 48,
+      "m": 7,
+      "routes": "duplicates",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.013452851213514805,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.6160867810249329,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.4999919533729553,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92487,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 48,
+      "m": 5,
+      "routes": "mixed",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.01315789483487606,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0078125,
+            "max_relative_nonzero": 0.05384528636932373,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.17535370588302612,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92485,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 48,
+      "m": 1,
+      "routes": "one",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.012903138063848019,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0078125,
+            "max_relative_nonzero": 0.0061349691823124886,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.007462686393409967,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92481,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 48,
+      "m": 9,
+      "routes": "empty",
+      "oracle": {
+        "max_abs": 0.0,
+        "max_relative_nonzero": 0.0,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92489,
+      "valid_to_empty": false,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 16,
+      "block_m": 48,
+      "m": 17,
+      "routes": "tail",
+      "oracle": {
+        "max_abs": 0.03125,
+        "max_relative_nonzero": 0.13418938219547272,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.10267087817192078,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.1553758829832077,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92497,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 64,
+      "block_m": 64,
+      "m": 9,
+      "routes": "balanced",
+      "oracle": {
+        "max_abs": 0.03125,
+        "max_relative_nonzero": 0.038094475865364075,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.03225775435566902,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.125,
+            "max_relative_nonzero": 0.08252385258674622,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92649,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 64,
+      "block_m": 64,
+      "m": 17,
+      "routes": "skew",
+      "oracle": {
+        "max_abs": 0.0625,
+        "max_relative_nonzero": 0.9238530397415161,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.013157892972230911,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.125,
+            "max_relative_nonzero": 0.01898731105029583,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92657,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 64,
+      "block_m": 64,
+      "m": 7,
+      "routes": "duplicates",
+      "oracle": {
+        "max_abs": 0.015625,
+        "max_relative_nonzero": 0.013452851213514805,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.015625,
+            "max_relative_nonzero": 0.019999859854578972,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.014563069678843021,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92647,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 64,
+      "block_m": 64,
+      "m": 5,
+      "routes": "mixed",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.01315789483487606,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0078125,
+            "max_relative_nonzero": 0.038459986448287964,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.5035412311553955,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92645,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 64,
+      "block_m": 64,
+      "m": 1,
+      "routes": "one",
+      "oracle": {
+        "max_abs": 0.0078125,
+        "max_relative_nonzero": 0.012903138063848019,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.00048828125,
+            "max_relative_nonzero": 0.009708688594400883,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.007299270015209913,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92641,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 64,
+      "block_m": 64,
+      "m": 9,
+      "routes": "empty",
+      "oracle": {
+        "max_abs": 0.0,
+        "max_relative_nonzero": 0.0,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92649,
+      "valid_to_empty": false,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "edge",
+      "DIV": 1,
+      "T": 64,
+      "block_m": 64,
+      "m": 17,
+      "routes": "tail",
+      "oracle": {
+        "max_abs": 0.03125,
+        "max_relative_nonzero": 0.13418938219547272,
+        "exact": false,
+        "raw_BF16_bytes": false,
+        "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+      },
+      "graph_mutations": [
+        {
+          "kind": "current_X",
+          "oracle": {
+            "max_abs": 0.03125,
+            "max_relative_nonzero": 0.032257843762636185,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "zero",
+          "oracle": {
+            "max_abs": 0.0,
+            "max_relative_nonzero": 0.0,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        },
+        {
+          "kind": "outliers",
+          "oracle": {
+            "max_abs": 0.0625,
+            "max_relative_nonzero": 0.16969482600688934,
+            "exact": false,
+            "raw_BF16_bytes": false,
+            "bound": "abs<=0.001+0.02*abs(reference); screen-only, no full-task admission"
+          }
+        }
+      ],
+      "mutation_seed": 92657,
+      "valid_to_empty": true,
+      "counter_state": "no global progress counters; routes/experts/post immutable except declared post mutation",
+      "drain": "PASS"
+    },
+    {
+      "kind": "all_K_basis",
+      "DIV": 8,
+      "T": 8,
+      "all4096K": true,
+      "replays": 64,
+      "input_rows_per_replay": 64,
+      "output_channels": 8192,
+      "reference": "numeric single-term BF16 boundaries; exact including every real route slot"
+    },
+    {
+      "kind": "all_K_basis",
+      "DIV": 8,
+      "T": 16,
+      "all4096K": true,
+      "replays": 64,
+      "input_rows_per_replay": 64,
+      "output_channels": 8192,
+      "reference": "numeric single-term BF16 boundaries; exact including every real route slot"
+    },
+    {
+      "kind": "all_K_basis",
+      "DIV": 8,
+      "T": 32,
+      "all4096K": true,
+      "replays": 64,
+      "input_rows_per_replay": 64,
+      "output_channels": 8192,
+      "reference": "numeric single-term BF16 boundaries; exact including every real route slot"
+    },
+    {
+      "kind": "all_K_basis",
+      "DIV": 8,
+      "T": 64,
+      "all4096K": true,
+      "replays": 64,
+      "input_rows_per_replay": 64,
+      "output_channels": 8192,
+      "reference": "numeric single-term BF16 boundaries; exact including every real route slot"
+    },
+    {
+      "kind": "all_K_basis",
+      "DIV": 1,
+      "T": 8,
+      "all4096K": true,
+      "replays": 64,
+      "input_rows_per_replay": 64,
+      "output_channels": 4096,
+      "reference": "numeric single-term BF16 boundaries; exact including every real route slot"
+    },
+    {
+      "kind": "all_K_basis",
+      "DIV": 1,
+      "T": 16,
+      "all4096K": true,
+      "replays": 64,
+      "input_rows_per_replay": 64,
+      "output_channels": 4096,
+      "reference": "numeric single-term BF16 boundaries; exact including every real route slot"
+    },
+    {
+      "kind": "all_K_basis",
+      "DIV": 1,
+      "T": 32,
+      "all4096K": true,
+      "replays": 64,
+      "input_rows_per_replay": 64,
+      "output_channels": 4096,
+      "reference": "numeric single-term BF16 boundaries; exact including every real route slot"
+    },
+    {
+      "kind": "all_K_basis",
+      "DIV": 1,
+      "T": 64,
+      "all4096K": true,
+      "replays": 64,
+      "input_rows_per_replay": 64,
+      "output_channels": 4096,
+      "reference": "numeric single-term BF16 boundaries; exact including every real route slot"
+    }
+  ],
+  "timings": [],
+  "raw": [],
+  "gates": {
+    "actual_eight_PC_streams": {
+      "actual_cubin_functions": [
+        {
+          "tokens": 8,
+          "gather_divisor": 1,
+          "static_K64_groups": 5,
+          "four_HGMMA_per_group": true,
+          "actual_D_no_generic_write_before_wait0": true,
+          "math_128thread_barriers_after_wait0": 5
+        },
+        {
+          "tokens": 16,
+          "gather_divisor": 1,
+          "static_K64_groups": 5,
+          "four_HGMMA_per_group": true,
+          "actual_D_no_generic_write_before_wait0": true,
+          "math_128thread_barriers_after_wait0": 5
+        },
+        {
+          "tokens": 32,
+          "gather_divisor": 1,
+          "static_K64_groups": 5,
+          "four_HGMMA_per_group": true,
+          "actual_D_no_generic_write_before_wait0": true,
+          "math_128thread_barriers_after_wait0": 5
+        },
+        {
+          "tokens": 64,
+          "gather_divisor": 1,
+          "static_K64_groups": 5,
+          "four_HGMMA_per_group": true,
+          "actual_D_no_generic_write_before_wait0": true,
+          "math_128thread_barriers_after_wait0": 5
+        },
+        {
+          "tokens": 8,
+          "gather_divisor": 8,
+          "static_K64_groups": 5,
+          "four_HGMMA_per_group": true,
+          "actual_D_no_generic_write_before_wait0": true,
+          "math_128thread_barriers_after_wait0": 5
+        },
+        {
+          "tokens": 16,
+          "gather_divisor": 8,
+          "static_K64_groups": 5,
+          "four_HGMMA_per_group": true,
+          "actual_D_no_generic_write_before_wait0": true,
+          "math_128thread_barriers_after_wait0": 5
+        },
+        {
+          "tokens": 32,
+          "gather_divisor": 8,
+          "static_K64_groups": 5,
+          "four_HGMMA_per_group": true,
+          "actual_D_no_generic_write_before_wait0": true,
+          "math_128thread_barriers_after_wait0": 5
+        },
+        {
+          "tokens": 64,
+          "gather_divisor": 8,
+          "static_K64_groups": 5,
+          "four_HGMMA_per_group": true,
+          "actual_D_no_generic_write_before_wait0": true,
+          "math_128thread_barriers_after_wait0": 5
+        }
+      ],
+      "registers": [
+        58,
+        64,
+        42,
+        42,
+        38,
+        48,
+        32,
+        48
+      ],
+      "spills_stack_local": 0,
+      "limit": "fixed offline CUDA12.8 streams and register destinations; future actual JIT canonical regate mandatory"
+    },
+    "JIT": {
+      "production_sha256": "f9c3eaa45691d567f68377f692321e12ef266da0023a899c1cc8e9470460cc5a",
+      "augmented_sha256": "96776ec0493b685a9e0c390be0d58380ccb2d5a8ca48001c237947adfa5cf94d",
+      "so_sha256": "45cbb48a12ad054979d3f87f2db07cb0419cdeb9789a7c84c32e281e61cbf859",
+      "sass_sha256": "b92c3fc60d56c587d201b839daa1bece4926916b413b00036ea646eeae8827e9",
+      "production_sass_sha256": "4bfb1c50d793d20b3720268b360f5867b888bdcb445854fa6aab76867332c3c9",
+      "production_inverse_exact": true,
+      "before_any_project_launch": true
+    },
+    "actual_resources": [
+      {
+        "T": 8,
+        "DIV": 8,
+        "dynamic_shared": 19488,
+        "canonical": {
+          "REG": 32,
+          "STACK": 0,
+          "SHARED": 1024,
+          "LOCAL": 0
+        },
+        "registers": 32,
+        "local": 0,
+        "static_shared": 0,
+        "max_threads": 256,
+        "max_dynamic": 49152,
+        "blocks_per_SM": 8
+      },
+      {
+        "T": 8,
+        "DIV": 1,
+        "dynamic_shared": 19488,
+        "canonical": {
+          "REG": 48,
+          "STACK": 0,
+          "SHARED": 1024,
+          "LOCAL": 0
+        },
+        "registers": 48,
+        "local": 0,
+        "static_shared": 0,
+        "max_threads": 256,
+        "max_dynamic": 49152,
+        "blocks_per_SM": 5
+      },
+      {
+        "T": 16,
+        "DIV": 8,
+        "dynamic_shared": 21536,
+        "canonical": {
+          "REG": 38,
+          "STACK": 0,
+          "SHARED": 1024,
+          "LOCAL": 0
+        },
+        "registers": 38,
+        "local": 0,
+        "static_shared": 0,
+        "max_threads": 256,
+        "max_dynamic": 49152,
+        "blocks_per_SM": 6
+      },
+      {
+        "T": 16,
+        "DIV": 1,
+        "dynamic_shared": 21536,
+        "canonical": {
+          "REG": 48,
+          "STACK": 0,
+          "SHARED": 1024,
+          "LOCAL": 0
+        },
+        "registers": 48,
+        "local": 0,
+        "static_shared": 0,
+        "max_threads": 256,
+        "max_dynamic": 49152,
+        "blocks_per_SM": 5
+      },
+      {
+        "T": 32,
+        "DIV": 8,
+        "dynamic_shared": 25632,
+        "canonical": {
+          "REG": 42,
+          "STACK": 0,
+          "SHARED": 1024,
+          "LOCAL": 0
+        },
+        "registers": 42,
+        "local": 0,
+        "static_shared": 0,
+        "max_threads": 256,
+        "max_dynamic": 49152,
+        "blocks_per_SM": 5
+      },
+      {
+        "T": 32,
+        "DIV": 1,
+        "dynamic_shared": 25632,
+        "canonical": {
+          "REG": 42,
+          "STACK": 0,
+          "SHARED": 1024,
+          "LOCAL": 0
+        },
+        "registers": 42,
+        "local": 0,
+        "static_shared": 0,
+        "max_threads": 256,
+        "max_dynamic": 49152,
+        "blocks_per_SM": 5
+      },
+      {
+        "T": 64,
+        "DIV": 8,
+        "dynamic_shared": 33824,
+        "canonical": {
+          "REG": 58,
+          "STACK": 0,
+          "SHARED": 1024,
+          "LOCAL": 0
+        },
+        "registers": 58,
+        "local": 0,
+        "static_shared": 0,
+        "max_threads": 256,
+        "max_dynamic": 49152,
+        "blocks_per_SM": 4
+      },
+      {
+        "T": 64,
+        "DIV": 1,
+        "dynamic_shared": 33824,
+        "canonical": {
+          "REG": 64,
+          "STACK": 0,
+          "SHARED": 1024,
+          "LOCAL": 0
+        },
+        "registers": 64,
+        "local": 0,
+        "static_shared": 0,
+        "max_threads": 256,
+        "max_dynamic": 49152,
+        "blocks_per_SM": 4
+      }
+    ]
+  },
+  "memory": {
+    "before_banks": 0,
+    "after_banks_and_immutable_copies": 3623883264
+  },
+  "cost": {
+    "compile_seconds": 0.03452388600271661,
+    "preparation_seconds": 0.09148900699801743,
+    "transfer_seconds": null,
+    "transfer_note": "inputs generated on device; image/checkout transfer external and unknown, not zero"
+  },
+  "graph_replays": 782,
+  "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Feb_21_20:23:50_PST_2025\nCuda compilation tools, release 12.8, V12.8.93\nBuild cuda_12.8.r12.8/compiler.35583870_0\n",
+  "driver": "NVRM version: NVIDIA UNIX x86_64 Kernel Module  580.178.04  Tue Jul  7 12:38:21 UTC 2026\nGCC version:  gcc version 15.2.0 (Ubuntu 15.2.0-16ubuntu1) \n",
+  "phase": "untimed_shared_cache13_dependency_chain",
+  "error": "Traceback (most recent call last):\n  File \"/okc/tools/moe_ss_pipeline_screen_v3.py\", line 379, in run\n    chain_oracle(down['out'],fresh0)\n  File \"/okc/tools/moe_ss_pipeline_screen_v3.py\", line 378, in chain_oracle\n    return check(out,expected_down)\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/okc/tools/moe_ss_pipeline_screen_v3.py\", line 183, in check\n    else:assert bool((delta<=bound).all()),('predeclared screen numeric bound failed',float(delta.max()),int((delta>bound).sum()))\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('predeclared screen numeric bound failed', 8.0, 360)\n",
+  "cleanup": [],
+  "finished_at": 1793123440.1224782,
+  "elapsed_seconds": 10.617352724075317
+}

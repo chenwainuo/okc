@@ -1,0 +1,180 @@
+{
+  "state": "CPU_ONLY_CANDIDATE_GPU_UNRUN_REVIEW_REQUIRED",
+  "packing": {
+    "lossless_raw_nibbles": 279552,
+    "exact_CPP_helper_values": 272,
+    "finite_raw_E4M3_scales": 254,
+    "finite_FP4_times_scale_bit_cases": 4064,
+    "both_raw_FP8_NaNs": "sign-preserving quiet BF16 NaNs; invalid finite-numeric inputs",
+    "signed_zero_bit_checks": true,
+    "finite_nonzero_BF16_weight_range": [
+      0.0009765625,
+      2688.0
+    ],
+    "BF16_weight_subnormals": false,
+    "old_positive_normal_and_zero_biased_product_cases": 1920,
+    "conditional_epilogue_power2_cases": 21,
+    "global_and_weight_representation": "canonical unbiased; not blanket v1 identity",
+    "known_v1_limits": [
+      "rawscale01 lossy HALF-byte decode",
+      "old biased BF16 partial underflow forD=2^-16",
+      "old compensated global overflows forrawgs4096"
+    ],
+    "raw_pack_layout_exact_v1": true,
+    "hardware_mover_and_onehot_math": "UNPROBED; stage/fulltask GPU mandatory"
+  },
+  "layout": [
+    {
+      "tokens": 8,
+      "output_scalars": 512,
+      "shared_dynamic": 19488,
+      "stage_bytes": 9216,
+      "full_count": 1,
+      "empty_count": 1,
+      "math_release_threads_rendezvous": 128,
+      "producer_publication_threads": 128
+    },
+    {
+      "tokens": 16,
+      "output_scalars": 1024,
+      "shared_dynamic": 21536,
+      "stage_bytes": 10240,
+      "full_count": 1,
+      "empty_count": 1,
+      "math_release_threads_rendezvous": 128,
+      "producer_publication_threads": 128
+    },
+    {
+      "tokens": 32,
+      "output_scalars": 2048,
+      "shared_dynamic": 25632,
+      "stage_bytes": 12288,
+      "full_count": 1,
+      "empty_count": 1,
+      "math_release_threads_rendezvous": 128,
+      "producer_publication_threads": 128
+    },
+    {
+      "tokens": 64,
+      "output_scalars": 4096,
+      "shared_dynamic": 33824,
+      "stage_bytes": 16384,
+      "full_count": 1,
+      "empty_count": 1,
+      "math_release_threads_rendezvous": 128,
+      "producer_publication_threads": 128
+    }
+  ],
+  "protocol": {
+    "complete_stages": 64,
+    "reachable_interleavings": 192,
+    "no_dead_states": true,
+    "init_slots": [
+      0,
+      1
+    ],
+    "last_reads": [
+      62,
+      63
+    ],
+    "producer_final_return": "maththreads retain CTA shared lifetime until finalwait0",
+    "assumption": "finite warp/asynchronous-engine progress; not arbitrary scheduler or numeric proof"
+  },
+  "routing": {
+    "shape_block_routing_cases": 280,
+    "up_input": "slot//8 bounds originalM",
+    "down_input": "slot bounds M*8",
+    "nonlocal_and_empty": "no kernel write; explicit output zero each call",
+    "capacity_tail": "ceil grid with per-lane capacity guards; no block-alignment allocation assumption"
+  },
+  "physical": {
+    "actual_cubin_functions": [
+      {
+        "tokens": 64,
+        "gather_divisor": 8,
+        "static_K64_groups": 5,
+        "four_HGMMA_per_group": true,
+        "actual_D_no_generic_write_before_wait0": true,
+        "math_128thread_barriers_after_wait0": 5
+      },
+      {
+        "tokens": 64,
+        "gather_divisor": 1,
+        "static_K64_groups": 5,
+        "four_HGMMA_per_group": true,
+        "actual_D_no_generic_write_before_wait0": true,
+        "math_128thread_barriers_after_wait0": 5
+      },
+      {
+        "tokens": 32,
+        "gather_divisor": 8,
+        "static_K64_groups": 5,
+        "four_HGMMA_per_group": true,
+        "actual_D_no_generic_write_before_wait0": true,
+        "math_128thread_barriers_after_wait0": 5
+      },
+      {
+        "tokens": 32,
+        "gather_divisor": 1,
+        "static_K64_groups": 5,
+        "four_HGMMA_per_group": true,
+        "actual_D_no_generic_write_before_wait0": true,
+        "math_128thread_barriers_after_wait0": 5
+      },
+      {
+        "tokens": 16,
+        "gather_divisor": 8,
+        "static_K64_groups": 5,
+        "four_HGMMA_per_group": true,
+        "actual_D_no_generic_write_before_wait0": true,
+        "math_128thread_barriers_after_wait0": 5
+      },
+      {
+        "tokens": 16,
+        "gather_divisor": 1,
+        "static_K64_groups": 5,
+        "four_HGMMA_per_group": true,
+        "actual_D_no_generic_write_before_wait0": true,
+        "math_128thread_barriers_after_wait0": 5
+      },
+      {
+        "tokens": 8,
+        "gather_divisor": 8,
+        "static_K64_groups": 5,
+        "four_HGMMA_per_group": true,
+        "actual_D_no_generic_write_before_wait0": true,
+        "math_128thread_barriers_after_wait0": 5
+      },
+      {
+        "tokens": 8,
+        "gather_divisor": 1,
+        "static_K64_groups": 5,
+        "four_HGMMA_per_group": true,
+        "actual_D_no_generic_write_before_wait0": true,
+        "math_128thread_barriers_after_wait0": 5
+      }
+    ],
+    "registers": [
+      58,
+      64,
+      42,
+      42,
+      38,
+      48,
+      32,
+      48
+    ],
+    "spills_stack_local": 0,
+    "limit": "fixed offline CUDA12.8 streams and register destinations; future actual JIT canonical regate mandatory"
+  },
+  "early_release_negative": "REJECTED",
+  "physical_negatives_rejected": [
+    "missing_async_wait",
+    "missing_reader_rendezvous"
+  ],
+  "full_host_wrapper_object_matches_device_canonical": true,
+  "both_projection_adapter_inverse_to_entire_parent_method_AST": true,
+  "serving_parent_method_exact": true,
+  "inherited_finalizer": "unmodified inherited _forward_marlin: norm each expert before router sum",
+  "CUDA_context_initialized": false
+}

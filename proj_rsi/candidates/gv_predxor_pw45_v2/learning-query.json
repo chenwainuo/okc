@@ -1,0 +1,603 @@
+{
+  "registry_path": "proj_rsi/learnings.json",
+  "registry_sha256_at_read": "796741367ae629bf6d11dcb2b315c24c05e129159a5047d27a4556a099648290",
+  "lessons": [
+    {
+      "id": "eh-tiny-context-bound",
+      "version": 1,
+      "supersedes": null,
+      "title": "Tiny EH gains survive recovery; official bake and fixed geometry answer different questions",
+      "tags": [
+        "EH",
+        "epilogue",
+        "tiny",
+        "official",
+        "bake",
+        "uncertainty"
+      ],
+      "context": {
+        "experiment_id": "official-check:a3ed4ce5886a4415 + research.eh.samegeometry.gpu.01",
+        "family": "EH",
+        "parents": [
+          "PW36@2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf"
+        ],
+        "comparators": [
+          "same-geometry FL3",
+          "EH65539",
+          "actual selected serving policies"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "official CHECK plus H100 local fixed trial"
+        },
+        "validity": "VALID_OFFICIAL_CHECK",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/pw38/submission.py",
+            "role": "official CHECK source",
+            "sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "official",
+          "path": "proj_rsi/audits/pw38-official-check-author.json",
+          "sha256": "21ce139c67dbcaa176fa4c2028c1195f0bf98698e03eb45eba81b4582208d3cc"
+        },
+        {
+          "id": "fixed",
+          "path": "proj_rsi/audits/eh-same-geometry-01/report.md",
+          "sha256": "8cf0d7f16e3ede067a170e25f24e6045fb851a3c98e09992542250aec05057ea"
+        }
+      ],
+      "observations": [
+        {
+          "id": "pooler",
+          "statement": "Official CHECK same-job prepare prints about0.13us pooler EH gain.",
+          "outcome": "positive",
+          "evidence": "official",
+          "selector": {
+            "json_pointer": "/same_job_component_bakes/0/printed_control_minus_EH_us",
+            "equals": 0.129999999999999
+          }
+        },
+        {
+          "id": "qkv",
+          "statement": "Official CHECK prepare prints about0.42us QKV hinted EH gain.",
+          "outcome": "positive",
+          "evidence": "official",
+          "selector": {
+            "json_pointer": "/same_job_component_bakes/1/printed_control_minus_EH_us",
+            "equals": 0.41999999999999815
+          }
+        },
+        {
+          "id": "unpool",
+          "statement": "Official hinted unpooler EH bake regresses and remains unselected.",
+          "outcome": "negative",
+          "evidence": "official",
+          "selector": {
+            "json_pointer": "/same_job_component_bakes/2/printed_control_minus_EH_us",
+            "equals": -0.16000000000000014
+          }
+        },
+        {
+          "id": "mixed",
+          "statement": "Fixed geometry remains mixed, without a minimum tiny-gain filter.",
+          "outcome": "mixed",
+          "evidence": "fixed",
+          "selector": {
+            "contains": "This is three both-estimator-positive EH3 observations, one both-estimator-negative EH2 observation, and four sign disagreements."
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "EH may offer a small shape/flag-dependent benefit, but sequential bake medians also contain selection and timing context.",
+          "status": "unproven",
+          "observation_ids": [
+            "pooler",
+            "qkv",
+            "unpool",
+            "mixed"
+          ]
+        }
+      ],
+      "scope": "Official CHECK component prepare observations versus a separate four-shape matched local trial; CHECK is not a leaderboard submission.",
+      "transfer_limits": [
+        "Sequential official prepare differences are not balanced causal estimates or whole-score improvements.",
+        "Do not substitute EH2 for selected EH3 or transfer a fixed full-width o result to selected HALF/LT."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Matched actual-selected EH3 repeats fail to preserve even directional pooler benefit after counterbalanced order and fresh inputs.",
+      "next_test": {
+        "question": "Does bounded confirmation retain useful EH choices without forcing EH on mixed shapes?",
+        "controls": [
+          "same-geometry FL3",
+          "EH65539",
+          "actual selected serving policies"
+        ],
+        "discriminator": "Confirm close EH3 finalists against their actual selected comparator using balanced fresh-fixture rounds inside a fixed prepare budget; preserve QKV sign disagreement and unselected negative EH alternatives.",
+        "stop_rule": "Do not enable universally; decline selection changes if budget or correctness gates fail, without deleting tiny positive observations.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      },
+      "related_queue_ids": [
+        "research.eh.samegeometry.gpu.01",
+        "pw38.stack.fullscope.01",
+        "research.prepare.selection.pw39.readiness.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Only if the named discriminator succeeds inside the declared scope.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Existing fixed-geometry root bound600s is evidence of a past reservation, not permission for this proposed test.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "6b58697000771856c5c3ef11cbc68049f172bcaa898e63e3e8fadfbb5f8cd8f9"
+    },
+    {
+      "id": "prepare-selection-is-experiment",
+      "version": 1,
+      "supersedes": null,
+      "title": "Unchanged kernels with changed picks motivate bounded PW39 selection confirmation",
+      "tags": [
+        "prepare",
+        "selection",
+        "PW39",
+        "noise",
+        "bake",
+        "regression"
+      ],
+      "context": {
+        "experiment_id": "pw38.stack.fullscope.01 + smallm.cursor.v3.all5.01",
+        "family": "prepare-selection",
+        "parents": [
+          "PW38@29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+          "PW36@2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf"
+        ],
+        "comparators": [
+          "unchanged PW38 fullprepare",
+          "new PW39 confirmation",
+          "same kernel bodies",
+          "independent held-out fixtures"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/pw38/submission.py",
+            "role": "unchanged kernel/prepare parent",
+            "sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e"
+          },
+          {
+            "path": "proj_rsi/candidates/pw36/submission.py",
+            "role": "actual local comparator",
+            "sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "selection",
+          "path": "proj_rsi/audits/pw38-stack-01/report.md",
+          "sha256": "9a2824e75a7d35f6ee1d1dc5b7a1f0a037462cc78f7a25a1574be7880de9909d"
+        },
+        {
+          "id": "smallm",
+          "path": "proj_rsi/audits/smallm-v3-01/report.md",
+          "sha256": "8e529093da2347b0d97f6c37da62b4a5254b8c1b57761c7a1cf284a6696dafce"
+        }
+      ],
+      "observations": [
+        {
+          "id": "pooler",
+          "statement": "PW38 full policy regresses pooler32 through an existing non-EARLY choice.",
+          "outcome": "negative",
+          "evidence": "selection",
+          "selector": {
+            "contains": "It loses0.240us paired/0.192us F1 versus RS32 and0.128/0.128us versus PW36."
+          }
+        },
+        {
+          "id": "unchanged",
+          "statement": "A small positive observation can occur on an unchanged path and is not cursor evidence.",
+          "outcome": "positive",
+          "evidence": "smallm",
+          "selector": {
+            "contains": "all\nthree serve the unchanged GV15 kernel"
+          }
+        },
+        {
+          "id": "confound",
+          "statement": "Selected ST5/ST6 differences confound recurrence attribution.",
+          "outcome": "mixed",
+          "evidence": "smallm",
+          "selector": {
+            "contains": "the run establishes complete prepared-policy behavior, not isolated recurrence\nlatency."
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Close bake finalist selection variability may contribute to regressions even when common kernel instructions are unchanged; the specific noise source is unmeasured.",
+          "status": "unproven",
+          "observation_ids": [
+            "pooler",
+            "unchanged",
+            "confound"
+          ]
+        }
+      ],
+      "scope": "Actual full prepared policies and picks, not a forced-kernel code effect or proof of deterministic selector improvement.",
+      "transfer_limits": [
+        "Do not relabel unchanged-path wins as code gains or subtract cross-run minima.",
+        "PW39 is a new queued CPU/readiness idea, not a measured improvement; original prepare budget and full-stack validation remain required."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Repeated bounded confirmation selects the same or worse held-out serving policy, or consumes the prepare deadline advantage.",
+      "next_test": {
+        "question": "Does the actual PW39 bounded close-finalist confirmation reduce held-out selection regret within the existing prepare budget?",
+        "controls": [
+          "unchanged PW38 fullprepare",
+          "new PW39 confirmation",
+          "same kernel bodies",
+          "independent held-out fixtures"
+        ],
+        "discriminator": "Reference research.prepare.selection.pw39.readiness.01: freeze finalist lists and decision samples, confirm only close finalists, evaluate actual selected outputs on disjoint balanced fixtures, and report selection frequencies/regret plus full prepare wall time across repetitions.",
+        "stop_rule": "Reject a selector version if it exceeds budget or worsens held-out full-policy regret; never force the best observed kernel or reset prepare clocks to obtain a win.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      },
+      "related_queue_ids": [
+        "research.prepare.selection.pw39.readiness.01",
+        "pw38.stack.fullscope.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Only if the named discriminator succeeds inside the declared scope.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Existing PW39 readiness plan:60CPU minutes and600s follow-up GPU scenario, not new authorization.",
+        "cpu_minutes": 60,
+        "gpu_seconds": 600
+      },
+      "record_sha256": "57cd30c4cc101e897da3d2662fb23bfc2fbdf134308fb18aed785b6ff06c62e8"
+    },
+    {
+      "id": "prepare-selection-is-experiment",
+      "version": 2,
+      "supersedes": "57cd30c4cc101e897da3d2662fb23bfc2fbdf134308fb18aed785b6ff06c62e8",
+      "title": "Unchanged kernels with changed picks motivate bounded PW39 selection confirmation",
+      "tags": [
+        "prepare",
+        "selection",
+        "PW39",
+        "noise",
+        "bake",
+        "regression"
+      ],
+      "context": {
+        "experiment_id": "pw38.stack.fullscope.01 + smallm.cursor.v3.all5.01",
+        "family": "prepare-selection",
+        "parents": [
+          "PW38@29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+          "PW36@2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf"
+        ],
+        "comparators": [
+          "actual PW38 prepared policy",
+          "actual PW36 prepared policy",
+          "actual RS32 prepared policy",
+          "smallm-v3 actual prepared policy"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/pw38/submission.py",
+            "role": "unchanged kernel/prepare parent",
+            "sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e"
+          },
+          {
+            "path": "proj_rsi/candidates/pw36/submission.py",
+            "role": "actual local comparator",
+            "sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "selection",
+          "path": "proj_rsi/audits/pw38-stack-01/report.md",
+          "sha256": "9a2824e75a7d35f6ee1d1dc5b7a1f0a037462cc78f7a25a1574be7880de9909d"
+        },
+        {
+          "id": "smallm",
+          "path": "proj_rsi/audits/smallm-v3-01/report.md",
+          "sha256": "8e529093da2347b0d97f6c37da62b4a5254b8c1b57761c7a1cf284a6696dafce"
+        }
+      ],
+      "observations": [
+        {
+          "id": "pooler",
+          "statement": "PW38 full policy regresses pooler32 through an existing non-EARLY choice.",
+          "outcome": "negative",
+          "evidence": "selection",
+          "selector": {
+            "contains": "It loses0.240us paired/0.192us F1 versus RS32 and0.128/0.128us versus PW36."
+          }
+        },
+        {
+          "id": "unchanged",
+          "statement": "A small positive observation can occur on an unchanged path and is not cursor evidence.",
+          "outcome": "positive",
+          "evidence": "smallm",
+          "selector": {
+            "contains": "all\nthree serve the unchanged GV15 kernel"
+          }
+        },
+        {
+          "id": "confound",
+          "statement": "Selected ST5/ST6 differences confound recurrence attribution.",
+          "outcome": "mixed",
+          "evidence": "smallm",
+          "selector": {
+            "contains": "the run establishes complete prepared-policy behavior, not isolated recurrence\nlatency."
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Close bake finalist selection variability may contribute to regressions even when common kernel instructions are unchanged; the specific noise source is unmeasured.",
+          "status": "unproven",
+          "observation_ids": [
+            "pooler",
+            "unchanged",
+            "confound"
+          ]
+        }
+      ],
+      "scope": "Metadata correction of v1 context.comparators: PW39 confirmation and held-out fixtures are proposed next-test controls, not measured comparators. Actual full prepared policies and picks, not a forced-kernel code effect or proof of deterministic selector improvement.",
+      "transfer_limits": [
+        "Do not relabel unchanged-path wins as code gains or subtract cross-run minima.",
+        "PW39 is a new queued CPU/readiness idea, not a measured improvement; original prepare budget and full-stack validation remain required."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Repeated bounded confirmation selects the same or worse held-out serving policy, or consumes the prepare deadline advantage.",
+      "next_test": {
+        "question": "Does the actual PW39 bounded close-finalist confirmation reduce held-out selection regret within the existing prepare budget?",
+        "controls": [
+          "unchanged PW38 fullprepare",
+          "new PW39 confirmation",
+          "same kernel bodies",
+          "independent held-out fixtures"
+        ],
+        "discriminator": "Reference research.prepare.selection.pw39.readiness.01: freeze finalist lists and decision samples, confirm only close finalists, evaluate actual selected outputs on disjoint balanced fixtures, and report selection frequencies/regret plus full prepare wall time across repetitions.",
+        "stop_rule": "Reject a selector version if it exceeds budget or worsens held-out full-policy regret; never force the best observed kernel or reset prepare clocks to obtain a win.",
+        "required_gates": [
+          "frozen source/evidence hashes",
+          "actual selected comparator and same-run declared scope",
+          "full correctness/ownership/counter/cleanup gates before gain admission",
+          "retain all raw signed outcomes; independent validation"
+        ]
+      },
+      "related_queue_ids": [
+        "research.prepare.selection.pw39.readiness.01",
+        "pw38.stack.fullscope.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Only if the named discriminator succeeds inside the declared scope.",
+          "No measured gain or cross-hardware transfer is asserted."
+        ]
+      },
+      "cost": {
+        "basis": "Existing PW39 readiness plan:60CPU minutes and600s follow-up GPU scenario, not new authorization.",
+        "cpu_minutes": 60,
+        "gpu_seconds": 600
+      },
+      "record_sha256": "78c2ea94c607aa37547436c8f5120e7a84d31a83723cbba68750922797b10317"
+    },
+    {
+      "id": "pw45-small-fixed-gain-unselected-mixed-package",
+      "version": 1,
+      "supersedes": null,
+      "title": "A tiny fixed mechanism win can coexist with an unselected path and conflicting package estimators",
+      "tags": [
+        "o32-HALF-fullK",
+        "actual-policy",
+        "paired",
+        "F1",
+        "small-gains"
+      ],
+      "context": {
+        "experiment_id": "research.pw45.gpu.01",
+        "family": "o32-HALF-fullK",
+        "parents": [
+          "scored PW38 source29e557ea53f3"
+        ],
+        "comparators": [
+          "actual independently prepared PW38",
+          "fixed mechanism arms separately where declared"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local132SM"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/audits/pw45-runtime-independent.json",
+            "sha256": "236a0141f6276edf61d0b1e3882f01d472fd5f3a26bcbe5097897eaf24b906f3",
+            "role": "independently validated immutable actual collection summary"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "runtime",
+          "path": "proj_rsi/audits/pw45-runtime-independent.json",
+          "sha256": "236a0141f6276edf61d0b1e3882f01d472fd5f3a26bcbe5097897eaf24b906f3"
+        }
+      ],
+      "observations": [
+        {
+          "id": "paired",
+          "statement": "Actual PW38-minus-PW45 paired aggregate point is positive; no effect-size filter.",
+          "outcome": "positive",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/pw38_minus_pw45_local_score_estimate_us/paired",
+            "equals": 7.453381362991422
+          }
+        },
+        {
+          "id": "f1",
+          "statement": "Actual F1 aggregate point is negative and must remain explicit.",
+          "outcome": "negative",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/pw38_minus_pw45_local_score_estimate_us/F1",
+            "equals": -9.135128164251
+          }
+        },
+        {
+          "id": "st5",
+          "statement": "Fixed ST5 HALF fullK tiny paired win over old early ST5 remains preserved.",
+          "outcome": "positive",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/fixed_o32_mechanism/contrasts/old_st5_early_zi_minus_half_st5_fullk/paired_median_gain_us",
+            "equals": 0.06399955600500107
+          }
+        },
+        {
+          "id": "st4",
+          "statement": "Fixed ST4 HALF fullK loses the same old control.",
+          "outcome": "negative",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/fixed_o32_mechanism/contrasts/old_st5_early_zi_minus_half_st4_fullk/paired_median_gain_us",
+            "equals": -0.4960000514984131
+          }
+        },
+        {
+          "id": "selected",
+          "statement": "Actual PW45 o32 uses GV, so the fixed HALF mechanism is not its serving path.",
+          "outcome": "neutral",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/actual_o32_basis/pw45/pick/family",
+            "equals": "GV"
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Independent prepare selections and timing context may explain conflicting package estimators; neither the fixed win nor the package paired point isolates a causal source gain.",
+          "status": "unproven",
+          "observation_ids": [
+            "paired",
+            "f1",
+            "st5",
+            "st4",
+            "selected"
+          ]
+        }
+      ],
+      "scope": "One independently prepared policy per source on local H100; no official result or transfer forecast.",
+      "transfer_limits": [
+        "No official H200 score, independent feature causality, repeat-prepare frequency or saved-time forecast follows.",
+        "Retain every signed point and conflicting estimator; source-family retirement is not implied."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Evaluate the measured positive package point under root official controls while preserving opposite F1 and exact source/picks. Any mechanism refinement gets a new immutable version and compares actual prepared paths; do not force the fixed winner.",
+      "next_test": {
+        "question": "A tiny fixed mechanism win can coexist with an unselected path and conflicting package estimators",
+        "controls": [
+          "Actual independently prepared PW38 full policy",
+          "Fixed mechanism contrasts remain separate from selected path"
+        ],
+        "discriminator": "Evaluate the measured positive package point under root official controls while preserving opposite F1 and exact source/picks. Any mechanism refinement gets a new immutable version and compares actual prepared paths; do not force the fixed winner.",
+        "stop_rule": "Missing validity gates invalidate evidence; estimator disagreement is preserved without imposing a new effect-size/significance cutoff.",
+        "required_gates": [
+          "Frozen source/JIT/inventory/actualSO identity and strict terminal/current-X/fullphysical counter/immutability/cleanup",
+          "All raw signed paired/F1 observations and actual selected plans retained"
+        ]
+      },
+      "related_queue_ids": [
+        "research.pw45.gpu.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Future benefit and H200 transfer remain unknown."
+        ]
+      },
+      "cost": {
+        "basis": "This evidence backfill authorizes no future reservation or job.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "794f67c8a9893cae1066cfc42b56382025c7df13fee3777eaaa180a249b74fe3"
+    }
+  ],
+  "applications": {
+    "eh-tiny-context-bound": "Retain every tiny signed contrast; no minimum gain threshold. This CPU candidate makes no gain claim.",
+    "prepare-selection-is-experiment": "Separate fixed-kernel mechanism contrast from fresh prepared-policy comparison; changing pointer could alter preparation picks.",
+    "pw45-small-fixed-gain-unselected-mixed-package": "Use actual parent PW45 as measured policy comparator and preserve selection/cost/tiny-negative outcomes; own-control changes cannot promote this candidate."
+  },
+  "transfer_limits": "Different GV bit layout from RQ; no copied resource/performance inference. PW42 empty-guard regression is prior evidence, not a family ban; no empty guard or duplicated math is added."
+}

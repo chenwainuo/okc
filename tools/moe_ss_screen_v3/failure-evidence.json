@@ -1,0 +1,32 @@
+{
+  "state": "ACTUAL_V2_INVALID_NO_PERFORMANCE_ADMISSION_PRESERVED",
+  "result": "results/proj-rsi/scheduler/artifacts/research.moe.ss.stage.screen.v2.01/collection-1793115722457840089/logs/scheduler/moe-ss-stage-screen-v2-01/result.json",
+  "evidence_sha256": {
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.stage.screen.v2.01/collection-1793115722457840089/logs/scheduler/moe-ss-stage-screen-v2-01/actual.cu": "96776ec0493b685a9e0c390be0d58380ccb2d5a8ca48001c237947adfa5cf94d",
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.stage.screen.v2.01/collection-1793115722457840089/logs/scheduler/moe-ss-stage-screen-v2-01/actual.production.sass": "4bfb1c50d793d20b3720268b360f5867b888bdcb445854fa6aab76867332c3c9",
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.stage.screen.v2.01/collection-1793115722457840089/logs/scheduler/moe-ss-stage-screen-v2-01/actual.resources": "3b4ecfd5e174d3479cee093f9ec015e46bbb5c1f4ff9147f83c80f72bdb6d8a7",
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.stage.screen.v2.01/collection-1793115722457840089/logs/scheduler/moe-ss-stage-screen-v2-01/actual.sass": "b92c3fc60d56c587d201b839daa1bece4926916b413b00036ea646eeae8827e9",
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.stage.screen.v2.01/collection-1793115722457840089/logs/scheduler/moe-ss-stage-screen-v2-01/result.json": "696b234099097f9205f96d4b610bf64c99039aec773dcdd7b7f16a07ed0e1c0a"
+  },
+  "actual_outcome": {
+    "elapsed_seconds": 47.49577879905701,
+    "compile_seconds": 44.01608397200471,
+    "phase": "actual_JIT_and_resources",
+    "checks": [],
+    "timings": [],
+    "graph_replays": 0,
+    "actual_resource_failure": {
+      "T": 8,
+      "DIV": 8,
+      "registers": 32,
+      "local": 0,
+      "static_shared": 0,
+      "max_threads": 256,
+      "max_dynamic": 49152,
+      "blocks_per_SM": 8
+    }
+  },
+  "diagnosis": "Harness compares runtime sharedSizeBytes0 to offline SHARED1024 despite exact production resource table match and all8 physical PC stream gates passing. Dynamic extern shared alignment is a possible accounting explanation, not independently established driver causality. No production project launched and no speed/correctness outcome measured.",
+  "repair": "Separate v3 harness retains exact binary resource match, permits runtime static shared0 or canonical1024, keeps all other resource bounds, and persists all8 attribute rows before assertions. Production source v2 unchanged.",
+  "remaining_goal": "original immutable861333f/source05ec full14 plus independent holdouts, frozen/current entire expert comparators and separate full8H200 serving/model/norm/router/collectives/TTFT/throughput; no3x or official claim"
+}

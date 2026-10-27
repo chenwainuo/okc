@@ -1,0 +1,114 @@
+{
+  "id": "research.gv.direct.policy.01",
+  "resource": "gpu",
+  "kind": "optimization",
+  "state": "BACKLOG",
+  "author": "sol08",
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 5.020985952742537,
+      "p_gain": 0.1,
+      "p_valid": 0.8
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "No separate information gain credited; fixed versus wrapper versus actualpolicy outcomes retained."
+    },
+    "basis": "LOW-CONFIDENCE conditional sensitivity only: hypothetical0.1us in each of four hot cells, computed from immutable PW38scored load totals; this is not measured GV benefit or PW45forecast. Subjective0.1gain/0.8valid priors. ActualPW45freshpicks/full30 package results decide; static opcode savings carry no time estimate. Source/compile evidence and trial README explain scope and costs. New direct-only integration run uses same unmeasured score scenario; prior fixed partial gains mixed, actual fullpolicy unknown; no profiler prerequisite.",
+    "confidence": "CPU_ONLY_UNMEASURED",
+    "evidence": [
+      "proj_rsi/candidates/gv_predxor_pw45_v2/manifest.json",
+      "proj_rsi/candidates/gv_predxor_trial/README.md",
+      "proj_rsi/candidates/gv_predxor_trial/cpu-proof.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 1020,
+    "followup_gpu_seconds": 720,
+    "cpu_minutes": 90
+  },
+  "files": {
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/build.py": "95aefb91a477078799964c5d5fbb6b75c62eb21fcd2e7d556e7cb7be09b630be",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/candidate-full.resources": "c2633777749b4f3c79c0303880118b97b7e4c3558a235612ba0d16c101fe1fc7",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/candidate-full.sass": "3258ffd5db6461d04fcac4f368441a4a54e279abc2514b81c95a4f3b1c9ac071",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/control-full.resources": "2f01fb6de3b0a558b1de12196a0169693cb2b359f1291366b0c441daf788db80",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/control-full.sass": "a02a648e81135f707b6871a49f262e49312264a6698c7d307c58e7e04138fb0b",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/delta.json": "04d5179cb47529e3387290d635e263f06b64498fc32f3153b43ff24459681a13",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/candidates/gv_predxor_trial/gv_support.py": "97b3bf9c90edb1a618664bdd2d5a55a67911edc129edbb2cf9710343c667571a",
+    "proj_rsi/candidates/gv_predxor_trial/support.py": "dc4286bc47af139767e860fd602b3d385a847eada81d1a90d05a385644e15e24",
+    "proj_rsi/candidates/policy_integration_trial_v1/README.md": "369f233aec76c38f046c683c13233197ddf130dd9009fde13ec08e97dd108a3c",
+    "proj_rsi/candidates/policy_integration_trial_v1/cpu-proof.json": "c39ff307aa37e394f3112fffb33eb7486138dfe4a7058e1724ebd7cb6daf0fa7",
+    "proj_rsi/candidates/policy_integration_trial_v1/driver.py": "7edc849f7643cf66372c40902cf31b97742a1b1140b984b680199521b4a66ccc",
+    "proj_rsi/candidates/policy_integration_trial_v1/focused_check.py": "228805548b3751f81f9f3ecb18b54804b1142a77449e3899f6f9859fb07f32cf",
+    "proj_rsi/candidates/policy_integration_trial_v1/gv_support.py": "97b3bf9c90edb1a618664bdd2d5a55a67911edc129edbb2cf9710343c667571a",
+    "proj_rsi/candidates/policy_integration_trial_v1/support.py": "dc4286bc47af139767e860fd602b3d385a847eada81d1a90d05a385644e15e24",
+    "proj_rsi/candidates/pw45/build_patch.py": "93c727da08d326a09d1df7aeae6c34bff679fa24f138eb8aedf0b75de886c0f5",
+    "proj_rsi/candidates/pw45/cpu_proof.py": "8097f4de13b9d88bd36f80c5598cbfc6cdf3d48ee9f026baf6ae624cd3ab8723",
+    "proj_rsi/candidates/pw45/physical_proof.py": "2f777c48c274c7b5daea5f53f5bd406b54e88c8958c96f4a01c0bf2a1efbdf20",
+    "proj_rsi/candidates/pw45/sass.txt": "515f5ff528892bb19e1150f6600eb4f7760e084443885961f719e06d1a44b827",
+    "proj_rsi/candidates/pw45/submission.py": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+    "proj_rsi/tools/gv_predxor_lab.py": "0353af7299f41a05fd6954db021e2f5da5943c8114fb482c2b84b5ff1e5bb5bf",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/candidates/policy_integration_trial_v1/manifest.json": "60c3e03a26940706aea17e73dabee97ad4d8481b90218b27237953b53f1a2985",
+    "proj_rsi/scheduling/reviews/gv-direct-policy-01.md": "9aaf908c80a624365589e8e026684713150b048e8688aab6291b3e2a7c514793"
+  },
+  "review": {
+    "actor": "rq_lab_review",
+    "decision": "GO",
+    "path": "proj_rsi/scheduling/reviews/gv-direct-policy-01.md",
+    "sha256": "9aaf908c80a624365589e8e026684713150b048e8688aab6291b3e2a7c514793"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-gv-direct-policy-01",
+    "inner_seconds": 900,
+    "outer_seconds": 1020,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/policy_integration_trial_v1/driver.py",
+      "--output",
+      "/okc/logs/scheduler/gv-direct-policy-01/run",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/gv-direct-policy-01.md"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv-direct-policy-01"
+    ]
+  },
+  "annotations": {
+    "scope": {
+      "policies": 2,
+      "shapes": 30,
+      "task_checks": 148,
+      "raw_timing_calls": 2910,
+      "terminal_oracles": 120,
+      "mutations": 240,
+      "fixed_arms": 0,
+      "profiler_calls": 0
+    },
+    "bounds": {
+      "inner_seconds": 900,
+      "outer_seconds": 1020,
+      "profile": false
+    },
+    "root_admission": "Reuse previous scope source proof; remove mandatory fixed mechanism/profile that aborted previous validated correctness. Current PW45/GV actual policy full30 only; exactdriver review and25 executable/data pins; no mutablelogs."
+  },
+  "created_at": 1793124041.314357
+}
