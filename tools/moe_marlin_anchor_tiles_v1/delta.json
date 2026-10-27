@@ -1,0 +1,29 @@
+{
+  "edits": [
+    {
+      "name": "host-control",
+      "before": "namespace sglang {\n",
+      "after": "namespace sglang {\n\n// Diagnostic host controls only. Graphs retain their captured native launch.\nstatic int64_t anchor_tile_mode=0, anchor_tile_default=0, anchor_tile_selected=0, anchor_tile_hits=0;\nint64_t anchor_tile_control(int64_t command) {\n  if(command>=0 && command<=2){anchor_tile_mode=command;anchor_tile_default=anchor_tile_selected=anchor_tile_hits=0;return command;}\n  if(command==-1)return anchor_tile_default;\n  if(command==-2)return anchor_tile_selected;\n  if(command==-3)return anchor_tile_hits;\n  return -99;\n}\n"
+    },
+    {
+      "name": "only-two-existing-NVFP4-math-instantiations",
+      "before": "  COMMON_GET_IF(host::kU4)\n  COMMON_GET_IF(host::kU4B8)\n  COMMON_GET_IF(host::kU8B128)\n\n  NVFP4_GET_IF(host::kFE2M1f)\n\n  BIGGROUP_GET_IF(host::kFE4M3fn)\n\n  ACT_GET_IF(host::kU4B8)\n  ACT_GET_IF(host::kU8B128)\n  if (std::is_same<scalar_t, nv_bfloat16>::value) {\n    if (false) {\n    }\n    MXFP4_GET_IF(host::kFE2M1f)\n  }\n",
+      "after": "  _GET_IF(host::kFE2M1f, 1, 8, 8, true, 1, 256, false)\n  _GET_IF(host::kFE2M1f, 1, 8, 4, true, 1, 128, false)\n"
+    },
+    {
+      "name": "tiny-host-scope",
+      "before": "  int count = 0;\n  constexpr int device_max_reg_size",
+      "after": "  const bool anchor_scope = std::is_same_v<scalar_t, __nv_bfloat16> && kIsEP && !kHasBias &&\n      q_type==host::kFE2M1f && group_size==16 && prob_m==8 && prob_n==8192 && prob_k==4096 && top_k==8 &&\n      thread_m_blocks==1 && m_block_size_8 && !has_act_order && is_k_full && !has_zp && !is_zp_float;\n  host::RuntimeCheck(anchor_scope, \"two-tile diagnostic only accepts exact M8 EP8 gate/up NVFP4 path\");\n  exec_config_t forced_cfg = exec_config_t{0, thread_config_t{-1,-1,-1}};\n  int count = 0;\n  constexpr int device_max_reg_size"
+    },
+    {
+      "name": "reuse-original-validity-attrs-and-residency",
+      "before": "    if (allow_count > count) {\n",
+      "after": "    if (anchor_tile_mode==i+1) forced_cfg={allow_count,th_config};\n    if (allow_count > count) {\n"
+    },
+    {
+      "name": "record-default-before-force",
+      "before": "  return exec_cfg;\n}\n\ntemplate <typename scalar_t, bool kIsEP, bool kHasBias>\nvoid marlin_mm(",
+      "after": "  auto encode=[](exec_config_t c)->int64_t{return int64_t(c.blocks_per_sm)*1000000000LL+\n      int64_t(c.tb_cfg.num_threads)*1000000LL+int64_t(c.tb_cfg.thread_n)*1000LL+c.tb_cfg.thread_k;};\n  anchor_tile_default=encode(exec_cfg);\n  if(anchor_tile_mode){host::RuntimeCheck(forced_cfg.blocks_per_sm>0,\"forced existing tile unsupported\");exec_cfg=forced_cfg;}\n  anchor_tile_selected=encode(exec_cfg);++anchor_tile_hits;\n  return exec_cfg;\n}\n\ntemplate <typename scalar_t, bool kIsEP, bool kHasBias>\nvoid marlin_mm("
+    }
+  ]
+}

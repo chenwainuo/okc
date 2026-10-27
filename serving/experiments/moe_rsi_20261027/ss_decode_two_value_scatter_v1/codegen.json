@@ -1,0 +1,65 @@
+{
+  "state": "CPU_OFFLINE_ONLY_NO_GPU_PROPOSAL",
+  "scope": "two adjacent BF16 packed32bit store, rolledproducerstep, same8KBLUT; NOT pair2pipeline",
+  "registers": 48,
+  "spills_or_stack": false,
+  "checked_changed_scatter_scalars": 4096,
+  "static_instructions": 896,
+  "static_LDS_U16": 8,
+  "first_memory_schedule": [
+    {
+      "pc": "0x2130",
+      "instruction": "LDS.U16 R37, [R37+0x4820]"
+    },
+    {
+      "pc": "0x2160",
+      "instruction": "LDS.U16 R38, [R43+0x4820]"
+    },
+    {
+      "pc": "0x2220",
+      "instruction": "STS [R40], R39"
+    },
+    {
+      "pc": "0x2250",
+      "instruction": "LDS.U16 R37, [R37+0x4820]"
+    },
+    {
+      "pc": "0x2270",
+      "instruction": "LDS.U16 R38, [R38+0x4820]"
+    },
+    {
+      "pc": "0x2340",
+      "instruction": "STS [R40+0x400], R39"
+    },
+    {
+      "pc": "0x2360",
+      "instruction": "LDS.U16 R36, [R36+0x4820]"
+    },
+    {
+      "pc": "0x2380",
+      "instruction": "LDS.U16 R37, [R43+0x4820]"
+    },
+    {
+      "pc": "0x23b0",
+      "instruction": "STS [R35], R36"
+    },
+    {
+      "pc": "0x23c0",
+      "instruction": "LDS.U16 R34, [R42+0x4820]"
+    },
+    {
+      "pc": "0x23d0",
+      "instruction": "LDS.U16 R37, [R38+0x4820]"
+    },
+    {
+      "pc": "0x2400",
+      "instruction": "STS [R35+0x400], R34"
+    },
+    {
+      "pc": "0x2720",
+      "instruction": "STS.U16 [R33], R32"
+    }
+  ],
+  "kernel_sha256": "466d47f7552161578c504e22312d9f522c6fd844ed83824f38a5c9ef75f74468",
+  "limit": "offlineCUDA12.8; unchanged codec/matrix/protocol not reproved; actualCUDA13 schedule/resources/timing not inferred"
+}

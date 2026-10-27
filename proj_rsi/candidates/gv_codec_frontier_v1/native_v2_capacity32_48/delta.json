@@ -1,0 +1,71 @@
+{
+  "parent_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+  "changes": [
+    {
+      "old": "  const size_t wo = ",
+      "new": "  const size_t wo = ",
+      "occurrences": 1
+    },
+    {
+      "old": "  auto ld = [&](int s, int u) {\n    if constexpr (!L::BK) {\n#pragma unroll\n    for (int j = 0; j < RT; j++)\n#pragma unroll\n      for (int h = 0; h < NA; h++)\n#pragma unroll\n        for (int i = 0; i < NL; i++) wb[s][j][h][i] = gnc((h ? p.W2 : p.W) + wo + j * js + (u * NL + i) * 32);\n    }",
+      "new": "  constexpr int FCAP = MT == 1 ? 32 : 48, FSLOT = 32 + FCAP * 2;\n  const uint32_t fs = (uint32_t)__cvta_generic_to_shared(smem) + L::SMEM;\n  static_assert(RT == 1 && NA == 1 && !L::BK && S == 1 && (ST == 1 || ST == 2), \"two-cell frontier scope\");\n  auto ld = [&](int s, int u) {\n    const unsigned unit = ((bx * WR + wr) * p.KC + c0 + u);\n    wb[s][0][0][0] = gnc(p.W + ((size_t)unit * 2) * 32 + lane);\n    wb[s][0][0][1] = gnc(p.W + ((size_t)unit * 2 + 1) * 32 + lane);\n    const uint32_t h0 = frontier_ldg(fp.header + ((size_t)unit * 3) * 32 + lane);\n    const uint32_t h1 = frontier_ldg(fp.header + ((size_t)unit * 3 + 1) * 32 + lane);\n    const uint32_t h2 = frontier_ldg(fp.header + ((size_t)unit * 3 + 2) * 32 + lane);\n    wb[s][0][0][2] = make_uint4(h0, __funnelshift_r(h0,h1,24), __funnelshift_r(h1,h2,16), h2 >> 8);\n    const uint32_t begin = __ldg(p.esc + (size_t)unit * 8);\n    const uint32_t finish = unit + 1 < fp.units ? __ldg(p.esc + (size_t)(unit + 1) * 8) : fp.words;\n    const uint32_t dest = fs + (w * ST + s) * FSLOT;\n    if (lane < 2) {\n      asm volatile(\"cp.async.ca.shared.global [%0], [%1], 16;\\n\" :: \"r\"(dest + lane * 16), \"l\"(p.esc + (size_t)unit * 8 + lane * 4));\n    }\n    if (lane >= 2 && lane < 2 + FCAP / 8 && (lane - 2) * 16 < (finish - begin) * 2) {\n      asm volatile(\"cp.async.ca.shared.global [%0], [%1], 16;\\n\" :: \"r\"(dest + 32 + (lane - 2) * 16), \"l\"(fp.records + (size_t)begin * 2 + (lane - 2) * 16));\n    }\n    asm volatile(\"cp.async.commit_group;\\n\" ::: \"memory\");",
+      "occurrences": 1
+    },
+    {
+      "old": "  auto step = [&](const int u, const int s) {",
+      "new": "  auto step = [&](const int u, const int s) {\n    // Exactly ST initial groups and one group per refill, including tails.\n    if constexpr (ST == 1) asm volatile(\"cp.async.wait_group 0;\\n\" ::: \"memory\");\n    else if (u + 1 < KU) asm volatile(\"cp.async.wait_group 1;\\n\" ::: \"memory\");\n    else asm volatile(\"cp.async.wait_group 0;\\n\" ::: \"memory\");\n    __syncwarp();",
+      "occurrences": 1
+    },
+    {
+      "old": "if ((C12 || CE) && LDEC)",
+      "new": "if constexpr (false)",
+      "occurrences": 3
+    },
+    {
+      "old": "dec1(q[",
+      "new": "frontier_dec(q[",
+      "occurrences": 4
+    },
+    {
+      "old": "    if constexpr (((V >> 25) & 1) != 0) {  // pw21 router",
+      "new": "    // Consume every repair before ld() can overwrite this slot.\n    const uint32_t* desc = (const uint32_t*)(smem + L::SMEM + (w * ST + s) * FSLOT);\n    const uint32_t first = desc[0];\n#pragma unroll\n    for (int q = 0; q < 4; ++q) {\n      const unsigned short* fixes = (const unsigned short*)(smem + L::SMEM + (w * ST + s) * FSLOT + 32 + 2*(desc[2*q] - first));\n      frontier_fix(*reinterpret_cast<unsigned (*)[4]>(A[0][0] + 4*q), fixes, desc[2*q+1], lane);\n    }\n    __syncwarp();\n    if constexpr (((V >> 25) & 1) != 0) {  // pw21 router",
+      "occurrences": 1
+    },
+    {
+      "old": "  // pw14 probes only",
+      "new": "  static_assert((FMT == 1 && MT == 1 && ST == 1 && WR == 2 && WK == 16 && KU == 8 && S == 1 && RT == 1 && XS == 0 && V == 3) ||\n                (FMT == 1 && MT == 2 && ST == 2 && WR == 1 && WK == 4 && KU == 16 && S == 1 && RT == 1 && XS == 2 && V == 1), \"exact selected two-cell scope\");\n  // pw14 probes only",
+      "occurrences": 1
+    }
+  ],
+  "templates": [
+    [
+      1,
+      1,
+      1,
+      2,
+      16,
+      8,
+      1,
+      1,
+      0,
+      3
+    ],
+    [
+      1,
+      2,
+      2,
+      1,
+      4,
+      16,
+      1,
+      1,
+      2,
+      1
+    ]
+  ],
+  "status": "OFFLINE_NATIVE_PROTOTYPE_GPU_UNRUN",
+  "additional_shared_bytes": {
+    "pooler": 3072,
+    "unpooler": 1024
+  }
+}

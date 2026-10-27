@@ -1,0 +1,30 @@
+{
+  "state": "CPU_STATIC_CAPACITY_MODEL_NOT_DYNAMIC_COUNTERS",
+  "source": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h",
+  "source_sha256": "6b43bc72d64a591bc86f62df2db14bdea5adce7b70b00af1a3e601a3c0d24fdb",
+  "fixed_template": {
+    "moe_block_size": 8,
+    "thread_k_blocks": 4,
+    "thread_n_blocks": 8,
+    "stages": 4,
+    "group_blocks": 1,
+    "weight_bits": 4,
+    "scale_bits": 8,
+    "sh_b_red_bias_size_int4": 1024,
+    "sh_s_size_int4": 128,
+    "shm_size_used_int4": 1160
+  },
+  "parent_observed3_and_proposed4_under_same_actual_optin232448B": {
+    "3": {
+      "dynamic_shared_B": 76458,
+      "sh_a_max_row": 444,
+      "max_num_stage_groups": 13
+    },
+    "4": {
+      "dynamic_shared_B": 57088,
+      "sh_a_max_row": 293,
+      "max_num_stage_groups": 9
+    }
+  },
+  "limitation": "Future actual query/device values take precedence; stage groups are allocation/loop capacity, not measured A-load count, stall time or predicted gain."
+}

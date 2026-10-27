@@ -1,0 +1,52 @@
+{
+  "state": "CPU_RUNNABLE_DRIVER_GPU_UNRUN",
+  "driver_sha256": "6faa9f447eb4c20ca2f020d7a08b1485a5790e55999ba94dc0f57dc137fc2e38",
+  "manifest_sha256": "c39cebb2c25a34d6d3dbc46a13fafb76dc219d6cc2a43bf76bb64260ec9e23a4",
+  "import_and_help_without_Torch": true,
+  "manifest_files_match": true,
+  "same_code_private_globals_mechanism": true,
+  "reused_onefunction_gate": [
+    {
+      "tokens": 8,
+      "gather_divisor": 1,
+      "static_K64_groups": 5,
+      "four_HGMMA_per_group": true,
+      "actual_D_no_generic_write_before_wait0": true,
+      "math_128thread_barriers_after_wait0": 5
+    }
+  ],
+  "gate_negative_rejections": [
+    "missing_wait0",
+    "missing_reader_barrier"
+  ],
+  "exact_factories": [
+    {
+      "arm": "v1_LUT_control",
+      "exact_factory_source": true
+    },
+    {
+      "arm": "failed_v2",
+      "exact_factory_source": true
+    },
+    {
+      "arm": "two_value_scatter",
+      "exact_factory_source": true
+    }
+  ],
+  "pairwise_three_arm_order": {
+    "(0, 1)": [
+      4,
+      4
+    ],
+    "(0, 2)": [
+      4,
+      4
+    ],
+    "(1, 2)": [
+      4,
+      4
+    ]
+  },
+  "no_new_codec_or_matrix_campaign": true,
+  "CUDA_context_initialized": false
+}

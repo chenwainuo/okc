@@ -1,0 +1,49 @@
+{
+  "original_result_sha256": "ad773dffe31f34fa1249800c2c9f975373e5da9f39dd03e041f4c07787ac6a9c",
+  "original_SO_sha256": "0c176fe07fe12c3f5fc7b8def5d2f05eb647f637daf846a7db80e6b7b67e4233",
+  "original_module_name": "ss_serving_cu130_05a899aaaac331a822ff",
+  "LUT_result_sha256": "d953d950c4a14bec0253d4086a48a2766060726efa0b2cb0bdbacd48a296abf9",
+  "LUT_SO_sha256": "28f7b022d75dfdefd78ce0fd3699857eb05c4ab601cc0fb2670297a7f2b25d17",
+  "LUT_module_name": "ss_lut_stage_cu130_dd3f2f935a82b8f1ee30",
+  "prior_archive_sha256": "e49a158ba0ce83875d12e6767bdac85fe6a429dc980518dbdc7e8c688317aa86",
+  "LUT_serving_source": "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/serving_both.py",
+  "LUT_extension_source": "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/extension_source.cu",
+  "state": "CPU_FROZEN_V2_EMPTY_EXACT_ZERO_REPAIR_GPU_UNRUN",
+  "files": {
+    "benchmarks/rsi_bundle.py": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25",
+    "benchmarks/rsi_worker.py": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/adapter.py": "c8aa1303123db57d84e5d244c6ca3baeeaa1d5ae895534223399951ef1bba838",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/kernel.cuh": "09a7d995f687ecbc172927b811bc30773e90f103aea9c02f3114a0b733491e63",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/extension_source.cu": "29e8ccca7da01aeab28e2964b6e98d1e7d89cad8cb884f34f956bf25091b5974",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/serving_both.py": "f443b2805bd7f1f7100d9b1e836e592ccb6d5ac4fa5d4e732003243c1c82162d",
+    "audits/moe_ss_pair2_causal_triage_20261027/contract.json": "f34d44a4f6487f711493f8d9a6f5a942bc3d148a6f4bff9429cfd5f24d314833",
+    "tools/moe_ss_v1_up_counters_v2/probe.py": "d3af6434cd4509ae5bd33fc7bbaed9c784375d561a996fb082f5810c413d6bf9"
+  },
+  "scope": {
+    "seeds": [
+      7901,
+      7903
+    ],
+    "active_local_blocks": [
+      6,
+      7
+    ],
+    "warm_project_calls_per_fixture": 3,
+    "profiled_DIV8_launches": 2,
+    "new_compile": false,
+    "kernel_replay": true,
+    "clock_control": "none",
+    "cache_control": "all",
+    "not_clean_F1": true,
+    "not_admission_gate": true
+  },
+  "profiler_provenance": {
+    "root_CPU_only_pinned_image_inspection": "/usr/local/cuda/bin/ncu NsightCompute2025.3.1.0 build36398880; noGPU/runc",
+    "metric_availability": "must query exact gh100 names before prepare; no fallback"
+  },
+  "repair": {
+    "original_attempt": "research.moe.ss.v1.up.counters.01",
+    "cause": "Original reference intentionally rejects all-nonlocal case as nothing to check; use exact-zero condition already established by prior serving/stage harness. G6/G7 reference unchanged.",
+    "change": "Only empty terminal validation branch; exact same kernels/binaries/fixtures/metrics/budgets."
+  }
+}

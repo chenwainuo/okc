@@ -1,0 +1,200 @@
+{
+  "state": "OPTIONAL_COUNTER_CAPTURE_COMPLETE_EXPORT_REQUIRES_REVIEW",
+  "started_at": 1793134823.28171,
+  "diagnostic_only": true,
+  "scoring_admission": false,
+  "metrics": [
+    "gpu__time_duration.sum",
+    "dram__bytes_read.sum",
+    "dram__bytes_write.sum",
+    "dram__throughput.avg.pct_of_peak_sustained_elapsed",
+    "sm__throughput.avg.pct_of_peak_sustained_elapsed",
+    "sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed",
+    "smsp__issue_active.avg.pct_of_peak_sustained_active",
+    "smsp__warps_eligible.avg.per_cycle_active"
+  ],
+  "version": "NVIDIA (R) Nsight Compute Command Line Profiler\nCopyright (c) 2018-2025 NVIDIA Corporation\nVersion 2025.3.1.0 (build 36398880) (public-release)\n",
+  "query_argv": [
+    "/usr/local/cuda/bin/ncu",
+    "--chips",
+    "gh100",
+    "--query-metrics-mode",
+    "suffix",
+    "--query-metrics-collection",
+    "profiling",
+    "--metrics",
+    "gpu__time_duration,dram__bytes_read,dram__bytes_write,dram__throughput,sm__throughput,sm__pipe_tensor_cycles_active,smsp__issue_active,smsp__warps_eligible"
+  ],
+  "query_returncode": 0,
+  "ncu_sha256": "18d8a8aa13c156cd43ebdf24ac950b5386cb229f2a4c931db47ef91cfe785920",
+  "capture_argv": [
+    "/usr/local/cuda/bin/ncu",
+    "--target-processes",
+    "application-only",
+    "--kill",
+    "no",
+    "--replay-mode",
+    "kernel",
+    "--cache-control",
+    "all",
+    "--clock-control",
+    "none",
+    "--profile-from-start",
+    "off",
+    "--kernel-name-base",
+    "mangled",
+    "--kernel-name",
+    "regex:.*moe_ss_lut_full_v1.*projectILi8ELi8EE.*",
+    "--launch-count",
+    "2",
+    "--metrics",
+    "gpu__time_duration.sum,dram__bytes_read.sum,dram__bytes_write.sum,dram__throughput.avg.pct_of_peak_sustained_elapsed,sm__throughput.avg.pct_of_peak_sustained_elapsed,sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed,smsp__issue_active.avg.pct_of_peak_sustained_active,smsp__warps_eligible.avg.per_cycle_active",
+    "--export",
+    "/okc/logs/scheduler/moe-ss-v1-up-counters-v2-01/up",
+    "python3",
+    "/okc/tools/moe_ss_v1_up_counters_v2/probe.py",
+    "--child",
+    "--prior",
+    "/okc/logs/scheduler/moe-ss-true-serving-pilot-01",
+    "--lut-prior",
+    "/okc/logs/scheduler/moe-ss-decode-lut-stage-01",
+    "--output",
+    "/okc/logs/scheduler/moe-ss-v1-up-counters-v2-01",
+    "--review",
+    "/okc/proj_rsi/scheduling/reviews/moe-ss-v1-up-counters-v2-01.md",
+    "--review-sha256",
+    "dc7bc98ea5a1482aee38481cd3b684b5eea550026ae6be5dad0fdd578bf995c4"
+  ],
+  "capture_returncode": 0,
+  "report_sha256": "5c9cfd82f633f6d854f87db629d72993b9375d0b40f626eebd05ad38b1f9c627",
+  "captures": [
+    {
+      "kernel_id": "0",
+      "seed": 7901,
+      "metrics": {
+        "gpu__time_duration.sum": {
+          "value": "197,472",
+          "unit": "ns"
+        },
+        "dram__bytes_read.sum": {
+          "value": "113,340,160",
+          "unit": "byte"
+        },
+        "dram__bytes_write.sum": {
+          "value": "2,336,512",
+          "unit": "byte"
+        },
+        "dram__throughput.avg.pct_of_peak_sustained_elapsed": {
+          "value": "17.48",
+          "unit": "%"
+        },
+        "sm__throughput.avg.pct_of_peak_sustained_elapsed": {
+          "value": "55.05",
+          "unit": "%"
+        },
+        "sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed": {
+          "value": "1.67",
+          "unit": "%"
+        },
+        "smsp__issue_active.avg.pct_of_peak_sustained_active": {
+          "value": "61.32",
+          "unit": "%"
+        },
+        "smsp__warps_eligible.avg.per_cycle_active": {
+          "value": "1.15",
+          "unit": "warp"
+        }
+      },
+      "launch_and_replay": {
+        "Kernel Name": "_ZN18moe_ss_lut_full_v17projectILi8ELi8EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii",
+        "Block Size": "(256, 1, 1)",
+        "Grid Size": "(128, 64, 1)",
+        "launch__occupancy_cluster_gpu_pct": "0",
+        "launch__occupancy_cluster_pct": "0",
+        "launch__occupancy_limit_barriers": "16",
+        "launch__occupancy_limit_blocks": "32",
+        "launch__occupancy_limit_registers": "6",
+        "launch__occupancy_limit_shared_mem": "6",
+        "launch__occupancy_limit_warps": "8",
+        "launch__occupancy_per_barrier_count": "1,288",
+        "launch__occupancy_per_block_size": "2,252",
+        "launch__occupancy_per_cluster_size": "0",
+        "launch__occupancy_per_register_count": "4,976",
+        "launch__occupancy_per_shared_mem_size": "4,264",
+        "launch__registers_per_thread": "40",
+        "launch__registers_per_thread_allocated": "40",
+        "launch__shared_mem_config_size": "200,704",
+        "launch__shared_mem_per_block": "28,704",
+        "launch__shared_mem_per_block_allocated": "28,800",
+        "launch__shared_mem_per_block_driver": "1,024",
+        "launch__shared_mem_per_block_dynamic": "27,680",
+        "launch__shared_mem_per_block_static": "0"
+      }
+    },
+    {
+      "kernel_id": "1",
+      "seed": 7903,
+      "metrics": {
+        "gpu__time_duration.sum": {
+          "value": "312,320",
+          "unit": "ns"
+        },
+        "dram__bytes_read.sum": {
+          "value": "132,219,648",
+          "unit": "byte"
+        },
+        "dram__bytes_write.sum": {
+          "value": "2,437,376",
+          "unit": "byte"
+        },
+        "dram__throughput.avg.pct_of_peak_sustained_elapsed": {
+          "value": "12.86",
+          "unit": "%"
+        },
+        "sm__throughput.avg.pct_of_peak_sustained_elapsed": {
+          "value": "41.28",
+          "unit": "%"
+        },
+        "sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed": {
+          "value": "1.25",
+          "unit": "%"
+        },
+        "smsp__issue_active.avg.pct_of_peak_sustained_active": {
+          "value": "49.25",
+          "unit": "%"
+        },
+        "smsp__warps_eligible.avg.per_cycle_active": {
+          "value": "0.90",
+          "unit": "warp"
+        }
+      },
+      "launch_and_replay": {
+        "Kernel Name": "_ZN18moe_ss_lut_full_v17projectILi8ELi8EEEvPKjPKhPK13__nv_bfloat16S7_PKiS9_S9_PS5_iiiiiiii",
+        "Block Size": "(256, 1, 1)",
+        "Grid Size": "(128, 64, 1)",
+        "launch__occupancy_cluster_gpu_pct": "0",
+        "launch__occupancy_cluster_pct": "0",
+        "launch__occupancy_limit_barriers": "16",
+        "launch__occupancy_limit_blocks": "32",
+        "launch__occupancy_limit_registers": "6",
+        "launch__occupancy_limit_shared_mem": "6",
+        "launch__occupancy_limit_warps": "8",
+        "launch__occupancy_per_barrier_count": "1,288",
+        "launch__occupancy_per_block_size": "2,252",
+        "launch__occupancy_per_cluster_size": "0",
+        "launch__occupancy_per_register_count": "4,976",
+        "launch__occupancy_per_shared_mem_size": "4,264",
+        "launch__registers_per_thread": "40",
+        "launch__registers_per_thread_allocated": "40",
+        "launch__shared_mem_config_size": "200,704",
+        "launch__shared_mem_per_block": "28,704",
+        "launch__shared_mem_per_block_allocated": "28,800",
+        "launch__shared_mem_per_block_driver": "1,024",
+        "launch__shared_mem_per_block_dynamic": "27,680",
+        "launch__shared_mem_per_block_static": "0"
+      }
+    }
+  ],
+  "replay_pass_evidence": "capture.log retained verbatim; hidden replay pass count requires report/log review",
+  "elapsed_seconds": 21.344037532806396
+}

@@ -1,0 +1,24 @@
+{
+  "edits": [
+    {
+      "name": "query-declaration",
+      "before": "// Diagnostic host controls only. Graphs retain their captured native launch.",
+      "after": "int64_t anchor_block_info(int64_t field);\n// Diagnostic host controls only. Graphs retain their captured native launch."
+    },
+    {
+      "name": "new-single-mode",
+      "before": "if(command>=0 && command<=2)",
+      "after": "if(command>=0 && command<=3)"
+    },
+    {
+      "name": "four-block-requery-before-force",
+      "before": "  if(anchor_tile_mode){host::RuntimeCheck(forced_cfg.blocks_per_sm>0,\"forced existing tile unsupported\");exec_cfg=forced_cfg;}\n",
+      "after": "  if(anchor_tile_mode==3){\n    host::RuntimeCheck(exec_cfg.tb_cfg.thread_k==64 && exec_cfg.tb_cfg.thread_n==128 && exec_cfg.tb_cfg.num_threads==128,\n                       \"four-block diagnostic requires current K64/N128/128t tile\");\n    host::RuntimeCheck(anchor_block_info(0)==1,\"four-block runtime device/kernel occupancy unsupported\");\n    exec_cfg.blocks_per_sm=4;\n  } else if(anchor_tile_mode){host::RuntimeCheck(forced_cfg.blocks_per_sm>0,\"forced existing tile unsupported\");exec_cfg=forced_cfg;}\n"
+    },
+    {
+      "name": "query-only-export",
+      "before": "\n}  // namespace sglang\n",
+      "after": "\n}  // namespace sglang\n\nnamespace sglang {\n// Query only; no kernel launch. Every CUDA error is an unsupported receipt.\nint64_t anchor_block_info(int64_t field) {\n  int dev=0;\n  if(cudaGetDevice(&dev)!=cudaSuccess)return -100;\n  int regs_sm=0,shared_sm=0,shared_block=0,threads_sm=0,blocks_sm=0;\n  if(cudaDeviceGetAttribute(&regs_sm,cudaDevAttrMaxRegistersPerMultiprocessor,dev)!=cudaSuccess)return -101;\n  if(cudaDeviceGetAttribute(&shared_sm,cudaDevAttrMaxSharedMemoryPerMultiprocessor,dev)!=cudaSuccess)return -102;\n  if(cudaDeviceGetAttribute(&shared_block,cudaDevAttrMaxSharedMemoryPerBlockOptin,dev)!=cudaSuccess)return -103;\n  if(cudaDeviceGetAttribute(&threads_sm,cudaDevAttrMaxThreadsPerMultiProcessor,dev)!=cudaSuccess)return -104;\n  if(cudaDeviceGetAttribute(&blocks_sm,cudaDevAttrMaxBlocksPerMultiprocessor,dev)!=cudaSuccess)return -105;\n  auto kernel=device::marlin_moe::get_marlin_kernel<__nv_bfloat16,true,false>(host::kFE2M1f,1,8,4,true,false,false,1,128,false);\n  if(kernel==device::marlin_moe::MarlinDefault)return -106;\n  cudaFuncAttributes attr{};\n  if(cudaFuncGetAttributes(&attr,kernel)!=cudaSuccess)return -107;\n  const int reserve=device::marlin_moe::kSharedMemoryLaunchReserve;\n  const int dyn3=shared_block/3-reserve, dyn4=shared_block/4-reserve;\n  if(dyn3<0 || dyn4<0)return -108;\n  int occupancy3=0,occupancy4=0;\n  if(cudaFuncSetAttribute(kernel,cudaFuncAttributeMaxDynamicSharedMemorySize,dyn3)!=cudaSuccess)return -109;\n  if(cudaOccupancyMaxActiveBlocksPerMultiprocessor(&occupancy3,kernel,128,dyn3)!=cudaSuccess)return -110;\n  if(cudaFuncSetAttribute(kernel,cudaFuncAttributeMaxDynamicSharedMemorySize,dyn4)!=cudaSuccess)return -111;\n  if(cudaOccupancyMaxActiveBlocksPerMultiprocessor(&occupancy4,kernel,128,dyn4)!=cudaSuccess)return -112;\n  const int cache=device::marlin_moe::get_kernel_cache_size({64,128,128},true,1,8,8192,4096,4,16,false,true,false,false);\n  const int64_t regs4=int64_t(attr.numRegs)*128*4;\n  const int64_t shared4=(int64_t(dyn4)+attr.sharedSizeBytes)*4;\n  const bool legal=attr.maxThreadsPerBlock>=128 && attr.numRegs>0 && regs4<=regs_sm && shared4<=shared_sm &&\n      threads_sm>=4*128 && blocks_sm>=4 && dyn4+attr.sharedSizeBytes<=shared_block &&\n      cache+device::marlin_moe::kSharedMemoryValidityMargin<=dyn4 && occupancy4>=4;\n  const int64_t values[]={legal,attr.numRegs,int64_t(attr.sharedSizeBytes),int64_t(attr.localSizeBytes),\n      attr.maxThreadsPerBlock,regs_sm,shared_sm,shared_block,threads_sm,blocks_sm,dyn3,dyn4,cache,\n      occupancy3,occupancy4,regs4,shared4,reserve};\n  if(field<0 || field>=int(sizeof(values)/sizeof(values[0])))return -113;\n  return values[field];\n}\n} // namespace sglang\n"
+    }
+  ]
+}

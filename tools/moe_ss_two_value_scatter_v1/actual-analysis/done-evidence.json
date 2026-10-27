@@ -1,0 +1,157 @@
+{
+  "job_id": "research.moe.ss.two.value.scatter.down.01",
+  "recommended_state": "DONE",
+  "recommended_disposition": "VALID_REGRESSION",
+  "observed_state": "VALID_M8_THREE_ARM_TWO_VALUE_SCATTER_SCREEN_ROOT_REVIEW_REQUIRED",
+  "scope": "ONEfixedM8 downthree-armdiagnostic; newpackedscatter versus actualbestv1LUT andfailedactualv2; v1upretained. Narrowedconfigurationloss, notfamilyrejection.",
+  "result_path": "results/proj-rsi/scheduler/artifacts/research.moe.ss.two.value.scatter.down.01/collection-1793134066747658288/logs/scheduler/moe-ss-two-value-scatter-down-01/result.json",
+  "result_sha256": "36060ec3748d7a9dc013bd2320171b61e82ce341307e87e7481967002ea13038",
+  "analysis_path": "tools/moe_ss_two_value_scatter_v1/actual-analysis/analysis.json",
+  "analysis_sha256": "e5953db044628683d72133a588f38798dc182b483b9463dde1fd48f54f2a21c2",
+  "versus_best_v1": {
+    "complete_pairs": 8,
+    "signed_control_minus_variant_us": [
+      -148.8640159368515,
+      -74.52799379825592,
+      -78.97600531578064,
+      -84.35200154781342,
+      -2.8159916400909424,
+      -153.59999239444733,
+      -80.51200211048126,
+      -151.13599598407745
+    ],
+    "median_control_minus_variant_us": -82.43200182914734,
+    "median_control_over_variant": 0.6107298205469688,
+    "variant_wins": 0,
+    "variant_losses": 8
+  },
+  "partial_rescue_versus_failed_v2": {
+    "complete_pairs": 8,
+    "signed_control_minus_variant_us": [
+      29.7279953956604,
+      20.92801034450531,
+      27.99999713897705,
+      9.69599187374115,
+      10.399997234344482,
+      42.33598709106445,
+      15.00798761844635,
+      43.71201992034912
+    ],
+    "median_control_minus_variant_us": 24.46400374174118,
+    "median_control_over_variant": 1.0893274400663087,
+    "variant_wins": 8,
+    "variant_losses": 0
+  },
+  "median_new_over_v1_slowdown": 1.6374223367607286,
+  "fixed_exact_workload_F1": {
+    "all_blocks": {
+      "v1_full_lut0": 204.25599813461304,
+      "v2_rolled_down1": 226.0800004005432,
+      "two_value_scatter2": 209.02399718761444,
+      "v2_rolled_down3": 227.80799865722656,
+      "v1_full_lut4": 209.21599864959717
+    },
+    "new_us": 209.02399718761444,
+    "v1_before_minus_new_us": -4.767999053001404,
+    "v1_after_minus_new_us": 0.19200146198272705,
+    "v2_before_minus_new_us": 17.056003212928772,
+    "v2_after_minus_new_us": 18.78400146961212
+  },
+  "workload_comparability": {
+    "fixed_fixture_tensor_hashes": {
+      "x": "4ed0c47c0b1df1c2ecac11db2b53220d2c8d903de7b0cde637cd7feeaaa8fa59",
+      "sorted_ids": "4d8ec59b2b15ce20a75b1b76b53599025118d6381861ff0e2cea6f705ce9b385",
+      "experts": "cb045ee8d79fcccf3d744ec18516c1edf3b9088c1305ff9c5f0cc05fffbda412",
+      "post": "50c8ba3a6170f0a2fb6736ece8a603576ef6309a35e810911599bc6211b554a9"
+    },
+    "all8triples_same_routing": true,
+    "independent_audit_path": "audits/moe-timing-workload-contract/scatter-workload-receipt.json",
+    "independent_audit_sha256": "2c3330a0377d6b065bd3cda6be8ebb3c4772664937160534483e1d3383fb33c1",
+    "F1_earlier_seed_confound": "repairedhere bysingleimmutablefixture for all5blocks; doesnotretroactivelyvalidate earlierunmatchedF1claims"
+  },
+  "resources_and_mechanism": {
+    "actual_registers": 48,
+    "actual_active_CTAsSM": 5,
+    "spills_local_stack": 0,
+    "realized_actual_schedule": "twoindependentLDS_U16 thenoneSTS32,4packedstores/producerstep; v1eightlookupsbefore4stores; failedv2oneLDS/dependentSTS16 repeated8",
+    "scope": "partialrescue supports mechanism relevance; doesnotprovuniquecriticalpath ormatchv1 throughoccupancy alone"
+  },
+  "correctness": {
+    "total_records": 70,
+    "stage_bitwise_records": 53,
+    "mixed_full_records": 4,
+    "all_stage_bitwise_pass": true,
+    "all_mixed_full_pass": true,
+    "mixed_records": [
+      {
+        "kind": "mixed_eager_current_input",
+        "seed": 7777,
+        "empty": false,
+        "retained_up": "exact v1fullLUT",
+        "two_value_scatter_down": true,
+        "reference_pass": true,
+        "bitwise_equal_v1_full_serving": true,
+        "message": "relative L2 error 5.498e-03 (worst row 5.578e-03)"
+      },
+      {
+        "kind": "mixed_eager_fresh_input_routing",
+        "seed": 7778,
+        "empty": false,
+        "retained_up": "exact v1fullLUT",
+        "two_value_scatter_down": true,
+        "reference_pass": true,
+        "bitwise_equal_v1_full_serving": true,
+        "message": "relative L2 error 5.528e-03 (worst row 5.704e-03)"
+      },
+      {
+        "kind": "mixed_valid_to_nonlocal_zero",
+        "seed": 7779,
+        "empty": true,
+        "retained_up": "exact v1fullLUT",
+        "two_value_scatter_down": true,
+        "reference_pass": true,
+        "bitwise_equal_v1_full_serving": true,
+        "message": "mixed allnonlocal exactzero"
+      },
+      {
+        "kind": "mixed_own_terminal_after_stage_timings",
+        "seed": 7907,
+        "empty": false,
+        "retained_up": "exact v1fullLUT",
+        "two_value_scatter_down": true,
+        "reference_pass": true,
+        "bitwise_equal_v1_full_serving": true,
+        "message": "relative L2 error 5.585e-03 (worst row 5.789e-03)"
+      }
+    ],
+    "validated_direct_completion": true
+  },
+  "measurement": {
+    "raw_calls": 39,
+    "F1_calls": 15,
+    "matched_triple_calls": 24,
+    "matched_rounds": 8,
+    "pairwise_order": "all3comparisons4/4",
+    "wall_seconds": 62.12645626068115
+  },
+  "terminal_exit": 0,
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T20:46:20Z\nverify_reuse_tree_and_runtime\nreuse_exact_original_binary\nreuse_exact_v1_full_LUT_binary\nreuse_exact_failed_v2_binary\ncompile_and_gate_one_actual_two_value_scatter_function\n[1/3] ccache c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=ss_two_value_scatter_cu130_4d15e9022ddf3fff1897 -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -fPIC -std=c++20 -c /root/.cache/torch_extensions/ss_two_value_scatter_cu130_4d15e9022ddf3fff1897/main.cpp -o main.o \n[2/3] ccache /usr/local/cuda/bin/nvcc -MD -MF cuda.cuda.o.d -DTORCH_EXTENSION_NAME=ss_two_value_scatter_cu130_4d15e9022ddf3fff1897 -DTORCH_API_INCLUDE_EXTENSION_H -isystem /opt/sglang/lib/python3.12/site-packages/torch/include -isystem /opt/sglang/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /usr/include/python3.12 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options '-fPIC' -gencode=arch=compute_90a,code=sm_90a -O3 --expt-relaxed-constexpr -std=c++20 -c /root/.cache/torch_extensions/ss_two_value_scatter_cu130_4d15e9022ddf3fff1897/cuda.cu -o cuda.cuda.o \n/root/.cache/torch_extensions/ss_two_value_scatter_cu130_4d15e9022ddf3fff1897/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n/root/.cache/torch_extensions/ss_two_value_scatter_cu130_4d15e9022ddf3fff1897/cuda.cu:4:9: warning: #pragma once in main file\n    4 | #pragma once\n      |         ^~~~\n[3/3] ccache c++ main.o cuda.cuda.o -shared -L/opt/sglang/lib/python3.12/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o ss_two_value_scatter_cu130_4d15e9022ddf3fff1897.so\none_original_prepare_shared_immutable_banks\ncapture_real_stage_inputs_and_graphs\ndown_F1_then_matched_stage_timings\ndirect_terminal_source_and_immutable_checks\ncomplete\nTRIAL_EXIT okc-proj-moe-ss-two-value-scatter-down-01 0\n2026-10-27T20:47:30Z\n",
+    "terminal_exit": 0
+  },
+  "evidence_files": {
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.two.value.scatter.down.01/collection-1793134066747658288/logs/scheduler/moe-ss-two-value-scatter-down-01/result.json": "36060ec3748d7a9dc013bd2320171b61e82ce341307e87e7481967002ea13038",
+    "results/proj-rsi/scheduler/artifacts/research.moe.ss.two.value.scatter.down.01/collection-1793134066747658288/inventory.json": "64562873fd6ef1fe634c2b9fa8e10fbca72896e89f1d7e788ee964200e561997",
+    "tools/moe_ss_two_value_scatter_v1/actual-analysis/analysis.json": "e5953db044628683d72133a588f38798dc182b483b9463dde1fd48f54f2a21c2",
+    "audits/moe-timing-workload-contract/scatter-workload-receipt.json": "2c3330a0377d6b065bd3cda6be8ebb3c4772664937160534483e1d3383fb33c1"
+  },
+  "root_action": "RootmaymarkDONE/VALID_REGRESSION versusbestv1; retainpositivepartialrescueversusfailedv2. Keepv1LUTbothstages, nobroadSSrewrite orpromotion.",
+  "ITERATION": "RootcontinuesincumbentMarlin/projectionpriority. AuthorCPU-onlyreadoutcomplete; noGPU/API/queueactions."
+}

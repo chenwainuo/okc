@@ -1,0 +1,104 @@
+{
+  "state": "INVALID_HARNESS_EMPTY_ORACLE_BEFORE_COUNTER_COLLECTION",
+  "source_result": "results/proj-rsi/scheduler/artifacts/research.moe.ss.v1.up.counters.01/collection-1793134535318241647/logs/scheduler/moe-ss-v1-up-counters-01/result.json",
+  "source_result_sha256": "58e7b51ec644955a354e41e1b662f3ca92c2e3574024211f2d59b4726aa2dc0e",
+  "session_sha256": "b2922a04c13221aaffc9248f4cd7f510ed22b5cdee975257e6ddc7f4e4103d7a",
+  "actual_NCU_version": "NVIDIA (R) Nsight Compute Command Line Profiler\nCopyright (c) 2018-2025 NVIDIA Corporation\nVersion 2025.3.1.0 (build 36398880) (public-release)\n",
+  "actual_NCU_sha256": "18d8a8aa13c156cd43ebdf24ac950b5386cb229f2a4c931db47ef91cfe785920",
+  "metric_query_returncode": 0,
+  "G6_G7_fixture_identity": [
+    {
+      "seed": 7901,
+      "active_local_blocks": 6,
+      "post": 96,
+      "capacity": 512,
+      "projection_grid": [
+        128,
+        64,
+        1
+      ],
+      "tensor_sha256": {
+        "x": "1a254b522619913d100ba52c50c1ec7e5c3bb8ba8be58fa0c1fcae6d04b6fd2d",
+        "sorted_ids": "03a980590c7f4b751ec58ce99afc5ace3a15e4a2608e174d9b2ea91e3fbb0116",
+        "experts": "d968be251ce293b5778040ffe1ca4e682aff0eaa22cf1bac3b6edcf76c192207",
+        "post": "2baaed212bebc4ebeeb19752c47ff7c4420adf7806f577722b487a08b605ee13"
+      },
+      "bank_addresses": {
+        "packed": 127025805262848,
+        "scales": 127042079162368,
+        "globals": 127042964180992
+      }
+    },
+    {
+      "seed": 7903,
+      "active_local_blocks": 7,
+      "post": 112,
+      "capacity": 512,
+      "projection_grid": [
+        128,
+        64,
+        1
+      ],
+      "tensor_sha256": {
+        "x": "b17204784b64dc88c38a81e3a419c18e88da168df830597d067182fa554c06ab",
+        "sorted_ids": "0e7a453efe278c8d0e83a690baf91fb7dabe12c28603f0bc241b60a85a24c3da",
+        "experts": "a7dacfcc722af3d6872b8e8843229cd1fb520f46d69a4d38db46ebdc2676a3a6",
+        "post": "d3fe97979d0fbe3bf464e5001637443d72b890242a801cc221b1c8a169a69761"
+      },
+      "bank_addresses": {
+        "packed": 127025805262848,
+        "scales": 127042079162368,
+        "globals": 127042964180992
+      }
+    }
+  ],
+  "completed_nonempty_checks": [
+    {
+      "seed": 7901,
+      "original_task_pass": true,
+      "up_bitwise_equal": true,
+      "message": "relative L2 error 5.606e-03 (worst row 5.790e-03)"
+    },
+    {
+      "seed": 7903,
+      "original_task_pass": true,
+      "up_bitwise_equal": true,
+      "message": "relative L2 error 5.614e-03 (worst row 5.808e-03)"
+    }
+  ],
+  "counter_metrics_collected": false,
+  "cause": "Original reference intentionally rejects all-nonlocal case as nothing to check; use exact-zero condition already established by prior serving/stage harness. G6/G7 reference unchanged.",
+  "session_seconds": 18.221263885498047,
+  "child_seconds": 13.557830095291138,
+  "phases": [
+    {
+      "phase": "verify_exact_collected_tree_and_binaries",
+      "elapsed_seconds": 1.9073486328125e-06
+    },
+    {
+      "phase": "weights_and_one_original_prepare",
+      "elapsed_seconds": 11.808236598968506
+    },
+    {
+      "phase": "real_serving_current_inputs_and_empty",
+      "elapsed_seconds": 12.39216923713684
+    }
+  ],
+  "cleanup": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T20:54:45Z\nTRIAL_EXIT okc-proj-moe-ss-v1-up-counters-01 0\n2026-10-27T20:55:09Z\n",
+    "terminal_exit": 0
+  },
+  "next_immutable_revision": "tools/moe_ss_v1_up_counters_v2",
+  "original_preserved": true,
+  "no_kernel_rewrite": true,
+  "loop": "profile->measure->hypothesis->test->validate->stack->learn->reprioritize->repeat; proj_rsi/ITERATION.md",
+  "recommended_disposition": "INVALID_SETUP",
+  "hardware_metrics": "NONE; failure occurred before cudaProfilerStart"
+}

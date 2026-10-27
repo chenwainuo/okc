@@ -66,7 +66,7 @@ class HistoryTests(unittest.TestCase):
   self.assertEqual(partial['archive_status'],'ARCHIVED_PARTIAL')
  def test_no_small_positive_threshold_and_no_duplicate_feature_inflation(self):
   cat=self.catalog;observations=cat['positive_observations']
-  self.assertEqual(len(cat['improvements']),62)
+  self.assertEqual(len(cat['improvements']),68)
   original=[r for r in observations if r['catalog_cohort']=='initial_45_job_audit']
   self.assertEqual(len(original),224)
   self.assertGreater(len(observations),224)
@@ -113,7 +113,7 @@ class HistoryTests(unittest.TestCase):
    self.assertEqual(row['score_tested_jobs'],[])
    self.assertIsNone(row['official_score_us'])
    self.assertTrue(all('sha256' in ref for ref in row['evidence']))
-  self.assertEqual(len(self.catalog['local_paired_observations']),376)
+  self.assertEqual(len(self.catalog['local_paired_observations']),483)
  def test_normalized_release_profile_discovered_without_candidate_directory(self):
   with tempfile.TemporaryDirectory() as directory:
    root=Path(directory);path=root/'results/proj-rsi/releases/frozen-v1/profiles/submission.pending.json'
@@ -255,6 +255,31 @@ class HistoryTests(unittest.TestCase):
   self.assertTrue(all(r['gain_us']<0 and r['F1_gain_us']<0 for r in summaries))
   positive=[r for r in points if r['pairs']==1 and r['gain_us']>0]
   self.assertEqual(len(positive),2);self.assertTrue(all('.B7' in r['shape'] and r['gain_us']>51 and not r['shipping_gain'] for r in positive))
+ def test_marlin_gain_keeps_F1_conflict_and_every_matched_round(self):
+  points=[r for r in self.catalog['local_paired_observations'] if r['attempt_id']=='research.moe.original.marlin.fourblocks.01']
+  self.assertEqual(len(points),39)
+  self.assertEqual(len({r['observation_id'] for r in self.catalog['local_paired_observations']}),len(self.catalog['local_paired_observations']))
+  contrasted=[r for r in points if r['pairs']==12 and r['version']=='contrast']
+  self.assertEqual(len(contrasted),2)
+  self.assertTrue(all(r['gain_us']>0 and r['F1_before_gain_us']<0 and r['F1_after_gain_us']<0 for r in contrasted))
+  self.assertTrue(any(r['gain_us']<0 for r in points if r['pairs']==1))
+ def test_scatter_failed_parent_repair_does_not_replace_actual_best_loss(self):
+  points=[r for r in self.catalog['local_paired_observations'] if r['attempt_id']=='research.moe.ss.two.value.scatter.down.01' and r['pairs']==8]
+  self.assertEqual(len(points),3)
+  best=next(r for r in points if r['control']=='v1_full_lut' and r['version']=='two_value_scatter')
+  failed=next(r for r in points if r['control']=='v2_rolled_down' and r['version']=='two_value_scatter')
+  self.assertLess(best['gain_us'],0);self.assertEqual(best['wins'],0)
+  self.assertGreater(failed['gain_us'],0);self.assertEqual(failed['wins'],8)
+  self.assertLess(best['F1_before_gain_us'],0);self.assertGreater(best['F1_after_gain_us'],0)
+ def test_invalid_C11_and_counter_repair_do_not_admit_performance(self):
+  points=[r for r in self.catalog['local_paired_observations'] if r['attempt_id']=='research.gv.codec.frontier.two-cell.01']
+  self.assertEqual(len(points),2)
+  self.assertTrue(all(r['performance_admitted'] is False and r['validity']=='INVALID_CLEANUP_RAW_DIAGNOSTIC_ONLY' and not r['shipping_gain'] for r in points))
+  findings={r['immutable_id']:r for r in self.catalog['improvements']}
+  self.assertIn('INVALID_CLEANUP',findings['improvement.research.gv.codec.frontier.two-cell.01']['classification'])
+  self.assertEqual(findings['improvement.research.moe.ss.v1.up.counters.01']['classification'],'INVALID_SETUP_NO_COUNTER_COLLECTION')
+  self.assertEqual(findings['improvement.research.moe.ss.v1.up.counters.v2.01']['classification'],'VALID_DIAGNOSTIC_NO_PERFORMANCE_ADMISSION')
+  self.assertFalse(any('counters' in r['attempt_id'] for r in self.catalog['local_paired_observations']))
  def test_server_content_hash_not_claimed_equal_to_local_sha(self):
   row=next(r for r in self.catalog['submissions'] if r['candidate']=='rs32')
   self.assertNotEqual(row['source']['sha256'],row['api_content_hash'])
@@ -262,7 +287,7 @@ class HistoryTests(unittest.TestCase):
   self.assertTrue(all(r['causal_delta_vs_other_jobs_us'] is None for r in self.catalog['all_official_jobs']))
  def test_csv_roundtrip_preserves_all_rows_and_structured_evidence(self):
   outputs=render(self.catalog)
-  expected={'submissions':len(self.catalog['submissions']),'checks':len(self.catalog['checks']),'all_official_jobs':len(self.catalog['all_official_jobs']),'improvements':62,'positive_observations':len(self.catalog['positive_observations']),'local_observations':376,'candidates':self.catalog['counts']['candidates']}
+  expected={'submissions':len(self.catalog['submissions']),'checks':len(self.catalog['checks']),'all_official_jobs':len(self.catalog['all_official_jobs']),'improvements':68,'positive_observations':len(self.catalog['positive_observations']),'local_observations':483,'candidates':self.catalog['counts']['candidates']}
   for table,count in expected.items():
    rows=list(csv.DictReader(io.StringIO(outputs[f'proj_rsi/tables/{table}.csv'])))
    self.assertEqual(len(rows),count,table)

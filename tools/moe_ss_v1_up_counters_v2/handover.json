@@ -1,0 +1,29 @@
+{
+  "state": "ACTUAL_COUNTER_CAPTURE_VALID_ROOT_DISPOSITION_REVIEW_PENDING",
+  "job_id": "research.moe.ss.v1.up.counters.v2.01",
+  "root_ready_descriptor": "tools/moe_ss_v1_up_counters_v2/job-root-ready.json",
+  "root_ready_sha256": "27871f070bf142af17f70b5d3a61fa4971d196a8d5e6c12075686ecb1b4515a2",
+  "previous_attempt": "research.moe.ss.v1.up.counters.01 INVALID_SETUP/nohardwaremetrics",
+  "repair": "Emptyfixture exactbytezero; G6/G7 originalreference unchanged",
+  "CPU_regression": "cpu_regression.py PASS actualASTbranch, zeroGPUcalls",
+  "no_kernel_or_metric_changes": true,
+  "priority": "Below performance experiments; optionaldiagnostic nevergate",
+  "loop_pointer": {
+    "next": "Root independent completion review then scoped DONE/VALID_NO_GAIN diagnostic. No kernel rewrite implied: counters show low DRAM/tensor utilization but cannot identify producer versus consumer path. Preserve both valid diagnostic and original setup failure; prioritize existing measured-performance work and M3012 feasibility separately.",
+    "source_binary_outputs_owner": "moe_result_repair",
+    "metrics_causal_owner": "moe_pipeline_next",
+    "root_owns": [
+      "queue",
+      "GPU",
+      "admission",
+      "independent cleanup"
+    ]
+  },
+  "loop": "profile->measure->hypothesis->optimize/reimplement->test->validate->stack->submit measuredgains->learn->reprioritize->repeat",
+  "contract": "proj_rsi/ITERATION.md",
+  "idle_seconds_max": 10,
+  "actual_collection": "results/proj-rsi/scheduler/artifacts/research.moe.ss.v1.up.counters.v2.01/collection-1793134863943045419",
+  "analysis": "tools/moe_ss_v1_up_counters_v2/actual-analysis/analysis.json",
+  "done_evidence": "tools/moe_ss_v1_up_counters_v2/actual-analysis/done-evidence.json",
+  "resource_supplement": "tools/moe_ss_v1_up_counters_v2/actual-analysis/resource-supplement.json"
+}

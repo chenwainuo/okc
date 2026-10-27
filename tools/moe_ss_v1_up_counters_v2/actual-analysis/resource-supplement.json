@@ -1,0 +1,23 @@
+{
+  "state": "MEASURED_RESOURCE_SUPPLEMENT_NOT_NEW_EXPERIMENT",
+  "source_raw_csv": "results/proj-rsi/scheduler/artifacts/research.moe.ss.v1.up.counters.v2.01/collection-1793134863943045419/logs/scheduler/moe-ss-v1-up-counters-v2-01/up.csv",
+  "observed_both_kernels": {
+    "registers_per_thread": 40,
+    "register_residency_limit": 6,
+    "shared_residency_limit": 6,
+    "launch_shared_config_bytes": 200704,
+    "dynamic_shared_bytes": 27680,
+    "driver_shared_bytes": 1024,
+    "allocated_shared_bytes_per_block": 28800,
+    "device_shared_memory_per_SM_max": 233472
+  },
+  "source_launch": "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/kernel.cuh:358 ordinary launch, no carveout attribute",
+  "implication": "Register-only reduction does not guarantee increased residency under observed shared configuration. This counterevidence must enter any future occupancy hypothesis. No carveout experiment or kernel rewrite performed/proposed by this supplement.",
+  "replay_cost_observed": {
+    "passes_per_kernel": 10,
+    "kernels": 2,
+    "memory_backed_up_bytes_per_pass": 16755006730,
+    "warmup_passes_per_kernel": 0
+  },
+  "scope": "Optional diagnostic counters only; no latency/gain claim"
+}

@@ -1,0 +1,56 @@
+{
+  "parent": "tools/moe_marlin_anchor_tiles_v1/pilot.py",
+  "parent_sha256": "934e9cd466e479b02e48c93f9e657696a8ae667e8ec47eaf73f3fc45ed4d720e",
+  "edits": [
+    {
+      "name": "driver-doc",
+      "before": "Exact original M8 Marlin: anchor/default-shim/opposite existing up tile; root-only GPU.",
+      "after": "Exact original M8 Marlin: guarded3versus4blocks, sameK64tile/math; root-only GPU."
+    },
+    {
+      "name": "isolated-JIT-identity",
+      "before": "load_jit('moe_anchor_two_tiles'",
+      "after": "load_jit('moe_anchor_four_blocks'"
+    },
+    {
+      "name": "feasibility-query-export",
+      "before": "('anchor_tile_control','anchor_tile_control')],extra_include_paths",
+      "after": "('anchor_tile_control','anchor_tile_control'),('anchor_block_info','anchor_block_info')],extra_include_paths"
+    },
+    {
+      "name": "no-force-no-timing-until-actual-feasibility",
+      "before": "  r['compile_wall_seconds']=time.monotonic()-start;assert len(r['jit'])==1;save()\n",
+      "after": "  r['compile_wall_seconds']=time.monotonic()-start;assert len(r['jit'])==1;save()\n  phase('actual_cuda_four_block_feasibility_before_force_or_timing')\n  fields=('legal','registers_per_thread','static_shared_B','local_B','max_threads_per_block','device_registers_per_SM',\n          'device_shared_B_per_SM','device_optin_shared_B_per_block','device_threads_per_SM','device_blocks_per_SM',\n          'dynamic_shared_3_B','dynamic_shared_4_B','kernel_min_cache_B','actual_occupancy_3','actual_occupancy_4',\n          'four_blocks_register_count','four_blocks_total_shared_B','launch_reserve_B')\n  feasibility={key:int(variant.anchor_block_info(i))for i,key in enumerate(fields)}\n  r['four_block_feasibility']={'queries':feasibility,'before_any_forced_launch':True,'before_GPU_timing':True,\n       'query_has_no_CUDA_kernel_launch':True,'mechanism':'3to4blocks+smaller_dynamic_shared_and_Acache; not pure occupancy'};save()\n  if feasibility['legal']!=1 or any(v<0 for v in feasibility.values()):\n   r['state']='VALID_FOUR_BLOCK_UNSUPPORTED_NO_TIMING_ROOT_REVIEW_REQUIRED';r['reason']='actualCUDAdevice/kernel/occupancy query does not admit4';r['GPU_timing_calls']=0;save();return\n  assert feasibility['four_blocks_register_count']<=feasibility['device_registers_per_SM']\n  assert feasibility['four_blocks_total_shared_B']<=feasibility['device_shared_B_per_SM']\n  assert feasibility['actual_occupancy_4']>=4\n"
+    },
+    {
+      "name": "same-current-tile-force4-after-real-default",
+      "before": "  default=int(variant.anchor_tile_control(-1));assert default==int(variant.anchor_tile_control(-2));mode=opposite(default)",
+      "after": "  default=int(variant.anchor_tile_control(-1));assert default==int(variant.anchor_tile_control(-2))\n  if decode(default)!=dict(blocks_per_sm=3,threads=128,thread_n=128,thread_k=64):\n   r['state']='VALID_FOUR_BLOCK_UNSUPPORTED_NO_TIMING_ROOT_REVIEW_REQUIRED';r['reason']='actual default differs from intended current3blockK64tile';r['actual_default']=decode(default);r['GPU_timing_calls']=0;save();return\n  mode=3"
+    },
+    {
+      "name": "precise-scope",
+      "before": "one M8 normal EP8 original whole expert, original math; three arms/two existing gate-up tiles; no14/model/3x/official",
+      "after": "one M8 normal EP8 original whole expert; sameK64N128128t math,3versus4blocks+dynamicshared/Acache; no14/model/3x/official"
+    },
+    {
+      "name": "compile-phase",
+      "before": "phase('compile_exact_two_existing_native_tiles')",
+      "after": "phase('compile_reused_math_with_guarded_four_block_host_control')"
+    },
+    {
+      "name": "direct-state",
+      "before": "'VALID_ANCHOR_TILE_DIRECT_TIMINGS_PROFILE_OPTIONAL_ROOT_REVIEW'",
+      "after": "'VALID_FOUR_BLOCK_DIRECT_TIMINGS_PROFILE_OPTIONAL_ROOT_REVIEW'"
+    },
+    {
+      "name": "final-state",
+      "before": "'VALID_M8_ORIGINAL_MARLIN_TILE_SCREEN_ROOT_REVIEW_REQUIRED'",
+      "after": "'VALID_M8_ORIGINAL_MARLIN_FOUR_BLOCK_SCREEN_ROOT_REVIEW_REQUIRED'"
+    },
+    {
+      "name": "error-state",
+      "before": "'INVALID_ANCHOR_TILE_SCREEN_NO_PERFORMANCE_ADMISSION'",
+      "after": "'INVALID_FOUR_BLOCK_SCREEN_NO_PERFORMANCE_ADMISSION'"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "state": "CPU_SOURCE_INVERSE_PASS_GPU_UNRUN",
+  "parent": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/moe_wna16_marlin.cuh",
+  "parent_sha256": "ec75c89142eeee6e7d39d2908d3eeae74d1cc0c481368caa1263aa9d4bdcdc0a",
+  "variant": "serving/experiments/moe_rsi_20261027/anchor_marlin_tiles_v1/two_tiles.cuh",
+  "variant_sha256": "515ba06d70d29fb0537de3069e5f1f5134a9e631628b88269de99a4ff1f4e12c",
+  "exact_forward_inverse": true,
+  "math_headers_unchanged": [
+    {
+      "path": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/kernel.h",
+      "sha256": "b7a0dfdbe8bd12dd4cf87236a0c7e102b8668e5d328b7ec2d8542b942fab4ec2"
+    },
+    {
+      "path": "serving/sglang/python/sglang/kernels/jit/csrc/gemm/marlin_moe/marlin_template.h",
+      "sha256": "6b43bc72d64a591bc86f62df2db14bdea5adce7b70b00af1a3e601a3c0d24fdb"
+    }
+  ],
+  "native_Marlin_instantiations": 2,
+  "only_scope": [
+    "BF16",
+    "EP",
+    "no_bias",
+    "NVFP4_group16",
+    "m8",
+    "n8192",
+    "k4096",
+    "topk8",
+    "blockM8",
+    "no_act_order",
+    "no_zp",
+    "fullK"
+  ],
+  "original_residency_and_legal_config_filters": true,
+  "same_return_ABI": true,
+  "compile_GPU_calls": 0
+}
