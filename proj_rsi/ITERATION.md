@@ -1,5 +1,14 @@
 # Current iteration contract
 
+## Active objective and scope
+
+User correction 2026-10-27: **muse_bf16_proj only**, official score target
+**<3000 microseconds**. Serving and MoE optimization are out of scope. Preserve
+their existing results as history, but do not launch further work for them or
+count their gains toward this objective. All active ROI priorities, implementation
+assignments and new GPU admissions must target projection. This overrides older
+serving/MoE goals and handovers.
+
 ## Continuous coordinator loop
 
 Authority: explicit user instructions, reaffirmed 2026-10-27. Read this section

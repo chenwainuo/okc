@@ -1,5 +1,10 @@
 # Coordinator startup instructions
 
+Current scope (user correction 2026-10-27): optimize **muse_bf16_proj only**,
+target official score below 3000 microseconds. Do not optimize serving or MoE,
+launch their experiments, or treat their local gains as projection progress.
+Retain their historical evidence; active ROI work and GPU admissions are projection only.
+
 Before continuing optimization, read [proj_rsi/ITERATION.md](proj_rsi/ITERATION.md),
 especially its Continuous coordinator loop section. This records the user's
 explicit persistent instructions and applies to takeovers and compacted sessions.
