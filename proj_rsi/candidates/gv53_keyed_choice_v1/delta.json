@@ -1,0 +1,38 @@
+[
+  {
+    "old": "int XS, int V>\nstatic int64_t gvl(",
+    "new": "int XS, int V, bool KEYED = false>\nstatic int64_t gvl("
+  },
+  {
+    "old": "  if constexpr(FMT==1 && MT==1 && ST==1 && WR==2 && WK==16 && KU==8 && S==1 && RT==1 && XS==0 && V==3) {\n    if(p.N==4096 && p.K==8192 && (p.m==1 || p.m==8)) k=gv_keyed<FMT,MT,ST,WR,WK,KU,S,RT,XS,V>;\n  }",
+    "new": "  if constexpr(KEYED) {\n    static_assert(FMT==1 && MT==1 && ST==1 && WR==2 && WK==16 && KU==8 && S==1 && RT==1 && XS==0 && V==3,\"keyed host entry exact tuple\");\n    if(p.N!=4096 || p.K!=8192 || (p.m!=1 && p.m!=8)) return -3;\n    k=gv_keyed<FMT,MT,ST,WR,WK,KU,S,RT,XS,V>;\n  }"
+  },
+  {
+    "old": "\nint64_t gvrun(int64_t inst,",
+    "new": "\nint64_t gvkeyrun( torch::Tensor W, torch::Tensor W2, torch::Tensor x, torch::Tensor out, torch::Tensor esc, torch::Tensor ws, torch::Tensor cnt, int64_t T, int64_t U) {\n  G p;\n  p.W = (const uint4*)W.data_ptr(); p.W2 = (const uint4*)W2.data_ptr(); p.x = (const __nv_bfloat16*)x.data_ptr(); p.out = out.data_ptr();\n  p.esc = (const uint32_t*)esc.data_ptr(); p.ws = (float4*)ws.data_ptr(); p.cnt = cnt.data_ptr<int>();\n  p.m = x.size(0); p.K = x.size(1); p.N = out.size(1); p.KC = p.K / 64;\n  p.T0 = (uint32_t)(T & 0xffffffff); p.T1 = (uint32_t)((uint64_t)T >> 32); p.U0 = (uint32_t)(U & 0xffffffff); p.U1 = (uint32_t)((uint64_t)U >> 32);\n  auto st = at::cuda::getCurrentCUDAStream();\n  return gvl<1,1,1,2,16,8,1,1,0,3,true>(p,st,0);\n}\n\nint64_t gvrun(int64_t inst,"
+  },
+  {
+    "old": "load_inline(\"gv53_keyed_half_v1_%x\"",
+    "new": "load_inline(\"gv53_keyed_choice_v1_%x\""
+  },
+  {
+    "old": "cpp_sources=\"int64_t gvrun(int64_t, torch::Tensor",
+    "new": "cpp_sources=\"int64_t gvkeyrun(torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor, int64_t, int64_t); int64_t gvrun(int64_t, torch::Tensor"
+  },
+  {
+    "old": "functions=[\"gvrun\", \"gvocc\", \"gvregs\"",
+    "new": "functions=[\"gvkeyrun\", \"gvrun\", \"gvocc\", \"gvregs\""
+  },
+  {
+    "old": "def _gvcall(st, p, x, out):\n",
+    "new": "def _gvcall(st, p, x, out):\n    if len(p) == 8 and p[-1] == \"gv_keyed_choice\" and x.shape[0] in (1,8):\n        assert x.shape[1] == 8192 and out.shape[1] == 4096 and tuple(GVI[p[0]]) == (1,1,1,2,16,8,1,1,0,3)\n        return _gvext().gvkeyrun(p[1],p[5],x,out,p[2],st[\"gvws\"],st[\"gvcnt\"],p[3],p[6])\n"
+  },
+  {
+    "old": "\ndef prepare(weights):",
+    "new": "\ndef _gvkey_confirm(st, flush):\n    # All original bakes finish before this optional, same-geometry comparison.\n    target = (1,1,1,2,16,8,1,1,0,3)\n    deadline = _T0 + PREPARE_BUDGET_S\n    for m in (1,8):\n        layer, n, key = \"pooler\", 4096, (\"pooler\",_bk(m))\n        record = {\"m\":m,\"choice\":\"parent\",\"status\":\"UNSELECTED_PARENT_RETAINED\",\"pairs_us\":[],\"samples_us\":[]}\n        st.setdefault(\"gvkey_choices\", {})[(layer,m)] = record\n        def receipt():\n            print(\"GV_KEYED_CHOICE \" + repr(record),flush=True)\n        if time.time() >= deadline:\n            record[\"status\"] = \"BUDGET_SKIP_PARENT_RETAINED\"; receipt(); continue\n        rp = st.get(\"rq\",{}).get((layer,m))\n        if rp is not None and rp[\"n\"] == n:\n            record[\"status\"] = \"RQ_PRECEDENCE_PARENT_RETAINED\"; receipt(); continue\n        owner = st[\"sel\"]; p = owner.get(key)\n        if p is None or p[4] != n:\n            owner = st[\"gv\"]; p = owner.get(key)\n        if p is None or p[4] != n or len(p) != 7 or not (0 <= p[0] < len(GVI)) or tuple(GVI[p[0]]) != target:\n            receipt(); continue\n        w = st[layer+\"_raw\"][:n]\n        if tuple(w.shape) != (4096,8192):\n            record[\"status\"] = \"SHAPE_SKIP_PARENT_RETAINED\"; receipt(); continue\n        record.update({\"template\":target,\"id\":p[0],\"owner\":\"sel\" if owner is st[\"sel\"] else \"gv\"})\n        plans = (p,tuple(p)+(\"gv_keyed_choice\",))\n        gen = torch.Generator(device=w.device).manual_seed(89101+m)\n        x = torch.randn((m,w.shape[1]),generator=gen,device=w.device).to(torch.bfloat16)\n        xb = x.clone()\n        outputs = [torch.empty((m,n),dtype=torch.bfloat16,device=w.device) for _ in range(2)]\n        ref = x.double() @ w.double().T\n        def invoke(index):\n            assert _gvcall(st,plans[index],x,outputs[index]) == 0\n        def check(index):\n            got = outputs[index].double()\n            assert torch.equal(x.view(torch.uint8),xb.view(torch.uint8)) and bool(torch.isfinite(got).all())\n            assert float((got-ref).norm()/ref.norm().clamp(min=1e-30)) <= 4e-3\n            assert float(((got-ref).norm(dim=-1)/ref.norm(dim=-1).clamp(min=1e-30)).max()) <= 2e-2\n        complete = True\n        for block in range(4):\n            sample = {}\n            for index in ((0,1) if block % 2 == 0 else (1,0)):\n                if time.time() >= deadline:\n                    record[\"status\"] = \"BUDGET_SKIP_PARENT_RETAINED\"; complete = False; break\n                sample[index] = _tm(lambda: invoke(index),flush,9)*1e3\n                record[\"samples_us\"].append({\"block\":block,\"arm\":\"parent\" if index==0 else \"keyed\",\"us\":sample[index]})\n                check(index)  # immediate own-terminal/current-X check after this arm's actual graph timing\n                if not (0 < sample[index] < float(\"inf\")):\n                    record[\"status\"] = \"INVALID_TIMING_PARENT_RETAINED\"; complete = False; break\n            if not complete:\n                break\n            record[\"pairs_us\"].append({\"parent\":sample[0],\"keyed\":sample[1],\"order\":\"AB\" if block%2==0 else \"BA\"})\n        if complete and time.time() < deadline:\n            ds = sorted(r[\"parent\"]-r[\"keyed\"] for r in record[\"pairs_us\"])\n            effect = (ds[1]+ds[2])/2\n            record[\"paired_median_parent_minus_keyed_us\"] = effect\n            if effect > 0:\n                owner[key] = plans[1]; record[\"choice\"] = \"keyed\"\n            record[\"status\"] = \"COMPLETE_ZERO_THRESHOLD\"\n        elif complete:\n            record[\"status\"] = \"BUDGET_SKIP_PARENT_RETAINED\"\n        receipt()\n\n\ndef prepare(weights):"
+  },
+  {
+    "old": "    st.pop(\"gvc12\", None)\n",
+    "new": "    if GV:\n        _gvkey_confirm(st, torch.empty(64 << 20, dtype=torch.float32, device=dev))\n    st.pop(\"gvc12\", None)\n"
+  }
+]

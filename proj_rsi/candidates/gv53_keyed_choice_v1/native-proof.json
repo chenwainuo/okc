@@ -1,0 +1,29 @@
+{
+  "state": "PASS_TARGET_ONLY_CPU_COMPILE",
+  "argv": [
+    "/usr/local/cuda-12.8/bin/nvcc",
+    "-std=c++17",
+    "-O3",
+    "-lineinfo",
+    "-gencode=arch=compute_90a,code=sm_90a",
+    "-Xptxas=-v",
+    "-c",
+    "proj_rsi/candidates/gv53_keyed_choice_v1/host-target.cu",
+    "-o",
+    "proj_rsi/candidates/gv53_keyed_choice_v1/host-target.o"
+  ],
+  "functions": {
+    "gv_keyed": {
+      "native_PC_predicate_encoding_exact": true,
+      "slots": 360,
+      "nonNOP": 345
+    },
+    "gv_predxor": {
+      "native_PC_predicate_encoding_exact": true,
+      "slots": 360,
+      "nonNOP": 348
+    }
+  },
+  "GPU_used": false,
+  "full_Torch_host_compile_not_performed": true
+}
