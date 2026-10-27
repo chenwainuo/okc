@@ -1,0 +1,193 @@
+{
+  "scope": "CPU/read-only historical process audit; writes harness.* only; no GPU/SSH/API/queue/git mutations",
+  "finding": "All five requested failures are harness/instrumentation defects, not established candidate numeric kernel failures. This selected sample is not a population failure-rate estimate.",
+  "timing_limits": "Result start/finish and external host timestamp spans are different accounting scopes; do not sum or call them GPU busy time. CPU budgets in reviews are estimates, not measured CPU usage.",
+  "cases": [
+    {
+      "case": "PW41 setup",
+      "classification": "HARNESS_SETUP_FAILURE_NO_CANDIDATE_NUMERIC_FAILURE_ESTABLISHED",
+      "cause": "Harness classified every RQ TU as containing four M128 EH/control targets; actual small TU correctly has none.",
+      "CPU_review_blind_spot": "95/99 SASS/resource checks, eleven CPU tests and independent review missed actual small/large module partition.",
+      "result_state": "INVALID_NO_ADMISSION",
+      "measured_trial_checks": 0,
+      "measured_trial_raw_samples": 0,
+      "source_pins_at_dispatch": 60,
+      "evidence": [
+        {
+          "path": "results/proj-rsi/scheduler/artifacts/pw41.ticket.narrow.01/collection-1793087683748054150/logs/scheduler/pw41-ticket-narrow-01/result.json",
+          "sha256": "e512e4378d157d9740dad8044635eff563b2afce72062f8c8bb5b5b86e268048"
+        },
+        {
+          "path": "results/proj-rsi/scheduler/artifacts/pw41.ticket.narrow.01/collection-1793087683748054150/inventory.json",
+          "sha256": "7f1d56a6924bf87c190f41797460280c5d5a6a9f652bd198c933d57a30e3c850"
+        },
+        {
+          "path": "proj_rsi/scheduling/reviews/pw41-ticket-01.md",
+          "sha256": "feb3f8ca3b4627ddcdc0ddf6b76f064f3f863707063ad4446073ac68d51f45b8"
+        }
+      ],
+      "host_log_timestamp_endpoints": [
+        "2026-10-27T07:53:07Z",
+        "2026-10-27T07:54:21Z"
+      ],
+      "result_wall_seconds": 66.92627882957458
+    },
+    {
+      "case": "PW44 resource gate",
+      "classification": "HARNESS_SETUP_FAILURE_NO_CANDIDATE_NUMERIC_FAILURE_ESTABLISHED",
+      "cause": "Harness required Runtime user static shared=1024, conflating dump SHARED/system reservation. Exact failed flag/value was not persisted and remains unknown.",
+      "CPU_review_blind_spot": "123-pin independent wrapper review, fake complete mechanism run and physical/resource tests accepted the incorrect expected value.",
+      "result_state": "INVALID_NO_PERFORMANCE_ADMISSION",
+      "measured_trial_checks": 0,
+      "measured_trial_raw_samples": 0,
+      "source_pins_at_dispatch": 129,
+      "evidence": [
+        {
+          "path": "results/proj-rsi/scheduler/artifacts/pw44.stack.fullscope.01/collection-1793087540524299572/logs/scheduler/pw44-stack-01/result.json",
+          "sha256": "bd5129eb2962071650621ed3856fa5e4144159f9ca68764fe320552182dc1087"
+        },
+        {
+          "path": "results/proj-rsi/scheduler/artifacts/pw44.stack.fullscope.01/collection-1793087540524299572/inventory.json",
+          "sha256": "4eebfe2d1c8a2d81e9f8512166312d9fe82aa30516b99b3a7eb3c6abd86525d6"
+        },
+        {
+          "path": "proj_rsi/audits/pw44-stack-lab-independent.md",
+          "sha256": "66047d4dcdc759fab881b281c73d268b191776aca405236a04862694767d535c"
+        }
+      ],
+      "host_log_timestamp_endpoints": [
+        "2026-10-27T07:48:44Z",
+        "2026-10-27T07:52:04Z"
+      ]
+    },
+    {
+      "case": "MoE SS v2 resource gate",
+      "classification": "HARNESS_SETUP_FAILURE_NO_CANDIDATE_NUMERIC_FAILURE_ESTABLISHED",
+      "cause": "Same static-shared conflation: actual T8/DIV8 runtime static_shared0, registers32, local0, maxThreads256, maxDynamic49152, occupancy8.",
+      "CPU_review_blind_spot": "82-input screen, eleven CPU tests, 4064 normative bit cases, eight full production stream/physical checks and review still encoded static1024.",
+      "result_state": "INVALID_SCREEN_NO_PERFORMANCE_ADMISSION",
+      "measured_trial_checks": 0,
+      "measured_trial_raw_samples": 0,
+      "source_pins_at_dispatch": 84,
+      "evidence": [
+        {
+          "path": "results/proj-rsi/scheduler/artifacts/research.moe.ss.stage.screen.v2.01/collection-1793115722457840089/logs/scheduler/moe-ss-stage-screen-v2-01/result.json",
+          "sha256": "696b234099097f9205f96d4b610bf64c99039aec773dcdd7b7f16a07ed0e1c0a"
+        },
+        {
+          "path": "results/proj-rsi/scheduler/artifacts/research.moe.ss.stage.screen.v2.01/collection-1793115722457840089/inventory.json",
+          "sha256": "9a1261cfab1dc429ab6fea531bf552ced63ed464bdfd866617e730b2b8ee62f5"
+        },
+        {
+          "path": "proj_rsi/scheduling/reviews/moe-ss-stage-screen-v2-01.md",
+          "sha256": "bea3972b82e69ae9d565502af32e5fafafcbba6bab8411b071b4b3e1435b6f57"
+        }
+      ],
+      "host_log_timestamp_endpoints": [
+        "2026-10-27T15:40:42Z",
+        "2026-10-27T15:41:36Z"
+      ],
+      "result_wall_seconds": 47.49577879905701,
+      "compile_seconds": 44.01608397200471
+    },
+    {
+      "case": "PW38 trace01 annotation collision",
+      "classification": "PARSER_INSTRUMENTATION_FAILURE_CURRENT_PROFILE_TERMINAL_PASSED",
+      "cause": "CPU user_annotation and gpu_user_annotation legitimately share replay names; parser failed to filter category and rejected duplicate scopes.",
+      "CPU_review_blind_spot": "136 dependency pins, twelve author parser negatives and six independent parser/counter negatives omitted this genuine trace category collision.",
+      "current_trace_cases_before_failure": 1,
+      "current_cold_event_samples_first_case": 11,
+      "profile_replays_first_case": 3,
+      "host_wall_seconds": 71,
+      "evidence": [
+        {
+          "path": "results/proj-rsi/scheduler/artifacts/pw38.hotpath.trace.01/collection-1793114585674218450/logs/scheduler/pw38-hotpath-trace-01/run/capture.json",
+          "sha256": "1964b8894e2a88e73c05cfa12cbae7e87ed210cca0f328a2abc33a15e3844791"
+        },
+        {
+          "path": "proj_rsi/scheduling/validations/pw38-hotpath-trace-01.json",
+          "sha256": "18eaf97a29901b3ffac51cf1779ad09f31402acc8ed35cac8a40f9a797c724a2"
+        },
+        {
+          "path": "proj_rsi/audits/pw38-hotpath-trace-independent.md",
+          "sha256": "a3502d7e829a32d6fb6109d9ce59020d8aa088554dcd36dd86850005264b8fd3"
+        }
+      ]
+    },
+    {
+      "case": "GV prepared cache lifetime",
+      "classification": "HARNESS_DEFECT_CAUGHT_CPU_BEFORE_GPU_ADMISSION",
+      "cause": "Production prepare removes gvc12; fixed mechanism required it after prepare. Immutable revision2 would always abort at fixed stage.",
+      "CPU_review_blind_spot": "203 closure pins, offline15+8 exact device streams, scalar/chain/source proofs and fake terminal/counter negatives do not model prepared-state lifetime. Independent source-flow review caught it before driver GO.",
+      "GPU_cost_incurred_by_this_blocker_seconds": 0,
+      "evidence": [
+        {
+          "path": "proj_rsi/candidates/gv_predxor_trial/history/v2-missing-prepared-packs/manifest.json",
+          "sha256": "e368600ecef4224e8ca2cf88b555d9071c0714c7e5b7cde66a8a9596c17131ec"
+        },
+        {
+          "path": "proj_rsi/candidates/gv_predxor_trial/history/v2-missing-prepared-packs/mechanism.py",
+          "sha256": "a739057412689dbda5a486c5843a93f71ac4c959003e3ceda470952ee7613651"
+        },
+        {
+          "path": "proj_rsi/candidates/gv_predxor_trial/history/v2-missing-prepared-packs/cpu-proof.json",
+          "sha256": "b6c7c2806f9a0f2947b1ec83709806696b12b6694d7882b9482f61609b519156"
+        },
+        {
+          "path": "proj_rsi/candidates/pw45/submission.py",
+          "sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+        },
+        {
+          "path": "proj_rsi/audits/gv-predxor-lab-v2-blocker.md",
+          "sha256": "db19f4022fc8e4f0e3d77250044c80a4c2b775d2186f491c6dea5edcf0d58802"
+        }
+      ]
+    }
+  ],
+  "reuse_final_evidence": [
+    {
+      "path": "proj_rsi/audits/pw44-stack-02-independent/report.md",
+      "sha256": "e4cc51a894d04b7f299e79f5c4f4818b4825b4f9347ecacb519a8a132eac5763"
+    },
+    {
+      "path": "proj_rsi/audits/pw41-ticket-repair-independent.md",
+      "sha256": "baa9c8dd9bce49d168bfaf5fd67acd882e869920ce7cf5d2e4521623051d7816"
+    },
+    {
+      "path": "proj_rsi/scheduling/reviews/pw44-stack-02.md",
+      "sha256": "c346edb410f49e515a1a0fe45acb6823ab4f10facc5883e25ea91e60cee39ecb"
+    }
+  ],
+  "recommendations": [
+    {
+      "gate": "Source/build identity",
+      "early": "One candidate/control source+build recipe digest, exact measured symbol and shape. Reuse validated unchanged binary by SO hash/compiler/flags/architecture.",
+      "defer_or_remove": "No unconditional re-review/redump of every unrelated old main or transitive history file for each screen.",
+      "final": "Validate newly built/touched/served functions; full closure and independent final result review before promotion."
+    },
+    {
+      "gate": "Resource queries",
+      "early": "One launch helper shared across experiments; persist raw actual fields before assertions. Check actual requested threads/dynamic bytes, capacity, launch success and nonzero occupancy for measured functions. Keep user static and driver reservation typed separately.",
+      "defer_or_remove": "Remove dump SHARED==Runtime sharedSizeBytes assertion. Resource maxima alone do not justify rejection without correctness/safety/performance purpose.",
+      "final": "Reconcile full served scope; exact resource matching only when claiming binary identity or matched resources."
+    },
+    {
+      "gate": "Harness integration",
+      "early": "Small real-shape/module/state fixture: actual TU dispatch subset, completed prepare cache lifetime, real trace categories. Prefer one bounded GPU smoke after minimal source safety review over more self-consistent fake mocks.",
+      "defer_or_remove": "Stop treating test/pin counts as integration evidence; do not duplicate fake models that copy expected constants.",
+      "final": "Reusable regression fixtures for observed failure classes."
+    },
+    {
+      "gate": "Numerics/basis",
+      "early": "Independent normal/outlier/zero plus discriminating current-X/boundary/changed-index probes for each measured path; terminal output before any further replay; poison outputs; active counter/immutability checks.",
+      "defer_or_remove": "Defer repeated allK for every arm/geometry and all30 policy/full-task campaigns until measured mechanism warrants integration; reuse unchanged mapping proofs. No arbitrary gain threshold.",
+      "final": "Complete task/shape/basis coverage where needed for changed mapping, strict numerics, mutation/counter/drain checks and current-incumbent whole-policy comparison before promotion."
+    },
+    {
+      "gate": "Profiling and schedule",
+      "early": "Finite event timing, same fixtures, simple balanced AB/BA and both signed outcomes. Selected launch identity from existing dispatch/node metadata.",
+      "defer_or_remove": "Profiler/Chrome/NCU as optional diagnostics; parser failures invalidate attribution, not already valid numerical outputs. Separate setup smoke from expensive prepare/fullpolicy.",
+      "final": "All30 package/selection checks and separate official evaluation when required; retain tiny/conflicting estimates."
+    }
+  ]
+}

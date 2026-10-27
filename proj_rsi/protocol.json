@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "problem": "muse_bf16_proj",
-  "purpose": "Head-driven RSI loop that rewrites the muse_bf16_proj kernel for this model's exact shapes. Every claim about speed comes from an okc job id; nothing else counts.",
+  "purpose": "Optimize the actual selected serving path through bounded measured experiments. Local hardware measurements are valid within their scope; official leaderboard claims require official job evidence.",
   "goal": {
     "board_us_target": 3000.0,
     "speedup_required": 1.6103,
@@ -67,10 +67,10 @@
   },
   "loop": [
     "profile current selected serving path; retain exact source/JIT, shape and hardware identity",
-    "measure same-run controls with all raw timings and complete correctness/state/terminal-output gates",
+    "screen changed shapes against actual current selected controls using a bounded reusable harness, independent numerical/current-input/final-output checks and same-run balanced timing",
     "write causal hypothesis, affected regions, expected score scenario, subjective probabilities and full cost",
     "implement immutable version; record parent, composition requirements/conflicts and reversible delta",
-    "independent critic verifies exact executable closure and bounded driver before GPU admission",
+    "one independent review of changed executable source/harness and relevant addressing/synchronization hazards before launch; reuse unchanged source/build-bound evidence",
     "register reviewed job in durable ROI scheduler; root sole GPU launcher, one GPU slot",
     "validate raw artifacts and cleanup; retain every signed result including tiny positives and invalid attempts",
     "generalize after each validated success, failure or mixed result: preserve immutable facts separately from explanations, scope/transfer limits, confidence and falsification tests",
@@ -229,5 +229,15 @@
     "exceptions": "A proposed replacement for a selected hotpath remains eligible, but must name the incumbent it replaces. Correctness/setup repairs and bounded diagnostics are prerequisites, not performance gains.",
     "scope_limits": "Historical full-expert trace is not current full-model serving evidence. Projection3ms and original expert3x remain separate; fullmodel8GPU validation pending.",
     "threshold": "Retain every measured positive; this focus does not introduce a minimum gain threshold."
+  },
+  "experiment_stages": {
+    "authority": "User requested review and removal of unnecessary process; evidence audits/process-audit-20261027/promotion.md and proj_rsi/audits/process-audit-20261027/harness.md",
+    "screen": "Bounded affected-shape correctness and same-run event timing first. Actual prepared state/module smoke, current X, own terminal output, relevant state lifetime, source/build/shape identity, exclusive lock, timeout and cleanup.",
+    "targeted_diagnosis": "Assembly, basis sweeps, profiler counters and exhaustive proofs are targeted tools for a specific hypothesis or changed correctness hazard; not universal prerequisites to every screen.",
+    "integration": "Test actual prepared cumulative policy against current incumbent across all required shapes. Validate source/graph/state/numerics and actual selection. Retain compatible wins and all signed regressions.",
+    "release": "Official check on exact validated bytes; score promptly when point score improves incumbent. No minimum effect or statistical significance gate. Preserve mixed evidence and no isolated-causality claim from package score.",
+    "reuse": "Review changed code once. Reuse unchanged source/build/toolchain-bound evidence; do not re-prove unrelated kernels or pin mutable test-duration logs as executable dependencies.",
+    "parallel_bookkeeping": "Learning/history/dashboard/extra retrospective reviews are never hardware or submission dependencies. Preserve raw artifacts and brief outcome now; enrich asynchronously.",
+    "scope": "Future descriptors/harness design. Existing frozen artifacts and admitted jobs retain their original contracts; no silent weakening of a running test."
   }
 }

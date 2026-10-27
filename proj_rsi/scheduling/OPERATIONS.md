@@ -8,6 +8,34 @@ GPU work; implementation/review agents submit descriptors and CPU evidence.
 `source version != attempt != family`. A failed attempt is retained and gets a
 cause/next experiment; it never automatically rejects its family.
 
+## Staged experiments (2026-10-27 process audit)
+
+Start with a bounded screen of changed shapes against the current selected
+incumbent. Before launch, review the changed addressing/synchronization and the
+actual launcher contract once; keep source/build identity, exclusive GPU access,
+timeout and cleanup. Check independent numerical outputs, changed inputs and
+the final timed output before measuring or drawing conclusions. Reuse unchanged
+evidence with an exact source/build identity instead of repeating its review.
+
+Full30-policy validation, exhaustive basis campaigns, unrelated-kernel SASS
+comparisons and profiler captures are not universal screening prerequisites.
+Use them when required by the changed mapping, mechanism claim, observed failure
+or final integration. Full required correctness and actual selected-policy
+comparison remain necessary before release. A successful diagnostic is not a
+release-ready candidate. Record all signed effects without a minimum-gain bar.
+
+Freeze executable dependencies and launch parameters. Historical reports,
+test-duration logs and prior proof objects can be referenced as evidence; they
+need not become transitive launch dependencies merely because they exist.
+Existing frozen descriptors remain unchanged. One independent changed-code and
+harness review is sufficient; do not require extra narrative reviews of the
+same bytes. Learning, dashboard and history updates run after artifact collection
+in parallel with the next GPU job, never while holding the hardware slot.
+
+Audit: `proj_rsi/audits/process-audit-20261027/harness.md` and
+`audits/process-audit-20261027/promotion.md`. This guidance changes future
+experiment design; it does not silently alter the gates of a frozen running job.
+
 ## Priority, units, uncertainty
 
 ```text

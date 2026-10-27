@@ -1,7 +1,10 @@
 # Experiment learning registry
 
 A completed success, regression, mixed result or diagnosed setup failure should
-produce a lesson before the next experiment is admitted. This registry is a
+produce a lesson in parallel with the next experiment. Completing a lesson,
+catalog refresh or retrospective review is not a GPU-admission dependency.
+Read existing relevant lessons before repeating an experiment; record new facts
+and raw artifact links immediately, then enrich the registry asynchronously. This registry is a
 CPU-only review aid. It does not register work, alter queues, call an API, run a
 GPU, promote a source or replace the root validity/protocol gates.
 
