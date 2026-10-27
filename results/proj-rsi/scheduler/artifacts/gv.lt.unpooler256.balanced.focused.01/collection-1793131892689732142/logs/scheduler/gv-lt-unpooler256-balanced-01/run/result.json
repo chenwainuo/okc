@@ -1,0 +1,1289 @@
+{
+  "_output": "/okc/logs/scheduler/gv-lt-unpooler256-balanced-01/run",
+  "state": "FOCUSED_UNPOOLER256_VALIDATION_COMPLETE_ROOT_REVIEW_REQUIRED",
+  "sources": {
+    "gv_predxor_pw45_v2": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "gv_lt_unpooler256_balanced_v1": "65611157a4b6c5640ed48a8cbc4b0f3f24220bdaf93c96068c0191fb5562cc76"
+  },
+  "review_sha256": "75a999073ab8c9e593076943d7104facd0d4d2fc52e15f780c958d015fc79c2d",
+  "prepare": {
+    "gv_predxor_pw45_v2": {
+      "wall_seconds": 57.23835277557373,
+      "import_clock_elapsed": 57.44522833824158,
+      "budget_clock_reset": false,
+      "serving_CPU_fallback": false,
+      "build_threads_joined": 2,
+      "gvpred_choices": []
+    },
+    "gv_lt_unpooler256_balanced_v1": {
+      "wall_seconds": 42.111912965774536,
+      "import_clock_elapsed": 42.112234115600586,
+      "budget_clock_reset": false,
+      "serving_CPU_fallback": false,
+      "build_threads_joined": 2,
+      "gvpred_choices": []
+    }
+  },
+  "jit": [
+    {
+      "label": "gv_predxor_pw45_v2",
+      "name": "skinny_v20_16",
+      "source_sha256": "5b7f8f8d5e886d0281bb135d630e6e8b88fbef49b7957d71792f0b770095e39e",
+      "CPP_source_argument_sha256": "32dc5a4dba21483935b89625fa8976b16fdbb1eb1b834896b5411fda8d36e5ec",
+      "cuda_flags": [
+        "-O3",
+        "--use_fast_math",
+        "-lineinfo",
+        "-DWPC=16"
+      ],
+      "host_flags": null,
+      "so_sha256": "5acd39f2d6491f6d200422d9f9b7339f07d6142fb5c8499eadb024a7f400efb7",
+      "before_return_to_prepare_math": true,
+      "original_JIT_arguments_unchanged": true
+    },
+    {
+      "label": "gv_predxor_pw45_v2",
+      "name": "gvp45_predxor_v2_7bb50cec",
+      "source_sha256": "d1ad98f2bb9e7b020aa8cbf2a7942b1defbc937798e6409ea9cba82b6037f784",
+      "CPP_source_argument_sha256": "93d9358cdded65c888beefd8c718223e313c1ac05e8b8362d928388f417f7eeb",
+      "cuda_flags": [
+        "-O3",
+        "-lineinfo"
+      ],
+      "host_flags": null,
+      "so_sha256": "9f0b7a07a0a856706093cf0b8cc40673098c1066e22ea2765a10bf4037b15eda",
+      "before_return_to_prepare_math": true,
+      "original_JIT_arguments_unchanged": true
+    },
+    {
+      "label": "gv_predxor_pw45_v2",
+      "name": "rq32_b8115e36",
+      "source_sha256": "f7d75f3c3b969dd23d898aef068789ef8f143a861bdf8639990a063194dc0f95",
+      "CPP_source_argument_sha256": "5bfafb9a369dc9fa97270ff45d9e3b72a9bfd47d6acd7c2f6e795c01b9f2aa99",
+      "cuda_flags": [
+        "-gencode=arch=compute_90a,code=sm_90a",
+        "-O3",
+        "-DNDEBUG",
+        "--expt-relaxed-constexpr"
+      ],
+      "host_flags": null,
+      "so_sha256": "45833aee20b67286d5d9b9c25808f31a90261798b05d1cd7d17b058b65d7cdb3",
+      "before_return_to_prepare_math": true,
+      "original_JIT_arguments_unchanged": true
+    },
+    {
+      "label": "gv_predxor_pw45_v2",
+      "name": "rq128_bf9c548a",
+      "source_sha256": "d4fb2bf9643846b12ff3059440dfa0ef66fcbfc0c84fc7efd3a9e15d9e80717a",
+      "CPP_source_argument_sha256": "5bfafb9a369dc9fa97270ff45d9e3b72a9bfd47d6acd7c2f6e795c01b9f2aa99",
+      "cuda_flags": [
+        "-gencode=arch=compute_90a,code=sm_90a",
+        "-O3",
+        "-DNDEBUG",
+        "--expt-relaxed-constexpr"
+      ],
+      "host_flags": null,
+      "so_sha256": "1cf6b0dc214832ec827a0fa92e5cae337fd3adefb0e16fb48bd6bfaf66810a6c",
+      "before_return_to_prepare_math": true,
+      "original_JIT_arguments_unchanged": true
+    },
+    {
+      "label": "gv_predxor_pw45_v2",
+      "name": "rw29_8cbbd0bd",
+      "source_sha256": "55b7eb2657652cb2447a2612c4910c5295921023a895fe60cb2bcf2bb836aee7",
+      "CPP_source_argument_sha256": "96fb77f358201e16be50d6794580202e7e3d0ffafcb60dfb8bfe4da9eb6611ee",
+      "cuda_flags": [
+        "-O3",
+        "-lineinfo",
+        "-gencode=arch=compute_90a,code=sm_90a",
+        "-DNDEBUG"
+      ],
+      "host_flags": null,
+      "so_sha256": "900e17010d60892eff69ca049dca8878b6c19584e9b13bce43f962bedcc86041",
+      "before_return_to_prepare_math": true,
+      "original_JIT_arguments_unchanged": true
+    },
+    {
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "name": "rq128_bf9c548a",
+      "source_sha256": "d4fb2bf9643846b12ff3059440dfa0ef66fcbfc0c84fc7efd3a9e15d9e80717a",
+      "CPP_source_argument_sha256": "5bfafb9a369dc9fa97270ff45d9e3b72a9bfd47d6acd7c2f6e795c01b9f2aa99",
+      "cuda_flags": [
+        "-gencode=arch=compute_90a,code=sm_90a",
+        "-O3",
+        "-DNDEBUG",
+        "--expt-relaxed-constexpr"
+      ],
+      "host_flags": null,
+      "so_sha256": "1cf6b0dc214832ec827a0fa92e5cae337fd3adefb0e16fb48bd6bfaf66810a6c",
+      "before_return_to_prepare_math": true,
+      "original_JIT_arguments_unchanged": true
+    },
+    {
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "name": "rq32_b8115e36",
+      "source_sha256": "f7d75f3c3b969dd23d898aef068789ef8f143a861bdf8639990a063194dc0f95",
+      "CPP_source_argument_sha256": "5bfafb9a369dc9fa97270ff45d9e3b72a9bfd47d6acd7c2f6e795c01b9f2aa99",
+      "cuda_flags": [
+        "-gencode=arch=compute_90a,code=sm_90a",
+        "-O3",
+        "-DNDEBUG",
+        "--expt-relaxed-constexpr"
+      ],
+      "host_flags": null,
+      "so_sha256": "45833aee20b67286d5d9b9c25808f31a90261798b05d1cd7d17b058b65d7cdb3",
+      "before_return_to_prepare_math": true,
+      "original_JIT_arguments_unchanged": true
+    },
+    {
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "name": "skinny_v20_16",
+      "source_sha256": "5b7f8f8d5e886d0281bb135d630e6e8b88fbef49b7957d71792f0b770095e39e",
+      "CPP_source_argument_sha256": "32dc5a4dba21483935b89625fa8976b16fdbb1eb1b834896b5411fda8d36e5ec",
+      "cuda_flags": [
+        "-O3",
+        "--use_fast_math",
+        "-lineinfo",
+        "-DWPC=16"
+      ],
+      "host_flags": null,
+      "so_sha256": "5acd39f2d6491f6d200422d9f9b7339f07d6142fb5c8499eadb024a7f400efb7",
+      "before_return_to_prepare_math": true,
+      "original_JIT_arguments_unchanged": true
+    },
+    {
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "name": "gvp45_predxor_v2_7bb50cec",
+      "source_sha256": "d1ad98f2bb9e7b020aa8cbf2a7942b1defbc937798e6409ea9cba82b6037f784",
+      "CPP_source_argument_sha256": "93d9358cdded65c888beefd8c718223e313c1ac05e8b8362d928388f417f7eeb",
+      "cuda_flags": [
+        "-O3",
+        "-lineinfo"
+      ],
+      "host_flags": null,
+      "so_sha256": "9f0b7a07a0a856706093cf0b8cc40673098c1066e22ea2765a10bf4037b15eda",
+      "before_return_to_prepare_math": true,
+      "original_JIT_arguments_unchanged": true
+    },
+    {
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "name": "rw29_8cbbd0bd",
+      "source_sha256": "55b7eb2657652cb2447a2612c4910c5295921023a895fe60cb2bcf2bb836aee7",
+      "CPP_source_argument_sha256": "96fb77f358201e16be50d6794580202e7e3d0ffafcb60dfb8bfe4da9eb6611ee",
+      "cuda_flags": [
+        "-O3",
+        "-lineinfo",
+        "-gencode=arch=compute_90a,code=sm_90a",
+        "-DNDEBUG"
+      ],
+      "host_flags": null,
+      "so_sha256": "900e17010d60892eff69ca049dca8878b6c19584e9b13bce43f962bedcc86041",
+      "before_return_to_prepare_math": true,
+      "original_JIT_arguments_unchanged": true
+    }
+  ],
+  "jit_errors": [],
+  "checks": [
+    {
+      "label": "gv_predxor_pw45_v2",
+      "case": {
+        "m": 256,
+        "layer": "unpooler",
+        "dist": "normal"
+      },
+      "focused_target": true,
+      "oracle": "relative L2 error 1.446e-04 (worst row 2.834e-04); 30 probe rows exact to 0.0e+00",
+      "pick": {
+        "family": "LT",
+        "lt": 300008
+      },
+      "counter_contract": "PASS"
+    },
+    {
+      "label": "gv_predxor_pw45_v2",
+      "case": {
+        "m": 256,
+        "layer": "unpooler",
+        "dist": "outliers"
+      },
+      "focused_target": true,
+      "oracle": "relative L2 error 1.435e-04 (worst row 2.941e-04); 30 probe rows exact to 0.0e+00",
+      "pick": {
+        "family": "LT",
+        "lt": 300008
+      },
+      "counter_contract": "PASS"
+    },
+    {
+      "label": "gv_predxor_pw45_v2",
+      "case": {
+        "m": 256,
+        "layer": "unpooler",
+        "dist": "normal"
+      },
+      "focused_target": true,
+      "oracle": "relative L2 error 1.361e-04 (worst row 3.079e-04); 35 probe rows exact to 0.0e+00",
+      "pick": {
+        "family": "LT",
+        "lt": 300008
+      },
+      "counter_contract": "PASS"
+    },
+    {
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "case": {
+        "m": 256,
+        "layer": "unpooler",
+        "dist": "normal"
+      },
+      "focused_target": true,
+      "oracle": "relative L2 error 1.446e-04 (worst row 2.834e-04); 30 probe rows exact to 0.0e+00",
+      "pick": {
+        "family": "LT",
+        "lt": 300012
+      },
+      "counter_contract": "PASS"
+    },
+    {
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "case": {
+        "m": 256,
+        "layer": "unpooler",
+        "dist": "outliers"
+      },
+      "focused_target": true,
+      "oracle": "relative L2 error 1.435e-04 (worst row 2.941e-04); 30 probe rows exact to 0.0e+00",
+      "pick": {
+        "family": "LT",
+        "lt": 300012
+      },
+      "counter_contract": "PASS"
+    },
+    {
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "case": {
+        "m": 256,
+        "layer": "unpooler",
+        "dist": "normal"
+      },
+      "focused_target": true,
+      "oracle": "relative L2 error 1.361e-04 (worst row 3.079e-04); 35 probe rows exact to 0.0e+00",
+      "pick": {
+        "family": "LT",
+        "lt": 300012
+      },
+      "counter_contract": "PASS"
+    }
+  ],
+  "shapes": {
+    "verify32/unpooler": {
+      "picks": {
+        "gv_predxor_pw45_v2": {
+          "family": "LT",
+          "lt": 300008,
+          "prepared_lt_code": 300008,
+          "prepared_lt_config": [
+            3,
+            [
+              66,
+              20,
+              1,
+              0,
+              0,
+              4,
+              35,
+              0,
+              2
+            ]
+          ],
+          "Lt_finalist_serving_mechanism": "EXERCISED",
+          "actual_backend": "LT"
+        },
+        "gv_lt_unpooler256_balanced_v1": {
+          "family": "LT",
+          "lt": 300012,
+          "prepared_lt_code": 300012,
+          "prepared_lt_config": [
+            3,
+            [
+              66,
+              20,
+              1,
+              0,
+              0,
+              4,
+              35,
+              0,
+              2
+            ]
+          ],
+          "Lt_finalist_serving_mechanism": "EXERCISED",
+          "actual_backend": "LT"
+        }
+      },
+      "terminal_oracles": [
+        {
+          "label": "gv_predxor_pw45_v2",
+          "phase": "F1",
+          "seed": 9010,
+          "oracle": "relative L2 error 1.468e-04 (worst row 3.470e-04); 30 probe rows exact to 0.0e+00"
+        },
+        {
+          "label": "gv_lt_unpooler256_balanced_v1",
+          "phase": "F1",
+          "seed": 9010,
+          "oracle": "relative L2 error 1.468e-04 (worst row 3.470e-04); 30 probe rows exact to 0.0e+00"
+        },
+        {
+          "label": "gv_predxor_pw45_v2",
+          "phase": "paired",
+          "seed": 9051,
+          "oracle": "relative L2 error 1.276e-04 (worst row 2.451e-04); 37 probe rows exact to 0.0e+00"
+        },
+        {
+          "label": "gv_lt_unpooler256_balanced_v1",
+          "phase": "paired",
+          "seed": 9051,
+          "oracle": "relative L2 error 1.276e-04 (worst row 2.451e-04); 37 probe rows exact to 0.0e+00"
+        }
+      ],
+      "mutations": [
+        {
+          "label": "gv_predxor_pw45_v2",
+          "kind": "zero",
+          "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00)",
+          "output_poison_overwritten": true,
+          "float_scratch_poisoned": [
+            "/ws",
+            "/gvws",
+            "/rs_ws"
+          ]
+        },
+        {
+          "label": "gv_lt_unpooler256_balanced_v1",
+          "kind": "zero",
+          "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00)",
+          "output_poison_overwritten": true,
+          "float_scratch_poisoned": [
+            "/ws",
+            "/gvws",
+            "/rs_ws"
+          ]
+        },
+        {
+          "label": "gv_predxor_pw45_v2",
+          "kind": "outliers",
+          "oracle": "relative L2 error 1.639e-04 (worst row 3.413e-04); 43 probe rows exact to 0.0e+00",
+          "output_poison_overwritten": true,
+          "float_scratch_poisoned": [
+            "/ws",
+            "/gvws",
+            "/rs_ws"
+          ]
+        },
+        {
+          "label": "gv_lt_unpooler256_balanced_v1",
+          "kind": "outliers",
+          "oracle": "relative L2 error 1.639e-04 (worst row 3.413e-04); 43 probe rows exact to 0.0e+00",
+          "output_poison_overwritten": true,
+          "float_scratch_poisoned": [
+            "/ws",
+            "/gvws",
+            "/rs_ws"
+          ]
+        },
+        {
+          "label": "gv_predxor_pw45_v2",
+          "kind": "all_probes",
+          "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 256 probe rows exact to 0.0e+00",
+          "output_poison_overwritten": true,
+          "float_scratch_poisoned": [
+            "/ws",
+            "/gvws",
+            "/rs_ws"
+          ]
+        },
+        {
+          "label": "gv_lt_unpooler256_balanced_v1",
+          "kind": "all_probes",
+          "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 256 probe rows exact to 0.0e+00",
+          "output_poison_overwritten": true,
+          "float_scratch_poisoned": [
+            "/ws",
+            "/gvws",
+            "/rs_ws"
+          ]
+        },
+        {
+          "label": "gv_predxor_pw45_v2",
+          "kind": "fresh_normal",
+          "oracle": "relative L2 error 1.430e-04 (worst row 3.256e-04); 31 probe rows exact to 0.0e+00",
+          "output_poison_overwritten": true,
+          "float_scratch_poisoned": [
+            "/ws",
+            "/gvws",
+            "/rs_ws"
+          ]
+        },
+        {
+          "label": "gv_lt_unpooler256_balanced_v1",
+          "kind": "fresh_normal",
+          "oracle": "relative L2 error 1.430e-04 (worst row 3.256e-04); 31 probe rows exact to 0.0e+00",
+          "output_poison_overwritten": true,
+          "float_scratch_poisoned": [
+            "/ws",
+            "/gvws",
+            "/rs_ws"
+          ]
+        }
+      ],
+      "F1_medians_us": {
+        "gv_predxor_pw45_v2_before": 27.615999802947044,
+        "gv_lt_unpooler256_balanced_v1": 27.744000777602196,
+        "gv_predxor_pw45_v2_after": 27.648000046610832
+      },
+      "paired_all_samples": [
+        {
+          "gv_predxor_pw45_v2": 28.48000079393387,
+          "gv_lt_unpooler256_balanced_v1": 27.51999907195568
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 27.456000447273254,
+          "gv_predxor_pw45_v2": 27.83999964594841
+        },
+        {
+          "gv_predxor_pw45_v2": 28.736000880599022,
+          "gv_lt_unpooler256_balanced_v1": 28.9280004799366
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 27.775999158620834,
+          "gv_predxor_pw45_v2": 27.51999907195568
+        },
+        {
+          "gv_predxor_pw45_v2": 27.456000447273254,
+          "gv_lt_unpooler256_balanced_v1": 27.775999158620834
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 27.68000029027462,
+          "gv_predxor_pw45_v2": 27.68000029027462
+        },
+        {
+          "gv_predxor_pw45_v2": 27.83999964594841,
+          "gv_lt_unpooler256_balanced_v1": 27.615999802947044
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 27.55199931561947,
+          "gv_predxor_pw45_v2": 28.991999104619026
+        },
+        {
+          "gv_predxor_pw45_v2": 28.863999992609024,
+          "gv_lt_unpooler256_balanced_v1": 27.488000690937042
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 27.488000690937042,
+          "gv_predxor_pw45_v2": 27.583999559283257
+        },
+        {
+          "gv_predxor_pw45_v2": 27.96800062060356,
+          "gv_lt_unpooler256_balanced_v1": 27.648000046610832
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 28.351999819278717,
+          "gv_predxor_pw45_v2": 27.615999802947044
+        },
+        {
+          "gv_predxor_pw45_v2": 27.648000046610832,
+          "gv_lt_unpooler256_balanced_v1": 27.904000133275986
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 27.55199931561947,
+          "gv_predxor_pw45_v2": 27.871999889612198
+        },
+        {
+          "gv_predxor_pw45_v2": 28.79999950528145,
+          "gv_lt_unpooler256_balanced_v1": 29.055999591946602
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 28.896000236272812,
+          "gv_predxor_pw45_v2": 27.96800062060356
+        },
+        {
+          "gv_predxor_pw45_v2": 27.583999559283257,
+          "gv_lt_unpooler256_balanced_v1": 27.775999158620834
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 27.55199931561947,
+          "gv_predxor_pw45_v2": 27.51999907195568
+        },
+        {
+          "gv_predxor_pw45_v2": 27.488000690937042,
+          "gv_lt_unpooler256_balanced_v1": 27.712000533938408
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 28.831999748945236,
+          "gv_predxor_pw45_v2": 28.736000880599022
+        },
+        {
+          "gv_predxor_pw45_v2": 27.55199931561947,
+          "gv_lt_unpooler256_balanced_v1": 27.55199931561947
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 27.712000533938408,
+          "gv_predxor_pw45_v2": 27.456000447273254
+        },
+        {
+          "gv_predxor_pw45_v2": 27.51999907195568,
+          "gv_lt_unpooler256_balanced_v1": 27.456000447273254
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 27.55199931561947,
+          "gv_predxor_pw45_v2": 27.583999559283257
+        },
+        {
+          "gv_predxor_pw45_v2": 27.712000533938408,
+          "gv_lt_unpooler256_balanced_v1": 27.83999964594841
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 28.00000086426735,
+          "gv_predxor_pw45_v2": 27.744000777602196
+        },
+        {
+          "gv_predxor_pw45_v2": 28.76799926161766,
+          "gv_lt_unpooler256_balanced_v1": 28.9280004799366
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 27.488000690937042,
+          "gv_predxor_pw45_v2": 27.744000777602196
+        },
+        {
+          "gv_predxor_pw45_v2": 27.68000029027462,
+          "gv_lt_unpooler256_balanced_v1": 27.456000447273254
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 27.51999907195568,
+          "gv_predxor_pw45_v2": 27.648000046610832
+        },
+        {
+          "gv_predxor_pw45_v2": 27.488000690937042,
+          "gv_lt_unpooler256_balanced_v1": 27.712000533938408
+        },
+        {
+          "gv_lt_unpooler256_balanced_v1": 29.21600081026554,
+          "gv_predxor_pw45_v2": 28.896000236272812
+        }
+      ],
+      "paired_control_minus_candidate_us": {
+        "gv_predxor_pw45_v2": -0.06399955600500107
+      },
+      "paired_control_over_candidate_ratio": {
+        "gv_predxor_pw45_v2": 0.9977544782110916
+      },
+      "graphs": "RESET_AFTER_DRAIN"
+    }
+  },
+  "raw": [
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9000,
+      "mode": "F1",
+      "us": 29.53599952161312
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9001,
+      "mode": "F1",
+      "us": 27.615999802947044
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9002,
+      "mode": "F1",
+      "us": 27.648000046610832
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9003,
+      "mode": "F1",
+      "us": 28.79999950528145
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9004,
+      "mode": "F1",
+      "us": 28.736000880599022
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9005,
+      "mode": "F1",
+      "us": 28.44800055027008
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9006,
+      "mode": "F1",
+      "us": 27.424000203609467
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9007,
+      "mode": "F1",
+      "us": 27.615999802947044
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9008,
+      "mode": "F1",
+      "us": 27.583999559283257
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9009,
+      "mode": "F1",
+      "us": 27.55199931561947
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9010,
+      "mode": "F1",
+      "us": 27.39199995994568
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9000,
+      "mode": "F1",
+      "us": 28.575999662280083
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9001,
+      "mode": "F1",
+      "us": 29.023999348282814
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9002,
+      "mode": "F1",
+      "us": 28.76799926161766
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9003,
+      "mode": "F1",
+      "us": 28.896000236272812
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9004,
+      "mode": "F1",
+      "us": 27.904000133275986
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9005,
+      "mode": "F1",
+      "us": 27.744000777602196
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9006,
+      "mode": "F1",
+      "us": 27.648000046610832
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9007,
+      "mode": "F1",
+      "us": 27.488000690937042
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9008,
+      "mode": "F1",
+      "us": 27.68000029027462
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9009,
+      "mode": "F1",
+      "us": 27.712000533938408
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9010,
+      "mode": "F1",
+      "us": 27.456000447273254
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9000,
+      "mode": "F1",
+      "us": 29.08799983561039
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9001,
+      "mode": "F1",
+      "us": 28.704000636935234
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9002,
+      "mode": "F1",
+      "us": 28.79999950528145
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9003,
+      "mode": "F1",
+      "us": 27.871999889612198
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9004,
+      "mode": "F1",
+      "us": 27.583999559283257
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9005,
+      "mode": "F1",
+      "us": 27.488000690937042
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9006,
+      "mode": "F1",
+      "us": 27.35999971628189
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9007,
+      "mode": "F1",
+      "us": 27.807999402284622
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9008,
+      "mode": "F1",
+      "us": 27.583999559283257
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9009,
+      "mode": "F1",
+      "us": 27.648000046610832
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9010,
+      "mode": "F1",
+      "us": 27.51999907195568
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9020,
+      "mode": "paired",
+      "us": 28.48000079393387
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9020,
+      "mode": "paired",
+      "us": 27.51999907195568
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9021,
+      "mode": "paired",
+      "us": 27.456000447273254
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9021,
+      "mode": "paired",
+      "us": 27.83999964594841
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9022,
+      "mode": "paired",
+      "us": 28.736000880599022
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9022,
+      "mode": "paired",
+      "us": 28.9280004799366
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9023,
+      "mode": "paired",
+      "us": 27.775999158620834
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9023,
+      "mode": "paired",
+      "us": 27.51999907195568
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9024,
+      "mode": "paired",
+      "us": 27.456000447273254
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9024,
+      "mode": "paired",
+      "us": 27.775999158620834
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9025,
+      "mode": "paired",
+      "us": 27.68000029027462
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9025,
+      "mode": "paired",
+      "us": 27.68000029027462
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9026,
+      "mode": "paired",
+      "us": 27.83999964594841
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9026,
+      "mode": "paired",
+      "us": 27.615999802947044
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9027,
+      "mode": "paired",
+      "us": 27.55199931561947
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9027,
+      "mode": "paired",
+      "us": 28.991999104619026
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9028,
+      "mode": "paired",
+      "us": 28.863999992609024
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9028,
+      "mode": "paired",
+      "us": 27.488000690937042
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9029,
+      "mode": "paired",
+      "us": 27.488000690937042
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9029,
+      "mode": "paired",
+      "us": 27.583999559283257
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9030,
+      "mode": "paired",
+      "us": 27.96800062060356
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9030,
+      "mode": "paired",
+      "us": 27.648000046610832
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9031,
+      "mode": "paired",
+      "us": 28.351999819278717
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9031,
+      "mode": "paired",
+      "us": 27.615999802947044
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9032,
+      "mode": "paired",
+      "us": 27.648000046610832
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9032,
+      "mode": "paired",
+      "us": 27.904000133275986
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9033,
+      "mode": "paired",
+      "us": 27.55199931561947
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9033,
+      "mode": "paired",
+      "us": 27.871999889612198
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9034,
+      "mode": "paired",
+      "us": 28.79999950528145
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9034,
+      "mode": "paired",
+      "us": 29.055999591946602
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9035,
+      "mode": "paired",
+      "us": 28.896000236272812
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9035,
+      "mode": "paired",
+      "us": 27.96800062060356
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9036,
+      "mode": "paired",
+      "us": 27.583999559283257
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9036,
+      "mode": "paired",
+      "us": 27.775999158620834
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9037,
+      "mode": "paired",
+      "us": 27.55199931561947
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9037,
+      "mode": "paired",
+      "us": 27.51999907195568
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9038,
+      "mode": "paired",
+      "us": 27.488000690937042
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9038,
+      "mode": "paired",
+      "us": 27.712000533938408
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9039,
+      "mode": "paired",
+      "us": 28.831999748945236
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9039,
+      "mode": "paired",
+      "us": 28.736000880599022
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9040,
+      "mode": "paired",
+      "us": 27.55199931561947
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9040,
+      "mode": "paired",
+      "us": 27.55199931561947
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9041,
+      "mode": "paired",
+      "us": 27.712000533938408
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9041,
+      "mode": "paired",
+      "us": 27.456000447273254
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9042,
+      "mode": "paired",
+      "us": 27.51999907195568
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9042,
+      "mode": "paired",
+      "us": 27.456000447273254
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9043,
+      "mode": "paired",
+      "us": 27.55199931561947
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9043,
+      "mode": "paired",
+      "us": 27.583999559283257
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9044,
+      "mode": "paired",
+      "us": 27.712000533938408
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9044,
+      "mode": "paired",
+      "us": 27.83999964594841
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9045,
+      "mode": "paired",
+      "us": 28.00000086426735
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9045,
+      "mode": "paired",
+      "us": 27.744000777602196
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9046,
+      "mode": "paired",
+      "us": 28.76799926161766
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9046,
+      "mode": "paired",
+      "us": 28.9280004799366
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9047,
+      "mode": "paired",
+      "us": 27.488000690937042
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9047,
+      "mode": "paired",
+      "us": 27.744000777602196
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9048,
+      "mode": "paired",
+      "us": 27.68000029027462
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9048,
+      "mode": "paired",
+      "us": 27.456000447273254
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9049,
+      "mode": "paired",
+      "us": 27.51999907195568
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9049,
+      "mode": "paired",
+      "us": 27.648000046610832
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9050,
+      "mode": "paired",
+      "us": 27.488000690937042
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9050,
+      "mode": "paired",
+      "us": 27.712000533938408
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_lt_unpooler256_balanced_v1",
+      "seed": 9051,
+      "mode": "paired",
+      "us": 29.21600081026554
+    },
+    {
+      "shape": "verify32/unpooler",
+      "label": "gv_predxor_pw45_v2",
+      "seed": 9051,
+      "mode": "paired",
+      "us": 28.896000236272812
+    }
+  ],
+  "hardware": {
+    "name": "NVIDIA H100 80GB HBM3",
+    "SM_count": 132,
+    "compute_capability": [
+      9,
+      0
+    ],
+    "UUID": "54a7daab-fe3e-c7fc-7f7c-6fbc40145a22",
+    "before_weights_and_prepare": true
+  },
+  "phase": "complete",
+  "candidate_actual_GV_picks": {},
+  "profiling": "NOT_REQUESTED_NO_PROFILER_DEPENDENCY",
+  "fixed_mechanism": "OMITTED_ACTUAL_POLICY_ONLY",
+  "all30_package_controls_required_for_promotion": true,
+  "focused_cells": [
+    [
+      "unpooler",
+      256
+    ]
+  ],
+  "official_score_claim": false,
+  "graph_cleanup": [],
+  "finished_at": 1793131876.1846044
+}

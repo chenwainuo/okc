@@ -1,152 +1,134 @@
 {
-  "status": "CURRENT_BOARD_VERIFIED_PW45_SOURCE_AND_ACTUAL_SCORED_ROUTES",
-  "official_job_id": "d5a125fcdcdc408d",
-  "score_us": 3179.285623687654,
+  "status": "CURRENT_BOARD_VERIFIED_GV_PREDXOR_PW45_V2_SOURCE_AND_ACTUAL_SCORED_ROUTES",
+  "official_job_id": "9916d34357b745cf",
+  "score_us": 3157.0384036526784,
   "source": {
-    "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-    "sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
-    "bytes": 277550
+    "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+    "sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "bytes": 303077
   },
-  "parent": "PW38 + optional o32 HALF52 fullK ST4/ST5 contenders; original controls retained; actual per-job selections recorded separately",
-  "historical_pw38_view": {
-    "path": "proj_rsi/audits/selected-hotpaths-pw38/current-stack-snapshot.json",
-    "sha256": "a0047afad7d4fa9e36baa572af4dcab674e53cd3fad7c8474dca2f559a4fcc5f",
-    "bytes": 123525
+  "parent": "PW45 + standalone GV predicated escape repair alternatives with original controls and actual prepare selection retained",
+  "historical_pw38_view": null,
+  "historical_pw45_view": {
+    "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/historical-current-stack-before-gv.json",
+    "sha256": "ec34fcd1e04fd2b2333305be21fddcf5f7499035519e82b61b4a5721eff214db",
+    "bytes": 131657
   },
-  "route_differences_from_pw38": [
+  "route_differences_from_pw45": [
+    {
+      "load": "decode 1",
+      "layer": "pooler",
+      "m": 1,
+      "previous_kernel": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)",
+      "current_kernel": "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)",
+      "causal_gain_us": null
+    },
+    {
+      "load": "decode 1",
+      "layer": "unpooler",
+      "m": 1,
+      "previous_kernel": "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)",
+      "current_kernel": "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)",
+      "causal_gain_us": null
+    },
+    {
+      "load": "decode 16",
+      "layer": "pooler",
+      "m": 16,
+      "previous_kernel": "void gv<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)",
+      "current_kernel": "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)",
+      "causal_gain_us": null
+    },
+    {
+      "load": "decode 16",
+      "layer": "unpooler",
+      "m": 16,
+      "previous_kernel": "void gv<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)",
+      "current_kernel": "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)",
+      "causal_gain_us": null
+    },
     {
       "load": "decode 16",
       "layer": "router",
       "m": 16,
-      "previous_family": "gv",
-      "current_family": "gv",
-      "previous_kernel": "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)",
-      "current_kernel": "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)",
-      "previous_pick": "rk-s16w8z",
-      "current_pick": "rk-s16w8x",
-      "causal_gain_us": null
-    },
-    {
-      "load": "decode 32",
-      "layer": "o",
-      "m": 32,
-      "previous_family": "rq",
-      "current_family": "rq",
-      "previous_kernel": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
-      "current_kernel": "void rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)",
-      "previous_pick": "rq:t32s6hze-k2",
-      "current_pick": "rq:t32s5ze-k2",
+      "previous_kernel": "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)",
+      "current_kernel": "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)",
       "causal_gain_us": null
     },
     {
       "load": "decode 32",
       "layer": "pooler",
       "m": 32,
-      "previous_family": "rq",
-      "current_family": "rq",
-      "previous_kernel": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
-      "current_kernel": "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
-      "previous_pick": "rq:t32s6hze-k4",
-      "current_pick": "rq:t32s5hze-k4",
+      "previous_kernel": "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
+      "current_kernel": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
       "causal_gain_us": null
     },
     {
       "load": "decode 32",
       "layer": "unpooler",
       "m": 32,
-      "previous_family": "rq",
-      "current_family": "rq",
-      "previous_kernel": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
-      "current_kernel": "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
-      "previous_pick": "rq:t32s6hze-k2",
-      "current_pick": "rq:t32s5hze-k2",
+      "previous_kernel": "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
+      "current_kernel": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
       "causal_gain_us": null
     },
     {
       "load": "verify 1",
-      "layer": "qkv_gate",
+      "layer": "o",
       "m": 8,
-      "previous_family": "gv",
-      "current_family": "gv",
-      "previous_kernel": "void gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)",
-      "current_kernel": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)",
-      "previous_pick": null,
-      "current_pick": null,
+      "previous_kernel": "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)",
+      "current_kernel": "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)",
       "causal_gain_us": null
     },
     {
-      "load": "verify 16",
-      "layer": "qkv_gate",
-      "m": 128,
-      "previous_family": "rq",
-      "current_family": "rq",
-      "previous_kernel": "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)",
-      "current_kernel": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
-      "previous_pick": "rq:s4s5hzEH",
-      "current_pick": "rq:s4s5hz",
-      "causal_gain_us": null
-    },
-    {
-      "load": "verify 16",
+      "load": "verify 1",
       "layer": "pooler",
+      "m": 8,
+      "previous_kernel": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)",
+      "current_kernel": "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)",
+      "causal_gain_us": null
+    },
+    {
+      "load": "verify 1",
+      "layer": "unpooler",
+      "m": 8,
+      "previous_kernel": "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)",
+      "current_kernel": "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)",
+      "causal_gain_us": null
+    },
+    {
+      "load": "verify 16",
+      "layer": "o",
       "m": 128,
-      "previous_family": "rq",
-      "current_family": "rq",
-      "previous_kernel": "void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)",
-      "current_kernel": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
-      "previous_pick": "rq:s4s5zEH",
-      "current_pick": "rq:s4s5hz",
+      "previous_kernel": "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopB_NNN",
+      "current_kernel": "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN",
       "causal_gain_us": null
     },
     {
       "load": "verify 16",
       "layer": "unpooler",
       "m": 128,
-      "previous_family": "Lt/vendor",
-      "current_family": "Lt/vendor",
-      "previous_kernel": "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN",
-      "current_kernel": "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_coopB_NNN",
-      "previous_pick": "r6",
-      "current_pick": "r6",
+      "previous_kernel": "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_coopB_NNN",
+      "current_kernel": "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT",
       "causal_gain_us": null
     },
     {
       "load": "verify 32",
       "layer": "o",
       "m": 256,
-      "previous_family": "Lt/vendor",
-      "current_family": "Lt/vendor",
-      "previous_kernel": "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN",
-      "current_kernel": "nvjet_sm90_tst_256x64_64x5_1x2_v_bz_coopB_NNN",
-      "previous_pick": "r6",
-      "current_pick": "r6",
-      "causal_gain_us": null
-    },
-    {
-      "load": "verify 32",
-      "layer": "pooler",
-      "m": 256,
-      "previous_family": "Lt/vendor",
-      "current_family": "Lt/vendor",
-      "previous_kernel": "nvjet_sm90_tst_64x128_64x8_1x2_v_bz_NNT",
-      "current_kernel": "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN",
-      "previous_pick": "r6",
-      "current_pick": "r6",
+      "previous_kernel": "nvjet_sm90_tst_256x64_64x5_1x2_v_bz_coopB_NNN",
+      "current_kernel": "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN",
       "causal_gain_us": null
     },
     {
       "load": "verify 32",
       "layer": "unpooler",
       "m": 256,
-      "previous_family": "Lt/vendor",
-      "current_family": "Lt/vendor",
-      "previous_kernel": "nvjet_sm90_tst_128x128_64x6_1x2_h_bz_NNN",
-      "current_kernel": "nvjet_sm90_tst_128x128_64x6_1x2_v_bz_coopA_NNT",
-      "previous_pick": "r6",
-      "current_pick": "r6",
+      "previous_kernel": "nvjet_sm90_tst_128x128_64x6_1x2_v_bz_coopA_NNT",
+      "current_kernel": "nvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN",
       "causal_gain_us": null
     }
   ],
+  "route_differences_from_pw38": [],
   "new_HALF52_selected_routes": [],
   "historical_rs32_audit_status": "HISTORICAL_RETAINED_UNCHANGED",
   "historical_rs32_job": "fb548b5dc6f04696",
@@ -161,56 +143,56 @@
         {
           "name": "_c12",
           "ordinal": 60,
-          "line": 1863,
-          "end_line": 1886,
+          "line": 2329,
+          "end_line": 2352,
           "AST_sha256": "bc09f8b66ededeed0d38092c4993ecacdc87fadb71c0b3e13ae957fa1ebd714c",
           "source_segment_sha256": "3c503d6053c1b9cd02c7182a9003b6ce7d2838d92c7b45cb75213b76c30707c6",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_unc12",
           "ordinal": 61,
-          "line": 1889,
-          "end_line": 1905,
+          "line": 2355,
+          "end_line": 2371,
           "AST_sha256": "13fb5cf10592610ec00076375e64b261c5aa4323c20ad73603a8c282da18a91e",
           "source_segment_sha256": "8f7f4b72c1d1899cca3bdd89fce29ccc5b576aa1f00e3ffd1edae22769922d79",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_gvesc",
           "ordinal": 62,
-          "line": 1908,
-          "end_line": 1925,
+          "line": 2374,
+          "end_line": 2391,
           "AST_sha256": "8fda1c1d6ae7ce28d646b72f4412d45ab2b1519537bc9b0c48a7bb02dfecedd0",
           "source_segment_sha256": "6ea07b3008f71bacfec6bb2250f8184d56e05d61da3b4c61b79e146790a2a4af",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_rqpack",
           "ordinal": 158,
-          "line": 4704,
-          "end_line": 4714,
+          "line": 5170,
+          "end_line": 5180,
           "AST_sha256": "4dc54a1df0290b9dd17fd0b14ca5bbc06513390c6cc4434ec57da3de2c6b2cf0",
           "source_segment_sha256": "ff22e440ed8c9c22133ee2133b7fba898efbb8090d0addbe10051a891ca37a80",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_rqunpack",
           "ordinal": 159,
-          "line": 4717,
-          "end_line": 4723,
+          "line": 5183,
+          "end_line": 5189,
           "AST_sha256": "11c58f01a33efbfff7dbe9555128d58d291a48dc8041af903b55cf0daa9d84e3",
           "source_segment_sha256": "cfb3f20320b6418532eb677599e0406029f9f3d0d9013c52576f246ac1a8dc2b",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -228,34 +210,34 @@
         {
           "name": "_pack",
           "ordinal": 92,
-          "line": 2364,
-          "end_line": 2370,
+          "line": 2830,
+          "end_line": 2836,
           "AST_sha256": "0a382987e77dca5eb9d51f31ea747f56ae2f5044e2dcf5002207465cee23164e",
           "source_segment_sha256": "047946bc419098df59bda720420f8271a3545f90a01b3aab79f4b1436b962631",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_pack_nat",
           "ordinal": 157,
-          "line": 4696,
-          "end_line": 4701,
+          "line": 5162,
+          "end_line": 5167,
           "AST_sha256": "d512c852274462dcbbfd618b0be807628fa5630bcff9748e20c806720e2367b4",
           "source_segment_sha256": "a29ce3bf724f2f35e5c5819f3149aa87f827be2c0b350b83781376b53f6c12e8",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_rqpack",
           "ordinal": 158,
-          "line": 4704,
-          "end_line": 4714,
+          "line": 5170,
+          "end_line": 5180,
           "AST_sha256": "4dc54a1df0290b9dd17fd0b14ca5bbc06513390c6cc4434ec57da3de2c6b2cf0",
           "source_segment_sha256": "ff22e440ed8c9c22133ee2133b7fba898efbb8090d0addbe10051a891ca37a80",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -274,33 +256,33 @@
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
-          "same_AST_as_historical_rs32": true
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+          "same_AST_as_historical_rs32": false
         },
         {
           "name": "_gvst",
           "ordinal": 15,
-          "line": 1686,
-          "end_line": 1690,
+          "line": 2152,
+          "end_line": 2156,
           "AST_sha256": "8452fd9dcd4fec104725169e12ae3030f6d2be5d17741b36536b583d69e1363c",
           "source_segment_sha256": "54a5df3592a36c263d58d09fcb1acde3acd28a0e97286966f0637c64aeb1a1ea",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_gvinst",
           "ordinal": 16,
-          "line": 1693,
-          "end_line": 1701,
+          "line": 2159,
+          "end_line": 2167,
           "AST_sha256": "f7229da821d0002e7f643f3f6112874cbcf73ebc6f91c412cf7b96d3425dcaf4",
           "source_segment_sha256": "b3074919d1e306c0623a72fef614886e1725db24e0364dead5c81a63a3044e25",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -319,12 +301,12 @@
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
-          "same_AST_as_historical_rs32": true
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+          "same_AST_as_historical_rs32": false
         }
       ],
       "isolated_causal_gain_us": null,
@@ -341,12 +323,12 @@
         {
           "name": "GVC",
           "ordinal": 12,
-          "line": 1660,
-          "end_line": 1681,
+          "line": 2126,
+          "end_line": 2147,
           "AST_sha256": "5fc87ff7cd7dc4218a54e8de4702333f6ff35d83ab25427be6321402854a5f0d",
           "source_segment_sha256": "f54e26d919b5b1b8b18a4a69cfcc61033ee6213d6f7fa4867ce3aa26e88373bf",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -365,33 +347,33 @@
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
-          "same_AST_as_historical_rs32": true
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+          "same_AST_as_historical_rs32": false
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_gxinst",
           "ordinal": 54,
-          "line": 1839,
-          "end_line": 1841,
+          "line": 2305,
+          "end_line": 2307,
           "AST_sha256": "7aad78e1a5da9251eb9e6636770a649e996091ace60e8bfc6d51ddddd61a7c8a",
           "source_segment_sha256": "c0b7bba4e0f9694fa9597241c5ae42766c9ee71d241529f8dd227ae9f1ba2627",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -410,22 +392,22 @@
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
-          "same_AST_as_historical_rs32": true
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+          "same_AST_as_historical_rs32": false
         },
         {
           "name": "RRB",
           "ordinal": 67,
-          "line": 1971,
-          "end_line": 1971,
+          "line": 2437,
+          "end_line": 2437,
           "AST_sha256": "22dff13090a2c6fd44915a974a165285c69874d3332faac9a50bc5435d703e8b",
           "source_segment_sha256": "a3f82d28205c6a8fa5fd9df511ff552b40f8f9942c7fe44c526bfeb78bf47bfa",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -443,34 +425,34 @@
         {
           "name": "prepare",
           "ordinal": 93,
-          "line": 2373,
-          "end_line": 2451,
+          "line": 2839,
+          "end_line": 2917,
           "AST_sha256": "d73f4b9ce01b189f1a9c5f3fde61ea09723772068619bb3cd23e99eb66b96620",
           "source_segment_sha256": "4e52aeaf2627100c342389d21beddc05a5f56014737f971875cb89adcc77ffab",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "_v12",
           "ordinal": 145,
-          "line": 3863,
-          "end_line": 3886,
+          "line": 4329,
+          "end_line": 4352,
           "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
           "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_validate",
           "ordinal": 99,
-          "line": 2481,
-          "end_line": 2512,
+          "line": 2947,
+          "end_line": 2978,
           "AST_sha256": "93fb5d46a5ada803ff85b2f703db5260c6f44e0efdbc7de8d8225b86f893adf8",
           "source_segment_sha256": "75248b1f0bca0c7fd1bb219dcf694eab130a9d576b8bf330d6231108cd7bfecd",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -488,67 +470,67 @@
         {
           "name": "RWCU",
           "ordinal": 117,
-          "line": 3032,
-          "end_line": 3559,
+          "line": 3498,
+          "end_line": 4025,
           "AST_sha256": "c43543cbe39ddb409cc0edcff62cd61cafb87ba1039e0323f42c457c96fb8e2a",
           "source_segment_sha256": "29f3f0cf093d4e114469b8ba93e453a4ec14514fc785780b206b8cf071c40e31",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "_rwsrc",
           "ordinal": 130,
-          "line": 3599,
-          "end_line": 3605,
+          "line": 4065,
+          "end_line": 4071,
           "AST_sha256": "c73cf83dfabd0d345f0baf4e242849614757ed3431c74e53d79655e64a56db99",
           "source_segment_sha256": "ed8ec23643096feac2826beed0280673e962c518822a5845a7328196a4c5d81c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "_rwext",
           "ordinal": 132,
-          "line": 3611,
-          "end_line": 3628,
+          "line": 4077,
+          "end_line": 4094,
           "AST_sha256": "59e1d0d88b4a6791142eeea22588504f49d6de09f61b9f5c1bcf9ec80f4ee305",
           "source_segment_sha256": "297e9b46a54c092ac7481c6deeda8f30065d4039924e8f3ebc12a7d27be39638",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "RSPALL",
           "ordinal": 133,
-          "line": 3638,
-          "end_line": 3658,
+          "line": 4104,
+          "end_line": 4124,
           "AST_sha256": "a764eda13c6534e2ad6f9e3de3702fc77fab653e543c9362baab794c29f95cdc",
           "source_segment_sha256": "442b14001c4b60b9138015971a94edfdf7e07d5950bb6df100c6a407b719f7f7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "RSP",
           "ordinal": 135,
-          "line": 3665,
-          "end_line": 3666,
+          "line": 4131,
+          "end_line": 4132,
           "AST_sha256": "1a3f153b75cecf4bee3819ca00b85a181849d9bbcf359e079343e50f443257e9",
           "source_segment_sha256": "9ab8b8845556a5a26b06b1d3477cfb3b31a139ac1c2b6b97ee48bb146eb21fdb",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "_rsbake",
           "ordinal": 141,
-          "line": 3717,
-          "end_line": 3786,
+          "line": 4183,
+          "end_line": 4252,
           "AST_sha256": "4dd352c5cbab69371f54ee06d7b4e6edd2ef668327123c6f2702e4b037cc941a",
           "source_segment_sha256": "09feb39a5ebb7f00030cd0ead4d65f625c2d47e40d5070cf31e87911c1ab785e",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         }
       ],
@@ -566,45 +548,45 @@
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "_rqwg",
           "ordinal": 150,
-          "line": 4646,
-          "end_line": 4657,
+          "line": 5112,
+          "end_line": 5123,
           "AST_sha256": "72e7654d050bb320c4c28374d2b4be474e96fcd0ffd8ca3498c8fedbbf433e15",
           "source_segment_sha256": "e8e9c00bb21eddb13f5b4bb72f7a04f10cabcc57e10caa3cab56552e3e80afe2",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "RQPROD",
           "ordinal": 162,
-          "line": 4754,
-          "end_line": 4754,
+          "line": 5220,
+          "end_line": 5220,
           "AST_sha256": "52518898508502dc52546a6f2a111011aff874c686a7c23c7e778f2a21eeefc4",
           "source_segment_sha256": "7a53ae38ea777a9fb02b02d291c5c283857ca7ab8bd659632e0db81d92a0ce5b",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "RQBAKE",
           "ordinal": 163,
-          "line": 4755,
-          "end_line": 4755,
+          "line": 5221,
+          "end_line": 5221,
           "AST_sha256": "99308aa1f2f93aec3d08c5ce78477121ef367ec0e148f802910ceba77fde7673",
           "source_segment_sha256": "3651c099dc5dd5d28b1bac8f61aae2dbafdb37a295626ba73a7b4cf3552ac932",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         }
       ],
@@ -622,23 +604,23 @@
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "_rqesc",
           "ordinal": 160,
-          "line": 4726,
-          "end_line": 4748,
+          "line": 5192,
+          "end_line": 5214,
           "AST_sha256": "23e3b5366242345b047e9180f2c406a12d74db353315cc3b53703c5a4a3423aa",
           "source_segment_sha256": "9d80682a6a839c0d6671a616d98be9e0fe39d67feb48a547bf4fb756fb97b8d0",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -656,23 +638,23 @@
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "_rqval",
           "ordinal": 169,
-          "line": 4784,
-          "end_line": 4815,
+          "line": 5250,
+          "end_line": 5281,
           "AST_sha256": "f222c186183c9bb8f744778a593fe0b5cc0af4b728dbdabd806c2685868e18cb",
           "source_segment_sha256": "7f3103beed4921d4d410f02935fe2385d165069927bd6ccf7ef70f245cafe83e",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -690,45 +672,45 @@
         {
           "name": "RQV",
           "ordinal": 146,
-          "line": 3900,
-          "end_line": 4009,
+          "line": 4366,
+          "end_line": 4475,
           "AST_sha256": "97a16d3dc142cdcf64f12bc31f1de9cf50233b985acb5d47fbaae3a88d811ad4",
           "source_segment_sha256": "9e1268122fbb463be67a649fbd272ec9c7043bfd3b7241c421c47b8b1751cb06",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "_rqsrc",
           "ordinal": 152,
-          "line": 4671,
-          "end_line": 4674,
+          "line": 5137,
+          "end_line": 5140,
           "AST_sha256": "8519c409ed07c47a4b23473df3faf6932baa9bf0d80f00e241dc84375c138c55",
           "source_segment_sha256": "2d69ea2e73bde9f6c83531008f97dcfe8e19d5c671cdfc9da93d98b3c1174e27",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_rqsbake",
           "ordinal": 175,
-          "line": 4928,
-          "end_line": 5015,
+          "line": 5394,
+          "end_line": 5481,
           "AST_sha256": "6f8939e76efd80c8628536b5fc827e4db4e3b96ddc89002f7f3d873972c68886",
           "source_segment_sha256": "1a6cd9aa7c9be6fb638784c728b2ba4aff5bfb0ff8d70d4c2c32a5262ecc5417",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "RQSBAKE",
           "ordinal": 172,
-          "line": 4912,
-          "end_line": 4923,
+          "line": 5378,
+          "end_line": 5389,
           "AST_sha256": "b9a45b26eb4bb5560ee593680b8ff7a3c3bd70662760b89a4326d4c15e9b2259",
           "source_segment_sha256": "e9227562d06a1ef3047b0e5142cbb91d774b1dc22ef7f3c729f32a3606cc5ee7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         }
       ],
@@ -746,23 +728,23 @@
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "RQSBAKE",
           "ordinal": 172,
-          "line": 4912,
-          "end_line": 4923,
+          "line": 5378,
+          "end_line": 5389,
           "AST_sha256": "b9a45b26eb4bb5560ee593680b8ff7a3c3bd70662760b89a4326d4c15e9b2259",
           "source_segment_sha256": "e9227562d06a1ef3047b0e5142cbb91d774b1dc22ef7f3c729f32a3606cc5ee7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         }
       ],
@@ -780,34 +762,34 @@
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "RQSBAKE",
           "ordinal": 172,
-          "line": 4912,
-          "end_line": 4923,
+          "line": 5378,
+          "end_line": 5389,
           "AST_sha256": "b9a45b26eb4bb5560ee593680b8ff7a3c3bd70662760b89a4326d4c15e9b2259",
           "source_segment_sha256": "e9227562d06a1ef3047b0e5142cbb91d774b1dc22ef7f3c729f32a3606cc5ee7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "RQPROD2",
           "ordinal": 173,
-          "line": 4924,
-          "end_line": 4924,
+          "line": 5390,
+          "end_line": 5390,
           "AST_sha256": "74351066cf65b7e72952fd1af0c14a8529c2bebdf44963ef923d396da69abd79",
           "source_segment_sha256": "99f5a3ca81264180bc45d3d872527ee70c66b698b5de154623d69e69bda13bb6",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -825,45 +807,45 @@
         {
           "name": "_tune",
           "ordinal": 83,
-          "line": 2229,
-          "end_line": 2259,
+          "line": 2695,
+          "end_line": 2725,
           "AST_sha256": "ab17380851a3bdafcff3941e7f23ea9ef57d363d3b0469661e37db2bebf89ba2",
           "source_segment_sha256": "dfd6da01daa2fc1fdc1a97b301e06c023a4c1e550d4ec02667c876996165339b",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_ltsearch",
           "ordinal": 89,
-          "line": 2279,
-          "end_line": 2354,
+          "line": 2745,
+          "end_line": 2820,
           "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
           "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_cublas",
           "ordinal": 91,
-          "line": 2360,
-          "end_line": 2361,
+          "line": 2826,
+          "end_line": 2827,
           "AST_sha256": "d20ff6e35198de4a5d8fe995017b80e2609afb9c9f6547f88d2bf1075cde6e0f",
           "source_segment_sha256": "b2f3492f3cdbb9e1c66d73f27685aeb55fe04273353fb8c1ce1cccdb42cc828f",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_v12",
           "ordinal": 145,
-          "line": 3863,
-          "end_line": 3886,
+          "line": 4329,
+          "end_line": 4352,
           "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
           "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -881,45 +863,45 @@
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_r6",
           "ordinal": 144,
-          "line": 3853,
-          "end_line": 3860,
+          "line": 4319,
+          "end_line": 4326,
           "AST_sha256": "2ba0657549f35d800ca9d3054d30d60e6cb6df687daeaa5724bc4a5f023725a5",
           "source_segment_sha256": "867b8be51685c592b86822545a4e068014e97ee228e1f1f23ded4a4054baf317",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_v12",
           "ordinal": 145,
-          "line": 3863,
-          "end_line": 3886,
+          "line": 4329,
+          "end_line": 4352,
           "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
           "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_bk",
           "ordinal": 63,
-          "line": 1928,
-          "end_line": 1929,
+          "line": 2394,
+          "end_line": 2395,
           "AST_sha256": "69db919944e6a854ec1c8d6e4433c03b2fa580ad109d571cedd17ea46a4a3d8c",
           "source_segment_sha256": "fd15c6f154868003af0482979f75421baa244b8b1ea236a8bb87309879ed97f5",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -937,67 +919,67 @@
         {
           "name": "prepare",
           "ordinal": 93,
-          "line": 2373,
-          "end_line": 2451,
+          "line": 2839,
+          "end_line": 2917,
           "AST_sha256": "d73f4b9ce01b189f1a9c5f3fde61ea09723772068619bb3cd23e99eb66b96620",
           "source_segment_sha256": "4e52aeaf2627100c342389d21beddc05a5f56014737f971875cb89adcc77ffab",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "_rqstart",
           "ordinal": 167,
-          "line": 4761,
-          "end_line": 4777,
+          "line": 5227,
+          "end_line": 5243,
           "AST_sha256": "bbfcb22605a52ee7a7e2f8d279661b0c79fb2deeba3b92e796af95c45462a902",
           "source_segment_sha256": "9eff9e9a1f1bc1332a7e022bae9e1292ef7117d2687221ee59d53c46a47935e0",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_rqbake",
           "ordinal": 170,
-          "line": 4818,
-          "end_line": 4904,
+          "line": 5284,
+          "end_line": 5370,
           "AST_sha256": "697272ff86b219f1573918585c5e91afbc0a567dfdecf0c31dece579117c9628",
           "source_segment_sha256": "f0d63296e573d7ab78b45c812a0d9b8b1be840cf3e12618e39dda0e1c84d4da3",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_rqsbake",
           "ordinal": 175,
-          "line": 4928,
-          "end_line": 5015,
+          "line": 5394,
+          "end_line": 5481,
           "AST_sha256": "6f8939e76efd80c8628536b5fc827e4db4e3b96ddc89002f7f3d873972c68886",
           "source_segment_sha256": "1a6cd9aa7c9be6fb638784c728b2ba4aff5bfb0ff8d70d4c2c32a5262ecc5417",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": false
         },
         {
           "name": "_rqval",
           "ordinal": 169,
-          "line": 4784,
-          "end_line": 4815,
+          "line": 5250,
+          "end_line": 5281,
           "AST_sha256": "f222c186183c9bb8f744778a593fe0b5cc0af4b728dbdabd806c2685868e18cb",
           "source_segment_sha256": "7f3103beed4921d4d410f02935fe2385d165069927bd6ccf7ef70f245cafe83e",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         },
         {
           "name": "_validate",
           "ordinal": 99,
-          "line": 2481,
-          "end_line": 2512,
+          "line": 2947,
+          "end_line": 2978,
           "AST_sha256": "93fb5d46a5ada803ff85b2f703db5260c6f44e0efdbc7de8d8225b86f893adf8",
           "source_segment_sha256": "75248b1f0bca0c7fd1bb219dcf694eab130a9d576b8bf330d6231108cd7bfecd",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
           "same_AST_as_historical_rs32": true
         }
       ],
@@ -1015,52 +997,52 @@
         {
           "name": "RWCU",
           "ordinal": 117,
-          "line": 3032,
-          "end_line": 3559,
+          "line": 3498,
+          "end_line": 4025,
           "AST_sha256": "c43543cbe39ddb409cc0edcff62cd61cafb87ba1039e0323f42c457c96fb8e2a",
           "source_segment_sha256": "29f3f0cf093d4e114469b8ba93e453a4ec14514fc785780b206b8cf071c40e31",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RTV",
           "ordinal": 125,
-          "line": 3576,
-          "end_line": 3579,
+          "line": 4042,
+          "end_line": 4045,
           "AST_sha256": "081831d3a90f632493d1b24ef0742ab83711f82a98158069846e4ffb6480e15e",
           "source_segment_sha256": "deb7cd4c7c8ba03f47a909d8a85eb7c482edd4a7ff3d3dfef3a2079004cd23c1",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RSP",
           "ordinal": 135,
-          "line": 3665,
-          "end_line": 3666,
+          "line": 4131,
+          "end_line": 4132,
           "AST_sha256": "1a3f153b75cecf4bee3819ca00b85a181849d9bbcf359e079343e50f443257e9",
           "source_segment_sha256": "9ab8b8845556a5a26b06b1d3477cfb3b31a139ac1c2b6b97ee48bb146eb21fdb",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rsbake",
           "ordinal": 141,
-          "line": 3717,
-          "end_line": 3786,
+          "line": 4183,
+          "end_line": 4252,
           "AST_sha256": "4dd352c5cbab69371f54ee06d7b4e6edd2ef668327123c6f2702e4b037cc941a",
           "source_segment_sha256": "09feb39a5ebb7f00030cd0ead4d65f625c2d47e40d5070cf31e87911c1ab785e",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rscall",
           "ordinal": 140,
-          "line": 3709,
-          "end_line": 3714,
+          "line": 4175,
+          "end_line": 4180,
           "AST_sha256": "3d9a89e00deed7c6998724ec99d7d33224f4883da3e1aa7092e51fddcf3c0fa6",
           "source_segment_sha256": "613ce286227245800c932d82b7f954c31cbe6dc32bef42953125c655d6d521c8",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ],
       "isolated_causal_gain_us": null
@@ -1075,42 +1057,42 @@
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQV",
           "ordinal": 146,
-          "line": 3900,
-          "end_line": 4009,
+          "line": 4366,
+          "end_line": 4475,
           "AST_sha256": "97a16d3dc142cdcf64f12bc31f1de9cf50233b985acb5d47fbaae3a88d811ad4",
           "source_segment_sha256": "9e1268122fbb463be67a649fbd272ec9c7043bfd3b7241c421c47b8b1751cb06",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQPROD",
           "ordinal": 162,
-          "line": 4754,
-          "end_line": 4754,
+          "line": 5220,
+          "end_line": 5220,
           "AST_sha256": "52518898508502dc52546a6f2a111011aff874c686a7c23c7e778f2a21eeefc4",
           "source_segment_sha256": "7a53ae38ea777a9fb02b02d291c5c283857ca7ab8bd659632e0db81d92a0ce5b",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQBAKE",
           "ordinal": 163,
-          "line": 4755,
-          "end_line": 4755,
+          "line": 5221,
+          "end_line": 5221,
           "AST_sha256": "99308aa1f2f93aec3d08c5ce78477121ef367ec0e148f802910ceba77fde7673",
           "source_segment_sha256": "3651c099dc5dd5d28b1bac8f61aae2dbafdb37a295626ba73a7b4cf3552ac932",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ],
       "isolated_causal_gain_us": null
@@ -1125,62 +1107,112 @@
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQV",
           "ordinal": 146,
-          "line": 3900,
-          "end_line": 4009,
+          "line": 4366,
+          "end_line": 4475,
           "AST_sha256": "97a16d3dc142cdcf64f12bc31f1de9cf50233b985acb5d47fbaae3a88d811ad4",
           "source_segment_sha256": "9e1268122fbb463be67a649fbd272ec9c7043bfd3b7241c421c47b8b1751cb06",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQSBAKE",
           "ordinal": 172,
-          "line": 4912,
-          "end_line": 4923,
+          "line": 5378,
+          "end_line": 5389,
           "AST_sha256": "b9a45b26eb4bb5560ee593680b8ff7a3c3bd70662760b89a4326d4c15e9b2259",
           "source_segment_sha256": "e9227562d06a1ef3047b0e5142cbb91d774b1dc22ef7f3c729f32a3606cc5ee7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQPROD2",
           "ordinal": 173,
-          "line": 4924,
-          "end_line": 4924,
+          "line": 5390,
+          "end_line": 5390,
           "AST_sha256": "74351066cf65b7e72952fd1af0c14a8529c2bebdf44963ef923d396da69abd79",
           "source_segment_sha256": "99f5a3ca81264180bc45d3d872527ee70c66b698b5de154623d69e69bda13bb6",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rqsrc",
           "ordinal": 152,
-          "line": 4671,
-          "end_line": 4674,
+          "line": 5137,
+          "end_line": 5140,
           "AST_sha256": "8519c409ed07c47a4b23473df3faf6932baa9bf0d80f00e241dc84375c138c55",
           "source_segment_sha256": "2d69ea2e73bde9f6c83531008f97dcfe8e19d5c671cdfc9da93d98b3c1174e27",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rqcall",
           "ordinal": 168,
-          "line": 4780,
-          "end_line": 4781,
+          "line": 5246,
+          "end_line": 5247,
           "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
           "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        }
+      ],
+      "isolated_causal_gain_us": null
+    },
+    {
+      "id": "gv_predicated_escape_xor",
+      "name": "Standalone GV predicated escape XOR repair",
+      "status": "SELECTED_IN_SCORED_PROFILE",
+      "scope": "Seven reviewed format1 GV templates; per-route selection below",
+      "implementation": "Separate gv_predxor kernel retains original gv controls; removes divergent scalar repair branch with predicated XOR. Source ancestry is PW45, not the RQ32 predxor experiment.",
+      "bindings": [
+        {
+          "name": "GVCU",
+          "ordinal": 10,
+          "line": 529,
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "GVI",
+          "ordinal": 55,
+          "line": 2310,
+          "end_line": 2311,
+          "AST_sha256": "e40c56d23d90b27268fe92166ac006105dfc95d0c6b43511e0c1ea8813924a4f",
+          "source_segment_sha256": "39a4fd20047b800624cdf28dd303dfea8baf59bc58aec7ceddffb035c2f15618",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "_gvcall",
+          "ordinal": 69,
+          "line": 2444,
+          "end_line": 2456,
+          "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
+          "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
+        },
+        {
+          "name": "kernel_fn",
+          "ordinal": 143,
+          "line": 4299,
+          "end_line": 4316,
+          "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
+          "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ],
       "isolated_causal_gain_us": null
@@ -1194,46 +1226,59 @@
       "load": "decode 1",
       "family": "gv",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        1,
+        1,
+        2,
+        16,
+        8,
+        1,
+        1,
+        2,
+        1
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
       "actual_prepare_pick": null,
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.5 \u00b5s 100.0%      1\ntotal                                                              9.5 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.3 \u00b5s 100.0%      1\ntotal                                                              9.3 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1244,46 +1289,59 @@
       "load": "decode 1",
       "family": "gv",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        1,
+        2,
+        1,
+        8,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
       "actual_prepare_pick": null,
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           3.9 \u00b5s 100.0%      1\ntotal                                                              3.9 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.0 \u00b5s 100.0%      1\ntotal                                                              4.0 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1292,48 +1350,61 @@
       "layer": "pooler",
       "m": 1,
       "load": "decode 1",
-      "family": "gv",
+      "family": "gv_predxor",
       "RQ_flags": null,
+      "GV_predxor_selected": true,
+      "GV_template": [
+        1,
+        1,
+        1,
+        2,
+        16,
+        8,
+        1,
+        1,
+        0,
+        3
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
       "actual_prepare_pick": null,
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         13.8 \u00b5s 100.0%      1\ntotal                                                             13.8 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1344,52 +1415,65 @@
       "load": "decode 1",
       "family": "gv",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        1,
+        4,
+        1,
+        4,
+        4,
+        4,
+        1,
+        0,
+        536870913
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
       "actual_prepare_pick": {
         "layer": "unpooler",
         "m": 1,
-        "selected": "uk-s4x",
-        "bake_us": 8.42,
-        "line": 98
+        "selected": "uk-s4w4x",
+        "bake_us": 8.29,
+        "line": 97
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)                   3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1400,46 +1484,48 @@
       "load": "decode 1",
       "family": "rr",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
       "actual_prepare_pick": null,
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.6 \u00b5s 100.0%      1\ntotal                                                              2.6 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.7 \u00b5s 100.0%      1\ntotal                                                              2.7 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1450,6 +1536,8 @@
       "load": "decode 16",
       "family": "rq",
       "RQ_flags": 35,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": true,
@@ -1457,45 +1545,45 @@
         "layer": "qkv_gate",
         "m": 16,
         "selected": "rq:t16s5hze-k7",
-        "bake_us": 13.86,
-        "line": 149
+        "bake_us": 13.89,
+        "line": 148
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.6 \u00b5s 100.0%      1\ntotal                                                              9.6 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.0 \u00b5s 100.0%      1\ntotal                                                             10.0 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rqcall",
           "ordinal": 168,
-          "line": 4780,
-          "end_line": 4781,
+          "line": 5246,
+          "end_line": 5247,
           "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
           "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1506,6 +1594,19 @@
       "load": "decode 16",
       "family": "gv",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        2,
+        2,
+        1,
+        8,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -1513,45 +1614,45 @@
         "layer": "o",
         "m": 16,
         "selected": "r6",
-        "bake_us": 9.82,
-        "line": 171
+        "bake_us": 9.57,
+        "line": 170
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           5.0 \u00b5s 100.0%      1\ntotal                                                              5.0 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.9 \u00b5s 100.0%      1\ntotal                                                              4.9 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1560,8 +1661,21 @@
       "layer": "pooler",
       "m": 16,
       "load": "decode 16",
-      "family": "gv",
+      "family": "gv_predxor",
       "RQ_flags": null,
+      "GV_predxor_selected": true,
+      "GV_template": [
+        1,
+        2,
+        2,
+        2,
+        8,
+        16,
+        1,
+        1,
+        0,
+        1
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -1569,45 +1683,45 @@
         "layer": "pooler",
         "m": 16,
         "selected": "r6",
-        "bake_us": 18.46,
-        "line": 137
+        "bake_us": 18.27,
+        "line": 136
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                         14.0 \u00b5s 100.0%      1\ntotal                                                             14.0 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                 14.2 \u00b5s 100.0%      1\ntotal                                                             14.2 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1616,8 +1730,21 @@
       "layer": "unpooler",
       "m": 16,
       "load": "decode 16",
-      "family": "gv",
+      "family": "gv_predxor",
       "RQ_flags": null,
+      "GV_predxor_selected": true,
+      "GV_template": [
+        1,
+        2,
+        2,
+        1,
+        4,
+        16,
+        1,
+        1,
+        2,
+        1
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -1625,45 +1752,45 @@
         "layer": "unpooler",
         "m": 16,
         "selected": "r6",
-        "bake_us": 18.75,
-        "line": 159
+        "bake_us": 18.59,
+        "line": 158
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                         14.3 \u00b5s 100.0%      1\ntotal                                                             14.3 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                 14.2 \u00b5s 100.0%      1\ntotal                                                             14.2 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1674,52 +1801,65 @@
       "load": "decode 16",
       "family": "gv",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        2,
+        2,
+        1,
+        1,
+        8,
+        1,
+        16,
+        1,
+        0,
+        134217728
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
       "actual_prepare_pick": {
         "layer": "router",
         "m": 16,
-        "selected": "rk-s16w8x",
+        "selected": "rk-s16w8z",
         "bake_us": 9.02,
-        "line": 118
+        "line": 117
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.7 \u00b5s 100.0%      1\ntotal                                                              3.7 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1730,6 +1870,8 @@
       "load": "decode 32",
       "family": "rq",
       "RQ_flags": 35,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": true,
@@ -1737,45 +1879,45 @@
         "layer": "qkv_gate",
         "m": 32,
         "selected": "rq:t32s5hze-k7",
-        "bake_us": 14.34,
-        "line": 143
+        "bake_us": 14.24,
+        "line": 142
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.2 \u00b5s 100.0%      1\ntotal                                                             10.2 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.8 \u00b5s 100.0%      1\ntotal                                                              9.8 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rqcall",
           "ordinal": 168,
-          "line": 4780,
-          "end_line": 4781,
+          "line": 5246,
+          "end_line": 5247,
           "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
           "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1786,6 +1928,8 @@
       "load": "decode 32",
       "family": "rq",
       "RQ_flags": 34,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": true,
@@ -1793,45 +1937,45 @@
         "layer": "o",
         "m": 32,
         "selected": "rq:t32s5ze-k2",
-        "bake_us": 10.66,
-        "line": 166
+        "bake_us": 10.4,
+        "line": 165
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)                5.2 \u00b5s 100.0%      1\ntotal                                                              5.2 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)                5.1 \u00b5s 100.0%      1\ntotal                                                              5.1 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rqcall",
           "ordinal": 168,
-          "line": 4780,
-          "end_line": 4781,
+          "line": 5246,
+          "end_line": 5247,
           "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
           "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1842,52 +1986,54 @@
       "load": "decode 32",
       "family": "rq",
       "RQ_flags": 35,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": true,
       "actual_prepare_pick": {
         "layer": "pooler",
         "m": 32,
-        "selected": "rq:t32s5hze-k4",
+        "selected": "rq:t32s6hze-k4",
         "bake_us": 19.17,
-        "line": 132
+        "line": 131
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               16.0 \u00b5s 100.0%      1\ntotal                                                             16.0 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.5 \u00b5s 100.0%      1\ntotal                                                             15.5 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rqcall",
           "ordinal": 168,
-          "line": 4780,
-          "end_line": 4781,
+          "line": 5246,
+          "end_line": 5247,
           "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
           "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1898,52 +2044,54 @@
       "load": "decode 32",
       "family": "rq",
       "RQ_flags": 35,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": true,
       "actual_prepare_pick": {
         "layer": "unpooler",
         "m": 32,
-        "selected": "rq:t32s5hze-k2",
-        "bake_us": 19.1,
-        "line": 154
+        "selected": "rq:t32s6hze-k2",
+        "bake_us": 19.3,
+        "line": 153
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.0 \u00b5s 100.0%      1\ntotal                                                             15.0 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rqcall",
           "ordinal": 168,
-          "line": 4780,
-          "end_line": 4781,
+          "line": 5246,
+          "end_line": 5247,
           "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
           "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -1954,6 +2102,19 @@
       "load": "decode 32",
       "family": "gv",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        2,
+        4,
+        2,
+        1,
+        8,
+        2,
+        8,
+        1,
+        0,
+        134217728
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -1961,45 +2122,45 @@
         "layer": "router",
         "m": 32,
         "selected": "rk-s8z",
-        "bake_us": 9.57,
-        "line": 123
+        "bake_us": 9.47,
+        "line": 122
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.0 \u00b5s 100.0%      1\ntotal                                                              4.0 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.3 \u00b5s 100.0%      1\ntotal                                                              4.3 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2010,46 +2171,59 @@
       "load": "verify 1",
       "family": "gv",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        1,
+        1,
+        2,
+        16,
+        8,
+        1,
+        1,
+        2,
+        1
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
       "actual_prepare_pick": null,
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          8.8 \u00b5s 100.0%      1\ntotal                                                              8.8 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.1 \u00b5s 100.0%      1\ntotal                                                              9.1 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2060,46 +2234,59 @@
       "load": "verify 1",
       "family": "gv",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        1,
+        2,
+        1,
+        8,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
       "actual_prepare_pick": null,
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           4.1 \u00b5s 100.0%      1\ntotal                                                              4.1 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           3.8 \u00b5s 100.0%      1\ntotal                                                              3.8 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2108,48 +2295,61 @@
       "layer": "pooler",
       "m": 8,
       "load": "verify 1",
-      "family": "gv",
+      "family": "gv_predxor",
       "RQ_flags": null,
+      "GV_predxor_selected": true,
+      "GV_template": [
+        1,
+        1,
+        1,
+        2,
+        16,
+        8,
+        1,
+        1,
+        0,
+        3
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
       "actual_prepare_pick": null,
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         13.9 \u00b5s 100.0%      1\ntotal                                                             13.9 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                 13.8 \u00b5s 100.0%      1\ntotal                                                             13.8 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2160,52 +2360,65 @@
       "load": "verify 1",
       "family": "gv",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        1,
+        1,
+        4,
+        1,
+        4,
+        4,
+        4,
+        1,
+        0,
+        536870913
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
       "actual_prepare_pick": {
         "layer": "unpooler",
         "m": 8,
-        "selected": "uk-s4x",
-        "bake_us": 8.45,
-        "line": 104
+        "selected": "uk-s4w4x",
+        "bake_us": 8.29,
+        "line": 103
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.4 \u00b5s 100.0%      1\ntotal                                                              3.4 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)                   3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2216,6 +2429,19 @@
       "load": "verify 1",
       "family": "gv",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": [
+        2,
+        1,
+        1,
+        1,
+        8,
+        1,
+        16,
+        1,
+        0,
+        536870912
+      ],
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -2223,45 +2449,45 @@
         "layer": "router",
         "m": 8,
         "selected": "rk-s16w8x",
-        "bake_us": 8.8,
-        "line": 111
+        "bake_us": 8.58,
+        "line": 110
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.5 \u00b5s 100.0%      1\ntotal                                                              3.5 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.3 \u00b5s 100.0%      1\ntotal                                                              3.3 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "GVCU",
           "ordinal": 10,
           "line": 529,
-          "end_line": 1654,
-          "AST_sha256": "d801c5880501e7528baf206a726f9248ba30ca4828f26a44bbb598aa2dc8d493",
-          "source_segment_sha256": "b6dd9a9e8783abbe887fa0e9dd3866b5fc7c8e7530548a6d835aa6d5824b6e48",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "end_line": 2120,
+          "AST_sha256": "025b1a2929d87e73bd2bf121b3d376992003ce2489006bb3b4e32b2b6ea0f191",
+          "source_segment_sha256": "07862381beb5769c56a3805a0e6f5363e00bddc980ddf7eb342a631653806dd0",
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_gvcall",
           "ordinal": 69,
-          "line": 1978,
-          "end_line": 1990,
+          "line": 2444,
+          "end_line": 2456,
           "AST_sha256": "ddb38eedc9d7861cb2583ad40dd6850997ef249ce1b0013a40c3d1164ac9155e",
           "source_segment_sha256": "f1487b90bbe366180d309d90c9f92344777c6a7076772a142c0e29b7d6798246",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2272,6 +2498,8 @@
       "load": "verify 16",
       "family": "rq",
       "RQ_flags": 3,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -2279,45 +2507,45 @@
         "layer": "qkv_gate",
         "m": 128,
         "selected": "rq:s4s5hz",
-        "bake_us": 17.06,
-        "line": 62
+        "bake_us": 16.58,
+        "line": 61
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               12.4 \u00b5s 100.0%      1\ntotal                                                             12.4 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               12.3 \u00b5s 100.0%      1\ntotal                                                             12.3 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rqcall",
           "ordinal": 168,
-          "line": 4780,
-          "end_line": 4781,
+          "line": 5246,
+          "end_line": 5247,
           "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
           "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2328,6 +2556,8 @@
       "load": "verify 16",
       "family": "Lt/vendor",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -2335,45 +2565,45 @@
         "layer": "o",
         "m": 128,
         "selected": "r6",
-        "bake_us": 11.1,
-        "line": 175
+        "bake_us": 10.98,
+        "line": 174
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopB_NNN                      5.5 \u00b5s 100.0%      1\ntotal                                                              5.5 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN                            5.5 \u00b5s 100.0%      1\ntotal                                                              5.5 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_v12",
           "ordinal": 145,
-          "line": 3863,
-          "end_line": 3886,
+          "line": 4329,
+          "end_line": 4352,
           "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
           "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_ltsearch",
           "ordinal": 89,
-          "line": 2279,
-          "end_line": 2354,
+          "line": 2745,
+          "end_line": 2820,
           "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
           "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2384,6 +2614,8 @@
       "load": "verify 16",
       "family": "rq",
       "RQ_flags": 3,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -2392,44 +2624,44 @@
         "m": 128,
         "selected": "rq:s4s5hz",
         "bake_us": 22.53,
-        "line": 50
+        "line": 49
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               18.5 \u00b5s 100.0%      1\ntotal                                                             18.5 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               18.7 \u00b5s 100.0%      1\ntotal                                                             18.7 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RQCU",
           "ordinal": 149,
-          "line": 4013,
-          "end_line": 4643,
+          "line": 4479,
+          "end_line": 5109,
           "AST_sha256": "f3278ee0348128e14fad979e216604899533dee06aa489b7d24a9e7f7fab2e41",
           "source_segment_sha256": "d1750565a45b50d414013794f897464ffcc5f866c9c78db63ed4bb12b117acb7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rqcall",
           "ordinal": 168,
-          "line": 4780,
-          "end_line": 4781,
+          "line": 5246,
+          "end_line": 5247,
           "AST_sha256": "3799ba4b756de146814a734bcfe471c2f919b4b5f79756c7f4ff27e88c56fae0",
           "source_segment_sha256": "5e8372eafb53d1698f57f59b984c0cf9c8ffab7ddc9c5aa5385bbc0bff524598",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2440,6 +2672,8 @@
       "load": "verify 16",
       "family": "Lt/vendor",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -2447,45 +2681,45 @@
         "layer": "unpooler",
         "m": 128,
         "selected": "r6",
-        "bake_us": 22.56,
-        "line": 74
+        "bake_us": 22.46,
+        "line": 73
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_h_bz_coopB_NNN                     19.3 \u00b5s 100.0%      1\ntotal                                                             19.3 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT                     19.6 \u00b5s 100.0%      1\ntotal                                                             19.6 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_v12",
           "ordinal": 145,
-          "line": 3863,
-          "end_line": 3886,
+          "line": 4329,
+          "end_line": 4352,
           "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
           "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_ltsearch",
           "ordinal": 89,
-          "line": 2279,
-          "end_line": 2354,
+          "line": 2745,
+          "end_line": 2820,
           "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
           "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2496,6 +2730,8 @@
       "load": "verify 16",
       "family": "rtk",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -2503,45 +2739,45 @@
         "layer": "router",
         "m": 128,
         "selected": "rt64k32b3x2z",
-        "bake_us": 11.52,
-        "line": 185
+        "bake_us": 11.81,
+        "line": 184
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.0 \u00b5s 100.0%      1\ntotal                                                              6.0 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.2 \u00b5s 100.0%      1\ntotal                                                              6.2 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RWCU",
           "ordinal": 117,
-          "line": 3032,
-          "end_line": 3559,
+          "line": 3498,
+          "end_line": 4025,
           "AST_sha256": "c43543cbe39ddb409cc0edcff62cd61cafb87ba1039e0323f42c457c96fb8e2a",
           "source_segment_sha256": "29f3f0cf093d4e114469b8ba93e453a4ec14514fc785780b206b8cf071c40e31",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rscall",
           "ordinal": 140,
-          "line": 3709,
-          "end_line": 3714,
+          "line": 4175,
+          "end_line": 4180,
           "AST_sha256": "3d9a89e00deed7c6998724ec99d7d33224f4883da3e1aa7092e51fddcf3c0fa6",
           "source_segment_sha256": "613ce286227245800c932d82b7f954c31cbe6dc32bef42953125c655d6d521c8",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2552,6 +2788,8 @@
       "load": "verify 32",
       "family": "Lt/vendor",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -2559,45 +2797,45 @@
         "layer": "qkv_gate",
         "m": 256,
         "selected": "r6",
-        "bake_us": 21.54,
-        "line": 67
+        "bake_us": 21.63,
+        "line": 66
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           18.3 \u00b5s 100.0%      1\ntotal                                                             18.3 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           19.5 \u00b5s 100.0%      1\ntotal                                                             19.5 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_v12",
           "ordinal": 145,
-          "line": 3863,
-          "end_line": 3886,
+          "line": 4329,
+          "end_line": 4352,
           "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
           "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_ltsearch",
           "ordinal": 89,
-          "line": 2279,
-          "end_line": 2354,
+          "line": 2745,
+          "end_line": 2820,
           "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
           "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2608,6 +2846,8 @@
       "load": "verify 32",
       "family": "Lt/vendor",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -2615,45 +2855,45 @@
         "layer": "o",
         "m": 256,
         "selected": "r6",
-        "bake_us": 12.9,
-        "line": 91
+        "bake_us": 12.8,
+        "line": 90
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_256x64_64x5_1x2_v_bz_coopB_NNN                      8.2 \u00b5s 100.0%      1\ntotal                                                              8.2 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN                     8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_v12",
           "ordinal": 145,
-          "line": 3863,
-          "end_line": 3886,
+          "line": 4329,
+          "end_line": 4352,
           "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
           "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_ltsearch",
           "ordinal": 89,
-          "line": 2279,
-          "end_line": 2354,
+          "line": 2745,
+          "end_line": 2820,
           "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
           "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2664,6 +2904,8 @@
       "load": "verify 32",
       "family": "Lt/vendor",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -2671,45 +2913,45 @@
         "layer": "pooler",
         "m": 256,
         "selected": "r6",
-        "bake_us": 27.94,
-        "line": 55
+        "bake_us": 27.97,
+        "line": 54
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           24.4 \u00b5s 100.0%      1\ntotal                                                             24.4 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           24.5 \u00b5s 100.0%      1\ntotal                                                             24.5 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_v12",
           "ordinal": 145,
-          "line": 3863,
-          "end_line": 3886,
+          "line": 4329,
+          "end_line": 4352,
           "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
           "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_ltsearch",
           "ordinal": 89,
-          "line": 2279,
-          "end_line": 2354,
+          "line": 2745,
+          "end_line": 2820,
           "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
           "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2720,6 +2962,8 @@
       "load": "verify 32",
       "family": "Lt/vendor",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -2727,45 +2971,45 @@
         "layer": "unpooler",
         "m": 256,
         "selected": "r6",
-        "bake_us": 28.06,
-        "line": 79
+        "bake_us": 27.71,
+        "line": 78
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_1x2_v_bz_coopA_NNT                    23.8 \u00b5s 100.0%      1\ntotal                                                             23.8 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN                    23.6 \u00b5s 100.0%      1\ntotal                                                             23.6 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_v12",
           "ordinal": 145,
-          "line": 3863,
-          "end_line": 3886,
+          "line": 4329,
+          "end_line": 4352,
           "AST_sha256": "8445f125e6c509633e5fbd57b198bf8aa620bc2984b7fe03a90264621610c0e2",
           "source_segment_sha256": "d329427be4dddf61305ea96fec7e6466c095669a7ca4b912ea00a8f54fbccdf7",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_ltsearch",
           "ordinal": 89,
-          "line": 2279,
-          "end_line": 2354,
+          "line": 2745,
+          "end_line": 2820,
           "AST_sha256": "3b9f8838bd2af60959b6feb9e8def899b029e50a81f806f17226118c05021717",
           "source_segment_sha256": "0142575a04406f0bd38ee896d776b5d97316894f0dcf49c4bf350064d38d23ea",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     },
@@ -2776,6 +3020,8 @@
       "load": "verify 32",
       "family": "rtk",
       "RQ_flags": null,
+      "GV_predxor_selected": false,
+      "GV_template": null,
       "EH_selected": false,
       "HALF_selected": false,
       "EARLY_selected": false,
@@ -2783,51 +3029,51 @@
         "layer": "router",
         "m": 256,
         "selected": "rt64k32b3x2z",
-        "bake_us": 13.34,
-        "line": 191
+        "bake_us": 13.06,
+        "line": 190
       },
-      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       7.9 \u00b5s 100.0%      1\ntotal                                                              7.9 \u00b5s",
+      "kernel_report": "kernel                                                           GPU time  share  calls\nvoid rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       8.0 \u00b5s 100.0%      1\ntotal                                                              8.0 \u00b5s",
       "profile": {
-        "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/profiles/submission.d5a125fcdcdc408d.json",
-        "sha256": "4b27c5a8d5286080ed768710bf985479cc1d75986c3dd37facc0df513cb103c5",
-        "bytes": 176811
+        "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/profiles/submission.9916d34357b745cf.json",
+        "sha256": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+        "bytes": 176993
       },
       "bindings": [
         {
           "name": "kernel_fn",
           "ordinal": 143,
-          "line": 3833,
-          "end_line": 3850,
+          "line": 4299,
+          "end_line": 4316,
           "AST_sha256": "a71839640f6fca284a7de84f0c92b1b3c6e38144b28819baf12eff493380a515",
           "source_segment_sha256": "1edf4f99c0e4dd2b94d27bbb1db945cd260a10bf782457a1349106bc6b0f9f8c",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "RWCU",
           "ordinal": 117,
-          "line": 3032,
-          "end_line": 3559,
+          "line": 3498,
+          "end_line": 4025,
           "AST_sha256": "c43543cbe39ddb409cc0edcff62cd61cafb87ba1039e0323f42c457c96fb8e2a",
           "source_segment_sha256": "29f3f0cf093d4e114469b8ba93e453a4ec14514fc785780b206b8cf071c40e31",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         },
         {
           "name": "_rscall",
           "ordinal": 140,
-          "line": 3709,
-          "end_line": 3714,
+          "line": 4175,
+          "end_line": 4180,
           "AST_sha256": "3d9a89e00deed7c6998724ec99d7d33224f4883da3e1aa7092e51fddcf3c0fa6",
           "source_segment_sha256": "613ce286227245800c932d82b7f954c31cbe6dc32bef42953125c655d6d521c8",
-          "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
-          "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
+          "path": "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py",
+          "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9"
         }
       ]
     }
   ],
-  "check_job": "87db1d6a076c4da4",
-  "scored_job": "d5a125fcdcdc408d",
+  "check_job": null,
+  "scored_job": "9916d34357b745cf",
   "limitations": [
     "Server content_hash algorithm is unknown; local release attestation does not equate it to raw SHA256.",
     "Package scores/actual routes are observed; individual feature causal deltas are not inferred.",

@@ -1,0 +1,11 @@
+DONE disposition: VALID_REGRESSION, valid narrow H100 result; retain currentGV501d and do not promote this selector. No queue mutation by analysis author.
+
+Both preparations actually serve Lt, with identical full layout/config: layout3, [ID66,TILE20,SPLITK1,REDUCTION0,SWIZZLE0,CUSTOM4,STAGES35,INNER0,CLUSTER2]. Control code300008 and candidate300012 are registration indices, not different algorithms. All five native source/SO pairs match. The intended serving path is exercised, but confirmation does not change the candidate’s own completed legacy choice300012.
+
+Balanced confirmation completes all32 replays and selects its legacy300012. Upper-median timings are Torch30.656us, legacy30001228.320us, layout2/code20000028.544us andlayout3/code30000029.408us. Each arm occupies every position twice. No deadline skip or forced winner occurs.
+
+Actual serving paired control-minus-candidate median is −0.063999556us, ratio0.997754478 (13wins/2ties/17losses across32pairs). F1 control-before27.615999803us, candidate27.744000778us, control-after27.648000047us: signedbefore−0.128000975us, after−0.096000731us. Both signedpointmeasures are negative. Samealgorithm/samebinary means these tiny differences do not demonstrate causal regression from chooserlogic; no selector improvement was found.
+
+All6 own task oracles,4 timedterminal oracles,8 retainedgraph zero/outlier/probe/fresh mutations,97 raw timing calls and invoked counter/input/immutableweight/NaNoverwrite contracts pass. Journal exactly reproduces saved timing summaries; all23 collected artifact hashes and14 launch sourcepins validate. TenJIT receipts/noerrors; graphs RESET_AFTER_DRAIN, no remaining cleanupgraphs. Root observation: exit0, no container/compute/guardprocess, GPUmemory0, cleanup_failedfalse. Original clocks unchanged; prepare57.238s/42.112s, no CPUfallback.
+
+This onecell directraw timing is not a full30package/H200/calibratedscore result. The exact historical official1x1coopA configuration remains unknown and no historicaltop3membership is established. No fullsweep, identicalretry, officialCHECK or scoring request is justified by this point alone. analysis.json retains exact receipt/raw/config/provenance and disposition evidence. CPU-only, no API/GPU/queue/git action.

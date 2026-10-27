@@ -31,7 +31,16 @@ INPUTS={
  'pw39_local':'proj_rsi/audits/pw39-stack-01/analysis.json',
  'pw40_local':'proj_rsi/audits/pw40-stack-01/analysis.json',
  'pw43_local':'proj_rsi/audits/pw43-runtime-independent.json',
+ 'pw45_local':'proj_rsi/audits/pw45-runtime-independent.json',
+ 'pw46_local':'proj_rsi/audits/pw46-runtime-independent.json',
  'pw43_brief':'proj_rsi/audits/pw43-refinement-brief.json',
+ 'complete_stack_local':'proj_rsi/audits/complete-gv-rq-eh-o32-policy-result/analysis.json',
+ 'eh_o32_local':'proj_rsi/audits/gv-private-eh-o32-policy-result/analysis.json',
+ 'submission_stack':'proj_rsi/audits/submission-stack-20261027/analysis.json',
+ 'lut_whole_local':'tools/moe_ss_lut_whole_v1/actual-analysis/analysis.json',
+ 'lut_whole_review':'tools/moe_ss_lut_whole_v1/actual-analysis/done-evidence.json',
+ 'm1_policy_local':'proj_rsi/audits/gv53-splitcta-m1-policy-result/analysis.json',
+ 'unpooler256_local':'proj_rsi/audits/gv-lt-unpooler256-balanced-focused-result/analysis.json',
  'pw38_profile_failure':'proj_rsi/audits/pw38-selected-profile-02/analysis.json',
 }
 # Curated source ancestry, supported by the source-map/official audit references.
@@ -55,8 +64,26 @@ VERSION_STACKS={
  'pw37':('pw36 + smallm cursor',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK+['smallm_cursor'],'PW36 + cursor source only; NOT SCORED; cursor v3 has regressions'),
  'pw39':('pw38 + bounded prepare confirmation',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK+['optional_EH_bit16_no_cursor','bounded_prepare_confirmation'],'PW38 + bounded host prepare confirmation; kernel bodies unchanged; local paired/F1 conflict and official CHECK regression, REFINE not scored'),
  'pw40':('pw38 + narrow QKV W-ring contender',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK+['optional_EH_bit16_no_cursor','optional_QKV_wring_x6w4hz'],'PW38 + optional QKV128 X6/W4 contender, no PW39 confirmation; W-ring validated locally but selected nowhere; official CHECK is separate, not scored'),
- 'pw38':('pw36 + rs32_eh_backport',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK+['optional_EH_bit16_no_cursor'],'PW36 + optional EH bit65536; excludes cursor; CPU only, NOT SCORED'),
+ 'pw45':('pw38 + optional o32 HALF fullK contenders',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK+['optional_EH_bit16_no_cursor','optional_o32_HALF52_fullK_ST4_ST5'],'PW38 + optional o32 HALF52 fullK ST4/ST5 contenders; original controls retained; actual per-job selections recorded separately'),
+ 'gv_predxor_pw45_v2':('pw45 + standalone GV predicated escape repair',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK+['optional_EH_bit16_no_cursor','optional_o32_HALF52_fullK_ST4_ST5','optional_GV_predicated_escape_xor'],'PW45 + standalone GV predicated escape repair alternatives with original controls and actual prepare selection retained'),
+ 'rq32_predxor':('pw45 + RQ32 predicated escape repair',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK+['optional_EH_bit16_no_cursor','optional_o32_HALF52_fullK_ST4_ST5','RQ32_predicated_escape_xor'],'PW45 + RQ32 predicated escape repair; CHECK and SCORED are distinct observations'),
+ 'pw38':('pw36 + rs32_eh_backport',BASE+['RP_pipelined_router128']+P1+RW+P2+RQ+SMALL+RTK+['optional_EH_bit16_no_cursor'],'PW36 + optional EH bit65536; excludes cursor; completed CHECK and separate scored run'),
 }
+
+# These source compositions are frozen release relationships, not causal deltas.
+GV_FEATURES=VERSION_STACKS['gv_predxor_pw45_v2'][1]
+VERSION_STACKS.update({
+ 'gv_small_original_choice_v2':('gv_predxor_pw45_v2 + original-kernel alternative',GV_FEATURES+['optional_original_GV_choice'],'Independent GV-only diagnostic branch; local paired/F1 conflict, own official CHECK'),
+ 'gv_lt_qkv256_balanced_v1':('gv_predxor_pw45_v2 + balanced QKV256 Lt selector',GV_FEATURES+['balanced_QKV256_Lt_confirmation'],'Independent GV-only diagnostic branch; final RQ supersedes Lt, own official CHECK'),
+ 'gv53_splitcta_selection_v1':('gv_predxor_pw45_v2 + optional split-CTA selector',GV_FEATURES+['optional_GV53_splitCTA'],'Independent GV-only diagnostic branch; source availability and actual selection remain distinct'),
+ 'gv53_splitcta_m1_selection_v1':('gv_predxor_pw45_v2 + M1-only split-CTA selector',GV_FEATURES+['optional_GV53_M1_splitCTA'],'Independent local M1-only optional selector; mixed shape observations and aggregate regression'),
+ 'gv_lt_unpooler256_balanced_v1':('gv_predxor_pw45_v2 + balanced unpooler256 Lt selector',GV_FEATURES+['balanced_unpooler256_Lt_confirmation'],'Independent local focused selector; identical complete selected Lt configuration and measured regression'),
+ 'gv_predxor_keepchoice_v1':('gv_predxor_pw45_v2 + alternative keepchoice selector',GV_FEATURES+['alternative_GV_keepchoice_policy'],'GV-only parent plus alternative keepchoice; parallel branch, not part of compatible full stack'),
+ 'rq32_gv_predxor_pw45_v1':('gv_predxor_pw45_v2 + RQ predxor',GV_FEATURES+['RQ32_predicated_escape_xor'],'GV + RQ predxor; parallel branch, own scored outcome'),
+ 'gv_private_eh_screen_v1':('gv_predxor_pw45_v2 + private EH',GV_FEATURES+['private_EH_free_QKV_pooler128'],'GV + private EH; parallel branch, own scored outcome'),
+ 'gv_private_eh_o32_v1':('gv_private_eh_screen_v1 + O32 factor1.0',GV_FEATURES+['private_EH_free_QKV_pooler128','O32_positive_factor1.0'],'GV + private EH + O32 factor1.0; locally measured versus EH parent only; not officially scored'),
+ 'complete_gv_rq_eh_o32_v1':('gv_predxor_pw45_v2 + RQ predxor + private EH + O32 factor1.0',GV_FEATURES+['RQ32_predicated_escape_xor','private_EH_free_QKV_pooler128','O32_positive_factor1.0'],'Complete compatible GV + RQ + private EH + O32 source, locally measured versus currentGV and officially scored; keepchoice excluded; factor configuration does not prove binding selection or isolated gain'),
+})
 
 def read(root,path):return json.loads((root/path).read_text())
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -128,6 +155,18 @@ def merged_live_jobs(root,config):
    if jid in merged and merged[jid]['mode']!=row['mode']:raise ValueError('job mode changed across snapshots')
    merged[jid]=row;origins[jid]=ref(root,snapshot['path'])
   if snapshot['id']==config['active_jobs_snapshot']:break
+ for entry in config.get('completed_receipt_jobs',[]):
+  for key in ('receipt','result'):
+   reference=entry[key];path=Path(reference['path'])
+   if path.is_absolute() or '..' in path.parts or digest(root/path)!=reference['sha256']:raise ValueError('completed receipt evidence changed')
+  receipt=read(root,entry['receipt']['path']);result=read(root,entry['result']['path']);jid=entry['job_id'];summary=result['summary']
+  if receipt['job']!=jid or result['job_id']!=jid:raise ValueError('completed receipt job mismatch')
+  association=config['job_source_associations'].get(jid)
+  if not association or receipt['source_sha256']!=association['source']['sha256']:raise ValueError('completed receipt source mismatch')
+  if receipt['kind'] not in ('check','run') or summary.get('status') not in ('ok','error'):raise ValueError('completed receipt outcome not terminal')
+  if jid in merged:continue
+  merged[jid]={'job_id':jid,'problem':receipt['problem'],'mode':receipt['kind'],'submitted_at':dt.datetime.fromisoformat(receipt['submitted_at'].replace('Z','+00:00')).timestamp(),'status':'done','result_status':summary['status'],'passed':summary['passed'],'score_us':summary['score_us'],'status_evidence_kind':'accepted_receipt_and_own_completed_official_result_not_API_capture'}
+  origins[jid]=entry['result']
  return list(merged.values()),origins
 
 def build(root=ROOT):
@@ -159,7 +198,7 @@ def build(root=ROOT):
   identity='Current local file hash + archived path/git ancestry association; historical uploaded bytes not independently attested' if source else 'UNKNOWN: failed check has no archived source mapping'
   if association:identity=association['association']
   api=inputs.get('live_'+candidate) if candidate in ('rs32','pw36') else None
-  row={'API_status_source':api_origins[live_row['job_id']],'job_id':live_row['job_id'],'submitted_at':live_row['submitted_at'],'submitted_utc':utc(live_row['submitted_at']),
+  row={'status_evidence_kind':live_row.get('status_evidence_kind','preserved_API_jobs_capture'),'status_evidence_source':api_origins[live_row['job_id']],'API_status_source':None if live_row.get('status_evidence_kind') else api_origins[live_row['job_id']],'job_id':live_row['job_id'],'submitted_at':live_row['submitted_at'],'submitted_utc':utc(live_row['submitted_at']),
    'mode':live_row['mode'],'API_result_status':live_row.get('result_status'),'leaderboard_submission':live_row['mode']=='run','candidate':candidate,'status':live_row['status'],
    'passed':live_row['passed'],'score_us':live_row['score_us'],'tests_passed':summary.get('tests_passed'),'tests':summary.get('tests'),'speedup':summary.get('speedup'),'speedup_ci':summary.get('speedup_ci'),
    'source':ref(root,source) if source else None,'release_attestation':association.get('attestation') if association else None,'additional_release_attestations':association.get('additional_attestations',[]) if association else [],'source_identity_status':identity,'api_content_hash':api.get('content_hash') if api else None,
@@ -179,6 +218,8 @@ def build(root=ROOT):
  best=next((r for r in submissions if board_row and r['job_id']==board_row.get('job')),None)
  if best is None:best=next(r for r in submissions if r['job_id']=='fb548b5dc6f04696')
  if best['passed'] is not True or best['score_us'] is None:raise ValueError('board best lacks completed successful official run')
+ previous_runs=[r for r in submissions if r['submitted_at']<best['submitted_at'] and r['passed'] is True and r['score_us'] is not None]
+ previous_best=min(previous_runs,key=lambda r:r['score_us']) if previous_runs else best
  findings=[]
  for finding in inputs['completeness']['findings']:
   r=dict(finding);r['immutable_id']='improvement.'+hashlib.sha256(r['id'].encode()).hexdigest()[:16]
@@ -267,7 +308,7 @@ def build(root=ROOT):
    record['currently_included']='Yes; current best PW38' if best['candidate']=='pw38' else 'PW38 scored, current best is '+str(best['candidate'])
    record['score_tested_jobs']=[pw38_run['job_id']]
    if pw38_run['job_id'] not in record['stack_tested_jobs']:record['stack_tested_jobs'].append(pw38_run['job_id'])
-   record['finding']+=' Scored run '+pw38_run['job_id']+' completed9/9,30shapes at '+str(pw38_run['score_us'])+'us; board selects this package. Observed package point difference versus prior best is not isolated EH causality.'
+   record['finding']+=' Scored run '+pw38_run['job_id']+' completed9/9,30shapes at '+str(pw38_run['score_us'])+'us; board selection for current best is '+str(best['candidate'])+'. Observed package point difference versus prior best is not isolated EH causality.'
    record['next_action']='Preserve scored source, outcomes, current actual picks and all prior packages; continue evidence-driven stacking per user authorization.'
    for feature in findings:
     if feature['id'] in ('RS128b early-half epilogue EH','PW35 one-node rtk router128/256'):
@@ -329,6 +370,91 @@ def build(root=ROOT):
  findings.append({'id':'PW38 selected profile context repair and GV cluster failure','immutable_id':'improvement.pw38.selected.profile.context.01','classification':'INVALID_PROFILE_DIAGNOSIS_NO_COUNTER_OR_LATENCY_ADMISSION','in_rs32':'No','currently_included':'No serving change','scope':'H100 selected profile attempts; informational setup diagnosis only',
   'finding':'Source revision2/jobv1 failed CUDA context metadata before prepare. Revision3/jobv2 repaired actual context and completed unchanged prepare73.931256s, then capture rc9/GV clusterLaunchFailed. Actual QKV1 S2/V0 uses SM90 DSM cluster barriers, not global-counter waiting. Missing postrange terminal/counter/cleanup fields invalidate all profile rows, including completed router rows. No admitted counter, latency gain or actual cause inferred.',
   'verification':'Source-bound raw collection and independent CPU diagnosis; context repair is observed, recipe/replay/instrumentation cause remains hypothesis.','stacked_versions':[],'stack_tested_jobs':['pw38.selected.profile.v1.01','pw38.selected.profile.v2.02'],'score_tested_jobs':[],'missing_reason':'Incomplete strict terminal oracles; all exported counters diagnostic only.','next_action':'Review hardware-only metrics versus broad sections with same five actual graph nodes and all terminal gates; success implicates removed recipe without proving software-patch versus replay mechanism.', 'evidence':[ref(root,paths['pw38_profile_failure'])]})
+ # Validated local PW45/PW46 never synthesize official submission IDs.
+ for version,attempt in [('pw45','research.pw45.gpu.01'),('pw46','pw46.stack.fullscope.01')]:
+  data=inputs[version+'_local'];delta=data['pw38_minus_'+version+'_local_score_estimate_us']
+  findings.append({'id':version.upper()+' actual full-policy runtime','immutable_id':'improvement.'+version+'.stack.fullscope.01','classification':'VALID_LOCAL_PAIRED_POINT_GAIN_F1_POINT_LOSS_NOT_OFFICIAL' if version=='pw45' else 'VALID_LOCAL_FULL_POLICY_REGRESSION_NOT_SHIPPED','in_rs32':'No','currently_included':'No; local experiment only','scope':'Actual independently prepared PW38 versus '+version.upper()+' on H100; no H200 forecast',
+   'finding':'All222 correctness records/4350 raw samples/180 terminal oracles/360 mutations validate. PW38-minus-'+version.upper()+' local conditional aggregate: paired '+str(delta['paired'])+'us; F1 '+str(delta['F1'])+'us. All30 exact signed effects retained. '+('Positive paired point and opposite F1 remain explicit without new effectsize/significance gate; actual o32 selects GV45, not fixed HALF52.' if version=='pw45' else 'Both aggregate points regress. Proxy preservation does not prove actual-incumbent parity; downstream family bake may supersede Lt confirmation.'),
+   'verification':'Independent collected inventory/source/JIT/terminal/raw/counter-source/cleanup audit; one prepare per source, no repeat-prepare frequency evidence.','stacked_versions':[version],'stack_tested_jobs':[attempt],'score_tested_jobs':[],'missing_reason':'No official submission inferred from local job; root owns evaluation decision.','next_action':'Preserve exact source and actual selected plans; root can evaluate measured positive point under official controls. Refine losing versions with a new immutable hypothesis, no forced winner or family kill.','evidence':[ref(root,paths[version+'_local']),ref(root,'proj_rsi/audits/'+version+'-runtime-independent.md')]})
+  for row in data['all_shape_signed_contrasts']:
+   wtl=row['paired_wins_ties_losses'];local_observations.append({'observation_id':'paired.'+attempt+'.'+row['shape']+'.pw38','attempt_id':attempt,'version':version,'shape':row['shape'],'control':'pw38','gain_us':row['paired_pw38_minus_'+version+'_us'],'F1_gain_us':row['F1_bracket_pw38_minus_'+version+'_us'],'paired_ratio':None,'wins':wtl[0],'ties':wtl[1],'losses':wtl[2],'pairs':sum(wtl),'same_selected_plan':row['picks']['pw38']==row['picks'][version],'hardware':'H100','result_sha256':data['result_sha256'],'evidence':ref(root,paths[version+'_local']),'shipping_gain':False})
+ fixed=inputs['pw45_local']['fixed_o32_mechanism']
+ findings.append({'id':'PW45 fixed o32 ST5 tiny gain and ST4 loss','immutable_id':'improvement.pw45.fixed.o32.01','classification':'VALID_LOCAL_FIXED_TINY_GAIN_UNSELECTED_NOT_SHIPPED','in_rs32':'No','currently_included':'No; actual PW45 o32 selects GV45','scope':'H100 o32 fullK1024/N8192 direct fixed arms, separate from prepared policy','finding':'Fixed ST5 HALF52 versus old ST5 earlyZI34 gains paired0.063999556us/F1 0.080000143us (17/30 paired wins); ST4 HALF52 loses paired−0.496000051us/F1−0.560000073us. Preserve every tiny/negative sign. Active warpgroups/shared/KS/store differ; no singlefactor or package causality asserted.','verification':'210 raw,6 strict terminal outputs,12 mutations,3 actual single-kernel graph profiles,all1024basis+FP64 and fullphysical counter/sink source guards validate.','stacked_versions':['pw45'],'stack_tested_jobs':['research.pw45.gpu.01'],'score_tested_jobs':[],'missing_reason':'New fixed contenders are not selected in the actual fullpolicy serving path.','next_action':'Retain fixed gain as mechanism evidence; compare future actual selected fullpolicy under independent controls, no hardcoded winner.','evidence':[ref(root,paths['pw45_local'])]})
+ for contrast,row in fixed['contrasts'].items():
+  local_observations.append({'observation_id':'fixed.research.pw45.gpu.01.'+contrast,'attempt_id':'research.pw45.gpu.01','version':'pw45_fixed_o32','shape':'o32/'+contrast,'control':contrast.split('_minus_')[0],'gain_us':row['paired_median_gain_us'],'F1_gain_us':row['F1_endpoint_average_gain_us'],'paired_ratio':row['paired_median_ratio'],'wins':row['wins'],'ties':None,'losses':None,'pairs':30,'same_selected_plan':False,'hardware':'H100','result_sha256':inputs['pw45_local']['result_sha256'],'evidence':ref(root,paths['pw45_local']),'shipping_gain':False})
+ # Completed CHECK and accepted scored intent remain distinct authorities.
+ pw45_checks=[row for row in checks if row['candidate']=='pw45']
+ pw45_runs=[row for row in submissions if row['candidate']=='pw45']
+ for feature in findings:
+  if feature['immutable_id'] not in ('improvement.pw45.stack.fullscope.01','improvement.pw45.fixed.o32.01'):continue
+  if pw45_checks and feature['immutable_id']=='improvement.pw45.stack.fullscope.01':
+   feature['classification']='VALID_LOCAL_PAIRED_POINT_GAIN_F1_POINT_LOSS_OFFICIAL_CHECK_POINT_GAIN_SCORED_PENDING'
+   feature['currently_included']='No; current best remains PW38; PW45 official CHECK complete and scored result pending'
+  feature['official_check_jobs']=[row['job_id'] for row in pw45_checks]
+  feature['pending_scored_submission_jobs']=[row['job_id'] for row in pw45_runs if row['status'] not in ('done','failed','cancelled')]
+  for row in pw45_checks:
+   feature['stack_tested_jobs'].append(row['job_id'])
+   feature['evidence'] += [r for r in (row['raw'],row['log'],row['release_attestation']) if r]
+   if row['status']=='done' and row['passed'] is True:
+    feature['official_check_score_us']=row['score_us'];feature['official_check_picks']=row['actual_picks']
+    feature['finding']+=' Official CHECK'+row['job_id']+' passed9/9 at'+str(row['score_us'])+'us, observed package point'+str(3198.6175079817267-row['score_us'])+'us below scored PW38. CHECK is not a leaderboard submission or isolated kernel causal gain.'
+  completed_runs=[row for row in pw45_runs if row['status']=='done' and row['passed'] is True]
+  if completed_runs:
+   row=completed_runs[-1];feature['score_tested_jobs']=[r['job_id'] for r in completed_runs];feature['stack_tested_jobs'] += [r['job_id'] for r in completed_runs]
+   feature['official_scored_score_us']=row['score_us'];feature['official_scored_picks']=row['actual_picks']
+   if feature['immutable_id']=='improvement.pw45.fixed.o32.01':feature['currently_included']='No; HALF52 unselected. Local o32 GV45, CHECK r6, SCORED existing RQ34 are separate observations.'
+   feature['evidence'] += [r for r in (row['raw'],row['log'],row['release_attestation']) if r]+row['additional_release_attestations']
+   if feature['immutable_id']=='improvement.pw45.stack.fullscope.01':
+    feature['classification']='PW45_OFFICIAL_STACK_SCORED_AND_BOARD_VERIFIED_CURRENT_BEST' if best['candidate']=='pw45' else 'PW45_OFFICIAL_STACK_SCORED_COMPLETED'
+    feature['currently_included']='Yes; current best PW45 package' if best['candidate']=='pw45' else 'PW45 scored; another package is current best'
+   feature['finding']+=' Distinct SCORED'+row['job_id']+' completed9/9 at'+str(row['score_us'])+'us; actual o32 selected old t32s5ze-k2 (RQflags34), not new HALF52. Package difference is not isolated new kernel causality.'
+   feature['missing_reason']='Scored source/actual routes archived; new HALF52 optional contenders remain unselected.'
+   feature['next_action']='Continue current selected hotpath research from this frozen scored stack; preserve PW38 historical and all local/CHECK/scored signs.'
+  if feature['pending_scored_submission_jobs']:
+   feature['finding']+=' Same frozen source accepted for scored run '+','.join(feature['pending_scored_submission_jobs'])+'; final score and board outcome UNKNOWN/pending. Do not copy CHECK score into that row.'
+   feature['next_action']='Await actual scored result and fresh board authority; preserve tiny CHECK point and opposite local F1 without a new effectsize/significance gate.'
+ if best['candidate'] in ('pw45','gv_predxor_pw45_v2','rq32_predxor'):
+  for feature in findings:
+   feature['current_best_context']=best['candidate']+' '+best['job_id']+'; original evidence and comparator retained historically.'
+   if feature['classification'].startswith('SHIPPED_INCLUDED'):
+    feature['currently_included']='Source retained in '+best['candidate']+'; actual selection is recorded in current scored routes'
+    if 'pw45' not in feature['stacked_versions']:feature['stacked_versions'].append('pw45')
+    if best['job_id'] not in feature['score_tested_jobs']:feature['score_tested_jobs'].append(best['job_id'])
+    if best['job_id'] not in feature['stack_tested_jobs']:feature['stack_tested_jobs'].append(best['job_id'])
+   if feature['id']=='RS128b early-half epilogue EH':
+    feature['currently_included']='Compiled in '+best['candidate']+'; actual EH selection is recorded in scored routes; historical PW38 evidence retained'
+    feature['missing_reason']='Source inclusion/scored package validation established; actual current choices recorded separately. No causal EH gain assigned.'
+   if feature['id']=='PW35 one-node rtk router128/256':feature['currently_included']='Source retained; actual RTK selection is recorded in current '+best['candidate']+' scored routes'
+ for version,title in [('gv_predxor_pw45_v2','GV predicated escape policy scored current best'),('rq32_predxor','RQ32 predicated escape official checks and scored outcome'),('gv_predxor_keepchoice_v1','GV alternative keepchoice scored outcome'),('rq32_gv_predxor_pw45_v1','GV plus RQ predxor scored outcome'),('gv_private_eh_screen_v1','GV plus private EH scored outcome'),('complete_gv_rq_eh_o32_v1','Complete GV RQ privateEH O32 scored outcome')]:
+  runs=[row for row in submissions if row['candidate']==version];version_checks=[row for row in checks if row['candidate']==version]
+  if not runs:continue
+  row=runs[-1];is_best=row['job_id']==best['job_id']
+  findings.append({'id':title,'immutable_id':'improvement.'+version+'.official.01','classification':'OFFICIAL_SCORED_CURRENT_BEST' if is_best else 'OFFICIAL_SCORED_COMPLETED_NOT_BEST','in_rs32':'No','currently_included':'Yes; current scored package' if is_best else 'No; independently scored package, not current best','scope':'Exact frozen release, own official 9/9 and30shape profiles; package point, no isolated mechanism causality','finding':'Scored '+row['job_id']+' completed9/9 at '+str(row['score_us'])+'us. '+('GV standalone predxor selected in four actual scored routes: poolerM1/M8/M16 and unpoolerM16; other route/selection changes retained separately. Direct scored submission followed valid local full-policy evidence; no redundant official CHECK.' if version=='gv_predxor_pw45_v2' else VERSION_STACKS[version][2]+'. No isolated causal or additive gain claimed.' if version!='rq32_predxor' else 'RQ32 CHECK87044866f4494726 at3182.7213us and SCORED7b2da0f017d54e3d at3193.8183us are distinct outcomes. This source is not the parent of current GV-only best.'),'verification':'Own completed official result and preserved API/board captures; current per-route source bindings and scored reports retained.','stacked_versions':[version],'stack_tested_jobs':[r['job_id'] for r in version_checks+runs],'score_tested_jobs':[r['job_id'] for r in runs],'missing_reason':'No isolated source causal delta inferred.','next_action':'Continue measured stacking against actual current scored stack without minimum-gain veto.','evidence':[row['raw'],row['release_attestation']],'official_check_jobs':[r['job_id'] for r in version_checks],'official_scored_score_us':row['score_us'],'official_scored_picks':row['actual_picks']})
+ # Preserve both newly completed full30 comparisons with their actual controls.
+ for key,version,control,attempt in [('complete_stack_local','complete_gv_rq_eh_o32_v1','gv_predxor_pw45_v2','complete.gv.rq.eh.o32.fullpolicy.01'),('eh_o32_local','gv_private_eh_o32_v1','gv_private_eh_screen_v1','gv.privateeh.o32.fullpolicy.01')]:
+  data=inputs[key]
+  for shape,point in data['shapes'].items():
+   wins,ties,losses=point['paired_wins_ties_losses']
+   local_observations.append({'observation_id':'paired.'+attempt+'.'+shape,'attempt_id':attempt,'version':version,'shape':shape,'control':control,'gain_us':point['paired_gain_us'],'F1_gain_us':point['F1_gain_us'],'wins':wins,'ties':ties,'losses':losses,'pairs':32,'hardware':'H100','result_sha256':data['result_sha256'],'shipping_gain':False,'evidence':ref(root,paths[key])})
+ data=inputs['eh_o32_local']
+ findings.append({'id':'EH plus O32 incremental local full30 versus EH parent','immutable_id':'improvement.gv_private_eh_o32_v1.local.01','classification':'VALID_LOCAL_FULL30_POSITIVE_VS_EH_PARENT_NOT_OFFICIALLY_SCORED','currently_included':'No; not current GV best','scope':'Whole package versus private EH parent only, not currentGV','finding':'Paired '+str(data['actual_policy_geometric_load_speedup']['paired'])+'x; F1 '+str(data['actual_policy_geometric_load_speedup']['F1'])+'x. Signed local losses retained; ratios cannot be added to other comparisons.','verification':data['state'],'stacked_versions':['gv_private_eh_o32_v1'],'stack_tested_jobs':['gv.privateeh.o32.fullpolicy.01'],'score_tested_jobs':[],'missing_reason':'No official scored outcome; no isolated feature causal gain','next_action':'Preserve incremental evidence separately from complete-stack score','evidence':[ref(root,paths['eh_o32_local'])]})
+ # New CPU-audited local results remain distinct from official receipt rows.
+ for key,version,attempt,title in [('m1_policy_local','gv53_splitcta_m1_selection_v1','research.gv53.splitcta.m1.fullpolicy.01','M1-only splitCTA actual full30 local policy'),('unpooler256_local','gv_lt_unpooler256_balanced_v1','gv.lt.unpooler256.balanced.focused.01','Balanced unpooler256 focused actual local policy')]:
+  data=inputs[key]
+  summary=('Paired load ratio '+str(data['actual_policy_geometric_load_speedup']['paired'])+'; endpoint F1 '+str(data['actual_policy_geometric_load_speedup']['F1'])+'; conservative F1 '+str(data['actual_policy_geometric_load_speedup']['F1_conservative'])+'. '+str(data['prepare_interpretation'])) if key=='m1_policy_local' else data['reason']
+  findings.append({'id':title,'immutable_id':'improvement.'+attempt,'classification':'VALID_LOCAL_ACTUAL_POLICY_REGRESSION_NOT_SCORED','currently_included':'No; independent local branch','scope':'H100 actual selected policy versus current GV source; no official leaderboard claim','finding':summary,'verification':data['state'],'stacked_versions':[version],'stack_tested_jobs':[attempt],'score_tested_jobs':[],'missing_reason':'Local observations do not establish official gain; all signs and source pins retained','next_action':'Preserve observations; diagnose selection mechanism and compare new immutable versions against current source','evidence':[ref(root,paths[key])]})
+  points=data['shapes'] if key=='m1_policy_local' else {'verify32/unpooler':{'paired_gain_us':data['timing']['paired_delta_us'],'F1_gain_us':data['timing']['F1_conservative_control_minus_candidate_us'],'paired_wins_ties_losses':data['timing']['paired_win_tie_loss']}}
+  for shape,point in points.items():
+   wins,ties,losses=point['paired_wins_ties_losses']
+   local_observations.append({'observation_id':'paired.'+attempt+'.'+shape,'attempt_id':attempt,'version':version,'shape':shape,'control':'gv_predxor_pw45_v2','gain_us':point['paired_gain_us'],'F1_gain_us':point['F1_gain_us'],'wins':wins,'ties':ties,'losses':losses,'pairs':sum([wins,ties,losses]),'hardware':'H100','shipping_gain':False,'evidence':ref(root,paths[key])})
+ for row in checks:
+  if row['status_evidence_kind']!='accepted_receipt_and_own_completed_official_result_not_API_capture':continue
+  findings.append({'id':row['candidate']+' completed official CHECK','immutable_id':'improvement.official.check.'+row['job_id'],'classification':'OFFICIAL_CHECK_COMPLETED_NOT_SCORED_NOT_BEST','currently_included':'No; independent diagnostic branch','scope':'Own official CHECK, distinct from scored release and board authority','finding':'CHECK '+row['job_id']+' completed9/9 at '+str(row['score_us'])+'us;30 timed profiles. '+row['stack_description']+'.','verification':row['source_identity_status'],'stacked_versions':[row['candidate']],'stack_tested_jobs':[row['job_id']],'score_tested_jobs':[],'missing_reason':'CHECK is not a leaderboard submission or isolated feature causal gain','next_action':'Preserve source, own result and actual routes; refine against current scored GV source','evidence':[row['raw'],row['release_attestation']],'official_check_jobs':[row['job_id']],'official_check_score_us':row['score_us']})
+ lut=inputs['lut_whole_local'];attempt='research.moe.ss.lut.whole.01'
+ findings.append({'id':'MoE LUT whole serving versus SS and actual anchor','immutable_id':'improvement.'+attempt,'classification':'VALID_LOCAL_PARENT_GAIN_ACTUAL_ANCHOR_REGRESSION_NOT_SHIPPED','currently_included':'No; local MoE research, distinct from projection leaderboard','scope':'Actual four-arm H100 M8 whole serving,8 matched input/routing seeds with balanced pair order','finding':'Actual anchor remains faster: anchor/LUT ratio '+str(lut['comparisons']['anchor_minus_LUT']['median_ratio'])+' and anchor/LUTgrid '+str(lut['comparisons']['anchor_minus_LUT_grid']['median_ratio'])+',0/8 candidate wins each. LUT versus original SS improves '+str(lut['comparisons']['SS_minus_LUT']['median_us'])+'us, ratio '+str(lut['comparisons']['SS_minus_LUT']['median_ratio'])+',8/8; this parent gain is not an anchor win. Grid incremental '+str(lut['comparisons']['LUT_minus_LUT_grid']['median_us'])+'us,6/8, modest/uncertain. F1 blocks use distinct seeds/routing workloads and are noncausal unmatched workload summaries.','verification':str(lut['correctness_count'])+' own numerical checks pass;4 empty exact checks;SS/LUT/grid final outputs bit exact;67 raw calls. Reviewed DONE evidence retains cleanup pointer.','stacked_versions':['actual_SS_LUT_whole','actual_SS_LUT_grid_whole'],'stack_tested_jobs':[attempt],'score_tested_jobs':[],'missing_reason':'Valid SS-parent gain but actual anchor regression; no official projection claim','next_action':'Preserve all raw signed comparisons and confounding; diagnose remaining actual-anchor gap before a new immutable experiment','evidence':[ref(root,paths['lut_whole_local']),ref(root,paths['lut_whole_review']),ref(root,lut['result'])]})
+ for name,point in lut['comparisons'].items():
+  control,version=name.split('_minus_',1)
+  local_observations.append({'observation_id':'paired.'+attempt+'.'+name,'attempt_id':attempt,'version':version,'shape':'MoE.M8.whole_serving','control':control,'gain_us':point['median_us'],'F1_gain_us':None,'F1_limitation':'Unmatched F1 block seeds/routing; no causal contrast','paired_ratio':point['median_ratio'],'wins':point['b_wins'],'ties':0,'losses':8-point['b_wins'],'pairs':8,'hardware':'H100','result_sha256':lut['result_sha256'],'shipping_gain':False,'evidence':ref(root,paths['lut_whole_local'])})
  # Maintain observation IDs independent of row position and keep all tiny records.
  observations=[]
  for r in inputs['completeness']['positive_bake_samples_no_killbar_filter']:
@@ -369,6 +495,11 @@ def build(root=ROOT):
    'historical_summary_paths':old.get('summary_paths',[]),'historical_text_artifacts_scanned':old.get('text_artifacts_scanned'),
    'new_since_completeness_snapshot':name not in historical,'actual_serving_evidence':'Per-job actual picks/profiles; never infer selection from source presence.'}
   if name=='pw37':candidate['status']='CPU_SOURCE_STACK_NOT_SCORED; cursor v3 is not a demonstrated incremental win'
+  if name in ('gv_predxor_pw45_v2','rq32_predxor','gv_predxor_keepchoice_v1','rq32_gv_predxor_pw45_v1','gv_private_eh_screen_v1','complete_gv_rq_eh_o32_v1'):candidate['status']='SCORED_COMPLETED_BOARD_VERIFIED_CURRENT_BEST' if best['candidate']==name else 'OFFICIAL_SCORED_COMPLETED_NOT_CURRENT_BEST'
+  if name in ('gv_small_original_choice_v2','gv_lt_qkv256_balanced_v1','gv53_splitcta_selection_v1'):candidate['status']='OFFICIAL_CHECK_COMPLETED_NOT_SCORED'
+  if name in ('gv53_splitcta_m1_selection_v1','gv_lt_unpooler256_balanced_v1'):candidate['status']='VALID_LOCAL_ACTUAL_POLICY_REGRESSION_NOT_SCORED'
+  if name=='gv_private_eh_o32_v1':candidate['status']='VALID_LOCAL_FULL30_VS_EH_PARENT_ONLY_NOT_SCORED'
+  if name=='pw45':candidate['status']='SCORED_COMPLETED_BOARD_VERIFIED_CURRENT_BEST' if best['candidate']=='pw45' else 'OFFICIAL_CHECK_SCORED_SUBMISSION_RECORDED'
   if name=='pw38':candidate['status']=('PW38_SCORED_SUBMISSION_'+pw38_run['status'].upper()) if pw38_run else 'PW36_PLUS_OPTIONAL_EH_VALIDATED_LOCAL_OFFICIAL_CHECK_'+('PENDING' if check_pending else 'COMPLETED')+'_NOT_SCORED'
   if name=='pw39':candidate['status']='OFFICIAL_CHECK_VALID_REGRESSION_REFINE_NOT_SCORED'
   if name=='pw40':
@@ -382,11 +513,12 @@ def build(root=ROOT):
  pending=[j['job_id'] for j in jobs if j['archive_status']=='PENDING_NO_ARCHIVE']
  failed_missing=[j['job_id'] for j in jobs if j['archive_status']=='FAILED_NO_ARCHIVE']
  return {'schema_version':1,'scope':'Complete live official job snapshot + preserved local improvements/observations; CPU-only rendering',
-  'authority':{'best_job':best['job_id'],'candidate':best['candidate'],'score_us':best['score_us'],'source_sha256':best['source']['sha256'] if best['source'] else None,'live_board':inputs['live_board'].get('you'),'board_row':board_row,'previous_best_job':'fb548b5dc6f04696','previous_score_us':3200.6150084373335,'observed_package_point_change_us':3200.6150084373335-best['score_us'],'point_change_is_isolated_feature_gain':False,'achievement_claim':False},
-  'methodology':['Union preserved API captures by job ID to survive latest50 pagination; newest observed row wins. Mode=run determines leaderboard submissions; checks remain separate including failures/noarchive.','Stable job/candidate/improvement/observation IDs; every input/source/raw/review link carries SHA256 when locally present.','Source compiled/available features are distinct from actual per-job selected policies and timed profiles.','No independent-job score subtraction is reported as a causal feature delta.','Feature findings and repeated positive preparation observations are separate tables; no positive threshold removes small observations.','Keep invalid attempts and superseded parents immutable; repairs get new source or attempt identity.','Review provenance gaps explicitly; server content_hash algorithm unknown and not raw SHA256 attestation.'],
+  'authority':{'best_job':best['job_id'],'candidate':best['candidate'],'score_us':best['score_us'],'source_sha256':best['source']['sha256'] if best['source'] else None,'live_board':inputs['live_board'].get('you'),'board_row':board_row,'previous_best_job':previous_best['job_id'],'previous_score_us':previous_best['score_us'],'observed_package_point_change_us':previous_best['score_us']-best['score_us'],'point_change_is_isolated_feature_gain':False,'achievement_claim':False},
+  'methodology':['Union preserved API captures by job ID to survive latest50 pagination; newest observed row wins. Append explicitly labeled accepted-receipt plus own-result rows where no newer API capture exists; do not invent captures. Mode=run determines leaderboard submissions; checks remain separate including failures/noarchive.','Stable job/candidate/improvement/observation IDs; every input/source/raw/review link carries SHA256 when locally present.','Source compiled/available features are distinct from actual per-job selected policies and timed profiles.','No independent-job score subtraction is reported as a causal feature delta.','Feature findings and repeated positive preparation observations are separate tables; no positive threshold removes small observations.','Keep invalid attempts and superseded parents immutable; repairs get new source or attempt identity.','Review provenance gaps explicitly; server content_hash algorithm unknown and not raw SHA256 attestation.'],
   'history_sources_config':ref(root,'proj_rsi/history_sources.json'),'active_jobs_snapshot':source_config['active_jobs_snapshot'],'preserved_jobs_snapshots':source_config['jobs_snapshots'],'active_board_snapshot':source_config.get('active_board_snapshot'),'preserved_board_snapshots':source_config.get('board_snapshots',[]),'input_provenance':{k:ref(root,v) for k,v in paths.items()},'additional_evidence':[ref(root,p) for p in ['proj_rsi/audits/smallm-v3-01/report.md','proj_rsi/audits/native-stmatrix-01/report.md','proj_rsi/audits/native-x4-01/report.md']],
   'counts':{'active_API_snapshot_rows':active_snapshot_row_count,'all_official_jobs':len(jobs),'leaderboard_submissions':len(submissions),'checks':len(checks),'archived_jobs':len(jobs)-len(missing),'complete_profile_jobs':sum(r['archive_status']=='ARCHIVED_30_SHAPES' for r in jobs),'partial_profile_jobs':sum(r['archive_status']=='ARCHIVED_PARTIAL' for r in jobs),'no_archive_jobs':len(missing),'pending_no_archive_jobs':len(pending),'failed_no_archive_jobs':len(failed_missing),'feature_findings':len(findings),'positive_observations':len(observations),'preserved_original_positive_observations':224,'new_official_positive_observations':len(observations)-224,'new_official_positive_observations_by_job':{j['job_id']:sum(r['job']==j['job_id'] for r in observations) for j in jobs if any(r['job']==j['job_id'] and r['catalog_cohort']!='initial_45_job_audit' for r in observations)},'local_paired_observations':len(local_observations),'pending_scored_submissions':sum(r['status'] not in ('done','failed','cancelled') for r in submissions),'selected_positive_observations':len(selected_observations),'below_0_3us':sum(r['positive_bake_difference_us']<.3 for r in observations),'below_0_5us':sum(r['positive_bake_difference_us']<.5 for r in observations),'candidates':len(candidates)},
   'submissions':submissions,'checks':checks,'all_official_jobs':jobs,'improvements':findings,'positive_observations':observations,'selected_positive_observations':selected_observations,'local_paired_observations':local_observations,'candidates':candidates,
+  'submission_stack_reconciliation':inputs['submission_stack'],'complete_stack_latest_local':inputs['complete_stack_local'],'eh_o32_incremental_latest_local':inputs['eh_o32_local'],'lut_whole_latest_local':inputs['lut_whole_local'],'m1_policy_latest_local':inputs['m1_policy_local'],'unpooler256_latest_local':inputs['unpooler256_local'],
   'pw39_latest_local':inputs['pw39_local'],'pw40_latest_local':inputs['pw40_local'],'pw38_latest_local':local,'native_composition_latest':combo,'cursor_v3_latest':inputs['cursor_v3'],'version_source_ancestry_comparisons':inputs['source_map']['named_AST_comparisons'],'historical_rs32_source_map':ref(root,paths['source_map']),'current_stack_view':current_view(root,best,inputs['source_map']),'current_exact_source_components':current_view(root,best,inputs['source_map'])['components'],'current_exact_selected_routes':current_view(root,best,inputs['source_map'])['routes'],
   'coverage_gaps':inputs['completeness']['coverage']['gaps']+['Failed check jobs without raw/source archive remain UNKNOWN: '+', '.join(failed_missing),'Pending accepted jobs awaiting archive remain separate: '+', '.join(pending),'Older PW34 current file hash does not establish exact historical bytes of each prepare-guard version.','The completeness cursor attempt01 finding is superseded by retained latest valid v3 result; both are preserved.']}
 
@@ -427,15 +559,44 @@ def current_view(root,best,historical):
   if 'rq<' in report:family='rq'
   elif 'rtk<' in report:family='rtk'
   elif 'rwk<' in report:family='rw'
+  elif 'gv_predxor<' in report:family='gv_predxor'
   elif 'gv<' in report:family='gv'
   elif 'rr<' in report:family='rr'
+  gv_match=re.search(r'(?:gv_predxor|gv)<([^>]+)>',report)
+  gv_template=[int(v.strip()) for v in gv_match[1].split(',')] if gv_match else None
   match=re.search(r'rq<([^>]+)>',report);flags=None
   if match:
    try:flags=int(match[1].split(',')[-1].strip())
    except ValueError:pass
-  names=['kernel_fn']+(['RQCU','_rqcall'] if family=='rq' else ['RWCU','_rscall'] if family in ('rtk','rw') else ['GVCU','_gvcall'] if family in ('gv','rr') else ['_v12','_ltsearch'])
-  routes.append({'index':index,'layer':case['layer'],'m':case['m'],'load':case['load'],'family':family,'RQ_flags':flags,'EH_selected':flags is not None and bool(flags&65536),'HALF_selected':flags is not None and bool(flags&16),'EARLY_selected':flags is not None and bool(flags&32),'actual_prepare_pick':picks.get((case['layer'],case['m'])),'kernel_report':report,'profile':best['raw'],'bindings':bindings(names)})
- return {'status':'CURRENT_BOARD_VERIFIED_PW38_SOURCE_AND_ACTUAL_SCORED_ROUTES','official_job_id':best['job_id'],'score_us':best['score_us'],'source':source,'parent':'PW36 + optional EH; no cursor','historical_rs32_audit_status':'HISTORICAL_RETAINED_UNCHANGED','historical_rs32_job':historical['official_job_id'],'components':components,'routes':routes,'check_job':'a3ed4ce5886a4415','scored_job':best['job_id'],'limitations':['Server content_hash algorithm is unknown; local release attestation does not equate it to raw SHA256.','Package scores/actual routes are observed; individual feature causal deltas are not inferred.','Source presence is separate from route selection; current pooler EH choice may differ from the CHECK choice.']}
+  names=['kernel_fn']+(['RQCU','_rqcall'] if family=='rq' else ['RWCU','_rscall'] if family in ('rtk','rw') else ['GVCU','_gvcall'] if family in ('gv','gv_predxor','rr') else ['_v12','_ltsearch'])
+  routes.append({'index':index,'layer':case['layer'],'m':case['m'],'load':case['load'],'family':family,'RQ_flags':flags,'GV_predxor_selected':family=='gv_predxor','GV_template':gv_template,'EH_selected':flags is not None and bool(flags&65536),'HALF_selected':flags is not None and bool(flags&16),'EARLY_selected':flags is not None and bool(flags&32),'actual_prepare_pick':picks.get((case['layer'],case['m'])),'kernel_report':report,'profile':best['raw'],'bindings':bindings(names)})
+ if best['candidate'] in ('pw45','gv_predxor_pw45_v2','rq32_predxor'):
+  components.append({'id':'o32_half52_optional','name':'Optional o32 HALF52 fullK ST4/ST5','status':'SELECTED_IN_SCORED_PROFILE' if any(r['layer']=='o' and r['m']==32 and r['RQ_flags']==52 for r in routes) else 'SOURCE_COMPILED_BUT_UNSELECTED_IN_SCORED_PROFILE','scope':'o32 only; fixed mechanism gains are separate from actual selected path','implementation':'Optional h32s4e/h32s5e candidates; original controls retained.','bindings':bindings(['RQCU','RQV','RQSBAKE','RQPROD2','_rqsrc','_rqcall']),'isolated_causal_gain_us':None})
+ if best['candidate']=='gv_predxor_pw45_v2':
+  components.append({'id':'gv_predicated_escape_xor','name':'Standalone GV predicated escape XOR repair','status':'SELECTED_IN_SCORED_PROFILE' if any(r['GV_predxor_selected'] for r in routes) else 'SOURCE_PRESENT_NOT_SELECTED_IN_SCORED_PROFILE','scope':'Seven reviewed format1 GV templates; per-route selection below','implementation':'Separate gv_predxor kernel retains original gv controls; removes divergent scalar repair branch with predicated XOR. Source ancestry is PW45, not the RQ32 predxor experiment.','bindings':bindings(['GVCU','GVI','_gvcall','_gvsrc','kernel_fn']),'isolated_causal_gain_us':None})
+ for component in components:
+  if component['id']=='eh_epilogue':component['status']='SELECTED_IN_SCORED_PROFILE' if any(r['EH_selected'] for r in routes) else 'SOURCE_PRESENT_NOT_SELECTED_IN_SCORED_PROFILE'
+  if component['id']=='rtk_router':component['status']='SELECTED_IN_SCORED_PROFILE' if any(r['family']=='rtk' for r in routes) else 'SOURCE_PRESENT_NOT_SELECTED_IN_SCORED_PROFILE'
+ previous_path='proj_rsi/audits/selected-hotpaths-pw38/current-stack-snapshot.json'
+ previous_pw45_path='results/proj-rsi/releases/pw45-v1-835acb90b47b/historical-current-stack-before-gv.json'
+ pw45_diffs=[]
+ if best['candidate']=='gv_predxor_pw45_v2':
+  old=read(root,previous_pw45_path);oldroutes={(r['load'],r['layer'],r['m']):r for r in old['routes']}
+  for route in routes:
+   previous=oldroutes[(route['load'],route['layer'],route['m'])]
+   def kernel_identity(r):
+    lines=r['kernel_report'].splitlines();return re.split(r'\s{2,}(?=\d)',lines[1],maxsplit=1)[0].strip() if len(lines)>1 else 'UNKNOWN'
+   if kernel_identity(previous)!=kernel_identity(route):pw45_diffs.append({'load':route['load'],'layer':route['layer'],'m':route['m'],'previous_kernel':kernel_identity(previous),'current_kernel':kernel_identity(route),'causal_gain_us':None})
+ diffs=[]
+ if best['candidate']=='pw45':
+  previous=read(root,previous_path);oldroutes={(r['load'],r['layer'],r['m']):r for r in previous['routes']}
+  def identity(route):
+   lines=route['kernel_report'].splitlines();return re.split(r'\s{2,}(?=\d)',lines[1],maxsplit=1)[0].strip() if len(lines)>1 else 'UNKNOWN'
+  for route in routes:
+   old=oldroutes[(route['load'],route['layer'],route['m'])];a=old.get('actual_prepare_pick') or {};b=route.get('actual_prepare_pick') or {}
+   if identity(old)!=identity(route) or a.get('selected')!=b.get('selected'):
+    diffs.append({'load':route['load'],'layer':route['layer'],'m':route['m'],'previous_family':old['family'],'current_family':route['family'],'previous_kernel':identity(old),'current_kernel':identity(route),'previous_pick':a.get('selected'),'current_pick':b.get('selected'),'causal_gain_us':None})
+ return {'status':'CURRENT_BOARD_VERIFIED_'+str(best['candidate']).upper()+'_SOURCE_AND_ACTUAL_SCORED_ROUTES','official_job_id':best['job_id'],'score_us':best['score_us'],'source':source,'parent':best['stack_description'],'historical_pw38_view':ref(root,previous_path) if best['candidate']=='pw45' else None,'historical_pw45_view':ref(root,previous_pw45_path) if best['candidate']=='gv_predxor_pw45_v2' else None,'route_differences_from_pw45':pw45_diffs,'route_differences_from_pw38':diffs,'new_HALF52_selected_routes':[{'load':r['load'],'layer':r['layer'],'m':r['m']} for r in routes if r['RQ_flags']==52],'historical_rs32_audit_status':'HISTORICAL_RETAINED_UNCHANGED','historical_rs32_job':historical['official_job_id'],'components':components,'routes':routes,'check_job':None if best['candidate']=='gv_predxor_pw45_v2' else '87044866f4494726' if best['candidate']=='rq32_predxor' else '87db1d6a076c4da4' if best['candidate']=='pw45' else 'a3ed4ce5886a4415','scored_job':best['job_id'],'limitations':['Server content_hash algorithm is unknown; local release attestation does not equate it to raw SHA256.','Package scores/actual routes are observed; individual feature causal deltas are not inferred.','Source presence is separate from route selection; current pooler EH choice may differ from the CHECK choice.']}
 
 def csv_text(rows,fields):
  output=io.StringIO(newline='');writer=csv.DictWriter(output,fieldnames=fields,lineterminator='\n');writer.writeheader()
@@ -444,7 +605,7 @@ def csv_text(rows,fields):
  return output.getvalue()
 
 def render(catalog):
- jobfields=['job_id','submitted_utc','mode','status','API_result_status','candidate','score_us','passed','tests_passed','tests','archive_status','parent','stack_description','compiled_or_available_features','actual_selected_features','source','source_identity_status','api_content_hash','API_status_source','raw','log','causal_caution']
+ jobfields=['job_id','submitted_utc','mode','status','API_result_status','candidate','score_us','passed','tests_passed','tests','archive_status','parent','stack_description','compiled_or_available_features','actual_selected_features','source','source_identity_status','api_content_hash','API_status_source','status_evidence_kind','status_evidence_source','raw','log','causal_caution']
  files={
  'proj_rsi/history_catalog.json':json.dumps(catalog,indent=2,ensure_ascii=False)+'\n',
  'proj_rsi/tables/submissions.csv':csv_text(catalog['submissions'],jobfields),
@@ -460,9 +621,11 @@ def render(catalog):
 
 This catalog preserves all official submissions and known improvement evidence. Regenerate with `python3 -m proj_rsi.history_catalog`; check deterministic renderings with `python3 -m proj_rsi.history_catalog --check`. No GPU or service calls occur during generation.
 
-The active versioned API snapshot contains **{all_jobs} official jobs:{runs} leaderboard submissions and{checks} checks**. The best is **{best_candidate}/{best_job}:{best_score}us**, local source `{best_source}`. Baseline R6's scored submission is included. Five older failed checks retain unknown source associations; partial failure metadata is preserved where found and genuinely missing archives remain explicit. PW38 check status and archived official evidence are shown below, separately from scored submissions and older failed/source-unknown checks. Preserved-snapshot union prevents latest50 pagination from dropping baseline R6.
+The union of preserved API captures and explicitly labeled accepted-receipt/own-result records contains **{all_jobs} official jobs:{runs} leaderboard submissions and{checks} checks**. The best is **{best_candidate}/{best_job}:{best_score}us**, local source `{best_source}`. Baseline R6's scored submission is included. Five older failed checks retain unknown source associations; partial failure metadata is preserved where found and genuinely missing archives remain explicit. PW38 check status and archived official evidence are shown below, separately from scored submissions and older failed/source-unknown checks. Preserved-snapshot union prevents latest50 pagination from dropping baseline R6.
 
-Historical best rs32 omitted PW35 RTK; PW36 tested that combination (3212.415452us). Current PW38 includes RTK plus selectable EH and is now the board-verified best. The omitted historical EH epilogue0.13–0.16us result remains visible with weaker raw provenance. Latest cursorv3 contains tiny wins, ties and regressions; it establishes no incremental shipping gain. PW37 remains an unscored source experiment; PW38's completed mode=run is preserved separately from its preceding check; its actual scored result, not the check score, determines current board authority.
+Historical best rs32 omitted PW35 RTK; PW36 tested that combination (3212.415452us). PW38 includes RTK plus selectable EH; current best is {current_best_name}. PW45 adds optional o32 HALF52 contenders, whose source presence must be distinguished from actual selection. The omitted historical EH epilogue0.13–0.16us result remains visible with weaker raw provenance. Latest cursorv3 contains tiny wins, ties and regressions; it establishes no incremental shipping gain. PW37 remains an unscored source experiment; Each completed mode=run remains distinct from its preceding CHECK; the active board's selected job and matching scored raw result determine current authority.
+
+Complete compatible GV+RQ+privateEH+O32 source d1ca is now measured full30 against currentGV (paired1.0016700108951944x, F11.002913179565869x), and scored job161bdb8de7354344 passed9/9 at3187.14239967648us, losing currentGV. EH+O32 c425 is a separate incremental local comparison versusEH aaf40d only. Keepchoice244e, GV+RQ137e and GV+EHaaf4 are parallel scored branches and also lostGV. Exact composition, receipts and signed evidence: [stack reconciliation](audits/submission-stack-20261027/report.md). Source presence does not establish selected use or isolated causal gain.
 
 ## Every leaderboard submission, chronologically
 
@@ -475,6 +638,7 @@ Historical best rs32 omitted PW35 RTK; PW36 tested that combination (3212.415452
   text+=f"|{r['submitted_utc']}|{r['candidate'] or 'UNKNOWN'} / `{r['job_id']}`|{score_display}|{r['stack_description']}. {raw_display}|\n"
  pw38=next((r for r in catalog['checks'] if r['job_id']=='a3ed4ce5886a4415'),{})
  text=text.replace('{best_candidate}',str(catalog['authority']['candidate'])).replace('{best_job}',catalog['authority']['best_job']).replace('{best_score}',f"{catalog['authority']['score_us']:.9f}").replace('{best_source}',str(catalog['authority']['source_sha256']))
+ text=text.replace('{current_best_name}',str(catalog['authority']['candidate']))
  text=text.replace('{pw38_check_status}',str(pw38.get('status','unknown'))).replace('{all_jobs}',str(counts['all_official_jobs'])).replace('{runs}',str(counts['leaderboard_submissions'])).replace('{checks}',str(counts['checks']))
  text+='''
 Each row is an independent official measurement. Scores are outcomes, not causal feature deltas. Every completed archived scored job passed9/9; accepted pending scored rows have unknown score/tests until their own result completes. Source descriptions state ancestry/availability; per-job picks and actual timed profile reports in the JSON distinguish selection from compiled presence. Initial PW34's RQ phase was skipped; later PW34 repaired it.
@@ -482,7 +646,7 @@ Each row is an independent official measurement. Scores are outcomes, not causal
 ## Preserved source stack versions
 
 - PW37 `7913564f…a0330`: PW36 + cursor. CPU source only; latest standalone cursorv3 has mixed/negative evidence, not an accepted improvement.
-- PW38: current board-verified scored stack `a3f0ebf25a754c01`,3198.617507982us. PW36 + optional EHbit65536; cursor excluded. Local full30-shape validation is complete with mixed results. Official CHECK `a3ed4ce5886a4415` status: {pw38_check_status}; it is not a leaderboard submission. See its [manifest](candidates/pw38/manifest.json) and [provenance](candidates/pw38/PROVENANCE.md). Actual local EH selection and mixed performance are preserved separately; official CHECK evidence is preserved independently from leaderboard scoring.
+- PW38: historical board-verified scored stack `a3f0ebf25a754c01`,3198.617507982us. PW36 + optional EHbit65536; cursor excluded. Local full30-shape validation is complete with mixed results. Official CHECK `a3ed4ce5886a4415` status: {pw38_check_status}; it is not a leaderboard submission. See its [manifest](candidates/pw38/manifest.json) and [provenance](candidates/pw38/PROVENANCE.md). Actual local EH selection and mixed performance are preserved separately; official CHECK evidence is preserved independently from leaderboard scoring.
 
 ## Every preserved improvement finding
 
@@ -490,19 +654,19 @@ Each row is an independent official measurement. Scores are outcomes, not causal
 |---|---|---|
 '''
  for r in catalog['improvements']:
-  text+=f"|{r['id']}|{r['classification'].replace('_',' ').lower()}; {r['currently_included']}|{r['finding']} Tested official stack: {', '.join(dict.fromkeys(r['stack_tested_jobs']+r['score_tested_jobs'])) or 'not established for this finding'}. Leaderboard-scored jobs: {', '.join(r['score_tested_jobs']) or 'none'}. {r['next_action']}|\n"
+  text+=f"|{r['id']}|{r['classification'].replace('_',' ').lower()}; {r['currently_included']}|{r['finding']} Tested stack/attempts: {', '.join(dict.fromkeys(r['stack_tested_jobs']+r['score_tested_jobs'])) or 'not established for this finding'}. Leaderboard-scored jobs: {', '.join(r['score_tested_jobs']) or 'none'}. {r['next_action']}|\n"
  text+=f'''\nThe **{counts['feature_findings']} feature findings** are distinct from **{counts['positive_observations']} positive rounded preparation observations**, including **{counts['below_0_3us']} below0.3us / {counts['below_0_5us']} below0.5us**. All are preserved without legacy kill-bar filtering; the original224 observations (76below0.3/107below0.5) remain immutable, with new official-job observations appended separately. Separate local paired observations retain the latest STMatrix parent+0.175999us/X4 parent+0.352001us alongside actual-incumbent−7.455999us/−7.472000us; both are NOT SHIPPED. The independent official audit additionally identifies {counts['selected_positive_observations']} selected positive observations across its33 ledger jobs; repeated bakes/alternative modes are not independent features or additive gains. Small paired cursor positives from the latest v3 audit are separately retained in that finding, not fabricated as official bake rows.
 
 ## Tables and evidence
 
 - [All{counts['leaderboard_submissions']} submissions](tables/submissions.csv), [all{counts['checks']} checks](tables/checks.csv), [all{counts['all_official_jobs']} official jobs](tables/all_official_jobs.csv).
 - [All improvement findings](tables/improvements.csv), [all positive preparation observations](tables/positive_observations.csv), [local paired observations including losses](tables/local_observations.csv), [all{counts['candidates']} candidate directories](tables/candidates.csv).
-- [Machine catalog](history_catalog.json): exact source18-component map/all30 serving routes, source hashes, raw/log/review links, primary input inventory and missing evidence.
-- [Official component history](audits/current-leaderboard-gains-official.md), [HISTORICAL rs32 source ancestry](audits/current-leaderboard-stack-source.md), [CURRENT PW38 stack](CURRENT_STACK.md), [corpus completeness](audits/current-leaderboard-gains-completeness.md), [latest cursorv3](audits/smallm-v3-01/report.md).
+- [Machine catalog](history_catalog.json): exact source component map/all30 serving routes, source hashes, raw/log/review links, primary input inventory and missing evidence.
+- [Official component history](audits/current-leaderboard-gains-official.md), [HISTORICAL rs32 source ancestry](audits/current-leaderboard-stack-source.md), [CURRENT scored stack](CURRENT_STACK.md), [corpus completeness](audits/current-leaderboard-gains-completeness.md), [latest cursorv3](audits/smallm-v3-01/report.md).
 
 ## Preservation and update method
 
-1. Append each new API snapshot path/SHA to `history_sources.json`, advance its active snapshot/revision, and preserve all older captures. Archive each official/API response and raw log/profile under its immutable job ID. Keep failures/noarchive/unknownsource rows. Mode`run` identifies a leaderboard submission; local H100 experiments and CPU-only source stacks remain separate.
+1. Append each new API snapshot path/SHA to `history_sources.json`, advance its active snapshot/revision, and preserve all older captures. Archive each official/API response and raw log/profile under its immutable job ID. When no newer API capture exists, append `completed_receipt_jobs` references to the accepted source-pinned receipt and own completed official result; retain explicit receipt/result provenance and NULL API status source. Keep failures/noarchive/unknownsource rows. Mode`run` identifies a leaderboard submission; local H100 experiments and CPU-only source stacks remain separate.
 2. Freeze each implementation and review, recording SHA256, parent and attempt. Attach actual prepare picks and timed graph/profile evidence. Never infer selection from a variant's presence in source.
 3. Add a feature-level finding or a new immutable observation linked to its comparator, hardware, numerical/graph validity and uncertainty. Retain negative/conflicting estimators and every small positive; no threshold deletes evidence.
 4. Record stack integration and actual tested/scored job IDs. A measured gain against a failed parent, mathematical scenario or CPU instruction reduction is not an official incumbent gain.
@@ -510,14 +674,15 @@ Each row is an independent official measurement. Scores are outcomes, not causal
 
 Server`content_hash` has an undocumented algorithm: live rs32`cd14084a…` differs from local fileSHA256`a7b6e010…`. Path/git/source comparisons establish association; they do not attest downloaded historical uploaded payload bytes. Earlier PW34 variants likewise need revision-specific payload provenance. Remote historical lab distributions missing locally remain explicit gaps. No benchmark achievement or additive cross-job score claim follows from this catalog.
 '''
+ text=text.replace('{current_best_name}',str(catalog['authority']['candidate']))
  text=text.replace('{pw38_check_status}',str(pw38.get('status','unknown')))
  if pw38.get('score_us') is not None:
   text+='\nPW38 CHECK: **'+str(pw38['score_us'])+'us**, '+str(pw38.get('tests_passed'))+'/'+str(pw38.get('tests'))+' tests; all30 shapes archived. This CHECK is not a leaderboard submission; the distinct scored run supplies current leaderboard authority.\n'
  view=catalog['current_stack_view']
  files['proj_rsi/current_leaderboard_stack.json']=json.dumps(view,indent=2)+'\n'
  current='# Current leaderboard stack: '+str(catalog['authority']['candidate'])+'\n\n'
- current+='Board-verified scored job `'+view['scored_job']+'`: **'+str(view['score_us'])+'us**,9/9 and30 timed shapes. Source `'+view['source']['sha256']+'`. PW36 + selectable EH, no cursor. The preceding CHECK is a distinct job.\n\n'
- current+='The old [rs32 source audit](audits/current-leaderboard-stack-source.md) and [official history](audits/current-leaderboard-gains-official.md) are HISTORICAL snapshots retained unchanged. Current bindings below are regenerated from frozen PW38 release bytes and this scored job; they are not copied CHECK selections.\n\n'
+ current+='Board-verified scored job `'+view['scored_job']+'`: **'+str(view['score_us'])+'us**,9/9 and30 timed shapes. Source `'+view['source']['sha256']+'`. '+view['parent']+('. No redundant preceding CHECK was required for this scored GV release.' if view['check_job'] is None else '. The preceding CHECK is a distinct job.')+'\n\n'
+ current+='The old [rs32 source audit](audits/current-leaderboard-stack-source.md) and [official history](audits/current-leaderboard-gains-official.md) are HISTORICAL snapshots retained unchanged. Current bindings below are regenerated from this frozen current release source and this scored job; they are not copied CHECK selections.\n\n'
  current+='|Component|Source/selection evidence|\n|---|---|\n'
  for component in view['components']:current+='|'+component['name']+'|'+component['status']+'; '+str(len(component['bindings']))+' current AST/source bindings; no isolated causal delta.|\n'
  current+='\n|Load / layer / M|Actual scored family / prepare pick|EH / HALF / EARLY flags|\n|---|---|---|\n'
@@ -525,6 +690,16 @@ Server`content_hash` has an undocumented algorithm: live rs32`cd14084a…` diffe
   pick=route['actual_prepare_pick'];name=pick['selected'] if pick else 'See actual kernel profile'
   current+='|'+str(route['load'])+' / '+route['layer']+' / '+str(route['m'])+'|'+route['family']+' / '+name+'|'+str(route['EH_selected'])+' / '+str(route['HALF_selected'])+' / '+str(route['EARLY_selected'])+'|\n'
  current+='\nFull per-route kernel reports, exact current source-node SHA256/line bindings and historical equivalence checks are in [machine view](current_leaderboard_stack.json). Source presence does not imply measured benefit on every route. Server payload hash remains opaque; no component-wise or cross-run additive gain claim is made.\n'
+ if view.get('historical_pw38_view'):
+  current+='\nPW38 historical source/routes are preserved byte-for-byte at `'+view['historical_pw38_view']['path']+'`. New HALF52 selected routes: **'+str(len(view['new_HALF52_selected_routes']))+'**. Optional EH is compiled but actual selection is evaluated per row.\n'
+  current+='\n|Shape|Previous PW38 pick / kernel|Current PW45 pick / kernel|\n|---|---|---|\n'
+  for diff in view['route_differences_from_pw38']:current+='|'+diff['load']+'/'+diff['layer']+' M'+str(diff['m'])+'|'+str(diff['previous_pick'])+' / '+diff['previous_kernel']+'|'+str(diff['current_pick'])+' / '+diff['current_kernel']+'|\n'
+ if view.get('historical_pw45_view'):
+  current+='\nPW45 historical source/routes are preserved byte-for-byte at `'+view['historical_pw45_view']['path']+'`. Selected standalone GV predxor routes: **'+str(sum(r['GV_predxor_selected'] for r in view['routes']))+'**.\n'
+  current+='\n|Shape|Previous PW45 kernel|Current scored kernel|\n|---|---|---|\n'
+  for diff in view['route_differences_from_pw45']:current+='|'+diff['load']+'/'+diff['layer']+' M'+str(diff['m'])+'|'+diff['previous_kernel']+'|'+diff['current_kernel']+'|\n'
+ current+='\nLatest complete compatible GV+RQ+privateEH+O32 source d1ca was measured locally against this GV source and officially scored as `161bdb8de7354344`: **3187.14239967648us**,9/9; it did not replace GV. The local whole-package positive point does not establish official benefit. EH+O32 c425 was measured versusEH parent only. [Exact stacking provenance and all branch outcomes](audits/submission-stack-20261027/report.md). Latest archived board rank: **'+str(catalog['authority']['board_row']['rank'])+'**.\n'
+ current+='\nLatest independently archived official CHECKs (receipt + own completed result, no new board capture): '+', '.join('`'+r['job_id']+'` '+str(r['score_us'])+'us' for r in catalog['checks'] if r['status_evidence_kind']=='accepted_receipt_and_own_completed_official_result_not_API_capture')+'. All passed9/9; none is a scored submission. M1-only full30 and focused unpooler256 local regressions remain separate in [history](HISTORY.md). MoE LUT whole improves its SS parent but remains slower than its actual anchor; it is separate local research with no projection leaderboard claim.\n'
  files['proj_rsi/CURRENT_STACK.md']=current
  files['proj_rsi/HISTORY.md']=text
  return files
