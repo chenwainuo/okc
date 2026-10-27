@@ -1,0 +1,73 @@
+{
+  "state": "CPU_PROPOSAL_ONLY_NOT_GPU_READY",
+  "scope": "muse_bf16_proj unpoolerM32N8192K4096KS2; larger RQ resource design candidate, not a source implementation or queue descriptor",
+  "hypothesis": "Physically compact existing HALF topology to256threads (one128threadmathWG+one128threadproducerWG), with mathbudget216/producer40 and launchbounds256,minBlocks2. Existing HALF only exits one mathWG after entering384threadkernel; it retains168register launch allocation and does not demonstrate a real2CTA resource point. A compact kernel could admit two independently progressing CTAs/SM and avoid the old HALF-KS2 noncoresidency/zero-handshake serialization.",
+  "source_facts": {
+    "source": "proj_rsi/candidates/rq_unpooler32_descriptor_offset_v4/submission.py",
+    "source_sha256": "963cbcde11f4fc89ce38fd05601ba3492f6dd11cb45b39cd3a83e6b863221809",
+    "current_launch_threads": 384,
+    "compiled_registers_per_thread": 168,
+    "compiled_CTA_registers": 64512,
+    "current_math_WGs": 2,
+    "current_math_budget": 232,
+    "current_producer_budget": 40,
+    "current_aggregate_dynamic_budget": 64512,
+    "observed_actual_occupancy": 1,
+    "current_full_ST6_shared_request": 99488,
+    "half_ST6_shared_request": 62624,
+    "compact256_entry_cap128_registers": 32768,
+    "compact_dynamic_216_math_40_producer_registers": 32768,
+    "two_compact_CTA_registers": 65536,
+    "two_compact_shared_request": 125248,
+    "native_or_runtime_new_occupancy": "UNKNOWN, not inferred from arithmetic"
+  },
+  "required_source_change": [
+    "Dedicated new compilevariant only: HALF64channel addressing/escape mapping and counterindexing reused; preserve every original variant.",
+    "Remap producer logicalwarps8..11 to physicalwarps4..7, EARLYinitializer256 to128, TMAprefetch320 to192, zeroingwarp10 to6, and update launchbounds/hostblock to256; audit every literal warp/tid role.",
+    "Keep mathbarrier4warps, Wempty/xempty countNW4, halfW6144/TMAbytes, bothringphases, firstaccumulate, reduction/zero fence lifetime and output128Bswizzle.",
+    "Try only fixedST6/NT32/KS2 initially; real new native cap128 and setmaxnreg216/40 must compile without spills before considering GPU. If compiler cannot fit216, diagnose live ranges offline, do not blindly enforce a cap or start sweeping."
+  ],
+  "prior_counterevidence": {
+    "source": "proj_rsi/candidates/rs32/NOTES.md",
+    "source_sha256": "9214ddb13168189bb1d3603bfa88a2309681acdc890f84fa6299275316762d2e",
+    "facts": [
+      "Historical HALF KS1 unpooler19.90us vsfullEARLY19.60us: halving channels alone lost.",
+      "Historical HALF KS2 o256CTA serialized zero handshake to19us because not co-resident. Compactproposal specifically targets physicalCTAresource change; oldnegative remains relevant.",
+      "Historical GS2/WM2 worsened runtime; cursor and predxor did not establish consistent officialgain. Do not change codec or pipeline ordering simultaneously.",
+      "Historical INS qkv stage985cycles/534fullwait and Wstream~3.1TB/s is oldH100qkv evidence, not currentH200unpooler critical-path proof."
+    ]
+  },
+  "cost_and_tradeoffs": {
+    "compressed_W_bytes_per_launch": 50331648,
+    "X_TMA_bytes_full_KS2": 16777216,
+    "X_TMA_bytes_compactHALF_KS2": 33554432,
+    "CTA_count_before_after": [
+      128,
+      256
+    ],
+    "active_math_WGs_at_capacity_before_after": [
+      2,
+      2
+    ],
+    "producer_WGs_at_capacity_before_after": [
+      1,
+      2
+    ],
+    "critical_limit": "Two compactCTAs do NOT double mathWG capacity vsonefullCTA. Xtraffic/producerwork/barriers increase; benefit could only come from independent progress/granularity/handshake overlap, not automatic2xspeedup. Larger register occupancy opportunity remains conditional.",
+    "CPU_cost": "Oneisolated sourcevariant/remappingproof plus oneofflineSM90a compile and lifetime/SASS/resource review; approximately1focusedimplementationcycle, noGPUcostauthorized here.",
+    "possible_later_GPU_cost": "Only if concrete compile/lifetime resources support mechanism: bounded <=120s reusefixedunpoolerdriver, fullselectedST6 and old384HALF and compact256HALF controls; nofull30/newselectorcampaign before localeffect. Rootownsadmission."
+  },
+  "predicted_observations": {
+    "support": "Compiled128orlessentryregs/0spill, actual>=2CTAoccupancy withST6halfshared, no handshake stalls/timeout, same exact outputs and ownterminal checks; matched fullkernel gain required.",
+    "refute_or_park": "Cannotfit216math/128entry withoutspills, actualoccupancy stays1, handshake unsafe, or doubledX/producercost offsets independence. A loss rejects measuredcompactconfiguration, not all RQdesigns."
+  },
+  "unknowns": [
+    "CurrentH200role-specific stalls and reachableclock/cachecontext.",
+    "Whether mathlive ranges fit216 and entrycap128; no compile performed.",
+    "Actualruntime shared/register allocation and zero-handshake progress, not arithmeticassumption.",
+    "Attainableusgain and officialscorevalue: UNKNOWN, no frequency-or-resource-to-time forecast."
+  ],
+  "next_smallest_CPU_falsifier": "Source-derived compact-role/lifetime proof then isolated compile-only cap216/40 variant; do notGPUprofile/rewrite incumbent before this has a concrete no-spill native/resource result.",
+  "GPU_API_SSH_queue_git_actions": 0,
+  "contract": "proj_rsi/ITERATION.md"
+}

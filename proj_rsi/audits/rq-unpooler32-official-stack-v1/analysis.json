@@ -1,0 +1,3402 @@
+{
+  "state": "FROZEN_ACTUAL_CHECK_MIXED_TRANSFER_NOT_INCUMBENT_WIN",
+  "new_job": "71a76a2c3fcd431f",
+  "jobs": {
+    "71a76a2c3fcd431f": {
+      "summary": {
+        "error": null,
+        "passed": true,
+        "score_us": 3182.3487733684065,
+        "speedup": 1.5179982912076495,
+        "speedup_ci": [
+          1.4952283168395348,
+          1.5407682655757642
+        ],
+        "status": "ok",
+        "tests": 9,
+        "tests_passed": 9
+      },
+      "kind": "check",
+      "source_sha256": "f018932999fbaed6600b330f3002749a2e423038fd925e27036ac3c1e6183d1e",
+      "target_bake": [
+        "BAKE unpooler m=32 rq:t32s5hze-k2 19.39 (ok 2.4e-03) at 125s",
+        "BAKE unpooler m=32 rq:t32s6hze-k2 19.33 (ok 2.4e-03) at 125s",
+        "BAKE unpooler m=32 rq:t32s6hz-k2 19.26 (ok 2.5e-03) at 125s",
+        "BAKE unpooler m=32 rq:t32s6hze_offset_unpool-k2 19.20 (ok 2.4e-03) at 125s",
+        "BAKE unpooler m=32 r6 20.80 (before variants 21.02, after variants 20.80) at 125s",
+        "PICK unpooler m=32 rq:t32s6hze_offset_unpool-k2 19.20",
+        "PREP done in 163s"
+      ]
+    },
+    "9916d34357b745cf": {
+      "summary": {
+        "error": null,
+        "passed": true,
+        "score_us": 3157.0384036526784,
+        "speedup": 1.5301682723944021,
+        "speedup_ci": [
+          1.507215748308486,
+          1.553120796480318
+        ],
+        "status": "ok",
+        "tests": 9,
+        "tests_passed": 9
+      },
+      "kind": "scored",
+      "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+      "target_bake": [
+        "BAKE unpooler m=32 rq:t32s5hze-k2 19.39 (ok 2.4e-03) at 127s",
+        "BAKE unpooler m=32 rq:t32s6hze-k2 19.30 (ok 2.4e-03) at 127s",
+        "BAKE unpooler m=32 rq:t32s6hz-k2 19.65 (ok 2.4e-03) at 127s",
+        "BAKE unpooler m=32 r6 20.77 (before variants 21.06, after variants 20.77) at 127s",
+        "PICK unpooler m=32 rq:t32s6hze-k2 19.30",
+        "PREP done in 166s"
+      ]
+    },
+    "ac49231d41d441f6": {
+      "summary": {
+        "error": null,
+        "passed": true,
+        "score_us": 3225.893245547708,
+        "speedup": 1.4975077078782262,
+        "speedup_ci": [
+          1.4750450922600529,
+          1.5199703234963995
+        ],
+        "status": "ok",
+        "tests": 9,
+        "tests_passed": 9
+      },
+      "kind": "check",
+      "source_sha256": "239b530cf7eead0a2dbf0af5c29aea4ba02e449500eb80e45b255b361cf2f900",
+      "target_bake": [
+        "BAKE unpooler m=32 rq:t32s5hze-k2 18.88 (ok 2.4e-03) at 108s",
+        "BAKE unpooler m=32 rq:t32s6hze-k2 18.98 (ok 2.4e-03) at 108s",
+        "BAKE unpooler m=32 rq:t32s6hz-k2 18.94 (ok 2.4e-03) at 108s",
+        "BAKE unpooler m=32 r6 20.58 (before variants 20.67, after variants 20.58) at 108s",
+        "PICK unpooler m=32 rq:t32s5hze-k2 18.88",
+        "PREP done in 140s"
+      ]
+    }
+  },
+  "comparisons": {
+    "9916d34357b745cf": {
+      "score_gain_us": -25.31036971572803,
+      "changed_input_seeds": 30,
+      "profile_visible_route_changes": 14,
+      "raw_wins_losses_ties": [
+        6,
+        24,
+        0
+      ],
+      "calibrated_wins_losses_ties": [
+        12,
+        18,
+        0
+      ],
+      "target": {
+        "load": "decode 32",
+        "layer": "unpooler",
+        "m": 32,
+        "new_seed": 2338722615017349918,
+        "old_seed": 1912365555374642548,
+        "same_input_seed": false,
+        "new_kernel_labels": [
+          "void rq<32, 6, 1, 0, 0, 0, 131107>(RqP, RqTmap, RqTmap)"
+        ],
+        "old_kernel_labels": [
+          "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+        ],
+        "same_profile_visible_route": false,
+        "new_timing": {
+          "median_raw_ns": 19071.999937295914,
+          "median_ns": 15074.712501990776,
+          "baseline_ns": 18816.000781953335,
+          "baseline_raw_ns": 22816.000506281853,
+          "paired_ratio": 1.248183060172357,
+          "parent_ns": 16752.004390582442,
+          "outside_ns": 16362.740384615385,
+          "replay_overhead": {
+            "gate_ns": 301247.99930490553,
+            "one_ns": 5247.999913990498,
+            "overhead_ns": 3999.999724328518,
+            "parent_one_ns": 306560.0097179413,
+            "parent_two_ns": 307648.0031013489,
+            "two_ns": 6496.000103652477
+          }
+        },
+        "old_timing": {
+          "median_raw_ns": 19007.999449968338,
+          "median_ns": 15059.097119932208,
+          "baseline_ns": 18735.999707132578,
+          "baseline_raw_ns": 22671.999409794807,
+          "paired_ratio": 1.2441648764143785,
+          "parent_ns": 20543.98600012064,
+          "outside_ns": 16172.783505154639,
+          "replay_overhead": {
+            "gate_ns": 298592.0077189803,
+            "one_ns": 5119.999870657921,
+            "overhead_ns": 3935.9997026622295,
+            "parent_one_ns": 303775.99596977234,
+            "parent_two_ns": 304928.0047416687,
+            "two_ns": 6304.000038653612
+          }
+        },
+        "raw_gain_us": -0.06400048732757568,
+        "calibrated_gain_us": -0.015615382058567774
+      },
+      "load_sums": {
+        "decode 1": {
+          "raw_gain_us": -0.7359986193478107,
+          "calibrated_gain_us": -1.1580780348197324,
+          "new_calibrated_sum_us": 36.53321459654667,
+          "old_calibrated_sum_us": 35.37513656172694
+        },
+        "decode 16": {
+          "raw_gain_us": -0.14400016516447067,
+          "calibrated_gain_us": 0.005550360610891397,
+          "new_calibrated_sum_us": 49.22680131978234,
+          "old_calibrated_sum_us": 49.232351680393236
+        },
+        "decode 32": {
+          "raw_gain_us": -0.591999851167202,
+          "calibrated_gain_us": -0.7130252904118444,
+          "new_calibrated_sum_us": 52.846614216272904,
+          "old_calibrated_sum_us": 52.13358892586106
+        },
+        "verify 1": {
+          "raw_gain_us": -0.28799939900636673,
+          "calibrated_gain_us": -0.012689361336149403,
+          "new_calibrated_sum_us": 36.910959657066996,
+          "old_calibrated_sum_us": 36.89827029573084
+        },
+        "verify 16": {
+          "raw_gain_us": 0.12799818068742752,
+          "calibrated_gain_us": 0.03150027688805493,
+          "new_calibrated_sum_us": 64.69119066286001,
+          "old_calibrated_sum_us": 64.72269093974806
+        },
+        "verify 32": {
+          "raw_gain_us": -1.4400016516447067,
+          "calibrated_gain_us": -2.160876344148042,
+          "new_calibrated_sum_us": 85.33023095608753,
+          "old_calibrated_sum_us": 83.16935461193948
+        }
+      },
+      "all30": [
+        {
+          "load": "decode 1",
+          "layer": "qkv_gate",
+          "m": 1,
+          "new_seed": 2336163761213771976,
+          "old_seed": 1910446567789430357,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 13024.000450968742,
+            "median_ns": 9264.149622496821,
+            "baseline_ns": 14432.0004619658,
+            "baseline_raw_ns": 18176.00056529045,
+            "paired_ratio": 1.5578332658746683,
+            "parent_ns": 10751.99875049293,
+            "outside_ns": 9662.849673202614,
+            "replay_overhead": {
+              "gate_ns": 301215.9999925643,
+              "one_ns": 5024.000070989132,
+              "overhead_ns": 3744.0001033246517,
+              "parent_one_ns": 306335.985660553,
+              "parent_two_ns": 307424.00884628296,
+              "two_ns": 6304.000038653612
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 12927.999719977379,
+            "median_ns": 8794.96920496118,
+            "baseline_ns": 14431.999996304512,
+            "baseline_raw_ns": 18624.000251293182,
+            "paired_ratio": 1.6409380931275486,
+            "parent_ns": 15135.998604819179,
+            "outside_ns": 9532.121212121212,
+            "replay_overhead": {
+              "gate_ns": 297840.0040883571,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 4192.00025498867,
+              "parent_one_ns": 302976.01222991943,
+              "parent_two_ns": 303808.0036640167,
+              "two_ns": 5983.99993032217
+            }
+          },
+          "raw_gain_us": -0.09600073099136353,
+          "calibrated_gain_us": -0.46918041753564105
+        },
+        {
+          "load": "decode 1",
+          "layer": "o",
+          "m": 1,
+          "new_seed": 2336360596121739504,
+          "old_seed": 1910594182219062058,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 9247.999638319016,
+            "median_ns": 5112.424978641368,
+            "baseline_ns": 6768.000312149525,
+            "baseline_raw_ns": 10928.000323474407,
+            "paired_ratio": 1.323833668058661,
+            "parent_ns": 6400.004029273987,
+            "outside_ns": 4730.106481481482,
+            "replay_overhead": {
+              "gate_ns": 301679.9986362457,
+              "one_ns": 5024.000070989132,
+              "overhead_ns": 4160.0000113248825,
+              "parent_one_ns": 306495.9943294525,
+              "parent_two_ns": 307743.99638175964,
+              "two_ns": 5888.000130653381
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 9151.999838650227,
+            "median_ns": 5135.565320514632,
+            "baseline_ns": 6752.000190317631,
+            "baseline_raw_ns": 10784.000158309937,
+            "paired_ratio": 1.3147530542248107,
+            "parent_ns": 10271.99742384255,
+            "outside_ns": 4630.860824742268,
+            "replay_overhead": {
+              "gate_ns": 298672.00437001884,
+              "one_ns": 5119.999870657921,
+              "overhead_ns": 4031.9999679923058,
+              "parent_one_ns": 303871.9892501831,
+              "parent_two_ns": 304895.9970474243,
+              "two_ns": 6207.999773323536
+            }
+          },
+          "raw_gain_us": -0.09599979966878891,
+          "calibrated_gain_us": 0.023140341873263425
+        },
+        {
+          "load": "decode 1",
+          "layer": "pooler",
+          "m": 1,
+          "new_seed": 2336557431029707033,
+          "old_seed": 1910741796648693760,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv_predxor<1, 1, 2, 1, 8, 16, 1, 1, 0, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 17983.999103307724,
+            "median_ns": 14114.95929010103,
+            "baseline_ns": 21695.999428629875,
+            "baseline_raw_ns": 25567.999109625816,
+            "paired_ratio": 1.5370925967774849,
+            "parent_ns": 15183.998038992286,
+            "outside_ns": 15094.81981981982,
+            "replay_overhead": {
+              "gate_ns": 301760.0050661713,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3871.999680995941,
+              "parent_one_ns": 306847.9895591736,
+              "parent_two_ns": 307904.0050506592,
+              "two_ns": 6111.999973654747
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 17632.000148296356,
+            "median_ns": 13714.963545591969,
+            "baseline_ns": 21568.00078228116,
+            "baseline_raw_ns": 25504.00048494339,
+            "paired_ratio": 1.572588998183169,
+            "parent_ns": 18832.00043812394,
+            "outside_ns": 15060.967391304348,
+            "replay_overhead": {
+              "gate_ns": 298767.9964862764,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3935.9997026622295,
+              "parent_one_ns": 303871.9892501831,
+              "parent_two_ns": 304863.98935317993,
+              "two_ns": 6047.999951988459
+            }
+          },
+          "raw_gain_us": -0.3519989550113678,
+          "calibrated_gain_us": -0.3999957445090604
+        },
+        {
+          "load": "decode 1",
+          "layer": "unpooler",
+          "m": 1,
+          "new_seed": 2336754265937674563,
+          "old_seed": 1910889411078325463,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 8191.999979317188,
+            "median_ns": 4338.300448808935,
+            "baseline_ns": 7200.000341981649,
+            "baseline_raw_ns": 11040.00024497509,
+            "paired_ratio": 1.6596361701869646,
+            "parent_ns": 6112.0151076465845,
+            "outside_ns": 4435.811475409836,
+            "replay_overhead": {
+              "gate_ns": 301183.9927639812,
+              "one_ns": 5119.999870657921,
+              "overhead_ns": 3839.9999029934406,
+              "parent_one_ns": 306367.99335479736,
+              "parent_two_ns": 307615.9954071045,
+              "two_ns": 6399.999838322401
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 8128.000423312187,
+            "median_ns": 4137.310038096525,
+            "baseline_ns": 6976.000033318996,
+            "baseline_raw_ns": 10975.999757647514,
+            "paired_ratio": 1.686119717662852,
+            "parent_ns": 9360.000491142273,
+            "outside_ns": 4320.887804878049,
+            "replay_overhead": {
+              "gate_ns": 298560.0084066391,
+              "one_ns": 5055.9998489916325,
+              "overhead_ns": 3999.999724328518,
+              "parent_one_ns": 303519.99402046204,
+              "parent_two_ns": 304639.995098114,
+              "two_ns": 6111.999973654747
+            }
+          },
+          "raw_gain_us": -0.06399955600500107,
+          "calibrated_gain_us": -0.20099041071240936
+        },
+        {
+          "load": "decode 1",
+          "layer": "router",
+          "m": 1,
+          "new_seed": 2336951100845642094,
+          "old_seed": 1911037025507957167,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+          ],
+          "old_kernel_labels": [
+            "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 7679.999805986881,
+            "median_ns": 3703.3802564985153,
+            "baseline_ns": 10335.99954098463,
+            "baseline_raw_ns": 14303.999952971935,
+            "paired_ratio": 2.79096361299856,
+            "parent_ns": 5120.008485391736,
+            "outside_ns": 3633.6884615384615,
+            "replay_overhead": {
+              "gate_ns": 301407.99353830516,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 3968.0004119873047,
+              "parent_one_ns": 306335.985660553,
+              "parent_two_ns": 307520.0021266937,
+              "two_ns": 6207.999773323536
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 7552.000228315592,
+            "median_ns": 3592.3284525626304,
+            "baseline_ns": 10431.999806314707,
+            "baseline_raw_ns": 14399.999752640724,
+            "paired_ratio": 2.903966033193016,
+            "parent_ns": 8944.010362029076,
+            "outside_ns": 3569.9686098654706,
+            "replay_overhead": {
+              "gate_ns": 298623.98840487003,
+              "one_ns": 5024.000070989132,
+              "overhead_ns": 3967.9999463260174,
+              "parent_one_ns": 303456.00843429565,
+              "parent_two_ns": 304863.98935317993,
+              "two_ns": 6080.0001956522465
+            }
+          },
+          "raw_gain_us": -0.12799957767128944,
+          "calibrated_gain_us": -0.11105180393588489
+        },
+        {
+          "load": "decode 16",
+          "layer": "qkv_gate",
+          "m": 16,
+          "new_seed": 2337147935753609626,
+          "old_seed": 1911184639937588872,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 14015.999622642994,
+            "median_ns": 10029.726972878645,
+            "baseline_ns": 13983.998913317919,
+            "baseline_raw_ns": 17983.999103307724,
+            "paired_ratio": 1.394255192701856,
+            "parent_ns": 10928.00684273243,
+            "outside_ns": 10848.823943661971,
+            "replay_overhead": {
+              "gate_ns": 301952.0025700331,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 4000.000189989805,
+              "parent_one_ns": 307040.0059223175,
+              "parent_two_ns": 308223.99258613586,
+              "two_ns": 6175.999995321035
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 13952.000066637993,
+            "median_ns": 10133.08899963215,
+            "baseline_ns": 14431.999530643225,
+            "baseline_raw_ns": 18271.999433636665,
+            "paired_ratio": 1.4242448212156367,
+            "parent_ns": 15375.994145870209,
+            "outside_ns": 10730.807692307691,
+            "replay_overhead": {
+              "gate_ns": 298656.00913763046,
+              "one_ns": 4960.000049322844,
+              "overhead_ns": 3839.9999029934406,
+              "parent_one_ns": 303712.01038360596,
+              "parent_two_ns": 304960.0124359131,
+              "two_ns": 6080.0001956522465
+            }
+          },
+          "raw_gain_us": -0.06399955600500107,
+          "calibrated_gain_us": 0.10336202675350432
+        },
+        {
+          "load": "decode 16",
+          "layer": "o",
+          "m": 16,
+          "new_seed": 2337344770661577159,
+          "old_seed": 1911332254367220578,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 9488.000068813562,
+            "median_ns": 5553.165312559681,
+            "baseline_ns": 6847.99998998642,
+            "baseline_raw_ns": 10784.000158309937,
+            "paired_ratio": 1.2331705621113405,
+            "parent_ns": 7039.985852316022,
+            "outside_ns": 5949.809523809524,
+            "replay_overhead": {
+              "gate_ns": 301280.0000142306,
+              "one_ns": 5024.000070989132,
+              "overhead_ns": 3936.000168323517,
+              "parent_one_ns": 306272.0000743866,
+              "parent_two_ns": 307392.0011520386,
+              "two_ns": 6111.999973654747
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 9407.99992531538,
+            "median_ns": 5595.060884214828,
+            "baseline_ns": 7039.9995893239975,
+            "baseline_raw_ns": 10847.999714314938,
+            "paired_ratio": 1.2582525436292804,
+            "parent_ns": 10591.98984876275,
+            "outside_ns": 5779.616216216216,
+            "replay_overhead": {
+              "gate_ns": 298735.9999679029,
+              "one_ns": 4896.000027656555,
+              "overhead_ns": 3808.00012499094,
+              "parent_one_ns": 303712.01038360596,
+              "parent_two_ns": 304895.9970474243,
+              "two_ns": 5983.99993032217
+            }
+          },
+          "raw_gain_us": -0.0800001434981823,
+          "calibrated_gain_us": 0.04189557165514634
+        },
+        {
+          "load": "decode 16",
+          "layer": "pooler",
+          "m": 16,
+          "new_seed": 2337541605569544693,
+          "old_seed": 1911479868796852285,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 17967.999912798405,
+            "median_ns": 14133.898907047645,
+            "baseline_ns": 21696.001291275024,
+            "baseline_raw_ns": 25536.000728607178,
+            "paired_ratio": 1.5350330035583215,
+            "parent_ns": 15552.009688690305,
+            "outside_ns": 15073.468468468469,
+            "replay_overhead": {
+              "gate_ns": 301312.0039831847,
+              "one_ns": 4927.999805659056,
+              "overhead_ns": 3839.9994373321533,
+              "parent_one_ns": 306176.00679397583,
+              "parent_two_ns": 307359.9934577942,
+              "two_ns": 6016.000173985958
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 18047.9995906353,
+            "median_ns": 14265.11358500028,
+            "baseline_ns": 21696.00035995245,
+            "baseline_raw_ns": 25472.000241279602,
+            "paired_ratio": 1.520913256713618,
+            "parent_ns": 19247.984513640404,
+            "outside_ns": 15081.330097087379,
+            "replay_overhead": {
+              "gate_ns": 298784.01197493076,
+              "one_ns": 4832.000005990267,
+              "overhead_ns": 3775.9998813271523,
+              "parent_one_ns": 303647.9949951172,
+              "parent_two_ns": 304735.9883785248,
+              "two_ns": 5888.000130653381
+            }
+          },
+          "raw_gain_us": 0.07999967783689499,
+          "calibrated_gain_us": 0.13121467795263378
+        },
+        {
+          "load": "decode 16",
+          "layer": "unpooler",
+          "m": 16,
+          "new_seed": 2337738440477512228,
+          "old_seed": 1911627483226483993,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 18592.000007629395,
+            "median_ns": 14780.928446519207,
+            "baseline_ns": 18831.999506801367,
+            "baseline_raw_ns": 22703.999653458595,
+            "paired_ratio": 1.2740741946583305,
+            "parent_ns": 16111.988574266434,
+            "outside_ns": 15699.29906542056,
+            "replay_overhead": {
+              "gate_ns": 301520.0011432171,
+              "one_ns": 5152.000114321709,
+              "overhead_ns": 3872.0001466572285,
+              "parent_one_ns": 306816.0116672516,
+              "parent_two_ns": 307936.01274490356,
+              "two_ns": 6432.000081986189
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 18527.99952030182,
+            "median_ns": 14345.17450571615,
+            "baseline_ns": 18368.000630289316,
+            "baseline_raw_ns": 22560.0004196167,
+            "paired_ratio": 1.280430616091159,
+            "parent_ns": 19935.992313548923,
+            "outside_ns": 15718.34,
+            "replay_overhead": {
+              "gate_ns": 298559.9965322763,
+              "one_ns": 5247.999913990498,
+              "overhead_ns": 4191.999789327383,
+              "parent_one_ns": 303871.9892501831,
+              "parent_two_ns": 304895.9970474243,
+              "two_ns": 6304.000038653612
+            }
+          },
+          "raw_gain_us": -0.06400048732757568,
+          "calibrated_gain_us": -0.43575394080305707
+        },
+        {
+          "load": "decode 16",
+          "layer": "router",
+          "m": 16,
+          "new_seed": 2337935275385479764,
+          "old_seed": 1911775097656115702,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 8752.00005248189,
+            "median_ns": 4729.081680777166,
+            "baseline_ns": 14912.000391632318,
+            "baseline_raw_ns": 18944.00082528591,
+            "paired_ratio": 3.15325498653297,
+            "parent_ns": 6367.997732013464,
+            "outside_ns": 4844.618421052632,
+            "replay_overhead": {
+              "gate_ns": 301375.9986497462,
+              "one_ns": 5152.000114321709,
+              "overhead_ns": 4032.000433653593,
+              "parent_one_ns": 306528.0020236969,
+              "parent_two_ns": 307615.9954071045,
+              "two_ns": 6271.999794989824
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 8736.000396311283,
+            "median_ns": 4893.91370582983,
+            "baseline_ns": 15135.99930331111,
+            "baseline_raw_ns": 19007.999449968338,
+            "paired_ratio": 3.092821045307866,
+            "parent_ns": 10000.008624047041,
+            "outside_ns": 4890.693467336683,
+            "replay_overhead": {
+              "gate_ns": 298639.99458029866,
+              "one_ns": 4896.000027656555,
+              "overhead_ns": 3872.0001466572285,
+              "parent_one_ns": 303519.99402046204,
+              "parent_two_ns": 304607.9874038696,
+              "two_ns": 5919.999908655882
+            }
+          },
+          "raw_gain_us": -0.015999656170606613,
+          "calibrated_gain_us": 0.164832025052664
+        },
+        {
+          "load": "decode 32",
+          "layer": "qkv_gate",
+          "m": 32,
+          "new_seed": 2338132110293447301,
+          "old_seed": 1911922712085747412,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 14303.999952971935,
+            "median_ns": 10521.688646576393,
+            "baseline_ns": 14368.001371622086,
+            "baseline_raw_ns": 18208.00080895424,
+            "paired_ratio": 1.3655604013997533,
+            "parent_ns": 12016.004882752895,
+            "outside_ns": 10816.15107913669,
+            "replay_overhead": {
+              "gate_ns": 301359.9896803498,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3839.9994373321533,
+              "parent_one_ns": 306623.99530410767,
+              "parent_two_ns": 307615.9954071045,
+              "two_ns": 6144.000217318535
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 14224.00027513504,
+            "median_ns": 9556.633372314327,
+            "baseline_ns": 13952.00053229928,
+            "baseline_raw_ns": 18624.000251293182,
+            "paired_ratio": 1.4599284066623692,
+            "parent_ns": 15599.996084347367,
+            "outside_ns": 11029.328125,
+            "replay_overhead": {
+              "gate_ns": 298608.00481401384,
+              "one_ns": 5311.999935656786,
+              "overhead_ns": 4671.999718993902,
+              "parent_one_ns": 303808.0036640167,
+              "parent_two_ns": 304672.0027923584,
+              "two_ns": 5952.00015231967
+            }
+          },
+          "raw_gain_us": -0.07999967783689499,
+          "calibrated_gain_us": -0.9650552742620657
+        },
+        {
+          "load": "decode 32",
+          "layer": "o",
+          "m": 32,
+          "new_seed": 2338328945201414839,
+          "old_seed": 1912070326515379123,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "nvjet_sm90_tst_64x32_64x16_2x1_v_bz_TNT"
+          ],
+          "old_kernel_labels": [
+            "void rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 10719.99967098236,
+            "median_ns": 6783.150904751852,
+            "baseline_ns": 7024.000398814678,
+            "baseline_raw_ns": 10928.000323474407,
+            "paired_ratio": 1.0355070228341967,
+            "parent_ns": 8320.000488311052,
+            "outside_ns": 5968.44623655914,
+            "replay_overhead": {
+              "gate_ns": 301279.9951247871,
+              "one_ns": 5183.999892324209,
+              "overhead_ns": 3903.999924659729,
+              "parent_one_ns": 306623.99530410767,
+              "parent_two_ns": 307680.01079559326,
+              "two_ns": 6463.999859988689
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 10495.999827980995,
+            "median_ns": 6765.8824586531255,
+            "baseline_ns": 7104.000076651573,
+            "baseline_raw_ns": 10816.000401973724,
+            "paired_ratio": 1.049973912503611,
+            "parent_ns": 11984.00161229074,
+            "outside_ns": 6228.672727272728,
+            "replay_overhead": {
+              "gate_ns": 298512.00082339346,
+              "one_ns": 4800.000227987766,
+              "overhead_ns": 3712.000325322151,
+              "parent_one_ns": 303424.00074005127,
+              "parent_two_ns": 304383.9931488037,
+              "two_ns": 5888.000130653381
+            }
+          },
+          "raw_gain_us": -0.22399984300136566,
+          "calibrated_gain_us": -0.0172684460987266
+        },
+        {
+          "load": "decode 32",
+          "layer": "pooler",
+          "m": 32,
+          "new_seed": 2338525780109382378,
+          "old_seed": 1912217940945010835,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 19551.999866962433,
+            "median_ns": 15392.405224838014,
+            "baseline_ns": 22016.000002622604,
+            "baseline_raw_ns": 26143.9997702837,
+            "paired_ratio": 1.43031577463257,
+            "parent_ns": 17375.99540501833,
+            "outside_ns": 16214.117647058823,
+            "replay_overhead": {
+              "gate_ns": 301247.994415462,
+              "one_ns": 5247.999913990498,
+              "overhead_ns": 4127.999767661095,
+              "parent_one_ns": 306495.9943294525,
+              "parent_two_ns": 307808.0117702484,
+              "two_ns": 6368.0000603199005
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 19535.99974513054,
+            "median_ns": 15522.677468167032,
+            "baseline_ns": 21760.000847280025,
+            "baseline_raw_ns": 25728.000327944756,
+            "paired_ratio": 1.4018200720786809,
+            "parent_ns": 20816.00483506918,
+            "outside_ns": 16459.619565217392,
+            "replay_overhead": {
+              "gate_ns": 298735.9995022416,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3967.99948066473,
+              "parent_one_ns": 303808.0036640167,
+              "parent_two_ns": 304511.99412345886,
+              "two_ns": 6016.000173985958
+            }
+          },
+          "raw_gain_us": -0.01600012183189392,
+          "calibrated_gain_us": 0.13027224332901824
+        },
+        {
+          "load": "decode 32",
+          "layer": "unpooler",
+          "m": 32,
+          "new_seed": 2338722615017349918,
+          "old_seed": 1912365555374642548,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<32, 6, 1, 0, 0, 0, 131107>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 19071.999937295914,
+            "median_ns": 15074.712501990776,
+            "baseline_ns": 18816.000781953335,
+            "baseline_raw_ns": 22816.000506281853,
+            "paired_ratio": 1.248183060172357,
+            "parent_ns": 16752.004390582442,
+            "outside_ns": 16362.740384615385,
+            "replay_overhead": {
+              "gate_ns": 301247.99930490553,
+              "one_ns": 5247.999913990498,
+              "overhead_ns": 3999.999724328518,
+              "parent_one_ns": 306560.0097179413,
+              "parent_two_ns": 307648.0031013489,
+              "two_ns": 6496.000103652477
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 19007.999449968338,
+            "median_ns": 15059.097119932208,
+            "baseline_ns": 18735.999707132578,
+            "baseline_raw_ns": 22671.999409794807,
+            "paired_ratio": 1.2441648764143785,
+            "parent_ns": 20543.98600012064,
+            "outside_ns": 16172.783505154639,
+            "replay_overhead": {
+              "gate_ns": 298592.0077189803,
+              "one_ns": 5119.999870657921,
+              "overhead_ns": 3935.9997026622295,
+              "parent_one_ns": 303775.99596977234,
+              "parent_two_ns": 304928.0047416687,
+              "two_ns": 6304.000038653612
+            }
+          },
+          "raw_gain_us": -0.06400048732757568,
+          "calibrated_gain_us": -0.015615382058567774
+        },
+        {
+          "load": "decode 32",
+          "layer": "router",
+          "m": 32,
+          "new_seed": 2338919449925317459,
+          "old_seed": 1912513169804274262,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 9263.99976015091,
+            "median_ns": 5074.656938115871,
+            "baseline_ns": 15103.999990969896,
+            "baseline_raw_ns": 19295.99978029728,
+            "paired_ratio": 2.976358830785858,
+            "parent_ns": 6704.006344079971,
+            "outside_ns": 5189.088372093023,
+            "replay_overhead": {
+              "gate_ns": 301375.99632143974,
+              "one_ns": 5311.999935656786,
+              "overhead_ns": 4191.999789327383,
+              "parent_one_ns": 306591.9876098633,
+              "parent_two_ns": 307871.9973564148,
+              "two_ns": 6432.000081986189
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 9056.000038981438,
+            "median_ns": 5229.298506794368,
+            "baseline_ns": 15296.000521630049,
+            "baseline_raw_ns": 19104.0001809597,
+            "paired_ratio": 2.925057825969607,
+            "parent_ns": 10159.996571019292,
+            "outside_ns": 5505.528795811519,
+            "replay_overhead": {
+              "gate_ns": 298704.00088839233,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3807.999659329653,
+              "parent_one_ns": 303840.0113582611,
+              "parent_two_ns": 304991.9903278351,
+              "two_ns": 6175.999995321035
+            }
+          },
+          "raw_gain_us": -0.20799972116947174,
+          "calibrated_gain_us": 0.1546415686784976
+        },
+        {
+          "load": "verify 1",
+          "layer": "qkv_gate",
+          "m": 8,
+          "new_seed": 2339116284833285001,
+          "old_seed": 1912660784233905977,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 13088.000006973743,
+            "median_ns": 9200.99290802972,
+            "baseline_ns": 14016.000553965569,
+            "baseline_raw_ns": 17855.999991297722,
+            "paired_ratio": 1.5233139177548745,
+            "parent_ns": 10832.002852112055,
+            "outside_ns": 10128.394736842105,
+            "replay_overhead": {
+              "gate_ns": 301119.992043823,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3839.9994373321533,
+              "parent_one_ns": 306111.99140548706,
+              "parent_two_ns": 307296.0078716278,
+              "two_ns": 6144.000217318535
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 13071.99988514185,
+            "median_ns": 9159.501030123945,
+            "baseline_ns": 14671.999961137772,
+            "baseline_raw_ns": 18608.00012946129,
+            "paired_ratio": 1.6018339768601164,
+            "parent_ns": 14512.00246810913,
+            "outside_ns": 9990.56204379562,
+            "replay_overhead": {
+              "gate_ns": 298543.9896583557,
+              "one_ns": 4960.000049322844,
+              "overhead_ns": 3936.000168323517,
+              "parent_one_ns": 303391.9930458069,
+              "parent_two_ns": 304607.9874038696,
+              "two_ns": 5983.99993032217
+            }
+          },
+          "raw_gain_us": -0.01600012183189392,
+          "calibrated_gain_us": -0.04149187790577526
+        },
+        {
+          "load": "verify 1",
+          "layer": "o",
+          "m": 8,
+          "new_seed": 2339313119741252544,
+          "old_seed": 1912808398663537693,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 9200.000204145908,
+            "median_ns": 5534.6672881446,
+            "baseline_ns": 6879.99976798892,
+            "baseline_raw_ns": 10591.999627649784,
+            "paired_ratio": 1.2430737765802213,
+            "parent_ns": 6799.994269385934,
+            "outside_ns": 4846.944700460829,
+            "replay_overhead": {
+              "gate_ns": 301167.9963674396,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3711.999859660864,
+              "parent_one_ns": 306143.99909973145,
+              "parent_two_ns": 307455.98673820496,
+              "two_ns": 6271.999794989824
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 9216.000325977802,
+            "median_ns": 5336.617352798394,
+            "baseline_ns": 6752.000190317631,
+            "baseline_raw_ns": 10623.999871313572,
+            "paired_ratio": 1.2652209712538307,
+            "parent_ns": 10496.006580069661,
+            "outside_ns": 4736.868421052632,
+            "replay_overhead": {
+              "gate_ns": 298527.9995482415,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3871.999680995941,
+              "parent_one_ns": 303584.0094089508,
+              "parent_two_ns": 304800.00376701355,
+              "two_ns": 6111.999973654747
+            }
+          },
+          "raw_gain_us": 0.01600012183189392,
+          "calibrated_gain_us": -0.19804993534620643
+        },
+        {
+          "load": "verify 1",
+          "layer": "pooler",
+          "m": 8,
+          "new_seed": 2339509954649220088,
+          "old_seed": 1912956013093169410,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv_predxor<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 17775.999382138252,
+            "median_ns": 13608.534214207779,
+            "baseline_ns": 21376.000251621008,
+            "baseline_raw_ns": 25504.00048494339,
+            "paired_ratio": 1.570779035798266,
+            "parent_ns": 15728.001482784748,
+            "outside_ns": 14828.94642857143,
+            "replay_overhead": {
+              "gate_ns": 300992.0073673129,
+              "one_ns": 5152.000114321709,
+              "overhead_ns": 4128.000233322382,
+              "parent_one_ns": 306176.00679397583,
+              "parent_two_ns": 307327.9857635498,
+              "two_ns": 6175.999995321035
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 17599.99990463257,
+            "median_ns": 13536.974268757183,
+            "baseline_ns": 21168.00006479025,
+            "baseline_raw_ns": 25264.00052011013,
+            "paired_ratio": 1.5637172417210823,
+            "parent_ns": 18960.00956185162,
+            "outside_ns": 15056.52380952381,
+            "replay_overhead": {
+              "gate_ns": 298543.99408213794,
+              "one_ns": 5152.000114321709,
+              "overhead_ns": 4096.000455319881,
+              "parent_one_ns": 303775.99596977234,
+              "parent_two_ns": 304832.01146125793,
+              "two_ns": 6207.999773323536
+            }
+          },
+          "raw_gain_us": -0.1759994775056839,
+          "calibrated_gain_us": -0.07155994545059548
+        },
+        {
+          "load": "verify 1",
+          "layer": "unpooler",
+          "m": 8,
+          "new_seed": 2339706789557187633,
+          "old_seed": 1913103627522801128,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 1, 4, 1, 4, 4, 4, 1, 0, 536870913>(G)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 8191.999979317188,
+            "median_ns": 4060.6941930914395,
+            "baseline_ns": 6912.000477313995,
+            "baseline_raw_ns": 11040.00024497509,
+            "paired_ratio": 1.7021721283699607,
+            "parent_ns": 6016.005761921406,
+            "outside_ns": 4523.918032786885,
+            "replay_overhead": {
+              "gate_ns": 301135.99728792906,
+              "one_ns": 5247.999913990498,
+              "overhead_ns": 4127.999767661095,
+              "parent_one_ns": 306272.0000743866,
+              "parent_two_ns": 307520.0021266937,
+              "two_ns": 6368.0000603199005
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 8208.000101149082,
+            "median_ns": 4399.116231812419,
+            "baseline_ns": 7119.99973282218,
+            "baseline_raw_ns": 10896.00007981062,
+            "paired_ratio": 1.6185068449279796,
+            "parent_ns": 9536.008583381772,
+            "outside_ns": 4501.698564593302,
+            "replay_overhead": {
+              "gate_ns": 298591.9907223433,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 3776.0003469884396,
+              "parent_one_ns": 303775.99596977234,
+              "parent_two_ns": 304895.9970474243,
+              "two_ns": 6399.999838322401
+            }
+          },
+          "raw_gain_us": 0.01600012183189392,
+          "calibrated_gain_us": 0.33842203872097937
+        },
+        {
+          "load": "verify 1",
+          "layer": "router",
+          "m": 8,
+          "new_seed": 2339903624465155179,
+          "old_seed": 1913251241952432847,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 8448.000065982342,
+            "median_ns": 4506.071053593455,
+            "baseline_ns": 26368.000078946352,
+            "baseline_raw_ns": 30303.99978160858,
+            "paired_ratio": 5.8516609625848375,
+            "parent_ns": 6000.001449137926,
+            "outside_ns": 4677.533898305085,
+            "replay_overhead": {
+              "gate_ns": 301056.0083203018,
+              "one_ns": 4927.999805659056,
+              "overhead_ns": 3935.9997026622295,
+              "parent_one_ns": 306015.9981250763,
+              "parent_two_ns": 306944.01264190674,
+              "two_ns": 5919.999908655882
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 8320.000022649765,
+            "median_ns": 4466.061412238903,
+            "baseline_ns": 26175.999082624912,
+            "baseline_raw_ns": 30015.99945127964,
+            "paired_ratio": 5.861092507794803,
+            "parent_ns": 9696.014458313584,
+            "outside_ns": 4558.417475728155,
+            "replay_overhead": {
+              "gate_ns": 298575.98966918886,
+              "one_ns": 4800.000227987766,
+              "overhead_ns": 3840.000368654728,
+              "parent_one_ns": 303456.00843429565,
+              "parent_two_ns": 304351.9854545593,
+              "two_ns": 5760.000087320805
+            }
+          },
+          "raw_gain_us": -0.12800004333257675,
+          "calibrated_gain_us": -0.0400096413545516
+        },
+        {
+          "load": "verify 16",
+          "layer": "qkv_gate",
+          "m": 128,
+          "new_seed": 2340100459373122726,
+          "old_seed": 1913398856382064567,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 16863.999888300896,
+            "median_ns": 13045.52648275636,
+            "baseline_ns": 17119.999509304762,
+            "baseline_raw_ns": 20927.999168634415,
+            "paired_ratio": 1.312327220517628,
+            "parent_ns": 14288.015197962523,
+            "outside_ns": 13677.466101694916,
+            "replay_overhead": {
+              "gate_ns": 301407.9858548939,
+              "one_ns": 4863.999783992767,
+              "overhead_ns": 3807.999659329653,
+              "parent_one_ns": 306239.9923801422,
+              "parent_two_ns": 307392.0011520386,
+              "two_ns": 5919.999908655882
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 16815.999522805214,
+            "median_ns": 13095.674200334908,
+            "baseline_ns": 17087.99973130226,
+            "baseline_raw_ns": 20800.000056624413,
+            "paired_ratio": 1.3048583425254465,
+            "parent_ns": 18096.001353114843,
+            "outside_ns": 13210.39090909091,
+            "replay_overhead": {
+              "gate_ns": 298639.9964429438,
+              "one_ns": 4736.000206321478,
+              "overhead_ns": 3712.000325322151,
+              "parent_one_ns": 303456.00843429565,
+              "parent_two_ns": 304383.9931488037,
+              "two_ns": 5760.000087320805
+            }
+          },
+          "raw_gain_us": -0.04800036549568176,
+          "calibrated_gain_us": 0.0501477175785476
+        },
+        {
+          "load": "verify 16",
+          "layer": "o",
+          "m": 128,
+          "new_seed": 2340297294281090274,
+          "old_seed": 1913546470811696288,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT"
+          ],
+          "old_kernel_labels": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 11664.00033980608,
+            "median_ns": 7419.2508988898735,
+            "baseline_ns": 7263.9998979866505,
+            "baseline_raw_ns": 11487.999930977821,
+            "paired_ratio": 0.9790745719454705,
+            "parent_ns": 8895.99253423512,
+            "outside_ns": 6355.619883040936,
+            "replay_overhead": {
+              "gate_ns": 301679.99933473766,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 4224.000032991171,
+              "parent_one_ns": 306784.0039730072,
+              "parent_two_ns": 307711.98868751526,
+              "two_ns": 5952.00015231967
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 11119.999922811985,
+            "median_ns": 7358.760995765836,
+            "baseline_ns": 7776.0000713169575,
+            "baseline_raw_ns": 11583.99973064661,
+            "paired_ratio": 1.0566996367718964,
+            "parent_ns": 12240.001698955894,
+            "outside_ns": 6535.895705521472,
+            "replay_overhead": {
+              "gate_ns": 298623.9998135716,
+              "one_ns": 4863.999783992767,
+              "overhead_ns": 3807.999659329653,
+              "parent_one_ns": 303680.0026893616,
+              "parent_two_ns": 304511.99412345886,
+              "two_ns": 5919.999908655882
+            }
+          },
+          "raw_gain_us": -0.5440004169940948,
+          "calibrated_gain_us": -0.06048990312403748
+        },
+        {
+          "load": "verify 16",
+          "layer": "pooler",
+          "m": 128,
+          "new_seed": 2340494129189057823,
+          "old_seed": 1913694085241328010,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 22368.00082027912,
+            "median_ns": 18235.175538319872,
+            "baseline_ns": 25024.000089615583,
+            "baseline_raw_ns": 29152.000322937965,
+            "paired_ratio": 1.3722927995417153,
+            "parent_ns": 23023.99557083845,
+            "outside_ns": 19223.058139534885,
+            "replay_overhead": {
+              "gate_ns": 301328.00061255693,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 4128.000233322382,
+              "parent_one_ns": 306304.007768631,
+              "parent_two_ns": 307359.9934577942,
+              "two_ns": 6047.999951988459
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 22687.9995316267,
+            "median_ns": 17976.85415312117,
+            "baseline_ns": 24560.000747442245,
+            "baseline_raw_ns": 29168.00044476986,
+            "paired_ratio": 1.3662012573639364,
+            "parent_ns": 24159.988155588508,
+            "outside_ns": 19736.35802469136,
+            "replay_overhead": {
+              "gate_ns": 298704.00787331164,
+              "one_ns": 5311.999935656786,
+              "overhead_ns": 4607.999697327614,
+              "parent_one_ns": 303808.0036640167,
+              "parent_two_ns": 304767.99607276917,
+              "two_ns": 6016.000173985958
+            }
+          },
+          "raw_gain_us": 0.31999871134757996,
+          "calibrated_gain_us": -0.25832138519870207
+        },
+        {
+          "load": "verify 16",
+          "layer": "unpooler",
+          "m": 128,
+          "new_seed": 2340690964097025373,
+          "old_seed": 1913841699670959733,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopA_NNT"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 22112.000733613968,
+            "median_ns": 18338.303812177317,
+            "baseline_ns": 19952.000584453344,
+            "baseline_raw_ns": 23856.000043451786,
+            "paired_ratio": 1.0879959667373638,
+            "parent_ns": 22863.98597061634,
+            "outside_ns": 20019.464285714286,
+            "replay_overhead": {
+              "gate_ns": 300992.01016128063,
+              "one_ns": 4927.999805659056,
+              "overhead_ns": 3903.9994589984417,
+              "parent_one_ns": 305983.9904308319,
+              "parent_two_ns": 307103.9915084839,
+              "two_ns": 5952.00015231967
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 22608.00078511238,
+            "median_ns": 18543.867084653823,
+            "baseline_ns": 19920.000806450844,
+            "baseline_raw_ns": 24016.00033044815,
+            "paired_ratio": 1.074209641145231,
+            "parent_ns": 27279.997942969203,
+            "outside_ns": 21063.698630136987,
+            "replay_overhead": {
+              "gate_ns": 298559.9983949214,
+              "one_ns": 5055.9998489916325,
+              "overhead_ns": 4095.999523997307,
+              "parent_one_ns": 303647.9949951172,
+              "parent_two_ns": 304735.9883785248,
+              "two_ns": 6016.000173985958
+            }
+          },
+          "raw_gain_us": 0.4960000514984131,
+          "calibrated_gain_us": 0.20556327247650552
+        },
+        {
+          "load": "verify 16",
+          "layer": "router",
+          "m": 128,
+          "new_seed": 2340887799004992924,
+          "old_seed": 1913989314100591457,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "old_kernel_labels": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 11583.99973064661,
+            "median_ns": 7652.933930716579,
+            "baseline_ns": 16512.001398950815,
+            "baseline_raw_ns": 20416.000857949257,
+            "paired_ratio": 2.1576040703391675,
+            "parent_ns": 9120.005182921886,
+            "outside_ns": 7354.4011627906975,
+            "replay_overhead": {
+              "gate_ns": 301152.0029976964,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3903.9994589984417,
+              "parent_one_ns": 306176.00679397583,
+              "parent_two_ns": 307168.00689697266,
+              "two_ns": 6080.0001956522465
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 11487.999930977821,
+            "median_ns": 7747.534505872321,
+            "baseline_ns": 16560.000367462635,
+            "baseline_raw_ns": 20336.000248789787,
+            "paired_ratio": 2.1374542255876134,
+            "parent_ns": 12576.000299304724,
+            "outside_ns": 7308.909090909091,
+            "replay_overhead": {
+              "gate_ns": 298544.00316253304,
+              "one_ns": 4896.000027656555,
+              "overhead_ns": 3775.9998813271523,
+              "parent_one_ns": 303584.0094089508,
+              "parent_two_ns": 304639.995098114,
+              "two_ns": 6016.000173985958
+            }
+          },
+          "raw_gain_us": -0.09599979966878891,
+          "calibrated_gain_us": 0.09460057515574136
+        },
+        {
+          "load": "verify 32",
+          "layer": "qkv_gate",
+          "m": 256,
+          "new_seed": 2341084633912960476,
+          "old_seed": 1914136928530223182,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN"
+          ],
+          "old_kernel_labels": [
+            "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 21231.99962079525,
+            "median_ns": 17232.282989315627,
+            "baseline_ns": 19840.00066295266,
+            "baseline_raw_ns": 23776.00036561489,
+            "paired_ratio": 1.1513274634158384,
+            "parent_ns": 21696.00035995245,
+            "outside_ns": 18526.067415730337,
+            "replay_overhead": {
+              "gate_ns": 301295.99664360285,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3935.9997026622295,
+              "parent_one_ns": 306400.00104904175,
+              "parent_two_ns": 307327.9857635498,
+              "two_ns": 6047.999951988459
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 22463.999688625336,
+            "median_ns": 18215.748695489972,
+            "baseline_ns": 19360.00119894743,
+            "baseline_raw_ns": 23584.000766277313,
+            "paired_ratio": 1.0628166606042804,
+            "parent_ns": 26816.001860424876,
+            "outside_ns": 18909.972972972973,
+            "replay_overhead": {
+              "gate_ns": 298671.9992477447,
+              "one_ns": 5055.9998489916325,
+              "overhead_ns": 4223.999567329884,
+              "parent_one_ns": 303840.0113582611,
+              "parent_two_ns": 304479.9864292145,
+              "two_ns": 5888.000130653381
+            }
+          },
+          "raw_gain_us": 1.2320000678300858,
+          "calibrated_gain_us": 0.9834657061743456
+        },
+        {
+          "load": "verify 32",
+          "layer": "o",
+          "m": 256,
+          "new_seed": 2341281468820928029,
+          "old_seed": 1914284542959854908,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+          ],
+          "old_kernel_labels": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 13327.999971807003,
+            "median_ns": 9485.006766597337,
+            "baseline_ns": 9568.000212311745,
+            "baseline_raw_ns": 13439.999893307686,
+            "paired_ratio": 1.0087499616770628,
+            "parent_ns": 11263.991938903928,
+            "outside_ns": 9133.5,
+            "replay_overhead": {
+              "gate_ns": 300960.0087534636,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3871.999680995941,
+              "parent_one_ns": 306015.9981250763,
+              "parent_two_ns": 307168.00689697266,
+              "two_ns": 6111.999973654747
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 12896.000407636166,
+            "median_ns": 8717.65978318988,
+            "baseline_ns": 9279.999881982803,
+            "baseline_raw_ns": 13472.000136971474,
+            "paired_ratio": 1.0645058551008466,
+            "parent_ns": 14223.994687199593,
+            "outside_ns": 8860.576642335767,
+            "replay_overhead": {
+              "gate_ns": 298624.0070313215,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 4192.00025498867,
+              "parent_one_ns": 303936.0046386719,
+              "parent_two_ns": 304639.995098114,
+              "two_ns": 5983.99993032217
+            }
+          },
+          "raw_gain_us": -0.4319995641708374,
+          "calibrated_gain_us": -0.7673469834074568
+        },
+        {
+          "load": "verify 32",
+          "layer": "pooler",
+          "m": 256,
+          "new_seed": 2341478303728895583,
+          "old_seed": 1914432157389486635,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "nvjet_sm90_tst_64x128_64x8_1x1_v_bz_NNT"
+          ],
+          "old_kernel_labels": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 28480.00079393387,
+            "median_ns": 24478.525882361282,
+            "baseline_ns": 30624.00035560131,
+            "baseline_raw_ns": 34719.99987959862,
+            "paired_ratio": 1.2510557417866544,
+            "parent_ns": 31151.997856795788,
+            "outside_ns": 27994.578125,
+            "replay_overhead": {
+              "gate_ns": 301119.995303452,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 4095.999523997307,
+              "parent_one_ns": 306143.99909973145,
+              "parent_two_ns": 307007.9982280731,
+              "two_ns": 5888.000130653381
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 28079.99961078167,
+            "median_ns": 24084.211796200765,
+            "baseline_ns": 29567.998833954334,
+            "baseline_raw_ns": 33663.999289274216,
+            "paired_ratio": 1.2276921945445864,
+            "parent_ns": 34160.0077226758,
+            "outside_ns": 27374.793103448275,
+            "replay_overhead": {
+              "gate_ns": 298527.99605578184,
+              "one_ns": 5216.000135987997,
+              "overhead_ns": 4096.000455319881,
+              "parent_one_ns": 303647.9949951172,
+              "parent_two_ns": 304863.98935317993,
+              "two_ns": 6335.999816656113
+            }
+          },
+          "raw_gain_us": -0.4000011831521988,
+          "calibrated_gain_us": -0.39431408616051705
+        },
+        {
+          "load": "verify 32",
+          "layer": "unpooler",
+          "m": 256,
+          "new_seed": 2341675138636863138,
+          "old_seed": 1914579771819118363,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+          ],
+          "old_kernel_labels": [
+            "nvjet_sm90_tst_128x128_64x6_1x1_v_bz_coopA_NNN"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 28672.000393271446,
+            "median_ns": 24832.357852954054,
+            "baseline_ns": 24896.00144326687,
+            "baseline_raw_ns": 28736.000880599022,
+            "paired_ratio": 1.0025629298147878,
+            "parent_ns": 31455.996446311474,
+            "outside_ns": 27518.11111111111,
+            "replay_overhead": {
+              "gate_ns": 300991.99432879686,
+              "one_ns": 4927.999805659056,
+              "overhead_ns": 3839.9994373321533,
+              "parent_one_ns": 305887.99715042114,
+              "parent_two_ns": 307135.9992027283,
+              "two_ns": 6016.000173985958
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 27087.999507784843,
+            "median_ns": 23087.707336283085,
+            "baseline_ns": 24336.000438779593,
+            "baseline_raw_ns": 28400.0001847744,
+            "paired_ratio": 1.054067434427964,
+            "parent_ns": 32735.99362000823,
+            "outside_ns": 26310.655737704918,
+            "replay_overhead": {
+              "gate_ns": 298672.0004118979,
+              "one_ns": 5119.999870657921,
+              "overhead_ns": 4063.9997459948063,
+              "parent_one_ns": 303712.01038360596,
+              "parent_two_ns": 304991.9903278351,
+              "two_ns": 6175.999995321035
+            }
+          },
+          "raw_gain_us": -1.5840008854866028,
+          "calibrated_gain_us": -1.7446505166709685
+        },
+        {
+          "load": "verify 32",
+          "layer": "router",
+          "m": 256,
+          "new_seed": 2341871973544830694,
+          "old_seed": 1914727386248750092,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "old_kernel_labels": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 13311.99984997511,
+            "median_ns": 9302.057464859226,
+            "baseline_ns": 17536.000348627567,
+            "baseline_raw_ns": 21536.000072956085,
+            "paired_ratio": 1.8851743729679216,
+            "parent_ns": 10800.00284127891,
+            "outside_ns": 9026.313333333334,
+            "replay_overhead": {
+              "gate_ns": 300991.9982869178,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3999.999724328518,
+              "parent_one_ns": 305920.0048446655,
+              "parent_two_ns": 307072.0136165619,
+              "two_ns": 5983.99993032217
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 13055.999763309956,
+            "median_ns": 9064.02700077578,
+            "baseline_ns": 17632.00107961893,
+            "baseline_raw_ns": 21600.00056028366,
+            "paired_ratio": 1.9452723472811617,
+            "parent_ns": 14191.982569172978,
+            "outside_ns": 8951.226277372263,
+            "replay_overhead": {
+              "gate_ns": 298624.01145510375,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3967.99948066473,
+              "parent_one_ns": 303615.9873008728,
+              "parent_two_ns": 304735.9883785248,
+              "two_ns": 6016.000173985958
+            }
+          },
+          "raw_gain_us": -0.2560000866651535,
+          "calibrated_gain_us": -0.2380304640834456
+        }
+      ]
+    },
+    "ac49231d41d441f6": {
+      "score_gain_us": 43.544472179301465,
+      "changed_input_seeds": 30,
+      "profile_visible_route_changes": 11,
+      "raw_wins_losses_ties": [
+        14,
+        16,
+        0
+      ],
+      "calibrated_wins_losses_ties": [
+        20,
+        10,
+        0
+      ],
+      "target": {
+        "load": "decode 32",
+        "layer": "unpooler",
+        "m": 32,
+        "new_seed": 2338722615017349918,
+        "old_seed": 7927691170969602191,
+        "same_input_seed": false,
+        "new_kernel_labels": [
+          "void rq<32, 6, 1, 0, 0, 0, 131107>(RqP, RqTmap, RqTmap)"
+        ],
+        "old_kernel_labels": [
+          "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+        ],
+        "same_profile_visible_route": false,
+        "new_timing": {
+          "median_raw_ns": 19071.999937295914,
+          "median_ns": 15074.712501990776,
+          "baseline_ns": 18816.000781953335,
+          "baseline_raw_ns": 22816.000506281853,
+          "paired_ratio": 1.248183060172357,
+          "parent_ns": 16752.004390582442,
+          "outside_ns": 16362.740384615385,
+          "replay_overhead": {
+            "gate_ns": 301247.99930490553,
+            "one_ns": 5247.999913990498,
+            "overhead_ns": 3999.999724328518,
+            "parent_one_ns": 306560.0097179413,
+            "parent_two_ns": 307648.0031013489,
+            "two_ns": 6496.000103652477
+          }
+        },
+        "old_timing": {
+          "median_raw_ns": 19328.000023961067,
+          "median_ns": 15682.583650994715,
+          "baseline_ns": 19071.999471634626,
+          "baseline_raw_ns": 22655.999287962914,
+          "paired_ratio": 1.2161261113646238,
+          "parent_ns": 17392.010428011417,
+          "outside_ns": 18385.106796116506,
+          "replay_overhead": {
+            "gate_ns": 300080.00042289495,
+            "one_ns": 4767.999984323978,
+            "overhead_ns": 3583.999816328287,
+            "parent_one_ns": 304895.9970474243,
+            "parent_two_ns": 306015.9981250763,
+            "two_ns": 5952.00015231967
+          }
+        },
+        "raw_gain_us": 0.2560000866651535,
+        "calibrated_gain_us": 0.6078711490039386
+      },
+      "load_sums": {
+        "decode 1": {
+          "raw_gain_us": -0.7839989848434925,
+          "calibrated_gain_us": -0.34343165518694335,
+          "new_calibrated_sum_us": 36.53321459654667,
+          "old_calibrated_sum_us": 36.189782941359724
+        },
+        "decode 16": {
+          "raw_gain_us": 0.04799943417310715,
+          "calibrated_gain_us": 0.8208305514965105,
+          "new_calibrated_sum_us": 49.22680131978234,
+          "old_calibrated_sum_us": 50.04763187127885
+        },
+        "decode 32": {
+          "raw_gain_us": -0.20799832418560982,
+          "calibrated_gain_us": 1.2688223253500435,
+          "new_calibrated_sum_us": 52.846614216272904,
+          "old_calibrated_sum_us": 54.11543654162295
+        },
+        "verify 1": {
+          "raw_gain_us": 0.27200113981962204,
+          "calibrated_gain_us": 0.6810955312921047,
+          "new_calibrated_sum_us": 36.910959657066996,
+          "old_calibrated_sum_us": 37.5920551883591
+        },
+        "verify 16": {
+          "raw_gain_us": 0.31999871134757996,
+          "calibrated_gain_us": 0.8082589087601982,
+          "new_calibrated_sum_us": 64.69119066286001,
+          "old_calibrated_sum_us": 65.4994495716202
+        },
+        "verify 32": {
+          "raw_gain_us": 0.4319995641708374,
+          "calibrated_gain_us": 1.839465333840184,
+          "new_calibrated_sum_us": 85.33023095608753,
+          "old_calibrated_sum_us": 87.16969628992771
+        }
+      },
+      "all30": [
+        {
+          "load": "decode 1",
+          "layer": "qkv_gate",
+          "m": 1,
+          "new_seed": 2336163761213771976,
+          "old_seed": 7924633480478481614,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 13024.000450968742,
+            "median_ns": 9264.149622496821,
+            "baseline_ns": 14432.0004619658,
+            "baseline_raw_ns": 18176.00056529045,
+            "paired_ratio": 1.5578332658746683,
+            "parent_ns": 10751.99875049293,
+            "outside_ns": 9662.849673202614,
+            "replay_overhead": {
+              "gate_ns": 301215.9999925643,
+              "one_ns": 5024.000070989132,
+              "overhead_ns": 3744.0001033246517,
+              "parent_one_ns": 306335.985660553,
+              "parent_two_ns": 307424.00884628296,
+              "two_ns": 6304.000038653612
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 12912.000063806772,
+            "median_ns": 9110.27452107254,
+            "baseline_ns": 14048.000797629356,
+            "baseline_raw_ns": 17888.00023496151,
+            "paired_ratio": 1.5419953334156502,
+            "parent_ns": 11104.002594947815,
+            "outside_ns": 11852.318181818182,
+            "replay_overhead": {
+              "gate_ns": 299952.0003795624,
+              "one_ns": 4863.999783992767,
+              "overhead_ns": 3839.9994373321533,
+              "parent_one_ns": 304863.98935317993,
+              "parent_two_ns": 305855.98945617676,
+              "two_ns": 5888.000130653381
+            }
+          },
+          "raw_gain_us": -0.11200038716197014,
+          "calibrated_gain_us": -0.15387510142428074
+        },
+        {
+          "load": "decode 1",
+          "layer": "o",
+          "m": 1,
+          "new_seed": 2336360596121739504,
+          "old_seed": 7924868687439337037,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 9247.999638319016,
+            "median_ns": 5112.424978641368,
+            "baseline_ns": 6768.000312149525,
+            "baseline_raw_ns": 10928.000323474407,
+            "paired_ratio": 1.323833668058661,
+            "parent_ns": 6400.004029273987,
+            "outside_ns": 4730.106481481482,
+            "replay_overhead": {
+              "gate_ns": 301679.9986362457,
+              "one_ns": 5024.000070989132,
+              "overhead_ns": 4160.0000113248825,
+              "parent_one_ns": 306495.9943294525,
+              "parent_two_ns": 307743.99638175964,
+              "two_ns": 5888.000130653381
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 9088.000282645226,
+            "median_ns": 5192.239001542618,
+            "baseline_ns": 6784.000433981419,
+            "baseline_raw_ns": 10688.000358641148,
+            "paired_ratio": 1.3065655167194512,
+            "parent_ns": 7136.014057323337,
+            "outside_ns": 5779.55,
+            "replay_overhead": {
+              "gate_ns": 300031.9928396493,
+              "one_ns": 4896.000027656555,
+              "overhead_ns": 3903.999924659729,
+              "parent_one_ns": 304895.9970474243,
+              "parent_two_ns": 306015.9981250763,
+              "two_ns": 5888.000130653381
+            }
+          },
+          "raw_gain_us": -0.15999935567378998,
+          "calibrated_gain_us": 0.0798140229012497
+        },
+        {
+          "load": "decode 1",
+          "layer": "pooler",
+          "m": 1,
+          "new_seed": 2336557431029707033,
+          "old_seed": 7925103894400192461,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv_predxor<1, 1, 2, 1, 8, 16, 1, 1, 0, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 17983.999103307724,
+            "median_ns": 14114.95929010103,
+            "baseline_ns": 21695.999428629875,
+            "baseline_raw_ns": 25567.999109625816,
+            "paired_ratio": 1.5370925967774849,
+            "parent_ns": 15183.998038992286,
+            "outside_ns": 15094.81981981982,
+            "replay_overhead": {
+              "gate_ns": 301760.0050661713,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3871.999680995941,
+              "parent_one_ns": 306847.9895591736,
+              "parent_two_ns": 307904.0050506592,
+              "two_ns": 6111.999973654747
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 17567.99966096878,
+            "median_ns": 13851.887672446668,
+            "baseline_ns": 21696.00035995245,
+            "baseline_raw_ns": 25472.000241279602,
+            "paired_ratio": 1.5662847456602478,
+            "parent_ns": 15664.00472074747,
+            "outside_ns": 18107.41592920354,
+            "replay_overhead": {
+              "gate_ns": 299952.0068988204,
+              "one_ns": 4767.999984323978,
+              "overhead_ns": 3775.9998813271523,
+              "parent_one_ns": 304672.0027923584,
+              "parent_two_ns": 305855.98945617676,
+              "two_ns": 5760.000087320805
+            }
+          },
+          "raw_gain_us": -0.4159994423389435,
+          "calibrated_gain_us": -0.26307161765436105
+        },
+        {
+          "load": "decode 1",
+          "layer": "unpooler",
+          "m": 1,
+          "new_seed": 2336754265937674563,
+          "old_seed": 7925339101361047886,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 134217729>(G)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 8191.999979317188,
+            "median_ns": 4338.300448808935,
+            "baseline_ns": 7200.000341981649,
+            "baseline_raw_ns": 11040.00024497509,
+            "paired_ratio": 1.6596361701869646,
+            "parent_ns": 6112.0151076465845,
+            "outside_ns": 4435.811475409836,
+            "replay_overhead": {
+              "gate_ns": 301183.9927639812,
+              "one_ns": 5119.999870657921,
+              "overhead_ns": 3839.9999029934406,
+              "parent_one_ns": 306367.99335479736,
+              "parent_two_ns": 307615.9954071045,
+              "two_ns": 6399.999838322401
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 8287.999778985977,
+            "median_ns": 4059.5190472880345,
+            "baseline_ns": 6527.999881654978,
+            "baseline_raw_ns": 10751.999914646149,
+            "paired_ratio": 1.6080722385121002,
+            "parent_ns": 6399.993784725666,
+            "outside_ns": 5922.182572614108,
+            "replay_overhead": {
+              "gate_ns": 299935.9918758273,
+              "one_ns": 5152.000114321709,
+              "overhead_ns": 4224.000032991171,
+              "parent_one_ns": 305119.99130249023,
+              "parent_two_ns": 306048.0058193207,
+              "two_ns": 6080.0001956522465
+            }
+          },
+          "raw_gain_us": 0.09599979966878891,
+          "calibrated_gain_us": -0.2787814015209001
+        },
+        {
+          "load": "decode 1",
+          "layer": "router",
+          "m": 1,
+          "new_seed": 2336951100845642094,
+          "old_seed": 7925574308321903312,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+          ],
+          "old_kernel_labels": [
+            "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ..."
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 7679.999805986881,
+            "median_ns": 3703.3802564985153,
+            "baseline_ns": 10335.99954098463,
+            "baseline_raw_ns": 14303.999952971935,
+            "paired_ratio": 2.79096361299856,
+            "parent_ns": 5120.008485391736,
+            "outside_ns": 3633.6884615384615,
+            "replay_overhead": {
+              "gate_ns": 301407.99353830516,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 3968.0004119873047,
+              "parent_one_ns": 306335.985660553,
+              "parent_two_ns": 307520.0021266937,
+              "two_ns": 6207.999773323536
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 7488.000206649303,
+            "median_ns": 3975.862699009864,
+            "baseline_ns": 10687.99989297986,
+            "baseline_raw_ns": 14208.000153303146,
+            "paired_ratio": 2.68822157657546,
+            "parent_ns": 5807.98857845366,
+            "outside_ns": 4045.2209737827716,
+            "replay_overhead": {
+              "gate_ns": 299919.99990306795,
+              "one_ns": 4672.0001846551895,
+              "overhead_ns": 3520.000260323286,
+              "parent_one_ns": 304544.00181770325,
+              "parent_two_ns": 305952.0125389099,
+              "two_ns": 5824.000108987093
+            }
+          },
+          "raw_gain_us": -0.19199959933757782,
+          "calibrated_gain_us": 0.27248244251134884
+        },
+        {
+          "load": "decode 16",
+          "layer": "qkv_gate",
+          "m": 16,
+          "new_seed": 2337147935753609626,
+          "old_seed": 7925809515282758739,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 14015.999622642994,
+            "median_ns": 10029.726972878645,
+            "baseline_ns": 13983.998913317919,
+            "baseline_raw_ns": 17983.999103307724,
+            "paired_ratio": 1.394255192701856,
+            "parent_ns": 10928.00684273243,
+            "outside_ns": 10848.823943661971,
+            "replay_overhead": {
+              "gate_ns": 301952.0025700331,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 4000.000189989805,
+              "parent_one_ns": 307040.0059223175,
+              "parent_two_ns": 308223.99258613586,
+              "two_ns": 6175.999995321035
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 13919.999822974205,
+            "median_ns": 10193.880839698031,
+            "baseline_ns": 14240.000862628222,
+            "baseline_raw_ns": 17952.000722289085,
+            "paired_ratio": 1.3969165508756376,
+            "parent_ns": 11904.004728421569,
+            "outside_ns": 13311.58041958042,
+            "replay_overhead": {
+              "gate_ns": 300079.9978617579,
+              "one_ns": 4767.999984323978,
+              "overhead_ns": 3711.999859660864,
+              "parent_one_ns": 305056.00571632385,
+              "parent_two_ns": 305696.0105895996,
+              "two_ns": 5824.000108987093
+            }
+          },
+          "raw_gain_us": -0.09599979966878891,
+          "calibrated_gain_us": 0.16415386681938618
+        },
+        {
+          "load": "decode 16",
+          "layer": "o",
+          "m": 16,
+          "new_seed": 2337344770661577159,
+          "old_seed": 7926044722243614167,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 9488.000068813562,
+            "median_ns": 5553.165312559681,
+            "baseline_ns": 6847.99998998642,
+            "baseline_raw_ns": 10784.000158309937,
+            "paired_ratio": 1.2331705621113405,
+            "parent_ns": 7039.985852316022,
+            "outside_ns": 5949.809523809524,
+            "replay_overhead": {
+              "gate_ns": 301280.0000142306,
+              "one_ns": 5024.000070989132,
+              "overhead_ns": 3936.000168323517,
+              "parent_one_ns": 306272.0000743866,
+              "parent_two_ns": 307392.0011520386,
+              "two_ns": 6111.999973654747
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 9568.000212311745,
+            "median_ns": 5624.880497709612,
+            "baseline_ns": 6688.00063431263,
+            "baseline_raw_ns": 10656.00011497736,
+            "paired_ratio": 1.189003150739986,
+            "parent_ns": 7792.012300342321,
+            "outside_ns": 7393.665071770335,
+            "replay_overhead": {
+              "gate_ns": 299935.9951354563,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3967.99948066473,
+              "parent_one_ns": 304960.0124359131,
+              "parent_two_ns": 306015.9981250763,
+              "two_ns": 6016.000173985958
+            }
+          },
+          "raw_gain_us": 0.0800001434981823,
+          "calibrated_gain_us": 0.07171518514993112
+        },
+        {
+          "load": "decode 16",
+          "layer": "pooler",
+          "m": 16,
+          "new_seed": 2337541605569544693,
+          "old_seed": 7926279929204469596,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 17967.999912798405,
+            "median_ns": 14133.898907047645,
+            "baseline_ns": 21696.001291275024,
+            "baseline_raw_ns": 25536.000728607178,
+            "paired_ratio": 1.5350330035583215,
+            "parent_ns": 15552.009688690305,
+            "outside_ns": 15073.468468468469,
+            "replay_overhead": {
+              "gate_ns": 301312.0039831847,
+              "one_ns": 4927.999805659056,
+              "overhead_ns": 3839.9994373321533,
+              "parent_one_ns": 306176.00679397583,
+              "parent_two_ns": 307359.9934577942,
+              "two_ns": 6016.000173985958
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 17983.999103307724,
+            "median_ns": 14391.160738910943,
+            "baseline_ns": 21760.000381618738,
+            "baseline_raw_ns": 25407.999753952026,
+            "paired_ratio": 1.5120392841408452,
+            "parent_ns": 16063.999617472291,
+            "outside_ns": 17797.504504504504,
+            "replay_overhead": {
+              "gate_ns": 300000.0005122274,
+              "one_ns": 4863.999783992767,
+              "overhead_ns": 3647.999372333288,
+              "parent_one_ns": 304895.9970474243,
+              "parent_two_ns": 306111.99140548706,
+              "two_ns": 6080.0001956522465
+            }
+          },
+          "raw_gain_us": 0.015999190509319305,
+          "calibrated_gain_us": 0.25726183186329765
+        },
+        {
+          "load": "decode 16",
+          "layer": "unpooler",
+          "m": 16,
+          "new_seed": 2337738440477512228,
+          "old_seed": 7926515136165325026,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 18592.000007629395,
+            "median_ns": 14780.928446519207,
+            "baseline_ns": 18831.999506801367,
+            "baseline_raw_ns": 22703.999653458595,
+            "paired_ratio": 1.2740741946583305,
+            "parent_ns": 16111.988574266434,
+            "outside_ns": 15699.29906542056,
+            "replay_overhead": {
+              "gate_ns": 301520.0011432171,
+              "one_ns": 5152.000114321709,
+              "overhead_ns": 3872.0001466572285,
+              "parent_one_ns": 306816.0116672516,
+              "parent_two_ns": 307936.01274490356,
+              "two_ns": 6432.000081986189
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 18559.999763965607,
+            "median_ns": 14643.005598680505,
+            "baseline_ns": 18592.000473290682,
+            "baseline_raw_ns": 22528.00017595291,
+            "paired_ratio": 1.2696847206673214,
+            "parent_ns": 16464.009881019592,
+            "outside_ns": 18939.10280373832,
+            "replay_overhead": {
+              "gate_ns": 300095.9903001785,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3935.9997026622295,
+              "parent_one_ns": 305056.00571632385,
+              "parent_two_ns": 306015.9981250763,
+              "two_ns": 6047.999951988459
+            }
+          },
+          "raw_gain_us": -0.03200024366378784,
+          "calibrated_gain_us": -0.13792284783870126
+        },
+        {
+          "load": "decode 16",
+          "layer": "router",
+          "m": 16,
+          "new_seed": 2337935275385479764,
+          "old_seed": 7926750343126180457,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 8752.00005248189,
+            "median_ns": 4729.081680777166,
+            "baseline_ns": 14912.000391632318,
+            "baseline_raw_ns": 18944.00082528591,
+            "paired_ratio": 3.15325498653297,
+            "parent_ns": 6367.997732013464,
+            "outside_ns": 4844.618421052632,
+            "replay_overhead": {
+              "gate_ns": 301375.9986497462,
+              "one_ns": 5152.000114321709,
+              "overhead_ns": 4032.000433653593,
+              "parent_one_ns": 306528.0020236969,
+              "parent_two_ns": 307615.9954071045,
+              "two_ns": 6271.999794989824
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 8832.000195980072,
+            "median_ns": 5194.704196279763,
+            "baseline_ns": 15056.000091135502,
+            "baseline_raw_ns": 18703.999929130077,
+            "paired_ratio": 2.8983363676257063,
+            "parent_ns": 6863.988703116775,
+            "outside_ns": 6682.331858407079,
+            "replay_overhead": {
+              "gate_ns": 299984.0008560568,
+              "one_ns": 4832.000005990267,
+              "overhead_ns": 3647.9998379945755,
+              "parent_one_ns": 304863.98935317993,
+              "parent_two_ns": 306048.0058193207,
+              "two_ns": 6016.000173985958
+            }
+          },
+          "raw_gain_us": 0.0800001434981823,
+          "calibrated_gain_us": 0.4656225155025968
+        },
+        {
+          "load": "decode 32",
+          "layer": "qkv_gate",
+          "m": 32,
+          "new_seed": 2338132110293447301,
+          "old_seed": 7926985550087035889,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 14303.999952971935,
+            "median_ns": 10521.688646576393,
+            "baseline_ns": 14368.001371622086,
+            "baseline_raw_ns": 18208.00080895424,
+            "paired_ratio": 1.3655604013997533,
+            "parent_ns": 12016.004882752895,
+            "outside_ns": 10816.15107913669,
+            "replay_overhead": {
+              "gate_ns": 301359.9896803498,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3839.9994373321533,
+              "parent_one_ns": 306623.99530410767,
+              "parent_two_ns": 307615.9954071045,
+              "two_ns": 6144.000217318535
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 14159.999787807465,
+            "median_ns": 10387.77548428896,
+            "baseline_ns": 14447.999652475119,
+            "baseline_raw_ns": 18223.99999946356,
+            "paired_ratio": 1.3908656068209275,
+            "parent_ns": 12448.013294488192,
+            "outside_ns": 11926.524822695035,
+            "replay_overhead": {
+              "gate_ns": 299903.9883725345,
+              "one_ns": 4800.000227987766,
+              "overhead_ns": 3776.0003469884396,
+              "parent_one_ns": 304863.98935317993,
+              "parent_two_ns": 305759.996175766,
+              "two_ns": 5824.000108987093
+            }
+          },
+          "raw_gain_us": -0.14400016516447067,
+          "calibrated_gain_us": -0.133913162287432
+        },
+        {
+          "load": "decode 32",
+          "layer": "o",
+          "m": 32,
+          "new_seed": 2338328945201414839,
+          "old_seed": 7927220757047891322,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "nvjet_sm90_tst_64x32_64x16_2x1_v_bz_TNT"
+          ],
+          "old_kernel_labels": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 10719.99967098236,
+            "median_ns": 6783.150904751852,
+            "baseline_ns": 7024.000398814678,
+            "baseline_raw_ns": 10928.000323474407,
+            "paired_ratio": 1.0355070228341967,
+            "parent_ns": 8320.000488311052,
+            "outside_ns": 5968.44623655914,
+            "replay_overhead": {
+              "gate_ns": 301279.9951247871,
+              "one_ns": 5183.999892324209,
+              "overhead_ns": 3903.999924659729,
+              "parent_one_ns": 306623.99530410767,
+              "parent_two_ns": 307680.01079559326,
+              "two_ns": 6463.999859988689
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 10575.999971479177,
+            "median_ns": 6787.637440397709,
+            "baseline_ns": 7024.000398814678,
+            "baseline_raw_ns": 10800.00028014183,
+            "paired_ratio": 1.0348225668345539,
+            "parent_ns": 8623.995585367084,
+            "outside_ns": 7532.074074074074,
+            "replay_overhead": {
+              "gate_ns": 299967.99607761204,
+              "one_ns": 4832.000005990267,
+              "overhead_ns": 3775.9998813271523,
+              "parent_one_ns": 304991.9903278351,
+              "parent_two_ns": 305759.996175766,
+              "two_ns": 5888.000130653381
+            }
+          },
+          "raw_gain_us": -0.14399969950318336,
+          "calibrated_gain_us": 0.004486535645856747
+        },
+        {
+          "load": "decode 32",
+          "layer": "pooler",
+          "m": 32,
+          "new_seed": 2338525780109382378,
+          "old_seed": 7927455964008746756,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 19551.999866962433,
+            "median_ns": 15392.405224838014,
+            "baseline_ns": 22016.000002622604,
+            "baseline_raw_ns": 26143.9997702837,
+            "paired_ratio": 1.43031577463257,
+            "parent_ns": 17375.99540501833,
+            "outside_ns": 16214.117647058823,
+            "replay_overhead": {
+              "gate_ns": 301247.994415462,
+              "one_ns": 5247.999913990498,
+              "overhead_ns": 4127.999767661095,
+              "parent_one_ns": 306495.9943294525,
+              "parent_two_ns": 307808.0117702484,
+              "two_ns": 6368.0000603199005
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 19424.00075495243,
+            "median_ns": 15601.792904532522,
+            "baseline_ns": 22144.000977277756,
+            "baseline_raw_ns": 25984.00041460991,
+            "paired_ratio": 1.4193241195276114,
+            "parent_ns": 17631.998751312494,
+            "outside_ns": 19908.78431372549,
+            "replay_overhead": {
+              "gate_ns": 299903.99768576026,
+              "one_ns": 4863.999783992767,
+              "overhead_ns": 3839.9994373321533,
+              "parent_one_ns": 304832.01146125793,
+              "parent_two_ns": 305759.996175766,
+              "two_ns": 5888.000130653381
+            }
+          },
+          "raw_gain_us": -0.12799911201000214,
+          "calibrated_gain_us": 0.20938767969450783
+        },
+        {
+          "load": "decode 32",
+          "layer": "unpooler",
+          "m": 32,
+          "new_seed": 2338722615017349918,
+          "old_seed": 7927691170969602191,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<32, 6, 1, 0, 0, 0, 131107>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 19071.999937295914,
+            "median_ns": 15074.712501990776,
+            "baseline_ns": 18816.000781953335,
+            "baseline_raw_ns": 22816.000506281853,
+            "paired_ratio": 1.248183060172357,
+            "parent_ns": 16752.004390582442,
+            "outside_ns": 16362.740384615385,
+            "replay_overhead": {
+              "gate_ns": 301247.99930490553,
+              "one_ns": 5247.999913990498,
+              "overhead_ns": 3999.999724328518,
+              "parent_one_ns": 306560.0097179413,
+              "parent_two_ns": 307648.0031013489,
+              "two_ns": 6496.000103652477
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 19328.000023961067,
+            "median_ns": 15682.583650994715,
+            "baseline_ns": 19071.999471634626,
+            "baseline_raw_ns": 22655.999287962914,
+            "paired_ratio": 1.2161261113646238,
+            "parent_ns": 17392.010428011417,
+            "outside_ns": 18385.106796116506,
+            "replay_overhead": {
+              "gate_ns": 300080.00042289495,
+              "one_ns": 4767.999984323978,
+              "overhead_ns": 3583.999816328287,
+              "parent_one_ns": 304895.9970474243,
+              "parent_two_ns": 306015.9981250763,
+              "two_ns": 5952.00015231967
+            }
+          },
+          "raw_gain_us": 0.2560000866651535,
+          "calibrated_gain_us": 0.6078711490039386
+        },
+        {
+          "load": "decode 32",
+          "layer": "router",
+          "m": 32,
+          "new_seed": 2338919449925317459,
+          "old_seed": 7927926377930457627,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<2, 4, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 9263.99976015091,
+            "median_ns": 5074.656938115871,
+            "baseline_ns": 15103.999990969896,
+            "baseline_raw_ns": 19295.99978029728,
+            "paired_ratio": 2.976358830785858,
+            "parent_ns": 6704.006344079971,
+            "outside_ns": 5189.088372093023,
+            "replay_overhead": {
+              "gate_ns": 301375.99632143974,
+              "one_ns": 5311.999935656786,
+              "overhead_ns": 4191.999789327383,
+              "parent_one_ns": 306591.9876098633,
+              "parent_two_ns": 307871.9973564148,
+              "two_ns": 6432.000081986189
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 9216.000325977802,
+            "median_ns": 5655.647061409043,
+            "baseline_ns": 15695.998910814524,
+            "baseline_raw_ns": 19247.999414801598,
+            "paired_ratio": 2.7752790689354008,
+            "parent_ns": 7311.99118308723,
+            "outside_ns": 6742.852534562212,
+            "replay_overhead": {
+              "gate_ns": 300000.0056345016,
+              "one_ns": 4736.000206321478,
+              "overhead_ns": 3552.000503987074,
+              "parent_one_ns": 304767.99607276917,
+              "parent_two_ns": 306015.9981250763,
+              "two_ns": 5919.999908655882
+            }
+          },
+          "raw_gain_us": -0.04799943417310715,
+          "calibrated_gain_us": 0.5809901232931725
+        },
+        {
+          "load": "verify 1",
+          "layer": "qkv_gate",
+          "m": 8,
+          "new_seed": 2339116284833285001,
+          "old_seed": 7928161584891313064,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 13088.000006973743,
+            "median_ns": 9200.99290802972,
+            "baseline_ns": 14016.000553965569,
+            "baseline_raw_ns": 17855.999991297722,
+            "paired_ratio": 1.5233139177548745,
+            "parent_ns": 10832.002852112055,
+            "outside_ns": 10128.394736842105,
+            "replay_overhead": {
+              "gate_ns": 301119.992043823,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3839.9994373321533,
+              "parent_one_ns": 306111.99140548706,
+              "parent_two_ns": 307296.0078716278,
+              "two_ns": 6144.000217318535
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 13248.000293970108,
+            "median_ns": 9635.832732418668,
+            "baseline_ns": 14464.0002399683,
+            "baseline_raw_ns": 18144.000321626663,
+            "paired_ratio": 1.5010638562981493,
+            "parent_ns": 11247.982038185,
+            "outside_ns": 11172.753333333334,
+            "replay_overhead": {
+              "gate_ns": 300176.00511200726,
+              "one_ns": 4832.000005990267,
+              "overhead_ns": 3680.0000816583633,
+              "parent_one_ns": 305056.00571632385,
+              "parent_two_ns": 306239.9923801422,
+              "two_ns": 5983.99993032217
+            }
+          },
+          "raw_gain_us": 0.1600002869963646,
+          "calibrated_gain_us": 0.4348398243889478
+        },
+        {
+          "load": "verify 1",
+          "layer": "o",
+          "m": 8,
+          "new_seed": 2339313119741252544,
+          "old_seed": 7928396791852168502,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 9200.000204145908,
+            "median_ns": 5534.6672881446,
+            "baseline_ns": 6879.99976798892,
+            "baseline_raw_ns": 10591.999627649784,
+            "paired_ratio": 1.2430737765802213,
+            "parent_ns": 6799.994269385934,
+            "outside_ns": 4846.944700460829,
+            "replay_overhead": {
+              "gate_ns": 301167.9963674396,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3711.999859660864,
+              "parent_one_ns": 306143.99909973145,
+              "parent_two_ns": 307455.98673820496,
+              "two_ns": 6271.999794989824
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 9247.999638319016,
+            "median_ns": 5207.943429807379,
+            "baseline_ns": 6591.999903321266,
+            "baseline_raw_ns": 10623.999871313572,
+            "paired_ratio": 1.2657587380063147,
+            "parent_ns": 7136.0040456056595,
+            "outside_ns": 6440.62962962963,
+            "replay_overhead": {
+              "gate_ns": 300095.9884375334,
+              "one_ns": 5183.999892324209,
+              "overhead_ns": 4031.9999679923058,
+              "parent_one_ns": 305247.9922771454,
+              "parent_two_ns": 306432.00874328613,
+              "two_ns": 6335.999816656113
+            }
+          },
+          "raw_gain_us": 0.04799943417310715,
+          "calibrated_gain_us": -0.3267238583372209
+        },
+        {
+          "load": "verify 1",
+          "layer": "pooler",
+          "m": 8,
+          "new_seed": 2339509954649220088,
+          "old_seed": 7928631998813023941,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 17775.999382138252,
+            "median_ns": 13608.534214207779,
+            "baseline_ns": 21376.000251621008,
+            "baseline_raw_ns": 25504.00048494339,
+            "paired_ratio": 1.570779035798266,
+            "parent_ns": 15728.001482784748,
+            "outside_ns": 14828.94642857143,
+            "replay_overhead": {
+              "gate_ns": 300992.0073673129,
+              "one_ns": 5152.000114321709,
+              "overhead_ns": 4128.000233322382,
+              "parent_one_ns": 306176.00679397583,
+              "parent_two_ns": 307327.9857635498,
+              "two_ns": 6175.999995321035
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 17728.00087928772,
+            "median_ns": 13717.731477515126,
+            "baseline_ns": 21440.000273287296,
+            "baseline_raw_ns": 25472.000241279602,
+            "paired_ratio": 1.5629406588421577,
+            "parent_ns": 15712.006017565727,
+            "outside_ns": 17907.76785714286,
+            "replay_overhead": {
+              "gate_ns": 299999.9988824129,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 4031.9999679923058,
+              "parent_one_ns": 305056.00571632385,
+              "parent_two_ns": 306143.99909973145,
+              "two_ns": 6144.000217318535
+            }
+          },
+          "raw_gain_us": -0.04799850285053253,
+          "calibrated_gain_us": 0.10919726330734739
+        },
+        {
+          "load": "verify 1",
+          "layer": "unpooler",
+          "m": 8,
+          "new_seed": 2339706789557187633,
+          "old_seed": 7928867205773879381,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 8191.999979317188,
+            "median_ns": 4060.6941930914395,
+            "baseline_ns": 6912.000477313995,
+            "baseline_raw_ns": 11040.00024497509,
+            "paired_ratio": 1.7021721283699607,
+            "parent_ns": 6016.005761921406,
+            "outside_ns": 4523.918032786885,
+            "replay_overhead": {
+              "gate_ns": 301135.99728792906,
+              "one_ns": 5247.999913990498,
+              "overhead_ns": 4127.999767661095,
+              "parent_one_ns": 306272.0000743866,
+              "parent_two_ns": 307520.0021266937,
+              "two_ns": 6368.0000603199005
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 8224.000222980976,
+            "median_ns": 4495.4185404424115,
+            "baseline_ns": 7263.9998979866505,
+            "baseline_raw_ns": 11040.00024497509,
+            "paired_ratio": 1.6158673175004907,
+            "parent_ns": 6239.984650164843,
+            "outside_ns": 4494.40329218107,
+            "replay_overhead": {
+              "gate_ns": 300128.0087046325,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 3776.0003469884396,
+              "parent_one_ns": 305279.99997138977,
+              "parent_two_ns": 306432.00874328613,
+              "two_ns": 6399.999838322401
+            }
+          },
+          "raw_gain_us": 0.03200024366378784,
+          "calibrated_gain_us": 0.43472434735097204
+        },
+        {
+          "load": "verify 1",
+          "layer": "router",
+          "m": 8,
+          "new_seed": 2339903624465155179,
+          "old_seed": 7929102412734734822,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+          ],
+          "old_kernel_labels": [
+            "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 8448.000065982342,
+            "median_ns": 4506.071053593455,
+            "baseline_ns": 26368.000078946352,
+            "baseline_raw_ns": 30303.99978160858,
+            "paired_ratio": 5.8516609625848375,
+            "parent_ns": 6000.001449137926,
+            "outside_ns": 4677.533898305085,
+            "replay_overhead": {
+              "gate_ns": 301056.0083203018,
+              "one_ns": 4927.999805659056,
+              "overhead_ns": 3935.9997026622295,
+              "parent_one_ns": 306015.9981250763,
+              "parent_two_ns": 306944.01264190674,
+              "two_ns": 5919.999908655882
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 8527.999743819237,
+            "median_ns": 4535.129008175513,
+            "baseline_ns": 26144.000235944986,
+            "baseline_raw_ns": 30144.00042593479,
+            "paired_ratio": 5.764775420680423,
+            "parent_ns": 6511.992309242487,
+            "outside_ns": 6057.115384615385,
+            "replay_overhead": {
+              "gate_ns": 300095.999147743,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 4000.000189989805,
+              "parent_one_ns": 304991.9903278351,
+              "parent_two_ns": 306304.007768631,
+              "two_ns": 6175.999995321035
+            }
+          },
+          "raw_gain_us": 0.07999967783689499,
+          "calibrated_gain_us": 0.0290579545820583
+        },
+        {
+          "load": "verify 16",
+          "layer": "qkv_gate",
+          "m": 128,
+          "new_seed": 2340100459373122726,
+          "old_seed": 7929337619695590264,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 16863.999888300896,
+            "median_ns": 13045.52648275636,
+            "baseline_ns": 17119.999509304762,
+            "baseline_raw_ns": 20927.999168634415,
+            "paired_ratio": 1.312327220517628,
+            "parent_ns": 14288.015197962523,
+            "outside_ns": 13677.466101694916,
+            "replay_overhead": {
+              "gate_ns": 301407.9858548939,
+              "one_ns": 4863.999783992767,
+              "overhead_ns": 3807.999659329653,
+              "parent_one_ns": 306239.9923801422,
+              "parent_two_ns": 307392.0011520386,
+              "two_ns": 5919.999908655882
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 16815.999522805214,
+            "median_ns": 12940.670525786894,
+            "baseline_ns": 17023.999243974686,
+            "baseline_raw_ns": 20927.999168634415,
+            "paired_ratio": 1.3155422827627776,
+            "parent_ns": 14848.003862425685,
+            "outside_ns": 15135.14406779661,
+            "replay_overhead": {
+              "gate_ns": 300095.99518962204,
+              "one_ns": 5024.000070989132,
+              "overhead_ns": 3903.999924659729,
+              "parent_one_ns": 305151.9989967346,
+              "parent_two_ns": 306239.9923801422,
+              "two_ns": 6144.000217318535
+            }
+          },
+          "raw_gain_us": -0.04800036549568176,
+          "calibrated_gain_us": -0.1048559569694662
+        },
+        {
+          "load": "verify 16",
+          "layer": "o",
+          "m": 128,
+          "new_seed": 2340297294281090274,
+          "old_seed": 7929572826656445707,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT"
+          ],
+          "old_kernel_labels": [
+            "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopB_NNN"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 11664.00033980608,
+            "median_ns": 7419.2508988898735,
+            "baseline_ns": 7263.9998979866505,
+            "baseline_raw_ns": 11487.999930977821,
+            "paired_ratio": 0.9790745719454705,
+            "parent_ns": 8895.99253423512,
+            "outside_ns": 6355.619883040936,
+            "replay_overhead": {
+              "gate_ns": 301679.99933473766,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 4224.000032991171,
+              "parent_one_ns": 306784.0039730072,
+              "parent_two_ns": 307711.98868751526,
+              "two_ns": 5952.00015231967
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 11199.99960064888,
+            "median_ns": 7285.748879970696,
+            "baseline_ns": 7424.000184983015,
+            "baseline_raw_ns": 11327.999643981457,
+            "paired_ratio": 1.0189755792149777,
+            "parent_ns": 9200.00090263784,
+            "outside_ns": 6601.983146067416,
+            "replay_overhead": {
+              "gate_ns": 300207.9932484776,
+              "one_ns": 4927.999805659056,
+              "overhead_ns": 3903.9994589984417,
+              "parent_one_ns": 305279.99997138977,
+              "parent_two_ns": 306176.00679397583,
+              "two_ns": 5952.00015231967
+            }
+          },
+          "raw_gain_us": -0.46400073915719986,
+          "calibrated_gain_us": -0.13350201891917732
+        },
+        {
+          "load": "verify 16",
+          "layer": "pooler",
+          "m": 128,
+          "new_seed": 2340494129189057823,
+          "old_seed": 7929808033617301151,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 22368.00082027912,
+            "median_ns": 18235.175538319872,
+            "baseline_ns": 25024.000089615583,
+            "baseline_raw_ns": 29152.000322937965,
+            "paired_ratio": 1.3722927995417153,
+            "parent_ns": 23023.99557083845,
+            "outside_ns": 19223.058139534885,
+            "replay_overhead": {
+              "gate_ns": 301328.00061255693,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 4128.000233322382,
+              "parent_one_ns": 306304.007768631,
+              "parent_two_ns": 307359.9934577942,
+              "two_ns": 6047.999951988459
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 22592.000663280487,
+            "median_ns": 18816.929604477325,
+            "baseline_ns": 24880.001321434975,
+            "baseline_raw_ns": 28720.000758767128,
+            "paired_ratio": 1.3222136578283736,
+            "parent_ns": 21152.003901079297,
+            "outside_ns": 22905.147727272728,
+            "replay_overhead": {
+              "gate_ns": 299904.0044378489,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3839.9994373321533,
+              "parent_one_ns": 305119.99130249023,
+              "parent_two_ns": 305983.9904308319,
+              "two_ns": 6144.000217318535
+            }
+          },
+          "raw_gain_us": 0.22399984300136566,
+          "calibrated_gain_us": 0.5817540661574531
+        },
+        {
+          "load": "verify 16",
+          "layer": "unpooler",
+          "m": 128,
+          "new_seed": 2340690964097025373,
+          "old_seed": 7930043240578156596,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)"
+          ],
+          "old_kernel_labels": [
+            "nvjet_sm90_tst_128x64_64x8_1x2_v_bz_coopB_NNN"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 22112.000733613968,
+            "median_ns": 18338.303812177317,
+            "baseline_ns": 19952.000584453344,
+            "baseline_raw_ns": 23856.000043451786,
+            "paired_ratio": 1.0879959667373638,
+            "parent_ns": 22863.98597061634,
+            "outside_ns": 20019.464285714286,
+            "replay_overhead": {
+              "gate_ns": 300992.01016128063,
+              "one_ns": 4927.999805659056,
+              "overhead_ns": 3903.9994589984417,
+              "parent_one_ns": 305983.9904308319,
+              "parent_two_ns": 307103.9915084839,
+              "two_ns": 5952.00015231967
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 22752.000018954277,
+            "median_ns": 18919.87304679791,
+            "baseline_ns": 19695.999566465616,
+            "baseline_raw_ns": 23695.99975645542,
+            "paired_ratio": 1.041021761496389,
+            "parent_ns": 25439.979741349816,
+            "outside_ns": 24157.141025641027,
+            "replay_overhead": {
+              "gate_ns": 300000.00982545316,
+              "one_ns": 5088.00009265542,
+              "overhead_ns": 4000.000189989805,
+              "parent_one_ns": 305023.99802207947,
+              "parent_two_ns": 306208.0144882202,
+              "two_ns": 6175.999995321035
+            }
+          },
+          "raw_gain_us": 0.6399992853403091,
+          "calibrated_gain_us": 0.5815692346205942
+        },
+        {
+          "load": "verify 16",
+          "layer": "router",
+          "m": 128,
+          "new_seed": 2340887799004992924,
+          "old_seed": 7930278447539012042,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "old_kernel_labels": [
+            "void rtk<256, 4, 128, 128, 1, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 11583.99973064661,
+            "median_ns": 7652.933930716579,
+            "baseline_ns": 16512.001398950815,
+            "baseline_raw_ns": 20416.000857949257,
+            "paired_ratio": 2.1576040703391675,
+            "parent_ns": 9120.005182921886,
+            "outside_ns": 7354.4011627906975,
+            "replay_overhead": {
+              "gate_ns": 301152.0029976964,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3903.9994589984417,
+              "parent_one_ns": 306176.00679397583,
+              "parent_two_ns": 307168.00689697266,
+              "two_ns": 6080.0001956522465
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 11552.000418305397,
+            "median_ns": 7536.227514587374,
+            "baseline_ns": 16176.000237464905,
+            "baseline_raw_ns": 20175.999961793423,
+            "paired_ratio": 2.146432045231397,
+            "parent_ns": 9424.00866188109,
+            "outside_ns": 8223.739884393064,
+            "replay_overhead": {
+              "gate_ns": 299999.9893363565,
+              "one_ns": 4863.999783992767,
+              "overhead_ns": 3999.999724328518,
+              "parent_one_ns": 304863.98935317993,
+              "parent_two_ns": 305759.996175766,
+              "two_ns": 5727.999843657017
+            }
+          },
+          "raw_gain_us": -0.031999312341213226,
+          "calibrated_gain_us": -0.11670641612920554
+        },
+        {
+          "load": "verify 32",
+          "layer": "qkv_gate",
+          "m": 256,
+          "new_seed": 2341084633912960476,
+          "old_seed": 7930513654499867489,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN"
+          ],
+          "old_kernel_labels": [
+            "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 21231.99962079525,
+            "median_ns": 17232.282989315627,
+            "baseline_ns": 19840.00066295266,
+            "baseline_raw_ns": 23776.00036561489,
+            "paired_ratio": 1.1513274634158384,
+            "parent_ns": 21696.00035995245,
+            "outside_ns": 18526.067415730337,
+            "replay_overhead": {
+              "gate_ns": 301295.99664360285,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3935.9997026622295,
+              "parent_one_ns": 306400.00104904175,
+              "parent_two_ns": 307327.9857635498,
+              "two_ns": 6047.999951988459
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 21647.999994456768,
+            "median_ns": 18019.231363289273,
+            "baseline_ns": 20032.00026229024,
+            "baseline_raw_ns": 23744.000121951103,
+            "paired_ratio": 1.1117011518649789,
+            "parent_ns": 23871.99574150145,
+            "outside_ns": 21377.927710843374,
+            "replay_overhead": {
+              "gate_ns": 299967.99654327333,
+              "one_ns": 4767.999984323978,
+              "overhead_ns": 3711.999859660864,
+              "parent_one_ns": 304832.01146125793,
+              "parent_two_ns": 305824.01156425476,
+              "two_ns": 5824.000108987093
+            }
+          },
+          "raw_gain_us": 0.4160003736615181,
+          "calibrated_gain_us": 0.786948373973646
+        },
+        {
+          "load": "verify 32",
+          "layer": "o",
+          "m": 256,
+          "new_seed": 2341281468820928029,
+          "old_seed": 7930748861460722937,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+          ],
+          "old_kernel_labels": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 13327.999971807003,
+            "median_ns": 9485.006766597337,
+            "baseline_ns": 9568.000212311745,
+            "baseline_raw_ns": 13439.999893307686,
+            "paired_ratio": 1.0087499616770628,
+            "parent_ns": 11263.991938903928,
+            "outside_ns": 9133.5,
+            "replay_overhead": {
+              "gate_ns": 300960.0087534636,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3871.999680995941,
+              "parent_one_ns": 306015.9981250763,
+              "parent_two_ns": 307168.00689697266,
+              "two_ns": 6111.999973654747
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 13376.000337302685,
+            "median_ns": 9778.292945300578,
+            "baseline_ns": 9535.999968647957,
+            "baseline_raw_ns": 13183.999806642532,
+            "paired_ratio": 0.9752213420064217,
+            "parent_ns": 11519.99831199646,
+            "outside_ns": 11426.805369127516,
+            "replay_overhead": {
+              "gate_ns": 300080.00135421753,
+              "one_ns": 4767.999984323978,
+              "overhead_ns": 3647.9998379945755,
+              "parent_one_ns": 304863.98935317993,
+              "parent_two_ns": 306015.9981250763,
+              "two_ns": 5888.000130653381
+            }
+          },
+          "raw_gain_us": 0.04800036549568176,
+          "calibrated_gain_us": 0.2932861787032416
+        },
+        {
+          "load": "verify 32",
+          "layer": "pooler",
+          "m": 256,
+          "new_seed": 2341478303728895583,
+          "old_seed": 7930984068421578386,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "nvjet_sm90_tst_64x128_64x8_1x1_v_bz_NNT"
+          ],
+          "old_kernel_labels": [
+            "nvjet_sm90_tst_64x128_64x8_1x2_v_bz_NNT"
+          ],
+          "same_profile_visible_route": false,
+          "new_timing": {
+            "median_raw_ns": 28480.00079393387,
+            "median_ns": 24478.525882361282,
+            "baseline_ns": 30624.00035560131,
+            "baseline_raw_ns": 34719.99987959862,
+            "paired_ratio": 1.2510557417866544,
+            "parent_ns": 31151.997856795788,
+            "outside_ns": 27994.578125,
+            "replay_overhead": {
+              "gate_ns": 301119.995303452,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 4095.999523997307,
+              "parent_one_ns": 306143.99909973145,
+              "parent_two_ns": 307007.9982280731,
+              "two_ns": 5888.000130653381
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 28767.99926161766,
+            "median_ns": 25078.89402323162,
+            "baseline_ns": 30719.997826963663,
+            "baseline_raw_ns": 34527.99841761589,
+            "paired_ratio": 1.2249343132319335,
+            "parent_ns": 32800.00342056155,
+            "outside_ns": 30288.683333333334,
+            "replay_overhead": {
+              "gate_ns": 300016.00133255124,
+              "one_ns": 4800.000227987766,
+              "overhead_ns": 3808.0005906522274,
+              "parent_one_ns": 304895.9970474243,
+              "parent_two_ns": 305952.0125389099,
+              "two_ns": 5791.999865323305
+            }
+          },
+          "raw_gain_us": 0.2879984676837921,
+          "calibrated_gain_us": 0.6003681408703379
+        },
+        {
+          "load": "verify 32",
+          "layer": "unpooler",
+          "m": 256,
+          "new_seed": 2341675138636863138,
+          "old_seed": 7931219275382433836,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+          ],
+          "old_kernel_labels": [
+            "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT"
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 28672.000393271446,
+            "median_ns": 24832.357852954054,
+            "baseline_ns": 24896.00144326687,
+            "baseline_raw_ns": 28736.000880599022,
+            "paired_ratio": 1.0025629298147878,
+            "parent_ns": 31455.996446311474,
+            "outside_ns": 27518.11111111111,
+            "replay_overhead": {
+              "gate_ns": 300991.99432879686,
+              "one_ns": 4927.999805659056,
+              "overhead_ns": 3839.9994373321533,
+              "parent_one_ns": 305887.99715042114,
+              "parent_two_ns": 307135.9992027283,
+              "two_ns": 6016.000173985958
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 28416.000306606293,
+            "median_ns": 24714.929031254014,
+            "baseline_ns": 24543.99922862649,
+            "baseline_raw_ns": 28255.999088287354,
+            "paired_ratio": 0.993083945237659,
+            "parent_ns": 32463.99760246277,
+            "outside_ns": 32953.27868852459,
+            "replay_overhead": {
+              "gate_ns": 299952.0003795624,
+              "one_ns": 4832.000005990267,
+              "overhead_ns": 3711.999859660864,
+              "parent_one_ns": 304832.01146125793,
+              "parent_two_ns": 305920.0048446655,
+              "two_ns": 5952.00015231967
+            }
+          },
+          "raw_gain_us": -0.2560000866651535,
+          "calibrated_gain_us": -0.1174288217000394
+        },
+        {
+          "load": "verify 32",
+          "layer": "router",
+          "m": 256,
+          "new_seed": 2341871973544830694,
+          "old_seed": 7931454482343289287,
+          "same_input_seed": false,
+          "new_kernel_labels": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "old_kernel_labels": [
+            "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo..."
+          ],
+          "same_profile_visible_route": true,
+          "new_timing": {
+            "median_raw_ns": 13311.99984997511,
+            "median_ns": 9302.057464859226,
+            "baseline_ns": 17536.000348627567,
+            "baseline_raw_ns": 21536.000072956085,
+            "paired_ratio": 1.8851743729679216,
+            "parent_ns": 10800.00284127891,
+            "outside_ns": 9026.313333333334,
+            "replay_overhead": {
+              "gate_ns": 300991.9982869178,
+              "one_ns": 4991.999827325344,
+              "overhead_ns": 3999.999724328518,
+              "parent_one_ns": 305920.0048446655,
+              "parent_two_ns": 307072.0136165619,
+              "two_ns": 5983.99993032217
+            }
+          },
+          "old_timing": {
+            "median_raw_ns": 13248.000293970108,
+            "median_ns": 9578.348926852224,
+            "baseline_ns": 17791.999969631433,
+            "baseline_raw_ns": 21503.999829292297,
+            "paired_ratio": 1.8575226383487469,
+            "parent_ns": 11247.988091781735,
+            "outside_ns": 10201.906666666666,
+            "replay_overhead": {
+              "gate_ns": 299968.0086504668,
+              "one_ns": 4767.999984323978,
+              "overhead_ns": 3711.999859660864,
+              "parent_one_ns": 304800.00376701355,
+              "parent_two_ns": 305920.0048446655,
+              "two_ns": 5824.000108987093
+            }
+          },
+          "raw_gain_us": -0.06399955600500107,
+          "calibrated_gain_us": 0.2762914619929979
+        }
+      ]
+    }
+  },
+  "calibration": "Every official calibrated median equals calibrated baseline / paired_ratio. Raw event minus overhead is not the official calibrated formula. Profile snapshot durations and parent/outside timings are distinct.",
+  "cause_status": {
+    "setup_correctness": {
+      "status": "PROVEN",
+      "fact": "Official CHECK passes9/9; no setup/correctness failure observed."
+    },
+    "actual_path": {
+      "status": "PROVEN",
+      "fact": "New131107 unpooler32 selected in actual bake and timed profile. 9916 uses oldST6/35, ac492 oldST5/35. Budget did not hide new option."
+    },
+    "implementation": {
+      "status": "UNKNOWN",
+      "fact": "Focused native body equality and earlier own-output tests pass. No proof source/SO placement or prepare timing cannot change performance."
+    },
+    "measurement_comparability": {
+      "status": "PROVEN",
+      "fact": "Separate jobs change every input seed, baseline calibration and multiple routes. These30-row deltas are descriptive, not matched causal contrasts."
+    },
+    "performance_transfer": {
+      "status": "UNKNOWN",
+      "fact": "Newtarget slightly loses vs9916, wins vsac492; fullpackage loses vs9916 and wins vsac492. Cannot isolate RQ source contribution from GV source, route selection, seeds and calibration."
+    }
+  },
+  "next_smallest_falsifier": "If retained small gain merits further budget: one bounded unpoolerM32 same fixture/currentX, same run cold-L2 comparison of actualselected oldST5, actualincumbentST6, guardednew131107, with existing exact sources/codec/ownterminals and fixedF1+balancedpaired. Do not rerun unchanged full30 merely to explain this CHECK. Distinguishes geometry preference vs offset effect; officialtransfer still separate.",
+  "limits": [
+    "No minimum-size/significance rejection: preserve prior fixedunpooler+.048us paired/+.080usF1, newofficialraw/calibrated signs and poolernegative.",
+    "CHECK3182.348773us is25.310370us worse than actualscoredincumbent3157.038404us; not promoted as newbest.",
+    "CHECK improves43.544472us over239bCHECK3225.893246us; independentCHECKcontexts preventcausalstackclaim.",
+    "Shared-route labels may hide cuBLASLt configuration changes; no hiddenconfig identity claim."
+  ],
+  "files": {
+    "results/proj-rsi/jobs/71a76a2c3fcd431f.json": "7f5e6420b0dbf7d4580703f60685c8419fd8d9ea8f07b72877e6a2f5857bf091",
+    "results/proj-rsi/jobs/71a76a2c3fcd431f.submitted.json": "de908d9ad10e4b90fab8ad9a55a24beec0e7ad778221f938134ee19aff03c741",
+    "results/proj-rsi/releases/gv53-rq-unpooler32-stack-v1-f018932999fb/submission.py": "f018932999fbaed6600b330f3002749a2e423038fd925e27036ac3c1e6183d1e",
+    "results/proj-rsi/jobs/71a76a2c3fcd431f.log": "d34251a0cd816be3090ede6274c2cf9c7a75d92de5374a347760a055fbf4452a",
+    "results/proj-rsi/jobs/9916d34357b745cf.json": "0c80d3bc829cedd8dfb8b38a9e7b27b1d4e94c05ab36cf2f9d9843259b4b6e76",
+    "results/proj-rsi/jobs/9916d34357b745cf.submitted.json": "b0aba711b47c48be8d8acf78cfb470ff6c0b82bcdb81f16d0a0dda84742348b7",
+    "results/proj-rsi/releases/gv-predxor-v2-501d901db8ee/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "results/proj-rsi/jobs/9916d34357b745cf.log": "b99e1bfba1ffe4322e94693d36b8390802c8ccfa434d661c728683004a88e2d4",
+    "results/proj-rsi/jobs/ac49231d41d441f6.json": "8803ce8c782e2950b986849dc02de23691b3f34860ed67fa8e4b5ae32982a0c7",
+    "results/proj-rsi/jobs/ac49231d41d441f6.submitted.json": "caa4dbe26ba916147dac87fec8633fdab1d25cfa2a9a9b7585f68a94168b5adb",
+    "results/proj-rsi/releases/gv53-keyed-half-v1-239b530cf7ee/submission.py": "239b530cf7eead0a2dbf0af5c29aea4ba02e449500eb80e45b255b361cf2f900",
+    "results/proj-rsi/jobs/ac49231d41d441f6.log": "373924f9df729c66af7b71b3119d7dec723dc353c08bf23b2aca0e4fc987cc2c"
+  },
+  "CPU_only": true,
+  "contract": "proj_rsi/ITERATION.md: profile->measure->hypothesis->optimize/test->validate->stack/submit->learn->reprioritize->repeat"
+}
