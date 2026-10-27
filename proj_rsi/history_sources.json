@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "revision": 21,
+  "revision": 22,
   "active_jobs_snapshot": "complete-stack-scored-complete-161bdb8de7354344",
   "jobs_snapshots": [
     {
@@ -668,6 +668,7 @@
     "group8_qkv_runtime_trial",
     "group8_qkv_trial",
     "gv16_deltakey_v1",
+    "gv53_earlyload_v1",
     "gv53_exactso_counters_v1",
     "gv53_indexgate_v1",
     "gv53_keyed_choice_v1",
@@ -856,7 +857,7 @@
     "smallm_matched_geometry_trial"
   ],
   "candidate_inventory_policy": "Explicit preserved inventory cut. New in-progress candidate directories are retained on disk/ROI; append reviewed/measured versions deliberately rather than invalidating frozen history outputs during parallel CPU work. Discovery: python3 -m proj_rsi.history_catalog --discover-candidates (read-only). Refresh: append reviewed roots, advance revision/cut timestamp, regenerate/check. No source files are hidden or removed.",
-  "candidate_inventory_cut_utc": "2026-10-27T23:18:16Z",
+  "candidate_inventory_cut_utc": "2026-10-27T23:27:56Z",
   "candidate_inventory_refresh_notes": [
     {
       "cut_utc": "2026-10-27T23:18:16Z",
@@ -870,6 +871,13 @@
         "gv_top8_exponent_stats_v1"
       ],
       "basis": "Explicit root completed six-job cut through23:13/queue1839; preparing earlyload remains ROI tracked and discoverable, not silently admitted to measured inventory."
+    },
+    {
+      "cut_utc": "2026-10-27T23:27:56Z",
+      "added_completed_roots": [
+        "gv53_earlyload_v1"
+      ],
+      "basis": "Root DONE VALID_GAIN1853; pending production source remains separately ROI tracked/discoverable until delivered."
     }
   ]
 }

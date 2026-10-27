@@ -1,0 +1,315 @@
+{
+  "job_id": "research.gv53.earlyload.fixed.01",
+  "state": "CPU_VALIDATED_ACTUAL_EARLYLOAD_COMPLETE",
+  "recommended_DONE_disposition": "VALID_GAIN",
+  "native_pilot_sha256": "806c0dbf824528d8eb3af88382f5f4f8d1e06da33a44382a0a79aefe08bc822e",
+  "submission_sha256": "81fdc825bc21a568db8082873892982fb16eff5fbbc894baed2211a58aef1791",
+  "control_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+  "artifact_hashes_verified": 11,
+  "source_pins_verified": 18,
+  "actual_CU_sha256": "390793568fb29b6cd876bcd660db0cf42b7a3f10195e4c23e8073b0341db48e2",
+  "actual_SO_sha256": "d7ed705580342529ad20b424d688c1c3b242452259caeb6c5b703131c4514f22",
+  "actual_native_full_PC_predicate_128bitencoding_equals_CPU": true,
+  "native_instruction_counts": {
+    "_Z12gv_earlyloadILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G": 384,
+    "_Z10gv_predxorILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G": 360
+  },
+  "actual_resources": {
+    "control": {
+      "registers": 64,
+      "local": 0,
+      "user_static": 0,
+      "max_dynamic": 17408,
+      "max_threads": 1024,
+      "occupancy": 1,
+      "device_reserved": 1024,
+      "arm_echo": 0
+    },
+    "earlyload": {
+      "registers": 64,
+      "local": 0,
+      "user_static": 0,
+      "max_dynamic": 17408,
+      "max_threads": 1024,
+      "occupancy": 1,
+      "device_reserved": 1024,
+      "arm_echo": 1
+    }
+  },
+  "hardware": {
+    "name": "NVIDIA H100 80GB HBM3",
+    "SM_count": 132,
+    "cc": [
+      9,
+      0
+    ],
+    "UUID": "54a7daab-fe3e-c7fc-7f7c-6fbc40145a22"
+  },
+  "pack": {
+    "W_seed": 5344,
+    "actual_W_bit_reconstruction": "EXACT",
+    "packed_bytes": 50331648,
+    "escape_words": 131072,
+    "geometry": [
+      2,
+      16,
+      8,
+      1,
+      1,
+      0
+    ],
+    "packing_functions": "Exact original source AST; prepare and extension factories not executed"
+  },
+  "escape_contract": {
+    "both_arms_same_original_bank": true,
+    "SHA256": "5ab99292bd9381ab917d87664e1ea4d9f337fef77c5260762fed4600975a38ac",
+    "transport_repack_calls": 0
+  },
+  "timing": {
+    "sign": "control_minus_earlyload_us,positivefavorsnew",
+    "paired_median_us": 0.19200053066015244,
+    "paired_mean_us": 0.058666570112109184,
+    "paired_median_control_over_new": 1.0088790274544177,
+    "win_tie_loss": [
+      15,
+      0,
+      9
+    ],
+    "paired_each_delta_us": [
+      0.31999871134757996,
+      -0.15999935567378998,
+      0.15999935567378998,
+      0.2560000866651535,
+      0.22399984300136566,
+      0.2879984676837921,
+      -0.12800097465515137,
+      0.38399919867515564,
+      -0.9599998593330383,
+      -0.8320007473230362,
+      0.19200146198272705,
+      0.6399992853403091,
+      -0.38399919867515564,
+      -0.2560000866651535,
+      -1.3120006769895554,
+      0.4159994423389435,
+      0.9920001029968262,
+      0.7039997726678848,
+      0.09600073099136353,
+      -0.06400048732757568,
+      0.38400106132030487,
+      0.19199959933757782,
+      -0.12799911201000214,
+      0.38400106132030487
+    ],
+    "control_first_paired_median_us": 0.12800004333257675,
+    "new_first_paired_median_us": 0.2719992771744728,
+    "F1_medians_us": {
+      "control_before": 22.39999920129776,
+      "earlyload": 22.207999601960182,
+      "control_after": 22.336000576615334
+    },
+    "F1_before_minus_new_us": 0.19199959933757782,
+    "F1_after_minus_new_us": 0.12800097465515137,
+    "F1_endpoint_average_us": 0.1600002869963646,
+    "F1_control_drift_us": -0.06399862468242645,
+    "F1_matched_seed_endpoint_medians_us": [
+      0.03200024366378784,
+      0.22399984300136566
+    ]
+  },
+  "host_timestamps": {
+    "all_clean": {
+      "submission_span_us": {
+        "median": 24.356,
+        "minimum": 22.98,
+        "maximum": 52.433,
+        "mean": 25.001975308641974
+      },
+      "end_enqueue_to_sync_us": {
+        "median": 100.234,
+        "minimum": 84.529,
+        "maximum": 104.883,
+        "mean": 100.00660493827161
+      }
+    },
+    "F1_control_before": {
+      "submission_span_us": {
+        "median": 24.169,
+        "minimum": 23.172,
+        "maximum": 25.004,
+        "mean": 24.18881818181818
+      },
+      "end_enqueue_to_sync_us": {
+        "median": 100.695,
+        "minimum": 98.566,
+        "maximum": 104.883,
+        "mean": 100.722
+      }
+    },
+    "F1_new": {
+      "submission_span_us": {
+        "median": 23.988,
+        "minimum": 22.981,
+        "maximum": 25.256,
+        "mean": 23.929454545454547
+      },
+      "end_enqueue_to_sync_us": {
+        "median": 99.93,
+        "minimum": 98.121,
+        "maximum": 102.079,
+        "mean": 100.24127272727273
+      }
+    },
+    "F1_control_after": {
+      "submission_span_us": {
+        "median": 24.389,
+        "minimum": 23.472,
+        "maximum": 24.837,
+        "mean": 24.236454545454546
+      },
+      "end_enqueue_to_sync_us": {
+        "median": 100.234,
+        "minimum": 99.539,
+        "maximum": 102.4,
+        "mean": 100.4339090909091
+      }
+    },
+    "control": {
+      "submission_span_us": {
+        "median": 24.373,
+        "minimum": 23.268,
+        "maximum": 52.433,
+        "mean": 26.155625
+      },
+      "end_enqueue_to_sync_us": {
+        "median": 100.25399999999999,
+        "minimum": 84.529,
+        "maximum": 103.245,
+        "mean": 99.35775
+      }
+    },
+    "earlyload": {
+      "submission_span_us": {
+        "median": 24.658,
+        "minimum": 22.98,
+        "maximum": 34.205,
+        "mean": 25.063458333333333
+      },
+      "end_enqueue_to_sync_us": {
+        "median": 100.2115,
+        "minimum": 92.313,
+        "maximum": 104.622,
+        "mean": 100.02416666666667
+      }
+    }
+  },
+  "journal_spans_us": {
+    "median": 25.938,
+    "minimum": 24.551,
+    "maximum": 126.374,
+    "mean": 29.26554945054945
+  },
+  "F1_first_start_to_last_sync_seconds": 0.006531522,
+  "build": {
+    "CUDA_sha256": "390793568fb29b6cd876bcd660db0cf42b7a3f10195e4c23e8073b0341db48e2",
+    "SO_sha256": "d7ed705580342529ad20b424d688c1c3b242452259caeb6c5b703131c4514f22",
+    "stages": [
+      {
+        "stage": "native_compile",
+        "argv": [
+          "/usr/local/cuda/bin/nvcc",
+          "-c",
+          "-std=c++17",
+          "-arch=sm_90a",
+          "-O3",
+          "-lineinfo",
+          "-Xptxas=-v",
+          "-Xcompiler",
+          "-fPIC",
+          "/okc/logs/scheduler/gv53-earlyload-fixed-01/run/actual.cu",
+          "-o",
+          "/okc/logs/scheduler/gv53-earlyload-fixed-01/run/actual.o"
+        ],
+        "seconds": 1.5228519410011359,
+        "returncode": 0
+      },
+      {
+        "stage": "host_link",
+        "argv": [
+          "/usr/local/cuda/bin/nvcc",
+          "-shared",
+          "-cudart",
+          "shared",
+          "-Xcompiler",
+          "-fPIC",
+          "/okc/logs/scheduler/gv53-earlyload-fixed-01/run/actual.o",
+          "-o",
+          "/okc/logs/scheduler/gv53-earlyload-fixed-01/run/actual.so"
+        ],
+        "seconds": 0.050189993999083526,
+        "returncode": 0
+      }
+    ],
+    "CXX_Torch_compile_calls": 0,
+    "native_compile_calls": 1,
+    "actual_fullPC_predicate_encoding_equals_pilot": true,
+    "ABI": "validatedthinCABIwithcurrentstreamandstrongowners"
+  },
+  "cost": {
+    "native_compile_and_link_seconds": 1.57332152199524,
+    "task_weight_pack_seconds": 0.2687956250010757,
+    "run_elapsed_seconds": 5.120794627000578
+  },
+  "validity": {
+    "journal_rows": 91,
+    "clean_calls": 81,
+    "warmups": 10,
+    "initial_task_plus_FP64_oracles": 6,
+    "basis_columns_per_arm": 8,
+    "own_terminal_oracles": 4,
+    "mutations": 10,
+    "current_X_bytecheck": "PASS beforeanyreplay/mutation",
+    "same_original_escape_bank": "PASS",
+    "thin_currentstream_strongowners": "Source-bound success; owners retiredonlyafterallgraphsdrain/reset",
+    "post_scope_cleanup": {
+      "allocated": 0,
+      "reserved": 0,
+      "before_blas_clear": {
+        "allocated": 33554432,
+        "reserved": 1172307968
+      },
+      "blas_map_entries_workspace_bytes_after": [
+        1,
+        33554432,
+        0
+      ],
+      "clear_error": null,
+      "after_run_scope_and_drain": true
+    },
+    "external_cleanup": {
+      "cleanup_failed": false,
+      "compute_pids": [],
+      "container_exists": false,
+      "containers": [],
+      "gpu_memory_mib": 0,
+      "guard_pids": [],
+      "host_log_exists": true,
+      "host_log_tail": "2026-10-27T23:19:38Z\ntorch_import_and_device\nload_cleanup_bridge_and_compile_thin\nactual_task_weight_and_pack\nfixed_pooler_M8\ncomplete\nTRIAL_EXIT okc-proj-gv53-earlyload-fixed-01 0\n2026-10-27T23:19:49Z\n",
+      "terminal_exit": 0
+    }
+  },
+  "evidence": {
+    "results/proj-rsi/scheduler/artifacts/research.gv53.earlyload.fixed.01/collection-1793143210466227704/inventory.json": "419516d4bd9b3d6dca214ca3ddbb39225fd44a2491274e5715a6e2c34ae6089e",
+    "results/proj-rsi/scheduler/artifacts/research.gv53.earlyload.fixed.01/collection-1793143210466227704/logs/scheduler/gv53-earlyload-fixed-01/run/result.json": "448e570992bc8715d426bd15fde778837746a81cd158bed6457138521cda355d",
+    "results/proj-rsi/scheduler/artifacts/research.gv53.earlyload.fixed.01/collection-1793143210466227704/logs/scheduler/gv53-earlyload-fixed-01/run/raw.jsonl": "fa38e9de4a15732caca2a0449418f0384839950d6545b4e1396357851a20fff6",
+    "results/proj-rsi/scheduler/artifacts/research.gv53.earlyload.fixed.01/collection-1793143210466227704/logs/scheduler/gv53-earlyload-fixed-01/run/actual.sass": "bc7dba3c63327bc93373d8041d65d5b13cebb25ad6f0aee1d28026966097d225",
+    "results/proj-rsi/scheduler/artifacts/research.gv53.earlyload.fixed.01/collection-1793143210466227704/logs/scheduler/gv53-earlyload-fixed-01/run/native_compile.stderr": "ca843915666be9f0eae9e7da67b03974a4eae6beef2d0351f1cb9ed9873b67ce"
+  },
+  "limits": [
+    "OnefreshWseed/fixedM8H100cell; nofullpolicy/officialH200gainclaim.",
+    "F1andpairedusedifferentXbanks; everylossandorderestimatepreserved.",
+    "EarliernativeissuePROVEN; hardwarewaitreductioncauseUNMEASURED here, priorNCUcountercontextnotthisbinary.",
+    "Reusableevents/hosttimestampsaremethodchange; same-windowarmsidenticalmethod, cross-jobcausalityunproven.",
+    "Noactualdeviceclocktelemetrythiscleanrun; timestampgapscannotdetermineeventGPUqueueunderflow."
+  ]
+}
