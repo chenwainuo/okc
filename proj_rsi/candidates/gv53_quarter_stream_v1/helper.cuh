@@ -1,0 +1,3 @@
+__device__ __forceinline__ void gv_fix_quarter(uint32_t (&a)[4],uint32_t r,uint32_t xr,int lane,uint32_t target,uint32_t hm){
+  asm volatile("{ .reg .b32 ri, mask; .reg .pred pl, pa, pr; mov.b32 ri, %4; mov.b32 mask, %5; setp.eq.u32 pl, %6, %7; setp.eq.and.u32 pa, %8, 0, pl; setp.eq.and.u32 pr, ri, 0, pa; @pr xor.b32 %0, %0, mask; setp.eq.and.u32 pr, ri, 1, pa; @pr xor.b32 %1, %1, mask; setp.eq.and.u32 pr, ri, 2, pa; @pr xor.b32 %2, %2, mask; setp.eq.and.u32 pr, ri, 3, pa; @pr xor.b32 %3, %3, mask; }" : "+r"(a[0]),"+r"(a[1]),"+r"(a[2]),"+r"(a[3]) : "r"(r),"r"(xr),"r"(lane),"r"(target),"r"(hm));
+}

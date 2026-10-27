@@ -1,0 +1,107 @@
+{
+  "id": "research.gv53.quarter.stream.fixed.01",
+  "resource": "gpu",
+  "kind": "optimization",
+  "state": "BACKLOG",
+  "author": "rq_lab_review",
+  "created_at": 1793140677.7642174,
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 1.4276230834061343,
+      "p_gain": 0.12,
+      "p_valid": 0.9
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "No separate information credit/unpriced follow-up; measure one actual M8 native prototype against incumbent fixed implementation."
+    },
+    "basis": "CPUfirstMMAafter4PRMTvs16parent, same64regs0spills, but+114nonNOP/four loop controls/SHFLgrowth. Actualspeed UNKNOWN. Conditional0.1us completeM8 case drop gives1.427623scoreus, notforecast; subjective priors only.",
+    "confidence": "CPU_ONLY_UNMEASURED",
+    "evidence": [
+      "proj_rsi/candidates/gv53_quarter_stream_v1/codegen.json",
+      "proj_rsi/candidates/gv53_quarter_stream_v1/cpu-proof.json",
+      "proj_rsi/candidates/gv53_quarter_stream_trial_v1/cpu-proof.json",
+      "proj_rsi/scheduling/reviews/gv53-quarter-stream-v1-source.md"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 150,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 10
+  },
+  "files": {
+    "proj_rsi/candidates/gv53_quarter_stream_trial_v1/driver.py": "5a55b7d4f96b87d19624eb71e4137f054b8ef154071c863282b0e6adf73adf36",
+    "proj_rsi/candidates/gv53_quarter_stream_trial_v1/binding.cu": "39e5c37fb8f883c92aacf0b6e3431e1e9b762ed44a1c344f876dedc8e27ac596",
+    "proj_rsi/candidates/gv53_quarter_stream_v1/pilot.cu": "b7c8fccd8a92c57387872f41e164aefb86d70f5756ebef6ba5ae6b8a2bc7a7fb",
+    "proj_rsi/candidates/gv53_quarter_stream_v1/transport.py": "965d21022c14fb0ec7a4b68b1e54f6109443184ca0119dbe13b0adc75f6d3ab9",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/scheduling/reviews/gv53-quarter-stream-v1-source.md": "4715b328a56e4e2958b7cde5b004a34cf7d3850038a452028f388b29455eef2b",
+    "proj_rsi/candidates/gv53_quarter_stream_trial_v1/manifest.json": "ba674f0027d67ce8e74457d84d330cf1a1f54267a23cfb71f8116ce7d842fa9c",
+    "proj_rsi/scheduling/reviews/gv53-quarter-stream-fixed-01.md": "78193b1460dbb651286c0cf6320b8648a968ebb3a2d9c877c263fb6648a7421c"
+  },
+  "review": {
+    "actor": "measurement_contract_audit",
+    "path": "proj_rsi/scheduling/reviews/gv53-quarter-stream-fixed-01.md",
+    "sha256": "78193b1460dbb651286c0cf6320b8648a968ebb3a2d9c877c263fb6648a7421c",
+    "decision": "GO"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-gv53-quarter-stream-01",
+    "inner_seconds": 90,
+    "outer_seconds": 150,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/gv53_quarter_stream_trial_v1/driver.py",
+      "--output",
+      "/okc/logs/scheduler/gv53-quarter-stream-01/run",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/gv53-quarter-stream-fixed-01.md"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv53-quarter-stream-01"
+    ]
+  },
+  "annotations": {
+    "state": "BACKLOG_FOCUSED_DRIVER_GO_RUNTIME_UNRUN",
+    "scope": {
+      "fixed_cells": 1,
+      "m": 8,
+      "timed_calls": 81,
+      "warmup_calls": 10,
+      "own_terminal_sites": 4,
+      "mutations": 10,
+      "boundary_columns_per_arm": 8,
+      "full_prepare": false,
+      "profiling": false
+    },
+    "source_sha256": "b7c8fccd8a92c57387872f41e164aefb86d70f5756ebef6ba5ae6b8a2bc7a7fb",
+    "native_source_GO_sha256": "4715b328a56e4e2958b7cde5b004a34cf7d3850038a452028f388b29455eef2b",
+    "new_semantics": "Four ordered C12 decode4/repair4/MMA phases; distinct exact128B quarter-bucket escape bank mapped before timing; original accumulation/output unchanged",
+    "runtime_resource_gate": "Record raw actualattrs; legalresources/residency only",
+    "cleanup": "Same reviewed postdrain graph reset/run-scope release/ATenBLASclear strict0allocated",
+    "limits": "One prospectiveW fixedM8 implementation result only, no actualpolicy/officialspeed claim. Preserveall signedpaired/F1/order effects.",
+    "loop": "proj_rsi/ITERATION.md",
+    "problem": "muse_bf16_proj",
+    "pending_review_path": "proj_rsi/scheduling/reviews/gv53-quarter-stream-fixed-01.md",
+    "review_binding": "Exact independent driverGO pinned in files/review and argvpath; rootownsadmission."
+  },
+  "problem": "muse_bf16_proj"
+}
