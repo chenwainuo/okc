@@ -1,0 +1,2497 @@
+{
+  "analysis_date": "2026-10-27",
+  "state": "HISTORICAL_RETAINED_CAPTURE_REEXTRACTION_NOT_FRESH_GPU_WORK",
+  "scope": "single-GPU synthetic local EP8 full-expert _forward_marlin; not full model serving/projection/official; six shapes, not original14",
+  "metadata": {
+    "experiment_commit": "09329d68c81549760475f827c16498748dbacfc6",
+    "gpu": "NVIDIA H200",
+    "torch": "2.14.1+cu130",
+    "cuda": "13.0",
+    "seed": 5252,
+    "pairs": 20,
+    "candidate_sha256": "13285ce5b3409d6080f46bbd9ba452b63711f906c12640246552b3145b32744a",
+    "baseline_sha256": "7f06941671fc5b05c4e8cb3c383bb930df78fa2eea94c83c4faacb1a04382567",
+    "serving_diff_sha256": "05c13d3f16d080f3411b115ba2ab404ea8819cc56418afe08f32ee79c57843a6",
+    "measurement": "raw CUDA graph replay, cold L2, synthetic inputs; not official score"
+  },
+  "source_identity_limit": "Adapter hashes and exact retained serving diff; actual classfile SHA/current861333f identity is not asserted. Defaults upstreama55 stockcontrol, not861333f anchor.",
+  "inputs": {
+    "reports/2026-10-24-profiled.json": "b31ca0458f46fd2652a08497feba1b3df5f2c2eae483957309528cb0439ff0d7",
+    "results/serving-profiled.json": "91fda3e6d00da2d2fe98cff764937e19df37dc539ab9fb9ef036d272fca31414",
+    "results/serving-profiled-profiles/bs1-baseline.trace.json": "9aef8e720ffdce61edc865c0c8c8023b9378c09ec95e1a4c053f047e3ef667ca",
+    "results/serving-profiled-profiles/bs1-baseline-eager-stages.trace.json": "bd419c56b5819ed4f54586b8de7c07a605dd309dfb65f9063c141cef1004a44b",
+    "results/serving-profiled-profiles/bs1-candidate.trace.json": "2067eebc6d6459c37d2a4d7e294ca0d234ce6685ddca78a55c3f80797c444dc0",
+    "results/serving-profiled-profiles/bs1-candidate-eager-stages.trace.json": "0a1fc1c56b70bd539977502bfa56a688d55f21d91f1934f1577aa16c3847a2d5",
+    "results/serving-profiled-profiles/bs8-baseline.trace.json": "ca57ac4df75350c933102acab91668cbdc2c07779d8c2127ad7fd93860bc47ba",
+    "results/serving-profiled-profiles/bs8-baseline-eager-stages.trace.json": "f1720732634a04db3bab97d6289d695cf0808d57859ab7f6d7b04aee81238df2",
+    "results/serving-profiled-profiles/bs8-candidate.trace.json": "79bb420d3b8ae53fe1279949537d52fd0261d5308bac63e93b597ef33311b186",
+    "results/serving-profiled-profiles/bs8-candidate-eager-stages.trace.json": "bf53f95573c5afe639cb073b9bc40df7f1c4d9546fa7f77b62b33f3a87b0272a",
+    "results/serving-profiled-profiles/bs16-baseline.trace.json": "bb3e2f8cb045d5eceb4acdfa76d3ab0a50094e13e4cff4f2cb9565065b5484c8",
+    "results/serving-profiled-profiles/bs16-baseline-eager-stages.trace.json": "4d22f75bbd58fd59ad56c6d91bcc16f0ce746b52e139ba3d80d676bf3a14767e",
+    "results/serving-profiled-profiles/bs16-candidate.trace.json": "4dd8a0dd68f3da45003702164e0184965184874860ee5be5d6f8044622415510",
+    "results/serving-profiled-profiles/bs16-candidate-eager-stages.trace.json": "513543fad148f41ff8c6f8eaa1cb1121e5a6a09444a94691b77cd37eded24b93",
+    "results/serving-profiled-profiles/bs32-baseline.trace.json": "0152bf69cb7673aace9d0ec8100253b0e673aa977e05ef2a33d11a72a7a5e35f",
+    "results/serving-profiled-profiles/bs32-baseline-eager-stages.trace.json": "a17b797c27f1f7a51170c7070510db0e1b72c34ca2ae6b99ad40b2c70722eb45",
+    "results/serving-profiled-profiles/bs32-candidate.trace.json": "b3b50cfc0aeaf2beaf11b4e92407033a1d8f605e93c5392542071f1aad2eec83",
+    "results/serving-profiled-profiles/bs32-candidate-eager-stages.trace.json": "3e52c46dd006f8572f735914331bd285f0f59cf99340eed16f4296f3a1ef2645",
+    "results/serving-profiled-profiles/bs128-baseline.trace.json": "6f8ba440298a8d0f191303a255010228baa055a4371e416a02c05703814b425d",
+    "results/serving-profiled-profiles/bs128-baseline-eager-stages.trace.json": "96c440a6a2e3e280b5bca072e51de0f5e02f05b067e5056e971b1870d15bc40d",
+    "results/serving-profiled-profiles/bs128-candidate.trace.json": "71c13da4ad4f1f6df924230f0f75f79f76f53d57ff8996989895215562792958",
+    "results/serving-profiled-profiles/bs128-candidate-eager-stages.trace.json": "64cda1398e11ede95d07cc0998e318f717983156d5549ff1d42df65fad90e39c",
+    "results/serving-profiled-profiles/bs256-baseline.trace.json": "f5c5c7da5c92848133a8b5caf1e0f540c737f97135694280d9bc2b13a660bdcf",
+    "results/serving-profiled-profiles/bs256-baseline-eager-stages.trace.json": "aeed85354b498974ebc0121074ce201766774b846a211f429f11d8bb7cedbc4a",
+    "results/serving-profiled-profiles/bs256-candidate.trace.json": "203cd78e5fbd9671e9646695f763a32e392a46be7b3b10ff3a0cc75d154f8d52",
+    "results/serving-profiled-profiles/bs256-candidate-eager-stages.trace.json": "42e04b31a8b1d03133f91389f87fbdf6db9d38c92b14a24b0e53106841217ff5",
+    "reports/2026-10-25-wgmma-down-profile.json": "65bae246146f81505655dbeb9aa369a53a06e1907a23c31c5c12f854004034ab",
+    "results/rsi/wgmma-down-profile-v1/setup.json": "1a4c935376b83f52ed6dc5702320ef2925483b87cc41457faf3111f00d7bd13c",
+    "results/rsi/wgmma-down-profile-v1/down-m128.csv": "5e3348def0b002f53773182e86a254dd7fb4acf7bb98a867c1860cde0803f8de",
+    "results/rsi/wgmma-down-profile-v1/down-m128.ncu-rep": "aee3d65394a3ca4e022d9d9d144826edf2cc2bd1163885d6977293e6a529666e",
+    "reports/2026-10-25-wgmma-coalesced-profile.json": "5333cf1ef7078566afb5ebe2113a973cab56685bb2a0f4c4b96399b2467e9e07",
+    "results/rsi/wgmma-coalesced-profile-v3/setup.json": "d2fb2072a108689370fb4db66dc370fb38c8760022f705f2975d6a904f3002fa",
+    "results/rsi/wgmma-coalesced-profile-v3/down-m128.csv": "a54885a50981b25c3fdaa266be4cd32d3dbc99837139b532a1c1a7f58409aa39",
+    "results/rsi/wgmma-coalesced-profile-v3/down-m128.ncu-rep": "a8562c5479a40f6bab7e724c6cfa90a8ac8669ef18e9fe0c9df61268c4d00d57",
+    "results/rsi/probes/pipeline-profile-v4-lease.json": "283e124a57820cf76fb466afef183ab4406fffe6ed9251d69fda53f9f5615423",
+    "reports/2026-10-25-wgmma-pipeline-profile.json": "c8044e0dd30fea65fc51feca39ae836023e93d983f0ba36222ad592af81a35a3",
+    "results/rsi/wgmma-pipeline-profile-v4/setup.json": "f98e7937163404545b3939d77d1800b07fa2ed5f8a4c154c8629aa53ecb79236",
+    "results/rsi/wgmma-pipeline-profile-v4/down-m128.csv": "968572caafa518f3a12b5cc22a5d84373075a318b03529564307104c7f795e29",
+    "results/rsi/wgmma-pipeline-profile-v4/down-m128.ncu-rep": "9b08398006f632ef4d9de072ff7b20f929a2e4d449cdce57e4a4293152737012"
+  },
+  "graph_method": "Kernel dur sums grouped by actual GPU replay annotation; graphid0 cache flush excluded; five replays. First/second Marlin occurrence maps gate_up/down, corroborated by eager labels. Shares divide exclusive kernel sum, not wall/model time.",
+  "traces": [
+    {
+      "bs": 1,
+      "arm": "baseline",
+      "path": "results/serving-profiled-profiles/bs1-baseline.trace.json",
+      "capture_UTC_first_kernel": "2026-10-24T23:30:43.507610+00:00",
+      "capture_UTC_last_kernel_end": "2026-10-24T23:30:43.508224+00:00",
+      "GPU": [
+        {
+          "id": 0,
+          "name": "NVIDIA H200",
+          "totalGlobalMem": 150111977472,
+          "computeMajor": 9,
+          "computeMinor": 0,
+          "maxThreadsPerBlock": 1024,
+          "maxThreadsPerMultiprocessor": 2048,
+          "regsPerBlock": 65536,
+          "warpSize": 32,
+          "sharedMemPerBlock": 49152,
+          "numSms": 132,
+          "regsPerMultiprocessor": 65536,
+          "sharedMemPerBlockOptin": 232448,
+          "sharedMemPerMultiprocessor": 233472
+        }
+      ],
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13000,
+      "profiled_replays": 5,
+      "kernel_events": 105,
+      "exclusive_kernel_sum_us": 418.9360000000001,
+      "mean_exclusive_kernel_sum_us_per_replay": 83.78720000000001,
+      "GPU_replay_span_us_mean": 87.649,
+      "ranked_stage_components": [
+        {
+          "stage": "gate_up",
+          "count": 5,
+          "GPU_duration_us": 138.527,
+          "mean_us_per_profiled_replay": 27.705399999999997,
+          "share_percent_of_exclusive_GPU_kernel_sum": 33.06638722859815
+        },
+        {
+          "stage": "other",
+          "count": 60,
+          "GPU_duration_us": 119.48399999999998,
+          "mean_us_per_profiled_replay": 23.896799999999995,
+          "share_percent_of_exclusive_GPU_kernel_sum": 28.520824183168777
+        },
+        {
+          "stage": "down",
+          "count": 5,
+          "GPU_duration_us": 92.734,
+          "mean_us_per_profiled_replay": 18.546799999999998,
+          "share_percent_of_exclusive_GPU_kernel_sum": 22.13560066454064
+        },
+        {
+          "stage": "route_map_cast",
+          "count": 20,
+          "GPU_duration_us": 48.254999999999995,
+          "mean_us_per_profiled_replay": 9.651,
+          "share_percent_of_exclusive_GPU_kernel_sum": 11.518465827715925
+        },
+        {
+          "stage": "swiglu",
+          "count": 5,
+          "GPU_duration_us": 8.288,
+          "mean_us_per_profiled_replay": 1.6576,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.978345141023927
+        },
+        {
+          "stage": "alignment",
+          "count": 5,
+          "GPU_duration_us": 6.847999999999999,
+          "mean_us_per_profiled_replay": 1.3695999999999997,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.6346172207688043
+        },
+        {
+          "stage": "workspace_zero",
+          "count": 5,
+          "GPU_duration_us": 4.8,
+          "mean_us_per_profiled_replay": 0.96,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.1457597341837413
+        }
+      ],
+      "ranked_physical_kernel_symbols": [
+        {
+          "name": "void sglang::device::marlin_moe::Marlin<__nv_bfloat16, 562949953487106l, 2814749767172868l, 128, 1, 8, 4, true, 4, 1, false, true, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, int4 const*, unsigned short const*, int4 const*, int const*, int const*, int const*, int const*, float const*, int, bool, bool, int, int, int, int, int*, bool, bool, bool, int)",
+          "count": 10,
+          "GPU_duration_us": 231.261,
+          "mean_us_per_profiled_replay": 46.2522,
+          "share_percent_of_exclusive_GPU_kernel_sum": 55.20198789313879
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 10,
+          "GPU_duration_us": 28.927999999999997,
+          "mean_us_per_profiled_replay": 5.7856,
+          "share_percent_of_exclusive_GPU_kernel_sum": 6.905111998014014
+        },
+        {
+          "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>)",
+          "count": 5,
+          "GPU_duration_us": 27.391000000000002,
+          "mean_us_per_profiled_replay": 5.4782,
+          "share_percent_of_exclusive_GPU_kernel_sum": 6.538230183130597
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+          "count": 15,
+          "GPU_duration_us": 25.118000000000006,
+          "mean_us_per_profiled_replay": 5.023600000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 5.995665209005672
+        },
+        {
+          "name": "void at::native::reduce_kernel<128, 4, at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4>)",
+          "count": 5,
+          "GPU_duration_us": 19.552,
+          "mean_us_per_profiled_replay": 3.9104,
+          "share_percent_of_exclusive_GPU_kernel_sum": 4.667061317241774
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, unsigned short, unsigned short)#1}>(at::TensorIteratorBase&, at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, unsigned short, unsigned short)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, unsigned short, unsigned short)#1}>(at::TensorIteratorBase&, at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, unsigned short, unsigned short)#1} const&)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 13.248000000000001,
+          "mean_us_per_profiled_replay": 2.6496000000000004,
+          "share_percent_of_exclusive_GPU_kernel_sum": 3.162296866347127
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 12.766,
+          "mean_us_per_profiled_replay": 2.5532,
+          "share_percent_of_exclusive_GPU_kernel_sum": 3.0472434930395087
+        },
+        {
+          "name": "void sglang::act_and_mul_kernel<__nv_bfloat16, (sglang::ActivationKind)0, true, true, false, false, false>(sglang::ActivationParams)",
+          "count": 5,
+          "GPU_duration_us": 8.288,
+          "mean_us_per_profiled_replay": 1.6576,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.978345141023927
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<8, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>, false>(int, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 7.4239999999999995,
+          "mean_us_per_profiled_replay": 1.4848,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.7721083888708533
+        },
+        {
+          "name": "_moe_align_small_numel_kernel",
+          "count": 5,
+          "GPU_duration_us": 6.847999999999999,
+          "mean_us_per_profiled_replay": 1.3695999999999997,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.6346172207688043
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 5,
+          "GPU_duration_us": 6.561000000000001,
+          "mean_us_per_profiled_replay": 1.3122000000000003,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.5661103366624018
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::pow_tensor_scalar_kernel_impl<float, float>(at::TensorIteratorBase&, float)::{lambda(float)#1}, std::array<char*, 2ul>, false>(int, at::native::(anonymous namespace)::pow_tensor_scalar_kernel_impl<float, float>(at::TensorIteratorBase&, float)::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 5.984,
+          "mean_us_per_profiled_replay": 1.1968,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.4283804686157309
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::rsqrt_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, false>(int, at::native::rsqrt_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 5.5680000000000005,
+          "mean_us_per_profiled_replay": 1.1136000000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.3290812916531403
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<8, at::native::compare_scalar_kernel<int>(at::TensorIteratorBase&, at::native::(anonymous namespace)::OpType, int)::{lambda(int)#1}, std::array<char*, 2ul>, false>(int, at::native::compare_scalar_kernel<int>(at::TensorIteratorBase&, at::native::(anonymous namespace)::OpType, int)::{lambda(int)#1}, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 5.536,
+          "mean_us_per_profiled_replay": 1.1072,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.3214428934252482
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctorOnSelf_add<float>, std::array<char*, 2ul>, false>(int, at::native::CUDAFunctorOnSelf_add<float>, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 5.215,
+          "mean_us_per_profiled_replay": 1.043,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2448202112017108
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 4.8,
+          "mean_us_per_profiled_replay": 0.96,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.1457597341837413
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<8, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 4.448,
+          "mean_us_per_profiled_replay": 0.8896000000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.061737353676934
+        }
+      ],
+      "eager_calls": 3,
+      "eager_stage_GPU_spans": {
+        "okc_stage/finalize": {
+          "count": 3,
+          "GPU_span_us": 845.94,
+          "mean_GPU_span_us_per_eager_call": 281.98
+        },
+        "okc_stage/gemm_down": {
+          "count": 3,
+          "GPU_span_us": 57.384,
+          "mean_GPU_span_us_per_eager_call": 19.128
+        },
+        "okc_stage/gemm_gate_up": {
+          "count": 3,
+          "GPU_span_us": 79.72,
+          "mean_GPU_span_us_per_eager_call": 26.573333333333334
+        },
+        "okc_stage/workspace": {
+          "count": 3,
+          "GPU_span_us": 2.628,
+          "mean_GPU_span_us_per_eager_call": 0.876
+        },
+        "okc_stage/swiglu": {
+          "count": 3,
+          "GPU_span_us": 4.71,
+          "mean_GPU_span_us_per_eager_call": 1.57
+        },
+        "okc_stage/alignment": {
+          "count": 3,
+          "GPU_span_us": 3.782,
+          "mean_GPU_span_us_per_eager_call": 1.2606666666666666
+        }
+      },
+      "eager_kernel_events": 63
+    },
+    {
+      "bs": 1,
+      "arm": "candidate",
+      "path": "results/serving-profiled-profiles/bs1-candidate.trace.json",
+      "capture_UTC_first_kernel": "2026-10-24T23:30:43.569535+00:00",
+      "capture_UTC_last_kernel_end": "2026-10-24T23:30:43.570023+00:00",
+      "GPU": [
+        {
+          "id": 0,
+          "name": "NVIDIA H200",
+          "totalGlobalMem": 150111977472,
+          "computeMajor": 9,
+          "computeMinor": 0,
+          "maxThreadsPerBlock": 1024,
+          "maxThreadsPerMultiprocessor": 2048,
+          "regsPerBlock": 65536,
+          "warpSize": 32,
+          "sharedMemPerBlock": 49152,
+          "numSms": 132,
+          "regsPerMultiprocessor": 65536,
+          "sharedMemPerBlockOptin": 232448,
+          "sharedMemPerMultiprocessor": 233472
+        }
+      ],
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13000,
+      "profiled_replays": 5,
+      "kernel_events": 40,
+      "exclusive_kernel_sum_us": 300.6669999999999,
+      "mean_exclusive_kernel_sum_us_per_replay": 60.13339999999998,
+      "GPU_replay_span_us_mean": 61.3452,
+      "ranked_stage_components": [
+        {
+          "stage": "gate_up",
+          "count": 5,
+          "GPU_duration_us": 136.258,
+          "mean_us_per_profiled_replay": 27.251600000000003,
+          "share_percent_of_exclusive_GPU_kernel_sum": 45.31857503483922
+        },
+        {
+          "stage": "down",
+          "count": 5,
+          "GPU_duration_us": 93.05699999999999,
+          "mean_us_per_profiled_replay": 18.611399999999996,
+          "share_percent_of_exclusive_GPU_kernel_sum": 30.95018741664367
+        },
+        {
+          "stage": "alignment",
+          "count": 5,
+          "GPU_duration_us": 22.207,
+          "mean_us_per_profiled_replay": 4.4414,
+          "share_percent_of_exclusive_GPU_kernel_sum": 7.385911989011102
+        },
+        {
+          "stage": "post_norm_router_weighted_sum",
+          "count": 5,
+          "GPU_duration_us": 19.709,
+          "mean_us_per_profiled_replay": 3.9417999999999997,
+          "share_percent_of_exclusive_GPU_kernel_sum": 6.555092510983914
+        },
+        {
+          "stage": "route_map_cast",
+          "count": 10,
+          "GPU_duration_us": 15.868,
+          "mean_us_per_profiled_replay": 3.1736,
+          "share_percent_of_exclusive_GPU_kernel_sum": 5.277599470510566
+        },
+        {
+          "stage": "swiglu",
+          "count": 5,
+          "GPU_duration_us": 8.768,
+          "mean_us_per_profiled_replay": 1.7536,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.9161830197527507
+        },
+        {
+          "stage": "workspace_zero",
+          "count": 5,
+          "GPU_duration_us": 4.8,
+          "mean_us_per_profiled_replay": 0.96,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.596450558258805
+        }
+      ],
+      "ranked_physical_kernel_symbols": [
+        {
+          "name": "void sglang::device::marlin_moe::Marlin<__nv_bfloat16, 562949953487106l, 2814749767172868l, 128, 1, 8, 4, true, 4, 1, false, true, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, int4 const*, unsigned short const*, int4 const*, int const*, int const*, int const*, int const*, float const*, int, bool, bool, int, int, int, int, int*, bool, bool, bool, int)",
+          "count": 10,
+          "GPU_duration_us": 229.31499999999997,
+          "mean_us_per_profiled_replay": 45.86299999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 76.26876245148289
+        },
+        {
+          "name": "void moe_align_block_size_small_batch_expert_kernel<int, 256>(int const*, int*, int*, int*, int, int, unsigned long, bool, bool, int)",
+          "count": 5,
+          "GPU_duration_us": 22.207,
+          "mean_us_per_profiled_replay": 4.4414,
+          "share_percent_of_exclusive_GPU_kernel_sum": 7.385911989011102
+        },
+        {
+          "name": "_post_expert_norm_weighted_sum_kernel",
+          "count": 5,
+          "GPU_duration_us": 19.709,
+          "mean_us_per_profiled_replay": 3.9417999999999997,
+          "share_percent_of_exclusive_GPU_kernel_sum": 6.555092510983914
+        },
+        {
+          "name": "void sglang::act_and_mul_kernel<__nv_bfloat16, (sglang::ActivationKind)0, true, true, false, false, false>(sglang::ActivationParams)",
+          "count": 5,
+          "GPU_duration_us": 8.768,
+          "mean_us_per_profiled_replay": 1.7536,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.9161830197527507
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 8.317,
+          "mean_us_per_profiled_replay": 1.6634,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.766183186049684
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 5,
+          "GPU_duration_us": 7.551,
+          "mean_us_per_profiled_replay": 1.5102,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.511416284460883
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 4.8,
+          "mean_us_per_profiled_replay": 0.96,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.596450558258805
+        }
+      ],
+      "eager_calls": 3,
+      "eager_stage_GPU_spans": {
+        "okc_stage/gemm_down": {
+          "count": 3,
+          "GPU_span_us": 55.975,
+          "mean_GPU_span_us_per_eager_call": 18.658333333333335
+        },
+        "okc_stage/swiglu": {
+          "count": 3,
+          "GPU_span_us": 4.712,
+          "mean_GPU_span_us_per_eager_call": 1.5706666666666667
+        },
+        "okc_stage/gemm_gate_up": {
+          "count": 3,
+          "GPU_span_us": 79.369,
+          "mean_GPU_span_us_per_eager_call": 26.456333333333333
+        },
+        "okc_stage/workspace": {
+          "count": 3,
+          "GPU_span_us": 2.534,
+          "mean_GPU_span_us_per_eager_call": 0.8446666666666666
+        },
+        "okc_stage/alignment": {
+          "count": 3,
+          "GPU_span_us": 13.126000000000001,
+          "mean_GPU_span_us_per_eager_call": 4.375333333333334
+        },
+        "okc_stage/finalize": {
+          "count": 3,
+          "GPU_span_us": 10.438,
+          "mean_GPU_span_us_per_eager_call": 3.4793333333333334
+        }
+      },
+      "eager_kernel_events": 24
+    },
+    {
+      "bs": 8,
+      "arm": "baseline",
+      "path": "results/serving-profiled-profiles/bs8-baseline.trace.json",
+      "capture_UTC_first_kernel": "2026-10-24T23:30:44.126796+00:00",
+      "capture_UTC_last_kernel_end": "2026-10-24T23:30:44.127696+00:00",
+      "GPU": [
+        {
+          "id": 0,
+          "name": "NVIDIA H200",
+          "totalGlobalMem": 150111977472,
+          "computeMajor": 9,
+          "computeMinor": 0,
+          "maxThreadsPerBlock": 1024,
+          "maxThreadsPerMultiprocessor": 2048,
+          "regsPerBlock": 65536,
+          "warpSize": 32,
+          "sharedMemPerBlock": 49152,
+          "numSms": 132,
+          "regsPerMultiprocessor": 65536,
+          "sharedMemPerBlockOptin": 232448,
+          "sharedMemPerMultiprocessor": 233472
+        }
+      ],
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13000,
+      "profiled_replays": 5,
+      "kernel_events": 105,
+      "exclusive_kernel_sum_us": 669.4309999999999,
+      "mean_exclusive_kernel_sum_us_per_replay": 133.88619999999997,
+      "GPU_replay_span_us_mean": 144.4356,
+      "ranked_stage_components": [
+        {
+          "stage": "gate_up",
+          "count": 5,
+          "GPU_duration_us": 280.59000000000003,
+          "mean_us_per_profiled_replay": 56.11800000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 41.914700693574105
+        },
+        {
+          "stage": "down",
+          "count": 5,
+          "GPU_duration_us": 163.82999999999998,
+          "mean_us_per_profiled_replay": 32.766,
+          "share_percent_of_exclusive_GPU_kernel_sum": 24.47302261174042
+        },
+        {
+          "stage": "other",
+          "count": 60,
+          "GPU_duration_us": 145.305,
+          "mean_us_per_profiled_replay": 29.061,
+          "share_percent_of_exclusive_GPU_kernel_sum": 21.70574711956871
+        },
+        {
+          "stage": "route_map_cast",
+          "count": 20,
+          "GPU_duration_us": 46.844,
+          "mean_us_per_profiled_replay": 9.3688,
+          "share_percent_of_exclusive_GPU_kernel_sum": 6.997584515805215
+        },
+        {
+          "stage": "alignment",
+          "count": 5,
+          "GPU_duration_us": 17.535,
+          "mean_us_per_profiled_replay": 3.507,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.619388704735813
+        },
+        {
+          "stage": "swiglu",
+          "count": 5,
+          "GPU_duration_us": 10.527000000000001,
+          "mean_us_per_profiled_replay": 2.1054000000000004,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.5725295064017055
+        },
+        {
+          "stage": "workspace_zero",
+          "count": 5,
+          "GPU_duration_us": 4.8,
+          "mean_us_per_profiled_replay": 0.96,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.7170268481740464
+        }
+      ],
+      "ranked_physical_kernel_symbols": [
+        {
+          "name": "void sglang::device::marlin_moe::Marlin<__nv_bfloat16, 562949953487106l, 2814749767172868l, 128, 1, 8, 4, true, 4, 1, false, true, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, int4 const*, unsigned short const*, int4 const*, int const*, int const*, int const*, int const*, float const*, int, bool, bool, int, int, int, int, int*, bool, bool, bool, int)",
+          "count": 10,
+          "GPU_duration_us": 444.41999999999996,
+          "mean_us_per_profiled_replay": 88.88399999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 66.38772330531451
+        },
+        {
+          "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>)",
+          "count": 5,
+          "GPU_duration_us": 45.05500000000001,
+          "mean_us_per_profiled_replay": 9.011000000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 6.730342634267014
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 10,
+          "GPU_duration_us": 29.210999999999995,
+          "mean_us_per_profiled_replay": 5.842199999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 4.36355651291918
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+          "count": 15,
+          "GPU_duration_us": 29.02000000000001,
+          "mean_us_per_profiled_replay": 5.804000000000002,
+          "share_percent_of_exclusive_GPU_kernel_sum": 4.33502481958559
+        },
+        {
+          "name": "void at::native::reduce_kernel<128, 4, at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4>)",
+          "count": 5,
+          "GPU_duration_us": 20.16,
+          "mean_us_per_profiled_replay": 4.032,
+          "share_percent_of_exclusive_GPU_kernel_sum": 3.011512762330995
+        },
+        {
+          "name": "_moe_align_small_numel_kernel",
+          "count": 5,
+          "GPU_duration_us": 17.535,
+          "mean_us_per_profiled_replay": 3.507,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.619388704735813
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, unsigned short, unsigned short)#1}>(at::TensorIteratorBase&, at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, unsigned short, unsigned short)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, unsigned short, unsigned short)#1}>(at::TensorIteratorBase&, at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, unsigned short, unsigned short)#1} const&)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 15.04,
+          "mean_us_per_profiled_replay": 3.008,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.2466841242786786
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 11.488,
+          "mean_us_per_profiled_replay": 2.2976,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.7160842566298844
+        },
+        {
+          "name": "void sglang::act_and_mul_kernel<__nv_bfloat16, (sglang::ActivationKind)0, true, true, false, false, false>(sglang::ActivationParams)",
+          "count": 5,
+          "GPU_duration_us": 10.527000000000001,
+          "mean_us_per_profiled_replay": 2.1054000000000004,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.5725295064017055
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<8, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>, false>(int, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 7.231999999999999,
+          "mean_us_per_profiled_replay": 1.4464,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.0803204512488964
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::pow_tensor_scalar_kernel_impl<float, float>(at::TensorIteratorBase&, float)::{lambda(float)#1}, std::array<char*, 2ul>, false>(int, at::native::(anonymous namespace)::pow_tensor_scalar_kernel_impl<float, float>(at::TensorIteratorBase&, float)::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 7.038,
+          "mean_us_per_profiled_replay": 1.4076,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.0513406161351957
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<8, at::native::compare_scalar_kernel<int>(at::TensorIteratorBase&, at::native::(anonymous namespace)::OpType, int)::{lambda(int)#1}, std::array<char*, 2ul>, false>(int, at::native::compare_scalar_kernel<int>(at::TensorIteratorBase&, at::native::(anonymous namespace)::OpType, int)::{lambda(int)#1}, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 6.5920000000000005,
+          "mean_us_per_profiled_replay": 1.3184,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.9847168714923571
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 5,
+          "GPU_duration_us": 6.1450000000000005,
+          "mean_us_per_profiled_replay": 1.229,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.9179437462561489
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctorOnSelf_add<float>, std::array<char*, 2ul>, false>(int, at::native::CUDAFunctorOnSelf_add<float>, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 5.344,
+          "mean_us_per_profiled_replay": 1.0688,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.7982898909671049
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::rsqrt_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, false>(int, at::native::rsqrt_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 5.344,
+          "mean_us_per_profiled_replay": 1.0688,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.7982898909671049
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 4.8,
+          "mean_us_per_profiled_replay": 0.96,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.7170268481740464
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<8, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 4.48,
+          "mean_us_per_profiled_replay": 0.8960000000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.6692250582957767
+        }
+      ],
+      "eager_calls": 3,
+      "eager_stage_GPU_spans": {
+        "okc_stage/finalize": {
+          "count": 3,
+          "GPU_span_us": 1114.6480000000001,
+          "mean_GPU_span_us_per_eager_call": 371.5493333333334
+        },
+        "okc_stage/gemm_down": {
+          "count": 3,
+          "GPU_span_us": 95.529,
+          "mean_GPU_span_us_per_eager_call": 31.843
+        },
+        "okc_stage/gemm_gate_up": {
+          "count": 3,
+          "GPU_span_us": 162.377,
+          "mean_GPU_span_us_per_eager_call": 54.12566666666667
+        },
+        "okc_stage/workspace": {
+          "count": 3,
+          "GPU_span_us": 2.662,
+          "mean_GPU_span_us_per_eager_call": 0.8873333333333333
+        },
+        "okc_stage/swiglu": {
+          "count": 3,
+          "GPU_span_us": 5.862,
+          "mean_GPU_span_us_per_eager_call": 1.954
+        },
+        "okc_stage/alignment": {
+          "count": 3,
+          "GPU_span_us": 10.599,
+          "mean_GPU_span_us_per_eager_call": 3.533
+        }
+      },
+      "eager_kernel_events": 63
+    },
+    {
+      "bs": 8,
+      "arm": "candidate",
+      "path": "results/serving-profiled-profiles/bs8-candidate.trace.json",
+      "capture_UTC_first_kernel": "2026-10-24T23:30:44.186788+00:00",
+      "capture_UTC_last_kernel_end": "2026-10-24T23:30:44.187504+00:00",
+      "GPU": [
+        {
+          "id": 0,
+          "name": "NVIDIA H200",
+          "totalGlobalMem": 150111977472,
+          "computeMajor": 9,
+          "computeMinor": 0,
+          "maxThreadsPerBlock": 1024,
+          "maxThreadsPerMultiprocessor": 2048,
+          "regsPerBlock": 65536,
+          "warpSize": 32,
+          "sharedMemPerBlock": 49152,
+          "numSms": 132,
+          "regsPerMultiprocessor": 65536,
+          "sharedMemPerBlockOptin": 232448,
+          "sharedMemPerMultiprocessor": 233472
+        }
+      ],
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13000,
+      "profiled_replays": 5,
+      "kernel_events": 40,
+      "exclusive_kernel_sum_us": 512.0370000000001,
+      "mean_exclusive_kernel_sum_us_per_replay": 102.40740000000002,
+      "GPU_replay_span_us_mean": 106.22379999999998,
+      "ranked_stage_components": [
+        {
+          "stage": "gate_up",
+          "count": 5,
+          "GPU_duration_us": 277.82800000000003,
+          "mean_us_per_profiled_replay": 55.5656,
+          "share_percent_of_exclusive_GPU_kernel_sum": 54.25936016342568
+        },
+        {
+          "stage": "down",
+          "count": 5,
+          "GPU_duration_us": 160.03300000000002,
+          "mean_us_per_profiled_replay": 32.006600000000006,
+          "share_percent_of_exclusive_GPU_kernel_sum": 31.254186709163587
+        },
+        {
+          "stage": "alignment",
+          "count": 5,
+          "GPU_duration_us": 23.808,
+          "mean_us_per_profiled_replay": 4.7616,
+          "share_percent_of_exclusive_GPU_kernel_sum": 4.649663989125785
+        },
+        {
+          "stage": "post_norm_router_weighted_sum",
+          "count": 5,
+          "GPU_duration_us": 19.232,
+          "mean_us_per_profiled_replay": 3.8464,
+          "share_percent_of_exclusive_GPU_kernel_sum": 3.7559785718610166
+        },
+        {
+          "stage": "route_map_cast",
+          "count": 10,
+          "GPU_duration_us": 16.512,
+          "mean_us_per_profiled_replay": 3.3024,
+          "share_percent_of_exclusive_GPU_kernel_sum": 3.224766960200141
+        },
+        {
+          "stage": "swiglu",
+          "count": 5,
+          "GPU_duration_us": 9.568,
+          "mean_us_per_profiled_replay": 1.9136,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.868614963371787
+        },
+        {
+          "stage": "workspace_zero",
+          "count": 5,
+          "GPU_duration_us": 5.056,
+          "mean_us_per_profiled_replay": 1.0112,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.9874286428519812
+        }
+      ],
+      "ranked_physical_kernel_symbols": [
+        {
+          "name": "void sglang::device::marlin_moe::Marlin<__nv_bfloat16, 562949953487106l, 2814749767172868l, 128, 1, 8, 4, true, 4, 1, false, true, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, int4 const*, unsigned short const*, int4 const*, int const*, int const*, int const*, int const*, float const*, int, bool, bool, int, int, int, int, int*, bool, bool, bool, int)",
+          "count": 10,
+          "GPU_duration_us": 437.86100000000005,
+          "mean_us_per_profiled_replay": 87.57220000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 85.51354687258927
+        },
+        {
+          "name": "void moe_align_block_size_small_batch_expert_kernel<int, 256>(int const*, int*, int*, int*, int, int, unsigned long, bool, bool, int)",
+          "count": 5,
+          "GPU_duration_us": 23.808,
+          "mean_us_per_profiled_replay": 4.7616,
+          "share_percent_of_exclusive_GPU_kernel_sum": 4.649663989125785
+        },
+        {
+          "name": "_post_expert_norm_weighted_sum_kernel",
+          "count": 5,
+          "GPU_duration_us": 19.232,
+          "mean_us_per_profiled_replay": 3.8464,
+          "share_percent_of_exclusive_GPU_kernel_sum": 3.7559785718610166
+        },
+        {
+          "name": "void sglang::act_and_mul_kernel<__nv_bfloat16, (sglang::ActivationKind)0, true, true, false, false, false>(sglang::ActivationParams)",
+          "count": 5,
+          "GPU_duration_us": 9.568,
+          "mean_us_per_profiled_replay": 1.9136,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.868614963371787
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 8.671999999999999,
+          "mean_us_per_profiled_replay": 1.7343999999999997,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.693627608942322
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 5,
+          "GPU_duration_us": 7.84,
+          "mean_us_per_profiled_replay": 1.568,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.5311393512578189
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 5.056,
+          "mean_us_per_profiled_replay": 1.0112,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.9874286428519812
+        }
+      ],
+      "eager_calls": 3,
+      "eager_stage_GPU_spans": {
+        "okc_stage/gemm_down": {
+          "count": 3,
+          "GPU_span_us": 93.027,
+          "mean_GPU_span_us_per_eager_call": 31.009
+        },
+        "okc_stage/swiglu": {
+          "count": 3,
+          "GPU_span_us": 5.989999999999999,
+          "mean_GPU_span_us_per_eager_call": 1.9966666666666664
+        },
+        "okc_stage/gemm_gate_up": {
+          "count": 3,
+          "GPU_span_us": 162.08200000000002,
+          "mean_GPU_span_us_per_eager_call": 54.02733333333334
+        },
+        "okc_stage/workspace": {
+          "count": 3,
+          "GPU_span_us": 2.757,
+          "mean_GPU_span_us_per_eager_call": 0.919
+        },
+        "okc_stage/alignment": {
+          "count": 3,
+          "GPU_span_us": 14.181999999999999,
+          "mean_GPU_span_us_per_eager_call": 4.727333333333333
+        },
+        "okc_stage/finalize": {
+          "count": 3,
+          "GPU_span_us": 10.342,
+          "mean_GPU_span_us_per_eager_call": 3.4473333333333334
+        }
+      },
+      "eager_kernel_events": 24
+    },
+    {
+      "bs": 16,
+      "arm": "baseline",
+      "path": "results/serving-profiled-profiles/bs16-baseline.trace.json",
+      "capture_UTC_first_kernel": "2026-10-24T23:30:44.953600+00:00",
+      "capture_UTC_last_kernel_end": "2026-10-24T23:30:44.954879+00:00",
+      "GPU": [
+        {
+          "id": 0,
+          "name": "NVIDIA H200",
+          "totalGlobalMem": 150111977472,
+          "computeMajor": 9,
+          "computeMinor": 0,
+          "maxThreadsPerBlock": 1024,
+          "maxThreadsPerMultiprocessor": 2048,
+          "regsPerBlock": 65536,
+          "warpSize": 32,
+          "sharedMemPerBlock": 49152,
+          "numSms": 132,
+          "regsPerMultiprocessor": 65536,
+          "sharedMemPerBlockOptin": 232448,
+          "sharedMemPerMultiprocessor": 233472
+        }
+      ],
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13000,
+      "profiled_replays": 5,
+      "kernel_events": 110,
+      "exclusive_kernel_sum_us": 1039.6669999999997,
+      "mean_exclusive_kernel_sum_us_per_replay": 207.93339999999995,
+      "GPU_replay_span_us_mean": 217.8634,
+      "ranked_stage_components": [
+        {
+          "stage": "gate_up",
+          "count": 5,
+          "GPU_duration_us": 519.054,
+          "mean_us_per_profiled_replay": 103.8108,
+          "share_percent_of_exclusive_GPU_kernel_sum": 49.9250240702071
+        },
+        {
+          "stage": "down",
+          "count": 5,
+          "GPU_duration_us": 276.309,
+          "mean_us_per_profiled_replay": 55.26180000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 26.576682726296024
+        },
+        {
+          "stage": "other",
+          "count": 60,
+          "GPU_duration_us": 161.752,
+          "mean_us_per_profiled_replay": 32.3504,
+          "share_percent_of_exclusive_GPU_kernel_sum": 15.558058493729247
+        },
+        {
+          "stage": "route_map_cast",
+          "count": 20,
+          "GPU_duration_us": 47.068999999999996,
+          "mean_us_per_profiled_replay": 9.413799999999998,
+          "share_percent_of_exclusive_GPU_kernel_sum": 4.527314996051621
+        },
+        {
+          "stage": "alignment",
+          "count": 10,
+          "GPU_duration_us": 19.774,
+          "mean_us_per_profiled_replay": 3.9548,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.9019551452532404
+        },
+        {
+          "stage": "swiglu",
+          "count": 5,
+          "GPU_duration_us": 11.004999999999999,
+          "mean_us_per_profiled_replay": 2.2009999999999996,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.0585120043244618
+        },
+        {
+          "stage": "workspace_zero",
+          "count": 5,
+          "GPU_duration_us": 4.704,
+          "mean_us_per_profiled_replay": 0.9408,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.4524525641383252
+        }
+      ],
+      "ranked_physical_kernel_symbols": [
+        {
+          "name": "void sglang::device::marlin_moe::Marlin<__nv_bfloat16, 562949953487106l, 2814749767172868l, 128, 1, 8, 4, true, 4, 1, false, true, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, int4 const*, unsigned short const*, int4 const*, int const*, int const*, int const*, int const*, float const*, int, bool, bool, int, int, int, int, int*, bool, bool, bool, int)",
+          "count": 10,
+          "GPU_duration_us": 795.3629999999999,
+          "mean_us_per_profiled_replay": 159.0726,
+          "share_percent_of_exclusive_GPU_kernel_sum": 76.50170679650313
+        },
+        {
+          "name": "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>)",
+          "count": 5,
+          "GPU_duration_us": 45.15,
+          "mean_us_per_profiled_replay": 9.03,
+          "share_percent_of_exclusive_GPU_kernel_sum": 4.342736664720532
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+          "count": 15,
+          "GPU_duration_us": 39.421,
+          "mean_us_per_profiled_replay": 7.8842,
+          "share_percent_of_exclusive_GPU_kernel_sum": 3.791694840751896
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 10,
+          "GPU_duration_us": 29.376999999999995,
+          "mean_us_per_profiled_replay": 5.875399999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.8256162790585835
+        },
+        {
+          "name": "void at::native::reduce_kernel<128, 4, at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4>)",
+          "count": 5,
+          "GPU_duration_us": 22.079,
+          "mean_us_per_profiled_replay": 4.4158,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.123660749066769
+        },
+        {
+          "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, unsigned short, unsigned short)#1}>(at::TensorIteratorBase&, at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, unsigned short, unsigned short)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, unsigned short, unsigned short)#1}>(at::TensorIteratorBase&, at::native::(anonymous namespace)::where_kernel_impl(at::TensorIterator&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(bool, unsigned short, unsigned short)#1} const&)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 16.384,
+          "mean_us_per_profiled_replay": 3.2768,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.5758892029851872
+        },
+        {
+          "name": "void moe_align_block_size_kernel<int>(int const*, int*, int*, int*, int, int, unsigned long, int*, bool, bool, int, int)",
+          "count": 5,
+          "GPU_duration_us": 13.696,
+          "mean_us_per_profiled_replay": 2.7392,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.3173448806204298
+        },
+        {
+          "name": "void sglang::act_and_mul_kernel<__nv_bfloat16, (sglang::ActivationKind)0, true, true, false, false, false>(sglang::ActivationParams)",
+          "count": 5,
+          "GPU_duration_us": 11.004999999999999,
+          "mean_us_per_profiled_replay": 2.2009999999999996,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.0585120043244618
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 9.118,
+          "mean_us_per_profiled_replay": 1.8236,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.8770115815929527
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::pow_tensor_scalar_kernel_impl<float, float>(at::TensorIteratorBase&, float)::{lambda(float)#1}, std::array<char*, 2ul>, false>(int, at::native::(anonymous namespace)::pow_tensor_scalar_kernel_impl<float, float>(at::TensorIteratorBase&, float)::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 8.896,
+          "mean_us_per_profiled_replay": 1.7792000000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.8556585906833635
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 5,
+          "GPU_duration_us": 8.574,
+          "mean_us_per_profiled_replay": 1.7147999999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.8246871354000851
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<8, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>, false>(int, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 7.327999999999999,
+          "mean_us_per_profiled_replay": 1.4655999999999998,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.7048410693039215
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<8, at::native::compare_scalar_kernel<int>(at::TensorIteratorBase&, at::native::(anonymous namespace)::OpType, int)::{lambda(int)#1}, std::array<char*, 2ul>, false>(int, at::native::compare_scalar_kernel<int>(at::TensorIteratorBase&, at::native::(anonymous namespace)::OpType, int)::{lambda(int)#1}, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 6.782000000000001,
+          "mean_us_per_profiled_replay": 1.3564000000000003,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.6523242538235803
+        },
+        {
+          "name": "void count_and_sort_expert_tokens_kernel<int>(int const*, int*, int*, unsigned long, bool)",
+          "count": 5,
+          "GPU_duration_us": 6.078,
+          "mean_us_per_profiled_replay": 1.2156,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.5846102646328105
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctorOnSelf_add<float>, std::array<char*, 2ul>, false>(int, at::native::CUDAFunctorOnSelf_add<float>, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 5.759,
+          "mean_us_per_profiled_replay": 1.1518000000000002,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.553927363280743
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::rsqrt_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, false>(int, at::native::rsqrt_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::operator()() const::{lambda()#2}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>)",
+          "count": 5,
+          "GPU_duration_us": 5.728,
+          "mean_us_per_profiled_replay": 1.1456,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.5509456393248994
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 4.704,
+          "mean_us_per_profiled_replay": 0.9408,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.4524525641383252
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<8, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 4.225,
+          "mean_us_per_profiled_replay": 0.845,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.40638011978835537
+        }
+      ],
+      "eager_calls": 3,
+      "eager_stage_GPU_spans": {
+        "okc_stage/finalize": {
+          "count": 3,
+          "GPU_span_us": 852.675,
+          "mean_GPU_span_us_per_eager_call": 284.22499999999997
+        },
+        "okc_stage/swiglu": {
+          "count": 3,
+          "GPU_span_us": 7.238,
+          "mean_GPU_span_us_per_eager_call": 2.412666666666667
+        },
+        "okc_stage/gemm_gate_up": {
+          "count": 3,
+          "GPU_span_us": 310.948,
+          "mean_GPU_span_us_per_eager_call": 103.64933333333333
+        },
+        "okc_stage/workspace": {
+          "count": 3,
+          "GPU_span_us": 2.599,
+          "mean_GPU_span_us_per_eager_call": 0.8663333333333334
+        },
+        "okc_stage/alignment": {
+          "count": 3,
+          "GPU_span_us": 22.854,
+          "mean_GPU_span_us_per_eager_call": 7.617999999999999
+        },
+        "okc_stage/gemm_down": {
+          "count": 3,
+          "GPU_span_us": 166.084,
+          "mean_GPU_span_us_per_eager_call": 55.361333333333334
+        }
+      },
+      "eager_kernel_events": 66
+    },
+    {
+      "bs": 16,
+      "arm": "candidate",
+      "path": "results/serving-profiled-profiles/bs16-candidate.trace.json",
+      "capture_UTC_first_kernel": "2026-10-24T23:30:45.010498+00:00",
+      "capture_UTC_last_kernel_end": "2026-10-24T23:30:45.011564+00:00",
+      "GPU": [
+        {
+          "id": 0,
+          "name": "NVIDIA H200",
+          "totalGlobalMem": 150111977472,
+          "computeMajor": 9,
+          "computeMinor": 0,
+          "maxThreadsPerBlock": 1024,
+          "maxThreadsPerMultiprocessor": 2048,
+          "regsPerBlock": 65536,
+          "warpSize": 32,
+          "sharedMemPerBlock": 49152,
+          "numSms": 132,
+          "regsPerMultiprocessor": 65536,
+          "sharedMemPerBlockOptin": 232448,
+          "sharedMemPerMultiprocessor": 233472
+        }
+      ],
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13000,
+      "profiled_replays": 5,
+      "kernel_events": 40,
+      "exclusive_kernel_sum_us": 861.9590000000002,
+      "mean_exclusive_kernel_sum_us_per_replay": 172.39180000000005,
+      "GPU_replay_span_us_mean": 176.1248,
+      "ranked_stage_components": [
+        {
+          "stage": "gate_up",
+          "count": 5,
+          "GPU_duration_us": 512.836,
+          "mean_us_per_profiled_replay": 102.5672,
+          "share_percent_of_exclusive_GPU_kernel_sum": 59.496565381880096
+        },
+        {
+          "stage": "down",
+          "count": 5,
+          "GPU_duration_us": 268.834,
+          "mean_us_per_profiled_replay": 53.7668,
+          "share_percent_of_exclusive_GPU_kernel_sum": 31.188722433433604
+        },
+        {
+          "stage": "alignment",
+          "count": 5,
+          "GPU_duration_us": 26.497000000000003,
+          "mean_us_per_profiled_replay": 5.2994,
+          "share_percent_of_exclusive_GPU_kernel_sum": 3.0740441250685935
+        },
+        {
+          "stage": "post_norm_router_weighted_sum",
+          "count": 5,
+          "GPU_duration_us": 19.584,
+          "mean_us_per_profiled_replay": 3.9168,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.2720338206341593
+        },
+        {
+          "stage": "route_map_cast",
+          "count": 10,
+          "GPU_duration_us": 18.079,
+          "mean_us_per_profiled_replay": 3.6158,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.0974315483683097
+        },
+        {
+          "stage": "swiglu",
+          "count": 5,
+          "GPU_duration_us": 11.104000000000001,
+          "mean_us_per_profiled_replay": 2.2208,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.288228326405316
+        },
+        {
+          "stage": "workspace_zero",
+          "count": 5,
+          "GPU_duration_us": 5.0249999999999995,
+          "mean_us_per_profiled_replay": 1.005,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.5829743642098985
+        }
+      ],
+      "ranked_physical_kernel_symbols": [
+        {
+          "name": "void sglang::device::marlin_moe::Marlin<__nv_bfloat16, 562949953487106l, 2814749767172868l, 128, 1, 8, 4, true, 4, 1, false, true, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, int4 const*, unsigned short const*, int4 const*, int const*, int const*, int const*, int const*, float const*, int, bool, bool, int, int, int, int, int*, bool, bool, bool, int)",
+          "count": 10,
+          "GPU_duration_us": 781.6700000000001,
+          "mean_us_per_profiled_replay": 156.334,
+          "share_percent_of_exclusive_GPU_kernel_sum": 90.6852878153137
+        },
+        {
+          "name": "void moe_align_block_size_small_batch_expert_kernel<int, 256>(int const*, int*, int*, int*, int, int, unsigned long, bool, bool, int)",
+          "count": 5,
+          "GPU_duration_us": 26.497000000000003,
+          "mean_us_per_profiled_replay": 5.2994,
+          "share_percent_of_exclusive_GPU_kernel_sum": 3.0740441250685935
+        },
+        {
+          "name": "_post_expert_norm_weighted_sum_kernel",
+          "count": 5,
+          "GPU_duration_us": 19.584,
+          "mean_us_per_profiled_replay": 3.9168,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.2720338206341593
+        },
+        {
+          "name": "void sglang::act_and_mul_kernel<__nv_bfloat16, (sglang::ActivationKind)0, true, true, false, false, false>(sglang::ActivationParams)",
+          "count": 5,
+          "GPU_duration_us": 11.104000000000001,
+          "mean_us_per_profiled_replay": 2.2208,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.288228326405316
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 5,
+          "GPU_duration_us": 9.184,
+          "mean_us_per_profiled_replay": 1.8367999999999998,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.0654799126176533
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 8.895,
+          "mean_us_per_profiled_replay": 1.779,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.0319516357506562
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 5.0249999999999995,
+          "mean_us_per_profiled_replay": 1.005,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.5829743642098985
+        }
+      ],
+      "eager_calls": 3,
+      "eager_stage_GPU_spans": {
+        "okc_stage/gemm_down": {
+          "count": 3,
+          "GPU_span_us": 161.351,
+          "mean_GPU_span_us_per_eager_call": 53.78366666666667
+        },
+        "okc_stage/swiglu": {
+          "count": 3,
+          "GPU_span_us": 6.6930000000000005,
+          "mean_GPU_span_us_per_eager_call": 2.2310000000000003
+        },
+        "okc_stage/gemm_gate_up": {
+          "count": 3,
+          "GPU_span_us": 307.431,
+          "mean_GPU_span_us_per_eager_call": 102.47699999999999
+        },
+        "okc_stage/workspace": {
+          "count": 3,
+          "GPU_span_us": 2.662,
+          "mean_GPU_span_us_per_eager_call": 0.8873333333333333
+        },
+        "okc_stage/alignment": {
+          "count": 3,
+          "GPU_span_us": 15.718,
+          "mean_GPU_span_us_per_eager_call": 5.239333333333334
+        },
+        "okc_stage/finalize": {
+          "count": 3,
+          "GPU_span_us": 10.726,
+          "mean_GPU_span_us_per_eager_call": 3.5753333333333335
+        }
+      },
+      "eager_kernel_events": 24
+    },
+    {
+      "bs": 32,
+      "arm": "baseline",
+      "path": "results/serving-profiled-profiles/bs32-baseline.trace.json",
+      "capture_UTC_first_kernel": "2026-10-24T23:30:45.932355+00:00",
+      "capture_UTC_last_kernel_end": "2026-10-24T23:30:45.933482+00:00",
+      "GPU": [
+        {
+          "id": 0,
+          "name": "NVIDIA H200",
+          "totalGlobalMem": 150111977472,
+          "computeMajor": 9,
+          "computeMinor": 0,
+          "maxThreadsPerBlock": 1024,
+          "maxThreadsPerMultiprocessor": 2048,
+          "regsPerBlock": 65536,
+          "warpSize": 32,
+          "sharedMemPerBlock": 49152,
+          "numSms": 132,
+          "regsPerMultiprocessor": 65536,
+          "sharedMemPerBlockOptin": 232448,
+          "sharedMemPerMultiprocessor": 233472
+        }
+      ],
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13000,
+      "profiled_replays": 5,
+      "kernel_events": 45,
+      "exclusive_kernel_sum_us": 921.951,
+      "mean_exclusive_kernel_sum_us_per_replay": 184.3902,
+      "GPU_replay_span_us_mean": 188.39339999999999,
+      "ranked_stage_components": [
+        {
+          "stage": "gate_up",
+          "count": 5,
+          "GPU_duration_us": 550.465,
+          "mean_us_per_profiled_replay": 110.093,
+          "share_percent_of_exclusive_GPU_kernel_sum": 59.70653537986292
+        },
+        {
+          "stage": "down",
+          "count": 5,
+          "GPU_duration_us": 290.78400000000005,
+          "mean_us_per_profiled_replay": 58.15680000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 31.54007100160421
+        },
+        {
+          "stage": "route_map_cast",
+          "count": 10,
+          "GPU_duration_us": 22.240000000000002,
+          "mean_us_per_profiled_replay": 4.448,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.412275706626491
+        },
+        {
+          "stage": "post_norm_router_weighted_sum",
+          "count": 5,
+          "GPU_duration_us": 21.246,
+          "mean_us_per_profiled_replay": 4.2492,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.304460866141476
+        },
+        {
+          "stage": "alignment",
+          "count": 10,
+          "GPU_duration_us": 20.608000000000004,
+          "mean_us_per_profiled_replay": 4.121600000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.235259791463972
+        },
+        {
+          "stage": "swiglu",
+          "count": 5,
+          "GPU_duration_us": 11.776,
+          "mean_us_per_profiled_replay": 2.3552,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2772913094079836
+        },
+        {
+          "stage": "workspace_zero",
+          "count": 5,
+          "GPU_duration_us": 4.832,
+          "mean_us_per_profiled_replay": 0.9663999999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.5241059448929498
+        }
+      ],
+      "ranked_physical_kernel_symbols": [
+        {
+          "name": "void sglang::device::marlin_moe::Marlin<__nv_bfloat16, 562949953487106l, 2814749767172868l, 128, 1, 8, 4, false, 4, 1, false, true, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, int4 const*, unsigned short const*, int4 const*, int const*, int const*, int const*, int const*, float const*, int, bool, bool, int, int, int, int, int*, bool, bool, bool, int)",
+          "count": 10,
+          "GPU_duration_us": 841.2489999999999,
+          "mean_us_per_profiled_replay": 168.2498,
+          "share_percent_of_exclusive_GPU_kernel_sum": 91.24660638146712
+        },
+        {
+          "name": "_post_expert_norm_weighted_sum_kernel",
+          "count": 5,
+          "GPU_duration_us": 21.246,
+          "mean_us_per_profiled_replay": 4.2492,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.304460866141476
+        },
+        {
+          "name": "void moe_align_block_size_kernel<int>(int const*, int*, int*, int*, int, int, unsigned long, int*, bool, bool, int, int)",
+          "count": 5,
+          "GPU_duration_us": 13.632000000000001,
+          "mean_us_per_profiled_replay": 2.7264000000000004,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.4786035266516333
+        },
+        {
+          "name": "void sglang::act_and_mul_kernel<__nv_bfloat16, (sglang::ActivationKind)0, true, true, false, false, false>(sglang::ActivationParams)",
+          "count": 5,
+          "GPU_duration_us": 11.776,
+          "mean_us_per_profiled_replay": 2.3552,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2772913094079836
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 11.199,
+          "mean_us_per_profiled_replay": 2.2398,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2147066384222156
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 5,
+          "GPU_duration_us": 11.041,
+          "mean_us_per_profiled_replay": 2.2082,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.1975690682042757
+        },
+        {
+          "name": "void count_and_sort_expert_tokens_kernel<int>(int const*, int*, int*, unsigned long, bool)",
+          "count": 5,
+          "GPU_duration_us": 6.975999999999999,
+          "mean_us_per_profiled_replay": 1.3951999999999998,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.756656264812338
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 4.832,
+          "mean_us_per_profiled_replay": 0.9663999999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.5241059448929498
+        }
+      ],
+      "eager_calls": 3,
+      "eager_stage_GPU_spans": {
+        "okc_stage/gemm_down": {
+          "count": 3,
+          "GPU_span_us": 173.162,
+          "mean_GPU_span_us_per_eager_call": 57.720666666666666
+        },
+        "okc_stage/swiglu": {
+          "count": 3,
+          "GPU_span_us": 7.622,
+          "mean_GPU_span_us_per_eager_call": 2.5406666666666666
+        },
+        "okc_stage/gemm_gate_up": {
+          "count": 3,
+          "GPU_span_us": 329.93399999999997,
+          "mean_GPU_span_us_per_eager_call": 109.978
+        },
+        "okc_stage/workspace": {
+          "count": 3,
+          "GPU_span_us": 2.726,
+          "mean_GPU_span_us_per_eager_call": 0.9086666666666666
+        },
+        "okc_stage/alignment": {
+          "count": 3,
+          "GPU_span_us": 22.055,
+          "mean_GPU_span_us_per_eager_call": 7.351666666666667
+        },
+        "okc_stage/finalize": {
+          "count": 3,
+          "GPU_span_us": 12.166999999999998,
+          "mean_GPU_span_us_per_eager_call": 4.055666666666666
+        }
+      },
+      "eager_kernel_events": 27
+    },
+    {
+      "bs": 32,
+      "arm": "candidate",
+      "path": "results/serving-profiled-profiles/bs32-candidate.trace.json",
+      "capture_UTC_first_kernel": "2026-10-24T23:30:45.980774+00:00",
+      "capture_UTC_last_kernel_end": "2026-10-24T23:30:45.981882+00:00",
+      "GPU": [
+        {
+          "id": 0,
+          "name": "NVIDIA H200",
+          "totalGlobalMem": 150111977472,
+          "computeMajor": 9,
+          "computeMinor": 0,
+          "maxThreadsPerBlock": 1024,
+          "maxThreadsPerMultiprocessor": 2048,
+          "regsPerBlock": 65536,
+          "warpSize": 32,
+          "sharedMemPerBlock": 49152,
+          "numSms": 132,
+          "regsPerMultiprocessor": 65536,
+          "sharedMemPerBlockOptin": 232448,
+          "sharedMemPerMultiprocessor": 233472
+        }
+      ],
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13000,
+      "profiled_replays": 5,
+      "kernel_events": 40,
+      "exclusive_kernel_sum_us": 918.2339999999999,
+      "mean_exclusive_kernel_sum_us_per_replay": 183.64679999999998,
+      "GPU_replay_span_us_mean": 185.1922,
+      "ranked_stage_components": [
+        {
+          "stage": "gate_up",
+          "count": 5,
+          "GPU_duration_us": 542.622,
+          "mean_us_per_profiled_replay": 108.52439999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 59.09408712811767
+        },
+        {
+          "stage": "down",
+          "count": 5,
+          "GPU_duration_us": 282.176,
+          "mean_us_per_profiled_replay": 56.435199999999995,
+          "share_percent_of_exclusive_GPU_kernel_sum": 30.730293149676445
+        },
+        {
+          "stage": "alignment",
+          "count": 5,
+          "GPU_duration_us": 32.128,
+          "mean_us_per_profiled_replay": 6.4256,
+          "share_percent_of_exclusive_GPU_kernel_sum": 3.4988902610881327
+        },
+        {
+          "stage": "route_map_cast",
+          "count": 10,
+          "GPU_duration_us": 22.752999999999997,
+          "mean_us_per_profiled_replay": 4.550599999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.4779086812294033
+        },
+        {
+          "stage": "post_norm_router_weighted_sum",
+          "count": 5,
+          "GPU_duration_us": 21.822,
+          "mean_us_per_profiled_replay": 4.3644,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.376518403805566
+        },
+        {
+          "stage": "swiglu",
+          "count": 5,
+          "GPU_duration_us": 11.741999999999999,
+          "mean_us_per_profiled_replay": 2.3484,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2787590091414607
+        },
+        {
+          "stage": "workspace_zero",
+          "count": 5,
+          "GPU_duration_us": 4.991,
+          "mean_us_per_profiled_replay": 0.9982,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.5435433669413243
+        }
+      ],
+      "ranked_physical_kernel_symbols": [
+        {
+          "name": "void sglang::device::marlin_moe::Marlin<__nv_bfloat16, 562949953487106l, 2814749767172868l, 128, 1, 8, 4, false, 4, 1, false, true, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, int4 const*, unsigned short const*, int4 const*, int const*, int const*, int const*, int const*, float const*, int, bool, bool, int, int, int, int, int*, bool, bool, bool, int)",
+          "count": 10,
+          "GPU_duration_us": 824.7980000000001,
+          "mean_us_per_profiled_replay": 164.95960000000002,
+          "share_percent_of_exclusive_GPU_kernel_sum": 89.82438027779413
+        },
+        {
+          "name": "void moe_align_block_size_small_batch_expert_kernel<int, 256>(int const*, int*, int*, int*, int, int, unsigned long, bool, bool, int)",
+          "count": 5,
+          "GPU_duration_us": 32.128,
+          "mean_us_per_profiled_replay": 6.4256,
+          "share_percent_of_exclusive_GPU_kernel_sum": 3.4988902610881327
+        },
+        {
+          "name": "_post_expert_norm_weighted_sum_kernel",
+          "count": 5,
+          "GPU_duration_us": 21.822,
+          "mean_us_per_profiled_replay": 4.3644,
+          "share_percent_of_exclusive_GPU_kernel_sum": 2.376518403805566
+        },
+        {
+          "name": "void sglang::act_and_mul_kernel<__nv_bfloat16, (sglang::ActivationKind)0, true, true, false, false, false>(sglang::ActivationParams)",
+          "count": 5,
+          "GPU_duration_us": 11.741999999999999,
+          "mean_us_per_profiled_replay": 2.3484,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2787590091414607
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 5,
+          "GPU_duration_us": 11.425,
+          "mean_us_per_profiled_replay": 2.285,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2442362186545044
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 11.328000000000001,
+          "mean_us_per_profiled_replay": 2.2656,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2336724625748996
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 4.991,
+          "mean_us_per_profiled_replay": 0.9982,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.5435433669413243
+        }
+      ],
+      "eager_calls": 3,
+      "eager_stage_GPU_spans": {
+        "okc_stage/gemm_down": {
+          "count": 3,
+          "GPU_span_us": 169.284,
+          "mean_GPU_span_us_per_eager_call": 56.428
+        },
+        "okc_stage/swiglu": {
+          "count": 3,
+          "GPU_span_us": 7.367,
+          "mean_GPU_span_us_per_eager_call": 2.4556666666666667
+        },
+        "okc_stage/gemm_gate_up": {
+          "count": 3,
+          "GPU_span_us": 326.629,
+          "mean_GPU_span_us_per_eager_call": 108.87633333333333
+        },
+        "okc_stage/workspace": {
+          "count": 3,
+          "GPU_span_us": 2.6,
+          "mean_GPU_span_us_per_eager_call": 0.8666666666666667
+        },
+        "okc_stage/alignment": {
+          "count": 3,
+          "GPU_span_us": 19.015,
+          "mean_GPU_span_us_per_eager_call": 6.338333333333334
+        },
+        "okc_stage/finalize": {
+          "count": 3,
+          "GPU_span_us": 11.814,
+          "mean_GPU_span_us_per_eager_call": 3.938
+        }
+      },
+      "eager_kernel_events": 24
+    },
+    {
+      "bs": 128,
+      "arm": "baseline",
+      "path": "results/serving-profiled-profiles/bs128-baseline.trace.json",
+      "capture_UTC_first_kernel": "2026-10-24T23:30:47.309481+00:00",
+      "capture_UTC_last_kernel_end": "2026-10-24T23:30:47.312077+00:00",
+      "GPU": [
+        {
+          "id": 0,
+          "name": "NVIDIA H200",
+          "totalGlobalMem": 150111977472,
+          "computeMajor": 9,
+          "computeMinor": 0,
+          "maxThreadsPerBlock": 1024,
+          "maxThreadsPerMultiprocessor": 2048,
+          "regsPerBlock": 65536,
+          "warpSize": 32,
+          "sharedMemPerBlock": 49152,
+          "numSms": 132,
+          "regsPerMultiprocessor": 65536,
+          "sharedMemPerBlockOptin": 232448,
+          "sharedMemPerMultiprocessor": 233472
+        }
+      ],
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13000,
+      "profiled_replays": 5,
+      "kernel_events": 45,
+      "exclusive_kernel_sum_us": 2389.8810000000003,
+      "mean_exclusive_kernel_sum_us_per_replay": 477.97620000000006,
+      "GPU_replay_span_us_mean": 482.08000000000004,
+      "ranked_stage_components": [
+        {
+          "stage": "gate_up",
+          "count": 5,
+          "GPU_duration_us": 1502.599,
+          "mean_us_per_profiled_replay": 300.5198,
+          "share_percent_of_exclusive_GPU_kernel_sum": 62.87338156167607
+        },
+        {
+          "stage": "down",
+          "count": 5,
+          "GPU_duration_us": 776.6899999999999,
+          "mean_us_per_profiled_replay": 155.338,
+          "share_percent_of_exclusive_GPU_kernel_sum": 32.49910769615725
+        },
+        {
+          "stage": "route_map_cast",
+          "count": 10,
+          "GPU_duration_us": 32.705,
+          "mean_us_per_profiled_replay": 6.5409999999999995,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.3684781794574707
+        },
+        {
+          "stage": "post_norm_router_weighted_sum",
+          "count": 5,
+          "GPU_duration_us": 30.432000000000002,
+          "mean_us_per_profiled_replay": 6.0864,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2733688413774578
+        },
+        {
+          "stage": "alignment",
+          "count": 10,
+          "GPU_duration_us": 23.294999999999995,
+          "mean_us_per_profiled_replay": 4.658999999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.9747347252854847
+        },
+        {
+          "stage": "swiglu",
+          "count": 5,
+          "GPU_duration_us": 19.328,
+          "mean_us_per_profiled_replay": 3.8655999999999997,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.8087431968369972
+        },
+        {
+          "stage": "workspace_zero",
+          "count": 5,
+          "GPU_duration_us": 4.832,
+          "mean_us_per_profiled_replay": 0.9663999999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.2021857992092493
+        }
+      ],
+      "ranked_physical_kernel_symbols": [
+        {
+          "name": "void sglang::device::marlin_moe::Marlin<__nv_bfloat16, 562949953487106l, 2814749767172868l, 128, 3, 8, 4, false, 4, 1, false, true, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, int4 const*, unsigned short const*, int4 const*, int const*, int const*, int const*, int const*, float const*, int, bool, bool, int, int, int, int, int*, bool, bool, bool, int)",
+          "count": 10,
+          "GPU_duration_us": 2279.2889999999998,
+          "mean_us_per_profiled_replay": 455.85779999999994,
+          "share_percent_of_exclusive_GPU_kernel_sum": 95.37248925783331
+        },
+        {
+          "name": "_post_expert_norm_weighted_sum_kernel",
+          "count": 5,
+          "GPU_duration_us": 30.432000000000002,
+          "mean_us_per_profiled_replay": 6.0864,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2733688413774578
+        },
+        {
+          "name": "void sglang::act_and_mul_kernel<__nv_bfloat16, (sglang::ActivationKind)0, true, true, false, false, false>(sglang::ActivationParams)",
+          "count": 5,
+          "GPU_duration_us": 19.328,
+          "mean_us_per_profiled_replay": 3.8655999999999997,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.8087431968369972
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 5,
+          "GPU_duration_us": 16.897,
+          "mean_us_per_profiled_replay": 3.3793999999999995,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.7070226509186021
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 15.808,
+          "mean_us_per_profiled_replay": 3.1616,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.6614555285388686
+        },
+        {
+          "name": "void moe_align_block_size_kernel<int>(int const*, int*, int*, int*, int, int, unsigned long, int*, bool, bool, int, int)",
+          "count": 5,
+          "GPU_duration_us": 13.790999999999997,
+          "mean_us_per_profiled_replay": 2.7581999999999995,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.5770580208805374
+        },
+        {
+          "name": "void count_and_sort_expert_tokens_kernel<int>(int const*, int*, int*, unsigned long, bool)",
+          "count": 5,
+          "GPU_duration_us": 9.504,
+          "mean_us_per_profiled_replay": 1.9007999999999998,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.3976767044049473
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 4.832,
+          "mean_us_per_profiled_replay": 0.9663999999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.2021857992092493
+        }
+      ],
+      "eager_calls": 3,
+      "eager_stage_GPU_spans": {
+        "okc_stage/gemm_down": {
+          "count": 3,
+          "GPU_span_us": 466.92900000000003,
+          "mean_GPU_span_us_per_eager_call": 155.643
+        },
+        "okc_stage/swiglu": {
+          "count": 3,
+          "GPU_span_us": 11.783000000000001,
+          "mean_GPU_span_us_per_eager_call": 3.927666666666667
+        },
+        "okc_stage/gemm_gate_up": {
+          "count": 3,
+          "GPU_span_us": 909.435,
+          "mean_GPU_span_us_per_eager_call": 303.145
+        },
+        "okc_stage/workspace": {
+          "count": 3,
+          "GPU_span_us": 2.8209999999999997,
+          "mean_GPU_span_us_per_eager_call": 0.9403333333333332
+        },
+        "okc_stage/alignment": {
+          "count": 3,
+          "GPU_span_us": 25.927000000000003,
+          "mean_GPU_span_us_per_eager_call": 8.642333333333335
+        },
+        "okc_stage/finalize": {
+          "count": 3,
+          "GPU_span_us": 17.288,
+          "mean_GPU_span_us_per_eager_call": 5.762666666666667
+        }
+      },
+      "eager_kernel_events": 27
+    },
+    {
+      "bs": 128,
+      "arm": "candidate",
+      "path": "results/serving-profiled-profiles/bs128-candidate.trace.json",
+      "capture_UTC_first_kernel": "2026-10-24T23:30:47.654568+00:00",
+      "capture_UTC_last_kernel_end": "2026-10-24T23:30:47.657128+00:00",
+      "GPU": [
+        {
+          "id": 0,
+          "name": "NVIDIA H200",
+          "totalGlobalMem": 150111977472,
+          "computeMajor": 9,
+          "computeMinor": 0,
+          "maxThreadsPerBlock": 1024,
+          "maxThreadsPerMultiprocessor": 2048,
+          "regsPerBlock": 65536,
+          "warpSize": 32,
+          "sharedMemPerBlock": 49152,
+          "numSms": 132,
+          "regsPerMultiprocessor": 65536,
+          "sharedMemPerBlockOptin": 232448,
+          "sharedMemPerMultiprocessor": 233472
+        }
+      ],
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13000,
+      "profiled_replays": 5,
+      "kernel_events": 45,
+      "exclusive_kernel_sum_us": 2369.4660000000003,
+      "mean_exclusive_kernel_sum_us_per_replay": 473.8932000000001,
+      "GPU_replay_span_us_mean": 475.59700000000004,
+      "ranked_stage_components": [
+        {
+          "stage": "gate_up",
+          "count": 5,
+          "GPU_duration_us": 1494.8960000000002,
+          "mean_us_per_profiled_replay": 298.97920000000005,
+          "share_percent_of_exclusive_GPU_kernel_sum": 63.08999580496196
+        },
+        {
+          "stage": "down",
+          "count": 5,
+          "GPU_duration_us": 767.3670000000001,
+          "mean_us_per_profiled_replay": 153.47340000000003,
+          "share_percent_of_exclusive_GPU_kernel_sum": 32.385651450580006
+        },
+        {
+          "stage": "route_map_cast",
+          "count": 10,
+          "GPU_duration_us": 33.121,
+          "mean_us_per_profiled_replay": 6.6242,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.3978255016109113
+        },
+        {
+          "stage": "post_norm_router_weighted_sum",
+          "count": 5,
+          "GPU_duration_us": 29.951,
+          "mean_us_per_profiled_replay": 5.9902,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2640400832930287
+        },
+        {
+          "stage": "alignment",
+          "count": 10,
+          "GPU_duration_us": 20.354000000000003,
+          "mean_us_per_profiled_replay": 4.0708,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.8590121149659882
+        },
+        {
+          "stage": "swiglu",
+          "count": 5,
+          "GPU_duration_us": 18.977,
+          "mean_us_per_profiled_replay": 3.7954,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.8008977550215954
+        },
+        {
+          "stage": "workspace_zero",
+          "count": 5,
+          "GPU_duration_us": 4.8,
+          "mean_us_per_profiled_replay": 0.96,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.2025772895665099
+        }
+      ],
+      "ranked_physical_kernel_symbols": [
+        {
+          "name": "void sglang::device::marlin_moe::Marlin<__nv_bfloat16, 562949953487106l, 2814749767172868l, 128, 3, 8, 4, false, 4, 1, false, true, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, int4 const*, unsigned short const*, int4 const*, int const*, int const*, int const*, int const*, float const*, int, bool, bool, int, int, int, int, int*, bool, bool, bool, int)",
+          "count": 10,
+          "GPU_duration_us": 2262.263,
+          "mean_us_per_profiled_replay": 452.45259999999996,
+          "share_percent_of_exclusive_GPU_kernel_sum": 95.47564725554194
+        },
+        {
+          "name": "_post_expert_norm_weighted_sum_kernel",
+          "count": 5,
+          "GPU_duration_us": 29.951,
+          "mean_us_per_profiled_replay": 5.9902,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2640400832930287
+        },
+        {
+          "name": "void sglang::act_and_mul_kernel<__nv_bfloat16, (sglang::ActivationKind)0, true, true, false, false, false>(sglang::ActivationParams)",
+          "count": 5,
+          "GPU_duration_us": 18.977,
+          "mean_us_per_profiled_replay": 3.7954,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.8008977550215954
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 5,
+          "GPU_duration_us": 16.802,
+          "mean_us_per_profiled_replay": 3.3604,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.7091049206867707
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 16.319,
+          "mean_us_per_profiled_replay": 3.2638,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.6887205809241406
+        },
+        {
+          "name": "void moe_align_block_size_kernel<int>(int const*, int*, int*, int*, int, int, unsigned long, int*, bool, bool, int, int)",
+          "count": 5,
+          "GPU_duration_us": 14.017,
+          "mean_us_per_profiled_replay": 2.8034,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.591567889136202
+        },
+        {
+          "name": "void count_and_sort_expert_tokens_kernel<int>(int const*, int*, int*, unsigned long, bool)",
+          "count": 5,
+          "GPU_duration_us": 6.337000000000001,
+          "mean_us_per_profiled_replay": 1.2674,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.2674442258297861
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 4.8,
+          "mean_us_per_profiled_replay": 0.96,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.2025772895665099
+        }
+      ],
+      "eager_calls": 3,
+      "eager_stage_GPU_spans": {
+        "okc_stage/gemm_down": {
+          "count": 3,
+          "GPU_span_us": 460.669,
+          "mean_GPU_span_us_per_eager_call": 153.55633333333333
+        },
+        "okc_stage/swiglu": {
+          "count": 3,
+          "GPU_span_us": 11.846,
+          "mean_GPU_span_us_per_eager_call": 3.9486666666666665
+        },
+        "okc_stage/gemm_gate_up": {
+          "count": 3,
+          "GPU_span_us": 906.163,
+          "mean_GPU_span_us_per_eager_call": 302.0543333333333
+        },
+        "okc_stage/workspace": {
+          "count": 3,
+          "GPU_span_us": 2.661,
+          "mean_GPU_span_us_per_eager_call": 0.887
+        },
+        "okc_stage/alignment": {
+          "count": 3,
+          "GPU_span_us": 21.191000000000003,
+          "mean_GPU_span_us_per_eager_call": 7.063666666666667
+        },
+        "okc_stage/finalize": {
+          "count": 3,
+          "GPU_span_us": 17.51,
+          "mean_GPU_span_us_per_eager_call": 5.836666666666667
+        }
+      },
+      "eager_kernel_events": 27
+    },
+    {
+      "bs": 256,
+      "arm": "baseline",
+      "path": "results/serving-profiled-profiles/bs256-baseline.trace.json",
+      "capture_UTC_first_kernel": "2026-10-24T23:30:49.119335+00:00",
+      "capture_UTC_last_kernel_end": "2026-10-24T23:30:49.122392+00:00",
+      "GPU": [
+        {
+          "id": 0,
+          "name": "NVIDIA H200",
+          "totalGlobalMem": 150111977472,
+          "computeMajor": 9,
+          "computeMinor": 0,
+          "maxThreadsPerBlock": 1024,
+          "maxThreadsPerMultiprocessor": 2048,
+          "regsPerBlock": 65536,
+          "warpSize": 32,
+          "sharedMemPerBlock": 49152,
+          "numSms": 132,
+          "regsPerMultiprocessor": 65536,
+          "sharedMemPerBlockOptin": 232448,
+          "sharedMemPerMultiprocessor": 233472
+        }
+      ],
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13000,
+      "profiled_replays": 5,
+      "kernel_events": 45,
+      "exclusive_kernel_sum_us": 2849.2319999999995,
+      "mean_exclusive_kernel_sum_us_per_replay": 569.8463999999999,
+      "GPU_replay_span_us_mean": 574.0988,
+      "ranked_stage_components": [
+        {
+          "stage": "gate_up",
+          "count": 5,
+          "GPU_duration_us": 1798.221,
+          "mean_us_per_profiled_replay": 359.6442,
+          "share_percent_of_exclusive_GPU_kernel_sum": 63.11248083694134
+        },
+        {
+          "stage": "down",
+          "count": 5,
+          "GPU_duration_us": 927.4290000000001,
+          "mean_us_per_profiled_replay": 185.4858,
+          "share_percent_of_exclusive_GPU_kernel_sum": 32.55013982715343
+        },
+        {
+          "stage": "route_map_cast",
+          "count": 10,
+          "GPU_duration_us": 34.304,
+          "mean_us_per_profiled_replay": 6.8608,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2039735619984615
+        },
+        {
+          "stage": "swiglu",
+          "count": 5,
+          "GPU_duration_us": 28.768,
+          "mean_us_per_profiled_replay": 5.7536000000000005,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.0096755897729637
+        },
+        {
+          "stage": "alignment",
+          "count": 10,
+          "GPU_duration_us": 28.35,
+          "mean_us_per_profiled_replay": 5.67,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.9950049697602724
+        },
+        {
+          "stage": "post_norm_router_weighted_sum",
+          "count": 5,
+          "GPU_duration_us": 27.072,
+          "mean_us_per_profiled_replay": 5.4144,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.9501507774726664
+        },
+        {
+          "stage": "workspace_zero",
+          "count": 5,
+          "GPU_duration_us": 5.088,
+          "mean_us_per_profiled_replay": 1.0176,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.17857443690089123
+        }
+      ],
+      "ranked_physical_kernel_symbols": [
+        {
+          "name": "void sglang::device::marlin_moe::Marlin<__nv_bfloat16, 562949953487106l, 2814749767172868l, 128, 4, 8, 4, false, 4, 1, false, true, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, int4 const*, unsigned short const*, int4 const*, int const*, int const*, int const*, int const*, float const*, int, bool, bool, int, int, int, int, int*, bool, bool, bool, int)",
+          "count": 10,
+          "GPU_duration_us": 2725.649999999999,
+          "mean_us_per_profiled_replay": 545.1299999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 95.66262066409475
+        },
+        {
+          "name": "void sglang::act_and_mul_kernel<__nv_bfloat16, (sglang::ActivationKind)0, true, true, false, false, false>(sglang::ActivationParams)",
+          "count": 5,
+          "GPU_duration_us": 28.768,
+          "mean_us_per_profiled_replay": 5.7536000000000005,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.0096755897729637
+        },
+        {
+          "name": "_post_expert_norm_weighted_sum_kernel",
+          "count": 5,
+          "GPU_duration_us": 27.072,
+          "mean_us_per_profiled_replay": 5.4144,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.9501507774726664
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 5,
+          "GPU_duration_us": 17.536,
+          "mean_us_per_profiled_replay": 3.5072,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.6154640969917509
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 16.768,
+          "mean_us_per_profiled_replay": 3.3536,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.5885094650067108
+        },
+        {
+          "name": "void moe_align_block_size_kernel<int>(int const*, int*, int*, int*, int, int, unsigned long, int*, bool, bool, int, int)",
+          "count": 5,
+          "GPU_duration_us": 14.975,
+          "mean_us_per_profiled_replay": 2.995,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.5255802265312197
+        },
+        {
+          "name": "void count_and_sort_expert_tokens_kernel<int>(int const*, int*, int*, unsigned long, bool)",
+          "count": 5,
+          "GPU_duration_us": 13.375,
+          "mean_us_per_profiled_replay": 2.675,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.4694247432290527
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 5.088,
+          "mean_us_per_profiled_replay": 1.0176,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.17857443690089123
+        }
+      ],
+      "eager_calls": 3,
+      "eager_stage_GPU_spans": {
+        "okc_stage/gemm_down": {
+          "count": 3,
+          "GPU_span_us": 556.9830000000001,
+          "mean_GPU_span_us_per_eager_call": 185.66100000000003
+        },
+        "okc_stage/swiglu": {
+          "count": 3,
+          "GPU_span_us": 16.902,
+          "mean_GPU_span_us_per_eager_call": 5.634
+        },
+        "okc_stage/gemm_gate_up": {
+          "count": 3,
+          "GPU_span_us": 1086.054,
+          "mean_GPU_span_us_per_eager_call": 362.01800000000003
+        },
+        "okc_stage/workspace": {
+          "count": 3,
+          "GPU_span_us": 2.598,
+          "mean_GPU_span_us_per_eager_call": 0.866
+        },
+        "okc_stage/alignment": {
+          "count": 3,
+          "GPU_span_us": 25.606,
+          "mean_GPU_span_us_per_eager_call": 8.535333333333334
+        },
+        "okc_stage/finalize": {
+          "count": 3,
+          "GPU_span_us": 17.0,
+          "mean_GPU_span_us_per_eager_call": 5.666666666666667
+        }
+      },
+      "eager_kernel_events": 27
+    },
+    {
+      "bs": 256,
+      "arm": "candidate",
+      "path": "results/serving-profiled-profiles/bs256-candidate.trace.json",
+      "capture_UTC_first_kernel": "2026-10-24T23:30:49.169583+00:00",
+      "capture_UTC_last_kernel_end": "2026-10-24T23:30:49.172575+00:00",
+      "GPU": [
+        {
+          "id": 0,
+          "name": "NVIDIA H200",
+          "totalGlobalMem": 150111977472,
+          "computeMajor": 9,
+          "computeMinor": 0,
+          "maxThreadsPerBlock": 1024,
+          "maxThreadsPerMultiprocessor": 2048,
+          "regsPerBlock": 65536,
+          "warpSize": 32,
+          "sharedMemPerBlock": 49152,
+          "numSms": 132,
+          "regsPerMultiprocessor": 65536,
+          "sharedMemPerBlockOptin": 232448,
+          "sharedMemPerMultiprocessor": 233472
+        }
+      ],
+      "cuda_driver_version": 13020,
+      "cuda_runtime_version": 13000,
+      "profiled_replays": 5,
+      "kernel_events": 45,
+      "exclusive_kernel_sum_us": 2800.3690000000006,
+      "mean_exclusive_kernel_sum_us_per_replay": 560.0738000000001,
+      "GPU_replay_span_us_mean": 561.8876,
+      "ranked_stage_components": [
+        {
+          "stage": "gate_up",
+          "count": 5,
+          "GPU_duration_us": 1775.703,
+          "mean_us_per_profiled_replay": 355.1406,
+          "share_percent_of_exclusive_GPU_kernel_sum": 63.409607805257075
+        },
+        {
+          "stage": "down",
+          "count": 5,
+          "GPU_duration_us": 907.996,
+          "mean_us_per_profiled_replay": 181.5992,
+          "share_percent_of_exclusive_GPU_kernel_sum": 32.424155530931806
+        },
+        {
+          "stage": "route_map_cast",
+          "count": 10,
+          "GPU_duration_us": 33.983,
+          "mean_us_per_profiled_replay": 6.7966,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.2135186470068762
+        },
+        {
+          "stage": "swiglu",
+          "count": 5,
+          "GPU_duration_us": 28.543,
+          "mean_us_per_profiled_replay": 5.7086,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.019258533428987
+        },
+        {
+          "stage": "post_norm_router_weighted_sum",
+          "count": 5,
+          "GPU_duration_us": 27.872,
+          "mean_us_per_profiled_replay": 5.5744,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.9952974054490673
+        },
+        {
+          "stage": "alignment",
+          "count": 10,
+          "GPU_duration_us": 21.440000000000005,
+          "mean_us_per_profiled_replay": 4.288000000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.765613388806975
+        },
+        {
+          "stage": "workspace_zero",
+          "count": 5,
+          "GPU_duration_us": 4.832,
+          "mean_us_per_profiled_replay": 0.9663999999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.1725486891191839
+        }
+      ],
+      "ranked_physical_kernel_symbols": [
+        {
+          "name": "void sglang::device::marlin_moe::Marlin<__nv_bfloat16, 562949953487106l, 2814749767172868l, 128, 4, 8, 4, false, 4, 1, false, true, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, int4 const*, unsigned short const*, int4 const*, int const*, int const*, int const*, int const*, float const*, int, bool, bool, int, int, int, int, int*, bool, bool, bool, int)",
+          "count": 10,
+          "GPU_duration_us": 2683.699,
+          "mean_us_per_profiled_replay": 536.7398000000001,
+          "share_percent_of_exclusive_GPU_kernel_sum": 95.8337633361889
+        },
+        {
+          "name": "void sglang::act_and_mul_kernel<__nv_bfloat16, (sglang::ActivationKind)0, true, true, false, false, false>(sglang::ActivationParams)",
+          "count": 5,
+          "GPU_duration_us": 28.543,
+          "mean_us_per_profiled_replay": 5.7086,
+          "share_percent_of_exclusive_GPU_kernel_sum": 1.019258533428987
+        },
+        {
+          "name": "_post_expert_norm_weighted_sum_kernel",
+          "count": 5,
+          "GPU_duration_us": 27.872,
+          "mean_us_per_profiled_replay": 5.5744,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.9952974054490673
+        },
+        {
+          "name": "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1})",
+          "count": 5,
+          "GPU_duration_us": 17.152,
+          "mean_us_per_profiled_replay": 3.4304,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.61249071104558
+        },
+        {
+          "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#4}::operator()() const::{lambda(long)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+          "count": 5,
+          "GPU_duration_us": 16.831000000000003,
+          "mean_us_per_profiled_replay": 3.3662000000000005,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.6010279359612966
+        },
+        {
+          "name": "void moe_align_block_size_kernel<int>(int const*, int*, int*, int*, int, int, unsigned long, int*, bool, bool, int, int)",
+          "count": 5,
+          "GPU_duration_us": 14.624,
+          "mean_us_per_profiled_replay": 2.9248000000000003,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.5222168935593844
+        },
+        {
+          "name": "void count_and_sort_expert_tokens_kernel<int>(int const*, int*, int*, unsigned long, bool)",
+          "count": 5,
+          "GPU_duration_us": 6.815999999999999,
+          "mean_us_per_profiled_replay": 1.3631999999999997,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.2433964952475905
+        },
+        {
+          "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<int>, std::array<char*, 1ul>)",
+          "count": 5,
+          "GPU_duration_us": 4.832,
+          "mean_us_per_profiled_replay": 0.9663999999999999,
+          "share_percent_of_exclusive_GPU_kernel_sum": 0.1725486891191839
+        }
+      ],
+      "eager_calls": 3,
+      "eager_stage_GPU_spans": {
+        "okc_stage/gemm_down": {
+          "count": 3,
+          "GPU_span_us": 545.091,
+          "mean_GPU_span_us_per_eager_call": 181.697
+        },
+        "okc_stage/swiglu": {
+          "count": 3,
+          "GPU_span_us": 16.901,
+          "mean_GPU_span_us_per_eager_call": 5.633666666666667
+        },
+        "okc_stage/gemm_gate_up": {
+          "count": 3,
+          "GPU_span_us": 1075.969,
+          "mean_GPU_span_us_per_eager_call": 358.65633333333335
+        },
+        "okc_stage/workspace": {
+          "count": 3,
+          "GPU_span_us": 2.8209999999999997,
+          "mean_GPU_span_us_per_eager_call": 0.9403333333333332
+        },
+        "okc_stage/alignment": {
+          "count": 3,
+          "GPU_span_us": 21.509999999999998,
+          "mean_GPU_span_us_per_eager_call": 7.169999999999999
+        },
+        "okc_stage/finalize": {
+          "count": 3,
+          "GPU_span_us": 15.815000000000001,
+          "mean_GPU_span_us_per_eager_call": 5.271666666666667
+        }
+      },
+      "eager_kernel_events": 27
+    }
+  ],
+  "down_NCU": [
+    {
+      "version": "wgmma-down-profile-v1",
+      "scope": "one logical M128 down projection; NCU kernel replay/cache-control-all; no clean benchmark or whole-MoE contribution share",
+      "reservation_start_UTC": "2026-10-25T01:46:30.141704+00:00",
+      "exact_GPU_capture_timestamp": "not recorded in CSV/setup; reservation time is not capture timestamp",
+      "hardware": "NVIDIA H200",
+      "kernel_name": "routed_nvfp4_down(const unsigned char *, const unsigned char *, const bfloat16_t *, int, int, int, int, const int *, const int *, const int *, int, int, int, const bfloat16_t *, bfloat16_t *)",
+      "logical_profile_rows": 1,
+      "NCU_replay_passes": 3.0,
+      "raw_gpu__time_duration.sum": {
+        "value": 2.238816,
+        "unit": "ms",
+        "normalized_microseconds": 2238.816,
+        "limit": "Profiler-reported metric only; do not divide by replaypasses or infer causal speedup across unmatched fixtures"
+      },
+      "bundle_sha256": "25e677474e171c6858654bb0e2268b8773353efc8e21474292e4e0463eeb55b0",
+      "source_pins": {
+        "bundle_sha256": "25e677474e171c6858654bb0e2268b8773353efc8e21474292e4e0463eeb55b0",
+        "files": {
+          "benchmarks/serving_moe.py": "2f471b71e24c07ce2f0b9f15b6caeac2d1326718ea0b7171ccbc0128aee43dfd",
+          "benchmarks/serving_wgmma_down.py": "77bebb4cdd3eb4bd550e6a3958e6e630eba2cfda1c3b6c26e08319abe96e820a",
+          "benchmarks/serving_moe_base.py": "13285ce5b3409d6080f46bbd9ba452b63711f906c12640246552b3145b32744a",
+          "benchmarks/routed_adapter.py": "c098f02c86a9f7128bf215665c866615277a9b0fef67ef1bf600d81330855dc7",
+          "benchmarks/routed_down.cuh": "e3a83da389f8646431e22009114143bc36d53dc4fa60296572f19d35babe71ae",
+          "muse_moe_w4a16/reference.py": "a7e0b4fa86aa477a4e7bb5745b2b258954d72636b6da153bd239a717927cba44"
+        },
+        "worker_sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5"
+      },
+      "weight_seed": 920023,
+      "input_seed": 921151,
+      "routing": {
+        "local_route_rows": 191,
+        "total_ctas": 39040,
+        "useful_ctas": 2304,
+        "all_padding_ctas": 1024,
+        "nonlocal_or_beyond_post_ctas": 35712
+      },
+      "selected_counters": {
+        "smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct": {
+          "value": "72.520945",
+          "unit": "%"
+        },
+        "smsp__warp_issue_stalled_barrier_per_warp_active.pct": {
+          "value": "3.651811",
+          "unit": "%"
+        },
+        "sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed": {
+          "value": "0.636717",
+          "unit": "%"
+        }
+      },
+      "raw_ncu_retained": true
+    },
+    {
+      "version": "wgmma-coalesced-profile-v3",
+      "scope": "one logical M128 down projection; NCU kernel replay/cache-control-all; no clean benchmark or whole-MoE contribution share",
+      "reservation_start_UTC": "2026-10-25T02:20:18.021678+00:00",
+      "exact_GPU_capture_timestamp": "not recorded in CSV/setup; reservation time is not capture timestamp",
+      "hardware": "NVIDIA H200",
+      "kernel_name": "routed_nvfp4_down(const unsigned int *, const unsigned char *, const bfloat16_t *, int, int, int, int, const int *, const int *, const int *, int, int, int, const bfloat16_t *, bfloat16_t *)",
+      "logical_profile_rows": 1,
+      "NCU_replay_passes": 3.0,
+      "raw_gpu__time_duration.sum": {
+        "value": 516.48,
+        "unit": "us",
+        "normalized_microseconds": 516.48,
+        "limit": "Profiler-reported metric only; do not divide by replaypasses or infer causal speedup across unmatched fixtures"
+      },
+      "bundle_sha256": "90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087",
+      "source_pins": {
+        "bundle_sha256": "90e3f42727f5e84932eeaf3d0c1c85bc941cb1dd3fe93b6a5152d483e910e087",
+        "manifest_sha256": "73b2440082888ea426c59aa1cc95e7d30a6391c55b508b7c7002164c7db73df4",
+        "files": {
+          "benchmarks/serving_moe.py": "751b48fafca1bfa10f022f2e55ea09cf6edb9a866f0952f171f5083700e9df93",
+          "benchmarks/serving_wgmma_down.py": "77bebb4cdd3eb4bd550e6a3958e6e630eba2cfda1c3b6c26e08319abe96e820a",
+          "benchmarks/serving_moe_base.py": "13285ce5b3409d6080f46bbd9ba452b63711f906c12640246552b3145b32744a",
+          "benchmarks/routed_adapter.py": "cde9c407a93b69218b64c6fea835150768c99fa9cf2cd547bc66c8e01c0687ce",
+          "benchmarks/routed_down.cuh": "28ad39648ed3ad778711f05be18e49c41944c262171346fb79970c2bb1bb3089",
+          "muse_moe_w4a16/reference.py": "a7e0b4fa86aa477a4e7bb5745b2b258954d72636b6da153bd239a717927cba44"
+        },
+        "worker_sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+        "bundle_verifier_sha256": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25"
+      },
+      "weight_seed": 940033,
+      "input_seed": 941161,
+      "routing": {
+        "local_route_rows": 164,
+        "total_ctas": 39040,
+        "useful_ctas": 2112,
+        "all_padding_ctas": 1216,
+        "nonlocal_or_beyond_post_ctas": 35712
+      },
+      "selected_counters": {
+        "smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct": {
+          "value": "54.513651",
+          "unit": "%"
+        },
+        "smsp__warp_issue_stalled_barrier_per_warp_active.pct": {
+          "value": "11.871869",
+          "unit": "%"
+        },
+        "sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed": {
+          "value": "2.763287",
+          "unit": "%"
+        }
+      },
+      "raw_ncu_retained": true
+    },
+    {
+      "version": "wgmma-pipeline-profile-v4",
+      "scope": "one logical M128 down projection; NCU kernel replay/cache-control-all; no clean benchmark or whole-MoE contribution share",
+      "reservation_start_UTC": "2026-10-25T02:31:30.482225+00:00",
+      "exact_GPU_capture_timestamp": "not recorded in CSV/setup; reservation time is not capture timestamp",
+      "hardware": "NVIDIA H200",
+      "kernel_name": "routed_nvfp4_down(const unsigned int *, const unsigned char *, const bfloat16_t *, int, int, int, int, const int *, const int *, const int *, int, int, int, const bfloat16_t *, bfloat16_t *)",
+      "logical_profile_rows": 1,
+      "NCU_replay_passes": 3.0,
+      "raw_gpu__time_duration.sum": {
+        "value": 402.784,
+        "unit": "us",
+        "normalized_microseconds": 402.784,
+        "limit": "Profiler-reported metric only; do not divide by replaypasses or infer causal speedup across unmatched fixtures"
+      },
+      "bundle_sha256": "286d681185ac16e9f288938e35e3e516e28ae04803c01e5529eae6798748828b",
+      "source_pins": {
+        "bundle_sha256": "286d681185ac16e9f288938e35e3e516e28ae04803c01e5529eae6798748828b",
+        "manifest_sha256": "91d45d92dae302717b0b48b633d8735adebcfc7805c06c3d58e885e63c614798",
+        "files": {
+          "benchmarks/serving_moe.py": "bd510f2ba7eae4ccdddef3be52a63940fc6d0ccda32a1b3ca652c8d62fef6dae",
+          "benchmarks/serving_wgmma_down.py": "77bebb4cdd3eb4bd550e6a3958e6e630eba2cfda1c3b6c26e08319abe96e820a",
+          "benchmarks/serving_moe_base.py": "13285ce5b3409d6080f46bbd9ba452b63711f906c12640246552b3145b32744a",
+          "benchmarks/routed_adapter.py": "08fd372d84b9b7ec42e2dff8b00f1eef6d997bf14dd1d989b93131612d393140",
+          "benchmarks/routed_down.cuh": "50120fdc47b2026be404447aa3bba0aab28bff331e6613a919e080f4399b8e24",
+          "muse_moe_w4a16/reference.py": "a7e0b4fa86aa477a4e7bb5745b2b258954d72636b6da153bd239a717927cba44"
+        },
+        "worker_sha256": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+        "bundle_verifier_sha256": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25"
+      },
+      "weight_seed": 950041,
+      "input_seed": 951169,
+      "routing": {
+        "local_route_rows": 164,
+        "total_ctas": 39040,
+        "useful_ctas": 2112,
+        "all_padding_ctas": 1344,
+        "nonlocal_or_beyond_post_ctas": 35584
+      },
+      "selected_counters": {
+        "smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct": {
+          "value": "41.803104",
+          "unit": "%"
+        },
+        "smsp__warp_issue_stalled_barrier_per_warp_active.pct": {
+          "value": "10.346706",
+          "unit": "%"
+        },
+        "sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed": {
+          "value": "3.677100",
+          "unit": "%"
+        }
+      },
+      "raw_ncu_retained": true
+    }
+  ],
+  "GPU_calls_by_extractor": 0,
+  "torch_imported": false
+}

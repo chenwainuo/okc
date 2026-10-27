@@ -1,0 +1,244 @@
+{
+  "decision": "GO_BOUNDED_DIAGNOSTIC_GPU_UNRUN",
+  "pins": {
+    "driver": "20e8b62b56aa18fa4aa8ac16867275ce1213a690c2393f52afafdffc99e3999e",
+    "manifest": "39d98c081399f5370687e9b144a1c9d10abb96a764c8472eebc45e73620716ce",
+    "PW38": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e"
+  },
+  "manifest_files_verified": 136,
+  "independent_negative_rejections": [
+    "wrong_multiplicity",
+    "kernel_crosses_scope",
+    "missing_final_replay_kernel",
+    "unattributed_memset",
+    "zero_call_dormant_lane_corrupted",
+    "conflicting_physical_protocols"
+  ],
+  "author_cpu_proof": {
+    "status": "CPU_PASS_TRACE_GPU_UNRUN_REVIEW_REQUIRED",
+    "cases": {
+      "top4": [
+        [
+          "decode1-pooler",
+          "pooler",
+          1
+        ],
+        [
+          "verify1-pooler",
+          "pooler",
+          8
+        ],
+        [
+          "decode16-pooler",
+          "pooler",
+          16
+        ],
+        [
+          "decode16-unpooler",
+          "unpooler",
+          16
+        ]
+      ],
+      "all30": [
+        [
+          "decode1-qkv_gate",
+          "qkv_gate",
+          1
+        ],
+        [
+          "decode1-o",
+          "o",
+          1
+        ],
+        [
+          "decode1-pooler",
+          "pooler",
+          1
+        ],
+        [
+          "decode1-unpooler",
+          "unpooler",
+          1
+        ],
+        [
+          "decode1-router",
+          "router",
+          1
+        ],
+        [
+          "decode16-qkv_gate",
+          "qkv_gate",
+          16
+        ],
+        [
+          "decode16-o",
+          "o",
+          16
+        ],
+        [
+          "decode16-pooler",
+          "pooler",
+          16
+        ],
+        [
+          "decode16-unpooler",
+          "unpooler",
+          16
+        ],
+        [
+          "decode16-router",
+          "router",
+          16
+        ],
+        [
+          "decode32-qkv_gate",
+          "qkv_gate",
+          32
+        ],
+        [
+          "decode32-o",
+          "o",
+          32
+        ],
+        [
+          "decode32-pooler",
+          "pooler",
+          32
+        ],
+        [
+          "decode32-unpooler",
+          "unpooler",
+          32
+        ],
+        [
+          "decode32-router",
+          "router",
+          32
+        ],
+        [
+          "verify1-qkv_gate",
+          "qkv_gate",
+          8
+        ],
+        [
+          "verify1-o",
+          "o",
+          8
+        ],
+        [
+          "verify1-pooler",
+          "pooler",
+          8
+        ],
+        [
+          "verify1-unpooler",
+          "unpooler",
+          8
+        ],
+        [
+          "verify1-router",
+          "router",
+          8
+        ],
+        [
+          "verify16-qkv_gate",
+          "qkv_gate",
+          128
+        ],
+        [
+          "verify16-o",
+          "o",
+          128
+        ],
+        [
+          "verify16-pooler",
+          "pooler",
+          128
+        ],
+        [
+          "verify16-unpooler",
+          "unpooler",
+          128
+        ],
+        [
+          "verify16-router",
+          "router",
+          128
+        ],
+        [
+          "verify32-qkv_gate",
+          "qkv_gate",
+          256
+        ],
+        [
+          "verify32-o",
+          "o",
+          256
+        ],
+        [
+          "verify32-pooler",
+          "pooler",
+          256
+        ],
+        [
+          "verify32-unpooler",
+          "unpooler",
+          256
+        ],
+        [
+          "verify32-router",
+          "router",
+          256
+        ]
+      ]
+    },
+    "source_PW38": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+    "CUDA_contexts_or_API_calls": 0,
+    "production_imports": 0,
+    "NCU_calls": 0,
+    "multinode_duplicate_symbol_positive": true,
+    "trace_negative_rejections": [
+      "missingKernel",
+      "extraKernel",
+      "duplicateReplay",
+      "zeroDuration",
+      "NaNDuration",
+      "infiniteStart",
+      "wrongSymbol",
+      "wrongMetadata",
+      "outsideScope",
+      "missingReplay",
+      "badSetup",
+      "reorderedScopes"
+    ],
+    "own_terminal_negative_rejections": [
+      "corruptOutput",
+      "NaNOutput",
+      "staleX",
+      "wrongFixture",
+      "WChanged",
+      "packChanged",
+      "counterChanged",
+      "missingOutput"
+    ],
+    "active_reset_prefix_dormant_preservation_and_zero_calls": "PASS",
+    "weighted_progress_alias_offsets": "PASS",
+    "unprofiled_benchmark_replays_percase": 11,
+    "profile_replays_percase": 3,
+    "mutations_percase": 4,
+    "own_current_case_terminals_before_export": "PASS",
+    "one_final_all_retained_scope_terminal": "PASS",
+    "strict_units_overlap_and_host_sync_boundaries": "PASS",
+    "validity_reuse": "Unchanged PW38 source prior complete fullpolicy validation reused; newnormal/outlier owncase oracles rerun, no redundant allK campaign."
+  },
+  "schedule_all30": {
+    "cold_event_samples": 330,
+    "profile_replays": 90,
+    "mutations": 120,
+    "current_case_terminals": 180,
+    "final_retained_output_oracles": 30
+  },
+  "normal_inner_seconds": 600,
+  "normal_outer_seconds": 720,
+  "GPU_or_NCU_or_production_prepare_calls_by_reviewer": 0
+}

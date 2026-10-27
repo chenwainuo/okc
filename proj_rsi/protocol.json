@@ -7,14 +7,14 @@
     "speedup_required": 1.6103,
     "published_sglang_us": 4830.8,
     "incumbent_board": {
-      "job": "a3f0ebf25a754c01",
-      "candidate": "proj_rsi/candidates/pw38/submission.py",
-      "score_us": 3198.6175079817267,
-      "speedup": 1.5102774833018884,
-      "source_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e"
+      "job": "d5a125fcdcdc408d",
+      "candidate": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
+      "score_us": 3179.285623687654,
+      "speedup": 1.5194608386259911,
+      "source_sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3"
     },
     "floor_us": 2384.0,
-    "log_gain_needed": 0.38838415684847727,
+    "log_gain_needed": 0.34826541748822487,
     "note": "Exactscore=4830.8/geomean(SGLang_load_sum/ours_load_sum), sixequallyweightedloads. Holdsamejob SGLangvectorfixedforwhatif. 62*geomean(ours) isnotexactboardscore. floor_us isahistoricalprojectionfrompublisheduncompressedfloors, notauniversalboundwithlosslessweightcompression.",
     "active_thread_objective": {
       "objective": "3x the current benchmark",
@@ -201,5 +201,33 @@
     "proposal_rule": "Each future idea lists applicable lesson IDs or an explicit no-relevant-prior-lesson reason; validate applicability, do not blindly repeat a conclusion.",
     "retention": "Failures and conflicting/tiny positives remain evidence. A failed version never closes an entire family.",
     "submission": "Learning is recorded alongside validation; it does not introduce a statistical-significance or extra user-confirmation gate for measured improvements."
+  },
+  "hotpath_priority": {
+    "requested_at": "2026-10-27",
+    "authority": "User: log actual hotpath, focus most repetitive/costly selected paths",
+    "projection_evidence": "proj_rsi/audits/selected-hotpaths-pw38/report.json",
+    "expert_evidence": "proj_rsi/audits/serving-historical-hotpaths/report.json",
+    "projection_focus": [
+      "GV pooler M1/M8",
+      "GV pooler/unpooler M16",
+      "RQ pooler/unpooler M32",
+      "Lt pooler/unpooler M256"
+    ],
+    "full_expert_focus": [
+      "gate/up Marlin GEMM loop",
+      "down Marlin GEMM loop"
+    ],
+    "ranking": "Observed selected route + recoverable end-to-end cost weighted by exact benchmark aggregation, probability and full experiment cost. Raw callcount alone is not ROI.",
+    "required_experiment_context": [
+      "actual selected symbol and shape",
+      "source/JIT/hardware identity",
+      "timed complete path versus current incumbent",
+      "prior related positive/negative experiments",
+      "how change reaches actual selected path"
+    ],
+    "trace_boundaries": "Retain kernel counts/durations, copies, host sync, unprofiled timing separately. Static instruction counts or whole-kernel time do not establish sampled inner-loop bottlenecks.",
+    "exceptions": "A proposed replacement for a selected hotpath remains eligible, but must name the incumbent it replaces. Correctness/setup repairs and bounded diagnostics are prerequisites, not performance gains.",
+    "scope_limits": "Historical full-expert trace is not current full-model serving evidence. Projection3ms and original expert3x remain separate; fullmodel8GPU validation pending.",
+    "threshold": "Retain every measured positive; this focus does not introduce a minimum gain threshold."
   }
 }

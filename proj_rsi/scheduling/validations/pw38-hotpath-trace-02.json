@@ -1,0 +1,33 @@
+{
+  "job_id": "pw38.hotpath.trace.02",
+  "disposition": "VALID_DIAGNOSTIC",
+  "validator": "worker07 independent CPU artifact/source/JIT/trace/counter/terminal review",
+  "reason": "All30 actual Chrome traces and graph metadata match; strict executed output/counter/immutable receipts and cleanup pass. No speedup, bottleneck or official-score claim.",
+  "validation_summary": {
+    "cases": 30,
+    "reparsed_Chrome_files": 30,
+    "profile_graph_replays": 90,
+    "actual_kernel_events": 90,
+    "cold_event_samples": 330,
+    "mutations": 120,
+    "own_current_case_terminals": 180,
+    "final_retained_outputs": 30,
+    "physical_counter_arenas": 24
+  },
+  "source_pins_verified": 143,
+  "artifact_files_verified": 52,
+  "evidence": {
+    "proj_rsi/audits/pw38-hotpath-trace-02-independent.md": "7c002ce84df8afaf326f0ba1eb57fb22f891ef118274019a6ae7c720b539f91a",
+    "proj_rsi/audits/pw38-hotpath-trace-02-independent.py": "68d3943411fd6068ff266fee9f792fbea7a931bc64d010a51a3b4471aa0b1e92",
+    "proj_rsi/audits/pw38-hotpath-trace-02-independent.json": "79cd7285b93fd772be7d2964de1d516d551cab0937bff9521e68c3aa232e1a79"
+  },
+  "cleanup": "ALL_30_DRAINED_RESET_PHYSICAL_ZERO",
+  "limitations": [
+    "No archived output/X/W/counter tensor bytes for offline numerical regeneration; source-bound executed assertions and counter snapshots are validated.",
+    "Instrumented CUDA durations are not cold event or official scored latencies; host spans include replay and synchronization.",
+    "Three profile samples per case; uniform harness case counts are not serving request frequencies or score weights.",
+    "One kernel per actual graph gives launch boundaries, not internal loop/stall/instruction costs; closed-library source is UNKNOWN."
+  ],
+  "root_finalization_required": true,
+  "queue_mutations": 0
+}

@@ -1,0 +1,156 @@
+{
+  "status": "ACTUAL_SCORED_ROUTE_COMPARISON_NOT_CAUSAL_FEATURE_GAIN",
+  "previous_job": "a3f0ebf25a754c01",
+  "current_job": "d5a125fcdcdc408d",
+  "source": {
+    "path": "results/proj-rsi/releases/pw45-v1-835acb90b47b/submission.py",
+    "sha256": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+    "bytes": 277550
+  },
+  "previous_view": {
+    "path": "proj_rsi/audits/selected-hotpaths-pw38/current-stack-snapshot.json",
+    "sha256": "a0047afad7d4fa9e36baa572af4dcab674e53cd3fad7c8474dca2f559a4fcc5f",
+    "bytes": 123525
+  },
+  "current_view_sha256": "ec34fcd1e04fd2b2333305be21fddcf5f7499035519e82b61b4a5721eff214db",
+  "changes": [
+    {
+      "load": "decode 16",
+      "layer": "router",
+      "m": 16,
+      "previous_family": "gv",
+      "current_family": "gv",
+      "previous_kernel": "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)",
+      "current_kernel": "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)",
+      "previous_pick": "rk-s16w8z",
+      "current_pick": "rk-s16w8x",
+      "causal_gain_us": null
+    },
+    {
+      "load": "decode 32",
+      "layer": "o",
+      "m": 32,
+      "previous_family": "rq",
+      "current_family": "rq",
+      "previous_kernel": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
+      "current_kernel": "void rq<32, 5, 1, 0, 0, 0, 34>(RqP, RqTmap, RqTmap)",
+      "previous_pick": "rq:t32s6hze-k2",
+      "current_pick": "rq:t32s5ze-k2",
+      "causal_gain_us": null
+    },
+    {
+      "load": "decode 32",
+      "layer": "pooler",
+      "m": 32,
+      "previous_family": "rq",
+      "current_family": "rq",
+      "previous_kernel": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
+      "current_kernel": "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
+      "previous_pick": "rq:t32s6hze-k4",
+      "current_pick": "rq:t32s5hze-k4",
+      "causal_gain_us": null
+    },
+    {
+      "load": "decode 32",
+      "layer": "unpooler",
+      "m": 32,
+      "previous_family": "rq",
+      "current_family": "rq",
+      "previous_kernel": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
+      "current_kernel": "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)",
+      "previous_pick": "rq:t32s6hze-k2",
+      "current_pick": "rq:t32s5hze-k2",
+      "causal_gain_us": null
+    },
+    {
+      "load": "verify 1",
+      "layer": "qkv_gate",
+      "m": 8,
+      "previous_family": "gv",
+      "current_family": "gv",
+      "previous_kernel": "void gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)",
+      "current_kernel": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)",
+      "previous_pick": null,
+      "current_pick": null,
+      "causal_gain_us": null
+    },
+    {
+      "load": "verify 16",
+      "layer": "qkv_gate",
+      "m": 128,
+      "previous_family": "rq",
+      "current_family": "rq",
+      "previous_kernel": "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)",
+      "current_kernel": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
+      "previous_pick": "rq:s4s5hzEH",
+      "current_pick": "rq:s4s5hz",
+      "causal_gain_us": null
+    },
+    {
+      "load": "verify 16",
+      "layer": "pooler",
+      "m": 128,
+      "previous_family": "rq",
+      "current_family": "rq",
+      "previous_kernel": "void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)",
+      "current_kernel": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
+      "previous_pick": "rq:s4s5zEH",
+      "current_pick": "rq:s4s5hz",
+      "causal_gain_us": null
+    },
+    {
+      "load": "verify 16",
+      "layer": "unpooler",
+      "m": 128,
+      "previous_family": "Lt/vendor",
+      "current_family": "Lt/vendor",
+      "previous_kernel": "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN",
+      "current_kernel": "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_coopB_NNN",
+      "previous_pick": "r6",
+      "current_pick": "r6",
+      "causal_gain_us": null
+    },
+    {
+      "load": "verify 32",
+      "layer": "o",
+      "m": 256,
+      "previous_family": "Lt/vendor",
+      "current_family": "Lt/vendor",
+      "previous_kernel": "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN",
+      "current_kernel": "nvjet_sm90_tst_256x64_64x5_1x2_v_bz_coopB_NNN",
+      "previous_pick": "r6",
+      "current_pick": "r6",
+      "causal_gain_us": null
+    },
+    {
+      "load": "verify 32",
+      "layer": "pooler",
+      "m": 256,
+      "previous_family": "Lt/vendor",
+      "current_family": "Lt/vendor",
+      "previous_kernel": "nvjet_sm90_tst_64x128_64x8_1x2_v_bz_NNT",
+      "current_kernel": "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN",
+      "previous_pick": "r6",
+      "current_pick": "r6",
+      "causal_gain_us": null
+    },
+    {
+      "load": "verify 32",
+      "layer": "unpooler",
+      "m": 256,
+      "previous_family": "Lt/vendor",
+      "current_family": "Lt/vendor",
+      "previous_kernel": "nvjet_sm90_tst_128x128_64x6_1x2_h_bz_NNN",
+      "current_kernel": "nvjet_sm90_tst_128x128_64x6_1x2_v_bz_coopA_NNT",
+      "previous_pick": "r6",
+      "current_pick": "r6",
+      "causal_gain_us": null
+    }
+  ],
+  "new_HALF52_selected_routes": [],
+  "EH_selected_routes": [],
+  "limits": [
+    "Different independent prepares/jobs; route changes are observed, not causal latency deltas.",
+    "Historical PW38 hotpath report remains frozen; new score sensitivities must use current PW45 job."
+  ]
+}
