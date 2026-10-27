@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "status": "PROPOSED_LOW_CONFIDENCE_NOT_ROOT_APPROVED_NOT_APPLIED_TO_QUEUE",
+  "problem": "muse_bf16_proj",
+  "basis": "Subjective planning choices, not measured probabilities or speed forecasts. p_gain prices the stated5%-target-cut scenario, not a claim that this effect is attainable. Root chooses/adopts/changes all priors and budgets.",
+  "cost_rate_GPU_USD_per_hour_assumption": 5,
+  "entries": [
+    {
+      "id": "projection.gv.quarter_stream.M8",
+      "scenario": {
+        "assumed_target_latency_reduction_fraction": 0.05,
+        "target_case_count": 1,
+        "score_elasticity": 0.06114547809541188,
+        "conditional_score_us": 3147.311863154498,
+        "conditional_score_reduction_us": 9.726540498180384,
+        "baseline_and_other_routes_held_fixed": true,
+        "measured_or_forecast": false
+      },
+      "proposed_p_gain": 0.2,
+      "proposed_p_valid": 0.8,
+      "confidence": "low",
+      "reason": "Meaningful decode/repair/MMA dependency redesign and scalable pathway, but new metadata transport/liveness untested; old narrow instruction wins often failed transfer.",
+      "first_step_cost": {
+        "CPU_budget_minutes_proposed": 45,
+        "GPU_outer_seconds_proposed": 180,
+        "reviewed_GPU_cap": null,
+        "status": "proposed only; first GPU screen still requires frozen executable/review/root admission"
+      },
+      "followup_cost_seconds": null,
+      "end_to_end_expected_ROI": null,
+      "conditional_first_step_pricing": {
+        "prior_weighted_scenario_value_score_us": 1.5562464797088618,
+        "GPU_cost_USD_at_cap": 0.25,
+        "score_us_per_GPU_USD_at_first_step_cap": 6.224985918835447,
+        "not_measured_not_forecast_not_total_expected_ROI": true
+      }
+    },
+    {
+      "id": "projection.gv.unpool16.lanebase",
+      "scenario": {
+        "assumed_target_latency_reduction_fraction": 0.05,
+        "target_case_count": 1,
+        "score_elasticity": 0.048562831878118835,
+        "conditional_score_us": 3149.325715036364,
+        "conditional_score_reduction_us": 7.712688616314608,
+        "baseline_and_other_routes_held_fixed": true,
+        "measured_or_forecast": false
+      },
+      "proposed_p_gain": 0.1,
+      "proposed_p_valid": 0.95,
+      "confidence": "low",
+      "reason": "GO/admitted exact fixed-cell change and reused proofs; S2R20\u21925, but prior713c paired/robustness losses constrain speed likelihood. Compare501d actual incumbent, not only failed713c.",
+      "first_step_cost": {
+        "CPU_minutes_descriptor": 10,
+        "GPU_outer_seconds_reviewed": 150,
+        "status": "reviewed descriptor bound; actual runtime wall unknown"
+      },
+      "followup_cost_seconds": null,
+      "end_to_end_expected_ROI": null,
+      "conditional_first_step_pricing": {
+        "prior_weighted_scenario_value_score_us": 0.7327054185498878,
+        "GPU_cost_USD_at_cap": 0.20833333333333334,
+        "score_us_per_GPU_USD_at_first_step_cap": 3.5169860090394613,
+        "not_measured_not_forecast_not_total_expected_ROI": true
+      }
+    },
+    {
+      "id": "projection.thin_cabi.build_cost_validation",
+      "direct_score_gain_us": 0,
+      "proposed_p_build_saving": 0.5,
+      "proposed_p_runtime_valid": 0.8,
+      "confidence": "low",
+      "reason": "CPU POC SASS identity and1.605662s local compile/link establish feasibility, not same-image savings; remote ABI/stream/graph correctness remains untested.",
+      "first_step_cost": {
+        "CPU_budget_minutes_proposed": 20,
+        "GPU_outer_seconds_proposed": 180,
+        "status": "proposed cap for paired same-image cost/ABI validation, preferably piggyback an ordinary authorized useful trial; no new job is approved"
+      },
+      "conditional_build_savings": {
+        "assumed_seconds_saved_per_future_fresh_build": 10,
+        "assumed_future_fresh_builds": 20,
+        "gross_saved_slot_seconds": 200,
+        "gross_GPU_USD_if_build_occupies_exclusive_slot": 0.2777777777777778,
+        "prior_weighted_GPU_USD": 0.11111111111111112,
+        "first_probe_GPU_USD": 0.25,
+        "prior_weighted_saving_over_first_probe_cost": 0.4444444444444445,
+        "break_even_future_builds_if_all_assumptions_hold": 45.0,
+        "measured_or_forecast": false
+      },
+      "end_to_end_expected_ROI": null
+    }
+  ],
+  "limitations": [
+    "First-step score-us/USD and build-dollar ratios have different units and are not a cross-project measured ROI ranking.",
+    "Future integration/official/policy costs and actual attainable gains remain UNKNOWN; first-step ratios cannot be called total expected ROI.",
+    "All-zero placeholder descriptor estimates mean unknown/unpriced here; they do not rank opportunities or establish measured no-gain."
+  ],
+  "loop_contract": "proj_rsi/ITERATION.md"
+}
