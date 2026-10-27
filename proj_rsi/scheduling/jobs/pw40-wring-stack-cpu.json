@@ -1,0 +1,56 @@
+{
+  "id": "research.wring.pw40.stack.readiness.01",
+  "resource": "cpu",
+  "kind": "implementation",
+  "state": "BACKLOG",
+  "author": "sol12",
+  "created_at": 1793079121.5889983,
+  "depends_on": [
+    {
+      "id": "research.wring.rebase.gpu.01",
+      "accepted_dispositions": [
+        "VALID_GAIN"
+      ]
+    }
+  ],
+  "write_paths": [
+    "proj_rsi/candidates/pw40"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 1.5,
+      "p_gain": 0.25,
+      "p_valid": 0.8
+    },
+    "information": {
+      "scenario_score_us": 1.5,
+      "p_resolve": 0.8,
+      "p_followup_gain": 0.25,
+      "unblocks": [
+        "research.wring.pw40.stack.gpu.01"
+      ],
+      "decision": "Does optional qkv128x6w4KS7 retain an actual full-policy gain against current PW38 while EH remains a competing measured option?"
+    },
+    "basis": "Subjective low-confidence conditional score scenario only. ActualH100 Wring vs selectedPW36 +0.175999paired/+0.224F1. No direct currentPW38/H200 measurement yet; code composition is not speed addition.",
+    "confidence": "low; positive localoldcontrol, currentEHcompetitionuntested",
+    "evidence": [
+      "proj_rsi/audits/wring-rebase-01/report.md",
+      "proj_rsi/learnings.json",
+      "results/proj-rsi/releases/pw38-v1-29e557ea53f3/scored-completed-attestation.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 600,
+    "cpu_minutes": 60
+  },
+  "annotations": {
+    "lessons_applied": [
+      "wring-mechanism-policy-separation@1",
+      "composition-not-additivity@1",
+      "eh-tiny-context-bound@1"
+    ],
+    "preserve": "Base currentofficialPW38source29e557. KeepPW39hostconfirmationseparate untilmeasured. Portonlynarrowoptionalqkv128x6w4, preserveEH/nonWringexactcontrols.",
+    "release_requires": "ImmutableCPUproofs/sourcecontrols, independentcritique andactualfull-policyGPUmeasurement beforeofficialscoring"
+  }
+}

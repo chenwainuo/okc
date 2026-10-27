@@ -1,0 +1,53 @@
+{
+  "capture_job": "native.profile.v1.01",
+  "capture_recommended_disposition": "VALID_NO_GAIN",
+  "capture_reason": "Valid source-bound three-node counter diagnostic; no unprofiled speed comparison or gain claimed. Exact source/raw sample counts, role/phase denominators and missing reasons reconcile; retain diagnosis as information value.",
+  "export_job": "native.profile.export.v1.01",
+  "export_recommended_disposition": "CPU_PASS",
+  "export_reason": "Read-only NCU import under normal serialized slot completed; input unchanged, exact three kernel exports parsed, client version/hash retained and post-exit cleanup verified.",
+  "analysis_status": "ACTUAL_COUNTER_SOURCE_ANALYSIS_PASS_NO_TIME_OR_SPEED_CLAIM",
+  "capture_cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T05:00:19Z\n==WARNING== Note: Running with unmodified GPU clocks. If not controlled otherwise, profiling results may be inconsistent.\n==PROF== Connected to process 34 (/opt/conda/bin/python3.11)\nninja: no work to do.\nninja: no work to do.\nNATIVE_X_COMPARE_PROFILE_BEGIN three_nodes_DPpack_DPmain_NXmain\n==WARNING== Unable to access the following 6 metrics: ctc__rx_bytes_data_user.sum, ctc__rx_bytes_data_user.sum.pct_of_peak_sustained_elapsed, ctc__rx_bytes_data_user.sum.per_second, ctc__tx_bytes_data_user.sum, ctc__tx_bytes_data_user.sum.pct_of_peak_sustained_elapsed, ctc__tx_bytes_data_user.sum.per_second.\n\n\n==PROF== Profiling \"rx_pack\" - 0 (1/3): 0%....50%....100% - 34 passes\n==PROF== Profiling \"rq_px_dp\" - 1 (2/3): 0%....50%....100% - 34 passes\n==PROF== Profiling \"rq_tma_x\" - 2 (3/3): 0%....50%....100% - 34 passes\nNATIVE_X_COMPARE_PROFILE_END three_nodes\nNATIVE_X_COMPARE_COUNTER_DRIVER_DONE\n==PROF== Disconnected from process 34\n==PROF== Report: /okc/logs/scheduler/native-profile-01.ncu-rep\nTRIAL_EXIT okc-proj-native-profile-01 0\n2026-10-27T05:00:37Z\n",
+    "terminal_exit": 0
+  },
+  "export_collection": "results/proj-rsi/scheduler/artifacts/native.profile.export.v1.01/collection-1793078485763242784",
+  "sample_denominators": {
+    "DP_pack": {
+      "pack": 314.0,
+      "unmapped": 0,
+      "total": 314.0
+    },
+    "DP_main": {
+      "math": 1724.0,
+      "producer": 1524.0,
+      "common": 103.0,
+      "unmapped": 0,
+      "total": 3351.0
+    },
+    "NX_main": {
+      "math": 2002.0,
+      "producer": 1749.0,
+      "common": 112.0,
+      "unmapped": 0,
+      "total": 3863.0
+    }
+  },
+  "counter_analysis_sha256": "9513ee3738b7f8f34b8de7545728543ab71afc91afb233a54fdc27913de9be51",
+  "no_performance_or_H200_admission": true,
+  "no_queue_action_by_author": true,
+  "evidence_files": {
+    "proj_rsi/audits/native-profile-01/counter_analysis.py": "ab44589b5595988fe587796e2edee1a48e7f526c1469fc1ca2c7b79338078f7f",
+    "proj_rsi/audits/native-profile-01/counter_analysis_test.py": "5aa17de062574c8347cffad961947c8fc6487dec3ba58fc9b3e46782e794bcf0",
+    "proj_rsi/audits/native-profile-01/counter-analysis.json": "9513ee3738b7f8f34b8de7545728543ab71afc91afb233a54fdc27913de9be51",
+    "proj_rsi/audits/native-profile-01/counter-report.md": "36f85203ebc486cc4bcb03aff6a69cb189fdacd2d82817230dd0baed608668e0",
+    "proj_rsi/audits/native-profile-01/proposed-learning-registry-v3.json": "706bf2ee4d42cb191e63ca795826d694bd0f61383623a199972b2cc6dd172de1",
+    "results/proj-rsi/scheduler/artifacts/native.profile.export.v1.01/collection-1793078485763242784/inventory.json": "2f574239da43f3f49e5b68f6a99330fed3cee332995100b023d40af152945130"
+  }
+}

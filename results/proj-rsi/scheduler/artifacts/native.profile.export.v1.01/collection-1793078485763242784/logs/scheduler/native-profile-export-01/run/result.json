@@ -1,0 +1,117 @@
+{
+  "status": "OFFLINE_EXPORT_COMPLETE_SOURCE_COUNTER_ANALYSIS_PENDING",
+  "input_path": "proj_rsi/audits/native-profile-01/input/native-profile-01.ncu-rep",
+  "input_sha256_expected": "4bbde4f4d2a157dde8504dee2764c1a80706dd4ae1ff735725703681b39c6ddf",
+  "source_sha256": "84edd702b2399aaf90af32c492e5f9e302eea3844e153c17096d00e95955057b",
+  "bounds": {
+    "inner_seconds": 120,
+    "outer_seconds": 180,
+    "version_timeout_seconds": 5,
+    "per_import_timeout_seconds": 45
+  },
+  "capture_binary_sha256": "UNKNOWN_NOT_RECORDED_BY_CAPTURE; do not equate export binary hash with capture provenance",
+  "image_runtime_identity": {
+    "hostname": "2c1b2d028b3d",
+    "os_release": "PRETTY_NAME=\"Ubuntu 22.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"22.04\"\nVERSION=\"22.04.5 LTS (Jammy Jellyfish)\"\nVERSION_CODENAME=jammy\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=jammy\n"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/opt/nvidia/nsight-compute/2025.1.1/target/linux-desktop-glibc_2_11_3-x64/ncu",
+        "--import",
+        "/okc/proj_rsi/audits/native-profile-01/input/native-profile-01.ncu-rep",
+        "--page",
+        "raw",
+        "--csv"
+      ],
+      "stdout": "raw.csv",
+      "stderr": "raw.csv.stderr.txt",
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "/opt/nvidia/nsight-compute/2025.1.1/target/linux-desktop-glibc_2_11_3-x64/ncu",
+        "--import",
+        "/okc/proj_rsi/audits/native-profile-01/input/native-profile-01.ncu-rep",
+        "--page",
+        "source",
+        "--print-source",
+        "sass",
+        "--csv"
+      ],
+      "stdout": "source.csv",
+      "stderr": "source.csv.stderr.txt",
+      "returncode": 0
+    }
+  ],
+  "export_client": {
+    "path": "/opt/nvidia/nsight-compute/2025.1.1/target/linux-desktop-glibc_2_11_3-x64/ncu",
+    "sha256": "0bd1ff6b9f2b456b5b6ca6613fc79a9f6fab4e5bdd20b7fed110064305bd7ac5",
+    "version": "NVIDIA (R) Nsight Compute Command Line Profiler\nCopyright (c) 2018-2025 NVIDIA Corporation\nVersion 2025.1.1.0 (build 35528883) (public-release)\n",
+    "version_pin": "2025.1.1"
+  },
+  "three_nodes": {
+    "rx_pack": {
+      "kernel_name": "rx_pack(const unsigned int *, unsigned int *)",
+      "source_PC_rows": 56,
+      "source_samples": 314,
+      "raw_samples": 314,
+      "sample_count_metric_available": true,
+      "source_sample_column_available": true,
+      "source_raw_sample_reconciliation": "PASS",
+      "sampling_metadata_raw": {
+        "smsp__pcsamp_aggregated_passes": "2",
+        "smsp__pcsamp_dropped_bytes": "0",
+        "smsp__pcsamp_interval": "6",
+        "smsp__pcsamp_interval_cycles": "2048.000000"
+      },
+      "role_sample_denominators": "PENDING_CPU_SOURCE_SASS_BINDING_AND_ANALYSIS",
+      "interpretation": "Counts/samples are not microseconds; no inferred speed result."
+    },
+    "rq_px_dp": {
+      "kernel_name": "void rq_px_dp<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+      "source_PC_rows": 848,
+      "source_samples": 3351,
+      "raw_samples": 3351,
+      "sample_count_metric_available": true,
+      "source_sample_column_available": true,
+      "source_raw_sample_reconciliation": "PASS",
+      "sampling_metadata_raw": {
+        "smsp__pcsamp_aggregated_passes": "2",
+        "smsp__pcsamp_dropped_bytes": "0",
+        "smsp__pcsamp_interval": "6",
+        "smsp__pcsamp_interval_cycles": "2048.000000"
+      },
+      "role_sample_denominators": "PENDING_CPU_SOURCE_SASS_BINDING_AND_ANALYSIS",
+      "interpretation": "Counts/samples are not microseconds; no inferred speed result."
+    },
+    "rq_tma_x": {
+      "kernel_name": "void rq_tma_x<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+      "source_PC_rows": 1104,
+      "source_samples": 3863,
+      "raw_samples": 3863,
+      "sample_count_metric_available": true,
+      "source_sample_column_available": true,
+      "source_raw_sample_reconciliation": "PASS",
+      "sampling_metadata_raw": {
+        "smsp__pcsamp_aggregated_passes": "2",
+        "smsp__pcsamp_dropped_bytes": "0",
+        "smsp__pcsamp_interval": "6",
+        "smsp__pcsamp_interval_cycles": "2048.000000"
+      },
+      "role_sample_denominators": "PENDING_CPU_SOURCE_SASS_BINDING_AND_ANALYSIS",
+      "interpretation": "Counts/samples are not microseconds; no inferred speed result."
+    }
+  },
+  "input_immutable": "PASS",
+  "no_GPU_context_or_kernel_requested_by_script": true,
+  "artifact_hashes": {
+    "source.csv.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "PC-source-rows.json": "011a1a75ea323bd23e5cf8f0dc6573786736e8bf810b3eb3a6e8f0cd09d9837f",
+    "ncu-version.txt": "51568705db6a9090604111731ae421e10b2a73658b59489a8b8ed7b0d5a7460b",
+    "raw.csv.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source.csv": "122a3e6101aeb3ccda3b04f862a559234c57403c15f023dbab9532476d32df7f",
+    "raw.csv": "111416be3db65f7a0b11f2bbbdef6ec7ce5ddce0cc74d5ff456efb16000fd784",
+    "raw-kernel-rows.json": "1baa5586765065aa39b688c57bf0d4859f2659d6d2534c7b806956284e66470f"
+  }
+}

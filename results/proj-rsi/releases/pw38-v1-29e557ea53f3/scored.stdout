@@ -1,0 +1,188 @@
+submitted scored a3f0ebf25a754c01 for results/proj-rsi/releases/pw38-v1-29e557ea53f3/submission.py
+okc job a3f0ebf25a754c01  status=ok passed=True tests=9/9 score=3198.6175079817267 speedup=1.5102774833018884 ci=[1.48762332105236, 1.5329316455514166]
+load       layer        m    yours   sglang     sol  speedup vs incumbent
+decode 1   qkv_gate     1     9.00    13.95    7.87   1.550x  -0.20 WIN
+decode 1   o            1     5.16     6.75    3.50   1.308x  +0.20 loss
+decode 1   pooler       1    13.93    21.47   13.99   1.541x  +0.47 loss
+decode 1   unpooler     1     4.26     7.04    1.75   1.654x  +0.26 loss
+decode 1   router       1     3.88    10.34    1.75   2.666x  +0.21 loss
+decode 1   SUM               36.23    59.55           1.644x  (incumbent 35.29)
+decode 16  qkv_gate    16    10.14    13.97    7.93   1.378x  +0.47 loss
+decode 16  o           16     5.89     6.91    3.56   1.174x  +0.54 loss
+decode 16  pooler      16    14.39    21.57   14.06   1.499x  +0.22 loss
+decode 16  unpooler    16    15.06    18.83   14.06   1.251x  +0.64 loss
+decode 16  router      16     5.10    14.98    1.81   2.934x  +0.41 loss
+decode 16  SUM               50.58    76.26           1.508x  (incumbent 48.29)
+decode 32  qkv_gate    32    10.34    14.26    8.00   1.379x  +0.23 loss
+decode 32  o           32     6.57     6.88    3.62   1.048x  +0.20 loss
+decode 32  pooler      32    15.83    22.34   14.14   1.411x  +0.29 loss
+decode 32  unpooler    32    15.43    18.96   14.14   1.229x  +0.28 loss
+decode 32  router      32     5.51    15.50    1.86   2.815x  +0.53 loss
+decode 32  SUM               53.67    77.94           1.452x  (incumbent 52.14)
+verify 1   qkv_gate     8     9.34    14.14    7.90   1.514x  +0.03 tie
+verify 1   o            8     5.28     6.66    3.53   1.261x  +0.01 tie
+verify 1   pooler       8    13.62    21.41   14.02   1.571x  -0.09 WIN
+verify 1   unpooler     8     4.27     7.14    1.76   1.672x  +0.05 tie
+verify 1   router       8     4.47    26.14    1.78   5.848x  -0.48 WIN
+verify 1   SUM               36.99    75.49           2.041x  (incumbent 37.49)
+verify 16  qkv_gate   128    12.97    17.12    8.42   1.320x  -0.24 WIN
+verify 16  o          128     6.82     7.33    3.99   1.074x  -0.73 WIN
+verify 16  pooler     128    18.19    24.99   14.64   1.374x  -0.21 WIN
+verify 16  unpooler   128    18.49    19.50   14.64   1.055x  -0.46 WIN
+verify 16  router     128     7.65    16.45    2.21   2.151x  -1.76 WIN
+verify 16  SUM               64.11    85.39           1.332x  (incumbent 67.51)
+verify 32  qkv_gate   256    17.21    19.79    9.77   1.150x  -0.06 WIN
+verify 32  o          256     9.09     9.44    4.48   1.039x  +0.29 loss
+verify 32  pooler     256    24.84    30.74   17.37   1.237x  -0.00 tie
+verify 32  unpooler   256    23.41    24.43   17.37   1.044x  -1.29 WIN
+verify 32  router     256     9.49    17.54    2.68   1.848x  -1.49 WIN
+verify 32  SUM               84.04   101.94           1.213x  (incumbent 86.58)
+speedup 1.5103x  score 3198.6 us  ln-gain still needed for 3000: 0.385
+
+profiles:
+decode 1   qkv_gate  | void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.4 µs 100.0%      1
+decode 1   o         | void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           3.8 µs 100.0%      1
+decode 1   pooler    | void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         15.1 µs 100.0%      1
+decode 1   unpooler  | void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.4 µs 100.0%      1
+decode 1   router    | void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       3.1 µs 100.0%      1
+decode 16  qkv_gate  | void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.9 µs 100.0%      1
+decode 16  o         | void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           5.2 µs 100.0%      1
+decode 16  pooler    | void gv<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                         15.0 µs 100.0%      1
+decode 16  unpooler  | void gv<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                         14.6 µs 100.0%      1
+decode 16  router    | void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.2 µs 100.0%      1
+decode 32  qkv_gate  | void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.1 µs 100.0%      1
+decode 32  o         | void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                5.5 µs 100.0%      1
+decode 32  pooler    | void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.6 µs 100.0%      1
+decode 32  unpooler  | void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.2 µs 100.0%      1
+decode 32  router    | void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.1 µs 100.0%      1
+verify 1   qkv_gate  | void gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)                       9.1 µs 100.0%      1
+verify 1   o         | void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           4.0 µs 100.0%      1
+verify 1   pooler    | void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         13.8 µs 100.0%      1
+verify 1   unpooler  | void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.5 µs 100.0%      1
+verify 1   router    | void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.4 µs 100.0%      1
+verify 16  qkv_gate  | void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           12.8 µs 100.0%      1
+verify 16  o         | nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopB_NNN                      5.5 µs 100.0%      1
+verify 16  pooler    | void rq<128, 5, 1, 0, 0, 0, 65538>(RqP, RqTmap, RqTmap)           18.9 µs 100.0%      1
+verify 16  unpooler  | nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN                           18.5 µs 100.0%      1
+verify 16  router    | void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.1 µs 100.0%      1
+verify 32  qkv_gate  | nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           19.5 µs 100.0%      1
+verify 32  o         | nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                            8.4 µs 100.0%      1
+verify 32  pooler    | nvjet_sm90_tst_64x128_64x8_1x2_v_bz_NNT                           24.8 µs 100.0%      1
+verify 32  unpooler  | nvjet_sm90_tst_128x128_64x6_1x2_h_bz_NNN                          23.7 µs 100.0%      1
+verify 32  router    | void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       8.0 µs 100.0%      1
+
+PROBE p1alt    router m=1 rr6               8.06 us 
+PROBE p1alt    unpooler m=1 uk-s4x          8.38 us 
+PROBE p1alt    unpooler m=8 uk-s4x          8.54 us 
+PROBE p1alt    router m=8 rk-s16w8x         8.67 us 
+PROBE p1alt    router m=16 rk-s16w8z        9.09 us 
+PROBE p1alt    router m=32 rk-s8z           9.50 us 
+PROBE rszero   router m=128                 5.18 us 
+
+BAKE pooler    m=128  rq:s4s5z              23.30
+BAKE pooler    m=128  rq:s4s5hz             23.14
+BAKE pooler    m=128  rq:s4hz               23.49
+BAKE pooler    m=128  rq:s4s5zEH            23.04
+BAKE pooler    m=128  rq:s4s5hzEH           23.04
+BAKE pooler    m=128  r6                    23.84
+BAKE pooler    m=256  rq:n256s4hz           30.98
+BAKE pooler    m=256  rq:n256s5hz           31.39
+BAKE pooler    m=256  rq:n256s5z            31.36
+BAKE pooler    m=256  r6                    28.19
+BAKE qkv_gate  m=128  rq:s4s5z              17.34
+BAKE qkv_gate  m=128  rq:s4s5hz             17.63
+BAKE qkv_gate  m=128  rq:s4hz               17.73
+BAKE qkv_gate  m=128  rq:s4s5zEH            17.25
+BAKE qkv_gate  m=128  rq:s4s5hzEH           17.15
+BAKE qkv_gate  m=128  r6                    19.42
+BAKE qkv_gate  m=256  rq:n256s4hz           22.21
+BAKE qkv_gate  m=256  rq:n256s5hz           22.56
+BAKE qkv_gate  m=256  rq:n256s5z            22.50
+BAKE qkv_gate  m=256  r6                    21.79
+BAKE unpooler  m=128  rq:s4s5z              22.62
+BAKE unpooler  m=128  rq:s4s5hz             22.78
+BAKE unpooler  m=128  rq:s4hz               23.07
+BAKE unpooler  m=128  rq:s4s5zEH            22.75
+BAKE unpooler  m=128  rq:s4s5hzEH           22.72
+BAKE unpooler  m=128  r6                    22.66
+BAKE unpooler  m=256  rq:n256s4hz           31.42
+BAKE unpooler  m=256  rq:n256s5hz           31.65
+BAKE unpooler  m=256  rq:n256s5z            31.84
+BAKE unpooler  m=256  r6                    27.87
+BAKE o         m=128  rq:s4s5z              12.99
+BAKE o         m=128  rq:s4s5hz             13.28
+BAKE o         m=128  rq:s4hz               13.28
+BAKE o         m=128  rq:s4s5zEH            13.09
+BAKE o         m=128  rq:s4s5hzEH           13.09
+BAKE o         m=128  r6                    11.01
+BAKE o         m=256  rq:n256s4hz           16.22
+BAKE o         m=256  rq:n256s5hz           16.51
+BAKE o         m=256  rq:n256s5z            16.29
+BAKE o         m=256  r6                    12.96
+BAKE unpooler  m=1    r6                     8.67
+BAKE unpooler  m=1    uk-s4z                 8.77
+BAKE unpooler  m=1    uk-s4x                 8.58
+BAKE unpooler  m=1    uk-s4w4x               8.77
+BAKE unpooler  m=8    r6                     8.80
+BAKE unpooler  m=8    uk-s4z                 8.96
+BAKE unpooler  m=8    uk-s4x                 8.58
+BAKE unpooler  m=8    uk-s4w4x               8.70
+BAKE router    m=8    r6                     9.47
+BAKE router    m=8    rk-s8z                 9.31
+BAKE router    m=8    rk-s16w8z              9.06
+BAKE router    m=8    rk-s16w8x              8.90
+BAKE router    m=8    rk-s32x                8.86
+BAKE router    m=16   r6                     9.44
+BAKE router    m=16   rk-s8z                 9.31
+BAKE router    m=16   rk-s16w8z              9.09
+BAKE router    m=16   rk-s16w8x              9.02
+BAKE router    m=16   rk-s32x                9.28
+BAKE router    m=32   r6                    10.40
+BAKE router    m=32   rk-s8z                 9.66
+BAKE router    m=32   rk-s16w8z              9.63
+BAKE pooler    m=32   rq:t32s5hze-k4        20.06
+BAKE pooler    m=32   rq:t32s6hze-k4        19.87
+BAKE pooler    m=32   rq:t32s5hz-k4         20.16
+BAKE pooler    m=32   r6                    20.93
+BAKE pooler    m=16   rq:t16s5hze-k4        19.94
+BAKE pooler    m=16   rq:t16s6hze-k4        19.55
+BAKE pooler    m=16   rq:t16s5hz-k4         19.84
+BAKE pooler    m=16   r6                    18.21
+BAKE qkv_gate  m=32   rq:t32s5hze-k6        14.59
+BAKE qkv_gate  m=32   rq:t32s5hze-k7        14.34
+BAKE qkv_gate  m=32   rq:t32s5hz-k6         14.88
+BAKE qkv_gate  m=32   rq:t32s6hze-k6        15.04
+BAKE qkv_gate  m=32   r6                    18.24
+BAKE qkv_gate  m=16   rq:t16s5hze-k6        14.40
+BAKE qkv_gate  m=16   rq:t16s5ze-k6         14.59
+BAKE qkv_gate  m=16   rq:t16s5hze-k7        14.02
+BAKE qkv_gate  m=16   rq:t16s5ze-k7         14.24
+BAKE qkv_gate  m=16   r6                    14.69
+BAKE unpooler  m=32   rq:t32s5hze-k2        19.33
+BAKE unpooler  m=32   rq:t32s6hze-k2        19.20
+BAKE unpooler  m=32   rq:t32s6hz-k2         19.46
+BAKE unpooler  m=32   r6                    20.93
+BAKE unpooler  m=16   rq:t16s5hze-k2        19.23
+BAKE unpooler  m=16   rq:t16s6hze-k2        19.14
+BAKE unpooler  m=16   rq:t16s5hz-k2         19.20
+BAKE unpooler  m=16   r6                    18.82
+BAKE o         m=32   rq:t32s5hze-k2        10.69
+BAKE o         m=32   rq:t32s6hze-k2        10.66
+BAKE o         m=32   rq:t32s5ze-k2         10.75
+BAKE o         m=32   r6                    10.82
+BAKE o         m=16   rq:t16s5hze-k2        10.59
+BAKE o         m=16   rq:t16s6hze-k2        10.62
+BAKE o         m=16   rq:t16s5ze-k2         10.72
+BAKE o         m=16   r6                     9.89
+BAKE o         m=128  rq:h128s8e-k1         12.70
+BAKE o         m=128  rq:h128s5-k1          12.67
+BAKE o         m=128  r6                    11.04
+BAKE router    m=128  r6                    13.82
+BAKE router    m=128  rw64k32s8z            13.02
+BAKE router    m=128  rt64k32b3x2z          11.87
+BAKE router    m=128  rt64k32b4z            11.90
+BAKE router    m=128  rt64k32b3x2bz         11.87
+BAKE router    m=256  r6                    15.65
+BAKE router    m=256  rw64k32r3x2z          16.26
+BAKE router    m=256  rt64k16b6z            14.27
+BAKE router    m=256  rt64k32b3x2z          13.50

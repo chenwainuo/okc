@@ -1,0 +1,207 @@
+{
+  "lesson": {
+    "id": "wring-mechanism-policy-separation",
+    "version": 1,
+    "supersedes": null,
+    "title": "W-ring tiny selected-policy gain coexists with negative equal-depth mechanism contrast",
+    "tags": [
+      "Wring",
+      "QKV128",
+      "barriers",
+      "lifetime",
+      "counter",
+      "incumbent",
+      "mixed",
+      "tiny-gain"
+    ],
+    "context": {
+      "experiment_id": "research.wring.rebase.gpu.01",
+      "family": "separate-W-ring",
+      "parents": [
+        "PW36 frozen2a067",
+        "historical rs128b mechanism only"
+      ],
+      "comparators": [
+        "actual LOCAL PW36 selected s4s5hz KS7",
+        "coupledX5W5",
+        "independentX5W5",
+        "independentX6W4"
+      ],
+      "hardware": {
+        "kind": "GPU",
+        "model": "H100 local"
+      },
+      "validity": "VALID_LOCAL",
+      "disposition": "VALID_MIXED",
+      "sources": [
+        {
+          "path": "proj_rsi/candidates/pw36/submission.py",
+          "role": "actual selected policy parent",
+          "sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf"
+        },
+        {
+          "path": "proj_rsi/candidates/pw36_wring_rebase/extension_source.cu",
+          "role": "three measured fixed arms",
+          "sha256": "1a614dcd721c6431900d25cc46fa3545110cfbed2d6dede6c940d5ad8c458443"
+        },
+        {
+          "path": "proj_rsi/tools/wring_rebase_lab.py",
+          "role": "frozen measurement and validity gates",
+          "sha256": "fd43d83540e2469be8bcd0d5c676b2a96c1ccbeab0e440b767603bcabd594924"
+        }
+      ]
+    },
+    "evidence": [
+      {
+        "id": "analysis",
+        "path": "proj_rsi/audits/wring-rebase-01/analysis.json",
+        "sha256": "fbbfefe3a34c2e37a9fd23f888e280c07426478bbc2b004ba12e5e81d7f675eb"
+      },
+      {
+        "id": "report",
+        "path": "proj_rsi/audits/wring-rebase-01/report.md",
+        "sha256": "181466216a4dc9562e2a7b8d82616a97cbadfd286d75daf7c31cb5b71856708e"
+      }
+    ],
+    "observations": [
+      {
+        "id": "selected-policy-gain",
+        "statement": "Split versus actual selected PW36 is positive in both local F1 and paired estimators; gain is tiny and not robustness or transfer evidence.",
+        "outcome": "positive",
+        "evidence": "analysis",
+        "selector": {
+          "json_pointer": "/comparisons/incumbent_minus_split",
+          "equals": {
+            "F1_gain_us": 0.22399984300136566,
+            "paired_median_gain_us": 0.1759994775056839,
+            "paired_wins": 23
+          }
+        }
+      },
+      {
+        "id": "equal-depth-regression",
+        "statement": "Equal-depth independent full barriers plus40Bmetadata regress coupled at this configuration in both estimators.",
+        "outcome": "negative",
+        "evidence": "analysis",
+        "selector": {
+          "json_pointer": "/comparisons/coupled_minus_equal",
+          "equals": {
+            "F1_gain_us": -0.22399984300136566,
+            "paired_median_gain_us": -0.2400008961558342,
+            "paired_wins": 10
+          }
+        }
+      },
+      {
+        "id": "split-coupled-conflict",
+        "statement": "Split versus coupled reverses sign between F1 and paired; depth/footprint and barrier changes are coupled.",
+        "outcome": "mixed",
+        "evidence": "analysis",
+        "selector": {
+          "json_pointer": "/comparisons/coupled_minus_split",
+          "equals": {
+            "F1_gain_us": -0.03199838101863861,
+            "paired_median_gain_us": 0.19199959933757782,
+            "paired_wins": 26
+          }
+        }
+      },
+      {
+        "id": "same-main-context",
+        "statement": "Actual incumbent and coupled share exact main instruction stream yet show estimator-dependent context gap.",
+        "outcome": "mixed",
+        "evidence": "analysis",
+        "selector": {
+          "json_pointer": "/comparisons/incumbent_minus_coupled",
+          "equals": {
+            "F1_gain_us": 0.2559982240200043,
+            "paired_median_gain_us": 0.015999190509319305,
+            "paired_wins": 16
+          }
+        }
+      },
+      {
+        "id": "depth-comparison",
+        "statement": "Split beats equal in both estimators but changes both ring depths and shared-memory footprint.",
+        "outcome": "positive",
+        "evidence": "analysis",
+        "selector": {
+          "json_pointer": "/comparisons/equal_minus_split",
+          "equals": {
+            "F1_gain_us": 0.19200146198272705,
+            "paired_median_gain_us": 0.4479996860027313,
+            "paired_wins": 25
+          }
+        }
+      }
+    ],
+    "hypotheses": [
+      {
+        "statement": "Barrier separation alone may add synchronization/address cost at equal depth; depth rebalance might compensate, while pointer/allocation/capture context or order may explain some tiny gaps. These causal explanations remain unproven.",
+        "status": "unproven",
+        "observation_ids": [
+          "selected-policy-gain",
+          "equal-depth-regression",
+          "split-coupled-conflict",
+          "same-main-context",
+          "depth-comparison"
+        ]
+      }
+    ],
+    "scope": "QKV M128/N2304/K8192/KS7 complete single-main graphs on local H100. Equal-minus-coupled tests independent full barriers plus40Bmetadata at equal5/5depth. Split-minus-equal changes both depths and shared footprint. Actual-policy and mechanism contrasts are separate facts.",
+    "transfer_limits": [
+      "No H100-to-H200, component-to-whole-score, cross-run minimum or historicalgain addition.",
+      "No automatic serving selection/integration from fixed-arm graph timings; original prepare selection and budget remain separate gates.",
+      "Exact same main stream does not guarantee identical allocation/cache/capture context; no causal or robustness claim from32pairs.",
+      "Protocol is bounded two-WG source model with finite engine progress; archived output/counter arrays and SO are not retained for independent rerun."
+    ],
+    "confidence": {
+      "observation": "high",
+      "causality": "low",
+      "transfer": "low"
+    },
+    "falsification": "The selected-policy hypothesis weakens if split gains disappear/reverse under matched context and alternating order, or identical-main incumbent/coupled controls retain a systematic gap sufficient to explain the observation.",
+    "next_test": {
+      "question": "Does split retain a signed gain over actual selected PW36 after matching fixed-arm pointer/allocation roles and diagnosing identical-main control context?",
+      "controls": [
+        "actual original PW36 kernel_fn selection",
+        "coupledX5W5 and identical-main comparator with matched pointer roles",
+        "equalX5W5",
+        "splitX6W4"
+      ],
+      "discriminator": "Predeclare balanced same-fixture complete-graph timing with swapped matched pointer/allocation roles; retain identical-main context gap and all six causal contrasts, then compare split sign versus actual policy and coupled separately.",
+      "stop_rule": "Abort validity failure without timing admission; retain every tiny signed contrast and estimator conflict. A persistent same-main context gap requires harness diagnosis before attributing a mechanism win; no family retirement.",
+      "required_gates": [
+        "new frozen reviewed source if harness changes",
+        "exact actual JIT/graph identity and selected no-fallback policy",
+        "resource/co-resident-grid/protocol lifetime",
+        "basis FP64 and task probes",
+        "counter fullstorage identity active/dormant/guards",
+        "own-fixture terminal outputs before replay",
+        "all raw balanced timing samples and cleanup"
+      ]
+    },
+    "related_queue_ids": [
+      "research.wring.rebase.readiness.01",
+      "research.wring.rebase.review.01",
+      "research.wring.rebase.gpu.01"
+    ],
+    "conditional_benefit": {
+      "kind": "conditional_scenario_not_measured",
+      "value": null,
+      "unit": "decision",
+      "conditions": [
+        "A separately admitted matched-context confirmation distinguishes mechanism from policy/context effects.",
+        "No extrapolated score or attainable speed gain is known."
+      ]
+    },
+    "cost": {
+      "basis": "Future matched-context source/review/runtime cost unknown; prior trial hardcaps240sinner/300souter are not a new reservation.",
+      "cpu_minutes": null,
+      "gpu_seconds": null
+    },
+    "record_sha256": "8aed17de00967041aa8d8f3de9d75ba2adf3f9f8cadb3a2315c610cc2067b3ab"
+  },
+  "idea_status": "proposed_unqueued",
+  "append_authority": "worker09 registry owner after source/anchor review; this artifact does not edit registry"
+}

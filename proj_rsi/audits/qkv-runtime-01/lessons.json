@@ -1,0 +1,69 @@
+{
+  "id": "lesson:qkv-split4-runtime-01",
+  "measurement_attempt": "research.qkv.split4.harness.gpu.01",
+  "outcome": "VALID_REGRESSION",
+  "facts": [
+    {
+      "claim": "All 210 unfiltered calls and numerical, JIT, counter, lifetime, graph and cleanup gates validate; both actual controls selected the same RQ FL3 KS7 kernel.",
+      "evidence": "analysis.json"
+    },
+    {
+      "claim": "Fresh pack + split4 main + FP32 reduce median 40.288us loses selected PW36/RS32 by 22.848/23.184us paired, with 0 of 30 wins against each.",
+      "evidence": "analysis.json/comparison"
+    },
+    {
+      "claim": "Candidate 144 CTAs and 122 registers did not imply full-pipeline speed over the selected RQ with 126 CTAs.",
+      "evidence": "analysis.json/logical_request_model"
+    },
+    {
+      "claim": "Frozen-source logical X payload is 72MiB for the candidate versus 36MiB for the selected control. Pack adds 2MiB read + 2MiB write; partials add 4.5MiB write + 4.5MiB reduce read. These are not measured DRAM bytes or time.",
+      "evidence": "analysis.json/logical_request_model"
+    },
+    {
+      "claim": "Driver wall time was 144.900s; source-bound candidate JIT phase 43.989s and real weights plus full prepares phase 98.999s. This observation is environment/cache-specific, not a universal timeout bound.",
+      "evidence": "analysis.json/phase_elapsed_seconds"
+    }
+  ],
+  "hypotheses": [
+    {
+      "claim": "Increased global X delivery/front-end demand or decoded-B publication may dominate despite higher CTA coverage.",
+      "status": "UNRESOLVED_NO_COUNTER_ATTRIBUTION"
+    },
+    {
+      "claim": "Fresh pack, FP32 partials and reduction may contribute to the regression; their share is unknown because only node names were archived.",
+      "status": "UNRESOLVED_NO_NODE_DURATION_ATTRIBUTION"
+    }
+  ],
+  "scope": {
+    "layer": "qkv_gate",
+    "m": 128,
+    "n": 2304,
+    "k": 8192,
+    "candidate": "group8_qkv split4 packedX three-nodepipeline",
+    "device": "localH100",
+    "not_established": [
+      "H200 score",
+      "M256 behavior",
+      "performance of the entire reverse family",
+      "an own-control gain",
+      "pack or reduction cost decomposition",
+      "a universal bandwidth ceiling"
+    ]
+  },
+  "discriminating_next_test": {
+    "action": "Only if information ROI warrants, run one bounded frozen full-pipeline diagnostic with the actual selected RQ and candidate pack/main/reduce. Quantify auxiliary-node contribution and source-bound main X-request versus B-publication exposure.",
+    "supports": "Auxiliary cost near the observed gap supports a fusion focus. Small auxiliary cost with a slow main rejects an auxiliary-only explanation. Source-mapped requests and stalls can distinguish X-delivery from B-publication hypotheses.",
+    "controls": [
+      "actual JIT before candidate math",
+      "actual selected policy and full pipeline",
+      "real terminal outputs",
+      "workspace and current-X poison",
+      "source-bound counter aliases",
+      "unfiltered raw calls",
+      "cleanup"
+    ],
+    "limits": "No PC fraction to time or DRAM inference; no automatic rerun or GPU authorization. A changed version is required for the next optimization."
+  },
+  "retention": "Keep this exact valid regression as a control; one version loss is not a family ban. No integration or promotion.",
+  "analysis_sha256": "12ee9e7b57a2a143636ffcf5f420513e44cab8798436578eebc8985f4d19c36b"
+}

@@ -1,0 +1,369 @@
+{
+  "state": "CPU_PW40_OPTIONAL_WRING_STACK_PASS_GPU_UNRUN_REVIEW_REQUIRED",
+  "source": {
+    "status": "PASS_EXACT_FULL_SOURCE_COMMUTATIVITY_AND_ANCESTOR_INVERSES",
+    "parent_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+    "research_parent_sha256": "207f5a1bdc4f5d7712d444d9c71e857643e6700451c88734fce898ac1fc1b7ab",
+    "common_base_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+    "kernel_catalog_EH_commuting_sha256": "3ab16bc1760389bf50e9fdb523dba4e1832df0055999613759dc78c3ee711154",
+    "full_candidate_sha256": "3bc0df52d96f62479c3d5c19ab2717c7a9f4d18c1dd087fb786e2f9f080f0278",
+    "normalizations": 0,
+    "disjoint_base_edit_spans": [
+      {
+        "group": "wring",
+        "id": "ring-config",
+        "lo": 228924,
+        "hi": 228991
+      },
+      {
+        "group": "wring",
+        "id": "approved-domain",
+        "lo": 230894,
+        "hi": 230950
+      },
+      {
+        "group": "wring",
+        "id": "ring-bases",
+        "lo": 231396,
+        "hi": 231579
+      },
+      {
+        "group": "wring",
+        "id": "split-full-init",
+        "lo": 232323,
+        "hi": 232662
+      },
+      {
+        "group": "wring",
+        "id": "W-producer-independent-slot-phase",
+        "lo": 234099,
+        "hi": 235313
+      },
+      {
+        "group": "wring",
+        "id": "W-read-and-release-independent-ring",
+        "lo": 239735,
+        "hi": 240458
+      },
+      {
+        "group": "wring",
+        "id": "X-full-wait-before-math",
+        "lo": 241538,
+        "hi": 241602
+      },
+      {
+        "group": "wring",
+        "id": "optional-split-catalog-only",
+        "lo": 222661,
+        "hi": 222702
+      },
+      {
+        "group": "EH",
+        "id": "current-safe-EH-epilogue",
+        "lo": 245792,
+        "hi": 248205
+      },
+      {
+        "group": "EH",
+        "id": "EH-only-approved-domain",
+        "lo": 230854,
+        "hi": 230893
+      },
+      {
+        "group": "EH",
+        "id": "EH-output-map-half-token-box",
+        "lo": 250748,
+        "hi": 250796
+      },
+      {
+        "group": "EH",
+        "id": "EH-selectable-variants",
+        "lo": 222702,
+        "hi": 222746
+      },
+      {
+        "group": "EH",
+        "id": "EH-compile-selection",
+        "lo": 258404,
+        "hi": 258475
+      },
+      {
+        "group": "EH",
+        "id": "EH-existing-validation-bake-selection",
+        "lo": 258476,
+        "hi": 258561
+      }
+    ],
+    "changed_named_AST": [
+      "RQCU",
+      "RQPROD",
+      "RQV",
+      "_rqbake"
+    ],
+    "optional_bake_choices": [
+      {
+        "layer": "pooler",
+        "m": 128,
+        "candidates": [
+          "s4s5z",
+          "s4s5hz",
+          "s4hz",
+          "s4s5zEH",
+          "s4s5hzEH"
+        ],
+        "KS": 4
+      },
+      {
+        "layer": "pooler",
+        "m": 256,
+        "candidates": [
+          "n256s4hz",
+          "n256s5hz",
+          "n256s5z"
+        ],
+        "KS": 4
+      },
+      {
+        "layer": "qkv_gate",
+        "m": 128,
+        "candidates": [
+          "s4s5z",
+          "s4s5hz",
+          "s4hz",
+          "s4s5zEH",
+          "s4s5hzEH",
+          "wring_x6w4hz"
+        ],
+        "KS": 7
+      },
+      {
+        "layer": "qkv_gate",
+        "m": 256,
+        "candidates": [
+          "n256s4hz",
+          "n256s5hz",
+          "n256s5z"
+        ],
+        "KS": 7
+      },
+      {
+        "layer": "unpooler",
+        "m": 128,
+        "candidates": [
+          "s4s5z",
+          "s4s5hz",
+          "s4hz",
+          "s4s5zEH",
+          "s4s5hzEH"
+        ],
+        "KS": 2
+      },
+      {
+        "layer": "unpooler",
+        "m": 256,
+        "candidates": [
+          "n256s4hz",
+          "n256s5hz",
+          "n256s5z"
+        ],
+        "KS": 2
+      },
+      {
+        "layer": "o",
+        "m": 128,
+        "candidates": [
+          "s4s5z",
+          "s4s5hz",
+          "s4hz",
+          "s4s5zEH",
+          "s4s5hzEH"
+        ],
+        "KS": 2
+      },
+      {
+        "layer": "o",
+        "m": 256,
+        "candidates": [
+          "n256s4hz",
+          "n256s5hz",
+          "n256s5z"
+        ],
+        "KS": 2
+      }
+    ],
+    "strict_anchor_negatives": [
+      "ring-config",
+      "approved-domain",
+      "ring-bases",
+      "split-full-init",
+      "W-producer-independent-slot-phase",
+      "W-read-and-release-independent-ring",
+      "X-full-wait-before-math",
+      "optional-split-catalog-only",
+      "compile-one-optional-split",
+      "qkv128-only-optional-bake"
+    ],
+    "future_PW39": "IN_MEMORY_SOURCE_COMMUTATIVITY_ONLY_NOT_INTEGRATED_NOT_VALIDATED",
+    "invariant": "codec/math/zero-trap/counter/output/D-retirement/existing-EH/default-controls unchanged outside seven Wring layout+publication edits",
+    "lint": {
+      "path": "/home/ubuntu/okc/proj_rsi/candidates/pw40/submission.py",
+      "ok": true,
+      "findings": [
+        {
+          "severity": "warning",
+          "rule": "sm_90a",
+          "detail": "several load_inline builds: confirm the one holding wgmma/setmaxnreg/multicast gets the sm_90a flags"
+        }
+      ]
+    }
+  },
+  "applied_lessons": [
+    "wring-mechanism-policy-separation@1",
+    "composition-not-additivity@1",
+    "eh-tiny-context-bound@1"
+  ],
+  "existing_control_SASS": {
+    "functions": 19,
+    "equal": "ALL_PC_PREDICATE_INSTRUCTION_OPERAND_BRANCH_TARGETS",
+    "instruction_counts": {
+      "32,6,1,0,0,0,3": 1832,
+      "16,5,1,0,0,0,3": 1832,
+      "128,5,1,0,0,0,20": 1336,
+      "128,8,1,0,0,0,52": 1776,
+      "16,6,1,0,0,0,35": 2216,
+      "32,5,1,0,0,0,34": 2120,
+      "16,5,1,0,0,0,34": 2152,
+      "16,5,1,0,0,0,35": 2192,
+      "32,6,1,0,0,0,35": 2184,
+      "32,5,1,0,0,0,3": 1800,
+      "32,5,1,0,0,0,35": 2160,
+      "128,5,1,0,0,0,65539": 1856,
+      "128,5,1,0,0,0,65538": 1816,
+      "256,5,1,0,0,0,2": 1840,
+      "256,5,1,0,0,0,3": 1880,
+      "256,4,1,0,0,0,3": 1840,
+      "128,8,1,0,0,0,3": 2240,
+      "128,5,1,0,0,0,3": 1832,
+      "128,5,1,0,0,0,2": 1792
+    }
+  },
+  "validated_split_SASS": "EXACT_FROZEN_WRING_ACTUAL_VALIDATED_MAIN",
+  "EH_physical": [
+    {
+      "flag": 65539,
+      "EH": true,
+      "static_STSM": 8,
+      "static_reduce_issues": 2,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": true
+    },
+    {
+      "flag": 65538,
+      "EH": true,
+      "static_STSM": 8,
+      "static_reduce_issues": 2,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": true
+    },
+    {
+      "flag": 3,
+      "EH": false,
+      "static_STSM": 8,
+      "static_reduce_issues": 1,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": false
+    },
+    {
+      "flag": 2,
+      "EH": false,
+      "static_STSM": 8,
+      "static_reduce_issues": 1,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": false
+    }
+  ],
+  "split_physical": [
+    {
+      "args": [
+        128,
+        6,
+        1,
+        0,
+        0,
+        0,
+        1027
+      ],
+      "Xslots": 6,
+      "Wslots": 4,
+      "HGMMA": 16,
+      "output_STSM": 8,
+      "reduce_issues": 1,
+      "final_wait0_before_output": true,
+      "TMA_read_drain": true,
+      "bounded_poll_trap": true,
+      "limits": "Source order binds independent ring protocol; actual JIT must match this exact stream. No arbitrary CFG/register allocator proof."
+    }
+  ],
+  "registers": {
+    "device": {
+      "32,6,1,0,0,0,3": 168,
+      "16,5,1,0,0,0,3": 168,
+      "128,5,1,0,0,0,20": 168,
+      "128,8,1,0,0,0,52": 168,
+      "16,6,1,0,0,0,35": 168,
+      "32,5,1,0,0,0,34": 168,
+      "16,5,1,0,0,0,34": 168,
+      "16,5,1,0,0,0,35": 168,
+      "32,6,1,0,0,0,35": 168,
+      "32,5,1,0,0,0,3": 168,
+      "32,5,1,0,0,0,35": 168,
+      "128,6,1,0,0,0,1027": 168,
+      "128,5,1,0,0,0,65539": 168,
+      "128,5,1,0,0,0,65538": 168,
+      "256,5,1,0,0,0,2": 168,
+      "256,5,1,0,0,0,3": 168,
+      "256,4,1,0,0,0,3": 168,
+      "128,8,1,0,0,0,3": 168,
+      "128,5,1,0,0,0,3": 168,
+      "128,5,1,0,0,0,2": 168
+    },
+    "control": {
+      "32,6,1,0,0,0,3": 168,
+      "16,5,1,0,0,0,3": 168,
+      "128,5,1,0,0,0,20": 168,
+      "128,8,1,0,0,0,52": 168,
+      "16,6,1,0,0,0,35": 168,
+      "32,5,1,0,0,0,34": 168,
+      "16,5,1,0,0,0,34": 168,
+      "16,5,1,0,0,0,35": 168,
+      "32,6,1,0,0,0,35": 168,
+      "32,5,1,0,0,0,3": 168,
+      "32,5,1,0,0,0,35": 168,
+      "128,5,1,0,0,0,65539": 168,
+      "128,5,1,0,0,0,65538": 168,
+      "256,5,1,0,0,0,2": 168,
+      "256,5,1,0,0,0,3": 168,
+      "256,4,1,0,0,0,3": 168,
+      "128,8,1,0,0,0,3": 168,
+      "128,5,1,0,0,0,3": 168,
+      "128,5,1,0,0,0,2": 168
+    }
+  },
+  "new_split_resource": {
+    "registers": 168,
+    "threads": 384,
+    "uniform_pool": 64512,
+    "dynamic_pool": 64512,
+    "shared_bytes": 148656,
+    "local_stack_spills": 0
+  },
+  "CUDA_calls": 0,
+  "production_imports": 0,
+  "prepare_calls": 0,
+  "extension_builds": 0,
+  "performance": "UNMEASURED_AGAINST_PW38_NO_ADDITIVE_CLAIM"
+}

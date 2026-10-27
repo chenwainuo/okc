@@ -1,0 +1,120 @@
+{
+  "status": "CPU_SOURCE_INDEPENDENT_PASS_GPU_UNRUN",
+  "manifest_sha256": "27ea3303d909c0f9f38b885e4455172b75c0dd27aa71f2647818aa1eb790b062",
+  "manifest_files_verified": 46,
+  "source_sha256": "3bc0df52d96f62479c3d5c19ab2717c7a9f4d18c1dd087fb786e2f9f080f0278",
+  "exact_reused_Wring_kernel_edits": 7,
+  "full_source_commutation_and_inverses": "PASS",
+  "source_generated_device_inputs_match": "PASS",
+  "existing_SASS_controls": 19,
+  "new_split_SASS": "EXACT_VALIDATED_WRING",
+  "existing_register_resources": "ALL_EXACT",
+  "all20_registers": 168,
+  "zero_stack_spills": "PASS",
+  "offline_cubin_disassembly_matches_retained": {
+    "device": 20,
+    "control": 19
+  },
+  "EH_physical": [
+    {
+      "flag": 65539,
+      "EH": true,
+      "static_STSM": 8,
+      "static_reduce_issues": 2,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": true
+    },
+    {
+      "flag": 65538,
+      "EH": true,
+      "static_STSM": 8,
+      "static_reduce_issues": 2,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": true
+    },
+    {
+      "flag": 3,
+      "EH": false,
+      "static_STSM": 8,
+      "static_reduce_issues": 1,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": false
+    },
+    {
+      "flag": 2,
+      "EH": false,
+      "static_STSM": 8,
+      "static_reduce_issues": 1,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": false
+    }
+  ],
+  "split_physical": [
+    {
+      "args": [
+        128,
+        6,
+        1,
+        0,
+        0,
+        0,
+        1027
+      ],
+      "Xslots": 6,
+      "Wslots": 4,
+      "HGMMA": 16,
+      "output_STSM": 8,
+      "reduce_issues": 1,
+      "final_wait0_before_output": true,
+      "TMA_read_drain": true,
+      "bounded_poll_trap": true,
+      "limits": "Source order binds independent ring protocol; actual JIT must match this exact stream. No arbitrary CFG/register allocator proof."
+    }
+  ],
+  "protocol_reachable_states": 53047,
+  "protocol_randomized_schedules": 1089,
+  "protocol_negative_controls": {
+    "early_X_reuse": "('X_RELEASE_BEFORE_WGMMA_RETIRE', 0, [0])",
+    "missing_Xfull_wait": "X_READ_BEFORE_PUBLISH",
+    "W_reuse_before_all8reads": "W_REUSE_BEFORE_ALL8_READS"
+  },
+  "W_stage_bytes_once": 12288,
+  "X_SW128_bf16_bijection": 8192,
+  "runtime_gate_required": {
+    "ZI_grid": 126,
+    "pre_prepare_SM_count_min": 126,
+    "actual_optin_occupancy_min": 1,
+    "shared_bytes": 148656,
+    "registers": 168,
+    "uniform_and_dynamic_register_pool": 64512
+  },
+  "frozen_artifacts_unchanged": "PASS",
+  "GPU_context_extension_prepare_timing_calls": 0,
+  "compiler_invocations": 0,
+  "offline_disassembly_calls": 2,
+  "applied_lesson_refs": [
+    "wring-mechanism-policy-separation@1",
+    "composition-not-additivity@1",
+    "eh-tiny-context-bound@1"
+  ],
+  "learning_retrieval_archive_sha256": "86617478ad3d82b318d181abe240b5e84547a415497e13ee6912aa5687eaf906",
+  "lesson_immutability_across_registry_append": "PASS_EXACT_V1_RECORDS_IN_ARCHIVED_V2_AND_CURRENT_V3",
+  "optional_bake_scope": {
+    "layer": "qkv_gate",
+    "m": 128,
+    "n": 2304,
+    "k": 8192,
+    "KS": 7,
+    "extra_variant": "wring_x6w4hz",
+    "old_prefix_order": "EXACT",
+    "forced": false,
+    "N_K_are_fixed_task_dimensions_not_new_production_checks": true
+  },
+  "new_function_domain_negative_cases": "SOURCE_PREDICATE_REJECTS_EH_HALF_EARLY_EP_NT_GS_PRB_WM_INS_OUTSIDE_VALIDATED_SPLIT_DOMAIN",
+  "production_runtime_co_residency_gate": "ABSENT_IN_UNCHANGED_RQ_GO; SEPARATE_REVIEWED_TRIAL_MUST_PRECHECK_BEFORE_PREPARE",
+  "source_domain_predicate_negative_cases": 11
+}

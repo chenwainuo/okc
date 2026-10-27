@@ -1,0 +1,48 @@
+{
+  "id": "research.learning.backfill.01",
+  "resource": "cpu",
+  "kind": "analysis",
+  "state": "BACKLOG",
+  "author": "sol09",
+  "created_at": 1793078218.6685462,
+  "depends_on": [],
+  "write_paths": [
+    "proj_rsi/learning.py",
+    "proj_rsi/learnings.json",
+    "proj_rsi/LEARNING.md",
+    "proj_rsi/tests/test_learning.py"
+  ],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 20,
+      "p_resolve": 0.8,
+      "p_followup_gain": 0.2,
+      "unblocks": [
+        "research.prepare.selection.pw39.readiness.01",
+        "native.next-bottleneck.readiness.01"
+      ],
+      "decision": "Convert validated successes/failures into scoped reusable lessons, discriminators and source-linked next ideas; prevent repeated comparator/representation/validation mistakes."
+    },
+    "basis": "Subjective planning estimate only. User explicitly requires generalization step. No direct speedup is claimed for writing a registry. Follow-up cost is budgeted; measured outcomes remain separate.",
+    "confidence": "low",
+    "evidence": [
+      "proj_rsi/audits/pw38-stack-01/report.md",
+      "proj_rsi/audits/native-x4-stmatrix-01/report.md",
+      "proj_rsi/candidates/rq11_actualescape/README.md"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 0,
+    "followup_gpu_seconds": 600,
+    "cpu_minutes": 30
+  },
+  "annotations": {
+    "required_learning_step": true,
+    "scope": "Backfill>=6 concrete lessons plus machine validation/query; ongoing future experiments must record success/failure/mixed experience and retrieve relevant lessons before next idea"
+  }
+}

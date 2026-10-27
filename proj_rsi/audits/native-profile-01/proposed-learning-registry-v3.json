@@ -1,0 +1,660 @@
+{
+  "schema_version": 1,
+  "registry_version": 3,
+  "lessons": [
+    {
+      "id": "native-profile-x-handoff-accounting",
+      "version": 1,
+      "supersedes": null,
+      "record_sha256": "57ee7791baad5e8e7ec0a6762b21df569958331164174fad24352c1638ec4c8f",
+      "title": "Native shared-X shifts the observed math dependency windows; producer backpressure remains visible",
+      "tags": [
+        "native-X",
+        "DP",
+        "TMA",
+        "PC-samples",
+        "waits",
+        "bar5",
+        "source-binding"
+      ],
+      "context": {
+        "experiment_id": "native.profile.v1.01+native.profile.export.v1.01",
+        "family": "native-X",
+        "parents": [
+          "DP@97dd5613f9dfe859c87bb62f21e6d9543c10cdc7fc7310c2e87e40246fb1cf3b",
+          "NX@ffd30a15ec5c1b5cc6fc1d550f7da512783f006f8a34cc37093ea18269d7e377"
+        ],
+        "comparators": [
+          "Same captured DP rx_pack+rq_px_dp versus NX rq_tma_x, fixed unpooler128 fullK4096/N8192",
+          "Separate prior unprofiled actual PW36 comparison retained; counter capture is not a benchmark"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local,132SM, kernel replay/cache-all, unmodified clocks"
+        },
+        "validity": "VALIDATED_DIAGNOSIS",
+        "disposition": "CPU_ACCOUNTING",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/operand_reverse_dual_producer/extension_source.cu",
+            "sha256": "97dd5613f9dfe859c87bb62f21e6d9543c10cdc7fc7310c2e87e40246fb1cf3b",
+            "role": "actual DP generated source"
+          },
+          {
+            "path": "proj_rsi/candidates/reverse_tma_x/extension_source.cu",
+            "sha256": "ffd30a15ec5c1b5cc6fc1d550f7da512783f006f8a34cc37093ea18269d7e377",
+            "role": "actual native generated source"
+          },
+          {
+            "path": "proj_rsi/tools/native_x_compare_ncu.py",
+            "sha256": "16e7502719383460c833b1319de5764f455ab78bfecc8cccb8ec745a697c5a1b",
+            "role": "selected three-node capture and immediate oracles"
+          },
+          {
+            "path": "proj_rsi/tools/native_profile_export.py",
+            "sha256": "84edd702b2399aaf90af32c492e5f9e302eea3844e153c17096d00e95955057b",
+            "role": "serialized report import only"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "counter",
+          "path": "proj_rsi/audits/native-profile-01/counter-analysis.json",
+          "sha256": "9513ee3738b7f8f34b8de7545728543ab71afc91afb233a54fdc27913de9be51"
+        },
+        {
+          "id": "capture",
+          "path": "proj_rsi/audits/native-profile-01/capture-validation.json",
+          "sha256": "525e8932f701b5e68953e8a48ffc0cadbb21a07a67142b453486901997ef261e"
+        },
+        {
+          "id": "prior",
+          "path": "proj_rsi/audits/native-x-01/analysis.json",
+          "sha256": "12072f62ed7f994000e8031739708dd9d50de5cdbe53a96038bb0478003fc604"
+        }
+      ],
+      "observations": [
+        {
+          "id": "dp-denominators",
+          "statement": "DPmain source/raw samples reconcile3351=1724math+1524producer+103common; common is not guessed as producer.",
+          "outcome": "neutral",
+          "evidence": "counter",
+          "selector": {
+            "json_pointer": "/variants/DP_main/roles",
+            "equals": {
+              "math": {
+                "# Samples": 1724.0,
+                "Warp Stall Sampling (All Samples)": 1724.0,
+                "Warp Stall Sampling (Not-issued Samples)": 1099.0,
+                "Instructions Executed": 3765173.0,
+                "Thread Instructions Executed": 120437920.0,
+                "Predicated-On Thread Instructions Executed": 110961696.0,
+                "stall_barrier": 30.0,
+                "stall_branch_resolving": 15.0,
+                "stall_dispatch": 24.0,
+                "stall_drain": 0.0,
+                "stall_imc": 4.0,
+                "stall_lg": 0.0,
+                "stall_long_sb": 967.0,
+                "stall_math": 45.0,
+                "stall_membar": 0.0,
+                "stall_mio": 0.0,
+                "stall_misc": 0.0,
+                "stall_no_inst": 5.0,
+                "stall_not_selected": 28.0,
+                "stall_selected": 119.0,
+                "stall_short_sb": 6.0,
+                "stall_sleep": 0.0,
+                "stall_tex": 0.0,
+                "stall_wait": 274.0,
+                "stall_barrier (Not Issued)": 23.0,
+                "stall_branch_resolving (Not Issued)": 10.0,
+                "stall_dispatch (Not Issued)": 12.0,
+                "stall_drain (Not Issued)": 0.0,
+                "stall_imc (Not Issued)": 4.0,
+                "stall_lg (Not Issued)": 0.0,
+                "stall_long_sb (Not Issued)": 696.0,
+                "stall_math (Not Issued)": 9.0,
+                "stall_membar (Not Issued)": 0.0,
+                "stall_mio (Not Issued)": 0.0,
+                "stall_misc (Not Issued)": 0.0,
+                "stall_no_inst (Not Issued)": 3.0,
+                "stall_not_selected (Not Issued)": 0.0,
+                "stall_selected (Not Issued)": 0.0,
+                "stall_short_sb (Not Issued)": 6.0,
+                "stall_sleeping (Not Issued)": 0.0,
+                "stall_tex (Not Issued)": 0.0,
+                "stall_wait (Not Issued)": 180.0,
+                "PC_count": 324,
+                "unexported_reason_residual": 207.0,
+                "not_issued_unexported_reason_residual": 156.0
+              },
+              "producer": {
+                "# Samples": 1524.0,
+                "Warp Stall Sampling (All Samples)": 1524.0,
+                "Warp Stall Sampling (Not-issued Samples)": 910.0,
+                "Instructions Executed": 4587506.0,
+                "Thread Instructions Executed": 133577989.0,
+                "Predicated-On Thread Instructions Executed": 127059554.0,
+                "stall_barrier": 178.0,
+                "stall_branch_resolving": 68.0,
+                "stall_dispatch": 46.0,
+                "stall_drain": 0.0,
+                "stall_imc": 1.0,
+                "stall_lg": 0.0,
+                "stall_long_sb": 629.0,
+                "stall_math": 32.0,
+                "stall_membar": 0.0,
+                "stall_mio": 5.0,
+                "stall_misc": 0.0,
+                "stall_no_inst": 29.0,
+                "stall_not_selected": 47.0,
+                "stall_selected": 152.0,
+                "stall_short_sb": 68.0,
+                "stall_sleep": 0.0,
+                "stall_tex": 0.0,
+                "stall_wait": 269.0,
+                "stall_barrier (Not Issued)": 131.0,
+                "stall_branch_resolving (Not Issued)": 46.0,
+                "stall_dispatch (Not Issued)": 18.0,
+                "stall_drain (Not Issued)": 0.0,
+                "stall_imc (Not Issued)": 1.0,
+                "stall_lg (Not Issued)": 0.0,
+                "stall_long_sb (Not Issued)": 482.0,
+                "stall_math (Not Issued)": 9.0,
+                "stall_membar (Not Issued)": 0.0,
+                "stall_mio (Not Issued)": 4.0,
+                "stall_misc (Not Issued)": 0.0,
+                "stall_no_inst (Not Issued)": 22.0,
+                "stall_not_selected (Not Issued)": 0.0,
+                "stall_selected (Not Issued)": 0.0,
+                "stall_short_sb (Not Issued)": 41.0,
+                "stall_sleeping (Not Issued)": 0.0,
+                "stall_tex (Not Issued)": 0.0,
+                "stall_wait (Not Issued)": 156.0,
+                "PC_count": 339,
+                "unexported_reason_residual": 0.0,
+                "not_issued_unexported_reason_residual": 0.0
+              },
+              "common": {
+                "# Samples": 103.0,
+                "Warp Stall Sampling (All Samples)": 103.0,
+                "Warp Stall Sampling (Not-issued Samples)": 85.0,
+                "Instructions Executed": 129408.0,
+                "Thread Instructions Executed": 3684608.0,
+                "Predicated-On Thread Instructions Executed": 2831744.0,
+                "stall_barrier": 35.0,
+                "stall_branch_resolving": 2.0,
+                "stall_dispatch": 0.0,
+                "stall_drain": 0.0,
+                "stall_imc": 13.0,
+                "stall_lg": 7.0,
+                "stall_long_sb": 1.0,
+                "stall_math": 2.0,
+                "stall_membar": 0.0,
+                "stall_mio": 5.0,
+                "stall_misc": 0.0,
+                "stall_no_inst": 19.0,
+                "stall_not_selected": 2.0,
+                "stall_selected": 6.0,
+                "stall_short_sb": 5.0,
+                "stall_sleep": 0.0,
+                "stall_tex": 0.0,
+                "stall_wait": 6.0,
+                "stall_barrier (Not Issued)": 34.0,
+                "stall_branch_resolving (Not Issued)": 1.0,
+                "stall_dispatch (Not Issued)": 0.0,
+                "stall_drain (Not Issued)": 0.0,
+                "stall_imc (Not Issued)": 13.0,
+                "stall_lg (Not Issued)": 6.0,
+                "stall_long_sb (Not Issued)": 1.0,
+                "stall_math (Not Issued)": 2.0,
+                "stall_membar (Not Issued)": 0.0,
+                "stall_mio (Not Issued)": 5.0,
+                "stall_misc (Not Issued)": 0.0,
+                "stall_no_inst (Not Issued)": 15.0,
+                "stall_not_selected (Not Issued)": 0.0,
+                "stall_selected (Not Issued)": 0.0,
+                "stall_short_sb (Not Issued)": 3.0,
+                "stall_sleeping (Not Issued)": 0.0,
+                "stall_tex (Not Issued)": 0.0,
+                "stall_wait (Not Issued)": 5.0,
+                "PC_count": 185,
+                "unexported_reason_residual": 0.0,
+                "not_issued_unexported_reason_residual": 0.0
+              }
+            }
+          }
+        },
+        {
+          "id": "nx-denominators",
+          "statement": "NXmain source/raw samples reconcile3863=2002math+1749producer+112common; both roles exceed200sample gate.",
+          "outcome": "neutral",
+          "evidence": "counter",
+          "selector": {
+            "json_pointer": "/variants/NX_main/roles",
+            "equals": {
+              "math": {
+                "# Samples": 2002.0,
+                "Warp Stall Sampling (All Samples)": 2002.0,
+                "Warp Stall Sampling (Not-issued Samples)": 1294.0,
+                "Instructions Executed": 4535949.0,
+                "Thread Instructions Executed": 141380768.0,
+                "Predicated-On Thread Instructions Executed": 129267232.0,
+                "stall_barrier": 132.0,
+                "stall_branch_resolving": 43.0,
+                "stall_dispatch": 61.0,
+                "stall_drain": 2.0,
+                "stall_imc": 5.0,
+                "stall_lg": 0.0,
+                "stall_long_sb": 1213.0,
+                "stall_math": 8.0,
+                "stall_membar": 0.0,
+                "stall_mio": 7.0,
+                "stall_misc": 0.0,
+                "stall_no_inst": 18.0,
+                "stall_not_selected": 52.0,
+                "stall_selected": 155.0,
+                "stall_short_sb": 0.0,
+                "stall_sleep": 0.0,
+                "stall_tex": 0.0,
+                "stall_wait": 254.0,
+                "stall_barrier (Not Issued)": 95.0,
+                "stall_branch_resolving (Not Issued)": 32.0,
+                "stall_dispatch (Not Issued)": 13.0,
+                "stall_drain (Not Issued)": 1.0,
+                "stall_imc (Not Issued)": 4.0,
+                "stall_lg (Not Issued)": 0.0,
+                "stall_long_sb (Not Issued)": 948.0,
+                "stall_math (Not Issued)": 3.0,
+                "stall_membar (Not Issued)": 0.0,
+                "stall_mio (Not Issued)": 7.0,
+                "stall_misc (Not Issued)": 0.0,
+                "stall_no_inst (Not Issued)": 14.0,
+                "stall_not_selected (Not Issued)": 0.0,
+                "stall_selected (Not Issued)": 0.0,
+                "stall_short_sb (Not Issued)": 0.0,
+                "stall_sleeping (Not Issued)": 0.0,
+                "stall_tex (Not Issued)": 0.0,
+                "stall_wait (Not Issued)": 150.0,
+                "PC_count": 580,
+                "unexported_reason_residual": 52.0,
+                "not_issued_unexported_reason_residual": 27.0
+              },
+              "producer": {
+                "# Samples": 1749.0,
+                "Warp Stall Sampling (All Samples)": 1749.0,
+                "Warp Stall Sampling (Not-issued Samples)": 1144.0,
+                "Instructions Executed": 4583394.0,
+                "Thread Instructions Executed": 133446405.0,
+                "Predicated-On Thread Instructions Executed": 126927970.0,
+                "stall_barrier": 156.0,
+                "stall_branch_resolving": 70.0,
+                "stall_dispatch": 21.0,
+                "stall_drain": 0.0,
+                "stall_imc": 1.0,
+                "stall_lg": 0.0,
+                "stall_long_sb": 966.0,
+                "stall_math": 10.0,
+                "stall_membar": 0.0,
+                "stall_mio": 3.0,
+                "stall_misc": 0.0,
+                "stall_no_inst": 21.0,
+                "stall_not_selected": 31.0,
+                "stall_selected": 132.0,
+                "stall_short_sb": 98.0,
+                "stall_sleep": 0.0,
+                "stall_tex": 0.0,
+                "stall_wait": 240.0,
+                "stall_barrier (Not Issued)": 113.0,
+                "stall_branch_resolving (Not Issued)": 59.0,
+                "stall_dispatch (Not Issued)": 8.0,
+                "stall_drain (Not Issued)": 0.0,
+                "stall_imc (Not Issued)": 1.0,
+                "stall_lg (Not Issued)": 0.0,
+                "stall_long_sb (Not Issued)": 681.0,
+                "stall_math (Not Issued)": 1.0,
+                "stall_membar (Not Issued)": 0.0,
+                "stall_mio (Not Issued)": 3.0,
+                "stall_misc (Not Issued)": 0.0,
+                "stall_no_inst (Not Issued)": 12.0,
+                "stall_not_selected (Not Issued)": 0.0,
+                "stall_selected (Not Issued)": 0.0,
+                "stall_short_sb (Not Issued)": 85.0,
+                "stall_sleeping (Not Issued)": 0.0,
+                "stall_tex (Not Issued)": 0.0,
+                "stall_wait (Not Issued)": 181.0,
+                "PC_count": 335,
+                "unexported_reason_residual": 0.0,
+                "not_issued_unexported_reason_residual": 0.0
+              },
+              "common": {
+                "# Samples": 112.0,
+                "Warp Stall Sampling (All Samples)": 112.0,
+                "Warp Stall Sampling (Not-issued Samples)": 102.0,
+                "Instructions Executed": 80640.0,
+                "Thread Instructions Executed": 2016896.0,
+                "Predicated-On Thread Instructions Executed": 1950208.0,
+                "stall_barrier": 31.0,
+                "stall_branch_resolving": 1.0,
+                "stall_dispatch": 0.0,
+                "stall_drain": 0.0,
+                "stall_imc": 29.0,
+                "stall_lg": 0.0,
+                "stall_long_sb": 0.0,
+                "stall_math": 0.0,
+                "stall_membar": 0.0,
+                "stall_mio": 1.0,
+                "stall_misc": 0.0,
+                "stall_no_inst": 36.0,
+                "stall_not_selected": 0.0,
+                "stall_selected": 4.0,
+                "stall_short_sb": 7.0,
+                "stall_sleep": 0.0,
+                "stall_tex": 0.0,
+                "stall_wait": 3.0,
+                "stall_barrier (Not Issued)": 30.0,
+                "stall_branch_resolving (Not Issued)": 0.0,
+                "stall_dispatch (Not Issued)": 0.0,
+                "stall_drain (Not Issued)": 0.0,
+                "stall_imc (Not Issued)": 28.0,
+                "stall_lg (Not Issued)": 0.0,
+                "stall_long_sb (Not Issued)": 0.0,
+                "stall_math (Not Issued)": 0.0,
+                "stall_membar (Not Issued)": 0.0,
+                "stall_mio (Not Issued)": 1.0,
+                "stall_misc (Not Issued)": 0.0,
+                "stall_no_inst (Not Issued)": 34.0,
+                "stall_not_selected (Not Issued)": 0.0,
+                "stall_selected (Not Issued)": 0.0,
+                "stall_short_sb (Not Issued)": 6.0,
+                "stall_sleeping (Not Issued)": 0.0,
+                "stall_tex (Not Issued)": 0.0,
+                "stall_wait (Not Issued)": 3.0,
+                "PC_count": 189,
+                "unexported_reason_residual": 0.0,
+                "not_issued_unexported_reason_residual": 0.0
+              }
+            }
+          }
+        },
+        {
+          "id": "dp-arrive",
+          "statement": "DP math WARPGROUP.ARRIVE sites have808samples/1724math (46.87%); this is dependency-PC association, not intrinsic fence latency.",
+          "outcome": "mixed",
+          "evidence": "counter",
+          "selector": {
+            "json_pointer": "/variants/DP_main/phases/math_WARPGROUP_ARRIVE/# Samples",
+            "equals": 808.0
+          }
+        },
+        {
+          "id": "nx-arrive",
+          "statement": "NX corresponding ARRIVE sites have14/2002math samples; low observed count is not a zero-cost or elapsed-time claim.",
+          "outcome": "positive",
+          "evidence": "counter",
+          "selector": {
+            "json_pointer": "/variants/NX_main/phases/math_WARPGROUP_ARRIVE/# Samples",
+            "equals": 14.0
+          }
+        },
+        {
+          "id": "nx-loop-window",
+          "statement": "NX loopXfull qualified window has769/2002math samples:260exact-test/predicate/slow-path plus509interleaved arithmetic. It is not isolated mbarrier latency.",
+          "outcome": "negative",
+          "evidence": "counter",
+          "selector": {
+            "json_pointer": "/variants/NX_main/wait_window_summaries/math_Xfull_loop",
+            "equals": {
+              "exact_test_predicate_slow_path_samples": 260.0,
+              "interleaved_fast_window_samples": 509.0,
+              "combined_samples": 769.0,
+              "fraction_of_role_samples": 0.3841158841158841,
+              "limit": "Qualified code window includes interleaved arithmetic; not isolated mbarrier latency."
+            }
+          }
+        },
+        {
+          "id": "nx-bar5",
+          "statement": "NX bar5 sites carry262/2002math samples (13.09%), source-proven shared-read retirement/convergence before slot reuse.",
+          "outcome": "negative",
+          "evidence": "counter",
+          "selector": {
+            "json_pointer": "/variants/NX_main/phases/math_bar5/# Samples",
+            "equals": 262.0
+          }
+        },
+        {
+          "id": "nx-producer-bempty",
+          "statement": "NX producer Bempty window carries764/1749producer samples (43.68%); small failed-lane fraction does not imply initially-ready data because TRYWAIT can block.",
+          "outcome": "negative",
+          "evidence": "counter",
+          "selector": {
+            "json_pointer": "/variants/NX_main/phases/producer_Bempty/# Samples",
+            "equals": 764.0
+          }
+        },
+        {
+          "id": "dp-producer-bempty",
+          "statement": "DP producer Bempty window carries475/1524producer samples (31.17%); different captures/pipeline association cannot be subtracted as saved time.",
+          "outcome": "neutral",
+          "evidence": "counter",
+          "selector": {
+            "json_pointer": "/variants/DP_main/phases/producer_Bempty/# Samples",
+            "equals": 475.0
+          }
+        },
+        {
+          "id": "dram-dp",
+          "statement": "DPmain DRAM reads51,466,240B from explicit51.466240Mbyte scaling.",
+          "outcome": "neutral",
+          "evidence": "counter",
+          "selector": {
+            "json_pointer": "/variants/DP_main/metrics/dram__bytes_read.sum/base_value",
+            "equals": 51466240.0
+          }
+        },
+        {
+          "id": "dram-nx",
+          "statement": "NXmain DRAM reads51,469,824B: LSU request reduction does not establish HBM byte elimination.",
+          "outcome": "negative",
+          "evidence": "counter",
+          "selector": {
+            "json_pointer": "/variants/NX_main/metrics/dram__bytes_read.sum/base_value",
+            "equals": 51469824.0
+          }
+        },
+        {
+          "id": "missing-reason",
+          "statement": "NX52source all-reason residual exactly matches raw warpgroup_arrive total; its per-PC distribution remains unavailable.",
+          "outcome": "neutral",
+          "evidence": "counter",
+          "selector": {
+            "json_pointer": "/variants/NX_main/unexported_reason_reconciliation",
+            "equals": {
+              "source_residual": 52.0,
+              "raw_warpgroup_arrive": 52.0,
+              "matches": true,
+              "not_issued_residual": 27.0,
+              "raw_not_issued_warpgroup_arrive": 27.0,
+              "not_issued_matches": true,
+              "limit": "Residual is not permission to invent per-PC warpgroup_arrive attribution."
+            }
+          }
+        },
+        {
+          "id": "prior-incumbent-loss",
+          "statement": "The separate unprofiled native-X predecessor still loses actual PW36 paired; this counter capture does not supersede that negative result.",
+          "outcome": "negative",
+          "evidence": "prior",
+          "selector": {
+            "json_pointer": "/paired_new_median_gain_us/incumbent",
+            "equals": -7.952000014483929
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Different current-X delivery moves dependency exposure from DP ARRIVE-associated consumers into native shared-X wait/refill/convergence windows; this capture supports association, not isolated causal latency.",
+          "status": "unproven",
+          "observation_ids": [
+            "dp-arrive",
+            "nx-arrive",
+            "nx-loop-window",
+            "nx-bar5"
+          ]
+        },
+        {
+          "statement": "Splitting the source-proven disjoint64-row math-WG X halves into independent refill/read-retirement domains might reduce cross-WG bar5 coupling; extra TMA requests and launch/resource costs may erase any benefit.",
+          "status": "unproven",
+          "observation_ids": [
+            "nx-loop-window",
+            "nx-bar5",
+            "nx-producer-bempty",
+            "prior-incumbent-loss"
+          ]
+        },
+        {
+          "statement": "Interpreting the LSU global-request drop as HBM-byte elimination is refuted in this captured scope by near-identical DP/NX DRAM-read totals.",
+          "status": "refuted",
+          "observation_ids": [
+            "dram-dp",
+            "dram-nx"
+          ]
+        }
+      ],
+      "scope": "One valid three-node H100 counter capture plus exact offline export; all PC/predicate/instruction rows bound to actual saved SASS; sample denominators and missing reasons explicit. No new optimization or timing result.",
+      "transfer_limits": [
+        "No stall/sample share is converted to microseconds or intrinsic instruction latency.",
+        "Two aggregated PC passes and kernel replay/cache-all are not independent benchmark trials; producer/common/phase overlap and metric replays prevent causal time subtraction.",
+        "No automatic transfer to current X4/STMatrix composite or H200; profile the actual new source only if a concrete reviewed test warrants it.",
+        "Six CTC metrics unavailable; native raw TMA/LDSM storage-bit roundtrip unprobed; capture binary SHA unknown though export-client SHA/version retained."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "A source-frozen matched next version that merely moves the hot PC/sample share without improving complete unprofiled actual-policy timings refutes the proposed causal speed mechanism. Numerical/lifetime/resource failure invalidates the attempt rather than counting as a speed result.",
+      "next_test": {
+        "question": "Can per-WG X half ownership or earlier address preparation remove specific cross-WG/shared-X dependencies without shifting cost or breaking reuse lifetimes?",
+        "controls": [
+          "Frozen NX parent, current X4/STMatrix predecessor where relevant, and actual prepared incumbent pipeline in the same run",
+          "One source change per new immutable version; same K/math/codec/output order, geometry and declared resource policy"
+        ],
+        "discriminator": "First CPU prove actual disjoint half ownership/refill and unchanged physical A retirement. Only then bounded root timing: compare signed F1 and paired full pipelines, and observe whether Bempty/Xfull/bar5 associations move; a PC shift alone is not a gain.",
+        "stop_rule": "Hold if bit-exact layout/proxy/slot/parity/retirement/resource proof fails; after valid no-gain retain evidence and refine mechanism, do not blindly repeat a deeper-ring or old asynchronous-producer variant.",
+        "required_gates": [
+          "Exact source/JIT/SASS and physical register/resource proof before first candidate math",
+          "AllKbasis/FP64/task, current/fresh/zero/NaN, W/pack/escape immutability and source-bound counters",
+          "Strict actual final timed output before replay/mutation and whole-pipeline controls",
+          "Named guard/container/compute/memory cleanup and independent root validation"
+        ]
+      },
+      "related_queue_ids": [
+        "native.profile.v1.01",
+        "native.profile.export.v1.01",
+        "native.x4.v1.01",
+        "native.x4.stmatrix.v1.01",
+        "native.next-bottleneck.readiness.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "No measured or predicted gain is inferred from PC samples or counter shares.",
+          "Any new source needs exact lifetime/resource/JIT/numerical/terminal validation and an unprofiled same-run actual-incumbent comparison."
+        ]
+      },
+      "cost": {
+        "basis": "Proposed new implementation/validation chain is not yet scoped or approved; cost unknown, not zero. Completed capture/export costs stay attached to their existing queue records.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      }
+    }
+  ],
+  "ideas": [
+    {
+      "id": "idea.native-per-wg-x-half-ownership",
+      "version": 1,
+      "supersedes": null,
+      "record_sha256": "9db8b8f0c4aa1789ce8682dc3616eafd2869081bd6c3b8a677b635154d05512a",
+      "title": "CPU feasibility: independent X half-ring ownership per math WG",
+      "tags": [
+        "native-X",
+        "Xfull",
+        "bar5",
+        "hypothesis",
+        "CPU-feasibility"
+      ],
+      "lesson_refs": [
+        "native-profile-x-handoff-accounting@1"
+      ],
+      "existing_roi_ids": [
+        "native.profile.v1.01",
+        "native.profile.export.v1.01",
+        "native.next-bottleneck.readiness.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Current row=64*wg+... gives each128thread math WG a disjoint64-row/8KiB half of the16KiB X slot. Investigate two64x64 descriptor halves, independent per-WG completion/reuse barriers and per-WG128-reader retirement instead of full256-thread bar5. Preserve total payload and exact math; charge doubled TMA requests, extra metadata and resource changes. This is not an already validated producer-owned async-refill port.",
+      "discriminator": "Discriminator: CPU coordinate/proxy/parity proof must show no half overwrite before all its readers retire and no cross-WG dependency retained. Compile actual A/D/SASS/resources; only if admissible compare full new pipeline against NX/current composite/actual incumbent. If only sample location changes or extra requests negate timings, retain valid no-gain. Avoid blindly repeating prior async/refill and depth-only variants.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "No measured or predicted gain is inferred from PC samples or counter shares.",
+          "Any new source needs exact lifetime/resource/JIT/numerical/terminal validation and an unprofiled same-run actual-incumbent comparison."
+        ]
+      },
+      "cost": {
+        "basis": "Concrete new source and proof package must be scoped before ROI/admission; all work and follow-up reservation costs unknown, not zero.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven"
+    },
+    {
+      "id": "idea.native-xwait-address-preparation",
+      "version": 1,
+      "supersedes": null,
+      "record_sha256": "2f495e45209a20d2b55c4284cbdcf82defe2db65078c244c8a4ad65773274ff0",
+      "title": "CPU feasibility: precompute native X addresses without changing wait/reuse order",
+      "tags": [
+        "native-X",
+        "Xfull",
+        "bar5",
+        "hypothesis",
+        "CPU-feasibility"
+      ],
+      "lesson_refs": [
+        "native-profile-x-handoff-accounting@1"
+      ],
+      "existing_roi_ids": [
+        "native.profile.v1.01",
+        "native.profile.export.v1.01",
+        "native.next-bottleneck.readiness.01"
+      ],
+      "status": "proposed",
+      "mechanism": "NX0x1c40 IMAD inside the fast Xfull window has408long-scoreboard samples. Investigate source address precomputation before TRYWAIT while preserving all waits, shared loads, barriers and refills. The hot consumer PC may inherit wait/dependency attribution rather than represent slow arithmetic; moving it can merely move samples.",
+      "discriminator": "Discriminator: exact event/index mapping and physical register resource budget must remain valid; reject spills/rounded pool overflow. A same-source-shaped PC relocation without consistent full-pipeline paired/F1 gain refutes an arithmetic-cost explanation. Do not claim408samples worth any microseconds or remove synchronization.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "No measured or predicted gain is inferred from PC samples or counter shares.",
+          "Any new source needs exact lifetime/resource/JIT/numerical/terminal validation and an unprofiled same-run actual-incumbent comparison."
+        ]
+      },
+      "cost": {
+        "basis": "Concrete new source and proof package must be scoped before ROI/admission; all work and follow-up reservation costs unknown, not zero.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven"
+    }
+  ]
+}

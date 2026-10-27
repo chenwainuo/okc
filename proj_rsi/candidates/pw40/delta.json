@@ -1,0 +1,139 @@
+{
+  "version": "pw40_v1_optional_qkv_wring_over_pw38",
+  "parent_source_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+  "parent_manifest_sha256": "48b697b288e71617bdf5e688325c17e90d6541d140153acfb73a464e01dbc89b",
+  "wring_parent_source_sha256": "207f5a1bdc4f5d7712d444d9c71e857643e6700451c88734fce898ac1fc1b7ab",
+  "wring_parent_manifest_sha256": "20ffb258d67a4ed205298103e0e34e9f06d929957c4cc670dd5985deccc1c299",
+  "edits": [
+    {
+      "id": "ring-config",
+      "before": "  static constexpr int SMEM = 1024 + ST * (XB + WB) + 24 * ST + 16;",
+      "after": "  static constexpr bool SPLITF = ((FL >> 8) & 255) != 0;\n  static constexpr int WS = SPLITF ? ((FL >> 8) & 255) : ST;\n  static constexpr int SMEM = SPLITF ? 1024 + ST * XB + WS * WB + 8 * (2 * ST + 2 * WS) + 16 : 1024 + ST * (XB + WB) + 24 * ST + 16;",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "approved-domain",
+      "before": "  constexpr int NW = HALF ? 4 : 8, CW = HALF ? 64 : 128;",
+      "after": "  constexpr int NW = HALF ? 4 : 8, CW = HALF ? 64 : 128;\n  constexpr bool SPLITF = C::SPLITF;\n  constexpr int WS = C::WS;\n  static_assert(!SPLITF || (NT == 128 && GS == 1 && PRB == 0 && WM == 0 && INS == 0 && (FL & ~65280) == 3 && ((ST == 5 && WS == 5) || (ST == 6 && WS == 4))), \"Wring rebase only x5w5/x6w4 M128 HINT+ZI; no HALF/EARLY/EH/EP\");",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "ring-bases",
+      "before": "  const uint32_t xring = sbase, wring = sbase + ST * XB, bars = wring + ST * WB;\n  const uint32_t full = bars, wempty = bars + 8 * ST, xempty = bars + 16 * ST, zflag = bars + 24 * ST;",
+      "after": "  const uint32_t xring = sbase, wring = sbase + ST * XB, bars = wring + WS * WB;\n  const uint32_t full = bars, wempty = bars + 8 * ST, xempty = wempty + 8 * WS, wfull0 = xempty + 8 * ST;\n  const uint32_t wfull = SPLITF ? wfull0 : full, zflag = SPLITF ? wfull0 + 8 * WS : bars + 24 * ST;",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "split-full-init",
+      "before": "    for (int i = 0; i < ST; i++) {\n      asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(full + 8 * i), \"r\"(XON ? 2 : 1));\n      asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(wempty + 8 * i), \"r\"(NW));\n      asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(xempty + 8 * i), \"r\"(NW));\n    }\n",
+      "after": "    if constexpr (SPLITF) {\n      for (int i = 0; i < ST; i++) {\n        asm volatile(\"mbarrier.init.shared::cta.b64 [%0], 1;\\n\" :: \"r\"(full + 8 * i));\n        asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(xempty + 8 * i), \"r\"(NW));\n      }\n      for (int i = 0; i < WS; i++) {\n        asm volatile(\"mbarrier.init.shared::cta.b64 [%0], 1;\\n\" :: \"r\"(wfull0 + 8 * i));\n        asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(wempty + 8 * i), \"r\"(NW));\n      }\n    } else {\n    for (int i = 0; i < ST; i++) {\n      asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(full + 8 * i), \"r\"(XON ? 2 : 1));\n      asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(wempty + 8 * i), \"r\"(NW));\n      asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(xempty + 8 * i), \"r\"(NW));\n    }\n    }\n",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "W-producer-independent-slot-phase",
+      "before": "    if (warp == 8 && lane == 0 && WON) {\n      const int nbw = p.walias ? nb % p.walias : nb;\n      const uint8_t* src = p.W + ((size_t)nbw * p.KC + s0) * 12288 + hh * 6144;\n      uint64_t pol = 0;\n      if (HINT) asm volatile(\"createpolicy.fractional.L2::evict_first.b64 %0, 1.0;\\n\" : \"=l\"(pol));\n      unsigned long long tw = 0;\n      const int se = EARLY ? (KCS < ST ? KCS : ST) : 0;  // EARLY: stages 0 .. ST-1 already issued (slot 0 of round 1 next)\n      int slot = 0, r = EARLY ? 1 : 0;\n      for (int s = se; s < KCS; s++) {\n        if (s >= ST) {\n          const unsigned long long t0 = INS ? clock64() : 0;\n          rq_wait((SELF ? full : wempty) + 8 * slot, (r & 1) ^ 1);\n          if (INS) tw += clock64() - t0;\n        }\n        rq_expect(full + 8 * slot, WB);\n        if (HINT) rq_bulkh(wring + slot * WB, src + (size_t)s * 12288, WB, full + 8 * slot, pol);\n        else rq_bulk(wring + slot * WB, src + (size_t)s * 12288, WB, full + 8 * slot);\n        if (++slot == ST) { slot = 0; r++; }\n      }\n      if (SELF && !XON) for (int s = (KCS > ST ? KCS - ST : 0); s < KCS; s++) rq_wait(full + 8 * (s % ST), (s / ST) & 1);\n      if (INS) { p.prof[cta * 32 + 9] = tw; p.prof[cta * 32 + 15] = rq_gt(); }\n",
+      "after": "    if (warp == 8 && lane == 0 && WON) {\n      const int nbw = p.walias ? nb % p.walias : nb;\n      const uint8_t* src = p.W + ((size_t)nbw * p.KC + s0) * 12288 + hh * 6144;\n      uint64_t pol = 0;\n      if (HINT) asm volatile(\"createpolicy.fractional.L2::evict_first.b64 %0, 1.0;\\n\" : \"=l\"(pol));\n      unsigned long long tw = 0;\n      const int se = EARLY ? (KCS < WS ? KCS : WS) : 0;  // EARLY: stages 0 .. WS-1 already issued (slot 0 of round 1 next)\n      int slot = 0, r = EARLY ? 1 : 0;\n      for (int s = se; s < KCS; s++) {\n        if (s >= WS) {\n          const unsigned long long t0 = INS ? clock64() : 0;\n          rq_wait((SELF ? wfull : wempty) + 8 * slot, (r & 1) ^ 1);\n          if (INS) tw += clock64() - t0;\n        }\n        rq_expect(wfull + 8 * slot, WB);\n        if (HINT) rq_bulkh(wring + slot * WB, src + (size_t)s * 12288, WB, wfull + 8 * slot, pol);\n        else rq_bulk(wring + slot * WB, src + (size_t)s * 12288, WB, wfull + 8 * slot);\n        if (++slot == WS) { slot = 0; r++; }\n      }\n      if (SELF && (!XON || SPLITF)) for (int s = (KCS > WS ? KCS - WS : 0); s < KCS; s++) rq_wait(wfull + 8 * (s % WS), (s / WS) & 1);\n      if (INS) { p.prof[cta * 32 + 9] = tw; p.prof[cta * 32 + 15] = rq_gt(); }\n",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "W-read-and-release-independent-ring",
+      "before": "  auto ldr = [&](int G) {  // full waits, LDS of this warp's 48 B per lane per stage, W slots released\n#pragma unroll\n    for (int j = 0; j < GS; j++) {\n      const int s = GS * G + j;\n      if (s < KCS) {\n        const int slot = RES ? 0 : s % ST;\n        if (!RES) rq_wait(full + 8 * slot, (s / ST) & 1);\n        if (PRB != 1 && PRB != 2) {\n          const uint32_t a = wl + slot * WB;\n          Q[j][0] = rq_lds(a); Q[j][1] = rq_lds(a + 512); Q[j][2] = rq_lds(a + 1024);\n        }\n      }\n    }\n    RQ_T1(1);\n    if (!RES) {\n      __syncwarp();\n      if (lane == 0) {\n#pragma unroll\n        for (int j = 0; j < GS; j++) if (GS * G + j < KCS) rq_arrive(wempty + 8 * ((GS * G + j) % ST));\n      }\n    }\n    RQ_T1(2);\n  };\n",
+      "after": "  auto ldr = [&](int G) {  // full waits, LDS of this warp's 48 B per lane per stage, W slots released\n#pragma unroll\n    for (int j = 0; j < GS; j++) {\n      const int s = GS * G + j;\n      if (s < KCS) {\n        const int slot = RES ? 0 : s % WS;\n        if (!RES) rq_wait(wfull + 8 * slot, (s / WS) & 1);\n        if (PRB != 1 && PRB != 2) {\n          const uint32_t a = wl + slot * WB;\n          Q[j][0] = rq_lds(a); Q[j][1] = rq_lds(a + 512); Q[j][2] = rq_lds(a + 1024);\n        }\n      }\n    }\n    RQ_T1(1);\n    if (!RES) {\n      __syncwarp();\n      if (lane == 0) {\n#pragma unroll\n        for (int j = 0; j < GS; j++) if (GS * G + j < KCS) rq_arrive(wempty + 8 * ((GS * G + j) % WS));\n      }\n    }\n    RQ_T1(2);\n  };\n",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "X-full-wait-before-math",
+      "before": "    constexpr int NS = decltype(NSC)::value;\n    rq_facc<ND>(D);",
+      "after": "    constexpr int NS = decltype(NSC)::value;\n    if constexpr (SPLITF && !RES) {\n#pragma unroll\n      for (int j = 0; j < NS; j++) { const int s = GS * G + j; rq_wait(full + 8 * (s % ST), (s / ST) & 1); }\n    }\n    rq_facc<ND>(D);",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "optional-split-catalog-only",
+      "region": "variant.catalog",
+      "before": "    (\"h128s8z\", 128, 8, 1, 0, 0, 0, 18),\n",
+      "after": "    (\"h128s8z\", 128, 8, 1, 0, 0, 0, 18),\n    (\"wring_x6w4hz\", 128, 6, 1, 0, 0, 0, 1027),\n"
+    },
+    {
+      "id": "compile-one-optional-split",
+      "region": "host.compile-catalog",
+      "before": "RQPROD = [\"s4s5z\", \"s4s5hz\", \"s4hz\", \"n256s4hz\", \"n256s5hz\", \"n256s5z\", \"s4s5zEH\", \"s4s5hzEH\"]",
+      "after": "RQPROD = [\"s4s5z\", \"s4s5hz\", \"s4hz\", \"n256s4hz\", \"n256s5hz\", \"n256s5z\", \"s4s5zEH\", \"s4s5hzEH\", \"wring_x6w4hz\"]"
+    },
+    {
+      "id": "qkv128-only-optional-bake",
+      "region": "host.bake-candidate-enumeration",
+      "before": "            for nm in RQBAKE[m]:",
+      "after": "            for nm in RQBAKE[m] + ([\"wring_x6w4hz\"] if layer == \"qkv_gate\" and m == 128 else []):"
+    }
+  ],
+  "kernel_catalog_edits": [
+    {
+      "id": "ring-config",
+      "before": "  static constexpr int SMEM = 1024 + ST * (XB + WB) + 24 * ST + 16;",
+      "after": "  static constexpr bool SPLITF = ((FL >> 8) & 255) != 0;\n  static constexpr int WS = SPLITF ? ((FL >> 8) & 255) : ST;\n  static constexpr int SMEM = SPLITF ? 1024 + ST * XB + WS * WB + 8 * (2 * ST + 2 * WS) + 16 : 1024 + ST * (XB + WB) + 24 * ST + 16;",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "approved-domain",
+      "before": "  constexpr int NW = HALF ? 4 : 8, CW = HALF ? 64 : 128;",
+      "after": "  constexpr int NW = HALF ? 4 : 8, CW = HALF ? 64 : 128;\n  constexpr bool SPLITF = C::SPLITF;\n  constexpr int WS = C::WS;\n  static_assert(!SPLITF || (NT == 128 && GS == 1 && PRB == 0 && WM == 0 && INS == 0 && (FL & ~65280) == 3 && ((ST == 5 && WS == 5) || (ST == 6 && WS == 4))), \"Wring rebase only x5w5/x6w4 M128 HINT+ZI; no HALF/EARLY/EH/EP\");",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "ring-bases",
+      "before": "  const uint32_t xring = sbase, wring = sbase + ST * XB, bars = wring + ST * WB;\n  const uint32_t full = bars, wempty = bars + 8 * ST, xempty = bars + 16 * ST, zflag = bars + 24 * ST;",
+      "after": "  const uint32_t xring = sbase, wring = sbase + ST * XB, bars = wring + WS * WB;\n  const uint32_t full = bars, wempty = bars + 8 * ST, xempty = wempty + 8 * WS, wfull0 = xempty + 8 * ST;\n  const uint32_t wfull = SPLITF ? wfull0 : full, zflag = SPLITF ? wfull0 + 8 * WS : bars + 24 * ST;",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "split-full-init",
+      "before": "    for (int i = 0; i < ST; i++) {\n      asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(full + 8 * i), \"r\"(XON ? 2 : 1));\n      asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(wempty + 8 * i), \"r\"(NW));\n      asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(xempty + 8 * i), \"r\"(NW));\n    }\n",
+      "after": "    if constexpr (SPLITF) {\n      for (int i = 0; i < ST; i++) {\n        asm volatile(\"mbarrier.init.shared::cta.b64 [%0], 1;\\n\" :: \"r\"(full + 8 * i));\n        asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(xempty + 8 * i), \"r\"(NW));\n      }\n      for (int i = 0; i < WS; i++) {\n        asm volatile(\"mbarrier.init.shared::cta.b64 [%0], 1;\\n\" :: \"r\"(wfull0 + 8 * i));\n        asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(wempty + 8 * i), \"r\"(NW));\n      }\n    } else {\n    for (int i = 0; i < ST; i++) {\n      asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(full + 8 * i), \"r\"(XON ? 2 : 1));\n      asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(wempty + 8 * i), \"r\"(NW));\n      asm volatile(\"mbarrier.init.shared::cta.b64 [%0], %1;\\n\" :: \"r\"(xempty + 8 * i), \"r\"(NW));\n    }\n    }\n",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "W-producer-independent-slot-phase",
+      "before": "    if (warp == 8 && lane == 0 && WON) {\n      const int nbw = p.walias ? nb % p.walias : nb;\n      const uint8_t* src = p.W + ((size_t)nbw * p.KC + s0) * 12288 + hh * 6144;\n      uint64_t pol = 0;\n      if (HINT) asm volatile(\"createpolicy.fractional.L2::evict_first.b64 %0, 1.0;\\n\" : \"=l\"(pol));\n      unsigned long long tw = 0;\n      const int se = EARLY ? (KCS < ST ? KCS : ST) : 0;  // EARLY: stages 0 .. ST-1 already issued (slot 0 of round 1 next)\n      int slot = 0, r = EARLY ? 1 : 0;\n      for (int s = se; s < KCS; s++) {\n        if (s >= ST) {\n          const unsigned long long t0 = INS ? clock64() : 0;\n          rq_wait((SELF ? full : wempty) + 8 * slot, (r & 1) ^ 1);\n          if (INS) tw += clock64() - t0;\n        }\n        rq_expect(full + 8 * slot, WB);\n        if (HINT) rq_bulkh(wring + slot * WB, src + (size_t)s * 12288, WB, full + 8 * slot, pol);\n        else rq_bulk(wring + slot * WB, src + (size_t)s * 12288, WB, full + 8 * slot);\n        if (++slot == ST) { slot = 0; r++; }\n      }\n      if (SELF && !XON) for (int s = (KCS > ST ? KCS - ST : 0); s < KCS; s++) rq_wait(full + 8 * (s % ST), (s / ST) & 1);\n      if (INS) { p.prof[cta * 32 + 9] = tw; p.prof[cta * 32 + 15] = rq_gt(); }\n",
+      "after": "    if (warp == 8 && lane == 0 && WON) {\n      const int nbw = p.walias ? nb % p.walias : nb;\n      const uint8_t* src = p.W + ((size_t)nbw * p.KC + s0) * 12288 + hh * 6144;\n      uint64_t pol = 0;\n      if (HINT) asm volatile(\"createpolicy.fractional.L2::evict_first.b64 %0, 1.0;\\n\" : \"=l\"(pol));\n      unsigned long long tw = 0;\n      const int se = EARLY ? (KCS < WS ? KCS : WS) : 0;  // EARLY: stages 0 .. WS-1 already issued (slot 0 of round 1 next)\n      int slot = 0, r = EARLY ? 1 : 0;\n      for (int s = se; s < KCS; s++) {\n        if (s >= WS) {\n          const unsigned long long t0 = INS ? clock64() : 0;\n          rq_wait((SELF ? wfull : wempty) + 8 * slot, (r & 1) ^ 1);\n          if (INS) tw += clock64() - t0;\n        }\n        rq_expect(wfull + 8 * slot, WB);\n        if (HINT) rq_bulkh(wring + slot * WB, src + (size_t)s * 12288, WB, wfull + 8 * slot, pol);\n        else rq_bulk(wring + slot * WB, src + (size_t)s * 12288, WB, wfull + 8 * slot);\n        if (++slot == WS) { slot = 0; r++; }\n      }\n      if (SELF && (!XON || SPLITF)) for (int s = (KCS > WS ? KCS - WS : 0); s < KCS; s++) rq_wait(wfull + 8 * (s % WS), (s / WS) & 1);\n      if (INS) { p.prof[cta * 32 + 9] = tw; p.prof[cta * 32 + 15] = rq_gt(); }\n",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "W-read-and-release-independent-ring",
+      "before": "  auto ldr = [&](int G) {  // full waits, LDS of this warp's 48 B per lane per stage, W slots released\n#pragma unroll\n    for (int j = 0; j < GS; j++) {\n      const int s = GS * G + j;\n      if (s < KCS) {\n        const int slot = RES ? 0 : s % ST;\n        if (!RES) rq_wait(full + 8 * slot, (s / ST) & 1);\n        if (PRB != 1 && PRB != 2) {\n          const uint32_t a = wl + slot * WB;\n          Q[j][0] = rq_lds(a); Q[j][1] = rq_lds(a + 512); Q[j][2] = rq_lds(a + 1024);\n        }\n      }\n    }\n    RQ_T1(1);\n    if (!RES) {\n      __syncwarp();\n      if (lane == 0) {\n#pragma unroll\n        for (int j = 0; j < GS; j++) if (GS * G + j < KCS) rq_arrive(wempty + 8 * ((GS * G + j) % ST));\n      }\n    }\n    RQ_T1(2);\n  };\n",
+      "after": "  auto ldr = [&](int G) {  // full waits, LDS of this warp's 48 B per lane per stage, W slots released\n#pragma unroll\n    for (int j = 0; j < GS; j++) {\n      const int s = GS * G + j;\n      if (s < KCS) {\n        const int slot = RES ? 0 : s % WS;\n        if (!RES) rq_wait(wfull + 8 * slot, (s / WS) & 1);\n        if (PRB != 1 && PRB != 2) {\n          const uint32_t a = wl + slot * WB;\n          Q[j][0] = rq_lds(a); Q[j][1] = rq_lds(a + 512); Q[j][2] = rq_lds(a + 1024);\n        }\n      }\n    }\n    RQ_T1(1);\n    if (!RES) {\n      __syncwarp();\n      if (lane == 0) {\n#pragma unroll\n        for (int j = 0; j < GS; j++) if (GS * G + j < KCS) rq_arrive(wempty + 8 * ((GS * G + j) % WS));\n      }\n    }\n    RQ_T1(2);\n  };\n",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "X-full-wait-before-math",
+      "before": "    constexpr int NS = decltype(NSC)::value;\n    rq_facc<ND>(D);",
+      "after": "    constexpr int NS = decltype(NSC)::value;\n    if constexpr (SPLITF && !RES) {\n#pragma unroll\n      for (int j = 0; j < NS; j++) { const int s = GS * G + j; rq_wait(full + 8 * (s % ST), (s / ST) & 1); }\n    }\n    rq_facc<ND>(D);",
+      "region": "kernel.layout-and-publication"
+    },
+    {
+      "id": "optional-split-catalog-only",
+      "region": "variant.catalog",
+      "before": "    (\"h128s8z\", 128, 8, 1, 0, 0, 0, 18),\n",
+      "after": "    (\"h128s8z\", 128, 8, 1, 0, 0, 0, 18),\n    (\"wring_x6w4hz\", 128, 6, 1, 0, 0, 0, 1027),\n"
+    }
+  ],
+  "host_policy_edits": [
+    {
+      "id": "compile-one-optional-split",
+      "region": "host.compile-catalog",
+      "before": "RQPROD = [\"s4s5z\", \"s4s5hz\", \"s4hz\", \"n256s4hz\", \"n256s5hz\", \"n256s5z\", \"s4s5zEH\", \"s4s5hzEH\"]",
+      "after": "RQPROD = [\"s4s5z\", \"s4s5hz\", \"s4hz\", \"n256s4hz\", \"n256s5hz\", \"n256s5z\", \"s4s5zEH\", \"s4s5hzEH\", \"wring_x6w4hz\"]"
+    },
+    {
+      "id": "qkv128-only-optional-bake",
+      "region": "host.bake-candidate-enumeration",
+      "before": "            for nm in RQBAKE[m]:",
+      "after": "            for nm in RQBAKE[m] + ([\"wring_x6w4hz\"] if layer == \"qkv_gate\" and m == 128 else []):"
+    }
+  ],
+  "EH_ancestor_delta_sha256": "05440c42518a7e7c98971ad6d96ef9528dc6523169c3d04483b7520bf88cbe5a",
+  "alternate_ancestor_bridge": {
+    "remove_unused_negative_equal_catalog_row": "    (\"wring_x5w5hz\", 128, 5, 1, 0, 0, 0, 1283),\n",
+    "split_row": "    (\"wring_x6w4hz\", 128, 6, 1, 0, 0, 0, 1027),\n"
+  },
+  "semantics": "Optional qkv128 x6w4 HINT+ZI KS7 contender. Existing EH/control candidates remain; no PW39 confirmation, no force, no Wring+EH same-kernel flag combination."
+}

@@ -7,10 +7,11 @@
     "speedup_required": 1.6103,
     "published_sglang_us": 4830.8,
     "incumbent_board": {
-      "job": "fb548b5dc6f04696",
-      "candidate": "proj_rsi/candidates/rs32/submission.py",
-      "score_us": 3200.6150084373335,
-      "speedup": 1.509334920715312
+      "job": "a3f0ebf25a754c01",
+      "candidate": "proj_rsi/candidates/pw38/submission.py",
+      "score_us": 3198.6175079817267,
+      "speedup": 1.5102774833018884,
+      "source_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e"
     },
     "floor_us": 2384.0,
     "log_gain_needed": 0.38838415684847727,
@@ -65,6 +66,8 @@
     "independent critic verifies exact executable closure and bounded driver before GPU admission",
     "register reviewed job in durable ROI scheduler; root sole GPU launcher, one GPU slot",
     "validate raw artifacts and cleanup; retain every signed result including tiny positives and invalid attempts",
+    "generalize after each validated success, failure or mixed result: preserve immutable facts separately from explanations, scope/transfer limits, confidence and falsification tests",
+    "retrieve relevant prior lessons before proposing the next experiment; create concrete follow-up ideas linked to lesson/evidence IDs and ROI queue entries",
     "compare against actual selected serving incumbent; separately retain parent-relative progress",
     "compose compatible gains into a concrete cumulative source, validate the whole stack and actual selected routes",
     "only root releases official check/scoring after local validation, quota and source guards; archive immutable job ID and payload association",
@@ -160,5 +163,35 @@
     "last_updated": "2026-10-27T04:47:36.335015+00:00",
     "scored_submission_rule": "After source/correctness/graph/state checks pass and complete serving measurement improves, submit the cumulative candidate. User explicitly accepts small point-estimate improvements; no minimum microsecond/percentage or statistical-significance threshold.",
     "measurement_uncertainty": "Record confidence intervals, conflicting estimators and comparator identity; uncertainty is reported, not an extra user approval gate."
+  },
+  "learning_contract": {
+    "required_after_every_experiment": true,
+    "outcomes": [
+      "valid_gain",
+      "valid_no_gain",
+      "valid_regression",
+      "invalid_setup",
+      "invalid_correctness",
+      "timeout",
+      "mixed"
+    ],
+    "registry": "proj_rsi/learnings.json",
+    "tool": "python3 -m proj_rsi.learning",
+    "required_fields": [
+      "experiment/source/comparator/hardware identity",
+      "evidence paths+SHA256",
+      "facts",
+      "causal hypotheses separately labeled",
+      "scope and transfer limits",
+      "contradictory evidence",
+      "confidence",
+      "falsification/discriminating test",
+      "reusable principle",
+      "next ideas and linked ROI job IDs"
+    ],
+    "execution": "CPU learning work after physical cleanup, in parallel with the next admitted GPU trial. Hardware slot is never held just for prose.",
+    "proposal_rule": "Each future idea lists applicable lesson IDs or an explicit no-relevant-prior-lesson reason; validate applicability, do not blindly repeat a conclusion.",
+    "retention": "Failures and conflicting/tiny positives remain evidence. A failed version never closes an entire family.",
+    "submission": "Learning is recorded alongside validation; it does not introduce a statistical-significance or extra user-confirmation gate for measured improvements."
   }
 }

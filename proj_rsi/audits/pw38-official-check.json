@@ -1,0 +1,451 @@
+{
+  "decision": "GO_SCORING_EXACT_RELEASE",
+  "job": "a3ed4ce5886a4415",
+  "mode": "unscored check",
+  "source_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+  "summary": {
+    "error": null,
+    "passed": true,
+    "score_us": 3193.637501792908,
+    "speedup": 1.5126325380660732,
+    "speedup_ci": [
+      1.489943049995082,
+      1.5353220261370641
+    ],
+    "status": "ok",
+    "tests": 9,
+    "tests_passed": 9
+  },
+  "recomputed_score_us": 3193.637501792908,
+  "score_ci_us": [
+    3146.4408884659197,
+    3242.271575424272
+  ],
+  "reference_scored_job": "fb548b5dc6f04696",
+  "reference_summary": {
+    "error": null,
+    "passed": true,
+    "score_us": 3200.6150084373335,
+    "speedup": 1.509334920715312,
+    "speedup_ci": [
+      1.4866948969045823,
+      1.5319749445260415
+    ],
+    "status": "ok",
+    "tests": 9,
+    "tests_passed": 9
+  },
+  "reference_score_ci_us": [
+    3153.3152792486044,
+    3249.355338515059
+  ],
+  "score_point_delta_us": -6.977506644425375,
+  "score_point_delta_percent": -0.21800518419214931,
+  "ci_overlap": true,
+  "load_sums": {
+    "decode 1": {
+      "ours_us": 36.09294150605922,
+      "baseline_us": 60.00000052154064
+    },
+    "decode 16": {
+      "ours_us": 49.008447855779856,
+      "baseline_us": 76.28800021484494
+    },
+    "decode 32": {
+      "ours_us": 52.04086893955037,
+      "baseline_us": 77.23199995234609
+    },
+    "verify 1": {
+      "ours_us": 37.779753815089194,
+      "baseline_us": 75.34399908035994
+    },
+    "verify 16": {
+      "ours_us": 65.49485141589089,
+      "baseline_us": 86.4639999344945
+    },
+    "verify 32": {
+      "ours_us": 86.32584310405426,
+      "baseline_us": 102.27200062945485
+    }
+  },
+  "profiles": [
+    {
+      "index": 0,
+      "case": {
+        "layer": "qkv_gate",
+        "load": "decode 1",
+        "m": 1,
+        "seed": 931669379313070091,
+        "weight": 62
+      },
+      "calibrated_us": 9.231521491367257,
+      "profile": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.5 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 1,
+      "case": {
+        "layer": "o",
+        "load": "decode 1",
+        "m": 1,
+        "seed": 931733353512429139,
+        "weight": 62
+      },
+      "calibrated_us": 4.960973290000707,
+      "profile": "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.0 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 2,
+      "case": {
+        "layer": "pooler",
+        "load": "decode 1",
+        "m": 1,
+        "seed": 931797327711788188,
+        "weight": 62
+      },
+      "calibrated_us": 13.703648985227678,
+      "profile": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         14.2 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 3,
+      "case": {
+        "layer": "unpooler",
+        "load": "decode 1",
+        "m": 1,
+        "seed": 931861301911147238,
+        "weight": 62
+      },
+      "calibrated_us": 4.497523155129604,
+      "profile": "void gv<1, 1, 2, 1, 16, 4, 1, 1, 0, 0>(G)                          3.6 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 4,
+      "case": {
+        "layer": "router",
+        "load": "decode 1",
+        "m": 1,
+        "seed": 931925276110506289,
+        "weight": 62
+      },
+      "calibrated_us": 3.6992745843339674,
+      "profile": "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.6 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 5,
+      "case": {
+        "layer": "qkv_gate",
+        "load": "decode 16",
+        "m": 16,
+        "seed": 931989250309865341,
+        "weight": 62
+      },
+      "calibrated_us": 10.125109429335993,
+      "profile": "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.3 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 6,
+      "case": {
+        "layer": "o",
+        "load": "decode 16",
+        "m": 16,
+        "seed": 932053224509224394,
+        "weight": 62
+      },
+      "calibrated_us": 5.536120952272521,
+      "profile": "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           5.1 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 7,
+      "case": {
+        "layer": "pooler",
+        "load": "decode 16",
+        "m": 16,
+        "seed": 932117198708583448,
+        "weight": 62
+      },
+      "calibrated_us": 14.28196195202513,
+      "profile": "void gv<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                         14.2 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 8,
+      "case": {
+        "layer": "unpooler",
+        "load": "decode 16",
+        "m": 16,
+        "seed": 932181172907942503,
+        "weight": 62
+      },
+      "calibrated_us": 14.342607116889745,
+      "profile": "void gv<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                         14.6 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 9,
+      "case": {
+        "layer": "router",
+        "load": "decode 16",
+        "m": 16,
+        "seed": 932245147107301559,
+        "weight": 62
+      },
+      "calibrated_us": 4.72264840525647,
+      "profile": "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.7 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 10,
+      "case": {
+        "layer": "qkv_gate",
+        "load": "decode 32",
+        "m": 32,
+        "seed": 932309121306660616,
+        "weight": 62
+      },
+      "calibrated_us": 10.414919135344388,
+      "profile": "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.3 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 11,
+      "case": {
+        "layer": "o",
+        "load": "decode 32",
+        "m": 32,
+        "seed": 932373095506019674,
+        "weight": 62
+      },
+      "calibrated_us": 6.292521903371819,
+      "profile": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                5.7 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 12,
+      "case": {
+        "layer": "pooler",
+        "load": "decode 32",
+        "m": 32,
+        "seed": 932437069705378733,
+        "weight": 62
+      },
+      "calibrated_us": 15.081659123486592,
+      "profile": "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.8 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 13,
+      "case": {
+        "layer": "unpooler",
+        "load": "decode 32",
+        "m": 32,
+        "seed": 932501043904737793,
+        "weight": 62
+      },
+      "calibrated_us": 15.287451374358303,
+      "profile": "void rq<32, 6, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)                15.6 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 14,
+      "case": {
+        "layer": "router",
+        "load": "decode 32",
+        "m": 32,
+        "seed": 932565018104096854,
+        "weight": 62
+      },
+      "calibrated_us": 4.964317402989274,
+      "profile": "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.2 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 15,
+      "case": {
+        "layer": "qkv_gate",
+        "load": "verify 1",
+        "m": 8,
+        "seed": 932628992303455916,
+        "weight": 62
+      },
+      "calibrated_us": 9.547312428591201,
+      "profile": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.0 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 16,
+      "case": {
+        "layer": "o",
+        "load": "verify 1",
+        "m": 8,
+        "seed": 932692966502814979,
+        "weight": 62
+      },
+      "calibrated_us": 5.385221322772914,
+      "profile": "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.0 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 17,
+      "case": {
+        "layer": "pooler",
+        "load": "verify 1",
+        "m": 8,
+        "seed": 932756940702174043,
+        "weight": 62
+      },
+      "calibrated_us": 13.983761666875404,
+      "profile": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         13.8 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 18,
+      "case": {
+        "layer": "unpooler",
+        "load": "verify 1",
+        "m": 8,
+        "seed": 932820914901533108,
+        "weight": 62
+      },
+      "calibrated_us": 4.274937544511595,
+      "profile": "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.4 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 19,
+      "case": {
+        "layer": "router",
+        "load": "verify 1",
+        "m": 8,
+        "seed": 932884889100892174,
+        "weight": 62
+      },
+      "calibrated_us": 4.588520852338076,
+      "profile": "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.6 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 20,
+      "case": {
+        "layer": "qkv_gate",
+        "load": "verify 16",
+        "m": 128,
+        "seed": 932948863300251241,
+        "weight": 62
+      },
+      "calibrated_us": 13.361366243464802,
+      "profile": "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           13.2 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 21,
+      "case": {
+        "layer": "o",
+        "load": "verify 16",
+        "m": 128,
+        "seed": 933012837499610309,
+        "weight": 62
+      },
+      "calibrated_us": 7.139444413608281,
+      "profile": "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN                            5.4 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 22,
+      "case": {
+        "layer": "pooler",
+        "load": "verify 16",
+        "m": 128,
+        "seed": 933076811698969378,
+        "weight": 62
+      },
+      "calibrated_us": 18.560420687748618,
+      "profile": "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           19.6 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 23,
+      "case": {
+        "layer": "unpooler",
+        "load": "verify 16",
+        "m": 128,
+        "seed": 933140785898328448,
+        "weight": 62
+      },
+      "calibrated_us": 18.6255020787021,
+      "profile": "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopB_NNN                     18.9 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 24,
+      "case": {
+        "layer": "router",
+        "load": "verify 16",
+        "m": 128,
+        "seed": 933204760097687519,
+        "weight": 62
+      },
+      "calibrated_us": 7.808117992367094,
+      "profile": "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.1 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 25,
+      "case": {
+        "layer": "qkv_gate",
+        "load": "verify 32",
+        "m": 256,
+        "seed": 933268734297046591,
+        "weight": 62
+      },
+      "calibrated_us": 18.653822361197797,
+      "profile": "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           19.2 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 26,
+      "case": {
+        "layer": "o",
+        "load": "verify 32",
+        "m": 256,
+        "seed": 933332708496405664,
+        "weight": 62
+      },
+      "calibrated_us": 9.599878867215164,
+      "profile": "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT                           8.2 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 27,
+      "case": {
+        "layer": "pooler",
+        "load": "verify 32",
+        "m": 256,
+        "seed": 933396682695764738,
+        "weight": 62
+      },
+      "calibrated_us": 25.12649052951881,
+      "profile": "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           24.1 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 28,
+      "case": {
+        "layer": "unpooler",
+        "load": "verify 32",
+        "m": 256,
+        "seed": 933460656895123813,
+        "weight": 62
+      },
+      "calibrated_us": 23.472194905548196,
+      "profile": "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN                    23.5 \u00b5s 100.0%      1"
+    },
+    {
+      "index": 29,
+      "case": {
+        "layer": "router",
+        "load": "verify 32",
+        "m": 256,
+        "seed": 933524631094482889,
+        "weight": 62
+      },
+      "calibrated_us": 9.4734564405743,
+      "profile": "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       8.2 \u00b5s 100.0%      1"
+    }
+  ],
+  "checks": {
+    "tests_passed": 9,
+    "finite_benchmarks": 30,
+    "runs_per_case": 60,
+    "one_kernel_profiles": 30,
+    "manifest_files_verified": 7,
+    "cold_prepare_seconds": 161,
+    "runtime_errors_or_budget_skips": false
+  },
+  "refs": {
+    "results/proj-rsi/jobs/a3ed4ce5886a4415.json": "ffdabc0866e8194b4a540528258d9059ca7c84766661f9fa413cab94fcbdccb9",
+    "results/proj-rsi/releases/pw38-v1-29e557ea53f3/submission.py": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+    "results/proj-rsi/releases/pw38-v1-29e557ea53f3/manifest.json": "48b697b288e71617bdf5e688325c17e90d6541d140153acfb73a464e01dbc89b",
+    "results/proj-rsi/releases/pw38-v1-29e557ea53f3/profiles/submission.a3ed4ce5886a4415.log": "bcb4ea414222be406b9a62743c8004de46854a03ed4c6b30408f68396e092909",
+    "results/proj-rsi/releases/pw38-v1-29e557ea53f3/profiles/submission.a3ed4ce5886a4415.json": "ffdabc0866e8194b4a540528258d9059ca7c84766661f9fa413cab94fcbdccb9",
+    "results/proj-rsi/releases/pw38-v1-29e557ea53f3/attestation.json": "94fb0439cc23735ab05c3cb01f4f7185484ba3cae0bd1890ce32c26fe32f5b7f",
+    "results/proj-rsi/releases/pw38-v1-29e557ea53f3/check-completed-attestation.json": "819c4b760bc70f2ed1f3e10f9bdfd3cf9727dcc14b361c4d38259ab4a6a37484"
+  }
+}

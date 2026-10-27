@@ -1,0 +1,2542 @@
+{
+  "status": "VALID_RESEARCH_RESULT_NO_PROMOTION",
+  "source_sha256": "207f5a1bdc4f5d7712d444d9c71e857643e6700451c88734fce898ac1fc1b7ab",
+  "manifest_sha256": "20ffb258d67a4ed205298103e0e34e9f06d929957c4cc670dd5985deccc1c299",
+  "GPU": "ROOT_ONLY",
+  "attrs": {
+    "coupled": {
+      "regs": 168,
+      "local": 0,
+      "smem": 144520,
+      "occupancy": 1,
+      "max_dynamic": 144520,
+      "max_threads": 384
+    },
+    "equal": {
+      "regs": 168,
+      "local": 0,
+      "smem": 144560,
+      "occupancy": 1,
+      "max_dynamic": 144560,
+      "max_threads": 384
+    },
+    "split": {
+      "regs": 168,
+      "local": 0,
+      "smem": 148656,
+      "occupancy": 1,
+      "max_dynamic": 148656,
+      "max_threads": 384
+    }
+  },
+  "actual_JIT": {
+    "binary": "/root/.cache/torch_extensions/pw36_wring_1a614dcd721c6431/pw36_wring_1a614dcd721c6431.so",
+    "sass": "/okc/logs/scheduler/wring-rebase-01/result.jit.sass",
+    "sha256": "fa3cbc685813e7fb17e0532baf91e2cd658ec474611ae39ef528455f80a8fe5d",
+    "physical": [
+      {
+        "args": [
+          128,
+          6,
+          1,
+          0,
+          0,
+          0,
+          1027
+        ],
+        "Xslots": 6,
+        "Wslots": 4,
+        "HGMMA": 16,
+        "output_STSM": 8,
+        "reduce_issues": 1,
+        "final_wait0_before_output": true,
+        "TMA_read_drain": true,
+        "bounded_poll_trap": true,
+        "limits": "Source order binds independent ring protocol; actual JIT must match this exact stream. No arbitrary CFG/register allocator proof."
+      },
+      {
+        "args": [
+          128,
+          5,
+          1,
+          0,
+          0,
+          0,
+          1283
+        ],
+        "Xslots": 5,
+        "Wslots": 5,
+        "HGMMA": 16,
+        "output_STSM": 8,
+        "reduce_issues": 1,
+        "final_wait0_before_output": true,
+        "TMA_read_drain": true,
+        "bounded_poll_trap": true,
+        "limits": "Source order binds independent ring protocol; actual JIT must match this exact stream. No arbitrary CFG/register allocator proof."
+      },
+      {
+        "args": [
+          128,
+          5,
+          1,
+          0,
+          0,
+          0,
+          3
+        ],
+        "Xslots": 5,
+        "Wslots": 5,
+        "HGMMA": 16,
+        "output_STSM": 8,
+        "reduce_issues": 1,
+        "final_wait0_before_output": true,
+        "TMA_read_drain": true,
+        "bounded_poll_trap": true,
+        "limits": "Source order binds independent ring protocol; actual JIT must match this exact stream. No arbitrary CFG/register allocator proof."
+      }
+    ],
+    "exact_all_main_streams": true
+  },
+  "actual_incumbent": {
+    "variant": "s4s5hz",
+    "KS": 7,
+    "not_forced": true,
+    "exact_selected_parent_JIT": true,
+    "sass": "/okc/logs/scheduler/wring-rebase-01/result.incumbent.jit.sass"
+  },
+  "validation": {
+    "incumbent": [
+      {
+        "all8192_basis": "EXACT",
+        "FP64": "PASS",
+        "detail": "ok 3.8e-03"
+      },
+      {
+        "task_distribution": "normal",
+        "result": "relative L2 error 3.938e-03 (worst row 4.451e-03); 17 probe rows exact to 0.0e+00",
+        "fresh_current_X_and_output": true
+      },
+      {
+        "task_distribution": "outliers",
+        "result": "relative L2 error 4.127e-03 (worst row 4.423e-03); 12 probe rows exact to 0.0e+00",
+        "fresh_current_X_and_output": true
+      }
+    ],
+    "coupled": [
+      {
+        "all8192_basis": "EXACT",
+        "FP64": "PASS",
+        "detail": "ok 3.8e-03"
+      },
+      {
+        "task_distribution": "normal",
+        "result": "relative L2 error 3.939e-03 (worst row 4.438e-03); 17 probe rows exact to 0.0e+00",
+        "fresh_current_X_and_output": true
+      },
+      {
+        "task_distribution": "outliers",
+        "result": "relative L2 error 4.175e-03 (worst row 4.463e-03); 12 probe rows exact to 0.0e+00",
+        "fresh_current_X_and_output": true
+      }
+    ],
+    "equal": [
+      {
+        "all8192_basis": "EXACT",
+        "FP64": "PASS",
+        "detail": "ok 3.8e-03"
+      },
+      {
+        "task_distribution": "normal",
+        "result": "relative L2 error 3.939e-03 (worst row 4.457e-03); 17 probe rows exact to 0.0e+00",
+        "fresh_current_X_and_output": true
+      },
+      {
+        "task_distribution": "outliers",
+        "result": "relative L2 error 4.206e-03 (worst row 4.432e-03); 12 probe rows exact to 0.0e+00",
+        "fresh_current_X_and_output": true
+      }
+    ],
+    "split": [
+      {
+        "all8192_basis": "EXACT",
+        "FP64": "PASS",
+        "detail": "ok 3.8e-03"
+      },
+      {
+        "task_distribution": "normal",
+        "result": "relative L2 error 3.944e-03 (worst row 4.404e-03); 17 probe rows exact to 0.0e+00",
+        "fresh_current_X_and_output": true
+      },
+      {
+        "task_distribution": "outliers",
+        "result": "relative L2 error 4.149e-03 (worst row 4.431e-03); 12 probe rows exact to 0.0e+00",
+        "fresh_current_X_and_output": true
+      }
+    ]
+  },
+  "timing": {
+    "F1_raw_us": {
+      "incumbent_before": [
+        17.184000462293625,
+        17.184000462293625,
+        18.719999119639397,
+        17.44000054895878,
+        17.855999991297722,
+        16.92800037562847,
+        17.24799908697605,
+        17.56799966096878,
+        17.08799973130226,
+        16.767999157309532,
+        17.56799966096878,
+        17.343999817967415,
+        17.59999990463257,
+        18.751999363303185,
+        16.831999644637108,
+        16.92800037562847,
+        17.535999417304993,
+        17.376000061631203,
+        17.823999747633934,
+        17.823999747633934,
+        17.75999926030636
+      ],
+      "coupled_before": [
+        17.184000462293625,
+        17.08799973130226,
+        17.023999243974686,
+        17.855999991297722,
+        17.216000705957413,
+        16.896000131964684,
+        16.831999644637108,
+        16.96000061929226,
+        16.863999888300896,
+        17.216000705957413,
+        17.696000635623932,
+        16.896000131964684,
+        17.023999243974686,
+        16.831999644637108,
+        17.216000705957413,
+        17.023999243974686,
+        16.767999157309532,
+        18.112000077962875,
+        16.896000131964684,
+        16.672000288963318,
+        16.96000061929226
+      ],
+      "equal_before": [
+        19.007999449968338,
+        17.152000218629837,
+        17.472000792622566,
+        17.535999417304993,
+        17.27999933063984,
+        17.152000218629837,
+        16.96000061929226,
+        18.36800016462803,
+        17.055999487638474,
+        16.92800037562847,
+        17.023999243974686,
+        17.311999574303627,
+        17.696000635623932,
+        16.992000862956047,
+        18.303999677300453,
+        17.27999933063984,
+        17.216000705957413,
+        17.216000705957413,
+        16.992000862956047,
+        17.44000054895878,
+        17.055999487638474
+      ],
+      "split": [
+        17.184000462293625,
+        16.96000061929226,
+        16.767999157309532,
+        17.632000148296356,
+        17.696000635623932,
+        16.992000862956047,
+        16.736000776290894,
+        16.672000288963318,
+        18.144000321626663,
+        17.023999243974686,
+        17.152000218629837,
+        16.96000061929226,
+        16.896000131964684,
+        17.08799973130226,
+        17.055999487638474,
+        18.303999677300453,
+        16.96000061929226,
+        17.023999243974686,
+        16.831999644637108,
+        17.152000218629837,
+        16.896000131964684
+      ],
+      "equal_after": [
+        17.40800030529499,
+        18.17600056529045,
+        16.92800037562847,
+        17.27999933063984,
+        17.311999574303627,
+        17.311999574303627,
+        17.216000705957413,
+        17.343999817967415,
+        17.023999243974686,
+        17.472000792622566,
+        17.11999997496605,
+        17.08799973130226,
+        18.49599927663803,
+        16.92800037562847,
+        17.44000054895878,
+        17.055999487638474,
+        17.24799908697605,
+        17.503999173641205,
+        17.023999243974686,
+        17.023999243974686,
+        17.343999817967415
+      ],
+      "coupled_after": [
+        17.343999817967415,
+        16.704000532627106,
+        18.400000408291817,
+        16.896000131964684,
+        16.831999644637108,
+        16.863999888300896,
+        17.472000792622566,
+        16.896000131964684,
+        17.023999243974686,
+        16.992000862956047,
+        16.79999940097332,
+        16.896000131964684,
+        16.704000532627106,
+        17.152000218629837,
+        16.863999888300896,
+        17.27999933063984,
+        18.239999189972878,
+        16.896000131964684,
+        16.992000862956047,
+        17.11999997496605,
+        17.311999574303627
+      ],
+      "incumbent_after": [
+        17.24799908697605,
+        17.24799908697605,
+        17.952000722289085,
+        16.992000862956047,
+        17.152000218629837,
+        17.152000218629837,
+        16.896000131964684,
+        17.184000462293625,
+        17.08799973130226,
+        17.40800030529499,
+        17.376000061631203,
+        17.56799966096878,
+        18.52799952030182,
+        17.055999487638474,
+        17.823999747633934,
+        18.239999189972878,
+        17.152000218629837,
+        17.08799973130226,
+        17.44000054895878,
+        17.40800030529499,
+        18.0479995906353
+      ]
+    },
+    "F1_medians_us": {
+      "incumbent_before": 17.44000054895878,
+      "coupled_before": 17.023999243974686,
+      "equal_before": 17.216000705957413,
+      "split": 17.023999243974686,
+      "equal_after": 17.27999933063984,
+      "coupled_after": 16.992000862956047,
+      "incumbent_after": 17.24799908697605
+    },
+    "paired_raw_us": [
+      {
+        "incumbent": 17.664000391960144,
+        "coupled": 17.696000635623932,
+        "equal": 17.311999574303627,
+        "split": 17.343999817967415
+      },
+      {
+        "coupled": 18.688000738620758,
+        "equal": 17.27999933063984,
+        "split": 17.055999487638474,
+        "incumbent": 17.184000462293625
+      },
+      {
+        "equal": 17.632000148296356,
+        "split": 16.92800037562847,
+        "incumbent": 17.11999997496605,
+        "coupled": 17.11999997496605
+      },
+      {
+        "split": 16.992000862956047,
+        "incumbent": 17.216000705957413,
+        "coupled": 17.27999933063984,
+        "equal": 17.27999933063984
+      },
+      {
+        "split": 17.055999487638474,
+        "equal": 17.376000061631203,
+        "coupled": 17.311999574303627,
+        "incumbent": 16.896000131964684
+      },
+      {
+        "equal": 18.624000251293182,
+        "coupled": 17.311999574303627,
+        "incumbent": 17.75999926030636,
+        "split": 16.96000061929226
+      },
+      {
+        "coupled": 17.24799908697605,
+        "incumbent": 16.992000862956047,
+        "split": 17.08799973130226,
+        "equal": 17.472000792622566
+      },
+      {
+        "incumbent": 17.055999487638474,
+        "split": 17.535999417304993,
+        "equal": 17.535999417304993,
+        "coupled": 18.52799952030182
+      },
+      {
+        "incumbent": 17.72800087928772,
+        "coupled": 17.023999243974686,
+        "equal": 17.40800030529499,
+        "split": 17.791999503970146
+      },
+      {
+        "coupled": 17.24799908697605,
+        "equal": 17.696000635623932,
+        "split": 17.11999997496605,
+        "incumbent": 17.952000722289085
+      },
+      {
+        "equal": 17.664000391960144,
+        "split": 16.92800037562847,
+        "incumbent": 18.94400082528591,
+        "coupled": 17.311999574303627
+      },
+      {
+        "split": 17.023999243974686,
+        "incumbent": 17.216000705957413,
+        "coupled": 17.184000462293625,
+        "equal": 17.75999926030636
+      },
+      {
+        "split": 17.40800030529499,
+        "equal": 17.216000705957413,
+        "coupled": 17.152000218629837,
+        "incumbent": 17.184000462293625
+      },
+      {
+        "equal": 17.535999417304993,
+        "coupled": 18.464000895619392,
+        "incumbent": 17.472000792622566,
+        "split": 16.96000061929226
+      },
+      {
+        "coupled": 17.72800087928772,
+        "incumbent": 18.783999606966972,
+        "split": 16.992000862956047,
+        "equal": 17.472000792622566
+      },
+      {
+        "incumbent": 17.664000391960144,
+        "split": 18.20800080895424,
+        "equal": 17.503999173641205,
+        "coupled": 17.40800030529499
+      },
+      {
+        "incumbent": 17.983999103307724,
+        "coupled": 17.023999243974686,
+        "equal": 17.75999926030636,
+        "split": 16.896000131964684
+      },
+      {
+        "coupled": 17.343999817967415,
+        "equal": 17.376000061631203,
+        "split": 17.216000705957413,
+        "incumbent": 17.27999933063984
+      },
+      {
+        "equal": 19.200000911951065,
+        "split": 17.08799973130226,
+        "incumbent": 17.27999933063984,
+        "coupled": 17.632000148296356
+      },
+      {
+        "split": 18.36800016462803,
+        "incumbent": 17.376000061631203,
+        "coupled": 17.216000705957413,
+        "equal": 17.184000462293625
+      },
+      {
+        "split": 17.11999997496605,
+        "equal": 17.40800030529499,
+        "coupled": 17.664000391960144,
+        "incumbent": 17.216000705957413
+      },
+      {
+        "equal": 17.56799966096878,
+        "coupled": 17.24799908697605,
+        "incumbent": 17.152000218629837,
+        "split": 17.055999487638474
+      },
+      {
+        "coupled": 17.27999933063984,
+        "incumbent": 17.24799908697605,
+        "split": 17.08799973130226,
+        "equal": 17.72800087928772
+      },
+      {
+        "incumbent": 17.855999991297722,
+        "split": 17.311999574303627,
+        "equal": 17.023999243974686,
+        "coupled": 17.11999997496605
+      },
+      {
+        "incumbent": 17.40800030529499,
+        "coupled": 17.24799908697605,
+        "equal": 18.239999189972878,
+        "split": 16.672000288963318
+      },
+      {
+        "coupled": 17.055999487638474,
+        "equal": 17.376000061631203,
+        "split": 17.24799908697605,
+        "incumbent": 17.376000061631203
+      },
+      {
+        "equal": 17.503999173641205,
+        "split": 16.96000061929226,
+        "incumbent": 17.216000705957413,
+        "coupled": 17.56799966096878
+      },
+      {
+        "split": 17.152000218629837,
+        "incumbent": 18.624000251293182,
+        "coupled": 17.184000462293625,
+        "equal": 17.56799966096878
+      },
+      {
+        "split": 16.992000862956047,
+        "equal": 17.27999933063984,
+        "coupled": 17.472000792622566,
+        "incumbent": 17.535999417304993
+      },
+      {
+        "equal": 18.400000408291817,
+        "coupled": 17.184000462293625,
+        "incumbent": 17.08799973130226,
+        "split": 17.08799973130226
+      },
+      {
+        "coupled": 17.472000792622566,
+        "incumbent": 17.503999173641205,
+        "split": 17.343999817967415,
+        "equal": 17.952000722289085
+      },
+      {
+        "incumbent": 17.055999487638474,
+        "split": 17.08799973130226,
+        "equal": 17.664000391960144,
+        "coupled": 17.40800030529499
+      }
+    ],
+    "comparisons": {
+      "incumbent_minus_split": {
+        "F1_gain_us": 0.22399984300136566,
+        "paired_median_gain_us": 0.1759994775056839,
+        "paired_wins": 23
+      },
+      "coupled_minus_equal": {
+        "F1_gain_us": -0.22399984300136566,
+        "paired_median_gain_us": -0.2400008961558342,
+        "paired_wins": 10
+      },
+      "coupled_minus_split": {
+        "F1_gain_us": -0.03199838101863861,
+        "paired_median_gain_us": 0.19199959933757782,
+        "paired_wins": 26
+      },
+      "equal_minus_split": {
+        "F1_gain_us": 0.19200146198272705,
+        "paired_median_gain_us": 0.4479996860027313,
+        "paired_wins": 25
+      },
+      "incumbent_minus_equal": {
+        "F1_gain_us": 0.03199838101863861,
+        "paired_median_gain_us": -0.09599979966878891,
+        "paired_wins": 11
+      },
+      "incumbent_minus_coupled": {
+        "F1_gain_us": 0.2559982240200043,
+        "paired_median_gain_us": 0.015999190509319305,
+        "paired_wins": 16
+      }
+    },
+    "all_calls": [
+      {
+        "label": "incumbent",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 18.464000895619392
+      },
+      {
+        "label": "incumbent",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 17.24799908697605
+      },
+      {
+        "label": "incumbent",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 17.343999817967415
+      },
+      {
+        "label": "incumbent",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 17.24799908697605
+      },
+      {
+        "label": "incumbent",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 17.696000635623932
+      },
+      {
+        "label": "coupled",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 17.11999997496605
+      },
+      {
+        "label": "coupled",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 16.92800037562847
+      },
+      {
+        "label": "coupled",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 18.079999834299088
+      },
+      {
+        "label": "coupled",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "coupled",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "equal",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 17.40800030529499
+      },
+      {
+        "label": "equal",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 18.400000408291817
+      },
+      {
+        "label": "equal",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "equal",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 16.992000862956047
+      },
+      {
+        "label": "equal",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 17.055999487638474
+      },
+      {
+        "label": "split",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "split",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 17.376000061631203
+      },
+      {
+        "label": "split",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "split",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 18.303999677300453
+      },
+      {
+        "label": "split",
+        "seed": 600000,
+        "mode": "warmup",
+        "us": 16.96000061929226
+      },
+      {
+        "label": "incumbent",
+        "seed": 601000,
+        "mode": "F1",
+        "us": 17.184000462293625
+      },
+      {
+        "label": "incumbent",
+        "seed": 601001,
+        "mode": "F1",
+        "us": 17.184000462293625
+      },
+      {
+        "label": "incumbent",
+        "seed": 601002,
+        "mode": "F1",
+        "us": 18.719999119639397
+      },
+      {
+        "label": "incumbent",
+        "seed": 601003,
+        "mode": "F1",
+        "us": 17.44000054895878
+      },
+      {
+        "label": "incumbent",
+        "seed": 601004,
+        "mode": "F1",
+        "us": 17.855999991297722
+      },
+      {
+        "label": "incumbent",
+        "seed": 601005,
+        "mode": "F1",
+        "us": 16.92800037562847
+      },
+      {
+        "label": "incumbent",
+        "seed": 601006,
+        "mode": "F1",
+        "us": 17.24799908697605
+      },
+      {
+        "label": "incumbent",
+        "seed": 601007,
+        "mode": "F1",
+        "us": 17.56799966096878
+      },
+      {
+        "label": "incumbent",
+        "seed": 601008,
+        "mode": "F1",
+        "us": 17.08799973130226
+      },
+      {
+        "label": "incumbent",
+        "seed": 601009,
+        "mode": "F1",
+        "us": 16.767999157309532
+      },
+      {
+        "label": "incumbent",
+        "seed": 601010,
+        "mode": "F1",
+        "us": 17.56799966096878
+      },
+      {
+        "label": "incumbent",
+        "seed": 601011,
+        "mode": "F1",
+        "us": 17.343999817967415
+      },
+      {
+        "label": "incumbent",
+        "seed": 601012,
+        "mode": "F1",
+        "us": 17.59999990463257
+      },
+      {
+        "label": "incumbent",
+        "seed": 601013,
+        "mode": "F1",
+        "us": 18.751999363303185
+      },
+      {
+        "label": "incumbent",
+        "seed": 601014,
+        "mode": "F1",
+        "us": 16.831999644637108
+      },
+      {
+        "label": "incumbent",
+        "seed": 601015,
+        "mode": "F1",
+        "us": 16.92800037562847
+      },
+      {
+        "label": "incumbent",
+        "seed": 601016,
+        "mode": "F1",
+        "us": 17.535999417304993
+      },
+      {
+        "label": "incumbent",
+        "seed": 601017,
+        "mode": "F1",
+        "us": 17.376000061631203
+      },
+      {
+        "label": "incumbent",
+        "seed": 601018,
+        "mode": "F1",
+        "us": 17.823999747633934
+      },
+      {
+        "label": "incumbent",
+        "seed": 601019,
+        "mode": "F1",
+        "us": 17.823999747633934
+      },
+      {
+        "label": "incumbent",
+        "seed": 601020,
+        "mode": "F1",
+        "us": 17.75999926030636
+      },
+      {
+        "label": "coupled",
+        "seed": 601021,
+        "mode": "F1",
+        "us": 17.184000462293625
+      },
+      {
+        "label": "coupled",
+        "seed": 601022,
+        "mode": "F1",
+        "us": 17.08799973130226
+      },
+      {
+        "label": "coupled",
+        "seed": 601023,
+        "mode": "F1",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "coupled",
+        "seed": 601024,
+        "mode": "F1",
+        "us": 17.855999991297722
+      },
+      {
+        "label": "coupled",
+        "seed": 601025,
+        "mode": "F1",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "coupled",
+        "seed": 601026,
+        "mode": "F1",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "coupled",
+        "seed": 601027,
+        "mode": "F1",
+        "us": 16.831999644637108
+      },
+      {
+        "label": "coupled",
+        "seed": 601028,
+        "mode": "F1",
+        "us": 16.96000061929226
+      },
+      {
+        "label": "coupled",
+        "seed": 601029,
+        "mode": "F1",
+        "us": 16.863999888300896
+      },
+      {
+        "label": "coupled",
+        "seed": 601030,
+        "mode": "F1",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "coupled",
+        "seed": 601031,
+        "mode": "F1",
+        "us": 17.696000635623932
+      },
+      {
+        "label": "coupled",
+        "seed": 601032,
+        "mode": "F1",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "coupled",
+        "seed": 601033,
+        "mode": "F1",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "coupled",
+        "seed": 601034,
+        "mode": "F1",
+        "us": 16.831999644637108
+      },
+      {
+        "label": "coupled",
+        "seed": 601035,
+        "mode": "F1",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "coupled",
+        "seed": 601036,
+        "mode": "F1",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "coupled",
+        "seed": 601037,
+        "mode": "F1",
+        "us": 16.767999157309532
+      },
+      {
+        "label": "coupled",
+        "seed": 601038,
+        "mode": "F1",
+        "us": 18.112000077962875
+      },
+      {
+        "label": "coupled",
+        "seed": 601039,
+        "mode": "F1",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "coupled",
+        "seed": 601040,
+        "mode": "F1",
+        "us": 16.672000288963318
+      },
+      {
+        "label": "coupled",
+        "seed": 601041,
+        "mode": "F1",
+        "us": 16.96000061929226
+      },
+      {
+        "label": "equal",
+        "seed": 601042,
+        "mode": "F1",
+        "us": 19.007999449968338
+      },
+      {
+        "label": "equal",
+        "seed": 601043,
+        "mode": "F1",
+        "us": 17.152000218629837
+      },
+      {
+        "label": "equal",
+        "seed": 601044,
+        "mode": "F1",
+        "us": 17.472000792622566
+      },
+      {
+        "label": "equal",
+        "seed": 601045,
+        "mode": "F1",
+        "us": 17.535999417304993
+      },
+      {
+        "label": "equal",
+        "seed": 601046,
+        "mode": "F1",
+        "us": 17.27999933063984
+      },
+      {
+        "label": "equal",
+        "seed": 601047,
+        "mode": "F1",
+        "us": 17.152000218629837
+      },
+      {
+        "label": "equal",
+        "seed": 601048,
+        "mode": "F1",
+        "us": 16.96000061929226
+      },
+      {
+        "label": "equal",
+        "seed": 601049,
+        "mode": "F1",
+        "us": 18.36800016462803
+      },
+      {
+        "label": "equal",
+        "seed": 601050,
+        "mode": "F1",
+        "us": 17.055999487638474
+      },
+      {
+        "label": "equal",
+        "seed": 601051,
+        "mode": "F1",
+        "us": 16.92800037562847
+      },
+      {
+        "label": "equal",
+        "seed": 601052,
+        "mode": "F1",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "equal",
+        "seed": 601053,
+        "mode": "F1",
+        "us": 17.311999574303627
+      },
+      {
+        "label": "equal",
+        "seed": 601054,
+        "mode": "F1",
+        "us": 17.696000635623932
+      },
+      {
+        "label": "equal",
+        "seed": 601055,
+        "mode": "F1",
+        "us": 16.992000862956047
+      },
+      {
+        "label": "equal",
+        "seed": 601056,
+        "mode": "F1",
+        "us": 18.303999677300453
+      },
+      {
+        "label": "equal",
+        "seed": 601057,
+        "mode": "F1",
+        "us": 17.27999933063984
+      },
+      {
+        "label": "equal",
+        "seed": 601058,
+        "mode": "F1",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "equal",
+        "seed": 601059,
+        "mode": "F1",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "equal",
+        "seed": 601060,
+        "mode": "F1",
+        "us": 16.992000862956047
+      },
+      {
+        "label": "equal",
+        "seed": 601061,
+        "mode": "F1",
+        "us": 17.44000054895878
+      },
+      {
+        "label": "equal",
+        "seed": 601062,
+        "mode": "F1",
+        "us": 17.055999487638474
+      },
+      {
+        "label": "split",
+        "seed": 601063,
+        "mode": "F1",
+        "us": 17.184000462293625
+      },
+      {
+        "label": "split",
+        "seed": 601064,
+        "mode": "F1",
+        "us": 16.96000061929226
+      },
+      {
+        "label": "split",
+        "seed": 601065,
+        "mode": "F1",
+        "us": 16.767999157309532
+      },
+      {
+        "label": "split",
+        "seed": 601066,
+        "mode": "F1",
+        "us": 17.632000148296356
+      },
+      {
+        "label": "split",
+        "seed": 601067,
+        "mode": "F1",
+        "us": 17.696000635623932
+      },
+      {
+        "label": "split",
+        "seed": 601068,
+        "mode": "F1",
+        "us": 16.992000862956047
+      },
+      {
+        "label": "split",
+        "seed": 601069,
+        "mode": "F1",
+        "us": 16.736000776290894
+      },
+      {
+        "label": "split",
+        "seed": 601070,
+        "mode": "F1",
+        "us": 16.672000288963318
+      },
+      {
+        "label": "split",
+        "seed": 601071,
+        "mode": "F1",
+        "us": 18.144000321626663
+      },
+      {
+        "label": "split",
+        "seed": 601072,
+        "mode": "F1",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "split",
+        "seed": 601073,
+        "mode": "F1",
+        "us": 17.152000218629837
+      },
+      {
+        "label": "split",
+        "seed": 601074,
+        "mode": "F1",
+        "us": 16.96000061929226
+      },
+      {
+        "label": "split",
+        "seed": 601075,
+        "mode": "F1",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "split",
+        "seed": 601076,
+        "mode": "F1",
+        "us": 17.08799973130226
+      },
+      {
+        "label": "split",
+        "seed": 601077,
+        "mode": "F1",
+        "us": 17.055999487638474
+      },
+      {
+        "label": "split",
+        "seed": 601078,
+        "mode": "F1",
+        "us": 18.303999677300453
+      },
+      {
+        "label": "split",
+        "seed": 601079,
+        "mode": "F1",
+        "us": 16.96000061929226
+      },
+      {
+        "label": "split",
+        "seed": 601080,
+        "mode": "F1",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "split",
+        "seed": 601081,
+        "mode": "F1",
+        "us": 16.831999644637108
+      },
+      {
+        "label": "split",
+        "seed": 601082,
+        "mode": "F1",
+        "us": 17.152000218629837
+      },
+      {
+        "label": "split",
+        "seed": 601083,
+        "mode": "F1",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "equal",
+        "seed": 601084,
+        "mode": "F1",
+        "us": 17.40800030529499
+      },
+      {
+        "label": "equal",
+        "seed": 601085,
+        "mode": "F1",
+        "us": 18.17600056529045
+      },
+      {
+        "label": "equal",
+        "seed": 601086,
+        "mode": "F1",
+        "us": 16.92800037562847
+      },
+      {
+        "label": "equal",
+        "seed": 601087,
+        "mode": "F1",
+        "us": 17.27999933063984
+      },
+      {
+        "label": "equal",
+        "seed": 601088,
+        "mode": "F1",
+        "us": 17.311999574303627
+      },
+      {
+        "label": "equal",
+        "seed": 601089,
+        "mode": "F1",
+        "us": 17.311999574303627
+      },
+      {
+        "label": "equal",
+        "seed": 601090,
+        "mode": "F1",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "equal",
+        "seed": 601091,
+        "mode": "F1",
+        "us": 17.343999817967415
+      },
+      {
+        "label": "equal",
+        "seed": 601092,
+        "mode": "F1",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "equal",
+        "seed": 601093,
+        "mode": "F1",
+        "us": 17.472000792622566
+      },
+      {
+        "label": "equal",
+        "seed": 601094,
+        "mode": "F1",
+        "us": 17.11999997496605
+      },
+      {
+        "label": "equal",
+        "seed": 601095,
+        "mode": "F1",
+        "us": 17.08799973130226
+      },
+      {
+        "label": "equal",
+        "seed": 601096,
+        "mode": "F1",
+        "us": 18.49599927663803
+      },
+      {
+        "label": "equal",
+        "seed": 601097,
+        "mode": "F1",
+        "us": 16.92800037562847
+      },
+      {
+        "label": "equal",
+        "seed": 601098,
+        "mode": "F1",
+        "us": 17.44000054895878
+      },
+      {
+        "label": "equal",
+        "seed": 601099,
+        "mode": "F1",
+        "us": 17.055999487638474
+      },
+      {
+        "label": "equal",
+        "seed": 601100,
+        "mode": "F1",
+        "us": 17.24799908697605
+      },
+      {
+        "label": "equal",
+        "seed": 601101,
+        "mode": "F1",
+        "us": 17.503999173641205
+      },
+      {
+        "label": "equal",
+        "seed": 601102,
+        "mode": "F1",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "equal",
+        "seed": 601103,
+        "mode": "F1",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "equal",
+        "seed": 601104,
+        "mode": "F1",
+        "us": 17.343999817967415
+      },
+      {
+        "label": "coupled",
+        "seed": 601105,
+        "mode": "F1",
+        "us": 17.343999817967415
+      },
+      {
+        "label": "coupled",
+        "seed": 601106,
+        "mode": "F1",
+        "us": 16.704000532627106
+      },
+      {
+        "label": "coupled",
+        "seed": 601107,
+        "mode": "F1",
+        "us": 18.400000408291817
+      },
+      {
+        "label": "coupled",
+        "seed": 601108,
+        "mode": "F1",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "coupled",
+        "seed": 601109,
+        "mode": "F1",
+        "us": 16.831999644637108
+      },
+      {
+        "label": "coupled",
+        "seed": 601110,
+        "mode": "F1",
+        "us": 16.863999888300896
+      },
+      {
+        "label": "coupled",
+        "seed": 601111,
+        "mode": "F1",
+        "us": 17.472000792622566
+      },
+      {
+        "label": "coupled",
+        "seed": 601112,
+        "mode": "F1",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "coupled",
+        "seed": 601113,
+        "mode": "F1",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "coupled",
+        "seed": 601114,
+        "mode": "F1",
+        "us": 16.992000862956047
+      },
+      {
+        "label": "coupled",
+        "seed": 601115,
+        "mode": "F1",
+        "us": 16.79999940097332
+      },
+      {
+        "label": "coupled",
+        "seed": 601116,
+        "mode": "F1",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "coupled",
+        "seed": 601117,
+        "mode": "F1",
+        "us": 16.704000532627106
+      },
+      {
+        "label": "coupled",
+        "seed": 601118,
+        "mode": "F1",
+        "us": 17.152000218629837
+      },
+      {
+        "label": "coupled",
+        "seed": 601119,
+        "mode": "F1",
+        "us": 16.863999888300896
+      },
+      {
+        "label": "coupled",
+        "seed": 601120,
+        "mode": "F1",
+        "us": 17.27999933063984
+      },
+      {
+        "label": "coupled",
+        "seed": 601121,
+        "mode": "F1",
+        "us": 18.239999189972878
+      },
+      {
+        "label": "coupled",
+        "seed": 601122,
+        "mode": "F1",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "coupled",
+        "seed": 601123,
+        "mode": "F1",
+        "us": 16.992000862956047
+      },
+      {
+        "label": "coupled",
+        "seed": 601124,
+        "mode": "F1",
+        "us": 17.11999997496605
+      },
+      {
+        "label": "coupled",
+        "seed": 601125,
+        "mode": "F1",
+        "us": 17.311999574303627
+      },
+      {
+        "label": "incumbent",
+        "seed": 601126,
+        "mode": "F1",
+        "us": 17.24799908697605
+      },
+      {
+        "label": "incumbent",
+        "seed": 601127,
+        "mode": "F1",
+        "us": 17.24799908697605
+      },
+      {
+        "label": "incumbent",
+        "seed": 601128,
+        "mode": "F1",
+        "us": 17.952000722289085
+      },
+      {
+        "label": "incumbent",
+        "seed": 601129,
+        "mode": "F1",
+        "us": 16.992000862956047
+      },
+      {
+        "label": "incumbent",
+        "seed": 601130,
+        "mode": "F1",
+        "us": 17.152000218629837
+      },
+      {
+        "label": "incumbent",
+        "seed": 601131,
+        "mode": "F1",
+        "us": 17.152000218629837
+      },
+      {
+        "label": "incumbent",
+        "seed": 601132,
+        "mode": "F1",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "incumbent",
+        "seed": 601133,
+        "mode": "F1",
+        "us": 17.184000462293625
+      },
+      {
+        "label": "incumbent",
+        "seed": 601134,
+        "mode": "F1",
+        "us": 17.08799973130226
+      },
+      {
+        "label": "incumbent",
+        "seed": 601135,
+        "mode": "F1",
+        "us": 17.40800030529499
+      },
+      {
+        "label": "incumbent",
+        "seed": 601136,
+        "mode": "F1",
+        "us": 17.376000061631203
+      },
+      {
+        "label": "incumbent",
+        "seed": 601137,
+        "mode": "F1",
+        "us": 17.56799966096878
+      },
+      {
+        "label": "incumbent",
+        "seed": 601138,
+        "mode": "F1",
+        "us": 18.52799952030182
+      },
+      {
+        "label": "incumbent",
+        "seed": 601139,
+        "mode": "F1",
+        "us": 17.055999487638474
+      },
+      {
+        "label": "incumbent",
+        "seed": 601140,
+        "mode": "F1",
+        "us": 17.823999747633934
+      },
+      {
+        "label": "incumbent",
+        "seed": 601141,
+        "mode": "F1",
+        "us": 18.239999189972878
+      },
+      {
+        "label": "incumbent",
+        "seed": 601142,
+        "mode": "F1",
+        "us": 17.152000218629837
+      },
+      {
+        "label": "incumbent",
+        "seed": 601143,
+        "mode": "F1",
+        "us": 17.08799973130226
+      },
+      {
+        "label": "incumbent",
+        "seed": 601144,
+        "mode": "F1",
+        "us": 17.44000054895878
+      },
+      {
+        "label": "incumbent",
+        "seed": 601145,
+        "mode": "F1",
+        "us": 17.40800030529499
+      },
+      {
+        "label": "incumbent",
+        "seed": 601146,
+        "mode": "F1",
+        "us": 18.0479995906353
+      },
+      {
+        "label": "incumbent",
+        "seed": 602000,
+        "mode": "paired",
+        "us": 17.664000391960144
+      },
+      {
+        "label": "coupled",
+        "seed": 602000,
+        "mode": "paired",
+        "us": 17.696000635623932
+      },
+      {
+        "label": "equal",
+        "seed": 602000,
+        "mode": "paired",
+        "us": 17.311999574303627
+      },
+      {
+        "label": "split",
+        "seed": 602000,
+        "mode": "paired",
+        "us": 17.343999817967415
+      },
+      {
+        "label": "coupled",
+        "seed": 602001,
+        "mode": "paired",
+        "us": 18.688000738620758
+      },
+      {
+        "label": "equal",
+        "seed": 602001,
+        "mode": "paired",
+        "us": 17.27999933063984
+      },
+      {
+        "label": "split",
+        "seed": 602001,
+        "mode": "paired",
+        "us": 17.055999487638474
+      },
+      {
+        "label": "incumbent",
+        "seed": 602001,
+        "mode": "paired",
+        "us": 17.184000462293625
+      },
+      {
+        "label": "equal",
+        "seed": 602002,
+        "mode": "paired",
+        "us": 17.632000148296356
+      },
+      {
+        "label": "split",
+        "seed": 602002,
+        "mode": "paired",
+        "us": 16.92800037562847
+      },
+      {
+        "label": "incumbent",
+        "seed": 602002,
+        "mode": "paired",
+        "us": 17.11999997496605
+      },
+      {
+        "label": "coupled",
+        "seed": 602002,
+        "mode": "paired",
+        "us": 17.11999997496605
+      },
+      {
+        "label": "split",
+        "seed": 602003,
+        "mode": "paired",
+        "us": 16.992000862956047
+      },
+      {
+        "label": "incumbent",
+        "seed": 602003,
+        "mode": "paired",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "coupled",
+        "seed": 602003,
+        "mode": "paired",
+        "us": 17.27999933063984
+      },
+      {
+        "label": "equal",
+        "seed": 602003,
+        "mode": "paired",
+        "us": 17.27999933063984
+      },
+      {
+        "label": "split",
+        "seed": 602004,
+        "mode": "paired",
+        "us": 17.055999487638474
+      },
+      {
+        "label": "equal",
+        "seed": 602004,
+        "mode": "paired",
+        "us": 17.376000061631203
+      },
+      {
+        "label": "coupled",
+        "seed": 602004,
+        "mode": "paired",
+        "us": 17.311999574303627
+      },
+      {
+        "label": "incumbent",
+        "seed": 602004,
+        "mode": "paired",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "equal",
+        "seed": 602005,
+        "mode": "paired",
+        "us": 18.624000251293182
+      },
+      {
+        "label": "coupled",
+        "seed": 602005,
+        "mode": "paired",
+        "us": 17.311999574303627
+      },
+      {
+        "label": "incumbent",
+        "seed": 602005,
+        "mode": "paired",
+        "us": 17.75999926030636
+      },
+      {
+        "label": "split",
+        "seed": 602005,
+        "mode": "paired",
+        "us": 16.96000061929226
+      },
+      {
+        "label": "coupled",
+        "seed": 602006,
+        "mode": "paired",
+        "us": 17.24799908697605
+      },
+      {
+        "label": "incumbent",
+        "seed": 602006,
+        "mode": "paired",
+        "us": 16.992000862956047
+      },
+      {
+        "label": "split",
+        "seed": 602006,
+        "mode": "paired",
+        "us": 17.08799973130226
+      },
+      {
+        "label": "equal",
+        "seed": 602006,
+        "mode": "paired",
+        "us": 17.472000792622566
+      },
+      {
+        "label": "incumbent",
+        "seed": 602007,
+        "mode": "paired",
+        "us": 17.055999487638474
+      },
+      {
+        "label": "split",
+        "seed": 602007,
+        "mode": "paired",
+        "us": 17.535999417304993
+      },
+      {
+        "label": "equal",
+        "seed": 602007,
+        "mode": "paired",
+        "us": 17.535999417304993
+      },
+      {
+        "label": "coupled",
+        "seed": 602007,
+        "mode": "paired",
+        "us": 18.52799952030182
+      },
+      {
+        "label": "incumbent",
+        "seed": 602008,
+        "mode": "paired",
+        "us": 17.72800087928772
+      },
+      {
+        "label": "coupled",
+        "seed": 602008,
+        "mode": "paired",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "equal",
+        "seed": 602008,
+        "mode": "paired",
+        "us": 17.40800030529499
+      },
+      {
+        "label": "split",
+        "seed": 602008,
+        "mode": "paired",
+        "us": 17.791999503970146
+      },
+      {
+        "label": "coupled",
+        "seed": 602009,
+        "mode": "paired",
+        "us": 17.24799908697605
+      },
+      {
+        "label": "equal",
+        "seed": 602009,
+        "mode": "paired",
+        "us": 17.696000635623932
+      },
+      {
+        "label": "split",
+        "seed": 602009,
+        "mode": "paired",
+        "us": 17.11999997496605
+      },
+      {
+        "label": "incumbent",
+        "seed": 602009,
+        "mode": "paired",
+        "us": 17.952000722289085
+      },
+      {
+        "label": "equal",
+        "seed": 602010,
+        "mode": "paired",
+        "us": 17.664000391960144
+      },
+      {
+        "label": "split",
+        "seed": 602010,
+        "mode": "paired",
+        "us": 16.92800037562847
+      },
+      {
+        "label": "incumbent",
+        "seed": 602010,
+        "mode": "paired",
+        "us": 18.94400082528591
+      },
+      {
+        "label": "coupled",
+        "seed": 602010,
+        "mode": "paired",
+        "us": 17.311999574303627
+      },
+      {
+        "label": "split",
+        "seed": 602011,
+        "mode": "paired",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "incumbent",
+        "seed": 602011,
+        "mode": "paired",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "coupled",
+        "seed": 602011,
+        "mode": "paired",
+        "us": 17.184000462293625
+      },
+      {
+        "label": "equal",
+        "seed": 602011,
+        "mode": "paired",
+        "us": 17.75999926030636
+      },
+      {
+        "label": "split",
+        "seed": 602012,
+        "mode": "paired",
+        "us": 17.40800030529499
+      },
+      {
+        "label": "equal",
+        "seed": 602012,
+        "mode": "paired",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "coupled",
+        "seed": 602012,
+        "mode": "paired",
+        "us": 17.152000218629837
+      },
+      {
+        "label": "incumbent",
+        "seed": 602012,
+        "mode": "paired",
+        "us": 17.184000462293625
+      },
+      {
+        "label": "equal",
+        "seed": 602013,
+        "mode": "paired",
+        "us": 17.535999417304993
+      },
+      {
+        "label": "coupled",
+        "seed": 602013,
+        "mode": "paired",
+        "us": 18.464000895619392
+      },
+      {
+        "label": "incumbent",
+        "seed": 602013,
+        "mode": "paired",
+        "us": 17.472000792622566
+      },
+      {
+        "label": "split",
+        "seed": 602013,
+        "mode": "paired",
+        "us": 16.96000061929226
+      },
+      {
+        "label": "coupled",
+        "seed": 602014,
+        "mode": "paired",
+        "us": 17.72800087928772
+      },
+      {
+        "label": "incumbent",
+        "seed": 602014,
+        "mode": "paired",
+        "us": 18.783999606966972
+      },
+      {
+        "label": "split",
+        "seed": 602014,
+        "mode": "paired",
+        "us": 16.992000862956047
+      },
+      {
+        "label": "equal",
+        "seed": 602014,
+        "mode": "paired",
+        "us": 17.472000792622566
+      },
+      {
+        "label": "incumbent",
+        "seed": 602015,
+        "mode": "paired",
+        "us": 17.664000391960144
+      },
+      {
+        "label": "split",
+        "seed": 602015,
+        "mode": "paired",
+        "us": 18.20800080895424
+      },
+      {
+        "label": "equal",
+        "seed": 602015,
+        "mode": "paired",
+        "us": 17.503999173641205
+      },
+      {
+        "label": "coupled",
+        "seed": 602015,
+        "mode": "paired",
+        "us": 17.40800030529499
+      },
+      {
+        "label": "incumbent",
+        "seed": 602016,
+        "mode": "paired",
+        "us": 17.983999103307724
+      },
+      {
+        "label": "coupled",
+        "seed": 602016,
+        "mode": "paired",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "equal",
+        "seed": 602016,
+        "mode": "paired",
+        "us": 17.75999926030636
+      },
+      {
+        "label": "split",
+        "seed": 602016,
+        "mode": "paired",
+        "us": 16.896000131964684
+      },
+      {
+        "label": "coupled",
+        "seed": 602017,
+        "mode": "paired",
+        "us": 17.343999817967415
+      },
+      {
+        "label": "equal",
+        "seed": 602017,
+        "mode": "paired",
+        "us": 17.376000061631203
+      },
+      {
+        "label": "split",
+        "seed": 602017,
+        "mode": "paired",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "incumbent",
+        "seed": 602017,
+        "mode": "paired",
+        "us": 17.27999933063984
+      },
+      {
+        "label": "equal",
+        "seed": 602018,
+        "mode": "paired",
+        "us": 19.200000911951065
+      },
+      {
+        "label": "split",
+        "seed": 602018,
+        "mode": "paired",
+        "us": 17.08799973130226
+      },
+      {
+        "label": "incumbent",
+        "seed": 602018,
+        "mode": "paired",
+        "us": 17.27999933063984
+      },
+      {
+        "label": "coupled",
+        "seed": 602018,
+        "mode": "paired",
+        "us": 17.632000148296356
+      },
+      {
+        "label": "split",
+        "seed": 602019,
+        "mode": "paired",
+        "us": 18.36800016462803
+      },
+      {
+        "label": "incumbent",
+        "seed": 602019,
+        "mode": "paired",
+        "us": 17.376000061631203
+      },
+      {
+        "label": "coupled",
+        "seed": 602019,
+        "mode": "paired",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "equal",
+        "seed": 602019,
+        "mode": "paired",
+        "us": 17.184000462293625
+      },
+      {
+        "label": "split",
+        "seed": 602020,
+        "mode": "paired",
+        "us": 17.11999997496605
+      },
+      {
+        "label": "equal",
+        "seed": 602020,
+        "mode": "paired",
+        "us": 17.40800030529499
+      },
+      {
+        "label": "coupled",
+        "seed": 602020,
+        "mode": "paired",
+        "us": 17.664000391960144
+      },
+      {
+        "label": "incumbent",
+        "seed": 602020,
+        "mode": "paired",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "equal",
+        "seed": 602021,
+        "mode": "paired",
+        "us": 17.56799966096878
+      },
+      {
+        "label": "coupled",
+        "seed": 602021,
+        "mode": "paired",
+        "us": 17.24799908697605
+      },
+      {
+        "label": "incumbent",
+        "seed": 602021,
+        "mode": "paired",
+        "us": 17.152000218629837
+      },
+      {
+        "label": "split",
+        "seed": 602021,
+        "mode": "paired",
+        "us": 17.055999487638474
+      },
+      {
+        "label": "coupled",
+        "seed": 602022,
+        "mode": "paired",
+        "us": 17.27999933063984
+      },
+      {
+        "label": "incumbent",
+        "seed": 602022,
+        "mode": "paired",
+        "us": 17.24799908697605
+      },
+      {
+        "label": "split",
+        "seed": 602022,
+        "mode": "paired",
+        "us": 17.08799973130226
+      },
+      {
+        "label": "equal",
+        "seed": 602022,
+        "mode": "paired",
+        "us": 17.72800087928772
+      },
+      {
+        "label": "incumbent",
+        "seed": 602023,
+        "mode": "paired",
+        "us": 17.855999991297722
+      },
+      {
+        "label": "split",
+        "seed": 602023,
+        "mode": "paired",
+        "us": 17.311999574303627
+      },
+      {
+        "label": "equal",
+        "seed": 602023,
+        "mode": "paired",
+        "us": 17.023999243974686
+      },
+      {
+        "label": "coupled",
+        "seed": 602023,
+        "mode": "paired",
+        "us": 17.11999997496605
+      },
+      {
+        "label": "incumbent",
+        "seed": 602024,
+        "mode": "paired",
+        "us": 17.40800030529499
+      },
+      {
+        "label": "coupled",
+        "seed": 602024,
+        "mode": "paired",
+        "us": 17.24799908697605
+      },
+      {
+        "label": "equal",
+        "seed": 602024,
+        "mode": "paired",
+        "us": 18.239999189972878
+      },
+      {
+        "label": "split",
+        "seed": 602024,
+        "mode": "paired",
+        "us": 16.672000288963318
+      },
+      {
+        "label": "coupled",
+        "seed": 602025,
+        "mode": "paired",
+        "us": 17.055999487638474
+      },
+      {
+        "label": "equal",
+        "seed": 602025,
+        "mode": "paired",
+        "us": 17.376000061631203
+      },
+      {
+        "label": "split",
+        "seed": 602025,
+        "mode": "paired",
+        "us": 17.24799908697605
+      },
+      {
+        "label": "incumbent",
+        "seed": 602025,
+        "mode": "paired",
+        "us": 17.376000061631203
+      },
+      {
+        "label": "equal",
+        "seed": 602026,
+        "mode": "paired",
+        "us": 17.503999173641205
+      },
+      {
+        "label": "split",
+        "seed": 602026,
+        "mode": "paired",
+        "us": 16.96000061929226
+      },
+      {
+        "label": "incumbent",
+        "seed": 602026,
+        "mode": "paired",
+        "us": 17.216000705957413
+      },
+      {
+        "label": "coupled",
+        "seed": 602026,
+        "mode": "paired",
+        "us": 17.56799966096878
+      },
+      {
+        "label": "split",
+        "seed": 602027,
+        "mode": "paired",
+        "us": 17.152000218629837
+      },
+      {
+        "label": "incumbent",
+        "seed": 602027,
+        "mode": "paired",
+        "us": 18.624000251293182
+      },
+      {
+        "label": "coupled",
+        "seed": 602027,
+        "mode": "paired",
+        "us": 17.184000462293625
+      },
+      {
+        "label": "equal",
+        "seed": 602027,
+        "mode": "paired",
+        "us": 17.56799966096878
+      },
+      {
+        "label": "split",
+        "seed": 602028,
+        "mode": "paired",
+        "us": 16.992000862956047
+      },
+      {
+        "label": "equal",
+        "seed": 602028,
+        "mode": "paired",
+        "us": 17.27999933063984
+      },
+      {
+        "label": "coupled",
+        "seed": 602028,
+        "mode": "paired",
+        "us": 17.472000792622566
+      },
+      {
+        "label": "incumbent",
+        "seed": 602028,
+        "mode": "paired",
+        "us": 17.535999417304993
+      },
+      {
+        "label": "equal",
+        "seed": 602029,
+        "mode": "paired",
+        "us": 18.400000408291817
+      },
+      {
+        "label": "coupled",
+        "seed": 602029,
+        "mode": "paired",
+        "us": 17.184000462293625
+      },
+      {
+        "label": "incumbent",
+        "seed": 602029,
+        "mode": "paired",
+        "us": 17.08799973130226
+      },
+      {
+        "label": "split",
+        "seed": 602029,
+        "mode": "paired",
+        "us": 17.08799973130226
+      },
+      {
+        "label": "coupled",
+        "seed": 602030,
+        "mode": "paired",
+        "us": 17.472000792622566
+      },
+      {
+        "label": "incumbent",
+        "seed": 602030,
+        "mode": "paired",
+        "us": 17.503999173641205
+      },
+      {
+        "label": "split",
+        "seed": 602030,
+        "mode": "paired",
+        "us": 17.343999817967415
+      },
+      {
+        "label": "equal",
+        "seed": 602030,
+        "mode": "paired",
+        "us": 17.952000722289085
+      },
+      {
+        "label": "incumbent",
+        "seed": 602031,
+        "mode": "paired",
+        "us": 17.055999487638474
+      },
+      {
+        "label": "split",
+        "seed": 602031,
+        "mode": "paired",
+        "us": 17.08799973130226
+      },
+      {
+        "label": "equal",
+        "seed": 602031,
+        "mode": "paired",
+        "us": 17.664000391960144
+      },
+      {
+        "label": "coupled",
+        "seed": 602031,
+        "mode": "paired",
+        "us": 17.40800030529499
+      }
+    ],
+    "terminal_checks": {
+      "F1": {
+        "checks": [
+          {
+            "label": "incumbent",
+            "input_seed": 601146,
+            "result": "relative L2 error 4.097e-03 (worst row 4.376e-03); 23 probe rows exact to 0.0e+00"
+          },
+          {
+            "label": "coupled",
+            "input_seed": 601125,
+            "result": "relative L2 error 3.950e-03 (worst row 4.451e-03); 12 probe rows exact to 0.0e+00"
+          },
+          {
+            "label": "equal",
+            "input_seed": 601104,
+            "result": "relative L2 error 4.038e-03 (worst row 4.375e-03); 17 probe rows exact to 0.0e+00"
+          },
+          {
+            "label": "split",
+            "input_seed": 601083,
+            "result": "relative L2 error 4.113e-03 (worst row 4.369e-03); 14 probe rows exact to 0.0e+00"
+          }
+        ],
+        "current_X_matches_last_call": true,
+        "before_any_replay_or_mutation": true
+      },
+      "paired": {
+        "checks": [
+          {
+            "label": "incumbent",
+            "input_seed": 602031,
+            "result": "relative L2 error 3.971e-03 (worst row 4.413e-03); 15 probe rows exact to 0.0e+00"
+          },
+          {
+            "label": "coupled",
+            "input_seed": 602031,
+            "result": "relative L2 error 3.973e-03 (worst row 4.448e-03); 15 probe rows exact to 0.0e+00"
+          },
+          {
+            "label": "equal",
+            "input_seed": 602031,
+            "result": "relative L2 error 3.960e-03 (worst row 4.501e-03); 15 probe rows exact to 0.0e+00"
+          },
+          {
+            "label": "split",
+            "input_seed": 602031,
+            "result": "relative L2 error 3.969e-03 (worst row 4.404e-03); 15 probe rows exact to 0.0e+00"
+          }
+        ],
+        "current_X_matches_last_call": true,
+        "before_any_replay_or_mutation": true
+      }
+    },
+    "policy": "All295rawcalls retained,147F1/128paired/20warm,32pairedrounds/eightbalancedorders; no tiny-gain retention cutoff or promotion inference"
+  },
+  "actual_graph_mutations": [
+    {
+      "label": "incumbent",
+      "input": "original",
+      "oracle": "relative L2 error 3.980e-03 (worst row 4.445e-03); 15 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "coupled",
+      "input": "original",
+      "oracle": "relative L2 error 3.961e-03 (worst row 4.386e-03); 15 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "equal",
+      "input": "original",
+      "oracle": "relative L2 error 3.970e-03 (worst row 4.423e-03); 15 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "split",
+      "input": "original",
+      "oracle": "relative L2 error 3.978e-03 (worst row 4.464e-03); 15 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "incumbent",
+      "input": "zero",
+      "oracle": "exact complete zero",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "coupled",
+      "input": "zero",
+      "oracle": "exact complete zero",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "equal",
+      "input": "zero",
+      "oracle": "exact complete zero",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "split",
+      "input": "zero",
+      "oracle": "exact complete zero",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "incumbent",
+      "input": "normal",
+      "oracle": "relative L2 error 4.065e-03 (worst row 4.435e-03); 16 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "coupled",
+      "input": "normal",
+      "oracle": "relative L2 error 4.068e-03 (worst row 4.396e-03); 16 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "equal",
+      "input": "normal",
+      "oracle": "relative L2 error 4.062e-03 (worst row 4.428e-03); 16 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "split",
+      "input": "normal",
+      "oracle": "relative L2 error 4.060e-03 (worst row 4.363e-03); 16 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "incumbent",
+      "input": "outliers",
+      "oracle": "relative L2 error 4.134e-03 (worst row 4.372e-03); 17 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "coupled",
+      "input": "outliers",
+      "oracle": "relative L2 error 4.128e-03 (worst row 4.416e-03); 17 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "equal",
+      "input": "outliers",
+      "oracle": "relative L2 error 4.165e-03 (worst row 4.459e-03); 17 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "split",
+      "input": "outliers",
+      "oracle": "relative L2 error 4.166e-03 (worst row 4.460e-03); 17 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "incumbent",
+      "input": "all_rows",
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "coupled",
+      "input": "all_rows",
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "equal",
+      "input": "all_rows",
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    },
+    {
+      "label": "split",
+      "input": "all_rows",
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00",
+      "NaN_poison_overwritten": true
+    }
+  ],
+  "profile": {
+    "incumbent": [
+      "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+    ],
+    "coupled": [
+      "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)"
+    ],
+    "equal": [
+      "void rq<128, 5, 1, 0, 0, 0, 1283>(RqP, RqTmap, RqTmap)"
+    ],
+    "split": [
+      "void rq<128, 6, 1, 0, 0, 0, 1027>(RqP, RqTmap, RqTmap)"
+    ]
+  },
+  "next": "Retain every contrast including tiny gains; diagnose split-barrier versus depth effect; no family-wide kill or assumed additivity.",
+  "graph_cleanup": "DRAINED_AND_RESET_ALL_CREATED_GRAPHS"
+}

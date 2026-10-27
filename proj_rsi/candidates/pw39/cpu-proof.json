@@ -1,0 +1,1657 @@
+{
+  "state": "CPU_PW39_HOST_SELECTION_PASS_GPU_UNRUN_REVIEW_REQUIRED",
+  "source": {
+    "state": "PASS_ENTIRE_PARENT_REVERSE_AND_ALL_CUDA_IDENTITY",
+    "parent_source_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+    "changed_named_AST": [
+      "_rqbake",
+      "_rqsbake"
+    ],
+    "added_named_AST": [
+      "_rqconfirm"
+    ],
+    "GPU_source_strings": {
+      "CUDA": {
+        "bytes": 22295,
+        "sha256": "5b7f8f8d5e886d0281bb135d630e6e8b88fbef49b7957d71792f0b770095e39e"
+      },
+      "GVCU": {
+        "bytes": 64903,
+        "sha256": "01e57e0420acac9b43f0bc817e85930fa4f37b9c6c7bb9308892ed2a5720aad7"
+      },
+      "LTCPP": {
+        "bytes": 6895,
+        "sha256": "6e1849ae1a1ef1877df03185a42938fe7437f52ab13bc8b4dda7dcdd71d0e031"
+      },
+      "RWCU": {
+        "bytes": 27952,
+        "sha256": "c2049af1f050b8f2f2af72a7dae31986a5553f74788bc7de920a0f02e8326daf"
+      },
+      "RQCU": {
+        "bytes": 34111,
+        "sha256": "4c3e774ebbeb0b5949538f9fa43543805520562bf5a5032e54cf283251ca44f4"
+      }
+    },
+    "generated_production_CUDA": {
+      "RQ128": {
+        "instances": 8,
+        "bytes": 44106,
+        "sha256": "d50202811d73e1ce12eff287d17b67ca5366db3c708829d720867521066fd9fa"
+      },
+      "RQ32": {
+        "instances": 11,
+        "bytes": 44338,
+        "sha256": "9f187dc85102a1ca956b895a6d3168220a5eb6fce367072a90f2f7e05c29a589"
+      }
+    },
+    "strict_anchor_negatives": [
+      "bounded-confirmation-helper",
+      "RQ128-confirm-after-existing-screen",
+      "RQ32-confirm-after-existing-screen"
+    ],
+    "prepare_clock_and_threads": "ENTIRE_PREPARE_AND_RQSTART_AST_EXACT",
+    "lint": {
+      "path": "/home/ubuntu/okc/proj_rsi/candidates/pw39/submission.py",
+      "ok": true,
+      "findings": [
+        {
+          "severity": "warning",
+          "rule": "sm_90a",
+          "detail": "several load_inline builds: confirm the one holding wgmma/setmaxnreg/multicast gets the sm_90a flags"
+        }
+      ]
+    }
+  },
+  "selection": {
+    "state": "PASS_SELECTION_ADVERSARIAL_CASES",
+    "cases": {
+      "screening_downward_outlier_corrected": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0,
+            "confirmation_medians_us": [
+              101.0,
+              101.0
+            ],
+            "bracket_ratios": [
+              1.01,
+              1.01
+            ],
+            "worst_bracket_ratio": 1.01
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0,
+            "confirmation_medians_us": [
+              97.0,
+              97.0
+            ],
+            "bracket_ratios": [
+              0.97,
+              0.97
+            ],
+            "worst_bracket_ratio": 0.97
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 101.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 97.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 97.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 101.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "confirmed",
+        "decision": "rq:B",
+        "reason": "both-confirmation-brackets-clear-unchanged-margin",
+        "selection_metric": "lowest-worst-of-two-local-conservative-bracket-ratios",
+        "elapsed_s": 0.007,
+        "cumulative_s": 0.007
+      },
+      "stable_fast_candidate": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0,
+            "confirmation_medians_us": [
+              97.0,
+              97.0
+            ],
+            "bracket_ratios": [
+              0.97,
+              0.97
+            ],
+            "worst_bracket_ratio": 0.97
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0,
+            "confirmation_medians_us": [
+              98.0,
+              98.0
+            ],
+            "bracket_ratios": [
+              0.98,
+              0.98
+            ],
+            "worst_bracket_ratio": 0.98
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 97.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 98.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 98.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 97.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "confirmed",
+        "decision": "rq:A",
+        "reason": "both-confirmation-brackets-clear-unchanged-margin",
+        "selection_metric": "lowest-worst-of-two-local-conservative-bracket-ratios",
+        "elapsed_s": 0.007,
+        "cumulative_s": 0.007
+      },
+      "noisy_low_average_loses_to_stable": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0,
+            "confirmation_medians_us": [
+              90.0,
+              98.0
+            ],
+            "bracket_ratios": [
+              0.9,
+              0.98
+            ],
+            "worst_bracket_ratio": 0.98
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0,
+            "confirmation_medians_us": [
+              96.0,
+              96.0
+            ],
+            "bracket_ratios": [
+              0.96,
+              0.96
+            ],
+            "worst_bracket_ratio": 0.96
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 90.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 96.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 96.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 98.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "confirmed",
+        "decision": "rq:B",
+        "reason": "both-confirmation-brackets-clear-unchanged-margin",
+        "selection_metric": "lowest-worst-of-two-local-conservative-bracket-ratios",
+        "elapsed_s": 0.007,
+        "cumulative_s": 0.007
+      },
+      "both_confirmation_blocks_required": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0,
+            "confirmation_medians_us": [
+              80.0,
+              102.0
+            ],
+            "bracket_ratios": [
+              0.8,
+              1.02
+            ],
+            "worst_bracket_ratio": 1.02
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0,
+            "confirmation_medians_us": [
+              103.0,
+              103.0
+            ],
+            "bracket_ratios": [
+              1.03,
+              1.03
+            ],
+            "worst_bracket_ratio": 1.03
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 80.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 103.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 103.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 102.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "confirmed",
+        "decision": "incumbent",
+        "reason": "no-top-two-candidate-clears-both-brackets",
+        "selection_metric": "lowest-worst-of-two-local-conservative-bracket-ratios",
+        "elapsed_s": 0.007,
+        "cumulative_s": 0.007
+      },
+      "strict_equal_margin_rejected": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0,
+            "confirmation_medians_us": [
+              99.0,
+              99.0
+            ],
+            "bracket_ratios": [
+              0.99,
+              0.99
+            ],
+            "worst_bracket_ratio": 0.99
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0,
+            "confirmation_medians_us": [
+              100.0,
+              100.0
+            ],
+            "bracket_ratios": [
+              1.0,
+              1.0
+            ],
+            "worst_bracket_ratio": 1.0
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 99.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 99.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "confirmed",
+        "decision": "incumbent",
+        "reason": "no-top-two-candidate-clears-both-brackets",
+        "selection_metric": "lowest-worst-of-two-local-conservative-bracket-ratios",
+        "elapsed_s": 0.007,
+        "cumulative_s": 0.007
+      },
+      "tiny_below_margin_retained": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0,
+            "confirmation_medians_us": [
+              98.999,
+              98.999
+            ],
+            "bracket_ratios": [
+              0.9899899999999999,
+              0.9899899999999999
+            ],
+            "worst_bracket_ratio": 0.9899899999999999
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0,
+            "confirmation_medians_us": [
+              100.0,
+              100.0
+            ],
+            "bracket_ratios": [
+              1.0,
+              1.0
+            ],
+            "worst_bracket_ratio": 1.0
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 98.999,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 98.999,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "confirmed",
+        "decision": "rq:A",
+        "reason": "both-confirmation-brackets-clear-unchanged-margin",
+        "selection_metric": "lowest-worst-of-two-local-conservative-bracket-ratios",
+        "elapsed_s": 0.007,
+        "cumulative_s": 0.007
+      },
+      "lower_adjacent_control_is_baseline": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0,
+            "confirmation_medians_us": [
+              90.0,
+              90.0
+            ],
+            "bracket_ratios": [
+              1.0,
+              1.0
+            ],
+            "worst_bracket_ratio": 1.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0,
+            "confirmation_medians_us": [
+              91.0,
+              91.0
+            ],
+            "bracket_ratios": [
+              1.011111111111111,
+              1.011111111111111
+            ],
+            "worst_bracket_ratio": 1.011111111111111
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 90.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 91.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 90.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 91.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 90.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "confirmed",
+        "decision": "incumbent",
+        "reason": "no-top-two-candidate-clears-both-brackets",
+        "selection_metric": "lowest-worst-of-two-local-conservative-bracket-ratios",
+        "elapsed_s": 0.007,
+        "cumulative_s": 0.007
+      },
+      "local_brackets_handle_drift": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0,
+            "confirmation_medians_us": [
+              97.0,
+              107.0
+            ],
+            "bracket_ratios": [
+              0.97,
+              0.9727272727272728
+            ],
+            "worst_bracket_ratio": 0.9727272727272728
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0,
+            "confirmation_medians_us": [
+              98.0,
+              108.0
+            ],
+            "bracket_ratios": [
+              0.98,
+              0.9818181818181818
+            ],
+            "worst_bracket_ratio": 0.9818181818181818
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 97.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 98.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 110.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 108.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 107.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 120.0,
+            "replays": 5
+          }
+        ],
+        "status": "confirmed",
+        "decision": "rq:A",
+        "reason": "both-confirmation-brackets-clear-unchanged-margin",
+        "selection_metric": "lowest-worst-of-two-local-conservative-bracket-ratios",
+        "elapsed_s": 0.007,
+        "cumulative_s": 0.007
+      },
+      "top_two_only": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90,
+            "confirmation_medians_us": [
+              97.0,
+              97.0
+            ],
+            "bracket_ratios": [
+              0.97,
+              0.97
+            ],
+            "worst_bracket_ratio": 0.97
+          },
+          {
+            "tag": "B",
+            "screen_us": 91,
+            "confirmation_medians_us": [
+              98.0,
+              98.0
+            ],
+            "bracket_ratios": [
+              0.98,
+              0.98
+            ],
+            "worst_bracket_ratio": 0.98
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 97.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 98.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 98.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 97.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "confirmed",
+        "decision": "rq:A",
+        "reason": "both-confirmation-brackets-clear-unchanged-margin",
+        "selection_metric": "lowest-worst-of-two-local-conservative-bracket-ratios",
+        "elapsed_s": 0.007,
+        "cumulative_s": 0.007
+      },
+      "one_candidate": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90,
+            "confirmation_medians_us": [
+              97.0,
+              97.0
+            ],
+            "bracket_ratios": [
+              0.97,
+              0.97
+            ],
+            "worst_bracket_ratio": 0.97
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 97.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 97.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "confirmed",
+        "decision": "rq:A",
+        "reason": "both-confirmation-brackets-clear-unchanged-margin",
+        "selection_metric": "lowest-worst-of-two-local-conservative-bracket-ratios",
+        "elapsed_s": 0.005,
+        "cumulative_s": 0.005
+      },
+      "screen_no_winner": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "incumbent",
+        "screen_us": 100,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0
+          }
+        ],
+        "blocks": [],
+        "status": "skipped",
+        "decision": "incumbent",
+        "reason": "no-screened-candidate-admitted",
+        "elapsed_s": 0.0,
+        "cumulative_s": 0.0
+      }
+    },
+    "shape_agnostic_identities": [
+      [
+        "qkv_gate",
+        1
+      ],
+      [
+        "qkv_gate",
+        8
+      ],
+      [
+        "qkv_gate",
+        16
+      ],
+      [
+        "qkv_gate",
+        32
+      ],
+      [
+        "qkv_gate",
+        128
+      ],
+      [
+        "qkv_gate",
+        256
+      ],
+      [
+        "o",
+        1
+      ],
+      [
+        "o",
+        8
+      ],
+      [
+        "o",
+        16
+      ],
+      [
+        "o",
+        32
+      ],
+      [
+        "o",
+        128
+      ],
+      [
+        "o",
+        256
+      ],
+      [
+        "pooler",
+        1
+      ],
+      [
+        "pooler",
+        8
+      ],
+      [
+        "pooler",
+        16
+      ],
+      [
+        "pooler",
+        32
+      ],
+      [
+        "pooler",
+        128
+      ],
+      [
+        "pooler",
+        256
+      ],
+      [
+        "unpooler",
+        1
+      ],
+      [
+        "unpooler",
+        8
+      ],
+      [
+        "unpooler",
+        16
+      ],
+      [
+        "unpooler",
+        32
+      ],
+      [
+        "unpooler",
+        128
+      ],
+      [
+        "unpooler",
+        256
+      ],
+      [
+        "router",
+        1
+      ],
+      [
+        "router",
+        8
+      ],
+      [
+        "router",
+        16
+      ],
+      [
+        "router",
+        32
+      ],
+      [
+        "router",
+        128
+      ],
+      [
+        "router",
+        256
+      ]
+    ]
+  },
+  "budget_errors": {
+    "state": "PASS_SHARED_BUDGET_INCOMPLETE_AND_ERROR_FALLBACKS",
+    "cases": {
+      "global_budget_empty": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0
+          }
+        ],
+        "blocks": [],
+        "status": "skipped",
+        "decision": "rq:A",
+        "reason": "global-confirmation-budget-incomplete-retain-screen",
+        "elapsed_s": 0.0,
+        "cumulative_s": 2.0
+      },
+      "prepare_cutoff": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0
+          }
+        ],
+        "blocks": [],
+        "status": "skipped",
+        "decision": "rq:A",
+        "reason": "prepare-cutoff-incomplete-retain-screen",
+        "elapsed_s": 0.0,
+        "cumulative_s": 0.0
+      },
+      "global_partial": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 97.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 98.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "skipped",
+        "decision": "rq:A",
+        "reason": "global-confirmation-budget-incomplete-retain-screen",
+        "elapsed_s": 2.0,
+        "cumulative_s": 2.0
+      },
+      "prepare_partial": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 97.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 98.0,
+            "replays": 5
+          }
+        ],
+        "status": "skipped",
+        "decision": "rq:A",
+        "reason": "prepare-cutoff-incomplete-retain-screen",
+        "elapsed_s": 0.6000000000000001,
+        "cumulative_s": 0.6000000000000001
+      },
+      "shared_budget_across_bakes": {
+        "used_s": 2.0,
+        "records": [
+          {
+            "layer": "arbitrary",
+            "m": 32,
+            "screen_pick": "rq:A",
+            "screen_us": 90.0,
+            "incumbent": "incumbent",
+            "candidates": [
+              {
+                "tag": "A",
+                "screen_us": 90.0,
+                "confirmation_medians_us": [
+                  97.0,
+                  97.0
+                ],
+                "bracket_ratios": [
+                  0.97,
+                  0.97
+                ],
+                "worst_bracket_ratio": 0.97
+              },
+              {
+                "tag": "B",
+                "screen_us": 91.0,
+                "confirmation_medians_us": [
+                  98.0,
+                  98.0
+                ],
+                "bracket_ratios": [
+                  0.98,
+                  0.98
+                ],
+                "worst_bracket_ratio": 0.98
+              }
+            ],
+            "blocks": [
+              {
+                "index": -1,
+                "tag": "incumbent",
+                "median_us": 100.0,
+                "replays": 5
+              },
+              {
+                "index": 0,
+                "tag": "A",
+                "median_us": 97.0,
+                "replays": 5
+              },
+              {
+                "index": 1,
+                "tag": "B",
+                "median_us": 98.0,
+                "replays": 5
+              },
+              {
+                "index": -1,
+                "tag": "incumbent",
+                "median_us": 100.0,
+                "replays": 5
+              },
+              {
+                "index": 1,
+                "tag": "B",
+                "median_us": 98.0,
+                "replays": 5
+              },
+              {
+                "index": 0,
+                "tag": "A",
+                "median_us": 97.0,
+                "replays": 5
+              },
+              {
+                "index": -1,
+                "tag": "incumbent",
+                "median_us": 100.0,
+                "replays": 5
+              }
+            ],
+            "status": "confirmed",
+            "decision": "rq:A",
+            "reason": "both-confirmation-brackets-clear-unchanged-margin",
+            "selection_metric": "lowest-worst-of-two-local-conservative-bracket-ratios",
+            "elapsed_s": 0.875,
+            "cumulative_s": 0.875
+          },
+          {
+            "layer": "arbitrary",
+            "m": 32,
+            "screen_pick": "rq:A",
+            "screen_us": 90.0,
+            "incumbent": "incumbent",
+            "candidates": [
+              {
+                "tag": "A",
+                "screen_us": 90.0,
+                "confirmation_medians_us": [
+                  97.0,
+                  97.0
+                ],
+                "bracket_ratios": [
+                  0.97,
+                  0.97
+                ],
+                "worst_bracket_ratio": 0.97
+              },
+              {
+                "tag": "B",
+                "screen_us": 91.0,
+                "confirmation_medians_us": [
+                  98.0,
+                  98.0
+                ],
+                "bracket_ratios": [
+                  0.98,
+                  0.98
+                ],
+                "worst_bracket_ratio": 0.98
+              }
+            ],
+            "blocks": [
+              {
+                "index": -1,
+                "tag": "incumbent",
+                "median_us": 100.0,
+                "replays": 5
+              },
+              {
+                "index": 0,
+                "tag": "A",
+                "median_us": 97.0,
+                "replays": 5
+              },
+              {
+                "index": 1,
+                "tag": "B",
+                "median_us": 98.0,
+                "replays": 5
+              },
+              {
+                "index": -1,
+                "tag": "incumbent",
+                "median_us": 100.0,
+                "replays": 5
+              },
+              {
+                "index": 1,
+                "tag": "B",
+                "median_us": 98.0,
+                "replays": 5
+              },
+              {
+                "index": 0,
+                "tag": "A",
+                "median_us": 97.0,
+                "replays": 5
+              },
+              {
+                "index": -1,
+                "tag": "incumbent",
+                "median_us": 100.0,
+                "replays": 5
+              }
+            ],
+            "status": "confirmed",
+            "decision": "rq:A",
+            "reason": "both-confirmation-brackets-clear-unchanged-margin",
+            "selection_metric": "lowest-worst-of-two-local-conservative-bracket-ratios",
+            "elapsed_s": 0.875,
+            "cumulative_s": 1.75
+          },
+          {
+            "layer": "arbitrary",
+            "m": 32,
+            "screen_pick": "rq:A",
+            "screen_us": 90.0,
+            "incumbent": "incumbent",
+            "candidates": [
+              {
+                "tag": "A",
+                "screen_us": 90.0
+              },
+              {
+                "tag": "B",
+                "screen_us": 91.0
+              }
+            ],
+            "blocks": [
+              {
+                "index": -1,
+                "tag": "incumbent",
+                "median_us": 100.0,
+                "replays": 5
+              },
+              {
+                "index": 0,
+                "tag": "A",
+                "median_us": 97.0,
+                "replays": 5
+              }
+            ],
+            "status": "skipped",
+            "decision": "rq:A",
+            "reason": "global-confirmation-budget-incomplete-retain-screen",
+            "elapsed_s": 0.25,
+            "cumulative_s": 2.0
+          }
+        ]
+      },
+      "monotonic_budget_survives_wallclock_rollback": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 97.0,
+            "replays": 5
+          },
+          {
+            "index": 1,
+            "tag": "B",
+            "median_us": 98.0,
+            "replays": 5
+          },
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "skipped",
+        "decision": "rq:A",
+        "reason": "global-confirmation-budget-incomplete-retain-screen",
+        "elapsed_s": 2.0,
+        "cumulative_s": 2.0
+      },
+      "empty_exception_message": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          },
+          {
+            "index": 0,
+            "tag": "A",
+            "median_us": 97.0,
+            "replays": 5
+          }
+        ],
+        "status": "error",
+        "decision": "incumbent",
+        "reason": "confirmation-error-retain-incumbent: RuntimeError",
+        "attempting_block": {
+          "index": 1,
+          "tag": "B"
+        },
+        "elapsed_s": 0.003,
+        "cumulative_s": 0.003
+      },
+      "launch_error": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "error",
+        "decision": "incumbent",
+        "reason": "confirmation-error-retain-incumbent: confirmation launch returned -6",
+        "attempting_block": {
+          "index": 0,
+          "tag": "A"
+        },
+        "elapsed_s": 0.001,
+        "cumulative_s": 0.001
+      },
+      "NaN": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "error",
+        "decision": "incumbent",
+        "reason": "confirmation-error-retain-incumbent: nonfinite/nonpositive confirmation timing",
+        "attempting_block": {
+          "index": 0,
+          "tag": "A"
+        },
+        "elapsed_s": 0.002,
+        "cumulative_s": 0.002
+      },
+      "infinite": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "error",
+        "decision": "incumbent",
+        "reason": "confirmation-error-retain-incumbent: nonfinite/nonpositive confirmation timing",
+        "attempting_block": {
+          "index": 0,
+          "tag": "A"
+        },
+        "elapsed_s": 0.002,
+        "cumulative_s": 0.002
+      },
+      "zero": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "error",
+        "decision": "incumbent",
+        "reason": "confirmation-error-retain-incumbent: nonfinite/nonpositive confirmation timing",
+        "attempting_block": {
+          "index": 0,
+          "tag": "A"
+        },
+        "elapsed_s": 0.002,
+        "cumulative_s": 0.002
+      },
+      "negative": {
+        "layer": "arbitrary",
+        "m": 32,
+        "screen_pick": "rq:A",
+        "screen_us": 90.0,
+        "incumbent": "incumbent",
+        "candidates": [
+          {
+            "tag": "A",
+            "screen_us": 90.0
+          },
+          {
+            "tag": "B",
+            "screen_us": 91.0
+          }
+        ],
+        "blocks": [
+          {
+            "index": -1,
+            "tag": "incumbent",
+            "median_us": 100.0,
+            "replays": 5
+          }
+        ],
+        "status": "error",
+        "decision": "incumbent",
+        "reason": "confirmation-error-retain-incumbent: nonfinite/nonpositive confirmation timing",
+        "attempting_block": {
+          "index": 0,
+          "tag": "A"
+        },
+        "elapsed_s": 0.002,
+        "cumulative_s": 0.002
+      }
+    },
+    "budget_limit": "Admission checked before each timing block; one in-flight 5replay block may cross allowance, no hard interrupt of original timing primitive"
+  },
+  "candidate_source_sha256": "8a13389137add37b6d363685bfec98a7c83d48704cab2a72444129efc0c5520a",
+  "production_imports": 0,
+  "CUDA_calls": 0,
+  "prepare_calls": 0,
+  "extension_builds": 0,
+  "performance": "UNMEASURED; confirmation can reject genuine gains or retain old noisy screen if budget incomplete; full-policy validation needed"
+}

@@ -1,0 +1,40 @@
+{
+  "family": "scalar_shared_X_loader_cursor",
+  "version_source": "0d0ef30a495de725139fd8a401ed0c7a239d0ef10e7c41a8b4f9a6c2d37c1737",
+  "attempt": "research.cursor.matchedgeometry.gpu.01",
+  "classification": "VALID_NO_GAIN",
+  "observed": "All validity gates pass. Some small matched paired medians favor cursor; all six matched conservative F1 point effects favor parent. No consistent actual-policy win.",
+  "evidence_ref": "proj_rsi/audits/cursor-matched-geometry-01/analysis.json",
+  "positive_observations_retained": {
+    "qkv32_ST5_paired_us": 0.09600026533007622,
+    "unpooler32_ST5_paired_us": 0.07999967783689499,
+    "unpooler32_ST6_paired_us": 0.11199899017810822,
+    "qkv32_actual_vs_RS32_paired_us": 0.2720002084970474,
+    "pooler32_actual_vs_RS32_F1_us": 0.06400048732757568,
+    "unpooler32_actual_vs_PW36_F1_us": 0.06400048732757568
+  },
+  "causal_scope": {
+    "fixed_pairs": "Same ST, KS, flags, shared allocation, block/resource pool and input fixtures; cursor source is the narrow edited variable. One timing batch does not resolve small effects.",
+    "actual_policies": "Freshly prepared policies select independently. QKV parentPW36ST5EARLY, RS32ST5noEARLY, cursorST6EARLY; its actual deltas confound cursor with stage/flags. Pooler/unpooler all selectST5EARLY at sameKS; still one prepare/batch.",
+    "not_proved": [
+      "No intrinsic instruction-cost attribution from removal of one UIMAD",
+      "No family-wide rejection",
+      "No official/current-leaderboard gain",
+      "No cold prepare-time claim from pre-JIT/_T0reset protocol"
+    ]
+  },
+  "failure_history": "Earlier blanket-zero counter failure was invalid setup caused by dormant persistent counters; this version preserves full dormant baselines and admits only source-bound active reset-zero paths. This terminal attempt passes; do not carry the earlier invalid setup into its classification.",
+  "proposed_next_test": {
+    "status": "PROPOSED_ONLY_NOT_QUEUED_NOT_AUTHORIZED_EXECUTED",
+    "question": "Do the small fixed-ST paired positives reproduce when F1 temporal order is reversed and fresh batches/prepares are independent?",
+    "smallest_design": "Reuse exact frozen parent/cursor kernels with full numerical/lifetime/JIT/counter gates; repeat matched ST5 QKV and ST5/ST6 unpooler with pooler retained as a negative control. Counterbalance which source is bracketed in F1 and retain all balanced paired rounds, immediate own-fixture final outputs and every negative observation. Include separately labeled actual current-leader policy; do not force a research geometry into production.",
+    "predictions": {
+      "supports": "Matched gains retain direction across independent batches and both bracketing orders while terminal validity holds; any actual current-policy win is independently demonstrated.",
+      "refutes": "Effects disappear/reverse across batches/orders or matched gains fail to beat actual current selected policy; preserve the measured result and narrow the hypothesis."
+    },
+    "attainable_gain": "UNKNOWN",
+    "score_value": "UNKNOWN; no extrapolation from these local microsecond differences",
+    "cost": "Root to review and bound before any GPU scheduling; no new GPU action made by reviewer",
+    "next_after_failure": "Inspect batch/order sensitivity and selected geometry before proposing a new immutable source; no automatic family ban."
+  }
+}

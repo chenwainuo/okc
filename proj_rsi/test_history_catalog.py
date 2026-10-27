@@ -22,7 +22,7 @@ class HistoryTests(unittest.TestCase):
   self.assertEqual(cat['submissions'][0]['job_id'],'23cecdef1bb54c9e')
   self.assertEqual(cat['submissions'][0]['candidate'],'r6-c12')
   self.assertEqual(cat['submissions'][0]['score_us'],3427.959139938749)
-  self.assertTrue(all(r['tests_passed']==r['tests']==9 for r in cat['submissions']))
+  self.assertTrue(all(r['tests_passed']==r['tests']==9 for r in cat['submissions'] if r['status']=='done' and r['passed'] is True))
  def test_failed_unarchived_checks_are_not_deleted_or_assigned_sources(self):
   rows=[r for r in self.catalog['all_official_jobs'] if r['passed'] is False]
   self.assertEqual(len(rows),5)
@@ -50,7 +50,7 @@ class HistoryTests(unittest.TestCase):
   self.assertTrue(any(p['layer']=='o' and p['m']==32 and p['selected'].startswith('rq:') for p in best['actual_picks']))
   self.assertNotIn('RTK_TMA_router128_256',best['compiled_or_available_features'])
   self.assertIn('RTK_TMA_router128_256',rows['e22a4b9d693d4902']['compiled_or_available_features'])
-  self.assertEqual(len(self.catalog['current_exact_source_components']),18)
+  self.assertEqual(len(self.catalog['current_exact_source_components']),20)
   self.assertEqual(len(self.catalog['current_exact_selected_routes']),30)
  def test_cursor_latest_valid_evidence_keeps_regressions_and_old_invalid_attempt(self):
   latest=self.catalog['cursor_v3_latest']
@@ -62,11 +62,12 @@ class HistoryTests(unittest.TestCase):
   self.assertEqual(row['score_tested_jobs'],[])
  def test_prospective_stacks_not_in_submission_table(self):
   candidates={r['candidate']:r for r in self.catalog['candidates']}
-  for name in ('pw37','pw38'):
-   self.assertFalse(candidates[name]['leaderboard_submitted'])
-   if name=='pw37':self.assertEqual(candidates[name]['official_jobs'],[])
-   else:self.assertIn('a3ed4ce5886a4415',candidates[name]['official_jobs'])
-   self.assertNotIn(name,{r['candidate'] for r in self.catalog['submissions']})
+  self.assertFalse(candidates['pw37']['leaderboard_submitted'])
+  self.assertEqual(candidates['pw37']['official_jobs'],[])
+  self.assertNotIn('pw37',{r['candidate'] for r in self.catalog['submissions']})
+  self.assertTrue(candidates['pw38']['leaderboard_submitted'])
+  self.assertIn('a3ed4ce5886a4415',candidates['pw38']['official_jobs'])
+  self.assertIn('a3f0ebf25a754c01',candidates['pw38']['official_jobs'])
   self.assertIn('optional_EH_bit16_no_cursor',candidates['pw38']['compiled_or_available_features'])
   self.assertNotIn('smallm_cursor',candidates['pw38']['compiled_or_available_features'])
  def test_small_new_parent_gains_and_actual_losses_preserved_not_shipped(self):
@@ -100,9 +101,29 @@ class HistoryTests(unittest.TestCase):
   self.assertEqual(len(row['actual_timed_profiles']),30)
   self.assertTrue(any('EH' in pick['selected'] for pick in row['actual_picks']))
   self.assertTrue(row['additional_release_attestations'])
-  self.assertEqual(self.catalog['authority']['best_job'],'fb548b5dc6f04696')
+  self.assertEqual(self.catalog['authority']['best_job'],'a3f0ebf25a754c01')
   self.assertIn('23cecdef1bb54c9e',{r['job_id'] for r in self.catalog['submissions']})
   self.assertGreaterEqual(len(self.catalog['all_official_jobs']),51)
+ def test_completed_scored_row_uses_own_result_and_verified_board_authority(self):
+  row=next(r for r in self.catalog['submissions'] if r['job_id']=='a3f0ebf25a754c01')
+  self.assertEqual(row['candidate'],'pw38');self.assertEqual(row['mode'],'run')
+  self.assertEqual(row['score_us'],3198.6175079817267)
+  self.assertNotEqual(row['score_us'],3193.637501792908)
+  self.assertEqual(row['tests'],9);self.assertEqual(len(row['actual_timed_profiles']),30)
+  self.assertEqual(self.catalog['authority']['source_sha256'],'29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e')
+  self.assertEqual(self.catalog['authority']['board_row']['rank'],108)
+  self.assertEqual(self.catalog['authority']['board_row']['attempts'],11)
+  self.assertEqual(len(self.catalog['submissions']),11);self.assertEqual(len(self.catalog['checks']),41)
+ def test_current_source_view_uses_scored_EH_flags_and_preserves_old_rs32_audit(self):
+  view=self.catalog['current_stack_view']
+  self.assertEqual(view['official_job_id'],'a3f0ebf25a754c01')
+  self.assertEqual(view['historical_rs32_job'],'fb548b5dc6f04696')
+  self.assertEqual(len(view['components']),20);self.assertEqual(len(view['routes']),30)
+  pooler=next(r for r in view['routes'] if r['layer']=='pooler' and r['m']==128)
+  self.assertTrue(pooler['EH_selected']);self.assertEqual(pooler['RQ_flags'],65538)
+  self.assertEqual(pooler['actual_prepare_pick']['selected'],'rq:s4s5zEH')
+  self.assertTrue(all(binding['source_sha256']==view['source']['sha256'] for r in view['routes'] for binding in r['bindings']))
+  self.assertEqual(self.catalog['historical_rs32_source_map']['path'],'proj_rsi/audits/current-leaderboard-stack-source.json')
  def test_server_content_hash_not_claimed_equal_to_local_sha(self):
   row=next(r for r in self.catalog['submissions'] if r['candidate']=='rs32')
   self.assertNotEqual(row['source']['sha256'],row['api_content_hash'])
@@ -125,6 +146,7 @@ class HistoryTests(unittest.TestCase):
    root=Path(directory)
    _,config=resolve_sources(ROOT)
    dependencies=set(INPUTS.values())|{'proj_rsi/history_sources.json'}|{r['path'] for r in config['jobs_snapshots']}
+   dependencies.update(r['path'] for r in config.get('board_snapshots',[]))
    for association in config['job_source_associations'].values():dependencies.update(association[k]['path'] for k in ('source','attestation'));dependencies.update(r['path'] for r in association.get('additional_attestations',[]))
    for name in dependencies:
     dest=root/name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/name,dest)

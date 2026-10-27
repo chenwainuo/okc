@@ -1,0 +1,2088 @@
+{
+  "disposition": "VALID_REGRESSION",
+  "attempt_status": "VALID_LOCAL_COMPARISON_REVIEW_REQUIRED_NO_OFFICIAL_GAIN",
+  "scope": {
+    "layer": "qkv_gate",
+    "m": 128,
+    "n": 2304,
+    "k": 8192
+  },
+  "inputs": {
+    "results/proj-rsi/scheduler/artifacts/research.qkv.split4.harness.gpu.01/collection-1793077707233847694/inventory.json": "b77b5d3fa89591557febb13e09ac2c386bd50355ea4ce06ae9d089fd1e577e5c",
+    "results/proj-rsi/scheduler/artifacts/research.qkv.split4.harness.gpu.01/collection-1793077707233847694/logs/scheduler/qkv-runtime-01/run/result.json": "5f80b1686cca6f1c1d804a4216d552382ec6f6f66be3321ab0a64a9b0c56068a",
+    "results/proj-rsi/scheduler/artifacts/research.qkv.split4.harness.gpu.01/collection-1793077707233847694/logs/scheduler/qkv-runtime-01/run/raw.jsonl": "83f40239ebdb632b4ca8333cce6907981afc5143d3de76d3b0baf897edd3a913",
+    "results/proj-rsi/scheduler/artifacts/research.qkv.split4.harness.gpu.01/collection-1793077707233847694/logs/scheduler/qkv-runtime-01/run/candidate.actual.so": "948650531553f68b8c984df0c22543dc3aa7a7a05c07deb3883497c24eda6933",
+    "results/proj-rsi/scheduler/artifacts/research.qkv.split4.harness.gpu.01/collection-1793077707233847694/logs/scheduler/qkv-runtime-01/run/candidate.jit.sass": "328f274a9f77dd20705262f0953399ce5e557933c5d8bfbdad9aa0334f764ecf",
+    "proj_rsi/audits/qkv-runtime-01/analysis.py": "c5e2897d31b3eea54a00700c329e232da2ffe85e24141de83766e16e3b238461"
+  },
+  "terminal_exit": 0,
+  "driver_wall_seconds": 144.90039587020874,
+  "phase_elapsed_seconds": {
+    "candidate_JIT_before_any_candidate_math": 43.9887809753418,
+    "real_task_weights_and_full_actual_prepares": 98.99887156486511,
+    "actual_task_W_lossless_pack_CSR_and_pipeline_ownership": 0.0527653694152832,
+    "all8192_basis_and_FP64_normal_outliers_all_three_policies": 0.15233254432678223,
+    "fixed_actual_serving_graphs": 0.706946611404419,
+    "full_pipeline_F1_and_balanced_pairs": 0.11047697067260742,
+    "profiles_only_after_both_strict_terminal_gates": 0.8834261894226074
+  },
+  "cleanup": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "router m=8 rk-s16w8z 7.78\nBAKE router m=8 rk-s16w8x 7.71\nBAKE router m=8 rk-s32x 7.84\nPICK router m=8 rk-s16w8z 7.78\nPROBE p1alt router m=8 rk-s16w8z 7.71 r6=8.74 delta=-1.02\nBAKE router m=16 r6 9.02\nBAKE router m=16 rk-s8z 8.35\nBAKE router m=16 rk-s16w8z 8.06\nBAKE router m=16 rk-s16w8x 7.90\nBAKE router m=16 rk-s32x 8.13\nPICK router m=16 rk-s16w8x 7.90\nPROBE p1alt router m=16 rk-s16w8x 7.94 r6=8.90 delta=-0.96\nBAKE router m=32 r6 9.66\nBAKE router m=32 rk-s8z 8.35\nBAKE router m=32 rk-s16w8z 8.45\nPICK router m=32 rk-s8z 8.35\nPROBE p1alt router m=32 rk-s8z 8.26 r6=9.44 delta=-1.18\nPREP rq32 thread ready at 0s\nPREP rq32 bake starts at 38s\nBAKE pooler m=32 rq:t32s5hze-k4 22.08 (ok 3.1e-03) at 38s\nBAKE pooler m=32 rq:t32s6hze-k4 22.05 (ok 3.1e-03) at 38s\nBAKE pooler m=32 rq:t32s5hz-k4 21.95 (ok 3.1e-03) at 38s\nBAKE pooler m=32 r6 23.17 (before variants 23.65, after variants 23.17) at 38s\nPICK pooler m=32 rq:t32s5hz-k4 21.95\nBAKE pooler m=16 rq:t16s5hze-k4 21.76 (ok 3.1e-03) at 38s\nBAKE pooler m=16 rq:t16s6hze-k4 21.95 (ok 3.2e-03) at 38s\nBAKE pooler m=16 rq:t16s5hz-k4 21.89 (ok 3.1e-03) at 38s\nBAKE pooler m=16 r6 21.60 (before variants 21.63, after variants 21.60) at 39s\nPICK pooler m=16 r6 21.60\nBAKE qkv_gate m=32 rq:t32s5hze-k6 15.01 (ok 3.6e-03) at 39s\nBAKE qkv_gate m=32 rq:t32s5hze-k7 14.98 (ok 3.8e-03) at 39s\nBAKE qkv_gate m=32 rq:t32s5hz-k6 15.14 (ok 3.6e-03) at 39s\nBAKE qkv_gate m=32 rq:t32s6hze-k6 14.94 (ok 3.7e-03) at 39s\nBAKE qkv_gate m=32 r6 18.27 (before variants 18.34, after variants 18.27) at 39s\nPICK qkv_gate m=32 rq:t32s6hze-k6 14.94\nBAKE qkv_gate m=16 rq:t16s5hze-k6 15.01 (ok 3.6e-03) at 39s\nBAKE qkv_gate m=16 rq:t16s5ze-k6 15.10 (ok 3.6e-03) at 39s\nBAKE qkv_gate m=16 rq:t16s5hze-k7 14.98 (ok 3.7e-03) at 39s\nBAKE qkv_gate m=16 rq:t16s5ze-k7 15.14 (ok 3.8e-03) at 39s\nBAKE qkv_gate m=16 r6 14.82 (before variants 14.82, after variants 14.88) at 39s\nPICK qkv_gate m=16 r6 14.82\nBAKE unpooler m=32 rq:t32s5hze-k2 21.60 (ok 2.4e-03) at 40s\nBAKE unpooler m=32 rq:t32s6hze-k2 22.05 (ok 2.4e-03) at 40s\nBAKE unpooler m=32 rq:t32s6hz-k2 21.92 (ok 2.5e-03) at 40s\nBAKE unpooler m=32 r6 23.23 (before variants 23.81, after variants 23.23) at 40s\nPICK unpooler m=32 rq:t32s5hze-k2 21.60\nBAKE unpooler m=16 rq:t16s5hze-k2 21.89 (ok 2.4e-03) at 40s\nBAKE unpooler m=16 rq:t16s6hze-k2 21.70 (ok 2.4e-03) at 40s\nBAKE unpooler m=16 rq:t16s5hz-k2 21.50 (ok 2.4e-03) at 40s\nBAKE unpooler m=16 r6 21.76 (before variants 22.02, after variants 21.76) at 40s\nPICK unpooler m=16 rq:t16s5hz-k2 21.50\nBAKE o m=32 rq:t32s5hze-k2 9.98 (ok 2.4e-03) at 40s\nBAKE o m=32 rq:t32s6hze-k2 9.95 (ok 2.4e-03) at 40s\nBAKE o m=32 rq:t32s5ze-k2 9.82 (ok 2.4e-03) at 40s\nBAKE o m=32 r6 9.86 (before variants 9.86, after variants 9.92) at 40s\nPICK o m=32 r6 9.86\nBAKE o m=16 rq:t16s5hze-k2 9.89 (ok 2.5e-03) at 40s\nBAKE o m=16 rq:t16s6hze-k2 9.86 (ok 2.5e-03) at 40s\nBAKE o m=16 rq:t16s5ze-k2 9.79 (ok 2.4e-03) at 40s\nBAKE o m=16 r6 9.06 (before variants 9.06, after variants 9.06) at 40s\nPICK o m=16 r6 9.06\nBAKE o m=128 rq:h128s8e-k1 11.10 (ok 1.7e-03) at 40s\nBAKE o m=128 rq:h128s5-k1 11.23 (ok 1.7e-03) at 41s\nBAKE o m=128 r6 11.20 (before variants 11.20, after variants 11.23) at 41s\nPICK o m=128 r6 11.20\nPREP rw compiled in 0s\nBAKE router m=128 r6 16.35\nBAKE router m=128 rp64k32s4 13.50\nBAKE router m=128 rw64k32s8 12.58\nBAKE router m=128 rw64k32s4z 11.94\nBAKE router m=128 rw64k32s8z 11.68\nBAKE router m=128 rw64k32r3x2 12.83\nBAKE router m=128 rw64k32r3x2z 12.19\nPROBE rszero router m=128 3.71\nPICK router m=128 rw64k32s8z 11.68\nBAKE router m=256 r6 15.07\nBAKE router m=256 rwv64k64s4x2 17.54\nBAKE router m=256 rw64k32r3x2 15.94\nBAKE router m=256 rw64k32r3x2z 14.98\nPICK router m=256 r6 15.07\nPREP done in 41s\nactual_task_W_lossless_pack_CSR_and_pipeline_ownership\nall8192_basis_and_FP64_normal_outliers_all_three_policies\nfixed_actual_serving_graphs\nfull_pipeline_F1_and_balanced_pairs\nprofiles_only_after_both_strict_terminal_gates\nTRIAL_EXIT okc-proj-qkv-runtime-01 0\n2026-10-27T05:07:53Z\n",
+    "terminal_exit": 0
+  },
+  "inventory_files_verified": 12,
+  "source_pins_verified": 46,
+  "actual_SO_and_JIT": {
+    "rq_qkv_g8_sk4": {
+      "instructions": 872,
+      "actual_SO_collected_SASS_and_canonical": "EXACT",
+      "physical_A_D_fences": {
+        "status": "PASS_PHYSICAL_ASYNC_A_AND_FENCE_COVERAGE",
+        "groups_per_static_loop": 2,
+        "MMA_per_group": [
+          8,
+          8
+        ],
+        "A_register_sets": [
+          [
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87
+          ],
+          [
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119
+          ]
+        ],
+        "D_registers": [
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55
+        ],
+        "loop_PC_range": [
+          3360,
+          6832
+        ],
+        "iterations": 2,
+        "groups_checked": 4,
+        "fences_checked": 4,
+        "initial_vector_loads": 16,
+        "all_MMA_fence_wait_operations_unpredicated": true,
+        "payload_writes_checked": 32,
+        "outlined_instruction_count": 16,
+        "outlined_entry_PCs": [
+          12784,
+          12848,
+          13152,
+          13216
+        ],
+        "retirement_events": [
+          {
+            "iteration": 0,
+            "PC": 4592,
+            "retired_groups": 0
+          },
+          {
+            "iteration": 0,
+            "PC": 6416,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 4592,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 6416,
+            "retired_groups": 1
+          }
+        ],
+        "tail": "Final wait0 precedes first generic A/D epilogue access",
+        "limits": "Fixed main-loop CFG, all predicate writes conservatively executed. Source proofs retain exact XP indices/B descriptors. No wait-mask/latency or general ISA verifier claim."
+      }
+    },
+    "rx_pack": {
+      "instructions": 56,
+      "actual_SO_collected_SASS_and_canonical": "EXACT"
+    },
+    "qkv_reduce": {
+      "instructions": 40,
+      "actual_SO_collected_SASS_and_canonical": "EXACT"
+    }
+  },
+  "live_resources": {
+    "source_sha256": "29f7f11bdf3246e66b9419fce4003cb27c22a4cf263a3d1f15c0f3770371f1a2",
+    "so_sha256": "948650531553f68b8c984df0c22543dc3aa7a7a05c07deb3883497c24eda6933",
+    "sass_sha256": "328f274a9f77dd20705262f0953399ce5e557933c5d8bfbdad9aa0334f764ecf",
+    "attrs": {
+      "pack": {
+        "0": 22,
+        "1": 0,
+        "2": 0,
+        "3": 1024,
+        "4": 49152
+      },
+      "main": {
+        "0": 122,
+        "1": 0,
+        "2": 0,
+        "3": 512,
+        "4": 49152
+      },
+      "reduce": {
+        "0": 16,
+        "1": 0,
+        "2": 0,
+        "3": 1024,
+        "4": 49152
+      }
+    },
+    "occupancy_after_optin": 1,
+    "physical_A_D_fence_gate": "PASS",
+    "actual_instruction_identity": "all three kernels equal frozen offline host SASS"
+  },
+  "actual_prepared_picks": {
+    "pw36": {
+      "counter_contract": "RQ",
+      "selected_rq": {
+        "i": 1,
+        "KS": 7,
+        "tab": 909522486,
+        "n": 2304
+      }
+    },
+    "rs32": {
+      "counter_contract": "RQ",
+      "selected_rq": {
+        "i": 1,
+        "KS": 7,
+        "tab": 909522486,
+        "n": 2304
+      }
+    }
+  },
+  "counts": {
+    "raw_calls": 210,
+    "warmup": 15,
+    "F1": 105,
+    "paired_calls": 90,
+    "paired_rounds": 30,
+    "strict_terminal_oracles": 6,
+    "basis_FP64_task_policies": 3,
+    "basis_columns_per_policy": 8192,
+    "task_normal_outlier_cases": 6,
+    "mutation_oracles": 45,
+    "counter_contexts": 54,
+    "counter_records": 2646
+  },
+  "counters": {
+    "contract_counts": {
+      "dormant_unchanged": 2430,
+      "reset0": 216
+    },
+    "dormant_nonzero_names": [
+      "pw36/p1cnt/82",
+      "pw36/p1cnt/83",
+      "pw36/p1cnt/84",
+      "pw36/p1cnt/85",
+      "pw36/p1cnt/86",
+      "pw36/p1cnt/87",
+      "pw36/p1cnt/88",
+      "pw36/p1cnt/89",
+      "pw36/p1cnt/90",
+      "pw36/p1cnt/91",
+      "pw36/p1cnt/92",
+      "pw36/p1cnt/93",
+      "pw36/p1cnt/94",
+      "pw36/rw_cnt",
+      "rs32/p1cnt/82",
+      "rs32/p1cnt/83",
+      "rs32/p1cnt/84",
+      "rs32/p1cnt/85",
+      "rs32/p1cnt/86",
+      "rs32/p1cnt/87",
+      "rs32/p1cnt/88",
+      "rs32/p1cnt/89",
+      "rs32/p1cnt/90",
+      "rs32/p1cnt/91",
+      "rs32/p1cnt/92",
+      "rs32/p1cnt/93",
+      "rs32/p1cnt/94",
+      "rs32/rw_cnt"
+    ],
+    "active_alias_contract": "All storage aliases of selected QKV RQ counter reset0; dormant values byte/digest unchanged; no blanket-zero rule"
+  },
+  "numeric_records": [
+    {
+      "label": "pw36",
+      "all8192_basis_exact": true,
+      "dist": "normal",
+      "relative_L2": 0.0037055406746310344,
+      "max_row": 0.004041957435473006,
+      "task": "relative L2 error 4.033e-03 (worst row 4.433e-03); 16 probe rows exact to 0.0e+00"
+    },
+    {
+      "label": "pw36",
+      "all8192_basis_exact": true,
+      "dist": "outliers",
+      "relative_L2": 0.003779148316519598,
+      "max_row": 0.004090177845417437,
+      "task": "relative L2 error 4.102e-03 (worst row 4.418e-03); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "label": "rs32",
+      "all8192_basis_exact": true,
+      "dist": "normal",
+      "relative_L2": 0.0037025203818724945,
+      "max_row": 0.00399870890659387,
+      "task": "relative L2 error 4.028e-03 (worst row 4.408e-03); 16 probe rows exact to 0.0e+00"
+    },
+    {
+      "label": "rs32",
+      "all8192_basis_exact": true,
+      "dist": "outliers",
+      "relative_L2": 0.0037851664324442826,
+      "max_row": 0.004034812171114811,
+      "task": "relative L2 error 4.116e-03 (worst row 4.418e-03); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "label": "new",
+      "all8192_basis_exact": true,
+      "dist": "normal",
+      "relative_L2": 0.0016061119145020202,
+      "max_row": 0.001737940745935201,
+      "task": "relative L2 error 1.157e-04 (worst row 3.772e-04); 16 probe rows exact to 0.0e+00"
+    },
+    {
+      "label": "new",
+      "all8192_basis_exact": true,
+      "dist": "outliers",
+      "relative_L2": 0.0016503903796518116,
+      "max_row": 0.0017272570239719722,
+      "task": "relative L2 error 1.023e-04 (worst row 3.002e-04); 20 probe rows exact to 0.0e+00"
+    }
+  ],
+  "comparison": {
+    "pw36": {
+      "F1_gain_us": -22.84800074994564,
+      "paired_gain": {
+        "n": 30,
+        "median": -22.84800074994564,
+        "p25": -23.15999986603856,
+        "p75": -22.543998435139656,
+        "min": -24.000002071261406,
+        "max": -21.376000717282295
+      },
+      "paired_all_gains_us": [
+        -23.103998973965645,
+        -23.136001080274582,
+        -23.424001410603523,
+        -22.591998800635338,
+        -22.272000089287758,
+        -23.29600229859352,
+        -22.048000246286392,
+        -22.752000018954277,
+        -22.815998643636703,
+        -23.200001567602158,
+        -24.000002071261406,
+        -22.88000099360943,
+        -22.624000906944275,
+        -23.296000435948372,
+        -23.04000034928322,
+        -22.527998313307762,
+        -22.304002195596695,
+        -22.943999618291855,
+        -21.376000717282295,
+        -23.16799946129322,
+        -23.072000592947006,
+        -23.423999547958374,
+        -22.592000663280487,
+        -22.944001480937004,
+        -21.535998210310936,
+        -22.655999287962914,
+        -23.16799946129322,
+        -22.816000506281853,
+        -22.048000246286392,
+        -22.367998957633972
+      ],
+      "paired_control_over_new_ratio": 0.43231229011938443,
+      "paired_slowdown_new_over_control_median": 2.313143076348026,
+      "wins": 0,
+      "ties": 0,
+      "losses": 30,
+      "control_before_new": {
+        "n": 15,
+        "median": -23.04000034928322,
+        "p25": -23.1520002707839,
+        "p75": -22.640000097453594,
+        "min": -23.424001410603523,
+        "max": -21.376000717282295
+      },
+      "new_before_control": {
+        "n": 15,
+        "median": -22.816000506281853,
+        "p25": -23.07200152426958,
+        "p75": -22.447998635470867,
+        "min": -24.000002071261406,
+        "max": -22.048000246286392
+      },
+      "all_six_order_strata": {
+        "pw36,rs32,new": {
+          "n": 5,
+          "median": -22.048000246286392,
+          "p25": -22.624000906944275,
+          "p75": -21.535998210310936,
+          "min": -23.103998973965645,
+          "max": -21.376000717282295
+        },
+        "pw36,new,rs32": {
+          "n": 5,
+          "median": -23.136001080274582,
+          "p25": -23.16799946129322,
+          "p75": -22.752000018954277,
+          "min": -23.296000435948372,
+          "max": -22.655999287962914
+        },
+        "rs32,pw36,new": {
+          "n": 5,
+          "median": -23.072000592947006,
+          "p25": -23.16799946129322,
+          "p75": -23.04000034928322,
+          "min": -23.424001410603523,
+          "max": -22.815998643636703
+        },
+        "rs32,new,pw36": {
+          "n": 5,
+          "median": -22.816000506281853,
+          "p25": -23.200001567602158,
+          "p75": -22.591998800635338,
+          "min": -23.423999547958374,
+          "max": -22.527998313307762
+        },
+        "new,pw36,rs32": {
+          "n": 5,
+          "median": -22.304002195596695,
+          "p25": -22.592000663280487,
+          "p75": -22.272000089287758,
+          "min": -24.000002071261406,
+          "max": -22.048000246286392
+        },
+        "new,rs32,pw36": {
+          "n": 5,
+          "median": -22.943999618291855,
+          "p25": -22.944001480937004,
+          "p75": -22.88000099360943,
+          "min": -23.29600229859352,
+          "max": -22.367998957633972
+        }
+      }
+    },
+    "rs32": {
+      "F1_gain_us": -23.136001080274582,
+      "paired_gain": {
+        "n": 30,
+        "median": -23.184001445770264,
+        "p25": -23.53600040078163,
+        "p75": -22.776001133024693,
+        "min": -24.160001426935196,
+        "max": -21.663999184966087
+      },
+      "paired_all_gains_us": [
+        -23.871999233961105,
+        -23.840000852942467,
+        -23.45600165426731,
+        -22.975999861955643,
+        -23.64800125360489,
+        -22.912001237273216,
+        -23.48800003528595,
+        -22.84799888730049,
+        -22.495999932289124,
+        -23.231999948620796,
+        -24.160001426935196,
+        -23.200001567602158,
+        -22.752001881599426,
+        -23.712001740932465,
+        -22.367998957633972,
+        -23.00799824297428,
+        -23.840000852942467,
+        -23.32800067961216,
+        -22.52800203859806,
+        -23.072000592947006,
+        -23.16800132393837,
+        -23.423999547958374,
+        -23.744001984596252,
+        -23.32800067961216,
+        -22.591998800635338,
+        -22.752000018954277,
+        -21.663999184966087,
+        -22.752001881599426,
+        -23.552000522613525,
+        -23.135999217629433
+      ],
+      "paired_control_over_new_ratio": 0.4240241537305588,
+      "paired_slowdown_new_over_control_median": 2.3583576980288368,
+      "wins": 0,
+      "ties": 0,
+      "losses": 30,
+      "control_before_new": {
+        "n": 15,
+        "median": -22.975999861955643,
+        "p25": -23.327999748289585,
+        "p75": -22.5600004196167,
+        "min": -23.871999233961105,
+        "max": -21.663999184966087
+      },
+      "new_before_control": {
+        "n": 15,
+        "median": -23.32800067961216,
+        "p25": -23.72800186276436,
+        "p75": -23.10399990528822,
+        "min": -24.160001426935196,
+        "max": -22.752000018954277
+      },
+      "all_six_order_strata": {
+        "pw36,rs32,new": {
+          "n": 5,
+          "median": -22.752001881599426,
+          "p25": -23.48800003528595,
+          "p75": -22.591998800635338,
+          "min": -23.871999233961105,
+          "max": -22.52800203859806
+        },
+        "pw36,new,rs32": {
+          "n": 5,
+          "median": -23.072000592947006,
+          "p25": -23.712001740932465,
+          "p75": -22.84799888730049,
+          "min": -23.840000852942467,
+          "max": -22.752000018954277
+        },
+        "rs32,pw36,new": {
+          "n": 5,
+          "median": -22.495999932289124,
+          "p25": -23.16800132393837,
+          "p75": -22.367998957633972,
+          "min": -23.45600165426731,
+          "max": -21.663999184966087
+        },
+        "rs32,new,pw36": {
+          "n": 5,
+          "median": -23.00799824297428,
+          "p25": -23.231999948620796,
+          "p75": -22.975999861955643,
+          "min": -23.423999547958374,
+          "max": -22.752001881599426
+        },
+        "new,pw36,rs32": {
+          "n": 5,
+          "median": -23.744001984596252,
+          "p25": -23.840000852942467,
+          "p75": -23.64800125360489,
+          "min": -24.160001426935196,
+          "max": -23.552000522613525
+        },
+        "new,rs32,pw36": {
+          "n": 5,
+          "median": -23.200001567602158,
+          "p25": -23.32800067961216,
+          "p75": -23.135999217629433,
+          "min": -23.32800067961216,
+          "max": -22.912001237273216
+        }
+      }
+    }
+  },
+  "F1_block_medians_us": {
+    "pw36_before": 17.44000054895878,
+    "rs32_before": 17.152000218629837,
+    "new": 40.28800129890442,
+    "rs32_after": 17.152000218629837,
+    "pw36_after": 17.44000054895878
+  },
+  "paired_policy_medians_us": {
+    "pw36": 17.40800030529499,
+    "rs32": 17.08799973130226,
+    "new": 40.28800129890442
+  },
+  "logical_request_model": {
+    "candidate_CTAs": 144,
+    "selected_control_CTAs": 126,
+    "candidate_X_main_bytes": 75497472,
+    "control_X_TMA_bytes": 37748736,
+    "candidate_pack_read_bytes": 2097152,
+    "candidate_pack_write_bytes": 2097152,
+    "candidate_FP32_partial_write_bytes": 4718592,
+    "candidate_FP32_reduce_read_bytes": 4718592,
+    "scope": "Logical global payload/request model for frozen geometry, excluding metadata and cache response; not actual DRAM bytes or timing"
+  },
+  "all_raw_calls": [
+    {
+      "label": "pw36",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 20.031999796628952,
+      "index": 0
+    },
+    {
+      "label": "pw36",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 17.59999990463257,
+      "index": 1
+    },
+    {
+      "label": "pw36",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 17.44000054895878,
+      "index": 2
+    },
+    {
+      "label": "pw36",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 18.464000895619392,
+      "index": 3
+    },
+    {
+      "label": "pw36",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 17.11999997496605,
+      "index": 4
+    },
+    {
+      "label": "rs32",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 17.88800023496151,
+      "index": 5
+    },
+    {
+      "label": "rs32",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 17.535999417304993,
+      "index": 6
+    },
+    {
+      "label": "rs32",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 16.704000532627106,
+      "index": 7
+    },
+    {
+      "label": "rs32",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 17.184000462293625,
+      "index": 8
+    },
+    {
+      "label": "rs32",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 17.632000148296356,
+      "index": 9
+    },
+    {
+      "label": "new",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 40.73600098490715,
+      "index": 10
+    },
+    {
+      "label": "new",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 39.744000881910324,
+      "index": 11
+    },
+    {
+      "label": "new",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 40.22400081157684,
+      "index": 12
+    },
+    {
+      "label": "new",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 40.22400081157684,
+      "index": 13
+    },
+    {
+      "label": "new",
+      "input_seed": 719999,
+      "mode": "warmup",
+      "us": 39.903998374938965,
+      "index": 14
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720000,
+      "mode": "F1",
+      "us": 17.11999997496605,
+      "index": 15
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720001,
+      "mode": "F1",
+      "us": 17.696000635623932,
+      "index": 16
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720002,
+      "mode": "F1",
+      "us": 17.376000061631203,
+      "index": 17
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720003,
+      "mode": "F1",
+      "us": 17.472000792622566,
+      "index": 18
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720004,
+      "mode": "F1",
+      "us": 17.343999817967415,
+      "index": 19
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720005,
+      "mode": "F1",
+      "us": 17.472000792622566,
+      "index": 20
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720006,
+      "mode": "F1",
+      "us": 17.24799908697605,
+      "index": 21
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720007,
+      "mode": "F1",
+      "us": 18.52799952030182,
+      "index": 22
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720008,
+      "mode": "F1",
+      "us": 17.664000391960144,
+      "index": 23
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720009,
+      "mode": "F1",
+      "us": 17.27999933063984,
+      "index": 24
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720010,
+      "mode": "F1",
+      "us": 17.343999817967415,
+      "index": 25
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720011,
+      "mode": "F1",
+      "us": 17.216000705957413,
+      "index": 26
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720012,
+      "mode": "F1",
+      "us": 17.632000148296356,
+      "index": 27
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720013,
+      "mode": "F1",
+      "us": 17.11999997496605,
+      "index": 28
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720014,
+      "mode": "F1",
+      "us": 17.055999487638474,
+      "index": 29
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720015,
+      "mode": "F1",
+      "us": 17.44000054895878,
+      "index": 30
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720016,
+      "mode": "F1",
+      "us": 17.472000792622566,
+      "index": 31
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720017,
+      "mode": "F1",
+      "us": 18.592000007629395,
+      "index": 32
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720018,
+      "mode": "F1",
+      "us": 17.632000148296356,
+      "index": 33
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720019,
+      "mode": "F1",
+      "us": 17.696000635623932,
+      "index": 34
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720020,
+      "mode": "F1",
+      "us": 17.311999574303627,
+      "index": 35
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720021,
+      "mode": "F1",
+      "us": 17.023999243974686,
+      "index": 36
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720022,
+      "mode": "F1",
+      "us": 18.17600056529045,
+      "index": 37
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720023,
+      "mode": "F1",
+      "us": 17.24799908697605,
+      "index": 38
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720024,
+      "mode": "F1",
+      "us": 17.632000148296356,
+      "index": 39
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720025,
+      "mode": "F1",
+      "us": 16.96000061929226,
+      "index": 40
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720026,
+      "mode": "F1",
+      "us": 16.896000131964684,
+      "index": 41
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720027,
+      "mode": "F1",
+      "us": 16.863999888300896,
+      "index": 42
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720028,
+      "mode": "F1",
+      "us": 16.896000131964684,
+      "index": 43
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720029,
+      "mode": "F1",
+      "us": 16.79999940097332,
+      "index": 44
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720030,
+      "mode": "F1",
+      "us": 17.983999103307724,
+      "index": 45
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720031,
+      "mode": "F1",
+      "us": 16.831999644637108,
+      "index": 46
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720032,
+      "mode": "F1",
+      "us": 17.535999417304993,
+      "index": 47
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720033,
+      "mode": "F1",
+      "us": 17.24799908697605,
+      "index": 48
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720034,
+      "mode": "F1",
+      "us": 17.472000792622566,
+      "index": 49
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720035,
+      "mode": "F1",
+      "us": 17.216000705957413,
+      "index": 50
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720036,
+      "mode": "F1",
+      "us": 16.992000862956047,
+      "index": 51
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720037,
+      "mode": "F1",
+      "us": 17.823999747633934,
+      "index": 52
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720038,
+      "mode": "F1",
+      "us": 17.472000792622566,
+      "index": 53
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720039,
+      "mode": "F1",
+      "us": 17.152000218629837,
+      "index": 54
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720040,
+      "mode": "F1",
+      "us": 16.79999940097332,
+      "index": 55
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720041,
+      "mode": "F1",
+      "us": 16.863999888300896,
+      "index": 56
+    },
+    {
+      "label": "new",
+      "input_seed": 720042,
+      "mode": "F1",
+      "us": 40.28800129890442,
+      "index": 57
+    },
+    {
+      "label": "new",
+      "input_seed": 720043,
+      "mode": "F1",
+      "us": 40.863998234272,
+      "index": 58
+    },
+    {
+      "label": "new",
+      "input_seed": 720044,
+      "mode": "F1",
+      "us": 40.991999208927155,
+      "index": 59
+    },
+    {
+      "label": "new",
+      "input_seed": 720045,
+      "mode": "F1",
+      "us": 40.063999593257904,
+      "index": 60
+    },
+    {
+      "label": "new",
+      "input_seed": 720046,
+      "mode": "F1",
+      "us": 40.352001786231995,
+      "index": 61
+    },
+    {
+      "label": "new",
+      "input_seed": 720047,
+      "mode": "F1",
+      "us": 39.872001856565475,
+      "index": 62
+    },
+    {
+      "label": "new",
+      "input_seed": 720048,
+      "mode": "F1",
+      "us": 39.99999910593033,
+      "index": 63
+    },
+    {
+      "label": "new",
+      "input_seed": 720049,
+      "mode": "F1",
+      "us": 40.44799879193306,
+      "index": 64
+    },
+    {
+      "label": "new",
+      "input_seed": 720050,
+      "mode": "F1",
+      "us": 39.744000881910324,
+      "index": 65
+    },
+    {
+      "label": "new",
+      "input_seed": 720051,
+      "mode": "F1",
+      "us": 40.383998304605484,
+      "index": 66
+    },
+    {
+      "label": "new",
+      "input_seed": 720052,
+      "mode": "F1",
+      "us": 40.608000010252,
+      "index": 67
+    },
+    {
+      "label": "new",
+      "input_seed": 720053,
+      "mode": "F1",
+      "us": 40.16000032424927,
+      "index": 68
+    },
+    {
+      "label": "new",
+      "input_seed": 720054,
+      "mode": "F1",
+      "us": 40.28800129890442,
+      "index": 69
+    },
+    {
+      "label": "new",
+      "input_seed": 720055,
+      "mode": "F1",
+      "us": 40.25600105524063,
+      "index": 70
+    },
+    {
+      "label": "new",
+      "input_seed": 720056,
+      "mode": "F1",
+      "us": 40.89599847793579,
+      "index": 71
+    },
+    {
+      "label": "new",
+      "input_seed": 720057,
+      "mode": "F1",
+      "us": 40.832001715898514,
+      "index": 72
+    },
+    {
+      "label": "new",
+      "input_seed": 720058,
+      "mode": "F1",
+      "us": 40.54399952292442,
+      "index": 73
+    },
+    {
+      "label": "new",
+      "input_seed": 720059,
+      "mode": "F1",
+      "us": 41.24800115823746,
+      "index": 74
+    },
+    {
+      "label": "new",
+      "input_seed": 720060,
+      "mode": "F1",
+      "us": 39.84000161290169,
+      "index": 75
+    },
+    {
+      "label": "new",
+      "input_seed": 720061,
+      "mode": "F1",
+      "us": 39.8080013692379,
+      "index": 76
+    },
+    {
+      "label": "new",
+      "input_seed": 720062,
+      "mode": "F1",
+      "us": 40.28800129890442,
+      "index": 77
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720063,
+      "mode": "F1",
+      "us": 17.535999417304993,
+      "index": 78
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720064,
+      "mode": "F1",
+      "us": 17.184000462293625,
+      "index": 79
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720065,
+      "mode": "F1",
+      "us": 17.152000218629837,
+      "index": 80
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720066,
+      "mode": "F1",
+      "us": 17.055999487638474,
+      "index": 81
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720067,
+      "mode": "F1",
+      "us": 17.023999243974686,
+      "index": 82
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720068,
+      "mode": "F1",
+      "us": 17.08799973130226,
+      "index": 83
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720069,
+      "mode": "F1",
+      "us": 17.023999243974686,
+      "index": 84
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720070,
+      "mode": "F1",
+      "us": 17.11999997496605,
+      "index": 85
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720071,
+      "mode": "F1",
+      "us": 17.40800030529499,
+      "index": 86
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720072,
+      "mode": "F1",
+      "us": 17.152000218629837,
+      "index": 87
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720073,
+      "mode": "F1",
+      "us": 17.40800030529499,
+      "index": 88
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720074,
+      "mode": "F1",
+      "us": 17.11999997496605,
+      "index": 89
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720075,
+      "mode": "F1",
+      "us": 18.303999677300453,
+      "index": 90
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720076,
+      "mode": "F1",
+      "us": 17.152000218629837,
+      "index": 91
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720077,
+      "mode": "F1",
+      "us": 17.184000462293625,
+      "index": 92
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720078,
+      "mode": "F1",
+      "us": 17.216000705957413,
+      "index": 93
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720079,
+      "mode": "F1",
+      "us": 16.96000061929226,
+      "index": 94
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720080,
+      "mode": "F1",
+      "us": 18.464000895619392,
+      "index": 95
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720081,
+      "mode": "F1",
+      "us": 17.216000705957413,
+      "index": 96
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720082,
+      "mode": "F1",
+      "us": 16.863999888300896,
+      "index": 97
+    },
+    {
+      "label": "rs32",
+      "input_seed": 720083,
+      "mode": "F1",
+      "us": 17.311999574303627,
+      "index": 98
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720084,
+      "mode": "F1",
+      "us": 17.27999933063984,
+      "index": 99
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720085,
+      "mode": "F1",
+      "us": 17.40800030529499,
+      "index": 100
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720086,
+      "mode": "F1",
+      "us": 18.52799952030182,
+      "index": 101
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720087,
+      "mode": "F1",
+      "us": 17.184000462293625,
+      "index": 102
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720088,
+      "mode": "F1",
+      "us": 17.664000391960144,
+      "index": 103
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720089,
+      "mode": "F1",
+      "us": 17.44000054895878,
+      "index": 104
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720090,
+      "mode": "F1",
+      "us": 17.216000705957413,
+      "index": 105
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720091,
+      "mode": "F1",
+      "us": 18.624000251293182,
+      "index": 106
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720092,
+      "mode": "F1",
+      "us": 17.343999817967415,
+      "index": 107
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720093,
+      "mode": "F1",
+      "us": 17.535999417304993,
+      "index": 108
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720094,
+      "mode": "F1",
+      "us": 17.343999817967415,
+      "index": 109
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720095,
+      "mode": "F1",
+      "us": 17.343999817967415,
+      "index": 110
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720096,
+      "mode": "F1",
+      "us": 17.44000054895878,
+      "index": 111
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720097,
+      "mode": "F1",
+      "us": 16.96000061929226,
+      "index": 112
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720098,
+      "mode": "F1",
+      "us": 17.472000792622566,
+      "index": 113
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720099,
+      "mode": "F1",
+      "us": 17.59999990463257,
+      "index": 114
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720100,
+      "mode": "F1",
+      "us": 17.535999417304993,
+      "index": 115
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720101,
+      "mode": "F1",
+      "us": 17.055999487638474,
+      "index": 116
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720102,
+      "mode": "F1",
+      "us": 18.65600049495697,
+      "index": 117
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720103,
+      "mode": "F1",
+      "us": 17.472000792622566,
+      "index": 118
+    },
+    {
+      "label": "pw36",
+      "input_seed": 720104,
+      "mode": "F1",
+      "us": 17.152000218629837,
+      "index": 119
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730000,
+      "mode": "paired",
+      "us": 17.823999747633934,
+      "index": 120
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730000,
+      "mode": "paired",
+      "us": 17.055999487638474,
+      "index": 121
+    },
+    {
+      "label": "new",
+      "input_seed": 730000,
+      "mode": "paired",
+      "us": 40.92799872159958,
+      "index": 122
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730001,
+      "mode": "paired",
+      "us": 17.632000148296356,
+      "index": 123
+    },
+    {
+      "label": "new",
+      "input_seed": 730001,
+      "mode": "paired",
+      "us": 40.76800122857094,
+      "index": 124
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730001,
+      "mode": "paired",
+      "us": 16.92800037562847,
+      "index": 125
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730002,
+      "mode": "paired",
+      "us": 16.896000131964684,
+      "index": 126
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730002,
+      "mode": "paired",
+      "us": 16.92800037562847,
+      "index": 127
+    },
+    {
+      "label": "new",
+      "input_seed": 730002,
+      "mode": "paired",
+      "us": 40.352001786231995,
+      "index": 128
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730003,
+      "mode": "paired",
+      "us": 17.08799973130226,
+      "index": 129
+    },
+    {
+      "label": "new",
+      "input_seed": 730003,
+      "mode": "paired",
+      "us": 40.063999593257904,
+      "index": 130
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730003,
+      "mode": "paired",
+      "us": 17.472000792622566,
+      "index": 131
+    },
+    {
+      "label": "new",
+      "input_seed": 730004,
+      "mode": "paired",
+      "us": 40.73600098490715,
+      "index": 132
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730004,
+      "mode": "paired",
+      "us": 18.464000895619392,
+      "index": 133
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730004,
+      "mode": "paired",
+      "us": 17.08799973130226,
+      "index": 134
+    },
+    {
+      "label": "new",
+      "input_seed": 730005,
+      "mode": "paired",
+      "us": 40.352001786231995,
+      "index": 135
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730005,
+      "mode": "paired",
+      "us": 17.44000054895878,
+      "index": 136
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730005,
+      "mode": "paired",
+      "us": 17.055999487638474,
+      "index": 137
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730006,
+      "mode": "paired",
+      "us": 18.144000321626663,
+      "index": 138
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730006,
+      "mode": "paired",
+      "us": 16.704000532627106,
+      "index": 139
+    },
+    {
+      "label": "new",
+      "input_seed": 730006,
+      "mode": "paired",
+      "us": 40.192000567913055,
+      "index": 140
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730007,
+      "mode": "paired",
+      "us": 17.311999574303627,
+      "index": 141
+    },
+    {
+      "label": "new",
+      "input_seed": 730007,
+      "mode": "paired",
+      "us": 40.063999593257904,
+      "index": 142
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730007,
+      "mode": "paired",
+      "us": 17.216000705957413,
+      "index": 143
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730008,
+      "mode": "paired",
+      "us": 18.015999346971512,
+      "index": 144
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730008,
+      "mode": "paired",
+      "us": 17.696000635623932,
+      "index": 145
+    },
+    {
+      "label": "new",
+      "input_seed": 730008,
+      "mode": "paired",
+      "us": 40.511999279260635,
+      "index": 146
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730009,
+      "mode": "paired",
+      "us": 16.992000862956047,
+      "index": 147
+    },
+    {
+      "label": "new",
+      "input_seed": 730009,
+      "mode": "paired",
+      "us": 40.22400081157684,
+      "index": 148
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730009,
+      "mode": "paired",
+      "us": 17.023999243974686,
+      "index": 149
+    },
+    {
+      "label": "new",
+      "input_seed": 730010,
+      "mode": "paired",
+      "us": 41.24800115823746,
+      "index": 150
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730010,
+      "mode": "paired",
+      "us": 17.24799908697605,
+      "index": 151
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730010,
+      "mode": "paired",
+      "us": 17.08799973130226,
+      "index": 152
+    },
+    {
+      "label": "new",
+      "input_seed": 730011,
+      "mode": "paired",
+      "us": 40.25600105524063,
+      "index": 153
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730011,
+      "mode": "paired",
+      "us": 17.055999487638474,
+      "index": 154
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730011,
+      "mode": "paired",
+      "us": 17.376000061631203,
+      "index": 155
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730012,
+      "mode": "paired",
+      "us": 17.216000705957413,
+      "index": 156
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730012,
+      "mode": "paired",
+      "us": 17.08799973130226,
+      "index": 157
+    },
+    {
+      "label": "new",
+      "input_seed": 730012,
+      "mode": "paired",
+      "us": 39.84000161290169,
+      "index": 158
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730013,
+      "mode": "paired",
+      "us": 17.44000054895878,
+      "index": 159
+    },
+    {
+      "label": "new",
+      "input_seed": 730013,
+      "mode": "paired",
+      "us": 40.73600098490715,
+      "index": 160
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730013,
+      "mode": "paired",
+      "us": 17.023999243974686,
+      "index": 161
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730014,
+      "mode": "paired",
+      "us": 18.17600056529045,
+      "index": 162
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730014,
+      "mode": "paired",
+      "us": 17.503999173641205,
+      "index": 163
+    },
+    {
+      "label": "new",
+      "input_seed": 730014,
+      "mode": "paired",
+      "us": 40.54399952292442,
+      "index": 164
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730015,
+      "mode": "paired",
+      "us": 16.896000131964684,
+      "index": 165
+    },
+    {
+      "label": "new",
+      "input_seed": 730015,
+      "mode": "paired",
+      "us": 39.903998374938965,
+      "index": 166
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730015,
+      "mode": "paired",
+      "us": 17.376000061631203,
+      "index": 167
+    },
+    {
+      "label": "new",
+      "input_seed": 730016,
+      "mode": "paired",
+      "us": 40.832001715898514,
+      "index": 168
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730016,
+      "mode": "paired",
+      "us": 18.52799952030182,
+      "index": 169
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730016,
+      "mode": "paired",
+      "us": 16.992000862956047,
+      "index": 170
+    },
+    {
+      "label": "new",
+      "input_seed": 730017,
+      "mode": "paired",
+      "us": 40.608000010252,
+      "index": 171
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730017,
+      "mode": "paired",
+      "us": 17.27999933063984,
+      "index": 172
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730017,
+      "mode": "paired",
+      "us": 17.664000391960144,
+      "index": 173
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730018,
+      "mode": "paired",
+      "us": 18.432000651955605,
+      "index": 174
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730018,
+      "mode": "paired",
+      "us": 17.27999933063984,
+      "index": 175
+    },
+    {
+      "label": "new",
+      "input_seed": 730018,
+      "mode": "paired",
+      "us": 39.8080013692379,
+      "index": 176
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730019,
+      "mode": "paired",
+      "us": 16.96000061929226,
+      "index": 177
+    },
+    {
+      "label": "new",
+      "input_seed": 730019,
+      "mode": "paired",
+      "us": 40.12800008058548,
+      "index": 178
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730019,
+      "mode": "paired",
+      "us": 17.055999487638474,
+      "index": 179
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730020,
+      "mode": "paired",
+      "us": 17.08799973130226,
+      "index": 180
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730020,
+      "mode": "paired",
+      "us": 17.184000462293625,
+      "index": 181
+    },
+    {
+      "label": "new",
+      "input_seed": 730020,
+      "mode": "paired",
+      "us": 40.25600105524063,
+      "index": 182
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730021,
+      "mode": "paired",
+      "us": 17.11999997496605,
+      "index": 183
+    },
+    {
+      "label": "new",
+      "input_seed": 730021,
+      "mode": "paired",
+      "us": 40.54399952292442,
+      "index": 184
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730021,
+      "mode": "paired",
+      "us": 17.11999997496605,
+      "index": 185
+    },
+    {
+      "label": "new",
+      "input_seed": 730022,
+      "mode": "paired",
+      "us": 41.24800115823746,
+      "index": 186
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730022,
+      "mode": "paired",
+      "us": 18.65600049495697,
+      "index": 187
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730022,
+      "mode": "paired",
+      "us": 17.503999173641205,
+      "index": 188
+    },
+    {
+      "label": "new",
+      "input_seed": 730023,
+      "mode": "paired",
+      "us": 40.32000154256821,
+      "index": 189
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730023,
+      "mode": "paired",
+      "us": 16.992000862956047,
+      "index": 190
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730023,
+      "mode": "paired",
+      "us": 17.376000061631203,
+      "index": 191
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730024,
+      "mode": "paired",
+      "us": 18.36800016462803,
+      "index": 192
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730024,
+      "mode": "paired",
+      "us": 17.311999574303627,
+      "index": 193
+    },
+    {
+      "label": "new",
+      "input_seed": 730024,
+      "mode": "paired",
+      "us": 39.903998374938965,
+      "index": 194
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730025,
+      "mode": "paired",
+      "us": 17.343999817967415,
+      "index": 195
+    },
+    {
+      "label": "new",
+      "input_seed": 730025,
+      "mode": "paired",
+      "us": 39.99999910593033,
+      "index": 196
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730025,
+      "mode": "paired",
+      "us": 17.24799908697605,
+      "index": 197
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730026,
+      "mode": "paired",
+      "us": 18.432000651955605,
+      "index": 198
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730026,
+      "mode": "paired",
+      "us": 16.92800037562847,
+      "index": 199
+    },
+    {
+      "label": "new",
+      "input_seed": 730026,
+      "mode": "paired",
+      "us": 40.09599983692169,
+      "index": 200
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730027,
+      "mode": "paired",
+      "us": 17.055999487638474,
+      "index": 201
+    },
+    {
+      "label": "new",
+      "input_seed": 730027,
+      "mode": "paired",
+      "us": 39.8080013692379,
+      "index": 202
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730027,
+      "mode": "paired",
+      "us": 16.992000862956047,
+      "index": 203
+    },
+    {
+      "label": "new",
+      "input_seed": 730028,
+      "mode": "paired",
+      "us": 40.73600098490715,
+      "index": 204
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730028,
+      "mode": "paired",
+      "us": 18.688000738620758,
+      "index": 205
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730028,
+      "mode": "paired",
+      "us": 17.184000462293625,
+      "index": 206
+    },
+    {
+      "label": "new",
+      "input_seed": 730029,
+      "mode": "paired",
+      "us": 39.99999910593033,
+      "index": 207
+    },
+    {
+      "label": "rs32",
+      "input_seed": 730029,
+      "mode": "paired",
+      "us": 16.863999888300896,
+      "index": 208
+    },
+    {
+      "label": "pw36",
+      "input_seed": 730029,
+      "mode": "paired",
+      "us": 17.632000148296356,
+      "index": 209
+    }
+  ],
+  "official_score_claim": false,
+  "limits": "Collected selected parent .so hashes are recorded, not archived; their exact captured CUDA source/SASS/resources and actual selected dispatch are verified. No new GPU/API/queue actions. No own-control-only or parent-relative promotion; no family ban."
+}

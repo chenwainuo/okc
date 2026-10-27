@@ -1,0 +1,173 @@
+{
+  "status": "INDEPENDENT_RECOMPUTATION_PASS",
+  "attempt_status": "VALID_RESEARCH_RESULT_NO_PROMOTION",
+  "raw_calls": 295,
+  "actual_candidate_JIT_mains": 3,
+  "actual_selected_incumbent_JIT": "EXACT_PARENT_CONTROL",
+  "basis_FP64_policies": 4,
+  "terminal_oracles": 8,
+  "mutation_oracles": 20,
+  "F1_medians_us": {
+    "incumbent_before": 17.44000054895878,
+    "coupled_before": 17.023999243974686,
+    "equal_before": 17.216000705957413,
+    "split": 17.023999243974686,
+    "equal_after": 17.27999933063984,
+    "coupled_after": 16.992000862956047,
+    "incumbent_after": 17.24799908697605
+  },
+  "paired_policy_medians_us": {
+    "incumbent": 17.32799969613552,
+    "coupled": 17.295999452471733,
+    "equal": 17.5199992954731,
+    "split": 17.08799973130226
+  },
+  "comparisons": {
+    "incumbent_minus_split": {
+      "F1_gain_us": 0.22399984300136566,
+      "paired_median_gain_us": 0.1759994775056839,
+      "paired_wins": 23
+    },
+    "coupled_minus_equal": {
+      "F1_gain_us": -0.22399984300136566,
+      "paired_median_gain_us": -0.2400008961558342,
+      "paired_wins": 10
+    },
+    "coupled_minus_split": {
+      "F1_gain_us": -0.03199838101863861,
+      "paired_median_gain_us": 0.19199959933757782,
+      "paired_wins": 26
+    },
+    "equal_minus_split": {
+      "F1_gain_us": 0.19200146198272705,
+      "paired_median_gain_us": 0.4479996860027313,
+      "paired_wins": 25
+    },
+    "incumbent_minus_equal": {
+      "F1_gain_us": 0.03199838101863861,
+      "paired_median_gain_us": -0.09599979966878891,
+      "paired_wins": 11
+    },
+    "incumbent_minus_coupled": {
+      "F1_gain_us": 0.2559982240200043,
+      "paired_median_gain_us": 0.015999190509319305,
+      "paired_wins": 16
+    }
+  },
+  "paired_distributions": {
+    "incumbent_minus_split": {
+      "median_us": 0.1759994775056839,
+      "min_us": -0.9920001029968262,
+      "max_us": 2.01600044965744,
+      "MAD_us": 0.2559982240200043,
+      "b_win_tie_loss": [
+        23,
+        1,
+        8
+      ]
+    },
+    "coupled_minus_equal": {
+      "median_us": -0.2400008961558342,
+      "min_us": -1.5680007636547089,
+      "max_us": 1.4080014079809189,
+      "MAD_us": 0.2720002084970474,
+      "b_win_tie_loss": [
+        10,
+        1,
+        21
+      ]
+    },
+    "coupled_minus_split": {
+      "median_us": 0.19199959933757782,
+      "min_us": -1.1519994586706161,
+      "max_us": 1.6320012509822845,
+      "MAD_us": 0.17600040882825851,
+      "b_win_tie_loss": [
+        26,
+        0,
+        6
+      ]
+    },
+    "equal_minus_split": {
+      "median_us": 0.4479996860027313,
+      "min_us": -1.183999702334404,
+      "max_us": 2.1120011806488037,
+      "MAD_us": 0.2720002084970474,
+      "b_win_tie_loss": [
+        25,
+        1,
+        6
+      ]
+    },
+    "incumbent_minus_equal": {
+      "median_us": -0.09599979966878891,
+      "min_us": -1.920001581311226,
+      "max_us": 1.3119988143444061,
+      "MAD_us": 0.38400012999773026,
+      "b_win_tie_loss": [
+        11,
+        1,
+        20
+      ]
+    },
+    "incumbent_minus_coupled": {
+      "median_us": 0.015999190509319305,
+      "min_us": -1.5040002763271332,
+      "max_us": 1.6320012509822845,
+      "MAD_us": 0.3359997645020485,
+      "b_win_tie_loss": [
+        16,
+        1,
+        15
+      ]
+    }
+  },
+  "official_score": "NOT_MEASURED",
+  "result_sha256": "1189fb7b6e5bd9876b6980677478c9e7dc302f39aa948750328d8dab8c765cbc",
+  "inventory_sha256": "e7ab973298137645c8938e11a393bca08bbeab5fe37607266caad53f864220be",
+  "inventory_files": 4,
+  "source_pins": 33,
+  "analysis_negative_controls": {
+    "raw_seed": "REJECTED",
+    "raw_nan": "REJECTED",
+    "declared_gain": "REJECTED",
+    "terminal_own_fixture": "REJECTED",
+    "mutation_poison": "REJECTED",
+    "resource_smem": "REJECTED",
+    "forced_incumbent": "REJECTED"
+  },
+  "CPU_source_protocol_counter_lifetime_proof": "INDEPENDENTLY_REEXECUTED_PASS",
+  "terminal_CPU_negative_controls": {
+    "output": "('equal', 'terminal own-fixture mismatch', 2, 'CPU ownfixture oracle')",
+    "nonfinite": "('split', 'nonfinite terminal output')",
+    "currentX": "current X differs from last actual call",
+    "wrong_own_fixture": "('equal', 'terminal own-fixture mismatch', 3, 'CPU ownfixture oracle')",
+    "weight": "immutable altered",
+    "active_counter": "active counter altered",
+    "dormant_counter": "dormant counter altered"
+  },
+  "counter_CPU_negative_controls": {
+    "active": "active RQ counter not reset",
+    "dormant": "dormant counter tail/guards changed",
+    "prefixguard": "dormant counter tail/guards changed",
+    "suffixguard": "dormant counter tail/guards changed",
+    "unrelated_nonzero_baseline": "unrelated counter storage changed"
+  },
+  "protocol_CPU_negative_controls": {
+    "early_X_reuse": "('X_RELEASE_BEFORE_WGMMA_RETIRE', 0, [0])",
+    "missing_Xfull_wait": "X_READ_BEFORE_PUBLISH",
+    "W_reuse_before_all8reads": "W_REUSE_BEFORE_ALL8_READS"
+  },
+  "source_lifetime_limits": "Two mathWG program witnesses aggregate four warp arrivals each; async engine transactions and WGMMA completion assumed finite. No GPU scheduler or arbitrary compiled-CFG proof.",
+  "terminal_exit": 0,
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "terminal_exit": 0
+  }
+}

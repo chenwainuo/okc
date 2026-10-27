@@ -1,0 +1,4223 @@
+{
+  "state": "AUTHOR_CPU_OFFICIAL_UNSCORED_CHECK_REANALYSIS_PASS_NO_SCORED_PROMOTION",
+  "job": "a3ed4ce5886a4415",
+  "mode": "check",
+  "source_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+  "server_content_hash_opaque": "ce929021306b1ad5513bf5eeca89749529e4f9b5fc66bd913e92b5542681dcd7",
+  "payload_ref": "muse_bf16_proj/ce929021306b1ad5513bf5eeca89749529e4f9b5fc66bd913e92b5542681dcd7.py",
+  "source_identity": "Pre-upload immutable snapshot and after-submit SHA attest local request bytes; opaque server content_hash not equated to SHA256.",
+  "official": {
+    "error": null,
+    "passed": true,
+    "score_us": 3193.637501792908,
+    "speedup": 1.5126325380660732,
+    "speedup_ci": [
+      1.489943049995082,
+      1.5353220261370641
+    ],
+    "status": "ok",
+    "tests": 9,
+    "tests_passed": 9
+  },
+  "recomputed_speedup": 1.5126325380660732,
+  "recomputed_score_us": 3193.637501792908,
+  "score_ci": [
+    3146.4408884659197,
+    3242.271575424272
+  ],
+  "other_job_context_only": {
+    "rs32": {
+      "job": "fb548b5dc6f04696",
+      "score_us": 3200.6150084373335,
+      "check_score_minus_other_job_us": -6.977506644425375,
+      "score_ci": [
+        3153.3152792486044,
+        3249.355338515059
+      ],
+      "CIs_overlap": true,
+      "causal": false
+    },
+    "pw36": {
+      "job": "e22a4b9d693d4902",
+      "score_us": 3212.415452073451,
+      "check_score_minus_other_job_us": -18.777950280542882,
+      "score_ci": [
+        3164.9413320920708,
+        3261.335484338529
+      ],
+      "CIs_overlap": true,
+      "causal": false
+    }
+  },
+  "all30_profiles": [
+    {
+      "index": 0,
+      "load": "decode 1",
+      "layer": "qkv_gate",
+      "m": 1,
+      "ours_us": 9.231521491367257,
+      "same_job_sglang_us": 14.06400091946125,
+      "speedup": 1.523475944091451,
+      "actual_profile_kernel": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.5 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 9.199054542664959,
+          "other_job_minus_check_us": -0.03246694870229838,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 9.159184478487294,
+          "other_job_minus_check_us": -0.07233701287996297,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 1,
+      "load": "decode 1",
+      "layer": "o",
+      "m": 1,
+      "ours_us": 4.960973290000707,
+      "same_job_sglang_us": 6.655999459326267,
+      "speedup": 1.341672101468887,
+      "actual_profile_kernel": "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.0 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 4.96756054642412,
+          "other_job_minus_check_us": 0.006587256423412846,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 5.2856873924460075,
+          "other_job_minus_check_us": 0.3247141024453004,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 2,
+      "load": "decode 1",
+      "layer": "pooler",
+      "m": 1,
+      "ours_us": 13.703648985227678,
+      "same_job_sglang_us": 21.616000682115555,
+      "speedup": 1.5773901320310575,
+      "actual_profile_kernel": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         14.2 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 13.462035894367908,
+          "other_job_minus_check_us": -0.24161309085977045,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 13.907327185722282,
+          "other_job_minus_check_us": 0.20367820049460406,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 3,
+      "load": "decode 1",
+      "layer": "unpooler",
+      "m": 1,
+      "ours_us": 4.497523155129604,
+      "same_job_sglang_us": 7.231999654322863,
+      "speedup": 1.607996091376312,
+      "actual_profile_kernel": "void gv<1, 1, 2, 1, 16, 4, 1, 1, 0, 0>(G)                          3.6 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 3.996916644413409,
+          "other_job_minus_check_us": -0.5006065107161954,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 4.322471323615486,
+          "other_job_minus_check_us": -0.17505183151411874,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 4,
+      "load": "decode 1",
+      "layer": "router",
+      "m": 1,
+      "ours_us": 3.6992745843339674,
+      "same_job_sglang_us": 10.431999806314707,
+      "speedup": 2.8200122938948926,
+      "actual_profile_kernel": "void rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.6 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 3.665704689408439,
+          "other_job_minus_check_us": -0.03356989492552831,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 3.750903620650639,
+          "other_job_minus_check_us": 0.051629036316671595,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 5,
+      "load": "decode 16",
+      "layer": "qkv_gate",
+      "m": 16,
+      "ours_us": 10.125109429335993,
+      "same_job_sglang_us": 14.031999744474888,
+      "speedup": 1.3858615398090675,
+      "actual_profile_kernel": "void rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.3 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 9.663935825712803,
+          "other_job_minus_check_us": -0.46117360362318927,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 10.456028131757133,
+          "other_job_minus_check_us": 0.3309187024211404,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 6,
+      "load": "decode 16",
+      "layer": "o",
+      "m": 16,
+      "ours_us": 5.536120952272521,
+      "same_job_sglang_us": 6.84799998998642,
+      "speedup": 1.2369671921953558,
+      "actual_profile_kernel": "void gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 0>(G)                           5.1 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 5.344963442993029,
+          "other_job_minus_check_us": -0.19115750927949193,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 5.201557607564374,
+          "other_job_minus_check_us": -0.33456334470814664,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 7,
+      "load": "decode 16",
+      "layer": "pooler",
+      "m": 16,
+      "ours_us": 14.28196195202513,
+      "same_job_sglang_us": 21.71199955046177,
+      "speedup": 1.5202392796868562,
+      "actual_profile_kernel": "void gv<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                         14.2 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 14.166533488498406,
+          "other_job_minus_check_us": -0.1154284635267242,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 14.088954792678065,
+          "other_job_minus_check_us": -0.19300715934706503,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 8,
+      "load": "decode 16",
+      "layer": "unpooler",
+      "m": 16,
+      "ours_us": 14.342607116889745,
+      "same_job_sglang_us": 18.463999964296818,
+      "speedup": 1.2873531160561285,
+      "actual_profile_kernel": "void gv<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                         14.6 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 14.420908690994064,
+          "other_job_minus_check_us": 0.07830157410431937,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 14.563460986254244,
+          "other_job_minus_check_us": 0.22085386936449858,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 9,
+      "load": "decode 16",
+      "layer": "router",
+      "m": 16,
+      "ours_us": 4.72264840525647,
+      "same_job_sglang_us": 15.232000965625048,
+      "speedup": 3.2253091186443834,
+      "actual_profile_kernel": "void gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.7 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 4.695848375777806,
+          "other_job_minus_check_us": -0.026800029478663667,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 4.868873752550299,
+          "other_job_minus_check_us": 0.14622534729382952,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 10,
+      "load": "decode 32",
+      "layer": "qkv_gate",
+      "m": 32,
+      "ours_us": 10.414919135344388,
+      "same_job_sglang_us": 14.479999896138906,
+      "speedup": 1.3903132331579164,
+      "actual_profile_kernel": "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.3 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 10.10794512446512,
+          "other_job_minus_check_us": -0.30697401087926757,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 10.281358421666779,
+          "other_job_minus_check_us": -0.1335607136776087,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 11,
+      "load": "decode 32",
+      "layer": "o",
+      "m": 32,
+      "ours_us": 6.292521903371819,
+      "same_job_sglang_us": 6.68800063431263,
+      "speedup": 1.0628490034701183,
+      "actual_profile_kernel": "void rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                5.7 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 6.36577079922631,
+          "other_job_minus_check_us": 0.07324889585449146,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 6.831208656269089,
+          "other_job_minus_check_us": 0.5386867528972701,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 12,
+      "load": "decode 32",
+      "layer": "pooler",
+      "m": 32,
+      "ours_us": 15.081659123486592,
+      "same_job_sglang_us": 21.887999959290028,
+      "speedup": 1.4512992091966828,
+      "actual_profile_kernel": "void rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.8 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 15.538102163324636,
+          "other_job_minus_check_us": 0.45644303983804413,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 15.498864448133224,
+          "other_job_minus_check_us": 0.4172053246466323,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 13,
+      "load": "decode 32",
+      "layer": "unpooler",
+      "m": 32,
+      "ours_us": 15.287451374358303,
+      "same_job_sglang_us": 19.00799898430705,
+      "speedup": 1.2433726537432679,
+      "actual_profile_kernel": "void rq<32, 6, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)                15.6 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 15.149120268335562,
+          "other_job_minus_check_us": -0.13833110602274168,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 15.20933258310863,
+          "other_job_minus_check_us": -0.07811879124967369,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 14,
+      "load": "decode 32",
+      "layer": "router",
+      "m": 32,
+      "ours_us": 4.964317402989274,
+      "same_job_sglang_us": 15.168000478297472,
+      "speedup": 3.0554050531023718,
+      "actual_profile_kernel": "void gv<2, 4, 2, 1, 8, 2, 8, 1, 0, 134217728>(G)                   4.2 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 4.978521353833797,
+          "other_job_minus_check_us": 0.014203950844522417,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 5.2171144992053335,
+          "other_job_minus_check_us": 0.2527970962160593,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 15,
+      "load": "verify 1",
+      "layer": "qkv_gate",
+      "m": 8,
+      "ours_us": 9.547312428591201,
+      "same_job_sglang_us": 14.14399966597557,
+      "speedup": 1.4814640006562199,
+      "actual_profile_kernel": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.0 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 9.316761505608152,
+          "other_job_minus_check_us": -0.23055092298304913,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 9.431596067031986,
+          "other_job_minus_check_us": -0.11571636155921539,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 16,
+      "load": "verify 1",
+      "layer": "o",
+      "m": 8,
+      "ours_us": 5.385221322772914,
+      "same_job_sglang_us": 6.688000168651342,
+      "speedup": 1.2419174195068388,
+      "actual_profile_kernel": "void gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.0 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 5.274411330498385,
+          "other_job_minus_check_us": -0.11080999227452892,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 5.292239825112781,
+          "other_job_minus_check_us": -0.09298149766013264,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 17,
+      "load": "verify 1",
+      "layer": "pooler",
+      "m": 8,
+      "ours_us": 13.983761666875404,
+      "same_job_sglang_us": 21.519999485462904,
+      "speedup": 1.5389277934019188,
+      "actual_profile_kernel": "void gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         13.8 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 13.718590892337465,
+          "other_job_minus_check_us": -0.265170774537939,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 13.877145858067149,
+          "other_job_minus_check_us": -0.10661580880825561,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 18,
+      "load": "verify 1",
+      "layer": "unpooler",
+      "m": 8,
+      "ours_us": 4.274937544511595,
+      "same_job_sglang_us": 7.087999489158392,
+      "speedup": 1.658035799437202,
+      "actual_profile_kernel": "void gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.4 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 4.222228995963594,
+          "other_job_minus_check_us": -0.052708548548001666,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 4.330137882182506,
+          "other_job_minus_check_us": 0.055200337670910926,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 19,
+      "load": "verify 1",
+      "layer": "router",
+      "m": 8,
+      "ours_us": 4.588520852338076,
+      "same_job_sglang_us": 25.904000271111727,
+      "speedup": 5.645392296280483,
+      "actual_profile_kernel": "void gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.6 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 4.95333980527336,
+          "other_job_minus_check_us": 0.3648189529352841,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 4.909484832349017,
+          "other_job_minus_check_us": 0.3209639800109416,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 20,
+      "load": "verify 16",
+      "layer": "qkv_gate",
+      "m": 128,
+      "ours_us": 13.361366243464802,
+      "same_job_sglang_us": 17.29599991813302,
+      "speedup": 1.2944783941232576,
+      "actual_profile_kernel": "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           13.2 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 13.207008322424473,
+          "other_job_minus_check_us": -0.15435792104032942,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 12.922156320792977,
+          "other_job_minus_check_us": -0.4392099226718251,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 21,
+      "load": "verify 16",
+      "layer": "o",
+      "m": 128,
+      "ours_us": 7.139444413608281,
+      "same_job_sglang_us": 7.3439995758235455,
+      "speedup": 1.028651411841707,
+      "actual_profile_kernel": "nvjet_sm90_tst_128x64_64x8_1x2_h_bz_NNN                            5.4 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 7.550517974464806,
+          "other_job_minus_check_us": 0.4110735608565248,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 7.54877254080838,
+          "other_job_minus_check_us": 0.4093281272000988,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 22,
+      "load": "verify 16",
+      "layer": "pooler",
+      "m": 128,
+      "ours_us": 18.560420687748618,
+      "same_job_sglang_us": 25.36000031977892,
+      "speedup": 1.366348357422662,
+      "actual_profile_kernel": "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           19.6 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 18.399035181928525,
+          "other_job_minus_check_us": -0.1613855058200926,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 18.151803665597576,
+          "other_job_minus_check_us": -0.40861702215104145,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 23,
+      "load": "verify 16",
+      "layer": "unpooler",
+      "m": 128,
+      "ours_us": 18.6255020787021,
+      "same_job_sglang_us": 19.983999896794558,
+      "speedup": 1.0729375139715494,
+      "actual_profile_kernel": "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_coopB_NNN                     18.9 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 18.95137490319335,
+          "other_job_minus_check_us": 0.325872824491249,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 19.103499961369984,
+          "other_job_minus_check_us": 0.4779978826678821,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 24,
+      "load": "verify 16",
+      "layer": "router",
+      "m": 128,
+      "ours_us": 7.808117992367094,
+      "same_job_sglang_us": 16.480000223964453,
+      "speedup": 2.1106238712164247,
+      "actual_profile_kernel": "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       6.1 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 9.403481933972989,
+          "other_job_minus_check_us": 1.5953639416058953,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 7.784167572639332,
+          "other_job_minus_check_us": -0.023950419727762018,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 25,
+      "load": "verify 32",
+      "layer": "qkv_gate",
+      "m": 256,
+      "ours_us": 18.653822361197797,
+      "same_job_sglang_us": 20.19199961796403,
+      "speedup": 1.0824590921357666,
+      "actual_profile_kernel": "nvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           19.2 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 17.276527350138725,
+          "other_job_minus_check_us": -1.377295011059072,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 17.76814608040556,
+          "other_job_minus_check_us": -0.8856762807922358,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 26,
+      "load": "verify 32",
+      "layer": "o",
+      "m": 256,
+      "ours_us": 9.599878867215164,
+      "same_job_sglang_us": 9.519999846816063,
+      "speedup": 0.9916791637161279,
+      "actual_profile_kernel": "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT                           8.2 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 8.799156651465292,
+          "other_job_minus_check_us": -0.8007222157498717,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 9.184376198824621,
+          "other_job_minus_check_us": -0.41550266839054295,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 27,
+      "load": "verify 32",
+      "layer": "pooler",
+      "m": 256,
+      "ours_us": 25.12649052951881,
+      "same_job_sglang_us": 30.17600066959858,
+      "speedup": 1.200963605886288,
+      "actual_profile_kernel": "nvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           24.1 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 24.838240169206934,
+          "other_job_minus_check_us": -0.2882503603118778,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 24.369706821551723,
+          "other_job_minus_check_us": -0.756783707967088,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 28,
+      "load": "verify 32",
+      "layer": "unpooler",
+      "m": 256,
+      "ours_us": 23.472194905548196,
+      "same_job_sglang_us": 24.51200131326914,
+      "speedup": 1.0442994961444854,
+      "actual_profile_kernel": "nvjet_sm90_tst_128x128_64x6_2x1_v_bz_coopA_NNN                    23.5 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 24.693354263625714,
+          "other_job_minus_check_us": 1.221159358077518,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 24.487152685509905,
+          "other_job_minus_check_us": 1.0149577799617084,
+          "causal": false
+        }
+      }
+    },
+    {
+      "index": 29,
+      "load": "verify 32",
+      "layer": "router",
+      "m": 256,
+      "ours_us": 9.4734564405743,
+      "same_job_sglang_us": 17.87199918180704,
+      "speedup": 1.8865341593024316,
+      "actual_profile_kernel": "void rtk<256, 3, 128, 128, 2, 4>(RtMap, RtMap, RtMap, flo...       8.2 \u00b5s 100.0%      1",
+      "profile_calls": 1,
+      "cross_job_context_only": {
+        "rs32": {
+          "other_job_ours_us": 10.977570284734263,
+          "other_job_minus_check_us": 1.5041138441599635,
+          "causal": false
+        },
+        "pw36": {
+          "other_job_ours_us": 9.271227848673158,
+          "other_job_minus_check_us": -0.20222859190114129,
+          "causal": false
+        }
+      }
+    }
+  ],
+  "six_load_sums": {
+    "decode 1": {
+      "ours_sum_us": 36.09294150605922,
+      "same_job_sglang_sum_us": 60.00000052154064,
+      "reference_sums_crossjob_context": {
+        "rs32": {
+          "ours_sum_us": 35.29127231727883,
+          "own_sglang_sum_us": 59.343998786062
+        },
+        "pw36": {
+          "ours_sum_us": 36.42557400092171,
+          "own_sglang_sum_us": 60.04799995571375
+        }
+      }
+    },
+    "decode 16": {
+      "ours_sum_us": 49.008447855779856,
+      "same_job_sglang_sum_us": 76.28800021484494,
+      "reference_sums_crossjob_context": {
+        "rs32": {
+          "ours_sum_us": 48.29218982397611,
+          "own_sglang_sum_us": 75.63200080767274
+        },
+        "pw36": {
+          "ours_sum_us": 49.17887527080411,
+          "own_sglang_sum_us": 75.5199994891882
+        }
+      }
+    },
+    "decode 32": {
+      "ours_sum_us": 52.04086893955037,
+      "same_job_sglang_sum_us": 77.23199995234609,
+      "reference_sums_crossjob_context": {
+        "rs32": {
+          "ours_sum_us": 52.13945970918543,
+          "own_sglang_sum_us": 76.75200048834085
+        },
+        "pw36": {
+          "ours_sum_us": 53.03787860838305,
+          "own_sglang_sum_us": 76.52800064533949
+        }
+      }
+    },
+    "verify 1": {
+      "ours_sum_us": 37.779753815089194,
+      "same_job_sglang_sum_us": 75.34399908035994,
+      "reference_sums_crossjob_context": {
+        "rs32": {
+          "ours_sum_us": 37.48533252968096,
+          "own_sglang_sum_us": 75.82400180399418
+        },
+        "pw36": {
+          "ours_sum_us": 37.840604464743436,
+          "own_sglang_sum_us": 75.60000056400895
+        }
+      }
+    },
+    "verify 16": {
+      "ours_sum_us": 65.49485141589089,
+      "same_job_sglang_sum_us": 86.4639999344945,
+      "reference_sums_crossjob_context": {
+        "rs32": {
+          "ours_sum_us": 67.51141831598414,
+          "own_sglang_sum_us": 86.68800024315715
+        },
+        "pw36": {
+          "ours_sum_us": 65.51040006120824,
+          "own_sglang_sum_us": 86.43200062215328
+        }
+      }
+    },
+    "verify 32": {
+      "ours_sum_us": 86.32584310405426,
+      "same_job_sglang_sum_us": 102.27200062945485,
+      "reference_sums_crossjob_context": {
+        "rs32": {
+          "ours_sum_us": 86.58484871917094,
+          "own_sglang_sum_us": 101.66399646550417
+        },
+        "pw36": {
+          "ours_sum_us": 85.08060963496497,
+          "own_sglang_sum_us": 102.19200095161796
+        }
+      }
+    }
+  },
+  "PREP": [
+    {
+      "line": 44,
+      "text": "PREP r6 done in 120s"
+    },
+    {
+      "line": 45,
+      "text": "PREP rq thread ready at 41s (bake starts at 120s)"
+    },
+    {
+      "line": 94,
+      "text": "PREP phase rq done at 120s"
+    },
+    {
+      "line": 126,
+      "text": "PREP phase gx done at 122s"
+    },
+    {
+      "line": 127,
+      "text": "PREP rq32 thread ready at 41s"
+    },
+    {
+      "line": 128,
+      "text": "PREP rq32 bake starts at 122s"
+    },
+    {
+      "line": 175,
+      "text": "PREP phase rq32 done at 123s"
+    },
+    {
+      "line": 176,
+      "text": "PREP rw compiled in 37s (at 161s)"
+    },
+    {
+      "line": 191,
+      "text": "PREP phase router done at 161s"
+    },
+    {
+      "line": 192,
+      "text": "PREP done in 161s"
+    }
+  ],
+  "BAKE": [
+    {
+      "line": 46,
+      "layer": "pooler",
+      "m": 128,
+      "path": "rq:s4s5z",
+      "us_printed": 22.98,
+      "raw": "BAKE pooler m=128 rq:s4s5z 22.98 (ok 3.2e-03) at 120s"
+    },
+    {
+      "line": 47,
+      "layer": "pooler",
+      "m": 128,
+      "path": "rq:s4s5hz",
+      "us_printed": 22.98,
+      "raw": "BAKE pooler m=128 rq:s4s5hz 22.98 (ok 3.1e-03) at 120s"
+    },
+    {
+      "line": 48,
+      "layer": "pooler",
+      "m": 128,
+      "path": "rq:s4hz",
+      "us_printed": 23.68,
+      "raw": "BAKE pooler m=128 rq:s4hz 23.68 (ok 3.1e-03) at 120s"
+    },
+    {
+      "line": 49,
+      "layer": "pooler",
+      "m": 128,
+      "path": "rq:s4s5zEH",
+      "us_printed": 22.88,
+      "raw": "BAKE pooler m=128 rq:s4s5zEH 22.88 (ok 3.1e-03) at 120s"
+    },
+    {
+      "line": 50,
+      "layer": "pooler",
+      "m": 128,
+      "path": "rq:s4s5hzEH",
+      "us_printed": 22.85,
+      "raw": "BAKE pooler m=128 rq:s4s5hzEH 22.85 (ok 3.2e-03) at 120s"
+    },
+    {
+      "line": 51,
+      "layer": "pooler",
+      "m": 128,
+      "path": "r6",
+      "us_printed": 24.35,
+      "raw": "BAKE pooler m=128 r6 24.35 (before pack 24.35, after variants 24.67) at 120s"
+    },
+    {
+      "line": 53,
+      "layer": "pooler",
+      "m": 256,
+      "path": "rq:n256s4hz",
+      "us_printed": 31.2,
+      "raw": "BAKE pooler m=256 rq:n256s4hz 31.20 (ok 3.2e-03) at 120s"
+    },
+    {
+      "line": 54,
+      "layer": "pooler",
+      "m": 256,
+      "path": "rq:n256s5hz",
+      "us_printed": 31.62,
+      "raw": "BAKE pooler m=256 rq:n256s5hz 31.62 (ok 3.1e-03) at 120s"
+    },
+    {
+      "line": 55,
+      "layer": "pooler",
+      "m": 256,
+      "path": "rq:n256s5z",
+      "us_printed": 31.62,
+      "raw": "BAKE pooler m=256 rq:n256s5z 31.62 (ok 3.2e-03) at 120s"
+    },
+    {
+      "line": 56,
+      "layer": "pooler",
+      "m": 256,
+      "path": "r6",
+      "us_printed": 28.1,
+      "raw": "BAKE pooler m=256 r6 28.10 (before pack 28.42, after variants 28.10) at 120s"
+    },
+    {
+      "line": 58,
+      "layer": "qkv_gate",
+      "m": 128,
+      "path": "rq:s4s5z",
+      "us_printed": 17.15,
+      "raw": "BAKE qkv_gate m=128 rq:s4s5z 17.15 (ok 3.8e-03) at 120s"
+    },
+    {
+      "line": 59,
+      "layer": "qkv_gate",
+      "m": 128,
+      "path": "rq:s4s5hz",
+      "us_printed": 17.22,
+      "raw": "BAKE qkv_gate m=128 rq:s4s5hz 17.22 (ok 3.8e-03) at 120s"
+    },
+    {
+      "line": 60,
+      "layer": "qkv_gate",
+      "m": 128,
+      "path": "rq:s4hz",
+      "us_printed": 17.7,
+      "raw": "BAKE qkv_gate m=128 rq:s4hz 17.70 (ok 3.9e-03) at 120s"
+    },
+    {
+      "line": 61,
+      "layer": "qkv_gate",
+      "m": 128,
+      "path": "rq:s4s5zEH",
+      "us_printed": 17.06,
+      "raw": "BAKE qkv_gate m=128 rq:s4s5zEH 17.06 (ok 3.8e-03) at 120s"
+    },
+    {
+      "line": 62,
+      "layer": "qkv_gate",
+      "m": 128,
+      "path": "rq:s4s5hzEH",
+      "us_printed": 16.8,
+      "raw": "BAKE qkv_gate m=128 rq:s4s5hzEH 16.80 (ok 3.9e-03) at 120s"
+    },
+    {
+      "line": 63,
+      "layer": "qkv_gate",
+      "m": 128,
+      "path": "r6",
+      "us_printed": 19.36,
+      "raw": "BAKE qkv_gate m=128 r6 19.36 (before pack 19.52, after variants 19.36) at 120s"
+    },
+    {
+      "line": 65,
+      "layer": "qkv_gate",
+      "m": 256,
+      "path": "rq:n256s4hz",
+      "us_printed": 21.95,
+      "raw": "BAKE qkv_gate m=256 rq:n256s4hz 21.95 (ok 3.8e-03) at 120s"
+    },
+    {
+      "line": 66,
+      "layer": "qkv_gate",
+      "m": 256,
+      "path": "rq:n256s5hz",
+      "us_printed": 22.78,
+      "raw": "BAKE qkv_gate m=256 rq:n256s5hz 22.78 (ok 3.8e-03) at 120s"
+    },
+    {
+      "line": 67,
+      "layer": "qkv_gate",
+      "m": 256,
+      "path": "rq:n256s5z",
+      "us_printed": 22.56,
+      "raw": "BAKE qkv_gate m=256 rq:n256s5z 22.56 (ok 3.8e-03) at 120s"
+    },
+    {
+      "line": 68,
+      "layer": "qkv_gate",
+      "m": 256,
+      "path": "r6",
+      "us_printed": 21.92,
+      "raw": "BAKE qkv_gate m=256 r6 21.92 (before pack 21.92, after variants 22.11) at 120s"
+    },
+    {
+      "line": 70,
+      "layer": "unpooler",
+      "m": 128,
+      "path": "rq:s4s5z",
+      "us_printed": 23.3,
+      "raw": "BAKE unpooler m=128 rq:s4s5z 23.30 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 71,
+      "layer": "unpooler",
+      "m": 128,
+      "path": "rq:s4s5hz",
+      "us_printed": 22.94,
+      "raw": "BAKE unpooler m=128 rq:s4s5hz 22.94 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 72,
+      "layer": "unpooler",
+      "m": 128,
+      "path": "rq:s4hz",
+      "us_printed": 23.55,
+      "raw": "BAKE unpooler m=128 rq:s4hz 23.55 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 73,
+      "layer": "unpooler",
+      "m": 128,
+      "path": "rq:s4s5zEH",
+      "us_printed": 23.36,
+      "raw": "BAKE unpooler m=128 rq:s4s5zEH 23.36 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 74,
+      "layer": "unpooler",
+      "m": 128,
+      "path": "rq:s4s5hzEH",
+      "us_printed": 23.1,
+      "raw": "BAKE unpooler m=128 rq:s4s5hzEH 23.10 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 75,
+      "layer": "unpooler",
+      "m": 128,
+      "path": "r6",
+      "us_printed": 23.04,
+      "raw": "BAKE unpooler m=128 r6 23.04 (before pack 23.04, after variants 23.17) at 120s"
+    },
+    {
+      "line": 77,
+      "layer": "unpooler",
+      "m": 256,
+      "path": "rq:n256s4hz",
+      "us_printed": 31.2,
+      "raw": "BAKE unpooler m=256 rq:n256s4hz 31.20 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 78,
+      "layer": "unpooler",
+      "m": 256,
+      "path": "rq:n256s5hz",
+      "us_printed": 32.16,
+      "raw": "BAKE unpooler m=256 rq:n256s5hz 32.16 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 79,
+      "layer": "unpooler",
+      "m": 256,
+      "path": "rq:n256s5z",
+      "us_printed": 32.0,
+      "raw": "BAKE unpooler m=256 rq:n256s5z 32.00 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 80,
+      "layer": "unpooler",
+      "m": 256,
+      "path": "r6",
+      "us_printed": 27.81,
+      "raw": "BAKE unpooler m=256 r6 27.81 (before pack 28.10, after variants 27.81) at 120s"
+    },
+    {
+      "line": 82,
+      "layer": "o",
+      "m": 128,
+      "path": "rq:s4s5z",
+      "us_printed": 12.93,
+      "raw": "BAKE o m=128 rq:s4s5z 12.93 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 83,
+      "layer": "o",
+      "m": 128,
+      "path": "rq:s4s5hz",
+      "us_printed": 12.86,
+      "raw": "BAKE o m=128 rq:s4s5hz 12.86 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 84,
+      "layer": "o",
+      "m": 128,
+      "path": "rq:s4hz",
+      "us_printed": 13.02,
+      "raw": "BAKE o m=128 rq:s4hz 13.02 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 85,
+      "layer": "o",
+      "m": 128,
+      "path": "rq:s4s5zEH",
+      "us_printed": 13.06,
+      "raw": "BAKE o m=128 rq:s4s5zEH 13.06 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 86,
+      "layer": "o",
+      "m": 128,
+      "path": "rq:s4s5hzEH",
+      "us_printed": 13.38,
+      "raw": "BAKE o m=128 rq:s4s5hzEH 13.38 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 87,
+      "layer": "o",
+      "m": 128,
+      "path": "r6",
+      "us_printed": 11.04,
+      "raw": "BAKE o m=128 r6 11.04 (before pack 11.04, after variants 11.23) at 120s"
+    },
+    {
+      "line": 89,
+      "layer": "o",
+      "m": 256,
+      "path": "rq:n256s4hz",
+      "us_printed": 16.35,
+      "raw": "BAKE o m=256 rq:n256s4hz 16.35 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 90,
+      "layer": "o",
+      "m": 256,
+      "path": "rq:n256s5hz",
+      "us_printed": 16.61,
+      "raw": "BAKE o m=256 rq:n256s5hz 16.61 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 91,
+      "layer": "o",
+      "m": 256,
+      "path": "rq:n256s5z",
+      "us_printed": 16.64,
+      "raw": "BAKE o m=256 rq:n256s5z 16.64 (ok 2.4e-03) at 120s"
+    },
+    {
+      "line": 92,
+      "layer": "o",
+      "m": 256,
+      "path": "r6",
+      "us_printed": 13.09,
+      "raw": "BAKE o m=256 r6 13.09 (before pack 14.14, after variants 13.09) at 120s"
+    },
+    {
+      "line": 96,
+      "layer": "unpooler",
+      "m": 1,
+      "path": "r6",
+      "us_printed": 8.58,
+      "raw": "BAKE unpooler m=1 r6 8.58"
+    },
+    {
+      "line": 97,
+      "layer": "unpooler",
+      "m": 1,
+      "path": "uk-s4z",
+      "us_printed": 8.7,
+      "raw": "BAKE unpooler m=1 uk-s4z 8.70"
+    },
+    {
+      "line": 98,
+      "layer": "unpooler",
+      "m": 1,
+      "path": "uk-s4x",
+      "us_printed": 8.61,
+      "raw": "BAKE unpooler m=1 uk-s4x 8.61"
+    },
+    {
+      "line": 99,
+      "layer": "unpooler",
+      "m": 1,
+      "path": "uk-s4w4x",
+      "us_printed": 8.67,
+      "raw": "BAKE unpooler m=1 uk-s4w4x 8.67"
+    },
+    {
+      "line": 101,
+      "layer": "unpooler",
+      "m": 8,
+      "path": "r6",
+      "us_printed": 8.9,
+      "raw": "BAKE unpooler m=8 r6 8.90"
+    },
+    {
+      "line": 102,
+      "layer": "unpooler",
+      "m": 8,
+      "path": "uk-s4z",
+      "us_printed": 8.83,
+      "raw": "BAKE unpooler m=8 uk-s4z 8.83"
+    },
+    {
+      "line": 103,
+      "layer": "unpooler",
+      "m": 8,
+      "path": "uk-s4x",
+      "us_printed": 8.51,
+      "raw": "BAKE unpooler m=8 uk-s4x 8.51"
+    },
+    {
+      "line": 104,
+      "layer": "unpooler",
+      "m": 8,
+      "path": "uk-s4w4x",
+      "us_printed": 8.7,
+      "raw": "BAKE unpooler m=8 uk-s4w4x 8.70"
+    },
+    {
+      "line": 107,
+      "layer": "router",
+      "m": 8,
+      "path": "r6",
+      "us_printed": 9.31,
+      "raw": "BAKE router m=8 r6 9.31"
+    },
+    {
+      "line": 108,
+      "layer": "router",
+      "m": 8,
+      "path": "rk-s8z",
+      "us_printed": 9.12,
+      "raw": "BAKE router m=8 rk-s8z 9.12"
+    },
+    {
+      "line": 109,
+      "layer": "router",
+      "m": 8,
+      "path": "rk-s16w8z",
+      "us_printed": 8.83,
+      "raw": "BAKE router m=8 rk-s16w8z 8.83"
+    },
+    {
+      "line": 110,
+      "layer": "router",
+      "m": 8,
+      "path": "rk-s16w8x",
+      "us_printed": 8.64,
+      "raw": "BAKE router m=8 rk-s16w8x 8.64"
+    },
+    {
+      "line": 111,
+      "layer": "router",
+      "m": 8,
+      "path": "rk-s32x",
+      "us_printed": 8.64,
+      "raw": "BAKE router m=8 rk-s32x 8.64"
+    },
+    {
+      "line": 114,
+      "layer": "router",
+      "m": 16,
+      "path": "r6",
+      "us_printed": 9.38,
+      "raw": "BAKE router m=16 r6 9.38"
+    },
+    {
+      "line": 115,
+      "layer": "router",
+      "m": 16,
+      "path": "rk-s8z",
+      "us_printed": 9.15,
+      "raw": "BAKE router m=16 rk-s8z 9.15"
+    },
+    {
+      "line": 116,
+      "layer": "router",
+      "m": 16,
+      "path": "rk-s16w8z",
+      "us_printed": 9.06,
+      "raw": "BAKE router m=16 rk-s16w8z 9.06"
+    },
+    {
+      "line": 117,
+      "layer": "router",
+      "m": 16,
+      "path": "rk-s16w8x",
+      "us_printed": 8.93,
+      "raw": "BAKE router m=16 rk-s16w8x 8.93"
+    },
+    {
+      "line": 118,
+      "layer": "router",
+      "m": 16,
+      "path": "rk-s32x",
+      "us_printed": 9.18,
+      "raw": "BAKE router m=16 rk-s32x 9.18"
+    },
+    {
+      "line": 121,
+      "layer": "router",
+      "m": 32,
+      "path": "r6",
+      "us_printed": 10.24,
+      "raw": "BAKE router m=32 r6 10.24"
+    },
+    {
+      "line": 122,
+      "layer": "router",
+      "m": 32,
+      "path": "rk-s8z",
+      "us_printed": 9.41,
+      "raw": "BAKE router m=32 rk-s8z 9.41"
+    },
+    {
+      "line": 123,
+      "layer": "router",
+      "m": 32,
+      "path": "rk-s16w8z",
+      "us_printed": 9.34,
+      "raw": "BAKE router m=32 rk-s16w8z 9.34"
+    },
+    {
+      "line": 129,
+      "layer": "pooler",
+      "m": 32,
+      "path": "rq:t32s5hze-k4",
+      "us_printed": 19.39,
+      "raw": "BAKE pooler m=32 rq:t32s5hze-k4 19.39 (ok 3.1e-03) at 123s"
+    },
+    {
+      "line": 130,
+      "layer": "pooler",
+      "m": 32,
+      "path": "rq:t32s6hze-k4",
+      "us_printed": 19.46,
+      "raw": "BAKE pooler m=32 rq:t32s6hze-k4 19.46 (ok 3.2e-03) at 123s"
+    },
+    {
+      "line": 131,
+      "layer": "pooler",
+      "m": 32,
+      "path": "rq:t32s5hz-k4",
+      "us_printed": 19.49,
+      "raw": "BAKE pooler m=32 rq:t32s5hz-k4 19.49 (ok 3.1e-03) at 123s"
+    },
+    {
+      "line": 132,
+      "layer": "pooler",
+      "m": 32,
+      "path": "r6",
+      "us_printed": 20.96,
+      "raw": "BAKE pooler m=32 r6 20.96 (before variants 21.18, after variants 20.96) at 123s"
+    },
+    {
+      "line": 134,
+      "layer": "pooler",
+      "m": 16,
+      "path": "rq:t16s5hze-k4",
+      "us_printed": 19.49,
+      "raw": "BAKE pooler m=16 rq:t16s5hze-k4 19.49 (ok 3.2e-03) at 123s"
+    },
+    {
+      "line": 135,
+      "layer": "pooler",
+      "m": 16,
+      "path": "rq:t16s6hze-k4",
+      "us_printed": 19.33,
+      "raw": "BAKE pooler m=16 rq:t16s6hze-k4 19.33 (ok 3.1e-03) at 123s"
+    },
+    {
+      "line": 136,
+      "layer": "pooler",
+      "m": 16,
+      "path": "rq:t16s5hz-k4",
+      "us_printed": 19.65,
+      "raw": "BAKE pooler m=16 rq:t16s5hz-k4 19.65 (ok 3.1e-03) at 123s"
+    },
+    {
+      "line": 137,
+      "layer": "pooler",
+      "m": 16,
+      "path": "r6",
+      "us_printed": 18.46,
+      "raw": "BAKE pooler m=16 r6 18.46 (before variants 18.66, after variants 18.46) at 123s"
+    },
+    {
+      "line": 139,
+      "layer": "qkv_gate",
+      "m": 32,
+      "path": "rq:t32s5hze-k6",
+      "us_printed": 14.98,
+      "raw": "BAKE qkv_gate m=32 rq:t32s5hze-k6 14.98 (ok 3.7e-03) at 123s"
+    },
+    {
+      "line": 140,
+      "layer": "qkv_gate",
+      "m": 32,
+      "path": "rq:t32s5hze-k7",
+      "us_printed": 14.46,
+      "raw": "BAKE qkv_gate m=32 rq:t32s5hze-k7 14.46 (ok 3.8e-03) at 123s"
+    },
+    {
+      "line": 141,
+      "layer": "qkv_gate",
+      "m": 32,
+      "path": "rq:t32s5hz-k6",
+      "us_printed": 14.85,
+      "raw": "BAKE qkv_gate m=32 rq:t32s5hz-k6 14.85 (ok 3.6e-03) at 123s"
+    },
+    {
+      "line": 142,
+      "layer": "qkv_gate",
+      "m": 32,
+      "path": "rq:t32s6hze-k6",
+      "us_printed": 14.62,
+      "raw": "BAKE qkv_gate m=32 rq:t32s6hze-k6 14.62 (ok 3.6e-03) at 123s"
+    },
+    {
+      "line": 143,
+      "layer": "qkv_gate",
+      "m": 32,
+      "path": "r6",
+      "us_printed": 18.18,
+      "raw": "BAKE qkv_gate m=32 r6 18.18 (before variants 18.37, after variants 18.18) at 123s"
+    },
+    {
+      "line": 145,
+      "layer": "qkv_gate",
+      "m": 16,
+      "path": "rq:t16s5hze-k6",
+      "us_printed": 14.4,
+      "raw": "BAKE qkv_gate m=16 rq:t16s5hze-k6 14.40 (ok 3.6e-03) at 123s"
+    },
+    {
+      "line": 146,
+      "layer": "qkv_gate",
+      "m": 16,
+      "path": "rq:t16s5ze-k6",
+      "us_printed": 14.56,
+      "raw": "BAKE qkv_gate m=16 rq:t16s5ze-k6 14.56 (ok 3.7e-03) at 123s"
+    },
+    {
+      "line": 147,
+      "layer": "qkv_gate",
+      "m": 16,
+      "path": "rq:t16s5hze-k7",
+      "us_printed": 14.05,
+      "raw": "BAKE qkv_gate m=16 rq:t16s5hze-k7 14.05 (ok 3.8e-03) at 123s"
+    },
+    {
+      "line": 148,
+      "layer": "qkv_gate",
+      "m": 16,
+      "path": "rq:t16s5ze-k7",
+      "us_printed": 14.18,
+      "raw": "BAKE qkv_gate m=16 rq:t16s5ze-k7 14.18 (ok 3.7e-03) at 123s"
+    },
+    {
+      "line": 149,
+      "layer": "qkv_gate",
+      "m": 16,
+      "path": "r6",
+      "us_printed": 14.56,
+      "raw": "BAKE qkv_gate m=16 r6 14.56 (before variants 14.66, after variants 14.56) at 123s"
+    },
+    {
+      "line": 151,
+      "layer": "unpooler",
+      "m": 32,
+      "path": "rq:t32s5hze-k2",
+      "us_printed": 19.9,
+      "raw": "BAKE unpooler m=32 rq:t32s5hze-k2 19.90 (ok 2.4e-03) at 123s"
+    },
+    {
+      "line": 152,
+      "layer": "unpooler",
+      "m": 32,
+      "path": "rq:t32s6hze-k2",
+      "us_printed": 20.1,
+      "raw": "BAKE unpooler m=32 rq:t32s6hze-k2 20.10 (ok 2.4e-03) at 123s"
+    },
+    {
+      "line": 153,
+      "layer": "unpooler",
+      "m": 32,
+      "path": "rq:t32s6hz-k2",
+      "us_printed": 19.68,
+      "raw": "BAKE unpooler m=32 rq:t32s6hz-k2 19.68 (ok 2.4e-03) at 123s"
+    },
+    {
+      "line": 154,
+      "layer": "unpooler",
+      "m": 32,
+      "path": "r6",
+      "us_printed": 20.64,
+      "raw": "BAKE unpooler m=32 r6 20.64 (before variants 21.06, after variants 20.64) at 123s"
+    },
+    {
+      "line": 156,
+      "layer": "unpooler",
+      "m": 16,
+      "path": "rq:t16s5hze-k2",
+      "us_printed": 19.84,
+      "raw": "BAKE unpooler m=16 rq:t16s5hze-k2 19.84 (ok 2.4e-03) at 123s"
+    },
+    {
+      "line": 157,
+      "layer": "unpooler",
+      "m": 16,
+      "path": "rq:t16s6hze-k2",
+      "us_printed": 19.62,
+      "raw": "BAKE unpooler m=16 rq:t16s6hze-k2 19.62 (ok 2.4e-03) at 123s"
+    },
+    {
+      "line": 158,
+      "layer": "unpooler",
+      "m": 16,
+      "path": "rq:t16s5hz-k2",
+      "us_printed": 19.9,
+      "raw": "BAKE unpooler m=16 rq:t16s5hz-k2 19.90 (ok 2.4e-03) at 123s"
+    },
+    {
+      "line": 159,
+      "layer": "unpooler",
+      "m": 16,
+      "path": "r6",
+      "us_printed": 18.98,
+      "raw": "BAKE unpooler m=16 r6 18.98 (before variants 18.98, after variants 19.07) at 123s"
+    },
+    {
+      "line": 161,
+      "layer": "o",
+      "m": 32,
+      "path": "rq:t32s5hze-k2",
+      "us_printed": 10.91,
+      "raw": "BAKE o m=32 rq:t32s5hze-k2 10.91 (ok 2.4e-03) at 123s"
+    },
+    {
+      "line": 162,
+      "layer": "o",
+      "m": 32,
+      "path": "rq:t32s6hze-k2",
+      "us_printed": 10.59,
+      "raw": "BAKE o m=32 rq:t32s6hze-k2 10.59 (ok 2.4e-03) at 123s"
+    },
+    {
+      "line": 163,
+      "layer": "o",
+      "m": 32,
+      "path": "rq:t32s5ze-k2",
+      "us_printed": 10.72,
+      "raw": "BAKE o m=32 rq:t32s5ze-k2 10.72 (ok 2.4e-03) at 123s"
+    },
+    {
+      "line": 164,
+      "layer": "o",
+      "m": 32,
+      "path": "r6",
+      "us_printed": 10.82,
+      "raw": "BAKE o m=32 r6 10.82 (before variants 10.82, after variants 10.85) at 123s"
+    },
+    {
+      "line": 166,
+      "layer": "o",
+      "m": 16,
+      "path": "rq:t16s5hze-k2",
+      "us_printed": 10.69,
+      "raw": "BAKE o m=16 rq:t16s5hze-k2 10.69 (ok 2.4e-03) at 123s"
+    },
+    {
+      "line": 167,
+      "layer": "o",
+      "m": 16,
+      "path": "rq:t16s6hze-k2",
+      "us_printed": 10.69,
+      "raw": "BAKE o m=16 rq:t16s6hze-k2 10.69 (ok 2.4e-03) at 123s"
+    },
+    {
+      "line": 168,
+      "layer": "o",
+      "m": 16,
+      "path": "rq:t16s5ze-k2",
+      "us_printed": 10.62,
+      "raw": "BAKE o m=16 rq:t16s5ze-k2 10.62 (ok 2.4e-03) at 123s"
+    },
+    {
+      "line": 169,
+      "layer": "o",
+      "m": 16,
+      "path": "r6",
+      "us_printed": 9.79,
+      "raw": "BAKE o m=16 r6 9.79 (before variants 9.86, after variants 9.79) at 123s"
+    },
+    {
+      "line": 171,
+      "layer": "o",
+      "m": 128,
+      "path": "rq:h128s8e-k1",
+      "us_printed": 13.12,
+      "raw": "BAKE o m=128 rq:h128s8e-k1 13.12 (ok 1.7e-03) at 123s"
+    },
+    {
+      "line": 172,
+      "layer": "o",
+      "m": 128,
+      "path": "rq:h128s5-k1",
+      "us_printed": 13.22,
+      "raw": "BAKE o m=128 rq:h128s5-k1 13.22 (ok 1.7e-03) at 123s"
+    },
+    {
+      "line": 173,
+      "layer": "o",
+      "m": 128,
+      "path": "r6",
+      "us_printed": 11.07,
+      "raw": "BAKE o m=128 r6 11.07 (before variants 11.07, after variants 11.14) at 123s"
+    },
+    {
+      "line": 177,
+      "layer": "router",
+      "m": 128,
+      "path": "r6",
+      "us_printed": 13.82,
+      "raw": "BAKE router m=128 r6 13.82"
+    },
+    {
+      "line": 178,
+      "layer": "router",
+      "m": 128,
+      "path": "rw64k32s8z",
+      "us_printed": 12.93,
+      "raw": "BAKE router m=128 rw64k32s8z 12.93"
+    },
+    {
+      "line": 179,
+      "layer": "router",
+      "m": 128,
+      "path": "rt64k32b3x2z",
+      "us_printed": 11.49,
+      "raw": "BAKE router m=128 rt64k32b3x2z 11.49"
+    },
+    {
+      "line": 180,
+      "layer": "router",
+      "m": 128,
+      "path": "rt64k32b4z",
+      "us_printed": 11.52,
+      "raw": "BAKE router m=128 rt64k32b4z 11.52"
+    },
+    {
+      "line": 181,
+      "layer": "router",
+      "m": 128,
+      "path": "rt64k32b3x2bz",
+      "us_printed": 11.55,
+      "raw": "BAKE router m=128 rt64k32b3x2bz 11.55"
+    },
+    {
+      "line": 185,
+      "layer": "router",
+      "m": 256,
+      "path": "r6",
+      "us_printed": 15.52,
+      "raw": "BAKE router m=256 r6 15.52"
+    },
+    {
+      "line": 186,
+      "layer": "router",
+      "m": 256,
+      "path": "rw64k32r3x2z",
+      "us_printed": 16.03,
+      "raw": "BAKE router m=256 rw64k32r3x2z 16.03"
+    },
+    {
+      "line": 187,
+      "layer": "router",
+      "m": 256,
+      "path": "rt64k16b6z",
+      "us_printed": 13.57,
+      "raw": "BAKE router m=256 rt64k16b6z 13.57"
+    },
+    {
+      "line": 188,
+      "layer": "router",
+      "m": 256,
+      "path": "rt64k32b3x2z",
+      "us_printed": 13.18,
+      "raw": "BAKE router m=256 rt64k32b3x2z 13.18"
+    }
+  ],
+  "PICK": [
+    {
+      "line": 52,
+      "layer": "pooler",
+      "m": 128,
+      "path": "rq:s4s5hzEH",
+      "us_printed": 22.85
+    },
+    {
+      "line": 57,
+      "layer": "pooler",
+      "m": 256,
+      "path": "r6",
+      "us_printed": 28.1
+    },
+    {
+      "line": 64,
+      "layer": "qkv_gate",
+      "m": 128,
+      "path": "rq:s4s5hzEH",
+      "us_printed": 16.8
+    },
+    {
+      "line": 69,
+      "layer": "qkv_gate",
+      "m": 256,
+      "path": "r6",
+      "us_printed": 21.92
+    },
+    {
+      "line": 76,
+      "layer": "unpooler",
+      "m": 128,
+      "path": "r6",
+      "us_printed": 23.04
+    },
+    {
+      "line": 81,
+      "layer": "unpooler",
+      "m": 256,
+      "path": "r6",
+      "us_printed": 27.81
+    },
+    {
+      "line": 88,
+      "layer": "o",
+      "m": 128,
+      "path": "r6",
+      "us_printed": 11.04
+    },
+    {
+      "line": 93,
+      "layer": "o",
+      "m": 256,
+      "path": "r6",
+      "us_printed": 13.09
+    },
+    {
+      "line": 100,
+      "layer": "unpooler",
+      "m": 1,
+      "path": "r6",
+      "us_printed": 8.58
+    },
+    {
+      "line": 105,
+      "layer": "unpooler",
+      "m": 8,
+      "path": "uk-s4x",
+      "us_printed": 8.51
+    },
+    {
+      "line": 112,
+      "layer": "router",
+      "m": 8,
+      "path": "rk-s16w8x",
+      "us_printed": 8.64
+    },
+    {
+      "line": 119,
+      "layer": "router",
+      "m": 16,
+      "path": "rk-s16w8x",
+      "us_printed": 8.93
+    },
+    {
+      "line": 124,
+      "layer": "router",
+      "m": 32,
+      "path": "rk-s8z",
+      "us_printed": 9.41
+    },
+    {
+      "line": 133,
+      "layer": "pooler",
+      "m": 32,
+      "path": "rq:t32s5hze-k4",
+      "us_printed": 19.39
+    },
+    {
+      "line": 138,
+      "layer": "pooler",
+      "m": 16,
+      "path": "r6",
+      "us_printed": 18.46
+    },
+    {
+      "line": 144,
+      "layer": "qkv_gate",
+      "m": 32,
+      "path": "rq:t32s5hze-k7",
+      "us_printed": 14.46
+    },
+    {
+      "line": 150,
+      "layer": "qkv_gate",
+      "m": 16,
+      "path": "rq:t16s5hze-k7",
+      "us_printed": 14.05
+    },
+    {
+      "line": 155,
+      "layer": "unpooler",
+      "m": 32,
+      "path": "rq:t32s6hz-k2",
+      "us_printed": 19.68
+    },
+    {
+      "line": 160,
+      "layer": "unpooler",
+      "m": 16,
+      "path": "r6",
+      "us_printed": 18.98
+    },
+    {
+      "line": 165,
+      "layer": "o",
+      "m": 32,
+      "path": "rq:t32s6hze-k2",
+      "us_printed": 10.59
+    },
+    {
+      "line": 170,
+      "layer": "o",
+      "m": 16,
+      "path": "r6",
+      "us_printed": 9.79
+    },
+    {
+      "line": 174,
+      "layer": "o",
+      "m": 128,
+      "path": "r6",
+      "us_printed": 11.07
+    },
+    {
+      "line": 184,
+      "layer": "router",
+      "m": 128,
+      "path": "rt64k32b3x2z",
+      "us_printed": 11.49
+    },
+    {
+      "line": 190,
+      "layer": "router",
+      "m": 256,
+      "path": "rt64k32b3x2z",
+      "us_printed": 13.18
+    }
+  ],
+  "same_job_component_bakes": [
+    {
+      "component": "EH_HINT_SAME_GEOMETRY",
+      "layer": "pooler",
+      "m": 128,
+      "control_printed_us": 22.98,
+      "EH_printed_us": 22.85,
+      "printed_control_minus_EH_us": 0.129999999999999,
+      "control_log_line": 47,
+      "EH_log_line": 50,
+      "interpretation": "Sequential same-job prepare medians; not a dedicated balanced production EH estimate."
+    },
+    {
+      "component": "EH_HINT_SAME_GEOMETRY",
+      "layer": "qkv_gate",
+      "m": 128,
+      "control_printed_us": 17.22,
+      "EH_printed_us": 16.8,
+      "printed_control_minus_EH_us": 0.41999999999999815,
+      "control_log_line": 59,
+      "EH_log_line": 62,
+      "interpretation": "Sequential same-job prepare medians; not a dedicated balanced production EH estimate."
+    },
+    {
+      "component": "EH_HINT_SAME_GEOMETRY",
+      "layer": "unpooler",
+      "m": 128,
+      "control_printed_us": 22.94,
+      "EH_printed_us": 23.1,
+      "printed_control_minus_EH_us": -0.16000000000000014,
+      "control_log_line": 71,
+      "EH_log_line": 74,
+      "interpretation": "Sequential same-job prepare medians; not a dedicated balanced production EH estimate."
+    },
+    {
+      "component": "EH_HINT_SAME_GEOMETRY",
+      "layer": "o",
+      "m": 128,
+      "control_printed_us": 12.86,
+      "EH_printed_us": 13.38,
+      "printed_control_minus_EH_us": -0.5200000000000014,
+      "control_log_line": 83,
+      "EH_log_line": 86,
+      "interpretation": "Sequential same-job prepare medians; not a dedicated balanced production EH estimate."
+    },
+    {
+      "component": "INHERITED_RTK_VS_OLD_RW",
+      "layer": "router",
+      "m": 128,
+      "control_printed_us": 12.93,
+      "RTK_printed_us": 11.49,
+      "printed_control_minus_RTK_us": 1.4399999999999995,
+      "control_log_line": 178,
+      "RTK_log_line": 179,
+      "interpretation": "Same-job inherited-branch bake control; not a new EH gain."
+    },
+    {
+      "component": "INHERITED_RTK_VS_OLD_RW",
+      "layer": "router",
+      "m": 256,
+      "control_printed_us": 16.03,
+      "RTK_printed_us": 13.18,
+      "printed_control_minus_RTK_us": 2.8500000000000014,
+      "control_log_line": 186,
+      "RTK_log_line": 188,
+      "interpretation": "Same-job inherited-branch bake control; not a new EH gain."
+    },
+    {
+      "component": "INHERITED_SMALL_NT_VS_R6_F1",
+      "layer": "pooler",
+      "m": 32,
+      "R6_printed_us": 20.96,
+      "RQ_printed_us": 19.39,
+      "printed_R6_minus_RQ_us": 1.5700000000000003,
+      "control_log_line": 132,
+      "RQ_log_line": 129,
+      "interpretation": "Same-job package bake comparison; no attribution of the whole saving to EH."
+    },
+    {
+      "component": "INHERITED_SMALL_NT_VS_R6_F1",
+      "layer": "qkv_gate",
+      "m": 32,
+      "R6_printed_us": 18.18,
+      "RQ_printed_us": 14.46,
+      "printed_R6_minus_RQ_us": 3.719999999999999,
+      "control_log_line": 143,
+      "RQ_log_line": 140,
+      "interpretation": "Same-job package bake comparison; no attribution of the whole saving to EH."
+    },
+    {
+      "component": "INHERITED_SMALL_NT_VS_R6_F1",
+      "layer": "qkv_gate",
+      "m": 16,
+      "R6_printed_us": 14.56,
+      "RQ_printed_us": 14.05,
+      "printed_R6_minus_RQ_us": 0.5099999999999998,
+      "control_log_line": 149,
+      "RQ_log_line": 147,
+      "interpretation": "Same-job package bake comparison; no attribution of the whole saving to EH."
+    },
+    {
+      "component": "INHERITED_SMALL_NT_VS_R6_F1",
+      "layer": "unpooler",
+      "m": 32,
+      "R6_printed_us": 20.64,
+      "RQ_printed_us": 19.68,
+      "printed_R6_minus_RQ_us": 0.9600000000000009,
+      "control_log_line": 154,
+      "RQ_log_line": 153,
+      "interpretation": "Same-job package bake comparison; no attribution of the whole saving to EH."
+    },
+    {
+      "component": "INHERITED_SMALL_NT_VS_R6_F1",
+      "layer": "o",
+      "m": 32,
+      "R6_printed_us": 10.82,
+      "RQ_printed_us": 10.59,
+      "printed_R6_minus_RQ_us": 0.23000000000000043,
+      "control_log_line": 164,
+      "RQ_log_line": 162,
+      "interpretation": "Same-job package bake comparison; no attribution of the whole saving to EH."
+    }
+  ],
+  "source_selected_EH": [
+    {
+      "layer": "qkv_gate",
+      "m": 128,
+      "kernel": "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           13.2 \u00b5s 100.0%      1"
+    },
+    {
+      "layer": "pooler",
+      "m": 128,
+      "kernel": "void rq<128, 5, 1, 0, 0, 0, 65539>(RqP, RqTmap, RqTmap)           19.6 \u00b5s 100.0%      1"
+    }
+  ],
+  "scope": {
+    "official_tests": 9,
+    "benchmark_shapes": 30,
+    "profiles": 30,
+    "runs_per_shape": 60,
+    "total_candidate_timing_samples": 1800,
+    "one_kernel_each_profile": true
+  },
+  "input_hashes": {
+    "results/proj-rsi/jobs/a3ed4ce5886a4415.json": "ffdabc0866e8194b4a540528258d9059ca7c84766661f9fa413cab94fcbdccb9",
+    "results/proj-rsi/jobs/a3ed4ce5886a4415.log": "bcb4ea414222be406b9a62743c8004de46854a03ed4c6b30408f68396e092909",
+    "results/proj-rsi/jobs/a3ed4ce5886a4415.txt": "b9cfdc86b6ef1555d5114f7597db85c700da0ce3041ef3e348f83f90c55aeba9",
+    "results/proj-rsi/jobs/a3ed4ce5886a4415.submitted.json": "2d61227d4afa25bea4aa3e7f791bf757ab92f511f6089a72cc66d6b7f0a42380",
+    "results/proj-rsi/releases/pw38-v1-29e557ea53f3/submission.py": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+    "results/proj-rsi/releases/pw38-v1-29e557ea53f3/attestation.json": "94fb0439cc23735ab05c3cb01f4f7185484ba3cae0bd1890ce32c26fe32f5b7f",
+    "results/proj-rsi/releases/pw38-v1-29e557ea53f3/check-status-0458.json": "8f8807649764e118798078382c7db7dea7de32dd2ac7123794658d267cdaf24a",
+    "results/proj-rsi/jobs/fb548b5dc6f04696.json": "f3a8e1c1339cbaf764d0f9024b7d4c9273dc73c15788f425c8c16e6b7a037fd7",
+    "results/proj-rsi/jobs/e22a4b9d693d4902.json": "4d7aaadfdd8f212ac93273d51952227a3333ea2916a553180733c4f3fe02a0b6"
+  },
+  "limitations": [
+    "Check is unscored and does not replace leaderboard incumbent.",
+    "Point score difference against prior jobs is smaller than official interval widths; intervals overlap.",
+    "All cross-job per-shape/score deltas are descriptive, not causal.",
+    "EH sequential prepare medians validate availability and selection, not a statistically isolated balanced EH production gain.",
+    "The exact run completes preparation at161s; this does not promise every future cold build or scored prepare will finish identically."
+  ],
+  "original_control_jobs_own_bake_evidence": {
+    "rs32": {
+      "job": "fb548b5dc6f04696",
+      "log_path": "results/proj-rsi/jobs/fb548b5dc6f04696.log",
+      "log_sha256": "dc74ae050555498984c5dde1f7474dbb5f70789822a72c1e679b2cdaab00a9ef",
+      "PREP": [
+        {
+          "line": 51,
+          "text": "PREP r6 done in 105s"
+        },
+        {
+          "line": 52,
+          "text": "PREP rq thread ready at 35s (bake starts at 105s)"
+        },
+        {
+          "line": 125,
+          "text": "PREP rq32 thread ready at 35s"
+        },
+        {
+          "line": 126,
+          "text": "PREP rq32 bake starts at 107s"
+        },
+        {
+          "line": 173,
+          "text": "PREP rw compiled in 34s"
+        },
+        {
+          "line": 188,
+          "text": "PREP done in 142s"
+        }
+      ],
+      "BAKE": [
+        {
+          "line": 53,
+          "layer": "pooler",
+          "m": 128,
+          "path": "rq:s4s5z",
+          "us_printed": 22.94,
+          "raw": "BAKE pooler m=128 rq:s4s5z 22.94 (ok 3.1e-03) at 105s"
+        },
+        {
+          "line": 54,
+          "layer": "pooler",
+          "m": 128,
+          "path": "rq:s4s5hz",
+          "us_printed": 23.2,
+          "raw": "BAKE pooler m=128 rq:s4s5hz 23.20 (ok 3.2e-03) at 105s"
+        },
+        {
+          "line": 55,
+          "layer": "pooler",
+          "m": 128,
+          "path": "rq:s4hz",
+          "us_printed": 24.16,
+          "raw": "BAKE pooler m=128 rq:s4hz 24.16 (ok 3.1e-03) at 105s"
+        },
+        {
+          "line": 56,
+          "layer": "pooler",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 23.87,
+          "raw": "BAKE pooler m=128 r6 23.87 (before pack 23.87, after variants 24.22) at 105s"
+        },
+        {
+          "line": 58,
+          "layer": "pooler",
+          "m": 256,
+          "path": "rq:n256s4hz",
+          "us_printed": 31.01,
+          "raw": "BAKE pooler m=256 rq:n256s4hz 31.01 (ok 3.1e-03) at 105s"
+        },
+        {
+          "line": 59,
+          "layer": "pooler",
+          "m": 256,
+          "path": "rq:n256s5hz",
+          "us_printed": 31.71,
+          "raw": "BAKE pooler m=256 rq:n256s5hz 31.71 (ok 3.2e-03) at 105s"
+        },
+        {
+          "line": 60,
+          "layer": "pooler",
+          "m": 256,
+          "path": "rq:n256s5z",
+          "us_printed": 31.46,
+          "raw": "BAKE pooler m=256 rq:n256s5z 31.46 (ok 3.2e-03) at 105s"
+        },
+        {
+          "line": 61,
+          "layer": "pooler",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 28.29,
+          "raw": "BAKE pooler m=256 r6 28.29 (before pack 28.64, after variants 28.29) at 105s"
+        },
+        {
+          "line": 63,
+          "layer": "qkv_gate",
+          "m": 128,
+          "path": "rq:s4s5z",
+          "us_printed": 16.96,
+          "raw": "BAKE qkv_gate m=128 rq:s4s5z 16.96 (ok 3.8e-03) at 105s"
+        },
+        {
+          "line": 64,
+          "layer": "qkv_gate",
+          "m": 128,
+          "path": "rq:s4s5hz",
+          "us_printed": 16.86,
+          "raw": "BAKE qkv_gate m=128 rq:s4s5hz 16.86 (ok 3.8e-03) at 105s"
+        },
+        {
+          "line": 65,
+          "layer": "qkv_gate",
+          "m": 128,
+          "path": "rq:s4hz",
+          "us_printed": 18.02,
+          "raw": "BAKE qkv_gate m=128 rq:s4hz 18.02 (ok 3.8e-03) at 105s"
+        },
+        {
+          "line": 66,
+          "layer": "qkv_gate",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 19.42,
+          "raw": "BAKE qkv_gate m=128 r6 19.42 (before pack 19.42, after variants 19.42) at 105s"
+        },
+        {
+          "line": 68,
+          "layer": "qkv_gate",
+          "m": 256,
+          "path": "rq:n256s4hz",
+          "us_printed": 21.98,
+          "raw": "BAKE qkv_gate m=256 rq:n256s4hz 21.98 (ok 3.8e-03) at 105s"
+        },
+        {
+          "line": 69,
+          "layer": "qkv_gate",
+          "m": 256,
+          "path": "rq:n256s5hz",
+          "us_printed": 22.82,
+          "raw": "BAKE qkv_gate m=256 rq:n256s5hz 22.82 (ok 3.9e-03) at 105s"
+        },
+        {
+          "line": 70,
+          "layer": "qkv_gate",
+          "m": 256,
+          "path": "rq:n256s5z",
+          "us_printed": 22.69,
+          "raw": "BAKE qkv_gate m=256 rq:n256s5z 22.69 (ok 3.9e-03) at 105s"
+        },
+        {
+          "line": 71,
+          "layer": "qkv_gate",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 21.6,
+          "raw": "BAKE qkv_gate m=256 r6 21.60 (before pack 21.73, after variants 21.60) at 105s"
+        },
+        {
+          "line": 73,
+          "layer": "unpooler",
+          "m": 128,
+          "path": "rq:s4s5z",
+          "us_printed": 22.88,
+          "raw": "BAKE unpooler m=128 rq:s4s5z 22.88 (ok 2.5e-03) at 105s"
+        },
+        {
+          "line": 74,
+          "layer": "unpooler",
+          "m": 128,
+          "path": "rq:s4s5hz",
+          "us_printed": 22.82,
+          "raw": "BAKE unpooler m=128 rq:s4s5hz 22.82 (ok 2.4e-03) at 105s"
+        },
+        {
+          "line": 75,
+          "layer": "unpooler",
+          "m": 128,
+          "path": "rq:s4hz",
+          "us_printed": 23.17,
+          "raw": "BAKE unpooler m=128 rq:s4hz 23.17 (ok 2.4e-03) at 105s"
+        },
+        {
+          "line": 76,
+          "layer": "unpooler",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 22.82,
+          "raw": "BAKE unpooler m=128 r6 22.82 (before pack 23.30, after variants 22.82) at 105s"
+        },
+        {
+          "line": 78,
+          "layer": "unpooler",
+          "m": 256,
+          "path": "rq:n256s4hz",
+          "us_printed": 31.1,
+          "raw": "BAKE unpooler m=256 rq:n256s4hz 31.10 (ok 2.4e-03) at 105s"
+        },
+        {
+          "line": 79,
+          "layer": "unpooler",
+          "m": 256,
+          "path": "rq:n256s5hz",
+          "us_printed": 31.9,
+          "raw": "BAKE unpooler m=256 rq:n256s5hz 31.90 (ok 2.4e-03) at 105s"
+        },
+        {
+          "line": 80,
+          "layer": "unpooler",
+          "m": 256,
+          "path": "rq:n256s5z",
+          "us_printed": 31.78,
+          "raw": "BAKE unpooler m=256 rq:n256s5z 31.78 (ok 2.4e-03) at 105s"
+        },
+        {
+          "line": 81,
+          "layer": "unpooler",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 28.16,
+          "raw": "BAKE unpooler m=256 r6 28.16 (before pack 28.38, after variants 28.16) at 105s"
+        },
+        {
+          "line": 83,
+          "layer": "o",
+          "m": 128,
+          "path": "rq:s4s5z",
+          "us_printed": 12.77,
+          "raw": "BAKE o m=128 rq:s4s5z 12.77 (ok 2.4e-03) at 105s"
+        },
+        {
+          "line": 84,
+          "layer": "o",
+          "m": 128,
+          "path": "rq:s4s5hz",
+          "us_printed": 13.44,
+          "raw": "BAKE o m=128 rq:s4s5hz 13.44 (ok 2.4e-03) at 106s"
+        },
+        {
+          "line": 85,
+          "layer": "o",
+          "m": 128,
+          "path": "rq:s4hz",
+          "us_printed": 13.06,
+          "raw": "BAKE o m=128 rq:s4hz 13.06 (ok 2.4e-03) at 106s"
+        },
+        {
+          "line": 86,
+          "layer": "o",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 11.23,
+          "raw": "BAKE o m=128 r6 11.23 (before pack 11.23, after variants 11.33) at 106s"
+        },
+        {
+          "line": 88,
+          "layer": "o",
+          "m": 256,
+          "path": "rq:n256s4hz",
+          "us_printed": 16.22,
+          "raw": "BAKE o m=256 rq:n256s4hz 16.22 (ok 2.4e-03) at 106s"
+        },
+        {
+          "line": 89,
+          "layer": "o",
+          "m": 256,
+          "path": "rq:n256s5hz",
+          "us_printed": 16.8,
+          "raw": "BAKE o m=256 rq:n256s5hz 16.80 (ok 2.4e-03) at 106s"
+        },
+        {
+          "line": 90,
+          "layer": "o",
+          "m": 256,
+          "path": "rq:n256s5z",
+          "us_printed": 16.42,
+          "raw": "BAKE o m=256 rq:n256s5z 16.42 (ok 2.4e-03) at 106s"
+        },
+        {
+          "line": 91,
+          "layer": "o",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 12.8,
+          "raw": "BAKE o m=256 r6 12.80 (before pack 12.80, after variants 13.18) at 106s"
+        },
+        {
+          "line": 94,
+          "layer": "unpooler",
+          "m": 1,
+          "path": "r6",
+          "us_printed": 8.67,
+          "raw": "BAKE unpooler m=1 r6 8.67"
+        },
+        {
+          "line": 95,
+          "layer": "unpooler",
+          "m": 1,
+          "path": "uk-s4z",
+          "us_printed": 8.7,
+          "raw": "BAKE unpooler m=1 uk-s4z 8.70"
+        },
+        {
+          "line": 96,
+          "layer": "unpooler",
+          "m": 1,
+          "path": "uk-s4x",
+          "us_printed": 8.45,
+          "raw": "BAKE unpooler m=1 uk-s4x 8.45"
+        },
+        {
+          "line": 97,
+          "layer": "unpooler",
+          "m": 1,
+          "path": "uk-s4w4x",
+          "us_printed": 8.48,
+          "raw": "BAKE unpooler m=1 uk-s4w4x 8.48"
+        },
+        {
+          "line": 100,
+          "layer": "unpooler",
+          "m": 8,
+          "path": "r6",
+          "us_printed": 8.7,
+          "raw": "BAKE unpooler m=8 r6 8.70"
+        },
+        {
+          "line": 101,
+          "layer": "unpooler",
+          "m": 8,
+          "path": "uk-s4z",
+          "us_printed": 8.7,
+          "raw": "BAKE unpooler m=8 uk-s4z 8.70"
+        },
+        {
+          "line": 102,
+          "layer": "unpooler",
+          "m": 8,
+          "path": "uk-s4x",
+          "us_printed": 8.51,
+          "raw": "BAKE unpooler m=8 uk-s4x 8.51"
+        },
+        {
+          "line": 103,
+          "layer": "unpooler",
+          "m": 8,
+          "path": "uk-s4w4x",
+          "us_printed": 8.61,
+          "raw": "BAKE unpooler m=8 uk-s4w4x 8.61"
+        },
+        {
+          "line": 106,
+          "layer": "router",
+          "m": 8,
+          "path": "r6",
+          "us_printed": 9.31,
+          "raw": "BAKE router m=8 r6 9.31"
+        },
+        {
+          "line": 107,
+          "layer": "router",
+          "m": 8,
+          "path": "rk-s8z",
+          "us_printed": 9.18,
+          "raw": "BAKE router m=8 rk-s8z 9.18"
+        },
+        {
+          "line": 108,
+          "layer": "router",
+          "m": 8,
+          "path": "rk-s16w8z",
+          "us_printed": 8.8,
+          "raw": "BAKE router m=8 rk-s16w8z 8.80"
+        },
+        {
+          "line": 109,
+          "layer": "router",
+          "m": 8,
+          "path": "rk-s16w8x",
+          "us_printed": 8.74,
+          "raw": "BAKE router m=8 rk-s16w8x 8.74"
+        },
+        {
+          "line": 110,
+          "layer": "router",
+          "m": 8,
+          "path": "rk-s32x",
+          "us_printed": 8.74,
+          "raw": "BAKE router m=8 rk-s32x 8.74"
+        },
+        {
+          "line": 113,
+          "layer": "router",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 9.47,
+          "raw": "BAKE router m=16 r6 9.47"
+        },
+        {
+          "line": 114,
+          "layer": "router",
+          "m": 16,
+          "path": "rk-s8z",
+          "us_printed": 9.41,
+          "raw": "BAKE router m=16 rk-s8z 9.41"
+        },
+        {
+          "line": 115,
+          "layer": "router",
+          "m": 16,
+          "path": "rk-s16w8z",
+          "us_printed": 9.06,
+          "raw": "BAKE router m=16 rk-s16w8z 9.06"
+        },
+        {
+          "line": 116,
+          "layer": "router",
+          "m": 16,
+          "path": "rk-s16w8x",
+          "us_printed": 8.9,
+          "raw": "BAKE router m=16 rk-s16w8x 8.90"
+        },
+        {
+          "line": 117,
+          "layer": "router",
+          "m": 16,
+          "path": "rk-s32x",
+          "us_printed": 8.99,
+          "raw": "BAKE router m=16 rk-s32x 8.99"
+        },
+        {
+          "line": 120,
+          "layer": "router",
+          "m": 32,
+          "path": "r6",
+          "us_printed": 10.11,
+          "raw": "BAKE router m=32 r6 10.11"
+        },
+        {
+          "line": 121,
+          "layer": "router",
+          "m": 32,
+          "path": "rk-s8z",
+          "us_printed": 9.44,
+          "raw": "BAKE router m=32 rk-s8z 9.44"
+        },
+        {
+          "line": 122,
+          "layer": "router",
+          "m": 32,
+          "path": "rk-s16w8z",
+          "us_printed": 9.25,
+          "raw": "BAKE router m=32 rk-s16w8z 9.25"
+        },
+        {
+          "line": 127,
+          "layer": "pooler",
+          "m": 32,
+          "path": "rq:t32s5hze-k4",
+          "us_printed": 19.39,
+          "raw": "BAKE pooler m=32 rq:t32s5hze-k4 19.39 (ok 3.1e-03) at 107s"
+        },
+        {
+          "line": 128,
+          "layer": "pooler",
+          "m": 32,
+          "path": "rq:t32s6hze-k4",
+          "us_printed": 19.39,
+          "raw": "BAKE pooler m=32 rq:t32s6hze-k4 19.39 (ok 3.2e-03) at 107s"
+        },
+        {
+          "line": 129,
+          "layer": "pooler",
+          "m": 32,
+          "path": "rq:t32s5hz-k4",
+          "us_printed": 19.49,
+          "raw": "BAKE pooler m=32 rq:t32s5hz-k4 19.49 (ok 3.2e-03) at 107s"
+        },
+        {
+          "line": 130,
+          "layer": "pooler",
+          "m": 32,
+          "path": "r6",
+          "us_printed": 21.02,
+          "raw": "BAKE pooler m=32 r6 21.02 (before variants 21.22, after variants 21.02) at 107s"
+        },
+        {
+          "line": 132,
+          "layer": "pooler",
+          "m": 16,
+          "path": "rq:t16s5hze-k4",
+          "us_printed": 19.46,
+          "raw": "BAKE pooler m=16 rq:t16s5hze-k4 19.46 (ok 3.1e-03) at 108s"
+        },
+        {
+          "line": 133,
+          "layer": "pooler",
+          "m": 16,
+          "path": "rq:t16s6hze-k4",
+          "us_printed": 19.3,
+          "raw": "BAKE pooler m=16 rq:t16s6hze-k4 19.30 (ok 3.1e-03) at 108s"
+        },
+        {
+          "line": 134,
+          "layer": "pooler",
+          "m": 16,
+          "path": "rq:t16s5hz-k4",
+          "us_printed": 19.2,
+          "raw": "BAKE pooler m=16 rq:t16s5hz-k4 19.20 (ok 3.1e-03) at 108s"
+        },
+        {
+          "line": 135,
+          "layer": "pooler",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 18.24,
+          "raw": "BAKE pooler m=16 r6 18.24 (before variants 18.27, after variants 18.24) at 108s"
+        },
+        {
+          "line": 137,
+          "layer": "qkv_gate",
+          "m": 32,
+          "path": "rq:t32s5hze-k6",
+          "us_printed": 14.5,
+          "raw": "BAKE qkv_gate m=32 rq:t32s5hze-k6 14.50 (ok 3.6e-03) at 108s"
+        },
+        {
+          "line": 138,
+          "layer": "qkv_gate",
+          "m": 32,
+          "path": "rq:t32s5hze-k7",
+          "us_printed": 14.05,
+          "raw": "BAKE qkv_gate m=32 rq:t32s5hze-k7 14.05 (ok 3.9e-03) at 108s"
+        },
+        {
+          "line": 139,
+          "layer": "qkv_gate",
+          "m": 32,
+          "path": "rq:t32s5hz-k6",
+          "us_printed": 14.53,
+          "raw": "BAKE qkv_gate m=32 rq:t32s5hz-k6 14.53 (ok 3.6e-03) at 108s"
+        },
+        {
+          "line": 140,
+          "layer": "qkv_gate",
+          "m": 32,
+          "path": "rq:t32s6hze-k6",
+          "us_printed": 14.4,
+          "raw": "BAKE qkv_gate m=32 rq:t32s6hze-k6 14.40 (ok 3.7e-03) at 108s"
+        },
+        {
+          "line": 141,
+          "layer": "qkv_gate",
+          "m": 32,
+          "path": "r6",
+          "us_printed": 17.95,
+          "raw": "BAKE qkv_gate m=32 r6 17.95 (before variants 18.37, after variants 17.95) at 108s"
+        },
+        {
+          "line": 143,
+          "layer": "qkv_gate",
+          "m": 16,
+          "path": "rq:t16s5hze-k6",
+          "us_printed": 14.34,
+          "raw": "BAKE qkv_gate m=16 rq:t16s5hze-k6 14.34 (ok 3.6e-03) at 108s"
+        },
+        {
+          "line": 144,
+          "layer": "qkv_gate",
+          "m": 16,
+          "path": "rq:t16s5ze-k6",
+          "us_printed": 15.58,
+          "raw": "BAKE qkv_gate m=16 rq:t16s5ze-k6 15.58 (ok 3.6e-03) at 108s"
+        },
+        {
+          "line": 145,
+          "layer": "qkv_gate",
+          "m": 16,
+          "path": "rq:t16s5hze-k7",
+          "us_printed": 14.05,
+          "raw": "BAKE qkv_gate m=16 rq:t16s5hze-k7 14.05 (ok 3.8e-03) at 108s"
+        },
+        {
+          "line": 146,
+          "layer": "qkv_gate",
+          "m": 16,
+          "path": "rq:t16s5ze-k7",
+          "us_printed": 14.11,
+          "raw": "BAKE qkv_gate m=16 rq:t16s5ze-k7 14.11 (ok 3.8e-03) at 108s"
+        },
+        {
+          "line": 147,
+          "layer": "qkv_gate",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 14.56,
+          "raw": "BAKE qkv_gate m=16 r6 14.56 (before variants 14.56, after variants 15.87) at 108s"
+        },
+        {
+          "line": 149,
+          "layer": "unpooler",
+          "m": 32,
+          "path": "rq:t32s5hze-k2",
+          "us_printed": 19.17,
+          "raw": "BAKE unpooler m=32 rq:t32s5hze-k2 19.17 (ok 2.4e-03) at 108s"
+        },
+        {
+          "line": 150,
+          "layer": "unpooler",
+          "m": 32,
+          "path": "rq:t32s6hze-k2",
+          "us_printed": 19.2,
+          "raw": "BAKE unpooler m=32 rq:t32s6hze-k2 19.20 (ok 2.4e-03) at 108s"
+        },
+        {
+          "line": 151,
+          "layer": "unpooler",
+          "m": 32,
+          "path": "rq:t32s6hz-k2",
+          "us_printed": 19.23,
+          "raw": "BAKE unpooler m=32 rq:t32s6hz-k2 19.23 (ok 2.4e-03) at 108s"
+        },
+        {
+          "line": 152,
+          "layer": "unpooler",
+          "m": 32,
+          "path": "r6",
+          "us_printed": 20.96,
+          "raw": "BAKE unpooler m=32 r6 20.96 (before variants 20.96, after variants 21.02) at 108s"
+        },
+        {
+          "line": 154,
+          "layer": "unpooler",
+          "m": 16,
+          "path": "rq:t16s5hze-k2",
+          "us_printed": 19.1,
+          "raw": "BAKE unpooler m=16 rq:t16s5hze-k2 19.10 (ok 2.4e-03) at 108s"
+        },
+        {
+          "line": 155,
+          "layer": "unpooler",
+          "m": 16,
+          "path": "rq:t16s6hze-k2",
+          "us_printed": 18.98,
+          "raw": "BAKE unpooler m=16 rq:t16s6hze-k2 18.98 (ok 2.4e-03) at 108s"
+        },
+        {
+          "line": 156,
+          "layer": "unpooler",
+          "m": 16,
+          "path": "rq:t16s5hz-k2",
+          "us_printed": 19.17,
+          "raw": "BAKE unpooler m=16 rq:t16s5hz-k2 19.17 (ok 2.4e-03) at 108s"
+        },
+        {
+          "line": 157,
+          "layer": "unpooler",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 18.82,
+          "raw": "BAKE unpooler m=16 r6 18.82 (before variants 18.82, after variants 18.85) at 108s"
+        },
+        {
+          "line": 159,
+          "layer": "o",
+          "m": 32,
+          "path": "rq:t32s5hze-k2",
+          "us_printed": 10.66,
+          "raw": "BAKE o m=32 rq:t32s5hze-k2 10.66 (ok 2.4e-03) at 108s"
+        },
+        {
+          "line": 160,
+          "layer": "o",
+          "m": 32,
+          "path": "rq:t32s6hze-k2",
+          "us_printed": 10.5,
+          "raw": "BAKE o m=32 rq:t32s6hze-k2 10.50 (ok 2.4e-03) at 108s"
+        },
+        {
+          "line": 161,
+          "layer": "o",
+          "m": 32,
+          "path": "rq:t32s5ze-k2",
+          "us_printed": 10.75,
+          "raw": "BAKE o m=32 rq:t32s5ze-k2 10.75 (ok 2.4e-03) at 108s"
+        },
+        {
+          "line": 162,
+          "layer": "o",
+          "m": 32,
+          "path": "r6",
+          "us_printed": 10.94,
+          "raw": "BAKE o m=32 r6 10.94 (before variants 11.01, after variants 10.94) at 108s"
+        },
+        {
+          "line": 164,
+          "layer": "o",
+          "m": 16,
+          "path": "rq:t16s5hze-k2",
+          "us_printed": 10.46,
+          "raw": "BAKE o m=16 rq:t16s5hze-k2 10.46 (ok 2.4e-03) at 108s"
+        },
+        {
+          "line": 165,
+          "layer": "o",
+          "m": 16,
+          "path": "rq:t16s6hze-k2",
+          "us_printed": 10.3,
+          "raw": "BAKE o m=16 rq:t16s6hze-k2 10.30 (ok 2.4e-03) at 108s"
+        },
+        {
+          "line": 166,
+          "layer": "o",
+          "m": 16,
+          "path": "rq:t16s5ze-k2",
+          "us_printed": 10.46,
+          "raw": "BAKE o m=16 rq:t16s5ze-k2 10.46 (ok 2.4e-03) at 108s"
+        },
+        {
+          "line": 167,
+          "layer": "o",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 9.66,
+          "raw": "BAKE o m=16 r6 9.66 (before variants 9.70, after variants 9.66) at 108s"
+        },
+        {
+          "line": 169,
+          "layer": "o",
+          "m": 128,
+          "path": "rq:h128s8e-k1",
+          "us_printed": 12.7,
+          "raw": "BAKE o m=128 rq:h128s8e-k1 12.70 (ok 1.7e-03) at 108s"
+        },
+        {
+          "line": 170,
+          "layer": "o",
+          "m": 128,
+          "path": "rq:h128s5-k1",
+          "us_printed": 12.96,
+          "raw": "BAKE o m=128 rq:h128s5-k1 12.96 (ok 1.7e-03) at 108s"
+        },
+        {
+          "line": 171,
+          "layer": "o",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 11.17,
+          "raw": "BAKE o m=128 r6 11.17 (before variants 11.17, after variants 11.49) at 108s"
+        },
+        {
+          "line": 174,
+          "layer": "router",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 14.02,
+          "raw": "BAKE router m=128 r6 14.02"
+        },
+        {
+          "line": 175,
+          "layer": "router",
+          "m": 128,
+          "path": "rp64k32s4",
+          "us_printed": 13.73,
+          "raw": "BAKE router m=128 rp64k32s4 13.73"
+        },
+        {
+          "line": 176,
+          "layer": "router",
+          "m": 128,
+          "path": "rw64k32s8",
+          "us_printed": 14.18,
+          "raw": "BAKE router m=128 rw64k32s8 14.18"
+        },
+        {
+          "line": 177,
+          "layer": "router",
+          "m": 128,
+          "path": "rw64k32s4z",
+          "us_printed": 13.66,
+          "raw": "BAKE router m=128 rw64k32s4z 13.66"
+        },
+        {
+          "line": 178,
+          "layer": "router",
+          "m": 128,
+          "path": "rw64k32s8z",
+          "us_printed": 13.22,
+          "raw": "BAKE router m=128 rw64k32s8z 13.22"
+        },
+        {
+          "line": 179,
+          "layer": "router",
+          "m": 128,
+          "path": "rw64k32r3x2",
+          "us_printed": 14.59,
+          "raw": "BAKE router m=128 rw64k32r3x2 14.59"
+        },
+        {
+          "line": 180,
+          "layer": "router",
+          "m": 128,
+          "path": "rw64k32r3x2z",
+          "us_printed": 13.89,
+          "raw": "BAKE router m=128 rw64k32r3x2z 13.89"
+        },
+        {
+          "line": 183,
+          "layer": "router",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 15.33,
+          "raw": "BAKE router m=256 r6 15.33"
+        },
+        {
+          "line": 184,
+          "layer": "router",
+          "m": 256,
+          "path": "rwv64k64s4x2",
+          "us_printed": 18.02,
+          "raw": "BAKE router m=256 rwv64k64s4x2 18.02"
+        },
+        {
+          "line": 185,
+          "layer": "router",
+          "m": 256,
+          "path": "rw64k32r3x2",
+          "us_printed": 17.06,
+          "raw": "BAKE router m=256 rw64k32r3x2 17.06"
+        },
+        {
+          "line": 186,
+          "layer": "router",
+          "m": 256,
+          "path": "rw64k32r3x2z",
+          "us_printed": 15.97,
+          "raw": "BAKE router m=256 rw64k32r3x2z 15.97"
+        }
+      ],
+      "PICK": [
+        {
+          "line": 57,
+          "layer": "pooler",
+          "m": 128,
+          "path": "rq:s4s5z",
+          "us_printed": 22.94
+        },
+        {
+          "line": 62,
+          "layer": "pooler",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 28.29
+        },
+        {
+          "line": 67,
+          "layer": "qkv_gate",
+          "m": 128,
+          "path": "rq:s4s5hz",
+          "us_printed": 16.86
+        },
+        {
+          "line": 72,
+          "layer": "qkv_gate",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 21.6
+        },
+        {
+          "line": 77,
+          "layer": "unpooler",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 22.82
+        },
+        {
+          "line": 82,
+          "layer": "unpooler",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 28.16
+        },
+        {
+          "line": 87,
+          "layer": "o",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 11.23
+        },
+        {
+          "line": 92,
+          "layer": "o",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 12.8
+        },
+        {
+          "line": 98,
+          "layer": "unpooler",
+          "m": 1,
+          "path": "uk-s4x",
+          "us_printed": 8.45
+        },
+        {
+          "line": 104,
+          "layer": "unpooler",
+          "m": 8,
+          "path": "uk-s4x",
+          "us_printed": 8.51
+        },
+        {
+          "line": 111,
+          "layer": "router",
+          "m": 8,
+          "path": "rk-s16w8z",
+          "us_printed": 8.8
+        },
+        {
+          "line": 118,
+          "layer": "router",
+          "m": 16,
+          "path": "rk-s16w8x",
+          "us_printed": 8.9
+        },
+        {
+          "line": 123,
+          "layer": "router",
+          "m": 32,
+          "path": "rk-s16w8z",
+          "us_printed": 9.25
+        },
+        {
+          "line": 131,
+          "layer": "pooler",
+          "m": 32,
+          "path": "rq:t32s5hze-k4",
+          "us_printed": 19.39
+        },
+        {
+          "line": 136,
+          "layer": "pooler",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 18.24
+        },
+        {
+          "line": 142,
+          "layer": "qkv_gate",
+          "m": 32,
+          "path": "rq:t32s5hze-k7",
+          "us_printed": 14.05
+        },
+        {
+          "line": 148,
+          "layer": "qkv_gate",
+          "m": 16,
+          "path": "rq:t16s5hze-k7",
+          "us_printed": 14.05
+        },
+        {
+          "line": 153,
+          "layer": "unpooler",
+          "m": 32,
+          "path": "rq:t32s5hze-k2",
+          "us_printed": 19.17
+        },
+        {
+          "line": 158,
+          "layer": "unpooler",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 18.82
+        },
+        {
+          "line": 163,
+          "layer": "o",
+          "m": 32,
+          "path": "rq:t32s6hze-k2",
+          "us_printed": 10.5
+        },
+        {
+          "line": 168,
+          "layer": "o",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 9.66
+        },
+        {
+          "line": 172,
+          "layer": "o",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 11.17
+        },
+        {
+          "line": 182,
+          "layer": "router",
+          "m": 128,
+          "path": "rw64k32s8z",
+          "us_printed": 13.22
+        },
+        {
+          "line": 187,
+          "layer": "router",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 15.33
+        }
+      ],
+      "within_own_job_contrasts": [
+        {
+          "shape": "pooler32",
+          "selected": "rq:t32s5hze-k4",
+          "control": "same-job R6 F1",
+          "control_us_printed": 21.02,
+          "selected_us_printed": 19.39,
+          "printed_gain_us": 1.629999999999999,
+          "source_lines": [
+            130,
+            131
+          ]
+        },
+        {
+          "shape": "qkv_gate32",
+          "selected": "rq:t32s5hze-k7",
+          "control": "same-job R6 F1",
+          "control_us_printed": 17.95,
+          "selected_us_printed": 14.05,
+          "printed_gain_us": 3.8999999999999986,
+          "source_lines": [
+            141,
+            142
+          ]
+        },
+        {
+          "shape": "qkv_gate16",
+          "selected": "rq:t16s5hze-k7",
+          "control": "same-job R6 F1",
+          "control_us_printed": 14.56,
+          "selected_us_printed": 14.05,
+          "printed_gain_us": 0.5099999999999998,
+          "source_lines": [
+            147,
+            148
+          ]
+        },
+        {
+          "shape": "unpooler32",
+          "selected": "rq:t32s5hze-k2",
+          "control": "same-job R6 F1",
+          "control_us_printed": 20.96,
+          "selected_us_printed": 19.17,
+          "printed_gain_us": 1.7899999999999991,
+          "source_lines": [
+            152,
+            153
+          ]
+        },
+        {
+          "shape": "o32",
+          "selected": "rq:t32s6hze-k2",
+          "control": "same-job R6 F1",
+          "control_us_printed": 10.94,
+          "selected_us_printed": 10.5,
+          "printed_gain_us": 0.4399999999999995,
+          "source_lines": [
+            162,
+            163
+          ]
+        }
+      ],
+      "causal_limit": "Each contrast uses this job own controls; do not subtract contrasts between jobs as an incremental feature estimate."
+    },
+    "pw36": {
+      "job": "e22a4b9d693d4902",
+      "log_path": "results/proj-rsi/jobs/e22a4b9d693d4902.log",
+      "log_sha256": "508db1c63274f49396993b79888ef7f2e4ccacaaab2a14a9b0c6895088fd0eb6",
+      "PREP": [
+        {
+          "line": 49,
+          "text": "PREP r6 done in 121s"
+        },
+        {
+          "line": 50,
+          "text": "PREP rq thread ready at 41s (bake starts at 121s)"
+        },
+        {
+          "line": 91,
+          "text": "PREP phase rq done at 122s"
+        },
+        {
+          "line": 124,
+          "text": "PREP phase gx done at 124s"
+        },
+        {
+          "line": 125,
+          "text": "PREP rq32 thread ready at 41s"
+        },
+        {
+          "line": 126,
+          "text": "PREP rq32 bake starts at 124s"
+        },
+        {
+          "line": 173,
+          "text": "PREP phase rq32 done at 125s"
+        },
+        {
+          "line": 174,
+          "text": "PREP rw compiled in 38s (at 163s)"
+        },
+        {
+          "line": 189,
+          "text": "PREP phase router done at 163s"
+        },
+        {
+          "line": 190,
+          "text": "PREP done in 163s"
+        }
+      ],
+      "BAKE": [
+        {
+          "line": 51,
+          "layer": "pooler",
+          "m": 128,
+          "path": "rq:s4s5z",
+          "us_printed": 23.01,
+          "raw": "BAKE pooler m=128 rq:s4s5z 23.01 (ok 3.1e-03) at 121s"
+        },
+        {
+          "line": 52,
+          "layer": "pooler",
+          "m": 128,
+          "path": "rq:s4s5hz",
+          "us_printed": 23.23,
+          "raw": "BAKE pooler m=128 rq:s4s5hz 23.23 (ok 3.2e-03) at 121s"
+        },
+        {
+          "line": 53,
+          "layer": "pooler",
+          "m": 128,
+          "path": "rq:s4hz",
+          "us_printed": 23.81,
+          "raw": "BAKE pooler m=128 rq:s4hz 23.81 (ok 3.1e-03) at 121s"
+        },
+        {
+          "line": 54,
+          "layer": "pooler",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 24.06,
+          "raw": "BAKE pooler m=128 r6 24.06 (before pack 24.06, after variants 24.22) at 121s"
+        },
+        {
+          "line": 56,
+          "layer": "pooler",
+          "m": 256,
+          "path": "rq:n256s4hz",
+          "us_printed": 31.26,
+          "raw": "BAKE pooler m=256 rq:n256s4hz 31.26 (ok 3.2e-03) at 121s"
+        },
+        {
+          "line": 57,
+          "layer": "pooler",
+          "m": 256,
+          "path": "rq:n256s5hz",
+          "us_printed": 32.03,
+          "raw": "BAKE pooler m=256 rq:n256s5hz 32.03 (ok 3.1e-03) at 121s"
+        },
+        {
+          "line": 58,
+          "layer": "pooler",
+          "m": 256,
+          "path": "rq:n256s5z",
+          "us_printed": 31.46,
+          "raw": "BAKE pooler m=256 rq:n256s5z 31.46 (ok 3.2e-03) at 121s"
+        },
+        {
+          "line": 59,
+          "layer": "pooler",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 28.22,
+          "raw": "BAKE pooler m=256 r6 28.22 (before pack 28.90, after variants 28.22) at 121s"
+        },
+        {
+          "line": 61,
+          "layer": "qkv_gate",
+          "m": 128,
+          "path": "rq:s4s5z",
+          "us_printed": 17.02,
+          "raw": "BAKE qkv_gate m=128 rq:s4s5z 17.02 (ok 3.8e-03) at 121s"
+        },
+        {
+          "line": 62,
+          "layer": "qkv_gate",
+          "m": 128,
+          "path": "rq:s4s5hz",
+          "us_printed": 16.8,
+          "raw": "BAKE qkv_gate m=128 rq:s4s5hz 16.80 (ok 3.8e-03) at 122s"
+        },
+        {
+          "line": 63,
+          "layer": "qkv_gate",
+          "m": 128,
+          "path": "rq:s4hz",
+          "us_printed": 18.24,
+          "raw": "BAKE qkv_gate m=128 rq:s4hz 18.24 (ok 3.8e-03) at 122s"
+        },
+        {
+          "line": 64,
+          "layer": "qkv_gate",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 19.62,
+          "raw": "BAKE qkv_gate m=128 r6 19.62 (before pack 19.62, after variants 19.71) at 122s"
+        },
+        {
+          "line": 66,
+          "layer": "qkv_gate",
+          "m": 256,
+          "path": "rq:n256s4hz",
+          "us_printed": 22.21,
+          "raw": "BAKE qkv_gate m=256 rq:n256s4hz 22.21 (ok 3.8e-03) at 122s"
+        },
+        {
+          "line": 67,
+          "layer": "qkv_gate",
+          "m": 256,
+          "path": "rq:n256s5hz",
+          "us_printed": 22.75,
+          "raw": "BAKE qkv_gate m=256 rq:n256s5hz 22.75 (ok 3.9e-03) at 122s"
+        },
+        {
+          "line": 68,
+          "layer": "qkv_gate",
+          "m": 256,
+          "path": "rq:n256s5z",
+          "us_printed": 22.34,
+          "raw": "BAKE qkv_gate m=256 rq:n256s5z 22.34 (ok 3.8e-03) at 122s"
+        },
+        {
+          "line": 69,
+          "layer": "qkv_gate",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 21.63,
+          "raw": "BAKE qkv_gate m=256 r6 21.63 (before pack 21.70, after variants 21.63) at 122s"
+        },
+        {
+          "line": 71,
+          "layer": "unpooler",
+          "m": 128,
+          "path": "rq:s4s5z",
+          "us_printed": 23.07,
+          "raw": "BAKE unpooler m=128 rq:s4s5z 23.07 (ok 2.4e-03) at 122s"
+        },
+        {
+          "line": 72,
+          "layer": "unpooler",
+          "m": 128,
+          "path": "rq:s4s5hz",
+          "us_printed": 22.72,
+          "raw": "BAKE unpooler m=128 rq:s4s5hz 22.72 (ok 2.4e-03) at 122s"
+        },
+        {
+          "line": 73,
+          "layer": "unpooler",
+          "m": 128,
+          "path": "rq:s4hz",
+          "us_printed": 23.68,
+          "raw": "BAKE unpooler m=128 rq:s4hz 23.68 (ok 2.4e-03) at 122s"
+        },
+        {
+          "line": 74,
+          "layer": "unpooler",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 22.88,
+          "raw": "BAKE unpooler m=128 r6 22.88 (before pack 23.30, after variants 22.88) at 122s"
+        },
+        {
+          "line": 76,
+          "layer": "unpooler",
+          "m": 256,
+          "path": "rq:n256s4hz",
+          "us_printed": 31.49,
+          "raw": "BAKE unpooler m=256 rq:n256s4hz 31.49 (ok 2.4e-03) at 122s"
+        },
+        {
+          "line": 77,
+          "layer": "unpooler",
+          "m": 256,
+          "path": "rq:n256s5hz",
+          "us_printed": 32.38,
+          "raw": "BAKE unpooler m=256 rq:n256s5hz 32.38 (ok 2.4e-03) at 122s"
+        },
+        {
+          "line": 78,
+          "layer": "unpooler",
+          "m": 256,
+          "path": "rq:n256s5z",
+          "us_printed": 32.06,
+          "raw": "BAKE unpooler m=256 rq:n256s5z 32.06 (ok 2.4e-03) at 122s"
+        },
+        {
+          "line": 79,
+          "layer": "unpooler",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 28.26,
+          "raw": "BAKE unpooler m=256 r6 28.26 (before pack 28.26, after variants 28.42) at 122s"
+        },
+        {
+          "line": 81,
+          "layer": "o",
+          "m": 128,
+          "path": "rq:s4s5z",
+          "us_printed": 13.34,
+          "raw": "BAKE o m=128 rq:s4s5z 13.34 (ok 2.4e-03) at 122s"
+        },
+        {
+          "line": 82,
+          "layer": "o",
+          "m": 128,
+          "path": "rq:s4s5hz",
+          "us_printed": 13.34,
+          "raw": "BAKE o m=128 rq:s4s5hz 13.34 (ok 2.4e-03) at 122s"
+        },
+        {
+          "line": 83,
+          "layer": "o",
+          "m": 128,
+          "path": "rq:s4hz",
+          "us_printed": 13.98,
+          "raw": "BAKE o m=128 rq:s4hz 13.98 (ok 2.4e-03) at 122s"
+        },
+        {
+          "line": 84,
+          "layer": "o",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 11.23,
+          "raw": "BAKE o m=128 r6 11.23 (before pack 11.26, after variants 11.23) at 122s"
+        },
+        {
+          "line": 86,
+          "layer": "o",
+          "m": 256,
+          "path": "rq:n256s4hz",
+          "us_printed": 16.42,
+          "raw": "BAKE o m=256 rq:n256s4hz 16.42 (ok 2.4e-03) at 122s"
+        },
+        {
+          "line": 87,
+          "layer": "o",
+          "m": 256,
+          "path": "rq:n256s5hz",
+          "us_printed": 16.86,
+          "raw": "BAKE o m=256 rq:n256s5hz 16.86 (ok 2.4e-03) at 122s"
+        },
+        {
+          "line": 88,
+          "layer": "o",
+          "m": 256,
+          "path": "rq:n256s5z",
+          "us_printed": 16.74,
+          "raw": "BAKE o m=256 rq:n256s5z 16.74 (ok 2.4e-03) at 122s"
+        },
+        {
+          "line": 89,
+          "layer": "o",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 13.15,
+          "raw": "BAKE o m=256 r6 13.15 (before pack 13.38, after variants 13.15) at 122s"
+        },
+        {
+          "line": 93,
+          "layer": "unpooler",
+          "m": 1,
+          "path": "r6",
+          "us_printed": 8.58,
+          "raw": "BAKE unpooler m=1 r6 8.58"
+        },
+        {
+          "line": 94,
+          "layer": "unpooler",
+          "m": 1,
+          "path": "uk-s4z",
+          "us_printed": 8.67,
+          "raw": "BAKE unpooler m=1 uk-s4z 8.67"
+        },
+        {
+          "line": 95,
+          "layer": "unpooler",
+          "m": 1,
+          "path": "uk-s4x",
+          "us_printed": 8.42,
+          "raw": "BAKE unpooler m=1 uk-s4x 8.42"
+        },
+        {
+          "line": 96,
+          "layer": "unpooler",
+          "m": 1,
+          "path": "uk-s4w4x",
+          "us_printed": 8.45,
+          "raw": "BAKE unpooler m=1 uk-s4w4x 8.45"
+        },
+        {
+          "line": 99,
+          "layer": "unpooler",
+          "m": 8,
+          "path": "r6",
+          "us_printed": 8.74,
+          "raw": "BAKE unpooler m=8 r6 8.74"
+        },
+        {
+          "line": 100,
+          "layer": "unpooler",
+          "m": 8,
+          "path": "uk-s4z",
+          "us_printed": 8.77,
+          "raw": "BAKE unpooler m=8 uk-s4z 8.77"
+        },
+        {
+          "line": 101,
+          "layer": "unpooler",
+          "m": 8,
+          "path": "uk-s4x",
+          "us_printed": 8.48,
+          "raw": "BAKE unpooler m=8 uk-s4x 8.48"
+        },
+        {
+          "line": 102,
+          "layer": "unpooler",
+          "m": 8,
+          "path": "uk-s4w4x",
+          "us_printed": 8.64,
+          "raw": "BAKE unpooler m=8 uk-s4w4x 8.64"
+        },
+        {
+          "line": 105,
+          "layer": "router",
+          "m": 8,
+          "path": "r6",
+          "us_printed": 9.28,
+          "raw": "BAKE router m=8 r6 9.28"
+        },
+        {
+          "line": 106,
+          "layer": "router",
+          "m": 8,
+          "path": "rk-s8z",
+          "us_printed": 9.25,
+          "raw": "BAKE router m=8 rk-s8z 9.25"
+        },
+        {
+          "line": 107,
+          "layer": "router",
+          "m": 8,
+          "path": "rk-s16w8z",
+          "us_printed": 8.99,
+          "raw": "BAKE router m=8 rk-s16w8z 8.99"
+        },
+        {
+          "line": 108,
+          "layer": "router",
+          "m": 8,
+          "path": "rk-s16w8x",
+          "us_printed": 8.7,
+          "raw": "BAKE router m=8 rk-s16w8x 8.70"
+        },
+        {
+          "line": 109,
+          "layer": "router",
+          "m": 8,
+          "path": "rk-s32x",
+          "us_printed": 8.86,
+          "raw": "BAKE router m=8 rk-s32x 8.86"
+        },
+        {
+          "line": 112,
+          "layer": "router",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 9.6,
+          "raw": "BAKE router m=16 r6 9.60"
+        },
+        {
+          "line": 113,
+          "layer": "router",
+          "m": 16,
+          "path": "rk-s8z",
+          "us_printed": 9.47,
+          "raw": "BAKE router m=16 rk-s8z 9.47"
+        },
+        {
+          "line": 114,
+          "layer": "router",
+          "m": 16,
+          "path": "rk-s16w8z",
+          "us_printed": 9.12,
+          "raw": "BAKE router m=16 rk-s16w8z 9.12"
+        },
+        {
+          "line": 115,
+          "layer": "router",
+          "m": 16,
+          "path": "rk-s16w8x",
+          "us_printed": 9.18,
+          "raw": "BAKE router m=16 rk-s16w8x 9.18"
+        },
+        {
+          "line": 116,
+          "layer": "router",
+          "m": 16,
+          "path": "rk-s32x",
+          "us_printed": 9.28,
+          "raw": "BAKE router m=16 rk-s32x 9.28"
+        },
+        {
+          "line": 119,
+          "layer": "router",
+          "m": 32,
+          "path": "r6",
+          "us_printed": 10.34,
+          "raw": "BAKE router m=32 r6 10.34"
+        },
+        {
+          "line": 120,
+          "layer": "router",
+          "m": 32,
+          "path": "rk-s8z",
+          "us_printed": 9.6,
+          "raw": "BAKE router m=32 rk-s8z 9.60"
+        },
+        {
+          "line": 121,
+          "layer": "router",
+          "m": 32,
+          "path": "rk-s16w8z",
+          "us_printed": 9.47,
+          "raw": "BAKE router m=32 rk-s16w8z 9.47"
+        },
+        {
+          "line": 127,
+          "layer": "pooler",
+          "m": 32,
+          "path": "rq:t32s5hze-k4",
+          "us_printed": 19.9,
+          "raw": "BAKE pooler m=32 rq:t32s5hze-k4 19.90 (ok 3.1e-03) at 124s"
+        },
+        {
+          "line": 128,
+          "layer": "pooler",
+          "m": 32,
+          "path": "rq:t32s6hze-k4",
+          "us_printed": 19.49,
+          "raw": "BAKE pooler m=32 rq:t32s6hze-k4 19.49 (ok 3.1e-03) at 124s"
+        },
+        {
+          "line": 129,
+          "layer": "pooler",
+          "m": 32,
+          "path": "rq:t32s5hz-k4",
+          "us_printed": 19.9,
+          "raw": "BAKE pooler m=32 rq:t32s5hz-k4 19.90 (ok 3.2e-03) at 124s"
+        },
+        {
+          "line": 130,
+          "layer": "pooler",
+          "m": 32,
+          "path": "r6",
+          "us_printed": 20.93,
+          "raw": "BAKE pooler m=32 r6 20.93 (before variants 21.06, after variants 20.93) at 124s"
+        },
+        {
+          "line": 132,
+          "layer": "pooler",
+          "m": 16,
+          "path": "rq:t16s5hze-k4",
+          "us_printed": 19.78,
+          "raw": "BAKE pooler m=16 rq:t16s5hze-k4 19.78 (ok 3.2e-03) at 124s"
+        },
+        {
+          "line": 133,
+          "layer": "pooler",
+          "m": 16,
+          "path": "rq:t16s6hze-k4",
+          "us_printed": 19.58,
+          "raw": "BAKE pooler m=16 rq:t16s6hze-k4 19.58 (ok 3.1e-03) at 124s"
+        },
+        {
+          "line": 134,
+          "layer": "pooler",
+          "m": 16,
+          "path": "rq:t16s5hz-k4",
+          "us_printed": 19.94,
+          "raw": "BAKE pooler m=16 rq:t16s5hz-k4 19.94 (ok 3.2e-03) at 124s"
+        },
+        {
+          "line": 135,
+          "layer": "pooler",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 18.27,
+          "raw": "BAKE pooler m=16 r6 18.27 (before variants 18.27, after variants 18.40) at 124s"
+        },
+        {
+          "line": 137,
+          "layer": "qkv_gate",
+          "m": 32,
+          "path": "rq:t32s5hze-k6",
+          "us_printed": 14.82,
+          "raw": "BAKE qkv_gate m=32 rq:t32s5hze-k6 14.82 (ok 3.7e-03) at 124s"
+        },
+        {
+          "line": 138,
+          "layer": "qkv_gate",
+          "m": 32,
+          "path": "rq:t32s5hze-k7",
+          "us_printed": 14.14,
+          "raw": "BAKE qkv_gate m=32 rq:t32s5hze-k7 14.14 (ok 3.9e-03) at 124s"
+        },
+        {
+          "line": 139,
+          "layer": "qkv_gate",
+          "m": 32,
+          "path": "rq:t32s5hz-k6",
+          "us_printed": 14.75,
+          "raw": "BAKE qkv_gate m=32 rq:t32s5hz-k6 14.75 (ok 3.6e-03) at 124s"
+        },
+        {
+          "line": 140,
+          "layer": "qkv_gate",
+          "m": 32,
+          "path": "rq:t32s6hze-k6",
+          "us_printed": 15.2,
+          "raw": "BAKE qkv_gate m=32 rq:t32s6hze-k6 15.20 (ok 3.6e-03) at 124s"
+        },
+        {
+          "line": 141,
+          "layer": "qkv_gate",
+          "m": 32,
+          "path": "r6",
+          "us_printed": 18.4,
+          "raw": "BAKE qkv_gate m=32 r6 18.40 (before variants 18.75, after variants 18.40) at 124s"
+        },
+        {
+          "line": 143,
+          "layer": "qkv_gate",
+          "m": 16,
+          "path": "rq:t16s5hze-k6",
+          "us_printed": 14.27,
+          "raw": "BAKE qkv_gate m=16 rq:t16s5hze-k6 14.27 (ok 3.7e-03) at 124s"
+        },
+        {
+          "line": 144,
+          "layer": "qkv_gate",
+          "m": 16,
+          "path": "rq:t16s5ze-k6",
+          "us_printed": 14.69,
+          "raw": "BAKE qkv_gate m=16 rq:t16s5ze-k6 14.69 (ok 3.7e-03) at 125s"
+        },
+        {
+          "line": 145,
+          "layer": "qkv_gate",
+          "m": 16,
+          "path": "rq:t16s5hze-k7",
+          "us_printed": 14.11,
+          "raw": "BAKE qkv_gate m=16 rq:t16s5hze-k7 14.11 (ok 3.8e-03) at 125s"
+        },
+        {
+          "line": 146,
+          "layer": "qkv_gate",
+          "m": 16,
+          "path": "rq:t16s5ze-k7",
+          "us_printed": 14.27,
+          "raw": "BAKE qkv_gate m=16 rq:t16s5ze-k7 14.27 (ok 3.8e-03) at 125s"
+        },
+        {
+          "line": 147,
+          "layer": "qkv_gate",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 14.78,
+          "raw": "BAKE qkv_gate m=16 r6 14.78 (before variants 14.78, after variants 14.98) at 125s"
+        },
+        {
+          "line": 149,
+          "layer": "unpooler",
+          "m": 32,
+          "path": "rq:t32s5hze-k2",
+          "us_printed": 19.49,
+          "raw": "BAKE unpooler m=32 rq:t32s5hze-k2 19.49 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 150,
+          "layer": "unpooler",
+          "m": 32,
+          "path": "rq:t32s6hze-k2",
+          "us_printed": 19.71,
+          "raw": "BAKE unpooler m=32 rq:t32s6hze-k2 19.71 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 151,
+          "layer": "unpooler",
+          "m": 32,
+          "path": "rq:t32s6hz-k2",
+          "us_printed": 19.74,
+          "raw": "BAKE unpooler m=32 rq:t32s6hz-k2 19.74 (ok 2.5e-03) at 125s"
+        },
+        {
+          "line": 152,
+          "layer": "unpooler",
+          "m": 32,
+          "path": "r6",
+          "us_printed": 20.93,
+          "raw": "BAKE unpooler m=32 r6 20.93 (before variants 21.34, after variants 20.93) at 125s"
+        },
+        {
+          "line": 154,
+          "layer": "unpooler",
+          "m": 16,
+          "path": "rq:t16s5hze-k2",
+          "us_printed": 19.55,
+          "raw": "BAKE unpooler m=16 rq:t16s5hze-k2 19.55 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 155,
+          "layer": "unpooler",
+          "m": 16,
+          "path": "rq:t16s6hze-k2",
+          "us_printed": 19.33,
+          "raw": "BAKE unpooler m=16 rq:t16s6hze-k2 19.33 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 156,
+          "layer": "unpooler",
+          "m": 16,
+          "path": "rq:t16s5hz-k2",
+          "us_printed": 19.71,
+          "raw": "BAKE unpooler m=16 rq:t16s5hz-k2 19.71 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 157,
+          "layer": "unpooler",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 18.91,
+          "raw": "BAKE unpooler m=16 r6 18.91 (before variants 18.91, after variants 19.04) at 125s"
+        },
+        {
+          "line": 159,
+          "layer": "o",
+          "m": 32,
+          "path": "rq:t32s5hze-k2",
+          "us_printed": 10.94,
+          "raw": "BAKE o m=32 rq:t32s5hze-k2 10.94 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 160,
+          "layer": "o",
+          "m": 32,
+          "path": "rq:t32s6hze-k2",
+          "us_printed": 10.72,
+          "raw": "BAKE o m=32 rq:t32s6hze-k2 10.72 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 161,
+          "layer": "o",
+          "m": 32,
+          "path": "rq:t32s5ze-k2",
+          "us_printed": 10.88,
+          "raw": "BAKE o m=32 rq:t32s5ze-k2 10.88 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 162,
+          "layer": "o",
+          "m": 32,
+          "path": "r6",
+          "us_printed": 10.82,
+          "raw": "BAKE o m=32 r6 10.82 (before variants 10.85, after variants 10.82) at 125s"
+        },
+        {
+          "line": 164,
+          "layer": "o",
+          "m": 16,
+          "path": "rq:t16s5hze-k2",
+          "us_printed": 10.62,
+          "raw": "BAKE o m=16 rq:t16s5hze-k2 10.62 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 165,
+          "layer": "o",
+          "m": 16,
+          "path": "rq:t16s6hze-k2",
+          "us_printed": 10.62,
+          "raw": "BAKE o m=16 rq:t16s6hze-k2 10.62 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 166,
+          "layer": "o",
+          "m": 16,
+          "path": "rq:t16s5ze-k2",
+          "us_printed": 10.59,
+          "raw": "BAKE o m=16 rq:t16s5ze-k2 10.59 (ok 2.4e-03) at 125s"
+        },
+        {
+          "line": 167,
+          "layer": "o",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 9.73,
+          "raw": "BAKE o m=16 r6 9.73 (before variants 9.79, after variants 9.73) at 125s"
+        },
+        {
+          "line": 169,
+          "layer": "o",
+          "m": 128,
+          "path": "rq:h128s8e-k1",
+          "us_printed": 12.58,
+          "raw": "BAKE o m=128 rq:h128s8e-k1 12.58 (ok 1.7e-03) at 125s"
+        },
+        {
+          "line": 170,
+          "layer": "o",
+          "m": 128,
+          "path": "rq:h128s5-k1",
+          "us_printed": 12.8,
+          "raw": "BAKE o m=128 rq:h128s5-k1 12.80 (ok 1.7e-03) at 125s"
+        },
+        {
+          "line": 171,
+          "layer": "o",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 11.23,
+          "raw": "BAKE o m=128 r6 11.23 (before variants 11.23, after variants 11.26) at 125s"
+        },
+        {
+          "line": 175,
+          "layer": "router",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 14.02,
+          "raw": "BAKE router m=128 r6 14.02"
+        },
+        {
+          "line": 176,
+          "layer": "router",
+          "m": 128,
+          "path": "rw64k32s8z",
+          "us_printed": 13.06,
+          "raw": "BAKE router m=128 rw64k32s8z 13.06"
+        },
+        {
+          "line": 177,
+          "layer": "router",
+          "m": 128,
+          "path": "rt64k32b3x2z",
+          "us_printed": 11.84,
+          "raw": "BAKE router m=128 rt64k32b3x2z 11.84"
+        },
+        {
+          "line": 178,
+          "layer": "router",
+          "m": 128,
+          "path": "rt64k32b4z",
+          "us_printed": 11.74,
+          "raw": "BAKE router m=128 rt64k32b4z 11.74"
+        },
+        {
+          "line": 179,
+          "layer": "router",
+          "m": 128,
+          "path": "rt64k32b3x2bz",
+          "us_printed": 11.74,
+          "raw": "BAKE router m=128 rt64k32b3x2bz 11.74"
+        },
+        {
+          "line": 183,
+          "layer": "router",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 15.55,
+          "raw": "BAKE router m=256 r6 15.55"
+        },
+        {
+          "line": 184,
+          "layer": "router",
+          "m": 256,
+          "path": "rw64k32r3x2z",
+          "us_printed": 16.0,
+          "raw": "BAKE router m=256 rw64k32r3x2z 16.00"
+        },
+        {
+          "line": 185,
+          "layer": "router",
+          "m": 256,
+          "path": "rt64k16b6z",
+          "us_printed": 13.73,
+          "raw": "BAKE router m=256 rt64k16b6z 13.73"
+        },
+        {
+          "line": 186,
+          "layer": "router",
+          "m": 256,
+          "path": "rt64k32b3x2z",
+          "us_printed": 13.31,
+          "raw": "BAKE router m=256 rt64k32b3x2z 13.31"
+        }
+      ],
+      "PICK": [
+        {
+          "line": 55,
+          "layer": "pooler",
+          "m": 128,
+          "path": "rq:s4s5z",
+          "us_printed": 23.01
+        },
+        {
+          "line": 60,
+          "layer": "pooler",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 28.22
+        },
+        {
+          "line": 65,
+          "layer": "qkv_gate",
+          "m": 128,
+          "path": "rq:s4s5hz",
+          "us_printed": 16.8
+        },
+        {
+          "line": 70,
+          "layer": "qkv_gate",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 21.63
+        },
+        {
+          "line": 75,
+          "layer": "unpooler",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 22.88
+        },
+        {
+          "line": 80,
+          "layer": "unpooler",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 28.26
+        },
+        {
+          "line": 85,
+          "layer": "o",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 11.23
+        },
+        {
+          "line": 90,
+          "layer": "o",
+          "m": 256,
+          "path": "r6",
+          "us_printed": 13.15
+        },
+        {
+          "line": 97,
+          "layer": "unpooler",
+          "m": 1,
+          "path": "uk-s4x",
+          "us_printed": 8.42
+        },
+        {
+          "line": 103,
+          "layer": "unpooler",
+          "m": 8,
+          "path": "uk-s4x",
+          "us_printed": 8.48
+        },
+        {
+          "line": 110,
+          "layer": "router",
+          "m": 8,
+          "path": "rk-s16w8x",
+          "us_printed": 8.7
+        },
+        {
+          "line": 117,
+          "layer": "router",
+          "m": 16,
+          "path": "rk-s16w8z",
+          "us_printed": 9.12
+        },
+        {
+          "line": 122,
+          "layer": "router",
+          "m": 32,
+          "path": "rk-s16w8z",
+          "us_printed": 9.47
+        },
+        {
+          "line": 131,
+          "layer": "pooler",
+          "m": 32,
+          "path": "rq:t32s6hze-k4",
+          "us_printed": 19.49
+        },
+        {
+          "line": 136,
+          "layer": "pooler",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 18.27
+        },
+        {
+          "line": 142,
+          "layer": "qkv_gate",
+          "m": 32,
+          "path": "rq:t32s5hze-k7",
+          "us_printed": 14.14
+        },
+        {
+          "line": 148,
+          "layer": "qkv_gate",
+          "m": 16,
+          "path": "rq:t16s5hze-k7",
+          "us_printed": 14.11
+        },
+        {
+          "line": 153,
+          "layer": "unpooler",
+          "m": 32,
+          "path": "rq:t32s5hze-k2",
+          "us_printed": 19.49
+        },
+        {
+          "line": 158,
+          "layer": "unpooler",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 18.91
+        },
+        {
+          "line": 163,
+          "layer": "o",
+          "m": 32,
+          "path": "r6",
+          "us_printed": 10.82
+        },
+        {
+          "line": 168,
+          "layer": "o",
+          "m": 16,
+          "path": "r6",
+          "us_printed": 9.73
+        },
+        {
+          "line": 172,
+          "layer": "o",
+          "m": 128,
+          "path": "r6",
+          "us_printed": 11.23
+        },
+        {
+          "line": 182,
+          "layer": "router",
+          "m": 128,
+          "path": "rt64k32b3x2z",
+          "us_printed": 11.84
+        },
+        {
+          "line": 188,
+          "layer": "router",
+          "m": 256,
+          "path": "rt64k32b3x2z",
+          "us_printed": 13.31
+        }
+      ],
+      "within_own_job_contrasts": [
+        {
+          "shape": "pooler32",
+          "selected": "rq:t32s6hze-k4",
+          "control": "same-job R6 F1",
+          "control_us_printed": 20.93,
+          "selected_us_printed": 19.49,
+          "printed_gain_us": 1.4400000000000013,
+          "source_lines": [
+            130,
+            131
+          ]
+        },
+        {
+          "shape": "qkv_gate32",
+          "selected": "rq:t32s5hze-k7",
+          "control": "same-job R6 F1",
+          "control_us_printed": 18.4,
+          "selected_us_printed": 14.14,
+          "printed_gain_us": 4.259999999999998,
+          "source_lines": [
+            141,
+            142
+          ]
+        },
+        {
+          "shape": "qkv_gate16",
+          "selected": "rq:t16s5hze-k7",
+          "control": "same-job R6 F1",
+          "control_us_printed": 14.78,
+          "selected_us_printed": 14.11,
+          "printed_gain_us": 0.6699999999999999,
+          "source_lines": [
+            147,
+            148
+          ]
+        },
+        {
+          "shape": "unpooler32",
+          "selected": "rq:t32s5hze-k2",
+          "control": "same-job R6 F1",
+          "control_us_printed": 20.93,
+          "selected_us_printed": 19.49,
+          "printed_gain_us": 1.4400000000000013,
+          "source_lines": [
+            152,
+            153
+          ]
+        },
+        {
+          "shape": "router128",
+          "selected": "rt64k32b3x2z",
+          "control": "same-job rw64k32s8z",
+          "control_us_printed": 13.06,
+          "selected_us_printed": 11.84,
+          "printed_gain_us": 1.2200000000000006,
+          "source_lines": [
+            176,
+            182
+          ]
+        },
+        {
+          "shape": "router256",
+          "selected": "rt64k32b3x2z",
+          "control": "same-job rw64k32r3x2z",
+          "control_us_printed": 16.0,
+          "selected_us_printed": 13.31,
+          "printed_gain_us": 2.6899999999999995,
+          "source_lines": [
+            184,
+            188
+          ]
+        }
+      ],
+      "causal_limit": "Each contrast uses this job own controls; do not subtract contrasts between jobs as an incremental feature estimate."
+    }
+  }
+}

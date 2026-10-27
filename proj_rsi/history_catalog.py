@@ -92,6 +92,14 @@ def resolve_sources(root=ROOT):
  matches=[row for row in snapshots if row['id']==config['active_jobs_snapshot']]
  if len(matches)!=1:raise ValueError('active jobs snapshot is unknown')
  paths=dict(INPUTS,live_jobs=matches[0]['path'])
+ board_snapshots=config.get('board_snapshots',[])
+ for snapshot in board_snapshots:
+  path=Path(snapshot['path'])
+  if path.is_absolute() or '..' in path.parts or digest(root/path)!=snapshot['sha256']:raise ValueError('immutable board snapshot changed')
+ if board_snapshots:
+  boards=[r for r in board_snapshots if r['id']==config['active_board_snapshot']]
+  if len(boards)!=1:raise ValueError('active board snapshot unknown')
+  paths['live_board']=boards[0]['path']
  for association in config.get('job_source_associations',{}).values():
   for key in ('source','attestation'):
    reference=association[key];path=Path(reference['path'])
@@ -156,6 +164,14 @@ def build(root=ROOT):
   jobs.append(row)
  submissions=[r for r in jobs if r['leaderboard_submission']]
  checks=[r for r in jobs if not r['leaderboard_submission']]
+ pw38_runs=[r for r in submissions if r['candidate']=='pw38']
+ pw38_run=pw38_runs[-1] if pw38_runs else None
+ team=inputs['live_board'].get('you',{}).get('team')
+ own_board_rows=[r for r in inputs['live_board'].get('rows',[]) if r.get('team')==team]
+ board_row=own_board_rows[0] if len(own_board_rows)==1 else None
+ best=next((r for r in submissions if board_row and r['job_id']==board_row.get('job')),None)
+ if best is None:best=next(r for r in submissions if r['job_id']=='fb548b5dc6f04696')
+ if best['passed'] is not True or best['score_us'] is None:raise ValueError('board best lacks completed successful official run')
  findings=[]
  for finding in inputs['completeness']['findings']:
   r=dict(finding);r['immutable_id']='improvement.'+hashlib.sha256(r['id'].encode()).hexdigest()[:16]
@@ -221,6 +237,46 @@ def build(root=ROOT):
   'next_action':'Retain all parent and composed versions; diagnose actual whole-pipeline gap before another immutable mechanism.'})
  for control,gain in combo['paired_new_median_gain_us'].items():
   local_observations.append({'observation_id':'paired.native.x4.stmatrix.v1.01.'+control,'attempt_id':'native.x4.stmatrix.v1.01','version':'reverse_tma_x4_stmatrix','control':control,'gain_us':gain,'F1_gain_us':combo['F1_new_gain_us'][control],'wins':combo['paired_new_wins'][control],'pairs':40,'hardware':'H100','result_sha256':combo['result_sha256'],'evidence':ref(root,paths['native_combo']),'shipping_gain':False})
+ if pw38_check and pw38_check['passed'] is True:
+  for feature in findings:
+   if feature['id']=='RS128b early-half epilogue EH':
+    feature['stacked_versions']=['rs128b historical lab','rs32_eh_backport','pw38']
+    feature['stack_tested_jobs']=['a3ed4ce5886a4415'];feature['official_check_jobs']=['a3ed4ce5886a4415']
+    feature['missing_reason']='Absent current best rs32, but now explicitly backported into PW38 and official-CHECK tested with selected qkv128/pooler128 EH. Historical raw weakness remains attached to original observation; new evidence is linked separately.'
+    feature['next_action']='Retain historical tiny observation and later PW38 evidence; await the already accepted scored PW38 outcome, without another significance threshold.'
+   elif feature['id']=='PW35 one-node rtk router128/256':
+    if 'pw38' not in feature['stacked_versions']:feature['stacked_versions'].append('pw38')
+    if 'a3ed4ce5886a4415' not in feature['stack_tested_jobs']:feature['stack_tested_jobs'].append('a3ed4ce5886a4415')
+ if pw38_run:
+  record=next(r for r in findings if r['id']=='PW38 full-policy EH stack local validation + official check')
+  record['official_scored_submission_jobs']=[r['job_id'] for r in pw38_runs]
+  record['scored_submission_status']=pw38_run['status'];record['scored_submission_score_us']=pw38_run['score_us']
+  record['currently_included']='Not current best rs32; PW38 scored submission '+pw38_run['job_id']+' status '+pw38_run['status']
+  record['classification']='PW38_VALIDATED_LOCAL_AND_CHECK_SCORED_SUBMISSION_'+pw38_run['status'].upper()+'_NOT_CURRENT_BEST'
+  record['evidence']+=[pw38_run['release_attestation']]+pw38_run['additional_release_attestations']
+  record['next_action']='Wait existing scored submission '+pw38_run['job_id']+'; keep its pending score NULL and do not copy CHECK score or resubmit. Continue source-bound stacking research.'
+  if pw38_run['passed'] is True and pw38_run['score_us'] is not None:
+   record['classification']='PW38_OFFICIAL_STACK_SCORED_AND_BOARD_VERIFIED_CURRENT_BEST' if best['job_id']==pw38_run['job_id'] else 'PW38_OFFICIAL_STACK_SCORED_COMPLETED'
+   record['currently_included']='Yes; current best PW38' if best['candidate']=='pw38' else 'PW38 scored, current best is '+str(best['candidate'])
+   record['score_tested_jobs']=[pw38_run['job_id']]
+   if pw38_run['job_id'] not in record['stack_tested_jobs']:record['stack_tested_jobs'].append(pw38_run['job_id'])
+   record['finding']+=' Scored run '+pw38_run['job_id']+' completed9/9,30shapes at '+str(pw38_run['score_us'])+'us; board selects this package. Observed package point difference versus prior best is not isolated EH causality.'
+   record['next_action']='Preserve scored source, outcomes, current actual picks and all prior packages; continue evidence-driven stacking per user authorization.'
+   for feature in findings:
+    if feature['id'] in ('RS128b early-half epilogue EH','PW35 one-node rtk router128/256'):
+     feature['currently_included']='Yes; current best PW38 scored stack'
+     feature['missing_reason']='Historical rs32 omission is resolved in the current PW38 scored stack; original comparator-specific observations remain preserved, not relabelled causal gains.'
+     if pw38_run['job_id'] not in feature['score_tested_jobs']:feature['score_tested_jobs'].append(pw38_run['job_id'])
+     if pw38_run['job_id'] not in feature['stack_tested_jobs']:feature['stack_tested_jobs'].append(pw38_run['job_id'])
+     feature['next_action']='Retain original observations and later current-best PW38 scored evidence; continue stacking without discarding tiny measured improvements.'
+ if best['candidate']=='pw38':
+  for feature in findings:
+   feature['current_best_context']='PW38 '+best['job_id']+'; original observation/evidence retained with its own historical comparator.'
+   if feature['classification'].startswith('SHIPPED_INCLUDED'):
+    if 'pw38' not in feature['stacked_versions']:feature['stacked_versions'].append('pw38')
+    if best['job_id'] not in feature['score_tested_jobs']:feature['score_tested_jobs'].append(best['job_id'])
+    if best['job_id'] not in feature['stack_tested_jobs']:feature['stack_tested_jobs'].append(best['job_id'])
+   if feature['id']=='pw22/pw23/pw29h router128 progression':feature['currently_included']='Code retained as controls/fallback; RTK supersedes old selected RW at128/256 in current scored PW38.'
  # Maintain observation IDs independent of row position and keep all tiny records.
  observations=[]
  for r in inputs['completeness']['positive_bake_samples_no_killbar_filter']:
@@ -244,7 +300,7 @@ def build(root=ROOT):
    control=min(controls,key=lambda r:abs(r[4]-line_number));gain=control[3]-value
    if gain<=0:continue
    token=f"{official_job['job_id']}:{line_number}:{mode}"
-   observations.append({'observation_id':'bake.'+hashlib.sha256(token.encode()).hexdigest()[:20],'job':official_job['job_id'],'candidate':official_job['candidate'],'layer':layer,'m':m,'mode':mode,'candidate_bake_us':value,'logged_r6_control_us':control[3],'positive_bake_difference_us':gain,'below_legacy_0_3us':gain<.3,'below_legacy_0_5us':gain<.5,'actual_final_pick':picks.get((layer,m)),'log':official_job['log']['path'],'line':line_number,'control_line':control[4],'classification':'Positive rounded same-job sample versus named r6 control; not necessarily incremental versus faster existing RQ mode. No threshold filter.','feature_level':False,'catalog_cohort':'live_official_new_archives'})
+   observations.append({'observation_id':'bake.'+hashlib.sha256(token.encode()).hexdigest()[:20],'job':official_job['job_id'],'candidate':official_job['candidate'],'layer':layer,'m':m,'mode':mode,'candidate_bake_us':value,'logged_r6_control_us':control[3],'positive_bake_difference_us':gain,'below_legacy_0_3us':gain<.3,'below_legacy_0_5us':gain<.5,'actual_final_pick':picks.get((layer,m)),'log':official_job['log']['path'],'line':line_number,'control_line':control[4],'classification':'Positive rounded same-job sample versus named r6 control; not necessarily incremental versus faster existing RQ mode. No threshold filter.','feature_level':False,'catalog_cohort':'official_'+official_job['mode']+'_'+official_job['job_id']})
  selected_observations=[]
  for jid,record in inputs['official_refs']['jobs'].items():
   for observation in record.get('selected_positive_bakes',[]):selected_observations.append(dict(observation,job=jid))
@@ -261,7 +317,7 @@ def build(root=ROOT):
    'historical_summary_paths':old.get('summary_paths',[]),'historical_text_artifacts_scanned':old.get('text_artifacts_scanned'),
    'new_since_completeness_snapshot':name not in historical,'actual_serving_evidence':'Per-job actual picks/profiles; never infer selection from source presence.'}
   if name=='pw37':candidate['status']='CPU_SOURCE_STACK_NOT_SCORED; cursor v3 is not a demonstrated incremental win'
-  if name=='pw38':candidate['status']='PW36_PLUS_OPTIONAL_EH_VALIDATED_LOCAL_OFFICIAL_CHECK_'+('PENDING' if check_pending else 'COMPLETED')+'_NOT_SCORED'
+  if name=='pw38':candidate['status']=('PW38_SCORED_SUBMISSION_'+pw38_run['status'].upper()) if pw38_run else 'PW36_PLUS_OPTIONAL_EH_VALIDATED_LOCAL_OFFICIAL_CHECK_'+('PENDING' if check_pending else 'COMPLETED')+'_NOT_SCORED'
   if name=='pw38':candidate['description']='PW36 + optional EH, no cursor; full30-shape local validation complete with mixed observations; accepted official check is separate from leaderboard scoring.'
   candidate['review_and_manifest_refs']=[ref(root,str(p.relative_to(root))) for p in sorted(d.glob('*')) if p.is_file() and p.name in ('manifest.json','PROVENANCE.md','hypothesis.json','RESULTS.md')]
   candidate['named_source_components']=source_nodes(root/d/'submission.py') if (d/'submission.py').exists() else []
@@ -270,12 +326,12 @@ def build(root=ROOT):
  pending=[j['job_id'] for j in jobs if j['archive_status']=='PENDING_NO_ARCHIVE']
  failed_missing=[j['job_id'] for j in jobs if j['archive_status']=='FAILED_NO_ARCHIVE']
  return {'schema_version':1,'scope':'Complete live official job snapshot + preserved local improvements/observations; CPU-only rendering',
-  'authority':{'best_job':'fb548b5dc6f04696','score_us':3200.6150084373335,'source_sha256':inputs['source_map']['source_sha256'],'live_board':inputs['live_board'].get('you'),'achievement_claim':False},
+  'authority':{'best_job':best['job_id'],'candidate':best['candidate'],'score_us':best['score_us'],'source_sha256':best['source']['sha256'] if best['source'] else None,'live_board':inputs['live_board'].get('you'),'board_row':board_row,'previous_best_job':'fb548b5dc6f04696','previous_score_us':3200.6150084373335,'observed_package_point_change_us':3200.6150084373335-best['score_us'],'point_change_is_isolated_feature_gain':False,'achievement_claim':False},
   'methodology':['Union preserved API captures by job ID to survive latest50 pagination; newest observed row wins. Mode=run determines leaderboard submissions; checks remain separate including failures/noarchive.','Stable job/candidate/improvement/observation IDs; every input/source/raw/review link carries SHA256 when locally present.','Source compiled/available features are distinct from actual per-job selected policies and timed profiles.','No independent-job score subtraction is reported as a causal feature delta.','Feature findings and repeated positive preparation observations are separate tables; no positive threshold removes small observations.','Keep invalid attempts and superseded parents immutable; repairs get new source or attempt identity.','Review provenance gaps explicitly; server content_hash algorithm unknown and not raw SHA256 attestation.'],
-  'history_sources_config':ref(root,'proj_rsi/history_sources.json'),'active_jobs_snapshot':source_config['active_jobs_snapshot'],'preserved_jobs_snapshots':source_config['jobs_snapshots'],'input_provenance':{k:ref(root,v) for k,v in paths.items()},'additional_evidence':[ref(root,p) for p in ['proj_rsi/audits/smallm-v3-01/report.md','proj_rsi/audits/native-stmatrix-01/report.md','proj_rsi/audits/native-x4-01/report.md']],
-  'counts':{'active_API_snapshot_rows':active_snapshot_row_count,'all_official_jobs':len(jobs),'leaderboard_submissions':len(submissions),'checks':len(checks),'archived_jobs':len(jobs)-len(missing),'complete_profile_jobs':sum(r['archive_status']=='ARCHIVED_30_SHAPES' for r in jobs),'partial_profile_jobs':sum(r['archive_status']=='ARCHIVED_PARTIAL' for r in jobs),'no_archive_jobs':len(missing),'pending_no_archive_jobs':len(pending),'failed_no_archive_jobs':len(failed_missing),'feature_findings':len(findings),'positive_observations':len(observations),'preserved_original_positive_observations':224,'new_official_positive_observations':len(observations)-224,'local_paired_observations':len(local_observations),'selected_positive_observations':len(selected_observations),'below_0_3us':sum(r['positive_bake_difference_us']<.3 for r in observations),'below_0_5us':sum(r['positive_bake_difference_us']<.5 for r in observations),'candidates':len(candidates)},
+  'history_sources_config':ref(root,'proj_rsi/history_sources.json'),'active_jobs_snapshot':source_config['active_jobs_snapshot'],'preserved_jobs_snapshots':source_config['jobs_snapshots'],'active_board_snapshot':source_config.get('active_board_snapshot'),'preserved_board_snapshots':source_config.get('board_snapshots',[]),'input_provenance':{k:ref(root,v) for k,v in paths.items()},'additional_evidence':[ref(root,p) for p in ['proj_rsi/audits/smallm-v3-01/report.md','proj_rsi/audits/native-stmatrix-01/report.md','proj_rsi/audits/native-x4-01/report.md']],
+  'counts':{'active_API_snapshot_rows':active_snapshot_row_count,'all_official_jobs':len(jobs),'leaderboard_submissions':len(submissions),'checks':len(checks),'archived_jobs':len(jobs)-len(missing),'complete_profile_jobs':sum(r['archive_status']=='ARCHIVED_30_SHAPES' for r in jobs),'partial_profile_jobs':sum(r['archive_status']=='ARCHIVED_PARTIAL' for r in jobs),'no_archive_jobs':len(missing),'pending_no_archive_jobs':len(pending),'failed_no_archive_jobs':len(failed_missing),'feature_findings':len(findings),'positive_observations':len(observations),'preserved_original_positive_observations':224,'new_official_positive_observations':len(observations)-224,'new_official_positive_observations_by_job':{j['job_id']:sum(r['job']==j['job_id'] for r in observations) for j in jobs if any(r['job']==j['job_id'] and r['catalog_cohort']!='initial_45_job_audit' for r in observations)},'local_paired_observations':len(local_observations),'pending_scored_submissions':sum(r['status'] not in ('done','failed','cancelled') for r in submissions),'selected_positive_observations':len(selected_observations),'below_0_3us':sum(r['positive_bake_difference_us']<.3 for r in observations),'below_0_5us':sum(r['positive_bake_difference_us']<.5 for r in observations),'candidates':len(candidates)},
   'submissions':submissions,'checks':checks,'all_official_jobs':jobs,'improvements':findings,'positive_observations':observations,'selected_positive_observations':selected_observations,'local_paired_observations':local_observations,'candidates':candidates,
-  'pw38_latest_local':local,'native_composition_latest':combo,'cursor_v3_latest':inputs['cursor_v3'],'version_source_ancestry_comparisons':inputs['source_map']['named_AST_comparisons'],'current_exact_source_components':inputs['source_map']['components'],'current_exact_selected_routes':inputs['source_map']['official_selected_routes'],
+  'pw38_latest_local':local,'native_composition_latest':combo,'cursor_v3_latest':inputs['cursor_v3'],'version_source_ancestry_comparisons':inputs['source_map']['named_AST_comparisons'],'historical_rs32_source_map':ref(root,paths['source_map']),'current_stack_view':current_view(root,best,inputs['source_map']),'current_exact_source_components':current_view(root,best,inputs['source_map'])['components'],'current_exact_selected_routes':current_view(root,best,inputs['source_map'])['routes'],
   'coverage_gaps':inputs['completeness']['coverage']['gaps']+['Failed check jobs without raw/source archive remain UNKNOWN: '+', '.join(failed_missing),'Pending accepted jobs awaiting archive remain separate: '+', '.join(pending),'Older PW34 current file hash does not establish exact historical bytes of each prepare-guard version.','The completeness cursor attempt01 finding is superseded by retained latest valid v3 result; both are preserved.']}
 
 def source_nodes(path):
@@ -290,6 +346,40 @@ def source_nodes(path):
   segment=''.join(lines[node.lineno-1:node.end_lineno])
   nodes.append({'name':name,'ordinal':ordinal,'line':node.lineno,'end_line':node.end_lineno,'AST_sha256':hashlib.sha256(ast.dump(node,include_attributes=False).encode()).hexdigest(),'source_segment_sha256':hashlib.sha256(segment.encode()).hexdigest()})
  return nodes
+
+def current_view(root,best,historical):
+ """Current source view from frozen release AST + this scored job's profiles.
+ Old rs32 audits remain byte-identical historical evidence, not relabelled files.
+ """
+ import re
+ source=best['source'];nodes=source_nodes(root/source['path']);byname={n['name']:n for n in nodes}
+ def bindings(names):
+  return [dict(byname[name],path=source['path'],source_sha256=source['sha256']) for name in names if name in byname]
+ components=[]
+ for old in historical['components']:
+  old_hashes={n['name']:n.get('AST_sha256') for n in old['bindings']}
+  bound=bindings(old_hashes)
+  for b in bound:b['same_AST_as_historical_rs32']=b['AST_sha256']==old_hashes[b['name']]
+  components.append({'id':old['id'],'name':old['name'],'status':'SOURCE_PRESENT; actual applicability is in scored routes','scope':old['scope'],'implementation':old['implementation'],
+   'bindings':bound,'isolated_causal_gain_us':None,'historical_parent_component':old['id'],'gain_scope':'Exact source inclusion and scored package validation; no isolated component causal gain inferred.'})
+ components += [
+  {'id':'rtk_router','name':'PW35 one-node TMA RTK router128/256','status':'SELECTED_IN_SCORED_PROFILE','scope':'router128/256','implementation':'PW35 RTK branch inherited through PW36; old RW alternatives remain source controls.','bindings':bindings(['RWCU','RTV','RSP','_rsbake','_rscall']),'isolated_causal_gain_us':None},
+  {'id':'eh_epilogue','name':'Optional EH early-half-slab epilogue bit65536','status':'SELECTED_IN_SCORED_PROFILE','scope':'qkv128/pooler128','implementation':'EHbit16=65536 is distinct from HALFbit4=16 and EARLYbit5=32. Original non-EH controls retained; no cursor patch.','bindings':bindings(['RQCU','RQV','RQPROD','RQBAKE']),'isolated_causal_gain_us':None}]
+ routes=[];picks={(p['layer'],p['m']):p for p in best['actual_picks']}
+ for index,p in enumerate(best['actual_timed_profiles']):
+  case=p['case'];report=p['report'];family='Lt/vendor'
+  if 'rq<' in report:family='rq'
+  elif 'rtk<' in report:family='rtk'
+  elif 'rwk<' in report:family='rw'
+  elif 'gv<' in report:family='gv'
+  elif 'rr<' in report:family='rr'
+  match=re.search(r'rq<([^>]+)>',report);flags=None
+  if match:
+   try:flags=int(match[1].split(',')[-1].strip())
+   except ValueError:pass
+  names=['kernel_fn']+(['RQCU','_rqcall'] if family=='rq' else ['RWCU','_rscall'] if family in ('rtk','rw') else ['GVCU','_gvcall'] if family in ('gv','rr') else ['_v12','_ltsearch'])
+  routes.append({'index':index,'layer':case['layer'],'m':case['m'],'load':case['load'],'family':family,'RQ_flags':flags,'EH_selected':flags is not None and bool(flags&65536),'HALF_selected':flags is not None and bool(flags&16),'EARLY_selected':flags is not None and bool(flags&32),'actual_prepare_pick':picks.get((case['layer'],case['m'])),'kernel_report':report,'profile':best['raw'],'bindings':bindings(names)})
+ return {'status':'CURRENT_BOARD_VERIFIED_PW38_SOURCE_AND_ACTUAL_SCORED_ROUTES','official_job_id':best['job_id'],'score_us':best['score_us'],'source':source,'parent':'PW36 + optional EH; no cursor','historical_rs32_audit_status':'HISTORICAL_RETAINED_UNCHANGED','historical_rs32_job':historical['official_job_id'],'components':components,'routes':routes,'check_job':'a3ed4ce5886a4415','scored_job':best['job_id'],'limitations':['Server content_hash algorithm is unknown; local release attestation does not equate it to raw SHA256.','Package scores/actual routes are observed; individual feature causal deltas are not inferred.','Source presence is separate from route selection; current pooler EH choice may differ from the CHECK choice.']}
 
 def csv_text(rows,fields):
  output=io.StringIO(newline='');writer=csv.DictWriter(output,fieldnames=fields,lineterminator='\n');writer.writeheader()
@@ -314,9 +404,9 @@ def render(catalog):
 
 This catalog preserves all official submissions and known improvement evidence. Regenerate with `python3 -m proj_rsi.history_catalog`; check deterministic renderings with `python3 -m proj_rsi.history_catalog --check`. No GPU or service calls occur during generation.
 
-The active versioned API snapshot contains **{all_jobs} official jobs:{runs} leaderboard submissions and{checks} checks**. The best is **rs32/fb548b5dc6f04696:3200.615008us**, local source `a7b6e010…5a35ad`. Baseline R6's scored submission is included. Five older failed checks retain unknown source associations; partial failure metadata is preserved where found and genuinely missing archives remain explicit. PW38 check status and archived official evidence are shown below, separately from scored submissions and older failed/source-unknown checks. Preserved-snapshot union prevents latest50 pagination from dropping baseline R6.
+The active versioned API snapshot contains **{all_jobs} official jobs:{runs} leaderboard submissions and{checks} checks**. The best is **{best_candidate}/{best_job}:{best_score}us**, local source `{best_source}`. Baseline R6's scored submission is included. Five older failed checks retain unknown source associations; partial failure metadata is preserved where found and genuinely missing archives remain explicit. PW38 check status and archived official evidence are shown below, separately from scored submissions and older failed/source-unknown checks. Preserved-snapshot union prevents latest50 pagination from dropping baseline R6.
 
-PW35's real router gains are absent best rs32, but their stack was already tested as PW36 (3212.415452us). The omitted historical EH epilogue0.13–0.16us result remains visible with weaker raw provenance. Latest cursorv3 contains tiny wins, ties and regressions; it establishes no incremental shipping gain. PW37 and PW38 source work are not leaderboard rows without their own API run jobs.
+Historical best rs32 omitted PW35 RTK; PW36 tested that combination (3212.415452us). Current PW38 includes RTK plus selectable EH and is now the board-verified best. The omitted historical EH epilogue0.13–0.16us result remains visible with weaker raw provenance. Latest cursorv3 contains tiny wins, ties and regressions; it establishes no incremental shipping gain. PW37 remains an unscored source experiment; PW38's completed mode=run is preserved separately from its preceding check; its actual scored result, not the check score, determines current board authority.
 
 ## Every leaderboard submission, chronologically
 
@@ -324,16 +414,19 @@ PW35's real router gains are absent best rs32, but their stack was already teste
 |---|---|---:|---|
 '''
  for r in catalog['submissions']:
-  text+=f"|{r['submitted_utc']}|{r['candidate'] or 'UNKNOWN'} / `{r['job_id']}`|{r['score_us']:.6f}|{r['stack_description']}. [Raw](../{r['raw']['path']})|\n"
+  score_display=f"{r['score_us']:.6f}" if r['score_us'] is not None else 'Pending — unknown'
+  raw_display=f"[Raw](../{r['raw']['path']})" if r['raw'] else 'No result archive yet; frozen source/attestation retained'
+  text+=f"|{r['submitted_utc']}|{r['candidate'] or 'UNKNOWN'} / `{r['job_id']}`|{score_display}|{r['stack_description']}. {raw_display}|\n"
  pw38=next((r for r in catalog['checks'] if r['job_id']=='a3ed4ce5886a4415'),{})
+ text=text.replace('{best_candidate}',str(catalog['authority']['candidate'])).replace('{best_job}',catalog['authority']['best_job']).replace('{best_score}',f"{catalog['authority']['score_us']:.9f}").replace('{best_source}',str(catalog['authority']['source_sha256']))
  text=text.replace('{pw38_check_status}',str(pw38.get('status','unknown'))).replace('{all_jobs}',str(counts['all_official_jobs'])).replace('{runs}',str(counts['leaderboard_submissions'])).replace('{checks}',str(counts['checks']))
  text+='''
-Each row is an independent official measurement. Scores are outcomes, not causal feature deltas. All10 archived scored jobs passed9/9. Source descriptions state ancestry/availability; per-job picks and actual timed profile reports in the JSON distinguish selection from compiled presence. Initial PW34's RQ phase was skipped; later PW34 repaired it.
+Each row is an independent official measurement. Scores are outcomes, not causal feature deltas. Every completed archived scored job passed9/9; accepted pending scored rows have unknown score/tests until their own result completes. Source descriptions state ancestry/availability; per-job picks and actual timed profile reports in the JSON distinguish selection from compiled presence. Initial PW34's RQ phase was skipped; later PW34 repaired it.
 
-## Prospective source stacks, not leaderboard submissions
+## Preserved source stack versions
 
 - PW37 `7913564f…a0330`: PW36 + cursor. CPU source only; latest standalone cursorv3 has mixed/negative evidence, not an accepted improvement.
-- PW38: PW36 + optional EHbit65536; cursor excluded. Local full30-shape validation is complete with mixed results. Official CHECK `a3ed4ce5886a4415` status: {pw38_check_status}; it is not a leaderboard submission. See its [manifest](candidates/pw38/manifest.json) and [provenance](candidates/pw38/PROVENANCE.md). Actual local EH selection and mixed performance are preserved separately; official CHECK evidence is preserved independently from leaderboard scoring.
+- PW38: current board-verified scored stack `a3f0ebf25a754c01`,3198.617507982us. PW36 + optional EHbit65536; cursor excluded. Local full30-shape validation is complete with mixed results. Official CHECK `a3ed4ce5886a4415` status: {pw38_check_status}; it is not a leaderboard submission. See its [manifest](candidates/pw38/manifest.json) and [provenance](candidates/pw38/PROVENANCE.md). Actual local EH selection and mixed performance are preserved separately; official CHECK evidence is preserved independently from leaderboard scoring.
 
 ## Every preserved improvement finding
 
@@ -346,10 +439,10 @@ Each row is an independent official measurement. Scores are outcomes, not causal
 
 ## Tables and evidence
 
-- [All10 submissions](tables/submissions.csv), [all{counts['checks']} checks](tables/checks.csv), [all{counts['all_official_jobs']} official jobs](tables/all_official_jobs.csv).
+- [All{counts['leaderboard_submissions']} submissions](tables/submissions.csv), [all{counts['checks']} checks](tables/checks.csv), [all{counts['all_official_jobs']} official jobs](tables/all_official_jobs.csv).
 - [All improvement findings](tables/improvements.csv), [all positive preparation observations](tables/positive_observations.csv), [local paired observations including losses](tables/local_observations.csv), [all{counts['candidates']} candidate directories](tables/candidates.csv).
 - [Machine catalog](history_catalog.json): exact source18-component map/all30 serving routes, source hashes, raw/log/review links, primary input inventory and missing evidence.
-- [Official component history](audits/current-leaderboard-gains-official.md), [source ancestry](audits/current-leaderboard-stack-source.md), [corpus completeness](audits/current-leaderboard-gains-completeness.md), [latest cursorv3](audits/smallm-v3-01/report.md).
+- [Official component history](audits/current-leaderboard-gains-official.md), [HISTORICAL rs32 source ancestry](audits/current-leaderboard-stack-source.md), [CURRENT PW38 stack](CURRENT_STACK.md), [corpus completeness](audits/current-leaderboard-gains-completeness.md), [latest cursorv3](audits/smallm-v3-01/report.md).
 
 ## Preservation and update method
 
@@ -363,7 +456,20 @@ Server`content_hash` has an undocumented algorithm: live rs32`cd14084a…` diffe
 '''
  text=text.replace('{pw38_check_status}',str(pw38.get('status','unknown')))
  if pw38.get('score_us') is not None:
-  text+='\nPW38 CHECK: **'+str(pw38['score_us'])+'us**, '+str(pw38.get('tests_passed'))+'/'+str(pw38.get('tests'))+' tests; all30 shapes archived. This is not a leaderboard submission or a new leaderboard best.\n'
+  text+='\nPW38 CHECK: **'+str(pw38['score_us'])+'us**, '+str(pw38.get('tests_passed'))+'/'+str(pw38.get('tests'))+' tests; all30 shapes archived. This CHECK is not a leaderboard submission; the distinct scored run supplies current leaderboard authority.\n'
+ view=catalog['current_stack_view']
+ files['proj_rsi/current_leaderboard_stack.json']=json.dumps(view,indent=2)+'\n'
+ current='# Current leaderboard stack: '+str(catalog['authority']['candidate'])+'\n\n'
+ current+='Board-verified scored job `'+view['scored_job']+'`: **'+str(view['score_us'])+'us**,9/9 and30 timed shapes. Source `'+view['source']['sha256']+'`. PW36 + selectable EH, no cursor. The preceding CHECK is a distinct job.\n\n'
+ current+='The old [rs32 source audit](audits/current-leaderboard-stack-source.md) and [official history](audits/current-leaderboard-gains-official.md) are HISTORICAL snapshots retained unchanged. Current bindings below are regenerated from frozen PW38 release bytes and this scored job; they are not copied CHECK selections.\n\n'
+ current+='|Component|Source/selection evidence|\n|---|---|\n'
+ for component in view['components']:current+='|'+component['name']+'|'+component['status']+'; '+str(len(component['bindings']))+' current AST/source bindings; no isolated causal delta.|\n'
+ current+='\n|Load / layer / M|Actual scored family / prepare pick|EH / HALF / EARLY flags|\n|---|---|---|\n'
+ for route in view['routes']:
+  pick=route['actual_prepare_pick'];name=pick['selected'] if pick else 'See actual kernel profile'
+  current+='|'+str(route['load'])+' / '+route['layer']+' / '+str(route['m'])+'|'+route['family']+' / '+name+'|'+str(route['EH_selected'])+' / '+str(route['HALF_selected'])+' / '+str(route['EARLY_selected'])+'|\n'
+ current+='\nFull per-route kernel reports, exact current source-node SHA256/line bindings and historical equivalence checks are in [machine view](current_leaderboard_stack.json). Source presence does not imply measured benefit on every route. Server payload hash remains opaque; no component-wise or cross-run additive gain claim is made.\n'
+ files['proj_rsi/CURRENT_STACK.md']=current
  files['proj_rsi/HISTORY.md']=text
  return files
 

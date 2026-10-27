@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 3,
-  "active_jobs_snapshot": "pw38-check-complete-a3ed4ce5886a4415",
+  "revision": 5,
+  "active_jobs_snapshot": "pw38-scored-complete-a3f0ebf25a754c01",
   "jobs_snapshots": [
     {
       "id": "pre-pw38-50-jobs",
@@ -17,6 +17,16 @@
       "id": "pw38-check-complete-a3ed4ce5886a4415",
       "path": "results/proj-rsi/releases/pw38-v1-29e557ea53f3/live-jobs-after-check-complete.json",
       "sha256": "74d3f6025f52e7aeec3d17e69d4cbb248530b3f75942710fc1feed21b0191c1f"
+    },
+    {
+      "id": "pw38-scored-accepted-a3f0ebf25a754c01",
+      "path": "results/proj-rsi/releases/pw38-v1-29e557ea53f3/live-jobs-after-scored-submit.json",
+      "sha256": "d19d561ee1124ba86f8b27f29b181462b9ee84178927e849415252e4da78acf0"
+    },
+    {
+      "id": "pw38-scored-complete-a3f0ebf25a754c01",
+      "path": "results/proj-rsi/releases/pw38-v1-29e557ea53f3/live-jobs-after-scored-complete.json",
+      "sha256": "63b3c1ae6befe89e309bd9fc6cb0e80817b4524230fcaca097af0902ee7b78be"
     }
   ],
   "job_source_associations": {
@@ -37,7 +47,42 @@
           "sha256": "819c4b760bc70f2ed1f3e10f9bdfd3cf9727dcc14b361c4d38259ab4a6a37484"
         }
       ]
+    },
+    "a3f0ebf25a754c01": {
+      "candidate": "pw38",
+      "source": {
+        "path": "results/proj-rsi/releases/pw38-v1-29e557ea53f3/submission.py",
+        "sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e"
+      },
+      "attestation": {
+        "path": "results/proj-rsi/releases/pw38-v1-29e557ea53f3/scored-submitted-attestation.json",
+        "sha256": "a9e8426e0b4c11bd1985942a877552c2c45b0bbfe099078e997758b90e957a6d"
+      },
+      "additional_attestations": [
+        {
+          "path": "results/proj-rsi/releases/pw38-v1-29e557ea53f3/scored-release-decision.json",
+          "sha256": "c6f23d85b059d4b60e1b6359744385aa9a57350e2b6416a3cec201db8bccb1fc"
+        },
+        {
+          "path": "results/proj-rsi/releases/pw38-v1-29e557ea53f3/scored-completed-attestation.json",
+          "sha256": "becea5e43a5690837d0b255ed71aa5a42bed6023f467469d9fd3804cdc839cc6"
+        }
+      ],
+      "association": "Frozen PW38 release bytes associated with accepted and completed scored job by root submit/completion attestations; opaque server content hash remains separate."
     }
   },
-  "preservation": "Never overwrite earlier API snapshots. Append a new snapshot ID/path/SHA and advance active pointer/revision after collecting a fresh read-only API response. Checks never enter submissions unless mode=run."
+  "preservation": "Never overwrite earlier API snapshots. Append a new snapshot ID/path/SHA and advance active pointer/revision after collecting a fresh read-only API response. Checks never enter submissions unless mode=run.",
+  "board_snapshots": [
+    {
+      "id": "pre-pw38-board",
+      "path": "results/proj-rsi/takeover/20261027/live-leaderboard-audit.json",
+      "sha256": "14228df024ce9376867902537ba6c82f932f05ccfde0e48282a56df54588631a"
+    },
+    {
+      "id": "pw38-scored-board-a3f0ebf25a754c01",
+      "path": "results/proj-rsi/releases/pw38-v1-29e557ea53f3/leaderboard-after-scored.json",
+      "sha256": "808f2a57afe2f158a2abe292b6c81b2ed8ea090a6e137c4e1442095523eec24e"
+    }
+  ],
+  "active_board_snapshot": "pw38-scored-board-a3f0ebf25a754c01"
 }

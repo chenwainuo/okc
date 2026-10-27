@@ -1,0 +1,201 @@
+2026-10-27T05:01:58Z
+[1/3] c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=pw36_wring_1a614dcd721c6431 -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\"_gcc\" -DPYBIND11_STDLIB=\"_libstdcpp\" -DPYBIND11_BUILD_ABI=\"_cxxabi1018\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -fPIC -std=c++17 -c /root/.cache/torch_extensions/pw36_wring_1a614dcd721c6431/main.cpp -o main.o 
+[2/3] /usr/local/cuda/bin/nvcc --generate-dependencies-with-compile --dependency-output cuda.cuda.o.d -DTORCH_EXTENSION_NAME=pw36_wring_1a614dcd721c6431 -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\"_gcc\" -DPYBIND11_STDLIB=\"_libstdcpp\" -DPYBIND11_BUILD_ABI=\"_cxxabi1018\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_90a,code=sm_90a --compiler-options '-fPIC' -gencode=arch=compute_90a,code=sm_90a -O3 -DNDEBUG --expt-relaxed-constexpr -std=c++17 -c /root/.cache/torch_extensions/pw36_wring_1a614dcd721c6431/cuda.cu -o cuda.cuda.o 
+[3/3] c++ main.o cuda.cuda.o -shared -L/opt/conda/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o pw36_wring_1a614dcd721c6431.so
+PREP rq thread started at 44s
+PREP rq32 thread started at 44s
+lt qkv_gate m128 heur 20.51 best 2:66.15.1.0.0.0.35.0.2 18.94 (109 tried, 3.7s)
+lt qkv_gate m256 heur 23.04 best 0:66.124.1.0.0.0.35.0.3 21.34 (97 tried, 7.1s)
+lt o m128 heur 10.98 best 2:66.18.1.0.0.6.35.0.5 10.66 (47 tried, 10.3s)
+lt o m256 heur 12.26 best 2:66.17.1.0.0.0.35.0.2 11.65 (47 tried, 12.1s)
+lt pooler m128 heur 28.67 best 2:66.15.1.0.0.2.35.0.5 27.74 (48 tried, 14.6s)
+lt pooler m256 heur 33.02 best 2:66.18.1.0.0.4.35.0.2 29.50 (47 tried, 16.3s)
+lt unpooler m128 heur 28.00 best 2:66.18.1.0.0.4.35.0.2 26.91 (47 tried, 19.0s)
+lt unpooler m256 heur 30.14 best 3:66.20.1.0.0.4.35.0.2 28.13 (47 tried, 20.8s)
+lt router m128 heur 11.55 best torch 11.55 (48 tried, 22.7s)
+lt router m256 heur 12.74 best 3:66.15.4.2.0.1.35.0.3 12.54 (48 tried, 24.6s)
+gv qkv_gate m1 v12 16.38 best 1.1.1.2.16.8.1.1.2.1 10.91
+  v12:16.38 1.1.2.1.8.16.1.1.0.1:11.33 1.1.2.1.4.16.2.1.0.0:12.70 1.1.2.1.4.16.2.1.0.1:12.29 1.1.2.1.4.8.4.1.0.1:14.98 1.1.1.2.16.8.1.1.2.1:10.82 1.1.1.1.16.8.1.1.2.8193:10.85
+gv qkv_gate m8 v12 16.38 best 1.1.1.2.16.8.1.1.2.1 10.98
+  v12:16.38 1.1.2.1.8.16.1.1.0.1:11.49 1.1.2.1.4.16.2.1.0.0:12.67 1.1.2.1.4.16.2.1.0.1:12.35 1.1.2.1.4.8.4.1.0.1:14.98 1.1.1.2.16.8.1.1.2.1:10.98 1.1.1.1.16.8.1.1.2.8193:11.10
+gv qkv_gate m16 v12 16.54 best 1.2.2.2.8.16.1.1.0.1 11.30
+  v12:16.54 1.2.2.1.4.16.2.1.0.1:12.67 1.2.2.1.4.8.4.1.2.1:16.70 1.2.2.1.4.8.4.1.2.3:13.47 1.2.2.1.4.16.2.1.2.0:13.50 1.2.2.1.4.16.2.1.2.1:13.22 1.2.1.1.4.16.2.1.2.1:13.15 1.2.1.1.4.8.4.1.2.1:12.61 1.2.2.2.8.16.1.1.0.1:11.36 1.2.1.2.16.8.1.1.2.3:11.87 1.2.1.1.16.8.1.1.2.8193:11.49
+gv qkv_gate m32 v12 15.94 best 1.4.2.1.8.16.1.1.2.1 14.53
+  v12:15.94 1.4.2.1.8.16.1.1.2.0:14.59 1.4.2.1.8.16.1.1.2.1:14.56 1.4.2.1.4.16.2.1.2.0:15.74 1.4.2.1.4.16.2.1.2.1:15.68 1.4.2.2.4.16.2.1.2.1:16.16 1.4.1.1.4.8.4.1.2.0:19.10 1.4.1.1.4.8.4.1.2.1:19.55 1.4.2.1.4.8.4.1.2.1:20.29 1.4.1.1.4.16.2.1.2.1:15.04
+gv o m1 v12 6.98 best 1.1.2.1.8.2.1.1.0.1 5.31
+  v12:7.01 1.1.2.1.8.2.1.1.0.0:5.50 1.1.2.1.8.2.1.1.0.1:5.25 1.1.2.2.4.4.1.1.0.1:5.57 1.1.2.1.4.4.1.1.0.1:5.82
+gv o m8 v12 6.94 best 1.1.2.1.8.2.1.1.0.1 5.47
+  v12:7.04 1.1.2.1.8.2.1.1.0.0:5.63 1.1.2.1.8.2.1.1.0.1:5.47 1.1.2.2.4.4.1.1.0.1:5.73 1.1.2.1.4.4.1.1.0.1:5.92
+gv o m16 v12 6.85 best 1.2.2.1.8.2.1.1.0.1 5.28
+  v12:7.04 1.2.2.1.8.2.1.1.0.0:5.50 1.2.2.1.8.2.1.1.0.1:5.31 1.2.2.2.4.4.1.1.0.1:5.76 1.2.2.2.4.4.1.1.2.1:5.66 1.2.2.1.8.2.1.1.2.1:6.85 1.2.1.1.4.4.1.1.2.1:5.63
+gv o m32 v12 7.07 best 1.4.1.1.4.4.1.1.2.1 6.37
+  v12:7.07 1.4.2.1.4.4.1.1.2.0:6.82 1.4.2.1.4.4.1.1.2.1:6.85 1.4.2.2.4.4.1.1.2.0:7.01 1.4.2.2.4.4.1.1.2.1:7.07 1.4.2.1.8.2.1.1.0.1:6.34 1.4.1.1.4.4.1.1.2.0:6.46 1.4.1.1.4.4.1.1.2.1:6.40 1.4.2.1.8.2.1.1.2.1:7.65 1.4.1.1.8.2.1.1.2.1:7.65
+gv pooler m1 v12 25.70 best 1.1.2.2.8.16.1.1.0.1 17.70
+  v12:28.67 1.1.2.2.8.16.1.1.0.0:18.11 1.1.2.2.8.16.1.1.0.1:17.92 1.1.1.2.16.8.1.1.0.3:17.82 1.1.2.1.8.16.1.1.0.1:17.82
+gv pooler m8 v12 25.86 best 1.1.2.2.8.16.1.1.0.1 17.70
+  v12:25.86 1.1.2.2.8.16.1.1.0.0:17.95 1.1.2.2.8.16.1.1.0.1:17.86 1.1.1.2.16.8.1.1.0.3:17.86 1.1.2.1.8.16.1.1.0.1:17.86
+gv pooler m16 v12 26.11 best 1.2.2.2.8.16.1.1.0.1 17.92
+  v12:26.11 1.2.2.2.8.16.1.1.0.0:18.30 1.2.2.2.8.16.1.1.0.1:17.76 1.2.2.1.8.16.1.1.2.1:18.18 1.2.2.1.8.16.1.1.0.1:19.84
+gv pooler m32 v12 26.24 best 1.4.2.1.8.16.1.1.2.0 20.26
+  v12:26.59 1.4.2.1.8.16.1.1.2.0:20.48 1.4.2.1.8.16.1.1.2.1:20.19 1.4.2.1.4.16.2.1.2.1:22.08 1.4.2.2.4.16.2.1.2.1:21.66
+gv unpooler m1 v12 5.76 best 1.1.2.1.16.4.1.1.0.0 3.78
+  v12:6.46 1.1.2.1.16.4.1.1.0.0:3.84 1.1.2.1.16.4.1.1.0.1:3.78 1.1.2.1.8.2.4.1.0.1:4.77 1.1.2.1.8.4.2.1.0.1:4.96
+gv unpooler m8 v12 7.04 best 1.1.2.1.16.4.1.1.0.1 3.87
+  v12:7.17 1.1.2.1.16.4.1.1.0.0:4.10 1.1.2.1.16.4.1.1.0.1:4.06 1.1.2.1.8.2.4.1.0.1:5.02 1.1.2.1.8.4.2.1.0.1:5.06
+gv unpooler m16 v12 23.36 best 1.2.2.1.4.16.1.1.2.1 18.27
+  v12:23.36 1.2.2.1.4.16.1.1.2.0:18.43 1.2.2.1.4.16.1.1.2.1:18.21 1.2.2.1.4.16.1.1.0.1:20.19 1.2.2.1.8.8.1.1.0.1:21.22
+gv unpooler m32 v12 23.65 best 1.4.2.1.4.16.1.1.2.1 20.19
+  v12:23.68 1.4.2.1.4.16.1.1.2.0:20.32 1.4.2.1.4.16.1.1.2.1:20.22 1.4.2.2.4.16.1.1.2.1:20.22 1.4.2.1.8.8.1.1.2.1:21.92
+gv router m1 v12 5.60 best rr7 3.39
+  v12:5.70 2.1.2.1.8.1.16.1.0.0:7.33 2.1.2.1.4.2.16.1.0.0:5.54 2.1.2.1.8.2.8.1.0.0:5.31 rr0:3.78 rr6:3.55 rr7:3.33
+PROBE p1alt router m=1 rr7 6.98 rr0=7.26 delta=-0.29
+gv router m8 v12 5.57 best 2.1.2.1.8.2.8.1.0.0 5.25
+  v12:5.57 2.1.2.1.8.1.16.1.0.0:7.17 2.1.2.1.4.2.16.1.0.0:5.60 2.1.2.1.8.2.8.1.0.0:5.31
+gv router m16 v12 5.76 best 2.2.2.1.8.2.8.1.0.0 5.41
+  v12:5.98 2.2.2.1.8.1.16.1.0.0:5.73 2.2.2.1.4.2.16.1.0.0:5.70 2.2.2.1.8.2.8.1.0.0:5.47
+gv router m32 v12 6.50 best 2.4.2.1.4.2.16.1.0.0 5.95
+  v12:6.50 2.4.2.1.8.1.16.1.0.0:8.03 2.4.2.1.4.2.16.1.0.0:6.05 2.4.2.1.8.2.8.1.0.0:8.99
+PREP r6 done in 79s
+PREP rq thread ready at 92s (bake starts at 92s)
+BAKE pooler m=128 rq:s4s5z 25.12 (ok 3.2e-03) at 92s
+BAKE pooler m=128 rq:s4s5hz 24.29 (ok 3.1e-03) at 92s
+BAKE pooler m=128 rq:s4hz 24.64 (ok 3.1e-03) at 92s
+BAKE pooler m=128 r6 27.01 (before pack 27.52, after variants 27.01) at 92s
+PICK pooler m=128 rq:s4s5hz 24.29
+BAKE pooler m=256 rq:n256s4hz 29.66 (ok 3.1e-03) at 92s
+BAKE pooler m=256 rq:n256s5hz 30.40 (ok 3.1e-03) at 92s
+BAKE pooler m=256 rq:n256s5z 30.08 (ok 3.2e-03) at 92s
+BAKE pooler m=256 r6 29.57 (before pack 29.57, after variants 29.66) at 92s
+PICK pooler m=256 r6 29.57
+BAKE qkv_gate m=128 rq:s4s5z 17.66 (ok 3.8e-03) at 92s
+BAKE qkv_gate m=128 rq:s4s5hz 17.41 (ok 3.8e-03) at 92s
+BAKE qkv_gate m=128 rq:s4hz 17.89 (ok 3.8e-03) at 92s
+BAKE qkv_gate m=128 r6 19.14 (before pack 19.14, after variants 19.94) at 93s
+PICK qkv_gate m=128 rq:s4s5hz 17.41
+BAKE qkv_gate m=256 rq:n256s4hz 21.09 (ok 3.8e-03) at 93s
+BAKE qkv_gate m=256 rq:n256s5hz 21.95 (ok 3.9e-03) at 93s
+BAKE qkv_gate m=256 rq:n256s5z 21.86 (ok 3.8e-03) at 93s
+BAKE qkv_gate m=256 r6 21.22 (before pack 21.31, after variants 21.22) at 93s
+PICK qkv_gate m=256 r6 21.22
+BAKE unpooler m=128 rq:s4s5z 25.25 (ok 2.4e-03) at 93s
+BAKE unpooler m=128 rq:s4s5hz 24.42 (ok 2.4e-03) at 93s
+BAKE unpooler m=128 rq:s4hz 24.96 (ok 2.4e-03) at 93s
+BAKE unpooler m=128 r6 26.78 (before pack 27.14, after variants 26.78) at 93s
+PICK unpooler m=128 rq:s4s5hz 24.42
+BAKE unpooler m=256 rq:n256s4hz 30.02 (ok 2.4e-03) at 93s
+BAKE unpooler m=256 rq:n256s5hz 30.53 (ok 2.4e-03) at 93s
+BAKE unpooler m=256 rq:n256s5z 30.78 (ok 2.4e-03) at 93s
+BAKE unpooler m=256 r6 27.97 (before pack 27.97, after variants 28.32) at 93s
+PICK unpooler m=256 r6 27.97
+BAKE o m=128 rq:s4s5z 12.48 (ok 2.4e-03) at 93s
+BAKE o m=128 rq:s4s5hz 12.35 (ok 2.4e-03) at 93s
+BAKE o m=128 rq:s4hz 12.22 (ok 2.4e-03) at 93s
+BAKE o m=128 r6 10.98 (before pack 11.17, after variants 10.98) at 93s
+PICK o m=128 r6 10.98
+BAKE o m=256 rq:n256s4hz 15.39 (ok 2.4e-03) at 93s
+BAKE o m=256 rq:n256s5hz 15.62 (ok 2.4e-03) at 94s
+BAKE o m=256 rq:n256s5z 15.55 (ok 2.4e-03) at 94s
+BAKE o m=256 r6 11.84 (before pack 11.84, after variants 11.87) at 94s
+PICK o m=256 r6 11.84
+PREP phase rq done at 94s
+GX router c12 escapes hi 286 lo 1071
+BAKE unpooler m=1 r6 7.55
+BAKE unpooler m=1 uk-s4z 7.39
+BAKE unpooler m=1 uk-s4x 7.33
+BAKE unpooler m=1 uk-s4w4x 7.46
+PICK unpooler m=1 uk-s4z 7.39
+PROBE p1alt unpooler m=1 uk-s4z 7.33 r6=7.46 delta=-0.13
+BAKE unpooler m=8 r6 7.39
+BAKE unpooler m=8 uk-s4z 7.33
+BAKE unpooler m=8 uk-s4x 7.17
+BAKE unpooler m=8 uk-s4w4x 7.26
+PICK unpooler m=8 uk-s4x 7.17
+PROBE p1alt unpooler m=8 uk-s4x 7.10 r6=7.36 delta=-0.26
+BAKE router m=8 r6 8.70
+BAKE router m=8 rk-s8z 8.22
+BAKE router m=8 rk-s16w8z 7.81
+BAKE router m=8 rk-s16w8x 7.65
+BAKE router m=8 rk-s32x 7.78
+PICK router m=8 rk-s16w8x 7.65
+PROBE p1alt router m=8 rk-s16w8x 7.74 r6=8.83 delta=-1.09
+BAKE router m=16 r6 9.06
+BAKE router m=16 rk-s8z 8.16
+BAKE router m=16 rk-s16w8z 8.03
+BAKE router m=16 rk-s16w8x 8.00
+BAKE router m=16 rk-s32x 8.13
+PICK router m=16 rk-s16w8z 8.03
+PROBE p1alt router m=16 rk-s16w8z 8.03 r6=8.86 delta=-0.83
+BAKE router m=32 r6 9.50
+BAKE router m=32 rk-s8z 8.26
+BAKE router m=32 rk-s16w8z 8.26
+PICK router m=32 rk-s8z 8.26
+PROBE p1alt router m=32 rk-s8z 8.22 r6=9.54 delta=-1.31
+PREP phase gx done at 98s
+PREP rq32 thread ready at 91s
+PREP rq32 bake starts at 98s
+BAKE pooler m=32 rq:t32s5hze-k4 21.86 (ok 3.1e-03) at 98s
+BAKE pooler m=32 rq:t32s6hze-k4 22.02 (ok 3.1e-03) at 98s
+BAKE pooler m=32 rq:t32s5hz-k4 22.05 (ok 3.2e-03) at 98s
+BAKE pooler m=32 r6 23.30 (before variants 23.71, after variants 23.30) at 98s
+PICK pooler m=32 rq:t32s5hze-k4 21.86
+BAKE pooler m=16 rq:t16s5hze-k4 21.92 (ok 3.1e-03) at 99s
+BAKE pooler m=16 rq:t16s6hze-k4 22.05 (ok 3.1e-03) at 99s
+BAKE pooler m=16 rq:t16s5hz-k4 21.89 (ok 3.1e-03) at 99s
+BAKE pooler m=16 r6 21.47 (before variants 21.57, after variants 21.47) at 99s
+PICK pooler m=16 r6 21.47
+BAKE qkv_gate m=32 rq:t32s5hze-k6 15.01 (ok 3.6e-03) at 99s
+BAKE qkv_gate m=32 rq:t32s5hze-k7 15.42 (ok 3.9e-03) at 99s
+BAKE qkv_gate m=32 rq:t32s5hz-k6 15.07 (ok 3.6e-03) at 99s
+BAKE qkv_gate m=32 rq:t32s6hze-k6 14.98 (ok 3.6e-03) at 99s
+BAKE qkv_gate m=32 r6 18.30 (before variants 18.30, after variants 18.40) at 99s
+PICK qkv_gate m=32 rq:t32s6hze-k6 14.98
+BAKE qkv_gate m=16 rq:t16s5hze-k6 14.85 (ok 3.6e-03) at 99s
+BAKE qkv_gate m=16 rq:t16s5ze-k6 15.01 (ok 3.6e-03) at 99s
+BAKE qkv_gate m=16 rq:t16s5hze-k7 14.88 (ok 3.9e-03) at 100s
+BAKE qkv_gate m=16 rq:t16s5ze-k7 15.14 (ok 3.8e-03) at 100s
+BAKE qkv_gate m=16 r6 14.78 (before variants 14.94, after variants 14.78) at 100s
+PICK qkv_gate m=16 r6 14.78
+BAKE unpooler m=32 rq:t32s5hze-k2 21.79 (ok 2.4e-03) at 100s
+BAKE unpooler m=32 rq:t32s6hze-k2 21.86 (ok 2.4e-03) at 100s
+BAKE unpooler m=32 rq:t32s6hz-k2 22.11 (ok 2.5e-03) at 100s
+BAKE unpooler m=32 r6 23.10 (before variants 23.87, after variants 23.10) at 100s
+PICK unpooler m=32 rq:t32s5hze-k2 21.79
+BAKE unpooler m=16 rq:t16s5hze-k2 21.73 (ok 2.4e-03) at 100s
+BAKE unpooler m=16 rq:t16s6hze-k2 21.92 (ok 2.4e-03) at 100s
+BAKE unpooler m=16 rq:t16s5hz-k2 21.98 (ok 2.4e-03) at 100s
+BAKE unpooler m=16 r6 21.76 (before variants 21.76, after variants 21.82) at 100s
+PICK unpooler m=16 r6 21.76
+BAKE o m=32 rq:t32s5hze-k2 9.82 (ok 2.4e-03) at 100s
+BAKE o m=32 rq:t32s6hze-k2 9.82 (ok 2.4e-03) at 100s
+BAKE o m=32 rq:t32s5ze-k2 9.86 (ok 2.4e-03) at 100s
+BAKE o m=32 r6 9.92 (before variants 9.98, after variants 9.92) at 100s
+PICK o m=32 r6 9.92
+BAKE o m=16 rq:t16s5hze-k2 9.73 (ok 2.5e-03) at 100s
+BAKE o m=16 rq:t16s6hze-k2 9.73 (ok 2.5e-03) at 101s
+BAKE o m=16 rq:t16s5ze-k2 9.73 (ok 2.4e-03) at 101s
+BAKE o m=16 r6 8.83 (before variants 8.86, after variants 8.83) at 101s
+PICK o m=16 r6 8.83
+BAKE o m=128 rq:h128s8e-k1 10.88 (ok 1.7e-03) at 101s
+BAKE o m=128 rq:h128s5-k1 11.17 (ok 1.7e-03) at 101s
+BAKE o m=128 r6 10.82 (before variants 10.82, after variants 10.88) at 101s
+PICK o m=128 r6 10.82
+PREP phase rq32 done at 101s
+PREP rw compiled in 0s (at 101s)
+BAKE router m=128 r6 16.61
+BAKE router m=128 rw64k32s8z 11.68
+BAKE router m=128 rt64k32b3x2z 10.59
+BAKE router m=128 rt64k32b4z 10.50
+BAKE router m=128 rt64k32b3x2bz 10.53
+BAKE router m=128 r6 F1 pre 16.51 post 16.00 base 16.00
+PROBE rszero router m=128 3.71
+PICK router m=128 rt64k32b3x2z 10.59
+BAKE router m=256 r6 15.01
+BAKE router m=256 rw64k32r3x2z 14.75
+BAKE router m=256 rt64k16b6z 13.22
+BAKE router m=256 rt64k32b3x2z 12.90
+BAKE router m=256 r6 F1 pre 15.30 post 15.23 base 15.01
+PICK router m=256 rt64k32b3x2z 12.90
+PREP phase router done at 101s
+PREP done in 101s
+TRIAL_EXIT okc-proj-wring-rebase-01 0
+2026-10-27T05:03:50Z

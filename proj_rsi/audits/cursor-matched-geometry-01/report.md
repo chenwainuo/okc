@@ -1,0 +1,25 @@
+# Cursor matched geometry: independent terminal review
+
+**VALID_NO_GAIN for integration; valid mixed component observations retained.** This is not an invalid setup and does not retire the family. The exact cursor source is `0d0ef30a495de725139fd8a401ed0c7a239d0ef10e7c41a8b4f9a6c2d37c1737`. Authoritative collection is `research.cursor.matchedgeometry.gpu.01/collection-1793078089318513356`. Driver c6219b3b… and trial fe5282b9… match the admitted freeze. No GPU, API or queue action occurred in this review.
+
+All15 collected file hashes,24 trial pins and all dispatch pins pass. Each of the three archived `.so` files was independently re-disassembled locally with CPU-only cuobjdump: SASS and resource output exactly match the saved files. All admitted function opcode/resource gates pass; parentPW36 and RS32 RQ32 binaries are identical. All fixed ST5/ST6 attributes are168registers/0local,83080/99488shared bytes, with identical paired KS6/4/2 and flags35. Both fixed sources retain the same384thread/64512register dynamic pool. Before-first-math JIT phases precede every basis/timing phase.
+
+Reconstruction from the frozen schedule and journal validates **1386raw calls,42immediate own-fixture terminal oracles,105retained-graph mutations and21full-K-basis/FP64 arm-shape validations**. All14paired orders occur twice, with every label in each position four times. F1 outputs are checked against seven distinct last-input fixtures before any replay/mutation; paired outputs use each arm's own last seed. All21graphs have exactly one actual RQ device node. All three shapes reset all seven graphs after drain. Terminal exit0 and independent cleanup observation show no guard/process/container/compute allocation and zero GPU memory.
+
+Counter checking uses source-bound active reset-zero contracts, full physical-storage alias identities and dormant baselines:71saved views cover69unique storages. Dormant P1/RW arenas correctly contain nonzero values; blanket zeroing would recreate the earlier invalid counter gate. This run's source checks active counters and fixed fresh counters after basis, timed outputs, mutations and profiling, and asserts unchanged dormant storage and immutable weight/packed/escape arenas. Successful terminal status attests those assertions ran. Baseline metadata and source contracts are archived; separate final full-storage counter dumps are not present, so this audit does not invent independently recomputed final counter values.
+
+Positive numbers below mean parent/control minus cursor, in microseconds. Every tiny effect is retained.
+
+| Shape | Matched ST5 paired / F1 | Matched ST6 paired / F1 | Actual vsPW36 paired / F1 | Actual vsRS32 paired / F1 |
+|---|---:|---:|---:|---:|
+| QKV32 | +.096 / −.160 | −.032 / −.064 | −.128 / −.288 | +.272 / .000 |
+| Pooler32 | −.032 / −.128 | −.080 / −.032 | −.048 / .000 | −.064 / +.064 |
+| Unpooler32 | +.080 / −.128 | +.112 / −.096 | −.192 / +.064 | −.160 / −.064 |
+
+The small matched positives are concrete point observations, not discarded noise: QKVST5 wins17/ties2/loses9 paired rounds; unpoolerST5/ST6 also retain their full distributions in JSON. All six matched conservative F1 comparisons favor the parent, so no consistent cursor improvement is established. Matched paired MADs range.192–.320µs; order and half-batch summaries remain descriptive and all signed samples are retained. No threshold or post hoc sample filter is used.
+
+Prepared policies are a separate question. QKV selections differ: PW36ST5EARLY/KS6, RS32ST5withoutEARLY/KS6, cursorST6EARLY/KS6. Thus QKV's+.272paired versusRS32 cannot isolate cursor, and it ties conservative F1 while losing toPW36. Pooler and unpooler all selectST5EARLY atKS4/2, but actual cursor paired medians lose to both actual controls. None of these actual references is the newly scored PW38 leader. The full scopes QKV16/O32 and all other shapes are excluded from this three-shape mechanism trial; no global shipping conclusion follows.
+
+Preparation explicitly prebuilt RQ32 and reset `_T0` after JIT in local research. This is a warm-cache preparation comparison, not official cold prepare-time evidence. Actual policy graphs capture `kernel_fn` directly; the extra output copy used by full-basis validation is absent from timed actual-policy graphs. The fixed source change's CPU cursor/event proof and actual opcode equality establish narrow implementation scope, not an intrinsic UIMAD/MOV/instruction latency claim.
+
+Independent negative controls reject a modified declared gain, wrong terminal fixture seed and wrong raw call identity. Reproducer `analyze.py` reads only frozen artifacts/source, re-disassembles the archived binaries locally and rewrites this review's `analysis.json`. `lesson.json` supplies an evidence-bound proposed follow-up for worker09: repeat exact matched kernels with independent batches and reversed F1 bracketing, retaining pooler as a negative control and comparing a separately labeled actual current policy. No proposed GPU work was queued or executed.

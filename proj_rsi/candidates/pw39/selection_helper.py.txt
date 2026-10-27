@@ -1,0 +1,81 @@
+def _rqconfirm(st, layer, m, cands, inc, x, out, flush, sink, screen, incumbent):
+    """PW39: bounded held-out top-two ABBA blocks; unchanged incumbent margin."""
+    audit = st.setdefault("rq_confirm", {"used_s": 0.0, "records": []})
+    started = time.monotonic()
+    previous_used = audit["used_s"]
+    rows = sorted(cands, key=lambda c: c[0])[:2]
+    record = {"layer": layer, "m": m, "screen_pick": screen[0],
+              "screen_us": screen[2], "incumbent": incumbent[0],
+              "candidates": [{"tag": tag, "screen_us": us} for us, tag, p in rows],
+              "blocks": [], "status": "skipped", "decision": screen[0], "reason": ""}
+    try:
+        if screen[1] is None or not rows:
+            record["reason"] = "no-screened-candidate-admitted"
+            return screen
+        # A single candidate still receives two separate confirmation blocks.
+        order = [-1, 0, 1, -1, 1, 0, -1] if len(rows) == 2 else [-1, 0, -1, 0, -1]
+        for index in order:
+            now = time.time()
+            if now - _T0 >= PREPARE_BUDGET_S - 30:
+                record["reason"] = "prepare-cutoff-incomplete-retain-screen"
+                return screen
+            if previous_used + max(0.0, time.monotonic() - started) >= 2.0:
+                record["reason"] = "global-confirmation-budget-incomplete-retain-screen"
+                return screen
+            if index < 0:
+                fn, tag = inc, incumbent[0]
+            else:
+                p, tag = rows[index][2], rows[index][1]
+                def fn(xx, oo, p=p):
+                    code = _rqcall(st, p, xx, oo)
+                    if code != 0:
+                        raise RuntimeError("confirmation launch returned %d" % code)
+                    return code
+            record["attempting_block"] = {"index": index, "tag": tag}
+            us = float(_time_us(fn, x, out, flush, sink, it=5))
+            if not (0.0 < us < float("inf")):
+                raise RuntimeError("nonfinite/nonpositive confirmation timing")
+            record["blocks"].append({"index": index, "tag": tag, "median_us": us, "replays": 5})
+            record.pop("attempting_block", None)
+        blocks = record["blocks"]
+        controls = [i for i, block in enumerate(blocks) if block["index"] < 0]
+        for index, row in enumerate(rows):
+            times, ratios = [], []
+            for i, block in enumerate(blocks):
+                if block["index"] != index:
+                    continue
+                before = max(j for j in controls if j < i)
+                after = min(j for j in controls if j > i)
+                baseline = min(blocks[before]["median_us"], blocks[after]["median_us"])
+                times.append(block["median_us"])
+                ratios.append(block["median_us"] / baseline)
+            assert len(times) == len(ratios) == 2
+            record["candidates"][index].update({"confirmation_medians_us": times,
+                "bracket_ratios": ratios, "worst_bracket_ratio": max(ratios)})
+        winner = min(range(len(rows)), key=lambda i: record["candidates"][i]["worst_bracket_ratio"])
+        confirmation = record["candidates"][winner]
+        record["status"] = "confirmed"
+        record["selection_metric"] = "lowest-worst-of-two-local-conservative-bracket-ratios"
+        if confirmation["worst_bracket_ratio"] < MARGIN:
+            record["decision"] = "rq:" + rows[winner][1]
+            record["reason"] = "both-confirmation-brackets-clear-unchanged-margin"
+            # PICK's displayed us stays a real block median, never a normalized
+            # synthetic latency. Ranking uses the separately recorded ratios.
+            return (record["decision"], rows[winner][2], max(confirmation["confirmation_medians_us"]))
+        record["decision"] = incumbent[0]
+        record["reason"] = "no-top-two-candidate-clears-both-brackets"
+        return (incumbent[0], None, min(blocks[i]["median_us"] for i in controls))
+    except Exception as error:
+        record["status"] = "error"
+        record["decision"] = incumbent[0]
+        record["reason"] = "confirmation-error-retain-incumbent: " + (str(error).splitlines() or [type(error).__name__])[-1][:160]
+        return incumbent
+    finally:
+        record["elapsed_s"] = max(0.0, time.monotonic() - started)
+        audit["used_s"] = previous_used + record["elapsed_s"]
+        record["cumulative_s"] = audit["used_s"]
+        audit["records"].append(record)
+        print("CONFIRM rq %s m=%d %s %s blocks=%s at %.0fs" %
+              (layer, m, record["status"], record["decision"] + " " + record["reason"], record["blocks"], time.time() - _T0), flush=True)
+
+

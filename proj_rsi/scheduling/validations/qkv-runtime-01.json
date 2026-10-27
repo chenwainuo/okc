@@ -1,0 +1,278 @@
+{
+  "job_id": "research.qkv.split4.harness.gpu.01",
+  "recommended_disposition": "VALID_REGRESSION",
+  "final_disposition_authority": "root controller; independent CPU validation only, no scheduler state change",
+  "validator": "worker08 actualSO/source/JIT/raw/numerical/graph/counter-contract/cleanup evidence review",
+  "reason": "All validity gates pass. Newcompletepack+split4main+FP32reduce losesactualselectedPW36/RS32inall30pairedrounds; no own-controlorofficialgain admission.",
+  "validation_summary": {
+    "inventory_files": 12,
+    "dispatch_source_pins": 46,
+    "raw_calls": 210,
+    "actual_SO_redump_kernels": 3,
+    "strict_terminal_oracles": 6,
+    "basis_FP64_task_policies": 3,
+    "all_K_basis_columns_per_policy": 8192,
+    "mutation_oracles": 45,
+    "counter_contexts": 54,
+    "counter_records": 2646,
+    "actual_graph_nodes_new": 3
+  },
+  "terminal_exit": 0,
+  "cleanup_verified": true,
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "router m=8 rk-s16w8z 7.78\nBAKE router m=8 rk-s16w8x 7.71\nBAKE router m=8 rk-s32x 7.84\nPICK router m=8 rk-s16w8z 7.78\nPROBE p1alt router m=8 rk-s16w8z 7.71 r6=8.74 delta=-1.02\nBAKE router m=16 r6 9.02\nBAKE router m=16 rk-s8z 8.35\nBAKE router m=16 rk-s16w8z 8.06\nBAKE router m=16 rk-s16w8x 7.90\nBAKE router m=16 rk-s32x 8.13\nPICK router m=16 rk-s16w8x 7.90\nPROBE p1alt router m=16 rk-s16w8x 7.94 r6=8.90 delta=-0.96\nBAKE router m=32 r6 9.66\nBAKE router m=32 rk-s8z 8.35\nBAKE router m=32 rk-s16w8z 8.45\nPICK router m=32 rk-s8z 8.35\nPROBE p1alt router m=32 rk-s8z 8.26 r6=9.44 delta=-1.18\nPREP rq32 thread ready at 0s\nPREP rq32 bake starts at 38s\nBAKE pooler m=32 rq:t32s5hze-k4 22.08 (ok 3.1e-03) at 38s\nBAKE pooler m=32 rq:t32s6hze-k4 22.05 (ok 3.1e-03) at 38s\nBAKE pooler m=32 rq:t32s5hz-k4 21.95 (ok 3.1e-03) at 38s\nBAKE pooler m=32 r6 23.17 (before variants 23.65, after variants 23.17) at 38s\nPICK pooler m=32 rq:t32s5hz-k4 21.95\nBAKE pooler m=16 rq:t16s5hze-k4 21.76 (ok 3.1e-03) at 38s\nBAKE pooler m=16 rq:t16s6hze-k4 21.95 (ok 3.2e-03) at 38s\nBAKE pooler m=16 rq:t16s5hz-k4 21.89 (ok 3.1e-03) at 38s\nBAKE pooler m=16 r6 21.60 (before variants 21.63, after variants 21.60) at 39s\nPICK pooler m=16 r6 21.60\nBAKE qkv_gate m=32 rq:t32s5hze-k6 15.01 (ok 3.6e-03) at 39s\nBAKE qkv_gate m=32 rq:t32s5hze-k7 14.98 (ok 3.8e-03) at 39s\nBAKE qkv_gate m=32 rq:t32s5hz-k6 15.14 (ok 3.6e-03) at 39s\nBAKE qkv_gate m=32 rq:t32s6hze-k6 14.94 (ok 3.7e-03) at 39s\nBAKE qkv_gate m=32 r6 18.27 (before variants 18.34, after variants 18.27) at 39s\nPICK qkv_gate m=32 rq:t32s6hze-k6 14.94\nBAKE qkv_gate m=16 rq:t16s5hze-k6 15.01 (ok 3.6e-03) at 39s\nBAKE qkv_gate m=16 rq:t16s5ze-k6 15.10 (ok 3.6e-03) at 39s\nBAKE qkv_gate m=16 rq:t16s5hze-k7 14.98 (ok 3.7e-03) at 39s\nBAKE qkv_gate m=16 rq:t16s5ze-k7 15.14 (ok 3.8e-03) at 39s\nBAKE qkv_gate m=16 r6 14.82 (before variants 14.82, after variants 14.88) at 39s\nPICK qkv_gate m=16 r6 14.82\nBAKE unpooler m=32 rq:t32s5hze-k2 21.60 (ok 2.4e-03) at 40s\nBAKE unpooler m=32 rq:t32s6hze-k2 22.05 (ok 2.4e-03) at 40s\nBAKE unpooler m=32 rq:t32s6hz-k2 21.92 (ok 2.5e-03) at 40s\nBAKE unpooler m=32 r6 23.23 (before variants 23.81, after variants 23.23) at 40s\nPICK unpooler m=32 rq:t32s5hze-k2 21.60\nBAKE unpooler m=16 rq:t16s5hze-k2 21.89 (ok 2.4e-03) at 40s\nBAKE unpooler m=16 rq:t16s6hze-k2 21.70 (ok 2.4e-03) at 40s\nBAKE unpooler m=16 rq:t16s5hz-k2 21.50 (ok 2.4e-03) at 40s\nBAKE unpooler m=16 r6 21.76 (before variants 22.02, after variants 21.76) at 40s\nPICK unpooler m=16 rq:t16s5hz-k2 21.50\nBAKE o m=32 rq:t32s5hze-k2 9.98 (ok 2.4e-03) at 40s\nBAKE o m=32 rq:t32s6hze-k2 9.95 (ok 2.4e-03) at 40s\nBAKE o m=32 rq:t32s5ze-k2 9.82 (ok 2.4e-03) at 40s\nBAKE o m=32 r6 9.86 (before variants 9.86, after variants 9.92) at 40s\nPICK o m=32 r6 9.86\nBAKE o m=16 rq:t16s5hze-k2 9.89 (ok 2.5e-03) at 40s\nBAKE o m=16 rq:t16s6hze-k2 9.86 (ok 2.5e-03) at 40s\nBAKE o m=16 rq:t16s5ze-k2 9.79 (ok 2.4e-03) at 40s\nBAKE o m=16 r6 9.06 (before variants 9.06, after variants 9.06) at 40s\nPICK o m=16 r6 9.06\nBAKE o m=128 rq:h128s8e-k1 11.10 (ok 1.7e-03) at 40s\nBAKE o m=128 rq:h128s5-k1 11.23 (ok 1.7e-03) at 41s\nBAKE o m=128 r6 11.20 (before variants 11.20, after variants 11.23) at 41s\nPICK o m=128 r6 11.20\nPREP rw compiled in 0s\nBAKE router m=128 r6 16.35\nBAKE router m=128 rp64k32s4 13.50\nBAKE router m=128 rw64k32s8 12.58\nBAKE router m=128 rw64k32s4z 11.94\nBAKE router m=128 rw64k32s8z 11.68\nBAKE router m=128 rw64k32r3x2 12.83\nBAKE router m=128 rw64k32r3x2z 12.19\nPROBE rszero router m=128 3.71\nPICK router m=128 rw64k32s8z 11.68\nBAKE router m=256 r6 15.07\nBAKE router m=256 rwv64k64s4x2 17.54\nBAKE router m=256 rw64k32r3x2 15.94\nBAKE router m=256 rw64k32r3x2z 14.98\nPICK router m=256 r6 15.07\nPREP done in 41s\nactual_task_W_lossless_pack_CSR_and_pipeline_ownership\nall8192_basis_and_FP64_normal_outliers_all_three_policies\nfixed_actual_serving_graphs\nfull_pipeline_F1_and_balanced_pairs\nprofiles_only_after_both_strict_terminal_gates\nTRIAL_EXIT okc-proj-qkv-runtime-01 0\n2026-10-27T05:07:53Z\n",
+    "terminal_exit": 0
+  },
+  "comparison": {
+    "pw36": {
+      "F1_gain_us": -22.84800074994564,
+      "paired_gain": {
+        "n": 30,
+        "median": -22.84800074994564,
+        "p25": -23.15999986603856,
+        "p75": -22.543998435139656,
+        "min": -24.000002071261406,
+        "max": -21.376000717282295
+      },
+      "paired_all_gains_us": [
+        -23.103998973965645,
+        -23.136001080274582,
+        -23.424001410603523,
+        -22.591998800635338,
+        -22.272000089287758,
+        -23.29600229859352,
+        -22.048000246286392,
+        -22.752000018954277,
+        -22.815998643636703,
+        -23.200001567602158,
+        -24.000002071261406,
+        -22.88000099360943,
+        -22.624000906944275,
+        -23.296000435948372,
+        -23.04000034928322,
+        -22.527998313307762,
+        -22.304002195596695,
+        -22.943999618291855,
+        -21.376000717282295,
+        -23.16799946129322,
+        -23.072000592947006,
+        -23.423999547958374,
+        -22.592000663280487,
+        -22.944001480937004,
+        -21.535998210310936,
+        -22.655999287962914,
+        -23.16799946129322,
+        -22.816000506281853,
+        -22.048000246286392,
+        -22.367998957633972
+      ],
+      "paired_control_over_new_ratio": 0.43231229011938443,
+      "paired_slowdown_new_over_control_median": 2.313143076348026,
+      "wins": 0,
+      "ties": 0,
+      "losses": 30,
+      "control_before_new": {
+        "n": 15,
+        "median": -23.04000034928322,
+        "p25": -23.1520002707839,
+        "p75": -22.640000097453594,
+        "min": -23.424001410603523,
+        "max": -21.376000717282295
+      },
+      "new_before_control": {
+        "n": 15,
+        "median": -22.816000506281853,
+        "p25": -23.07200152426958,
+        "p75": -22.447998635470867,
+        "min": -24.000002071261406,
+        "max": -22.048000246286392
+      },
+      "all_six_order_strata": {
+        "pw36,rs32,new": {
+          "n": 5,
+          "median": -22.048000246286392,
+          "p25": -22.624000906944275,
+          "p75": -21.535998210310936,
+          "min": -23.103998973965645,
+          "max": -21.376000717282295
+        },
+        "pw36,new,rs32": {
+          "n": 5,
+          "median": -23.136001080274582,
+          "p25": -23.16799946129322,
+          "p75": -22.752000018954277,
+          "min": -23.296000435948372,
+          "max": -22.655999287962914
+        },
+        "rs32,pw36,new": {
+          "n": 5,
+          "median": -23.072000592947006,
+          "p25": -23.16799946129322,
+          "p75": -23.04000034928322,
+          "min": -23.424001410603523,
+          "max": -22.815998643636703
+        },
+        "rs32,new,pw36": {
+          "n": 5,
+          "median": -22.816000506281853,
+          "p25": -23.200001567602158,
+          "p75": -22.591998800635338,
+          "min": -23.423999547958374,
+          "max": -22.527998313307762
+        },
+        "new,pw36,rs32": {
+          "n": 5,
+          "median": -22.304002195596695,
+          "p25": -22.592000663280487,
+          "p75": -22.272000089287758,
+          "min": -24.000002071261406,
+          "max": -22.048000246286392
+        },
+        "new,rs32,pw36": {
+          "n": 5,
+          "median": -22.943999618291855,
+          "p25": -22.944001480937004,
+          "p75": -22.88000099360943,
+          "min": -23.29600229859352,
+          "max": -22.367998957633972
+        }
+      }
+    },
+    "rs32": {
+      "F1_gain_us": -23.136001080274582,
+      "paired_gain": {
+        "n": 30,
+        "median": -23.184001445770264,
+        "p25": -23.53600040078163,
+        "p75": -22.776001133024693,
+        "min": -24.160001426935196,
+        "max": -21.663999184966087
+      },
+      "paired_all_gains_us": [
+        -23.871999233961105,
+        -23.840000852942467,
+        -23.45600165426731,
+        -22.975999861955643,
+        -23.64800125360489,
+        -22.912001237273216,
+        -23.48800003528595,
+        -22.84799888730049,
+        -22.495999932289124,
+        -23.231999948620796,
+        -24.160001426935196,
+        -23.200001567602158,
+        -22.752001881599426,
+        -23.712001740932465,
+        -22.367998957633972,
+        -23.00799824297428,
+        -23.840000852942467,
+        -23.32800067961216,
+        -22.52800203859806,
+        -23.072000592947006,
+        -23.16800132393837,
+        -23.423999547958374,
+        -23.744001984596252,
+        -23.32800067961216,
+        -22.591998800635338,
+        -22.752000018954277,
+        -21.663999184966087,
+        -22.752001881599426,
+        -23.552000522613525,
+        -23.135999217629433
+      ],
+      "paired_control_over_new_ratio": 0.4240241537305588,
+      "paired_slowdown_new_over_control_median": 2.3583576980288368,
+      "wins": 0,
+      "ties": 0,
+      "losses": 30,
+      "control_before_new": {
+        "n": 15,
+        "median": -22.975999861955643,
+        "p25": -23.327999748289585,
+        "p75": -22.5600004196167,
+        "min": -23.871999233961105,
+        "max": -21.663999184966087
+      },
+      "new_before_control": {
+        "n": 15,
+        "median": -23.32800067961216,
+        "p25": -23.72800186276436,
+        "p75": -23.10399990528822,
+        "min": -24.160001426935196,
+        "max": -22.752000018954277
+      },
+      "all_six_order_strata": {
+        "pw36,rs32,new": {
+          "n": 5,
+          "median": -22.752001881599426,
+          "p25": -23.48800003528595,
+          "p75": -22.591998800635338,
+          "min": -23.871999233961105,
+          "max": -22.52800203859806
+        },
+        "pw36,new,rs32": {
+          "n": 5,
+          "median": -23.072000592947006,
+          "p25": -23.712001740932465,
+          "p75": -22.84799888730049,
+          "min": -23.840000852942467,
+          "max": -22.752000018954277
+        },
+        "rs32,pw36,new": {
+          "n": 5,
+          "median": -22.495999932289124,
+          "p25": -23.16800132393837,
+          "p75": -22.367998957633972,
+          "min": -23.45600165426731,
+          "max": -21.663999184966087
+        },
+        "rs32,new,pw36": {
+          "n": 5,
+          "median": -23.00799824297428,
+          "p25": -23.231999948620796,
+          "p75": -22.975999861955643,
+          "min": -23.423999547958374,
+          "max": -22.752001881599426
+        },
+        "new,pw36,rs32": {
+          "n": 5,
+          "median": -23.744001984596252,
+          "p25": -23.840000852942467,
+          "p75": -23.64800125360489,
+          "min": -24.160001426935196,
+          "max": -23.552000522613525
+        },
+        "new,rs32,pw36": {
+          "n": 5,
+          "median": -23.200001567602158,
+          "p25": -23.32800067961216,
+          "p75": -23.135999217629433,
+          "min": -23.32800067961216,
+          "max": -22.912001237273216
+        }
+      }
+    }
+  },
+  "candidate_status": "VALID_LOCAL_COMPARISON_REVIEW_REQUIRED_NO_OFFICIAL_GAIN",
+  "scope": {
+    "layer": "qkv_gate",
+    "m": 128,
+    "n": 2304,
+    "k": 8192
+  },
+  "official_score_claim": false,
+  "evidence": {
+    "proj_rsi/audits/qkv-runtime-01/analysis.py": "c5e2897d31b3eea54a00700c329e232da2ffe85e24141de83766e16e3b238461",
+    "proj_rsi/audits/qkv-runtime-01/analysis.json": "12ee9e7b57a2a143636ffcf5f420513e44cab8798436578eebc8985f4d19c36b",
+    "proj_rsi/audits/qkv-runtime-01/report.md": "e0a36f7d63bda98126f29a0969968893966e8db5548cd4830812a08d2d0ef518",
+    "proj_rsi/audits/qkv-runtime-01/lessons.json": "86712059ebe975154ce8777c6a4b4df05fb794af75c04c8ec4d98e4c1676276d"
+  },
+  "driver_wall_seconds": 144.90039587020874
+}

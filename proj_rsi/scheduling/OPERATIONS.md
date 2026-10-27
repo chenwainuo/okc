@@ -214,3 +214,9 @@ full-queue priority replacement, dependency/review/source drift, restart/WAL
 corruption, unknown SSH launches, cleanup gates, safe literal commands, NCU
 target/clock rules and exit0 remaining unvalidated. They use temporary stores and
 fake transports: running the suite never starts a real GPU job.
+
+## Learn from every result
+
+After validation, use `python3 -m proj_rsi.learning validate`, `summarize`, and `query` to record and retrieve applicable evidence-bound lessons. Facts, causal explanations, transfer limits, conflicting estimators and the next discriminating test remain separate. Record a success, regression, mixed or invalid outcome; never erase a tiny positive or a failed parent. Link proposed ideas to lesson/version IDs and concrete ROI jobs. Preserve whole-registry snapshots before append. Learning uses CPU work after cleanup so the next GPU reservation can proceed. Measured improvements with correctness checks passing can be submitted without a minimum gain or significance gate.
+
+For agent handoffs, `send_message` delivers an update but does not restart a completed worker. Use `followup_task` for a new assignment to a completed/idle agent and verify its actual status before reporting active work.

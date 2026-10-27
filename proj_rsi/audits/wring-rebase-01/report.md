@@ -1,0 +1,48 @@
+# PW36 separate W-ring attempt01 independent actual-result review
+
+**Valid tiny local selected-policy gain for split X6/W4; mechanism contrasts remain mixed.** Recommend VALID_GAIN in the narrow split-versus-actual-incumbent comparison, with no promotion or transfer claim. Split improves actual selected PW36 by0.224000µs F1 and0.175999µs median paired difference,23 wins/1 tie/8 losses. Preserve that observation without a minimum-gain cutoff. It does not demonstrate a robust, official, additive or independently attributable mechanism gain. Root owns final disposition.
+
+Collection: `results/proj-rsi/scheduler/artifacts/research.wring.rebase.gpu.01/collection-1793077456292105300/`. Result SHA256 `1189fb7b6e5bd9876b6980677478c9e7dc302f39aa948750328d8dab8c765cbc`; inventory SHA256 `e7ab973298137645c8938e11a393bca08bbeab5fe37607266caad53f864220be`.
+
+All four policies are complete single-node QKV M128/N2304/K8192/KS7 graphs. Incumbent is original PW36's actual full-prepare-selected `s4s5hz` KS7, not forced, with guarded selected call returning0 and no fallback. Coupled is fixed X5/W5 count2 full barrier; equal is independent X5/W5 count1+count1 plus40B metadata; split is independent X6/W4 with changed shared footprint/addressing. Coupled and selected incumbent have the same exact kernel main instruction stream but separate prepared/candidate allocations and host/capture contexts.
+
+| Contrast A−B; positive favors B | F1 µs | Median paired µs | B wins/ties/losses |
+|---|---:|---:|---|
+| Actual selected incumbent−split | +0.224000 | +0.175999 |23/1/8|
+| Coupled−equal | −0.224000 | −0.240001 |10/1/21|
+| Coupled−split | −0.031998 | +0.192000 |26/0/6|
+| Equal−split | +0.192001 | +0.448000 |25/1/6|
+| Incumbent−equal | +0.031998 | −0.096000 |11/1/20|
+| Incumbent−coupled | +0.255998 | +0.015999 |16/1/15|
+
+Paired policy medians are incumbent17.328000, coupled17.295999, equal17.519999 and split17.088000µs. F1 lower brackets are incumbent17.247999, coupled16.992001, equal17.216001 and split17.023999µs. Median paired differences are computed from actual same-fixture pairs and need not equal differences of policy medians. Split's actual-incumbent deltas range[−0.992000,+2.016000]µs with MAD0.255998µs around+0.175999µs; this is a small noisy local positive observation.
+
+Equal-depth separation is slower than coupled in both estimators, so the result does not support “separating full barriers helps” at this exact configuration. Split beats equal in both estimators but changes both ring depths and shared footprint; that comparison cannot identify which change matters. Split versus coupled reverses sign across F1/paired. Incumbent versus coupled—the same main instruction stream—has a+0.255998µs F1 gap but only+0.015999µs paired median and16/1/15 result. That makes allocation/context/order effects or timing variability plausible; it does not erase the measured split-policy observation or establish a cause. Preserve all signed tiny contrasts; no cross-run minima, historical0.38µs addition or significance claim is used.
+
+## Independent validity evidence
+
+All four inventory files and33 dispatch source pins match; pins equal the admitted descriptor. Manifest `20ffb258d67a4ed205298103e0e34e9f06d929957c4cc670dd5985deccc1c299` verifies23 candidate files plus external driver. Candidate source `207f5a1bdc4f5d7712d444d9c71e857643e6700451c88734fce898ac1fc1b7ab`; driver `fd43d83540e2469be8bcd0d5c676b2a96c1ccbeab0e440b767603bcabd594924`. The finite eight-edit full-source delta/inverse restores PW36 exactly. Codec, math/D order, zero/counter/output suffix, original prepare and production selection remain unchanged.
+
+Saved candidate JIT SASS SHA verifies and all three complete PC/predicate/instruction dictionaries equal their own frozen canonical arms. Saved actual selected-incumbent JIT equals the original parent control at(128,5,1,0,0,0,3). Exact actual profiles independently show flags3/3/1283/1027 with ST5/5/5/6, one RQ kernel each. Physical gates reproduce16 HGMMA, finalwait0 before eight output STSM, one output reduction and TMA-read drain, bounded-poll TRAP, USETMAXREG232/40 and no local loads/stores. Saved loaded-SO disassembly is checked; shared objects themselves are not retained for independent redisassembly.
+
+Runtime resources are168 registers,0 local,384 max threads, occupancy1 and sufficient actual opt-in shared for coupled144520B/equal144560B/split148656B. Uniform and dynamic register pools both64512, within65536. The frozen driver checks co-resident126-CTA ZI grid against runtime SMcount×occupancy before candidate math. SMcount is not separately retained in JSON; this review verifies the exact source gate and successful admitted path, not a fresh hardware query.
+
+The read-only independent CPU source/protocol review reexecutes rather than regenerating frozen artifacts. It proves packed-W12288B and SW128-X8192-value stage bijections, shared nonoverlap/alignment and independent startup/phase/reuse/drain. It revisits53,047 reachable states and1,089 randomized complete schedules across KC128/KS1..64, including KS7 ragged18/19 stages. Wempty requires all8 reader LDS+syncwarp handoffs. Xempty follows retirement via wait1 or finalwait0. Missing publication, early X release and7-of8 W-reader mutations reject. Two WG witnesses aggregate four warps each, with finite engine progress assumed; this is not an arbitrary GPU CFG/liveness proof.
+
+Every295 raw calls is reconstructed:20 warmups,147 F1,128 paired; exact labels/seeds, seven21-call blocks,32 complete rounds and eight balanced orders repeated four times. Samples must be finite positive. Seven F1 medians, every32×4 pair and all six declared causal contrasts equal independent recomputation. Seven analyzer corruptions—seed,NaN time,declared gain,own terminal fixture,poison result,shared resource,forced incumbent—reject. Frozen CPU tests also reject per-arm instruction/PC/wrong-control alterations.
+
+All four policies retain all8192 basis EXACT/random FP64 PASS and fresh-current-X/output normal/outlier records. Parsed task, terminal and mutation errors satisfy the pinned task's.01 whole-output/.05 worst-row/.001 probe bounds;128 all-row probes are exactly zero error. Eight strict retained actual timed outputs bind to each policy's own final fixture before any replay/write/profile: F1 incumbent601146,coupled601125,equal601104,split601083; paired all602031. Current X and integrity pass. Seven synthetic terminal corruptions reject, including nonfinite output and wrong own fixture.
+
+Twenty retained actual-graph NaN/input mutations cover four policies×original/zero/normal/outliers/all-row probes. Exact complete zero and128 all-row probes are checked. The driver checks input identity and calls full immutability/counter integrity on each mutation, strict terminal boundary and final profile completion. All original weights, candidate packed W/CSR and actual selected-incumbent packed W/CSR are immutable.
+
+Counter contracts cover every recursively collected prepared cnt/counter allocation, deduplicated by physical storage. Candidate visible72-int views have36 active zeros,36 dormant baseline integers and8 guards on each side; selected RQ requires active36 zeros and full other-storage identity. Unrelated prepared counters retain actual prepare baseline, including legitimate nonzero values. Storage identity includes device, pointer, bytes,offset,shape,stride,dtype; no harness reset hides a failure. Five independent active/dormant/prefixguard/suffixguard/unrelated-baseline corruptions reject. Counter arrays are not individually serialized; validity is inferred from successful source-bound integrity assertions and retained driver status, with CPU semantics independently tested.
+
+Finally all graphs drain/reset. Archived exit0 and cleanup_failed=false, no compute/guard PIDs or containers, named container absent and0MiB GPU memory verify. This is archived post-exit evidence, not a live observation while subsequent jobs run. No reviewer GPU context/extension load, API/remote work, queue mutation or promotion occurred. Numerical output tensors are not retained; this is source-bound evidence/gate review without numerical GPU rerun.
+
+## Research decision and transfer limits
+
+Keep the tiny selected-policy gain and the negative equal-depth mechanism result as different facts. A fresh bounded confirmation should first ensure identical-main incumbent/coupled controls have no systematic context gap under alternating order and matched pointer/allocation roles, while retaining actual selected kernel_fn as a separate policy arm. Then distinguish independent barrier versus depth/footprint changes without forcing a serving choice. Refutation is disappearance/reversal of split's actual-policy gain under matched controls or persistent identical-main context gaps large enough to explain it. Retain any mixed or losing outcome instead of family-wide retirement.
+
+These are local H100 one-shape complete-graph results, not automatic H200 transfer, official score arithmetic, whole-load speedup or additive gains with other edits. Integration would additionally require the original preparation/budget/selection gates, actual selected-policy confirmation and independent official validity. Root owns that decision. Structured proposed lesson: `proposed-lesson.json`; machine evidence: `analysis.json`; CPU proof details: `independent-cpu-proof.json`; root validation: `proj_rsi/scheduling/validations/wring-rebase-01.json`.
+
+Reproducer: `python3 proj_rsi/audits/wring-rebase-01/analysis.py results/proj-rsi/scheduler/artifacts/research.wring.rebase.gpu.01/collection-1793077456292105300/logs/scheduler/wring-rebase-01/result.json`.
