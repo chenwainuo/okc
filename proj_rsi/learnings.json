@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "registry_version": 9,
+  "registry_version": 10,
   "lessons": [
     {
       "id": "native-x-parent-progress",
@@ -6557,6 +6557,729 @@
       },
       "cost": {
         "basis": "Quarter actual compile/load41.838135824s/run45.180085850s; exact-SO profile native builds0; no new execution requested.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      }
+    },
+    {
+      "id": "gv53-quarter-pipeline-control-cost",
+      "version": 2,
+      "supersedes": "738b748005ea76de8d05fc68612c3c4b5e76c4dca49a29857dcb4c852249892b",
+      "record_sha256": "2f36707d862f956683f19e2fded923286949eee0d2319643acb2deb48a694da9",
+      "title": "Earlier load issue can outperform earlier decode, but identical-body transfer remains mixed",
+      "tags": [
+        "projection",
+        "learning-v9"
+      ],
+      "context": {
+        "experiment_id": "research.gv53.earlyload.fixed.01; research.gv53.selected.earlyload.bodies.01; prior quarter/sparse",
+        "family": "muse_bf16_proj",
+        "parents": [
+          "incumbent projection 501d lineage"
+        ],
+        "comparators": [
+          "parent versus quarter/sparse prior trials",
+          "parent versus early next-W/X issue M8",
+          "package fixed parent/keyed M1 and parent/early-load M8"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100; CPU accounting explicitly separated"
+        },
+        "validity": "VALIDATED_DIAGNOSIS",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/gv53_quarter_stream_v1/pilot.cu",
+            "sha256": "b7c8fccd8a92c57387872f41e164aefb86d70f5756ebef6ba5ae6b8a2bc7a7fb",
+            "role": "quarter source"
+          },
+          {
+            "path": "proj_rsi/candidates/gv53_quarter_sparse_header_v1/pilot.cu",
+            "sha256": "f1fa67927bf0ea43c64642934ea650da8f42b918e383c8e7b9e17ee52bb855da",
+            "role": "sparse source"
+          },
+          {
+            "path": "proj_rsi/candidates/gv53_earlyload_v1/submission.py",
+            "sha256": "81fdc825bc21a568db8082873892982fb16eff5fbbc894baed2211a58aef1791",
+            "role": "early-load source"
+          },
+          {
+            "path": "proj_rsi/candidates/gv53_selected_earlyload_v1/submission.py",
+            "sha256": "17d44d1140ab09cdbab1f2835841e2891fc1c7c01c1eb4d9a2833c242d99a3e6",
+            "role": "production package source"
+          },
+          {
+            "path": "proj_rsi/candidates/gv53_earlyload_v1/README.md",
+            "sha256": "9605315e46977a3ae288e62fc93841c1be9ccd4a881afa9249a7d1fea8fb214b",
+            "role": "realized load-placement and instruction-count scope"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "quarter",
+          "path": "proj_rsi/audits/gv53-quarter-stream-result-v1/analysis.json",
+          "sha256": "e60fa27faef5e3523f6cc2d74e31534a94bff41e8a0252df9a9e6e0ba600c677"
+        },
+        {
+          "id": "sparse",
+          "path": "proj_rsi/audits/gv53-quarter-sparse-result-v1/analysis.json",
+          "sha256": "17f8720283ea2ba18a2c912d7d10fb652db77b9580ef650d2b9040a32ead0efd"
+        },
+        {
+          "id": "profile",
+          "path": "proj_rsi/audits/gv53-exactso-counter-result-v1/analysis.json",
+          "sha256": "e8e35c1f8e090063834a95524c847b2e5a3d780185f3c17a0a8a3db6d300842a"
+        },
+        {
+          "id": "quarter_native",
+          "path": "proj_rsi/audits/gv53-quarter-stream-result-v1/native-analysis.json",
+          "sha256": "5382143030e32a3b825e968e7bb898d9c01a96d52316b159401a4f7ec2dfd342"
+        },
+        {
+          "id": "sparse_native",
+          "path": "proj_rsi/audits/gv53-quarter-sparse-result-v1/native-analysis.json",
+          "sha256": "8d568875e950652f2d4b5cb8e2a738a30e9ed5dd9a6f135b1078f92fca62a1af"
+        },
+        {
+          "id": "earlyload",
+          "path": "proj_rsi/audits/gv53-earlyload-result-v1/analysis.json",
+          "sha256": "28150cae7639fab88467fb22007e5af2a17fa70a9e1c7e291e4357f0ca03f9eb"
+        },
+        {
+          "id": "package",
+          "path": "proj_rsi/audits/gv53-selected-earlyload-bodies-result-v1/analysis.json",
+          "sha256": "ce0b35ed4b6854a874263ca292d1f8185864691476d3bf99003475f7a67ba9e7"
+        }
+      ],
+      "observations": [
+        {
+          "id": "quarter_native",
+          "statement": "Actual collected native target matches CPU prototype; first-MMA PRMT4 and quarter462/sparse455 nonNOP establish the intended static schedule, not a timing gain.",
+          "outcome": "neutral",
+          "evidence": "quarter_native",
+          "selector": {
+            "json_pointer": "/functions/_Z10gv_quarterILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G",
+            "equals": {
+              "actual_PC_predicate_full128bit_encoding_matches_CPU_prototype": true,
+              "slots": 472,
+              "nonNOP": 462,
+              "PRMT_before_first_HMMA": 4,
+              "HMMA_PC": [
+                "0xa40",
+                "0xe20",
+                "0x1040",
+                "0x1300"
+              ]
+            }
+          }
+        },
+        {
+          "id": "sparse_native",
+          "statement": "Actual collected native target matches CPU prototype; first-MMA PRMT4 and quarter462/sparse455 nonNOP establish the intended static schedule, not a timing gain.",
+          "outcome": "neutral",
+          "evidence": "sparse_native",
+          "selector": {
+            "json_pointer": "/functions/_Z17gv_sparse_quarterILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G",
+            "equals": {
+              "actual_PC_predicate_full128bit_encoding_exact_vs_CPU": true,
+              "slots": 464,
+              "nonNOP": 455,
+              "PRMT_before_first_HMMA": 4,
+              "VOTE": [
+                [
+                  "0x4b0",
+                  "VOTEU.ANY UR12, UPT, P0"
+                ]
+              ],
+              "HMMA_PC": [
+                "0xab0",
+                "0xdb0",
+                "0x10b0",
+                "0x13c0"
+              ],
+              "empty_unit_header_repair_branches": [
+                [
+                  "0x820",
+                  "@!P1 BRA 0x860"
+                ],
+                [
+                  "0x840",
+                  "SHFL.IDX PT, R56, R0, R57, 0x1f"
+                ],
+                [
+                  "0x860",
+                  "@!P1 BRA 0xab0"
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "quarter-paired_median_control_minus_new_us",
+          "statement": "Quarter initial paired control-new -0.144000165us: a loss.",
+          "outcome": "negative",
+          "evidence": "quarter",
+          "selector": {
+            "json_pointer": "/rows/0/paired_median_control_minus_new_us",
+            "equals": -0.14400016516447067
+          }
+        },
+        {
+          "id": "quarter-F1_endpoint_average_control_minus_new_us",
+          "statement": "Quarter F1 endpoint-average control-new +0.256000087us; retain mixed sign and endpoint drift.",
+          "outcome": "mixed",
+          "evidence": "quarter",
+          "selector": {
+            "json_pointer": "/rows/0/F1_endpoint_average_control_minus_new_us",
+            "equals": 0.2560000866651535
+          }
+        },
+        {
+          "id": "quarter-F1_conservative_min_endpoint_control_minus_new_us",
+          "statement": "Quarter conservative endpoint control-new -0.320000574us.",
+          "outcome": "negative",
+          "evidence": "quarter",
+          "selector": {
+            "json_pointer": "/rows/0/F1_conservative_min_endpoint_control_minus_new_us",
+            "equals": -0.3200005739927292
+          }
+        },
+        {
+          "id": "retest-paired-0",
+          "statement": "Control-quarter -0.191999599us retest loss. Positive first-minus-second favors second; comparisons share24 triples and are not additive.",
+          "outcome": "negative",
+          "evidence": "sparse",
+          "selector": {
+            "json_pointer": "/comparisons/0/paired_median_first_minus_second_us",
+            "equals": -0.19199959933757782
+          }
+        },
+        {
+          "id": "retest-blocked-0",
+          "statement": "Blocked endpoint-average retains the signed first-minus-second effect from the same trial.",
+          "outcome": "negative",
+          "evidence": "sparse",
+          "selector": {
+            "json_pointer": "/comparisons/0/blocked_endpoint_average_first_minus_second_us",
+            "equals": -0.23999903351068497
+          }
+        },
+        {
+          "id": "retest-paired-1",
+          "statement": "Control-sparse -0.223999843us loss. Positive first-minus-second favors second; comparisons share24 triples and are not additive.",
+          "outcome": "negative",
+          "evidence": "sparse",
+          "selector": {
+            "json_pointer": "/comparisons/1/paired_median_first_minus_second_us",
+            "equals": -0.22399984300136566
+          }
+        },
+        {
+          "id": "retest-blocked-1",
+          "statement": "Blocked endpoint-average retains the signed first-minus-second effect from the same trial.",
+          "outcome": "negative",
+          "evidence": "sparse",
+          "selector": {
+            "json_pointer": "/comparisons/1/blocked_endpoint_average_first_minus_second_us",
+            "equals": -0.2719992771744728
+          }
+        },
+        {
+          "id": "retest-paired-2",
+          "statement": "Quarter-sparse -0.063999556us loss. Positive first-minus-second favors second; comparisons share24 triples and are not additive.",
+          "outcome": "negative",
+          "evidence": "sparse",
+          "selector": {
+            "json_pointer": "/comparisons/2/paired_median_first_minus_second_us",
+            "equals": -0.06399955600500107
+          }
+        },
+        {
+          "id": "retest-blocked-2",
+          "statement": "Blocked endpoint-average retains the signed first-minus-second effect from the same trial.",
+          "outcome": "negative",
+          "evidence": "sparse",
+          "selector": {
+            "json_pointer": "/comparisons/2/blocked_endpoint_average_first_minus_second_us",
+            "equals": -0.03200024366378784
+          }
+        },
+        {
+          "id": "profile-0-gpu__time_duration.sum",
+          "statement": "Exact-SO control: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/0/metrics/gpu__time_duration.sum",
+            "equals": {
+              "value": 22400.0,
+              "unit": "ns"
+            }
+          }
+        },
+        {
+          "id": "profile-0-dram__bytes_read.sum",
+          "statement": "Exact-SO control: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/0/metrics/dram__bytes_read.sum",
+            "equals": {
+              "value": 50998272.0,
+              "unit": "byte"
+            }
+          }
+        },
+        {
+          "id": "profile-0-smsp__inst_executed.sum",
+          "statement": "Exact-SO control: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/0/metrics/smsp__inst_executed.sum",
+            "equals": {
+              "value": 3223396.0,
+              "unit": "inst"
+            }
+          }
+        },
+        {
+          "id": "profile-0-smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+          "statement": "Exact-SO control: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/0/metrics/smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+            "equals": {
+              "value": 82.56,
+              "unit": "%"
+            }
+          }
+        },
+        {
+          "id": "profile-1-gpu__time_duration.sum",
+          "statement": "Exact-SO quarter: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/1/metrics/gpu__time_duration.sum",
+            "equals": {
+              "value": 21664.0,
+              "unit": "ns"
+            }
+          }
+        },
+        {
+          "id": "profile-1-dram__bytes_read.sum",
+          "statement": "Exact-SO quarter: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/1/metrics/dram__bytes_read.sum",
+            "equals": {
+              "value": 50999296.0,
+              "unit": "byte"
+            }
+          }
+        },
+        {
+          "id": "profile-1-smsp__inst_executed.sum",
+          "statement": "Exact-SO quarter: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/1/metrics/smsp__inst_executed.sum",
+            "equals": {
+              "value": 4404829.0,
+              "unit": "inst"
+            }
+          }
+        },
+        {
+          "id": "profile-1-smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+          "statement": "Exact-SO quarter: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/1/metrics/smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+            "equals": {
+              "value": 79.48,
+              "unit": "%"
+            }
+          }
+        },
+        {
+          "id": "profile-2-gpu__time_duration.sum",
+          "statement": "Exact-SO sparse: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/2/metrics/gpu__time_duration.sum",
+            "equals": {
+              "value": 21984.0,
+              "unit": "ns"
+            }
+          }
+        },
+        {
+          "id": "profile-2-dram__bytes_read.sum",
+          "statement": "Exact-SO sparse: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/2/metrics/dram__bytes_read.sum",
+            "equals": {
+              "value": 50998784.0,
+              "unit": "byte"
+            }
+          }
+        },
+        {
+          "id": "profile-2-smsp__inst_executed.sum",
+          "statement": "Exact-SO sparse: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/2/metrics/smsp__inst_executed.sum",
+            "equals": {
+              "value": 3751027.0,
+              "unit": "inst"
+            }
+          }
+        },
+        {
+          "id": "profile-2-smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+          "statement": "Exact-SO sparse: profiled duration is not clean timing gain; bytes/instructions are counters, stall percentage is sampled warp activity, not wall-time or repair-time fraction.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/arms/2/metrics/smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+            "equals": {
+              "value": 80.2,
+              "unit": "%"
+            }
+          }
+        },
+        {
+          "id": "cause",
+          "statement": "Profile durations rank quarter/sparse/control differently from clean timings; unchanged traffic plus increased instructions establishes a tradeoff, not causal allocation of loss.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/cause_confidence/clean_loss_cause",
+            "equals": "UNKNOWN: profile-durationranking differsclean; unchangedtraffic and more dynamicinstructions establish tradeoff, not lossallocation"
+          }
+        },
+        {
+          "id": "quarter-build",
+          "statement": "Quarter measured compile/load41.838135824s and run45.180085850s; do not substitute this cost into a controlled thin-ABI savings claim.",
+          "outcome": "neutral",
+          "evidence": "quarter",
+          "selector": {
+            "json_pointer": "/cost",
+            "equals": {
+              "compile_and_load_seconds": 41.83813582400035,
+              "task_weight_pack_seconds": 0.41592463199049234,
+              "run_elapsed_seconds": 45.18008584999188
+            }
+          }
+        },
+        {
+          "id": "early-paired",
+          "statement": "M8 early next-W/X issue: control-new paired +0.192000531us, versus prior quarter/sparse losses; a changed load dependency, not another repair format.",
+          "outcome": "positive",
+          "evidence": "earlyload",
+          "selector": {
+            "json_pointer": "/timing/paired_median_us",
+            "equals": 0.19200053066015244
+          }
+        },
+        {
+          "id": "early-f1",
+          "statement": "Same screen F1 endpoint average +0.160000287us; both endpoints and paired order medians positive.",
+          "outcome": "positive",
+          "evidence": "earlyload",
+          "selector": {
+            "json_pointer": "/timing/F1_endpoint_average_us",
+            "equals": 0.1600002869963646
+          }
+        },
+        {
+          "id": "early-orders",
+          "statement": "Initial control-first paired median +0.128000043us.",
+          "outcome": "positive",
+          "evidence": "earlyload",
+          "selector": {
+            "json_pointer": "/timing/control_first_paired_median_us",
+            "equals": 0.12800004333257675
+          }
+        },
+        {
+          "id": "early-reverse-orders",
+          "statement": "Initial new-first paired median +0.271999277us.",
+          "outcome": "positive",
+          "evidence": "earlyload",
+          "selector": {
+            "json_pointer": "/timing/new_first_paired_median_us",
+            "equals": 0.2719992771744728
+          }
+        },
+        {
+          "id": "early-resources",
+          "statement": "Both arms64 registers/occupancy1/local0; this is latency scheduling evidence without an occupancy gain.",
+          "outcome": "neutral",
+          "evidence": "earlyload",
+          "selector": {
+            "json_pointer": "/actual_resources",
+            "equals": {
+              "control": {
+                "registers": 64,
+                "local": 0,
+                "user_static": 0,
+                "max_dynamic": 17408,
+                "max_threads": 1024,
+                "occupancy": 1,
+                "device_reserved": 1024,
+                "arm_echo": 0
+              },
+              "earlyload": {
+                "registers": 64,
+                "local": 0,
+                "user_static": 0,
+                "max_dynamic": 17408,
+                "max_threads": 1024,
+                "occupancy": 1,
+                "device_reserved": 1024,
+                "arm_echo": 1
+              }
+            }
+          }
+        },
+        {
+          "id": "body-identity",
+          "statement": "Production-package extracted parent/keyed/early-load native streams match frozen pilot; a dispatch/body mismatch does not explain the observed fixed-role timing difference.",
+          "outcome": "neutral",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/three_native_streams_match_frozen_pilot",
+            "equals": true
+          }
+        },
+        {
+          "id": "package-1-paired_median_control_minus_option_us",
+          "statement": "Package M1 paired_median_control_minus_option_us: -0.048000365us; control-option sign. M1 is keyed, M8 is early-load; effects cannot be added.",
+          "outcome": "negative",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/cells/1/paired_median_control_minus_option_us",
+            "equals": -0.04800036549568176
+          }
+        },
+        {
+          "id": "package-1-paired_mean_us",
+          "statement": "Package M1 paired_mean_us: -0.230666716us; control-option sign. M1 is keyed, M8 is early-load; effects cannot be added.",
+          "outcome": "negative",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/cells/1/paired_mean_us",
+            "equals": -0.23066671565175056
+          }
+        },
+        {
+          "id": "package-1-F1_average_us",
+          "statement": "Package M1 F1_average_us: -0.960000791us; control-option sign. M1 is keyed, M8 is early-load; effects cannot be added.",
+          "outcome": "negative",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/cells/1/F1_average_us",
+            "equals": -0.960000790655613
+          }
+        },
+        {
+          "id": "package-1-control_first_median_us",
+          "statement": "Package M1 control_first_median_us: -0.016000122us; control-option sign. M1 is keyed, M8 is early-load; effects cannot be added.",
+          "outcome": "negative",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/cells/1/control_first_median_us",
+            "equals": -0.01600012183189392
+          }
+        },
+        {
+          "id": "package-1-option_first_median_us",
+          "statement": "Package M1 option_first_median_us: -0.064000487us; control-option sign. M1 is keyed, M8 is early-load; effects cannot be added.",
+          "outcome": "negative",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/cells/1/option_first_median_us",
+            "equals": -0.06400048732757568
+          }
+        },
+        {
+          "id": "package-8-paired_median_control_minus_option_us",
+          "statement": "Package M8 paired_median_control_minus_option_us: +0.031999312us; control-option sign. M1 is keyed, M8 is early-load; effects cannot be added.",
+          "outcome": "positive",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/cells/8/paired_median_control_minus_option_us",
+            "equals": 0.031999312341213226
+          }
+        },
+        {
+          "id": "package-8-paired_mean_us",
+          "statement": "Package M8 paired_mean_us: -0.033333354us; control-option sign. M1 is keyed, M8 is early-load; effects cannot be added.",
+          "outcome": "negative",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/cells/8/paired_mean_us",
+            "equals": -0.033333354319135346
+          }
+        },
+        {
+          "id": "package-8-F1_average_us",
+          "statement": "Package M8 F1_average_us: +0.176000409us; control-option sign. M1 is keyed, M8 is early-load; effects cannot be added.",
+          "outcome": "positive",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/cells/8/F1_average_us",
+            "equals": 0.17600040882825851
+          }
+        },
+        {
+          "id": "package-8-control_first_median_us",
+          "statement": "Package M8 control_first_median_us: +0.095999800us; control-option sign. M1 is keyed, M8 is early-load; effects cannot be added.",
+          "outcome": "positive",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/cells/8/control_first_median_us",
+            "equals": 0.09599979966878891
+          }
+        },
+        {
+          "id": "package-8-option_first_median_us",
+          "statement": "Package M8 option_first_median_us: -0.191999599us; control-option sign. M1 is keyed, M8 is early-load; effects cannot be added.",
+          "outcome": "negative",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/cells/8/option_first_median_us",
+            "equals": -0.19199959933757782
+          }
+        },
+        {
+          "id": "pack-fixture",
+          "statement": "Package Wseed5344 matches original early-load screen; same weight seed is not an independent-fixture replication.",
+          "outcome": "neutral",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/pack/W_seed",
+            "equals": 5344
+          }
+        },
+        {
+          "id": "package-no-policy",
+          "statement": "Fixed role execution is proven; actual chooser selection and official score remain unmeasured.",
+          "outcome": "neutral",
+          "evidence": "package",
+          "selector": {
+            "json_pointer": "/production_prepare_selection",
+            "equals": "UNMEASURED; sourceGO+CPUchooser/dispatch tests separate; fixedroles are deliberately selected bythisdeviceharness"
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Moving first MMA earlier or skipping empty-unit headers is sufficient to improve this complete kernel.",
+          "status": "refuted",
+          "observation_ids": [
+            "quarter-paired_median_control_minus_new_us",
+            "retest-paired-1"
+          ]
+        },
+        {
+          "statement": "More executed instructions contribute to the clean loss.",
+          "status": "unproven",
+          "observation_ids": [
+            "cause"
+          ]
+        },
+        {
+          "statement": "Changing incumbent next-W/X issue before current decode can avoid the quarter-stream format/control overhead and improve this M8 cell.",
+          "status": "supported_in_scope",
+          "observation_ids": [
+            "early-paired",
+            "early-f1",
+            "early-resources"
+          ]
+        },
+        {
+          "statement": "Hardware load-wait reduction causes the early-load gain.",
+          "status": "unproven",
+          "observation_ids": [
+            "early-paired",
+            "early-resources",
+            "cause"
+          ]
+        },
+        {
+          "statement": "Early-load effect magnitude transfers unchanged to the extracted production package.",
+          "status": "unproven",
+          "observation_ids": [
+            "early-paired",
+            "body-identity",
+            "package-8-paired_median_control_minus_option_us",
+            "package-8-option_first_median_us"
+          ]
+        }
+      ],
+      "scope": "Extends quarter/sparse evidence with one H100 M8 early-load screen and same-seed5344 package fixed-body trial. Initial +0.192us paired/+0.160us F1 becomes package +0.031999us paired/+0.176000us F1, but package paired mean -0.033333us and order medians +0.096000/-0.192000us. M1 keyed package separately loses -0.048000us paired/-0.960001us F1. No independent fixture or official transfer claim.",
+      "transfer_limits": [
+        "Quarter native first-MMA PRMT16 to4; sparse nonNOP462 to455 are static changes, not runtime savings.",
+        "Profile durations22400/21664/21984ns are not gains; profile ranking opposes clean timings.",
+        "Counters do not identify repair PC time, wall-time fractions or a proven bottleneck.",
+        "A losing version does not reject quarter/pipeline family; preserve mixed F1 and negative paired estimates.",
+        "Earlier native issue is realized; reduced hardware wait was not measured for this binary. Prior quarter/sparse counters do not attribute early-load cause.",
+        "Binary placement, run order, clocks and residual timing variation remain possible transfer factors; none is identified as the cause.",
+        "Prior quarter/sparse and early-load jobs differ in weights and event handling; their difference is not a controlled causal contrast.",
+        "The old earlier-first-MMA sufficiency refutation is scoped to quarter/sparse, not all load/decode pipelining."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Next implementation hypothesis: move only next-W loads early while leaving next-X issue unchanged, eliminating the X snapshot/live range. Compare parent, current W+X early-load and W-only at the same selected M8 tuple and same stored W/X, retain both pair orders and F1 endpoints. If W-only loses while W+X wins, W-only sufficiency is refuted; if W-only wins with reduced native copy/live-range cost, pursue that narrower schedule. No unchanged rerun or new profiling gate.",
+      "next_test": {
+        "question": "Can W-only earlier issue preserve useful overlap while removing X-snapshot copy/live-range overhead?",
+        "controls": [
+          "Exact parent and current combined W+X early-load bodies",
+          "Same M8 tuple, stored W/X, escape bank and timing method; both pair orders",
+          "Keep package fixed-body results separate from actual chooser/official CHECK"
+        ],
+        "discriminator": "Next implementation hypothesis: move only next-W loads early while leaving next-X issue unchanged, eliminating the X snapshot/live range. Compare parent, current W+X early-load and W-only at the same selected M8 tuple and same stored W/X, retain both pair orders and F1 endpoints. If W-only loses while W+X wins, W-only sufficiency is refuted; if W-only wins with reduced native copy/live-range cost, pursue that narrower schedule. No unchanged rerun or new profiling gate.",
+        "stop_rule": "If native W-only scheduling is not distinct, stop that implementation; if valid timing loses, retain it and reconsider X dependence rather than reject load scheduling. Root decides whether this new question earns a run.",
+        "required_gates": [
+          "Reuse unchanged scope-appropriate correctness/lifetime/native identity checks; no additional broad proof gate."
+        ]
+      },
+      "related_queue_ids": [
+        "research.gv53.quarter.stream.fixed.01",
+        "research.gv53.quarter.sparse.fixed.01",
+        "research.gv53.exactso.counters.01",
+        "research.gv53.earlyload.fixed.01",
+        "research.gv53.selected.earlyload.bodies.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "No kernel or official score gain is forecast; root owns any follow-up admission."
+        ]
+      },
+      "cost": {
+        "basis": "Existing measured early-load total5.120794627s and package5.455110821s; proposed W-only implementation/measurement cost unknown, no reservation requested.",
         "cpu_minutes": null,
         "gpu_seconds": null
       }
