@@ -1,0 +1,76 @@
+{
+  "base_path": "proj_rsi/candidates/gv53_maskgate_trial_v1/driver.py",
+  "base_sha256": "b62060251331487b17af1b124499779eda111fbc159b2e91eb4ff40205da3b60",
+  "edits": [
+    {
+      "before": "CAND=ROOT/'proj_rsi/candidates/gv53_maskgate_v1'",
+      "after": "CAND=D\nCLEANUP_HOOK=None",
+      "count": 1
+    },
+    {
+      "before": "maskgate",
+      "after": "keyed",
+      "count": 8
+    },
+    {
+      "before": "DECL='int64_t attrs",
+      "after": "DECL='std::vector<int64_t> clear_blas_cache();\\nint64_t attrs",
+      "count": 1
+    },
+    {
+      "before": "    columns=list(range(0,8192,128))\n    columns[:9]=[0,1,31,32,63,64,511,512,8191]\n    assert len(columns)==len(set(columns))==64",
+      "after": "    columns=[0,1,31,63,64,511,512,8191]\n    assert len(columns)==len(set(columns))==8",
+      "count": 1
+    },
+    {
+      "before": "assert len(basis_columns())==64",
+      "after": "assert len(basis_columns())==8",
+      "count": 1
+    },
+    {
+      "before": "def run(args):\n",
+      "after": "def run(args):\n    global CLEANUP_HOOK\n",
+      "count": 1
+    },
+    {
+      "before": "functions=['run','attrs']",
+      "after": "functions=['run','attrs','clear_blas_cache']",
+      "count": 1
+    },
+    {
+      "before": "        result['cost']['compile_and_load_seconds']=time.monotonic()-begin",
+      "after": "        CLEANUP_HOOK=ext.clear_blas_cache\n        result['cost']['compile_and_load_seconds']=time.monotonic()-begin",
+      "count": 1
+    },
+    {
+      "before": "assert a['registers']==64 and a['local']==0 and a['user_static']==0 and a['max_dynamic']>=17408",
+      "after": "assert 0<a['registers']<=255 and a['local']>=0 and a['user_static']>=0 and a['max_dynamic']>=17408",
+      "count": 1
+    },
+    {
+      "before": "immutable=[(key,t,t.clone())for key,t in weights.items()]+[('packed',packed,packed.clone()),('escape',escape,escape.clone())]",
+      "after": "immutable=[('pooler',weights['pooler'],weights['pooler'].clone()),('packed',packed,packed.clone()),('escape',escape,escape.clone())]",
+      "count": 1
+    },
+    {
+      "before": "range(0,64,m)",
+      "after": "range(0,8,m)",
+      "count": 1
+    },
+    {
+      "before": "    assert args.output and args.review;run(args)",
+      "after": "    assert args.output and args.review\n    error=None\n    try:run(args)\n    except BaseException as exc:error=repr(exc)\n    import gc\n    gc.collect();torch=sys.modules.get('torch')\n    if torch is not None and torch.cuda.is_initialized():\n        torch.cuda.synchronize();before={'allocated':torch.cuda.memory_allocated(),'reserved':torch.cuda.memory_reserved()}\n        evidence=None;clear_error=None\n        try:\n            if CLEANUP_HOOK is not None:evidence=list(map(int,CLEANUP_HOOK()))\n        except BaseException as exc:clear_error=repr(exc)\n        gc.collect();torch.cuda.empty_cache();torch.cuda.synchronize()\n        cleanup={'allocated':torch.cuda.memory_allocated(),'reserved':torch.cuda.memory_reserved(),'before_blas_clear':before,'blas_map_entries_workspace_bytes_after':evidence,'clear_error':clear_error,'after_run_scope_and_drain':True}\n        if (args.output/'result.json').exists():\n            result=json.loads((args.output/'result.json').read_text());result['post_scope_cleanup']=cleanup\n            if cleanup['allocated']!=0 or clear_error is not None:result['state']='INVALID_CLEANUP'\n            dump(args.output/'result.json',result)\n        assert cleanup['allocated']==0 and clear_error is None,cleanup\n        if error is None:assert evidence is not None and len(evidence)==3 and evidence[2]==0,cleanup\n    if error:raise RuntimeError(error)",
+      "count": 1
+    },
+    {
+      "before": "        assert torch.equal(env['_unc12'](packed,table,esc6,1),env['_frag_bits'](fr))\n        esc7=torch.cat((esc6,torch.full_like(esc6[:,:1],0)),1)",
+      "after": "        esc7=torch.cat((esc6,torch.full_like(esc6[:,:1],0)),1)",
+      "count": 1
+    },
+    {
+      "before": "'full_prepare_calls':0}",
+      "after": "'full_prepare_calls':0,'basis_columns_per_arm_cell':8,'resource_gate':'legal residency only; actual registers/local/static recorded'}",
+      "count": 2
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "state": "CPU_ONLY_CONDITIONAL_NOT_PERFORMANCE_MEASUREMENT",
+  "objective": "muse_bf16_proj score below3000us; current3157.0384036526784 remains actualbest",
+  "target": "Officialselected501d poolerM1+M8 rolledtuple(1,1,1,2,16,8,1,1,0,3)",
+  "combined_score_elasticity_rounded": 0.12577,
+  "measured_CPU_codegen": {
+    "nonNOP_control": 348,
+    "nonNOP_keyed": 345,
+    "removed_per_dynamic_repair": [
+      "oneUSHF",
+      "oneULOP3",
+      "oneISETPpredicatejoin"
+    ],
+    "padded_slots_control_and_new": 360,
+    "registers_both": 64,
+    "spills_stack_local_both": 0,
+    "P2R_both": 1,
+    "SHFL_both": 2,
+    "HMMA_both": 4,
+    "LDG_both": 11
+  },
+  "actual_GPU_speedup": null,
+  "dynamic_escape_loop_fraction": null,
+  "conditional_score_gain_us_if_both_target_cases_drop_absolute_us": {
+    "0.03": 0.8742680688552908,
+    "0.1": 2.9161139478576454,
+    "0.3": 8.764584233993563
+  },
+  "scenario_0p1us_both": 2.9161139478576454,
+  "estimated_conditional_ceiling": "Only complete-case arithmetic. No bound on actual improvement is inferred from three static instruction removals; a 0.1us reduction in each targeted full selected case gives2.9161139478576454scoreus. This does not independently close157.0384us gap.",
+  "counterevidence": [
+    "Memory/decode/HMMA/controlmaydominate; removeduniformopsmayalreadyoverlap.",
+    "P2Randshuffledependence remain; no claimpredicate-save latency removed.",
+    "Maskgate removedP2Rbutadded16PLOP3andmixedsigns; indexgate no intended codegenwin; cursorprefetch didnotmoveSHFL earlier.",
+    "SplitCTA fixedprogress didnotguaranteeactualselectedexecutionorincumbentgain.",
+    "C11v3rescuedfailedv2butlostC12; no newrepresentation orformattraffic here."
+  ],
+  "next": "One bounded oldpredxor versuskeyed M1/M8directscreen with unchanged CSR/geometry/math, fewboundaryprobes/currentownoutputs/guards; ifpositivepoint preserve then priceactualpolicy integration vs501d, do notforcecachedwinner.",
+  "cost": {
+    "GPU_inner_seconds": 120,
+    "GPU_outer_seconds": 180,
+    "GPU_seconds_charged": 180,
+    "CPU_minutes_planning": 10,
+    "followup_GPU_seconds": 0
+  },
+  "subjective_queue_priors": {
+    "p_gain": 0.15,
+    "p_valid": 0.9,
+    "not_measured_probabilities": true
+  },
+  "loop": "proj_rsi/ITERATION.md",
+  "combined_score_elasticity_exact": 0.12576225359845666,
+  "conditional_10pct_complete_target_case_gain_us": 40.2142933123301
+}

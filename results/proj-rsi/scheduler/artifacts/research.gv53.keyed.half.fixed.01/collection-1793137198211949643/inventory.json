@@ -1,0 +1,54 @@
+{
+  "cleanup_observation": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "host_log_tail": "2026-10-27T21:38:50Z\ntorch_import_and_device\ncompile_two_functions\n[1/3] c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=gv53_keyed_abaf27ce819c9eed4454 -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -fPIC -std=c++17 -c /root/.cache/torch_extensions/gv53_keyed_abaf27ce819c9eed4454/main.cpp -o main.o \n[2/3] /usr/local/cuda/bin/nvcc --generate-dependencies-with-compile --dependency-output cuda.cuda.o.d -DTORCH_EXTENSION_NAME=gv53_keyed_abaf27ce819c9eed4454 -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_90a,code=sm_90a --compiler-options '-fPIC' -O3 -lineinfo -gencode=arch=compute_90a,code=sm_90a -std=c++17 -c /root/.cache/torch_extensions/gv53_keyed_abaf27ce819c9eed4454/cuda.cu -o cuda.cuda.o \n[3/3] c++ main.o cuda.cuda.o -shared -L/opt/conda/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o gv53_keyed_abaf27ce819c9eed4454.so\nactual_task_weight_and_pack\nfixed_pooler_M1\nfixed_pooler_M8\ncomplete\nTRIAL_EXIT okc-proj-gv53-keyed-half-01 0\n2026-10-27T21:39:42Z\n",
+    "terminal_exit": 0
+  },
+  "collected_at": 1793137199.1450107,
+  "dispatch": {
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv53-keyed-half-01"
+    ],
+    "claimed_at": 1793137119.6823163,
+    "container": "okc-proj-gv53-keyed-half-01",
+    "controller_owner": "root",
+    "guard_pid": 594334,
+    "host": "root@107.170.6.60",
+    "host_log": "/root/okc/logs/scheduler/research.gv53.keyed.half.fixed.01.host.log",
+    "job_id": "research.gv53.keyed.half.fixed.01",
+    "launch_requested_at": 1793137129.1894014,
+    "phase": "RUNNING",
+    "remote_repo": "/root/okc",
+    "source_pins": {
+      "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+      "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+      "proj_rsi/candidates/gv53_keyed_half_v1/binding.cu": "e472a4053ff09e6741b8c1e5c38c175d723018c6605fd08fff2733c84a5a8718",
+      "proj_rsi/candidates/gv53_keyed_half_v1/driver.py": "1cef9a69cf7e97ca7d784619e12b4cd4afdb0bda3d480c9344b5007b57c0b87c",
+      "proj_rsi/candidates/gv53_keyed_half_v1/manifest.json": "ef620956c543674d07be264386a20881231bdc8f38225dc065a4d06af89ecfc8",
+      "proj_rsi/candidates/gv53_keyed_half_v1/pilot.cu": "f79c659ff30e548c51482a6b132c3f48ff5ee81bf7ad6802edfe679bd43be65d",
+      "proj_rsi/candidates/gv53_keyed_half_v1/submission.py": "239b530cf7eead0a2dbf0af5c29aea4ba02e449500eb80e45b255b361cf2f900",
+      "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+      "proj_rsi/scheduling/reviews/gv53-keyed-half-01.md": "acb05e1b25527e6401f395e1f092d2318434d56c79cbc7169c4220c052546403",
+      "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+      "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5"
+    }
+  },
+  "files": {
+    "logs/scheduler/gv53-keyed-half-01/run/actual.cu": "abaf27ce819c9eed4454c7c24923c4aab22f9d884c2b2241632d6a2ea73a1964",
+    "logs/scheduler/gv53-keyed-half-01/run/actual.so": "2638c75aa2020edda1a66905bda0a658335fbaf4dd4d6fc09b2e2f2e4933acad",
+    "logs/scheduler/gv53-keyed-half-01/run/raw.jsonl": "d939aa9b128834d924b59b0d04cb443531f817c46e423ac6f4a5e4b74fe2d4d6",
+    "logs/scheduler/gv53-keyed-half-01/run/result.json": "c15d1773abcc1387a0a327ada45146c4c0920e0c25a5c998b6070ba278f531a2",
+    "logs/scheduler/research.gv53.keyed.half.fixed.01.host.log": "03aa64ef9508f01b0a188a132c81a99d2ffe074621c17b20c1c8cb9bff6877bf"
+  },
+  "job_id": "research.gv53.keyed.half.fixed.01",
+  "missing": [],
+  "symlinks_not_followed_or_materialized": {},
+  "terminal_exit": 0,
+  "validation": "ROOT_VALIDATION_REQUIRED_NO_PERFORMANCE_ADMISSION"
+}
