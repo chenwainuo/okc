@@ -1,0 +1,33 @@
+{
+  "state": "CPU_CODEGEN_FAILED_RETAINED_NO_GPU",
+  "source_sha256": "ad08afe67b1e7798146e702796dd48cf7affd38df7364890693a94e4c2933b77",
+  "compile_command": [
+    "/usr/local/cuda-12.8/bin/nvcc",
+    "-gencode=arch=compute_90a,code=sm_90a",
+    "-O3",
+    "-DNDEBUG",
+    "--expt-relaxed-constexpr",
+    "--cubin",
+    "--ptxas-options=-v",
+    "/home/ubuntu/okc/proj_rsi/candidates/operand_reverse_fence_pair/device_source.cu",
+    "-o",
+    "/home/ubuntu/okc/proj_rsi/candidates/operand_reverse_fence_pair/device.sm90a.cubin"
+  ],
+  "main_registers": 126,
+  "static_HGMMA": 48,
+  "static_ARRIVE": 48,
+  "static_volatile_pin_STS128": 48,
+  "stack_spill_records": [
+    "48 bytes stack frame",
+    "48 bytes spill stores",
+    "144 bytes spill loads",
+    "0 bytes stack frame",
+    "0 bytes spill stores",
+    "0 bytes spill loads"
+  ],
+  "diagnostic_codes": [
+    "C7512",
+    "C7519"
+  ],
+  "gpu_calls": 0
+}

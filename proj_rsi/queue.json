@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-10-27T01:25:38.007592+00:00",
+  "updated_at_utc": "2026-10-27T02:06:11.332850+00:00",
   "goal_official_score_us_below": 3000,
   "incumbent": {
     "job": "fb548b5dc6f04696",
@@ -38,32 +38,46 @@
     "check_quota_left": 20,
     "scored_quota_left": 10,
     "reset_utc": "2026-10-28T00:00:00Z",
-    "gpu_status": "Idle0MiBafterDS384187terminal01:15:42; DPNcu383540terminal01:10:47, rawsourceexportsarchived",
+    "gpu_status": "Idle0MiB; balancedmeasurement386450terminal2026-10-27T01:42:46Zexit0, guard/container/computeabsentconfirmed02:02UTC",
     "quota_verified_utc": "2026-10-27T00:03:19.970407+00:00"
   },
   "ranked_open": [
     {
       "rank": 1,
-      "id": "operand_reverse_fence_pair",
+      "id": "operand_reverse_group8",
       "owner": "proj_integration",
-      "status": "CPU_IMPLEMENTATION_AUTHORIZED",
-      "hypothesis": "FreshDPARRIVEdominates; batch2groupsperlegalper-registerfence, explicitprefetchretiredslots/lookahead3to2",
-      "next": "Fullphase/inputfencecoverage/physicalA4+Dgeneric/SASSfutureloadplacement/128regproof thenindependentGO"
+      "status": "CPU_IMPLEMENTATION_CODEGEN_PASS_PHYSICAL_PROOF_PENDING",
+      "family": "operand_reverse",
+      "predecessor": "operand_reverse_dual_producer",
+      "observed_failure": "fence_pairv1-v6compilerinsertedperMMAARRIVE/wait0; realpinv6spilled. Preserveallversions.",
+      "hypothesis": "DPfreshprofileleadingmathARRIVE; canonical8-MMAgroupcanhalveboundarieswithoutcross-groupfencesharing",
+      "change": "Pair2existingK64mathstagesonly; sameproducerW6/B8/512threads/103600SMEM, nativeA2x32; lookahead192Kto128Kexplicit",
+      "CPU_code_generation": "Firstexactflagsmain122/pack22regs,0stack/spills,noC75,16staticHGMMA/2ARRIVE; notGPUadmission",
+      "forecast": {
+        "attainable_gain": "UNKNOWN; PCsamplefractionisnotlatencyfraction",
+        "information_value": "Determinewhetherfewerlegalgroupboundariesimprovefullpack+mainagainstDP/DSandactualincumbent"
+      },
+      "next": "GeneralizedphysicalA2x32retirementandfencecoverage/DAG/sourceidentity/lab/criticfreeze; boundedGPUonlyafterGO",
+      "next_after_failure": "Retaincodegen/runtimefailure; identifyconcretecauseanditerateversion"
     },
     {
       "rank": 2,
-      "id": "dual_stmatrix_measure",
+      "id": "group16_math_feasibility",
       "owner": "proj_tracks",
-      "status": "FOCUSED_FIXED_SOURCE_MEASUREMENT_DESIGN",
-      "hypothesis": "ResolveDSblockedF1+.832usvsDPpaired-.256us; mode/order/variance unknown",
-      "next": "OnepredeterminedbalancedwholepipelineDPvsDS measurementwithallraw/mode/order; noincclaim"
+      "status": "CPU_PLAN_ONLY",
+      "hypothesis": "Ifgroup8reducesfenceoverhead, canlargergroupmaintainoverlapwithin128regcap?",
+      "next": "Auditprior8/16MMAhistory,A1x64wait0vsA2x64pressure,B8/W6dependencies; noimplementationbeforecrediblefit",
+      "forecast": {
+        "attainable_gain": "UNKNOWN",
+        "information_value": "Distinguishlegalresource-fitopportunityfromregpressure/overlaptradeoff"
+      }
     },
     {
       "rank": 3,
       "id": "K128_paired_stages",
       "owner": "proj_tracks",
       "status": "CPU_PLAN_ONLY_CONDITIONAL",
-      "next": "Beforeimplementationneedcost/resource/oldworkdistinction; pairingBpublication/A2lookaheadconfound"
+      "next": "Physicalproducerpairing206000SMEMdistinctfrommath-onlygroup8; producerpublicationchangesrequirebenefit/resourceproof"
     }
   ],
   "closed_this_takeover": [
@@ -306,10 +320,28 @@
       "result": "proj_rsi/diagnostics/hw-zero-counters/hw-zero-counters01.json",
       "read_reduction_pct": 73.8274766621856,
       "terminal": "2026-10-26T23:49:24Z exit0"
+    },
+    {
+      "id": "dual_stmatrix_measure01",
+      "status": "VALID_FIXED_SOURCE_PARENT_PROGRESS",
+      "driver_sha256": "4812bbcfa2314db3db9ca481dcfa052daabb54e6d332c02c2866705dbc3d4293",
+      "json_sha256": "aa9c14d22deb9110a50e36e12b056658d1ba91b305ab7645ec052e0f47311378",
+      "archive": "proj_rsi/diagnostics/dual-stmatrix-measure01/",
+      "terminal": "2026-10-27T01:42:46Z exit0",
+      "process_and_container_gone": true,
+      "GPU_memory_MiB": 0,
+      "paired_comparisons": 64,
+      "raw_records": 350,
+      "timed_records": 320,
+      "median_gain_us": 1.16799958050251,
+      "wins": 48,
+      "median64_ratio_DP_over_DS": 1.0347440603095182,
+      "median32_swapped_ratio": 1.0309834056095077,
+      "limits": "Noincumbent/CI/officialclaim; allselectedtimedoutputsvalidatedbeforemutation; immutablefixedsources."
     }
   ],
   "family_status": {
-    "operand_reverse": "ACTIVEbestfailedDP34.496us; STMXandDPmeasuredprogress, composednext, officialincnotbeaten",
+    "operand_reverse": "ACTIVE: iterativePX/STMX/DPgains; balancedDSmeasurementnowfavorsDSoverDP. Actualservingincumbentstillfaster. Mathgroup8CPUcodegenpasses; physical/labreviewpending.",
     "hw_compression": "CurrentformatsPARKEDwithspecificreopeningROI; allocator/readobservervalidated; nofamilyimpossibilityclaim",
     "other_historical_failures": "Retained,lowerpriority; re-evaluatewithspecificprofilehypothesisratherthanblindlyrepeat."
   },
@@ -380,6 +412,15 @@
       "paired_gain_vs_DP_us": -0.2559982240200043,
       "paired_wins_vs_DP": "10/21",
       "result": "proj_rsi/candidates/operand_reverse_dual_stmatrix/operand-reverse-dual-stmatrix01.json"
+    },
+    {
+      "id": "operand_reverse_fence_pair",
+      "status": "CPU_CODEGEN_FAILURE_RETAINED_MECHANISM_PARKED",
+      "manifest_sha256": "7d821acac7bdeae33a351c7395d6430d89972a70a6b76650d482281cd34234a2",
+      "versions": "v1-v6",
+      "GPU_work": "NONE",
+      "reason": "C75/compilerinsertedperMMAfence/wait0; empty/identitypinsDCE; realvolatileallAsharedpin126regsbut48Bstack/48Bspillstores/144Bspillloads.",
+      "next": "Newcanonical8MMAgroupmechanism; oldper-registerfencesharingreopensonlywithcredibleliveness/codegenmechanism."
     }
   ],
   "completed_action_records": [
@@ -440,7 +481,7 @@
       "id": "operand_reverse_packed_x",
       "family": "operand_reverse",
       "owner": "proj_tracks",
-      "status": "RUNNING_ACTUAL_JIT_GATE_AND_FOUR_WAY_WHOLE_PIPELINE",
+      "status": "TERMINAL_VALID_PARENT_PROGRESS_NO_INCUMBENT_GAIN",
       "hypothesis": "Freshpercall1MiBnativeAfragmentpackmovesXtransposeoutof128consumerCTAs, allowing4coalescedv4loads/noSHFLratherthanV1transposeorV2scalaramplification",
       "predicted_observations": "Exactbitbijection/1MiBworkspace; main4vectorloads/64sectorinstances/noSHFL; two-nodecompletegraphwinsorloseswithpackfullyincluded",
       "comparison": [
@@ -451,7 +492,7 @@
       ],
       "validity": "Everycallpackfresh; poisonworkspace+retainedoutput, freshXnormal/outlier/probes, allK/FP64/source/bytes/counters/lifetime; noinputcache",
       "cost": "Extra1MiBlogicalread+1MiBwrite andonepacknodeperinvocation, memorysectortrafficmustmeasure",
-      "next": "CPUmap/inverse/overflow/lifetime/sourceandSASSresourceproof; independentreviewbeforeGPU",
+      "next": "FreshPCcapture\u2192STMX/DPfollowupscompleted",
       "forecast": {
         "attainable_gain": "UNKNOWN; largemechanismbutpackoverheadmayerasebenefit",
         "information_value": "Separateamortizedlayoutconversionfromconsumerload/shufflecost",
@@ -474,15 +515,16 @@
       "manifest_sha256": "0420abd392bcb8fae64508f8c247bccec8f7fd7873777e6138e81543a48c94f4",
       "source_sha256": "2c28de068a57235fcfec8af61a5678572ef76dc9833bc280e134623e8b6ff04a",
       "review": "proj_rsi/audits/operand-reverse-packed-x-preflight.md",
-      "confound": "FreshpercallpacknativeA4threeahead vsV4fourahead; alloverheadincluded"
+      "confound": "FreshpercallpacknativeA4threeahead vsV4fourahead; alloverheadincluded",
+      "terminal": "2026-10-27T00:13:09Z exit0"
     },
     {
       "id": "hw_compression_reversible_layout",
       "family": "hw_compression",
       "owner": "proj_integration",
-      "status": "FOUR_NODE_BYTEPLANES_FROZEN_INDEPENDENT_REVIEW",
+      "status": "CALIBRATED_CURRENT_REPRESENTATIONS_PARKED",
       "hypothesis": "KnownzeroresponsebutnormalBF16flatpointsatpayloadpatternopportunity; bitexactreversiblecentering/zigzagorbyteplanesmayexposehomogeneouspatterns",
-      "next": "One4node{rawWt,byteplanes64}x{GENERIC,NONE}fullspanvolatileuint4copydiagnostic; exactbytes/flags/graphs/resources/Region0; criticbeforeGPU",
+      "next": "Byteplanesandsignlowflat; same-readerzeroresponds75%; reopencrediblepayload/inversebenefitvsstock12bit",
       "forecast": {
         "attainable_gain": "UNKNOWN; mustbeatstock12bitpackedactualpathafterdecodecost",
         "information_value": "Distinguishpatternlayoutopportunityfromworkingallocator/populationpath"
@@ -498,7 +540,7 @@
       "id": "operand_reverse_dual_producer",
       "family": "operand_reverse",
       "owner": "root",
-      "status": "RUNNING_FOUR_WAY_INC_PX_STMX_DP",
+      "status": "TERMINAL_VALID_PARENT_PROGRESS_NO_INCUMBENT_GAIN",
       "pid": 381876,
       "container": "okc-proj-operand-reverse-dual-producer01",
       "inner_s": 240,
@@ -507,37 +549,41 @@
       "source_sha256": "97dd5613f9dfe859c87bb62f21e6d9543c10cdc7fc7310c2e87e40246fb1cf3b",
       "review": "proj_rsi/audits/operand-reverse-dual-producer-independent.md",
       "hypothesis": "UseheadroomfromPX122regstofit512threads/twoalternatingproducerWGs; moreproducerthroughputtargetsfreshBfullphase; sameWbytes/scalarstores/Xpack/mathA4",
-      "next": "ActualJITphysical/512maxthreads/rounded65536/0spill/occupancythenallK/20graphs15packpoisonand4waytiming",
+      "next": "FreshPCcapturecompleted; canonicalmathgroup8nowCPUimplementation",
       "forecast": {
         "gain": "UNKNOWN; fullpathmustbeatactual24usinc, currentSTMX38us",
         "risk": "MetadataCSRsread2x; morethreads/registers mayoffsetproducerparallelism"
-      }
+      },
+      "terminal": "2026-10-27T00:56:35Z exit0"
     },
     {
       "rank": 1,
       "id": "operand_reverse_dual_stmatrix",
       "owner": "proj_tracks",
-      "status": "FROZEN_GO_QUEUED_AFTER_DPNCU",
+      "status": "TERMINAL_VALID_ORIGINAL_MIXED_FOLLOWUP_FAVORS_DS",
       "manifest_sha256": "6785da2ec9881ce13148951daff2f8802d8e7bbe6c83abf588607092b3f97072",
       "hypothesis": "Composeindividuallyvalidproducerparallelism+storeissuechanges; actualfullpathadditivityunknown",
-      "next": "One4wayinc/DP/STMX/compositecompletepipeline; actualJIT512resource/lifetime/store/barriers/fullnumerics/workspaces"
+      "next": "Originalresultretained; balancedmeasurement01:42:46favorsDSinbothorders",
+      "terminal": "2026-10-27T01:15:42Z exit0"
     },
     {
       "rank": 2,
       "id": "dual_producer_ncu",
       "owner": "proj_integration",
-      "status": "RUNNING_PC_MEMORY_DIAGNOSTIC",
+      "status": "TERMINAL_VALID_ANALYSIS_COMPLETE",
       "pid": 383540,
       "container": "okc-proj-dual-producer-ncu01",
       "driver_sha256": "65e8d9fda91c2b281f7a8b72a693b0f94f37ef1fd4d61fb2160b991a2dc65525",
-      "purpose": "FreshremainingBfull/fence/producerphase; predicatedfailedlanes!=initialreadiness; no latencyclaim"
+      "purpose": "FreshremainingBfull/fence/producerphase; predicatedfailedlanes!=initialreadiness; no latencyclaim",
+      "terminal": "2026-10-27T01:10:47Z exit0",
+      "analysis": "proj_rsi/audits/dual-producer-pc-roi.md"
     },
     {
       "rank": 3,
       "id": "fence_batching",
       "owner": "proj_integration",
-      "status": "CPU_PRIMARY_ISA_FEASIBILITY_ONLY",
-      "next": "Per-registerfencerequirement/actualwaitmasks/lifetimeproofbeforeanyimplementation"
+      "status": "CPU_SIX_FAILURES_RETAINED_MECHANISM_PARKED",
+      "next": "Canonicalmathgroup8distinctmechanism; preserveC75/SASS/pinfailures"
     },
     {
       "rank": 4,
@@ -548,8 +594,12 @@
     }
   ],
   "best_failed_local": {
-    "id": "operand_reverse_dual_producer",
-    "F1_us": 34.4959981739521,
-    "reason": "ClearF1+pairedwinsoverPX/STMX; DScombinedF1winbutpairednegative10/21isnotnewbest"
+    "id": "operand_reverse_dual_stmatrix",
+    "status": "LOCAL_DEVELOPMENT_PARENT_PROGRESS_NO_INCUMBENT_PROMOTION",
+    "earlier_F1_us": 33.59999880194664,
+    "balanced_paired_gain_vs_DP_us": 1.16799958050251,
+    "balanced_wins": "48/64",
+    "balanced_median32_swapped_ratio_DP_over_DS": 1.0309834056095077,
+    "reason": "Original21samplemixedretained; newpredeclared64pairbalancedprotocolfavorsDSinbothorders. Noactualincumbentcomparisoninthisdiagnostic; officialunchanged."
   }
 }

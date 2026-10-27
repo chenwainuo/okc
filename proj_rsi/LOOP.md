@@ -1342,3 +1342,38 @@ manifest6785reviewedqueuedaftercontextdrains. ConditionalA6doesnotfit512/128reg
 uniformcap; fencebatchingandK128paired-stagesremainCPUfeasibilityonly. Official
 quotaresetverified20checks/10scored; noautomaticoldpw36repeat. Goal3000notmet,
 bestofficialstillrs32/fb548b5dc6f04696/3200.615us.
+
+### 01:10–02:10 UTC — diagnose compiler failure; repair measurement ambiguity
+
+DP profile completed01:10:47exit0,2nodes34passes.3395mainPCsamples:
+math1750/prod1556/common89; mathARRIVE833(47.6%),Bfull119(6.8%).
+ProducerBempty635(40.8%),publication212; backpressure+fenceexposuremotivates
+math-groupchange, notPCfraction→latencyclaim. AllactualJIT/numerics/bytes/
+counters/resetpass; sourceinstructionvsHWpasscountsnotexactreconciled.
+
+DS combined kernel valid01:15:42exit0 withall4way/fullK/actual20graphs/15XP
+poisons. F133.600vsDP34.432butpaired-.256us,10/21wins: preservebothestimators.
+InsteadofdiscardingDS, freezeDP/DSandmeasurepredeclared64balancedpairs/6steady
+blocks. Measurement386450terminal01:42:46exit0; 350rawrecords/320timed,
+32AB+32BAadjacentplan, samefreshfixtureperpair, allfinaltimedoutputschecked
+BEFOREmutations. Pairedmedian+1.168us48/64wins; median64rawratio1.03474406,
+median32swappedgeomean1.03098341; bothorderspositive+1.264/+1.120us.
+Bracketedeffects+.776/+1.192us. ThisnewlocaldiagnosticfavorsDSoverDP;
+originalmixedresultretained. Noincumbentcomparison/CI/officialscoreclaim.
+Archived4files+hashmanifestunderdiagnostics/dual-stmatrix-measure01;
+guard/containerabsent,GPU0MiBconfirmed02:02UTC.
+
+Fence_pairv1-v6failuresretained62files/manifest7d821aca. Per-registerlegal
+fencesharingfailedcompilerliveness: C75insertedper-MMAARRIVE/wait0, physical
+AregistersreusedafterMMAchunkbeforeasyncretirement. Empty/MOV/identitypinsDCE.
+ActualallAvolatilesharedscratchpinpreservedbut126regswith48Bstack/48Bspill
+stores/144Bspillloads; still48HGMMA/48ARRIVE. NO GPUadmission. Thismechanism
+parkedpendingnewlivenessmechanism; familycontinueswithcanonicalmathgroup8.
+
+Group8pairsexistingK64mathstagesunderone8MMA/fence/commit/wait; producer/W6/
+B8/512threads/103600SMEM unchanged. NativeA2x32retiredaftercoveringwait;
+lookahead192K→128Kconfoundexplicit. Firstexact-flagsCPUcompile122regs/0stack/
+spill/noC75/16staticHGMMA2ARRIVEPASS. PhysicalA2x32/fence/DAG/sourceproof+lab+
+independentfreezeadmissionstillpending; noGPUlaunchyet. LargerphysicalK128
+producerpairing206000SMEMremainsseparateCPUplan. Goal3000notmet; incumbent
+3200.615usunchanged. Failuresguideiterationsratherthanautomaticfamilyrejection.
