@@ -1,0 +1,246 @@
+{
+  "recommended_state": "DONE",
+  "recommended_disposition": "VALID_NO_GAIN",
+  "scope": "One fixed unpoolerM32N8192K4096KS2 fullST6FL35 vs compactHALFST6FL262195. Actual selected incumbent type, not a fresh selector/official score.",
+  "result_path": "results/proj-rsi/scheduler/artifacts/research.rq.compact256.half.fixed.01/collection-1793140029951563179/logs/scheduler/rq-compact256-half-fixed-01/run/result.json",
+  "result_sha256": "7b317dbd386a5d0d0444bdb9a95a1ebaaa67ffdbd25ecee44caa92476b9a28e4",
+  "analysis_sha256": "84b0d4dd9374428159f479cdd83cbccffa88d8e11fc95a0fc1796fbe5e697e3f",
+  "source_sha256": "bf5ab6527674f74e2683aef5563ad3bb2ead2e5a513ed8097ea7aaaa38a6e1cc",
+  "build": {
+    "CUDA_sha256": "bccec574fd3be71faa26240f402753f71e0976461be59a6b14b2d5707a47acab",
+    "SO_sha256": "2609ed077b9562d76a804da5f6b7b3998078e65c125c7b3f06a22fa2689a3472",
+    "native_types": {
+      "control": [
+        32,
+        6,
+        1,
+        0,
+        0,
+        0,
+        35
+      ],
+      "oldhalf": [
+        32,
+        6,
+        1,
+        0,
+        0,
+        0,
+        51
+      ],
+      "compact": [
+        32,
+        6,
+        1,
+        0,
+        0,
+        0,
+        262195
+      ]
+    },
+    "private_namespaces": [
+      "rq_control",
+      "rq_oldhalf",
+      "rq_compact"
+    ],
+    "source_binding": "exact frozen source bodies; fixedexactsource; three functions only"
+  },
+  "signed_effects": {
+    "paired_median_control_minus_compact_us": -0.01600012183189392,
+    "paired_control_over_compact_ratio": 0.9992732502802513,
+    "compact_wins_losses_ties": [
+      5,
+      6,
+      1
+    ],
+    "F1_control_before_minus_compact_us": 0.0959988683462143,
+    "F1_control_after_minus_compact_us": -0.22399984300136566,
+    "F1_endpoint_average_saving_us": -0.06400048732757568,
+    "signed_pair_savings_us": [
+      -0.4159994423389435,
+      -0.512000173330307,
+      0.28800033032894135,
+      -0.03200024366378784,
+      0.0,
+      1.0560005903244019,
+      -0.47999992966651917,
+      0.09600073099136353,
+      0.35200081765651703,
+      -0.5440004169940948,
+      -0.12800097465515137,
+      0.7040016353130341
+    ]
+  },
+  "resource_finding": {
+    "attributes": {
+      "control": {
+        "registers": 168,
+        "local": 0,
+        "static": 0,
+        "max_dynamic": 99488,
+        "max_threads": 384,
+        "occupancy": 1,
+        "launch_threads": 384,
+        "launch_shared": 99488
+      },
+      "oldhalf": {
+        "registers": 168,
+        "local": 0,
+        "static": 0,
+        "max_dynamic": 62624,
+        "max_threads": 384,
+        "occupancy": 1,
+        "launch_threads": 384,
+        "launch_shared": 62624
+      },
+      "compact": {
+        "registers": 128,
+        "local": 0,
+        "static": 0,
+        "max_dynamic": 62624,
+        "max_threads": 256,
+        "occupancy": 2,
+        "launch_threads": 256,
+        "launch_shared": 62624
+      }
+    },
+    "eligibility": {
+      "control": {
+        "state": "ELIGIBLE_RUNTIME_CAPACITY",
+        "required_resident_CTAs": 128,
+        "runtime_resident_capacity": 132,
+        "grid": [
+          64,
+          2,
+          1
+        ],
+        "attributes": {
+          "registers": 168,
+          "local": 0,
+          "static": 0,
+          "max_dynamic": 99488,
+          "max_threads": 384,
+          "occupancy": 1,
+          "launch_threads": 384,
+          "launch_shared": 99488
+        },
+        "performance_if_skipped": null,
+        "skip_cause": null
+      },
+      "oldhalf": {
+        "state": "SKIPPED_PROTOCOL_CAPACITY_PRECONDITION",
+        "required_resident_CTAs": 256,
+        "runtime_resident_capacity": 132,
+        "grid": [
+          128,
+          2,
+          1
+        ],
+        "attributes": {
+          "registers": 168,
+          "local": 0,
+          "static": 0,
+          "max_dynamic": 62624,
+          "max_threads": 384,
+          "occupancy": 1,
+          "launch_threads": 384,
+          "launch_shared": 62624
+        },
+        "performance_if_skipped": null,
+        "skip_cause": "PROVEN actualoccupancy capacity below requiredfullgrid; no launch"
+      },
+      "compact": {
+        "state": "ELIGIBLE_RUNTIME_CAPACITY",
+        "required_resident_CTAs": 256,
+        "runtime_resident_capacity": 264,
+        "grid": [
+          128,
+          2,
+          1
+        ],
+        "attributes": {
+          "registers": 128,
+          "local": 0,
+          "static": 0,
+          "max_dynamic": 62624,
+          "max_threads": 256,
+          "occupancy": 2,
+          "launch_threads": 256,
+          "launch_shared": 62624
+        },
+        "performance_if_skipped": null,
+        "skip_cause": null
+      }
+    },
+    "PROVEN": "Actualloadedcompactquery128regs/local0/256threads/62624shared gives2CTAoccupancy; full168regs/384threads query1. Nativeactualcompact exactlyoffline2232PC/instructions; inc216/dec40/noLDLSTL.",
+    "not_proven": "No simultaneous activeCTA trace or rolecriticalpath measurement; capacity is queried availability, not latency gain."
+  },
+  "old_HALF": "SKIPPED: actualquery1CTA\u00d7132SM=132capacity<256required, no eager/capture/timing launch. Numerical/performance unavailable, never zero-imputed. HistoricalHALFloss remains separate.",
+  "validity": {
+    "source_job_and_CUDA_SO_pins": "PASS",
+    "journal_exact_result_match": true,
+    "journal_rows": 51,
+    "timed_rows": 45,
+    "fixedF1_seed": 91100,
+    "samefixture_matched_pairs": 12,
+    "order": [
+      6,
+      6
+    ],
+    "validation_records": 8,
+    "own_terminal_records": 5,
+    "postterminal_mutation_records": 6,
+    "currentX_FP64_zero_boundary_counter_guards_sink": "PASS perconsumeddriver",
+    "graph_cleanup": "DRAINED_RESET",
+    "external_cleanup": {
+      "cleanup_failed": false,
+      "compute_pids": [],
+      "container_exists": false,
+      "containers": [],
+      "gpu_memory_mib": 0,
+      "guard_pids": [],
+      "host_log_exists": true,
+      "host_log_tail": "2026-10-27T22:25:58Z\ntorch_and_exact_three_function_compile\n[1/3] c++ -MMD -MF main.o.d -DTORCH_EXTENSION_NAME=rq_compact_half_bccec574fd3be71faa -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -fPIC -std=c++17 -c /root/.cache/torch_extensions/rq_compact_half_bccec574fd3be71faa/main.cpp -o main.o \n[2/3] /usr/local/cuda/bin/nvcc --generate-dependencies-with-compile --dependency-output cuda.cuda.o.d -DTORCH_EXTENSION_NAME=rq_compact_half_bccec574fd3be71faa -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\\\"_gcc\\\" -DPYBIND11_STDLIB=\\\"_libstdcpp\\\" -DPYBIND11_BUILD_ABI=\\\"_cxxabi1018\\\" -isystem /opt/conda/lib/python3.11/site-packages/torch/include -isystem /opt/conda/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/cuda/include -isystem /opt/conda/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_90a,code=sm_90a --compiler-options '-fPIC' -gencode=arch=compute_90a,code=sm_90a -O3 -DNDEBUG --expt-relaxed-constexpr -std=c++17 -c /root/.cache/torch_extensions/rq_compact_half_bccec574fd3be71faa/cuda.cu -o cuda.cuda.o \n[3/3] c++ main.o cuda.cuda.o -shared -L/opt/conda/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/cuda/lib64 -lcudart -o rq_compact_half_bccec574fd3be71faa.so\ntask_weights_and_original_codec\npack_and_validate_unpooler\ncapture_and_measure_unpooler\ncomplete\nTRIAL_EXIT okc-proj-rq-compact256-half-fixed-01 0\n2026-10-27T22:26:51Z\n",
+      "terminal_exit": 0
+    }
+  },
+  "cause_status": {
+    "setup_correctness": {
+      "status": "PROVEN",
+      "finding": "Valid outputs/currentinput/lifetimeprotocol; no numerical/setup failure observed."
+    },
+    "actual_selection": {
+      "status": "PROVEN",
+      "finding": "Full andcompact exactfunctions timed; oldHALF neverlaunched dueactualcapacity gate. No selectorconfound insidecontrast."
+    },
+    "implementation": {
+      "status": "UNKNOWN",
+      "finding": "CPU/actualnative mapping and no-spill128register point achieved; this does not rule out changedcriticalpath/scheduling costs."
+    },
+    "measurement": {
+      "status": "PROVEN",
+      "finding": "12samefixturepairs6/6order; fixedF1bracket. F1 endpoints differ in sign (+.095999/\u2212.224000us), so time/context drift preserved."
+    },
+    "resource_to_performance_transfer": {
+      "status": "UNKNOWN",
+      "finding": "Resourcehypothesis2CTA availability confirmed, but no observed same-run speedup. DoubledX TMA16\u219232MiB, doubledproducerWG and unchanged2mathWGaggregate capacity are PROVEN structuralcosts; their latencycontribution vs drift/independence benefit is UNKNOWN."
+    }
+  },
+  "next_smallest_falsifier": "Retain this physicalresourcepoint; park configuration for ROI rather than re-rununchangedfull30. If newevidence makes it priority, one bounded exactSO fixedfixture scheduling/stall diagnostic or additional matchedcontrast separates repeatable structuralcost from F1drift; do not claim occupancy fixes latency. A subsequent source would need evidence that independentprogress benefit can exceed extraX/producerwork, or remove duplicatedX; not authorized as broadrewrite here.",
+  "reopening": "Direct evidence currentselectedfullST6 stalls from CTA-local dependency/handshake that compact independentprogress can hide, or a concrete source design eliminating duplicatedX/producercost without losing the valid2CTA point. One losingversion does not rejectHALF/RQfamily.",
+  "cost": {
+    "compile_load_seconds": 42.865757733990904,
+    "run_elapsed_seconds": 46.15926684299484
+  },
+  "GPU_API_SSH_queue_git_actions_by_author": 0,
+  "evidence": {
+    "results/proj-rsi/scheduler/artifacts/research.rq.compact256.half.fixed.01/collection-1793140029951563179/logs/scheduler/rq-compact256-half-fixed-01/run/result.json": "7b317dbd386a5d0d0444bdb9a95a1ebaaa67ffdbd25ecee44caa92476b9a28e4",
+    "results/proj-rsi/scheduler/artifacts/research.rq.compact256.half.fixed.01/collection-1793140029951563179/logs/scheduler/rq-compact256-half-fixed-01/run/actual.cu": "bccec574fd3be71faa26240f402753f71e0976461be59a6b14b2d5707a47acab",
+    "results/proj-rsi/scheduler/artifacts/research.rq.compact256.half.fixed.01/collection-1793140029951563179/logs/scheduler/rq-compact256-half-fixed-01/run/actual.so": "2609ed077b9562d76a804da5f6b7b3998078e65c125c7b3f06a22fa2689a3472",
+    "results/proj-rsi/scheduler/artifacts/research.rq.compact256.half.fixed.01/collection-1793140029951563179/logs/scheduler/rq-compact256-half-fixed-01/run/raw.jsonl": "131630bb1695a5e8fd054bc92b2d05c2acee96cd32588c85a795a26c99c0eb03",
+    "results/proj-rsi/scheduler/artifacts/research.rq.compact256.half.fixed.01/collection-1793140029951563179/inventory.json": "6e29b406602366faa8a637f076d3ab04462fed392ef442d6884c8a6ffbb2e948",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/actual-analysis/analysis.json": "84b0d4dd9374428159f479cdd83cbccffa88d8e11fc95a0fc1796fbe5e697e3f",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/actual-analysis/native-supplement-v1.json": "f27e035f1ffd9fb620ac85cbc6d800a31cbf9a203f42ee8411922af50b247eff"
+  },
+  "contract": "proj_rsi/ITERATION.md; profile->measure->hypothesis->optimize/test->validate->stack/submit->learn->reprioritize->repeat"
+}

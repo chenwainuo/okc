@@ -1,0 +1,56 @@
+{
+  "disposition": "VALID_REGRESSION",
+  "author_recommendation": "VALID_NO_GAIN",
+  "author_evidence": "proj_rsi/candidates/rq_compact256_half_trial_v1/actual-analysis/done-evidence.json",
+  "author_evidence_sha256": "f17a83146a02b58a0dc1560fa28b7e477b3d6533eab694cca3a06bf584c788a6",
+  "reason": "Paired -0.0160001218us and F1 endpoint-average -0.0640004873us are negative descriptive points; preserve positive first endpoint and uncertainty. No magnitude/significance cutoff. No family rejection.",
+  "signed_effects": {
+    "paired_median_control_minus_compact_us": -0.01600012183189392,
+    "paired_control_over_compact_ratio": 0.9992732502802513,
+    "compact_wins_losses_ties": [
+      5,
+      6,
+      1
+    ],
+    "F1_control_before_minus_compact_us": 0.0959988683462143,
+    "F1_control_after_minus_compact_us": -0.22399984300136566,
+    "F1_endpoint_average_saving_us": -0.06400048732757568,
+    "signed_pair_savings_us": [
+      -0.4159994423389435,
+      -0.512000173330307,
+      0.28800033032894135,
+      -0.03200024366378784,
+      0.0,
+      1.0560005903244019,
+      -0.47999992966651917,
+      0.09600073099136353,
+      0.35200081765651703,
+      -0.5440004169940948,
+      -0.12800097465515137,
+      0.7040016353130341
+    ]
+  },
+  "cause_status": {
+    "setup_correctness": {
+      "status": "PROVEN",
+      "finding": "Valid outputs/currentinput/lifetimeprotocol; no numerical/setup failure observed."
+    },
+    "actual_selection": {
+      "status": "PROVEN",
+      "finding": "Full andcompact exactfunctions timed; oldHALF neverlaunched dueactualcapacity gate. No selectorconfound insidecontrast."
+    },
+    "implementation": {
+      "status": "UNKNOWN",
+      "finding": "CPU/actualnative mapping and no-spill128register point achieved; this does not rule out changedcriticalpath/scheduling costs."
+    },
+    "measurement": {
+      "status": "PROVEN",
+      "finding": "12samefixturepairs6/6order; fixedF1bracket. F1 endpoints differ in sign (+.095999/\u2212.224000us), so time/context drift preserved."
+    },
+    "resource_to_performance_transfer": {
+      "status": "UNKNOWN",
+      "finding": "Resourcehypothesis2CTA availability confirmed, but no observed same-run speedup. DoubledX TMA16\u219232MiB, doubledproducerWG and unchanged2mathWGaggregate capacity are PROVEN structuralcosts; their latencycontribution vs drift/independence benefit is UNKNOWN."
+    }
+  },
+  "reopening": "Direct evidence currentselectedfullST6 stalls from CTA-local dependency/handshake that compact independentprogress can hide, or a concrete source design eliminating duplicatedX/producercost without losing the valid2CTA point. One losingversion does not rejectHALF/RQfamily."
+}

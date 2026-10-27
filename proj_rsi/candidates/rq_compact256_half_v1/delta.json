@@ -1,0 +1,30 @@
+[
+  [
+    "__global__ void __launch_bounds__(384, 1) rq(",
+    "__global__ void __launch_bounds__((FL & 262144) ? 256 : 384, (FL & 262144) ? 2 : 1) rq("
+  ],
+  [
+    "  constexpr bool HALF = (FL & 16) != 0;",
+    "  constexpr bool COMPACT = (FL & 262144) != 0;\n  static_assert(!COMPACT || (NT == 32 && ST == 6 && GS == 1 && PRB == 0 && WM == 0 && INS == 0 && FL == 262195), \"compact HALF approved unpooler32 type only\");\n  constexpr bool HALF = (FL & 16) != 0;"
+  ],
+  [
+    "  const int tid = threadIdx.x, warp = tid >> 5, lane = tid & 31;",
+    "  // Map physical producer WG1 to the original logical WG2; logical WG1 is absent.\n  const int tid = threadIdx.x + ((COMPACT && threadIdx.x >= 128) ? 128 : 0), warp = tid >> 5, lane = tid & 31;"
+  ],
+  [
+    "  asm volatile(\"setmaxnreg.inc.sync.aligned.u32 232;\\n\");",
+    "  if constexpr (COMPACT) asm volatile(\"setmaxnreg.inc.sync.aligned.u32 216;\\n\");\n  else asm volatile(\"setmaxnreg.inc.sync.aligned.u32 232;\\n\");"
+  ],
+  [
+    "  if (p.m < 1 || p.m > NT || KS < 1 || p.KC / KS < GS || KS > 64) return -4;",
+    "  if (p.m < 1 || p.m > NT || KS < 1 || p.KC / KS < GS || KS > 64) return -4;\n  if constexpr (FL & 262144) {\n    if (p.m != 32 || p.N != 8192 || p.K != 4096 || p.KC != 64 || KS != 2 || p.walias != 0) return -47;\n  }"
+  ],
+  [
+    "KS), dim3(384), C::SMEM, at::cuda::getCurrentCUDAStream()",
+    "KS), dim3((FL & 262144) ? 256 : 384), C::SMEM, at::cuda::getCurrentCUDAStream()"
+  ],
+  [
+    "    (\"s4s5hzEH\", 128, 5, 1, 0, 0, 0, 65539),\n]",
+    "    (\"s4s5hzEH\", 128, 5, 1, 0, 0, 0, 65539),\n    (\"t32s6hze_half_compact256\", 32, 6, 1, 0, 0, 0, 262195),\n]"
+  ]
+]

@@ -1,0 +1,168 @@
+{
+  "state": "ACTUAL_VALID",
+  "result_path": "results/proj-rsi/scheduler/artifacts/research.rq.compact256.half.fixed.01/collection-1793140029951563179/logs/scheduler/rq-compact256-half-fixed-01/run/result.json",
+  "result_sha256": "7b317dbd386a5d0d0444bdb9a95a1ebaaa67ffdbd25ecee44caa92476b9a28e4",
+  "observed_state": "VALID_ONE_UNPOOLER_COMPACT256_HALF_CAPACITY_SCREEN_ROOT_REVIEW",
+  "attributes": {
+    "control": {
+      "registers": 168,
+      "local": 0,
+      "static": 0,
+      "max_dynamic": 99488,
+      "max_threads": 384,
+      "occupancy": 1,
+      "launch_threads": 384,
+      "launch_shared": 99488
+    },
+    "oldhalf": {
+      "registers": 168,
+      "local": 0,
+      "static": 0,
+      "max_dynamic": 62624,
+      "max_threads": 384,
+      "occupancy": 1,
+      "launch_threads": 384,
+      "launch_shared": 62624
+    },
+    "compact": {
+      "registers": 128,
+      "local": 0,
+      "static": 0,
+      "max_dynamic": 62624,
+      "max_threads": 256,
+      "occupancy": 2,
+      "launch_threads": 256,
+      "launch_shared": 62624
+    }
+  },
+  "arm_eligibility": {
+    "control": {
+      "state": "ELIGIBLE_RUNTIME_CAPACITY",
+      "required_resident_CTAs": 128,
+      "runtime_resident_capacity": 132,
+      "grid": [
+        64,
+        2,
+        1
+      ],
+      "attributes": {
+        "registers": 168,
+        "local": 0,
+        "static": 0,
+        "max_dynamic": 99488,
+        "max_threads": 384,
+        "occupancy": 1,
+        "launch_threads": 384,
+        "launch_shared": 99488
+      },
+      "performance_if_skipped": null,
+      "skip_cause": null
+    },
+    "oldhalf": {
+      "state": "SKIPPED_PROTOCOL_CAPACITY_PRECONDITION",
+      "required_resident_CTAs": 256,
+      "runtime_resident_capacity": 132,
+      "grid": [
+        128,
+        2,
+        1
+      ],
+      "attributes": {
+        "registers": 168,
+        "local": 0,
+        "static": 0,
+        "max_dynamic": 62624,
+        "max_threads": 384,
+        "occupancy": 1,
+        "launch_threads": 384,
+        "launch_shared": 62624
+      },
+      "performance_if_skipped": null,
+      "skip_cause": "PROVEN actualoccupancy capacity below requiredfullgrid; no launch"
+    },
+    "compact": {
+      "state": "ELIGIBLE_RUNTIME_CAPACITY",
+      "required_resident_CTAs": 256,
+      "runtime_resident_capacity": 264,
+      "grid": [
+        128,
+        2,
+        1
+      ],
+      "attributes": {
+        "registers": 128,
+        "local": 0,
+        "static": 0,
+        "max_dynamic": 62624,
+        "max_threads": 256,
+        "occupancy": 2,
+        "launch_threads": 256,
+        "launch_shared": 62624
+      },
+      "performance_if_skipped": null,
+      "skip_cause": null
+    }
+  },
+  "cost": {
+    "compile_load_seconds": 42.865757733990904,
+    "run_elapsed_seconds": 46.15926684299484
+  },
+  "error": null,
+  "performance": {
+    "contrasts": {
+      "control_minus_compact": {
+        "signed_pair_savings_us": [
+          -0.4159994423389435,
+          -0.512000173330307,
+          0.28800033032894135,
+          -0.03200024366378784,
+          0.0,
+          1.0560005903244019,
+          -0.47999992966651917,
+          0.09600073099136353,
+          0.35200081765651703,
+          -0.5440004169940948,
+          -0.12800097465515137,
+          0.7040016353130341
+        ],
+        "median_saving_us": -0.01600012183189392,
+        "right_wins_losses_ties": [
+          5,
+          6,
+          1
+        ],
+        "lead_follow": [
+          6,
+          6
+        ],
+        "F1_saving_us": -0.06400048732757568
+      }
+    },
+    "F1_blocks": [
+      {
+        "block": 0,
+        "arm": "control",
+        "median_us": 22.39999920129776
+      },
+      {
+        "block": 1,
+        "arm": "compact",
+        "median_us": 22.304000332951546
+      },
+      {
+        "block": 2,
+        "arm": "control",
+        "median_us": 22.08000048995018
+      }
+    ],
+    "own_terminal_records": 5,
+    "validation_records": 8,
+    "mutation_records": 6,
+    "timed_calls": 45,
+    "measured_arms": [
+      "control",
+      "compact"
+    ],
+    "limits": "Capacity is CUDA occupancy query evidence; no twofold mathWG/speed claim or causal individual-stall attribution. Original HALF skips have unavailable performance."
+  }
+}

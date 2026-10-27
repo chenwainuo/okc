@@ -1,0 +1,527 @@
+{
+  "state": "IMMUTABLE_CPU_DESIGN_BRIEF_NOT_GPU_READY",
+  "scope": "ONLY muse_bf16_proj sub3000us. No serving/MoE, no RQregister/occupancy duplication.",
+  "incumbent": {
+    "job": "9916d34357b745cf",
+    "source_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "score_us": 3157.0384036526784,
+    "gap_us": 157.03840365267843
+  },
+  "latest71a": {
+    "job": "71a76a2c3fcd431f",
+    "summary": {
+      "error": null,
+      "passed": true,
+      "score_us": 3182.3487733684065,
+      "speedup": 1.5179982912076495,
+      "speedup_ci": [
+        1.4952283168395348,
+        1.5407682655757642
+      ],
+      "status": "ok",
+      "tests": 9,
+      "tests_passed": 9
+    },
+    "source": "f018932999fbaed6600b330f3002749a2e423038fd925e27036ac3c1e6183d1e",
+    "selected_GV_targets": [
+      {
+        "layer": "pooler",
+        "m": 1,
+        "report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 1, 2, 1, 8, 16, 1, 1, 0, 1>(G)                 14.2 \u00b5s 100.0%      1\ntotal                                                             14.2 \u00b5s"
+      },
+      {
+        "layer": "pooler",
+        "m": 8,
+        "report": "kernel                                                           GPU time  share  calls\nvoid gv_keyed<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                   13.7 \u00b5s 100.0%      1\ntotal                                                             13.7 \u00b5s"
+      },
+      {
+        "layer": "pooler",
+        "m": 16,
+        "report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                 14.4 \u00b5s 100.0%      1\ntotal                                                             14.4 \u00b5s"
+      },
+      {
+        "layer": "unpooler",
+        "m": 16,
+        "report": "kernel                                                           GPU time  share  calls\nvoid gv_predxor<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                 14.3 \u00b5s 100.0%      1\ntotal                                                             14.3 \u00b5s"
+      }
+    ],
+    "warning": "M1pooler selects another existinggeometry anddoesnotuse the old keyedtarget; M8does. No historicalwinner forced."
+  },
+  "conditional_score_scenarios": {
+    "four_predxor": {
+      "selected_cases": 4,
+      "score_elasticity": 0.22261688649123687,
+      "routes": [
+        {
+          "load": "decode 1",
+          "layer": "pooler",
+          "m": 1,
+          "tuple": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            0,
+            3
+          ]
+        },
+        {
+          "load": "verify 1",
+          "layer": "pooler",
+          "m": 8,
+          "tuple": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            0,
+            3
+          ]
+        },
+        {
+          "load": "decode 16",
+          "layer": "unpooler",
+          "m": 16,
+          "tuple": [
+            1,
+            2,
+            2,
+            1,
+            4,
+            16,
+            1,
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "load": "decode 16",
+          "layer": "pooler",
+          "m": 16,
+          "tuple": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ]
+        }
+      ],
+      "cuts": [
+        {
+          "conditional_case_latency_reduction_fraction": 0.1,
+          "score_us": 3085.878188381492,
+          "gain_us": 71.16021527118664
+        },
+        {
+          "conditional_case_latency_reduction_fraction": 0.2,
+          "score_us": 3012.8583948781543,
+          "gain_us": 144.18000877452414
+        },
+        {
+          "conditional_case_latency_reduction_fraction": 0.3,
+          "score_us": 2937.8085827621258,
+          "gain_us": 219.22982089055267
+        }
+      ],
+      "uniform_scope_cut_to_reach3000": 0.21733386384594744,
+      "forecast": "UNKNOWN; these are exact arithmetic conditions on9916with its reference vector fixed, not attainable/measured speedups."
+    },
+    "all_BF16_FMT1_GV": {
+      "selected_cases": 11,
+      "score_elasticity": 0.412031190238213,
+      "routes": [
+        {
+          "load": "decode 1",
+          "layer": "pooler",
+          "m": 1,
+          "tuple": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            0,
+            3
+          ]
+        },
+        {
+          "load": "verify 1",
+          "layer": "pooler",
+          "m": 8,
+          "tuple": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            0,
+            3
+          ]
+        },
+        {
+          "load": "decode 16",
+          "layer": "unpooler",
+          "m": 16,
+          "tuple": [
+            1,
+            2,
+            2,
+            1,
+            4,
+            16,
+            1,
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "load": "decode 16",
+          "layer": "pooler",
+          "m": 16,
+          "tuple": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ]
+        },
+        {
+          "load": "decode 1",
+          "layer": "qkv_gate",
+          "m": 1,
+          "tuple": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "load": "verify 1",
+          "layer": "qkv_gate",
+          "m": 8,
+          "tuple": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "load": "decode 1",
+          "layer": "o",
+          "m": 1,
+          "tuple": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ]
+        },
+        {
+          "load": "verify 1",
+          "layer": "o",
+          "m": 8,
+          "tuple": [
+            1,
+            1,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ]
+        },
+        {
+          "load": "verify 1",
+          "layer": "unpooler",
+          "m": 8,
+          "tuple": [
+            1,
+            1,
+            4,
+            1,
+            4,
+            4,
+            4,
+            1,
+            0,
+            536870913
+          ]
+        },
+        {
+          "load": "decode 1",
+          "layer": "unpooler",
+          "m": 1,
+          "tuple": [
+            1,
+            1,
+            4,
+            1,
+            4,
+            4,
+            4,
+            1,
+            0,
+            536870913
+          ]
+        },
+        {
+          "load": "decode 16",
+          "layer": "o",
+          "m": 16,
+          "tuple": [
+            1,
+            2,
+            2,
+            1,
+            8,
+            2,
+            1,
+            1,
+            0,
+            1
+          ]
+        }
+      ],
+      "cuts": [
+        {
+          "conditional_case_latency_reduction_fraction": 0.1,
+          "score_us": 3024.086996692789,
+          "gain_us": 132.95140695988948
+        },
+        {
+          "conditional_case_latency_reduction_fraction": 0.2,
+          "score_us": 2884.8281005640783,
+          "gain_us": 272.2103030886001
+        },
+        {
+          "conditional_case_latency_reduction_fraction": 0.3,
+          "score_us": 2738.2389261370895,
+          "gain_us": 418.79947751558893
+        }
+      ],
+      "uniform_scope_cut_to_reach3000": 0.11764419032520552,
+      "forecast": "UNKNOWN; these are exact arithmetic conditions on9916with its reference vector fixed, not attainable/measured speedups."
+    },
+    "pooler_M1_M8": {
+      "selected_cases": 2,
+      "score_elasticity": 0.12576225359845666,
+      "routes": [
+        {
+          "load": "decode 1",
+          "layer": "pooler",
+          "m": 1,
+          "tuple": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            0,
+            3
+          ]
+        },
+        {
+          "load": "verify 1",
+          "layer": "pooler",
+          "m": 8,
+          "tuple": [
+            1,
+            1,
+            1,
+            2,
+            16,
+            8,
+            1,
+            1,
+            0,
+            3
+          ]
+        }
+      ],
+      "cuts": [
+        {
+          "conditional_case_latency_reduction_fraction": 0.1,
+          "score_us": 3116.8241103403484,
+          "gain_us": 40.21429331233003
+        },
+        {
+          "conditional_case_latency_reduction_fraction": 0.2,
+          "score_us": 3075.5430750606,
+          "gain_us": 81.4953285920783
+        },
+        {
+          "conditional_case_latency_reduction_fraction": 0.3,
+          "score_us": 3033.1215090596756,
+          "gain_us": 123.91689459300278
+        }
+      ],
+      "uniform_scope_cut_to_reach3000": 0.3761547083530631,
+      "forecast": "UNKNOWN; these are exact arithmetic conditions on9916with its reference vector fixed, not attainable/measured speedups."
+    }
+  },
+  "scenario_limits": "Fixed9916reference and allnontargettimes; cutsapplytoentireselectedcase latency. Not measuredremovabledecode/repairfractions, not forecasts, not additivebetween designs.",
+  "actual_weight_stats": {
+    "pooler": {
+      "C12": {
+        "repair_count": 4559,
+        "fraction": 0.00013586878776550293,
+        "clean_unit_fraction": 0.869659423828125
+      },
+      "C11": {
+        "repair_count": 454059,
+        "fraction": 0.013532012701034546,
+        "clean_unit_fraction": 0.0
+      }
+    },
+    "unpooler": {
+      "C12": {
+        "repair_count": 3299,
+        "fraction": 9.831786155700684e-05,
+        "clean_unit_fraction": 0.90435791015625
+      },
+      "C11": {
+        "repair_count": 835544,
+        "fraction": 0.024901151657104492,
+        "clean_unit_fraction": 0.0
+      }
+    }
+  },
+  "ranked_opportunities": [
+    {
+      "rank": 1,
+      "design": "C12 four-register decode\u2192repair\u2192MMA streaming; remove full-fragment staging",
+      "mechanism": "Keep C12 payload and actual HMMA math. Replace decode16A\u2192serial16-wayrepair\u2192allHMMA with four ordered4A phases, issuing each phase MMA before the next fullfragment is materialized. Prepare partitions escape records by (Kunit,register-quarter), so repairs select among4 registers rather than16 and no phase rescans anotherphase list. This is a dataflow/packet change, not another predicate-only helper.",
+      "concrete_packet_brief": {
+        "scope": "Initial exactM8 pooler FMT1/MT1/WR2/WK16/KU8/RT1/S1; broaderRT1/KU<=16 only after actualpositive evidence.",
+        "header_bytes_per_original_warp_group": 128,
+        "layout": "4*KU byte counts followed by up to32uint16 repairrecords; KU8 needs32+64=96bytes (padto128), KU16 needs64+64=128. Keep original32-recordcapacity/fallback, no truncation.",
+        "record16_bits": "lane5 + registerWithinQuarter2 + originalhm1 + highHalf1 + XOR7 =16; unit/quarter implicit in counts. Preserve ignoredhm1 semantics for NA1.",
+        "arithmetic": "Same K order within each independent accumulator; interleave across MT accumulators only. Current MT2 already reuses decoded W: no fictitious per-token duplicate-decode claim."
+      },
+      "initial_scope": "pooler_M1_M8; first hardware falsifier M8 only",
+      "family_scope": "all_BF16_FMT1_GV",
+      "known_counterevidence": [
+        "239b changes16-way predicate encoding only; localM8+.224us paired/+.176F1 did not transferofficially. Missing exposure ruledout for its own ac49targets.",
+        "UnpoolerM16 deltakey713c reduced110\u2192108regs/staticinstructions but occupancy remained4 and primarypaired gain\u2212.080us whileF1+.096us. PoolerM16 prototype spilled; do not extend blindly.",
+        "C12 repair fractions are only.0136%/.00983% on retained actualpooler/unpoolerweights. Repair-only savings have no measured large time share. The larger opportunity must come from decode/MMA scheduling/live-fragment staging, not a claim that rare repairs dominate.",
+        "OldC11frontier already used4-register parallel/high-byte repair and lostcurrentC12; keepingC12payload and removing fullA staging is the new discriminating mechanism, not repeating that oldformat."
+      ],
+      "reopening_condition": "A concrete supported C12packet/consumer changes compiled dependency/liveness without changing math, current controls or original capacity/fallback; no guaranteed resource or speed improvement assumed.",
+      "smallest_new_falsifier": "One matched M8 fixed current501d geometry and same immutable W/X: baseline and new packet/streaming consumer, direct paired/F1 output-owning timings. Reuse existing task/basis/mutation/cleanup harness; no fullprepare/profile/full30 or oldcodec proof campaign. Preserve every sign.",
+      "implementation_readiness": "Concrete byte/consumer contract only; no new kernel or GPU-ready descriptor authored.",
+      "unknown_forecast": "UNKNOWN; directscorecredit0.",
+      "reuse": "Original C12pack/math/source/basis invariants whereunchanged; review only new packet indexing and consumer order."
+    },
+    {
+      "rank": 2,
+      "design": "Lower-entropy packets with bounded independent decode, not C11 bitwidth alone",
+      "mechanism": "Co-design the exponent/high-bit code and register-fragment packet so more than a trivial byte reduction survives metadata/alignment while decoding independent bounded chunks. Avoid a per-symbol variable-bit-position dependency or per-escape serializedreplay. Candidate directions include block-local small dictionaries with literal fallback or fixed-size parallel entropy chunks; no schema is selected yet.",
+      "initial_scope": "four_predxor",
+      "family_scope": "all_BF16_FMT1_GV",
+      "known_counterevidence": [
+        "Measured C11 byte savings only4.979%pooler/2.978%unpooler; repair counts4559\u2192454059 and3299\u2192835544, and C11has0cleanKunits in these exactweightstats.",
+        "Validpreloaded C11frontier still loses currentC12 by3.216uspooler/8.384usunpooler paired,0/24wins both, despite gainsversusits slower v2.",
+        "Existing sourceFMT4codecE already has multi-substreams and stepwise decode; simply renaming those features is not new. Its LOP3\u2192PRMT\u2192SHF variableposition dependency and sharedLUT/ring costs are explicitsourcecounterevidence."
+      ],
+      "reopening_condition": "A distinct physicalpacket/decoder addresses the costly reconstruction path as well asbytes; exacttotalpayload+repair+header+padding+duplicate-boundary bytes mustberecorded, with fallback forunsupporteddata. This is a falsifier, not a minimum-gain admissionbar.",
+      "smallest_new_falsifier": "Start with retainedactual high7histograms and packetaccounting to reject an unchangedC11repeat. Once one new exactformat is concrete, one M8 matchedC12/control actualweight screen records reconstruction, bytes/resources and signedruntime. No broadformat sweep or fullsourceproof repeat.",
+      "implementation_readiness": "Architecture hypothesis; no concrete encoder/decoder or runnablejob.",
+      "unknown_forecast": "UNKNOWN; directscorecredit0."
+    },
+    {
+      "rank": 3,
+      "design": "CTA-cooperative compressed operand transport, preserve current HMMA consumer",
+      "mechanism": "Repack/load a contiguouscohort C12payload+sideband stream into a bounded sharedpipeline serving multiplecurrentconsumerwarps, amortizing per-warp address/metadata/barrier work and overlapping nextchunk transport with currentdecode/math. Keep HMMA and one-passweightsemantics; do not turn this into an uncompressed genericWGMMA rewrite.",
+      "initial_scope": "pooler_M1_M8",
+      "family_scope": "all_BF16_FMT1_GV",
+      "known_counterevidence": [
+        "OldPW38 M1originalGV counter shows50.883MBreads,74.23%DRAM,20.6%issue/.31eligible; sourceaccounting matchesoneC12weight+escapestream. It is NOT currentpredxor or H200, and proves neither repair bottleneck nor repeatedfullweightreads.",
+        "Current sourcealready has per-warpprivate bulkcopyrings (GL::BK,Vbit3). The proposed changed mechanism must be cohortownership/sidebandtransport/overlap, not enabling an oldoption.",
+        "Native reverse-TMA/x4/stmatrix variants gainedagainstslowercontrols but lostactualincumbent byabout7us; rawWGMMA alone is not a freshpositive.",
+        "Adding sharedstaging or loaderroles can lower residency or add waits; current M1/M8 one-wavegeometry and32warps/CTA cannot be assumedportable."
+      ],
+      "reopening_condition": "A concrete cohortlayout removes specific duplicated per-warp control/transport work while accounting allbytes and synchronization, retaining source-exact scalar math. No assumedcut in the already single-pass HBMmatrixstream.",
+      "smallest_new_falsifier": "One M8 currentgeometry two-arm prototype: existing transport versus cohorttransport with identical C12decode/repair/math and matched W/X. Record actualbytes/resources/ownterminals and directtimings; profiler optional only after validdirectevidence. Do not auto-rerun oldnativevariants.",
+      "implementation_readiness": "Architecture hypothesis; no runnablejob or speedclaim.",
+      "unknown_forecast": "UNKNOWN; directscorecredit0."
+    }
+  ],
+  "ROI_credit": {
+    "measured_gain_us": 0,
+    "forecast_score_gain_us": null,
+    "GPU_ready_items": 0,
+    "concrete_implementation_briefs": 1
+  },
+  "evidence_sha256": {
+    "proj_rsi/audits/selected-hotpaths-gv9916/report.json": "e6196ca87583ce8e8ba117636ffc157ef154f15971252dfb94ebaee351976e20",
+    "proj_rsi/audits/selected-hotpaths-gv9916/submission-source.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/audits/gv53-keyed-half-official-diagnosis-v1/analysis.json": "98633eaf3b6b337b22bbde9a8ea570a88ccd56d2bb2c1662720dcfed5eab803a",
+    "proj_rsi/audits/gv53-keyed-half-official-diagnosis-v1/README.md": "dd68212d80b5eb0e6f4fee7958832461da0bcee6d13de1e52befeacbdc8cdefe",
+    "proj_rsi/audits/gv-unpool16-deltakey-result/analysis.json": "14814ad1618a1947d93a7cce2dce2af9a1e1a23e371bf94bbce25c8fa4c18234",
+    "proj_rsi/candidates/gv_codec_frontier_v1/preload-analysis/actual-report.json": "f318d8f725912074c028da48a7bf5f65581df09614c7d5b5e969b18e49aa700b",
+    "proj_rsi/candidates/gv_codec_frontier_v1/actual-stats-proof.json": "114092f48132bf8420778121086a34520252614ddfb6f09795453eeaf9cc0482",
+    "results/proj-rsi/scheduler/artifacts/research.gv.codec.frontier.stats.01/collection-1793133046966574542/logs/scheduler/gv-codec-frontier-stats-01/stats.json": "a4053fc5e0f4911ba18cb3c07d0392d985e30d4f19f36bc122420f0542931e2e",
+    "proj_rsi/audits/gv-optional-counter-v2-result/report.json": "c3a5b41bf3549359139fcc3a591b7e779699c8f3ac10d310978c7b1c54a9601f",
+    "proj_rsi/audits/native-stmatrix-01/analysis.json": "aa4ae78a23481d075caad58e5e7348a304f5603adf19fa78479227aee1ea214e",
+    "proj_rsi/audits/native-x4-01/analysis.json": "8b77cf36a4f046a79ca80c1546b388909a8ea560739a606a4b207a30603c886b",
+    "audits/projection-failure-diagnosis-20261027/LATEST.json": "85916e4dd151e4ff69739bfd38c87bd2cedf645d82907da842e645d79fcbbaca",
+    "results/proj-rsi/jobs/71a76a2c3fcd431f.json": "7f5e6420b0dbf7d4580703f60685c8419fd8d9ea8f07b72877e6a2f5857bf091"
+  },
+  "actions": "CPU read/evidence/newartifact only; no GPU/API/SSH/queue/git or broadproof; no frozenartifact edits.",
+  "loop": "profile->measure->hypothesis->optimize/reimplement->test->validate->stack->submit measuredgains->learn->reprioritize->repeat; idle<=10s",
+  "contract": "proj_rsi/ITERATION.md"
+}

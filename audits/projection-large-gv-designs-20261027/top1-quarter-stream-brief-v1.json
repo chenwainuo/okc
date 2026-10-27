@@ -1,0 +1,73 @@
+{
+  "state": "FROZEN_CPU_IMPLEMENTATION_BRIEF_NOT_GPU_READY",
+  "owner": "rq_lab_review implements; moe_result_repair owns design/evidence only",
+  "parent_path": "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py",
+  "parent_sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+  "target": {
+    "layer": "pooler",
+    "m": 8,
+    "N": 4096,
+    "K": 8192,
+    "GV_tuple": [
+      1,
+      1,
+      1,
+      2,
+      16,
+      8,
+      1,
+      1,
+      0,
+      3
+    ],
+    "FMT": 1,
+    "NA": 1,
+    "KU": 8,
+    "RT": 1,
+    "S": 1,
+    "first_scope": "Only this exact supported target. Preserve all other kernels/pickers/fallbacks. No tuple-selection edit."
+  },
+  "changed_mechanism": "Same C12payload; four phases each dec1\u2192repair4A\u2192HMMA instead of decode16A\u2192fullfragmentrepairloop\u2192allHMMA. FirstMMA no longer waits for unrelated quarterdecode/repair. Keep original K/u/q order per accumulator and originalMT weight reuse.",
+  "transport": {
+    "total_bytes_per_original_warp_group": 128,
+    "capacity_records": 32,
+    "word_layout": "Header[0:KU] are uint32. RecordWord[KU:KU+16] packs up to32uint16 records. Zero-pad remaining32-KU-16 words. One original-sized128Bcoalescedwarp load; no C11 descriptor-copy/sharedring.",
+    "unit_header": "For unit u, uint32 h=\u03a3(offset[q]<<(6*q)), q=0..4. Each offset is0..32 and denotes absolute record index for beginning/end of quarter bucket(u,q), within this warpgroup flat record array. All5offsets occupy30bits.",
+    "bucket_order": "Units u increasing, then registerquarterq=oldregister>>2 increasing. Preserve original relative order within a bucket, including duplicate repairs; no deduplication/truncation. Header offset4 of unit u equals offset0 of nextu.",
+    "record16": "bits0..6=oldXOR7;bit7=oldhighHalf(bit10);bit8=oldhm(bit9);bits9..10=oldregister&3;bits11..15=oldlane(bits15..19). Unit and registerquarter are implicit in bucket.",
+    "old_record_reference": "u=old>>20;lane=(old>>15)&31;r=(old>>11)&15;hm=(old>>9)&1;highHalf=(old>>10)&1;xor7=old&0x7f. Preserve original validity/sentinel/capacity rejection, and original hm1 ignored behavior for FMT1/NA1.",
+    "decode_record": "For currentq only: xr=(record&0x7f)<<(8+16*((record>>7)&1)); apply iff lane==(record>>11), hm==0; indexwithinA4=(record>>9)&3. Do not drop or reinterpret highHalf/hm.",
+    "sizes": "KU8:32Bheader+64Brecords+32Bpad. KU16:64Bheader+64Brecords. Generalization beyond RT1/KU<=16 is NOT in this prototype.",
+    "sentinel_and_overflow": "0records\u2192all offsets0;32records valid if originalvalidity allowed;33+ follows originalrejection/fallback, nevertruncate. Unusedrecords neverread."
+  },
+  "consumer": {
+    "C12payload_map": "Reuse unchanged dec1. q0 uses(q0.x,q0.y,q2.x);q1(q0.z,q0.w,q2.y);q2(q1.x,q1.y,q2.z);q3(q1.z,q1.w,q2.w), producing4Aeach.",
+    "MMA": "Use unchanged hmma and acc indexing; q0..3/u order identical for each independentaccumulator. Keep existingB fragments/weights/X/reduction/output semantics.",
+    "prefetch_tradeoff": "Do not overwrite WBslot before every currentquarter payload is captured/consumed. Snapshot/prefetch choices can change liveness/overlap; record actualgeneratedcode rather than assume fewer sourcearrayelements means fewerregisters.",
+    "explicit_not_claimed": "MT2 already reuses decoded W. This prototype does not eliminate repeatedwholematrixreads or alterFP32summation."
+  },
+  "smallest_CPU_falsifier": [
+    "Construct onlynewheader+record roundtrip tests against existing32-bitrecords: allfieldextremes, highHalf0/1, hm0/1, duplicateXORcomposition, emptyunit, boundaryunit/quarter/lane/register,0/32capacity and originaloverflowfallback. Existingdec1/nativecodec proof is reused unchanged.",
+    "Compile only parent and new supportedM8 target with the existing binding. Check firstMMA/decoder/repair dependency ordering and rawresources/SASS. If fullfragmentbarrier is not actuallyremoved or compiled streams identical, the proposedchangedmechanism has not been established.",
+    "Keep hardwareunrun until independentreview/rootadmission; existingonecellmatchedW/X/currentoutput/ownterminal/freshzero/cleanup harness is reusable. No all30/fullprepare/profile or fullcodec proof campaign."
+  ],
+  "counterevidence": [
+    "C12 actualrepair fractions pooler.0001358688/unpooler.0000983179; rare-repair instruction savings alone do not explain157us.",
+    "239b localM8+.224uspaired/+.176F1 but officialac49loses; exposure/source/localcodegen equivalence established, official realizedbinary unknown.",
+    "713c unpooler16 primarypaired\u2212.080us/F1+.096us;110\u2192108regs/occupancy4unchanged; pooler16 spillprototypeexcluded.",
+    "C11frontier step4/highbytepatch alreadylost currentC12 by3.216/8.384us. This design retainsC12bits/one128Bheader and changes producerconsumercontrol, not the C11representation."
+  ],
+  "score_value": {
+    "conditional_only": "20%wholecasecut across the4selected9916predxor cases gives144.1800088score-us;11FMT1caseuniformcut11.764419% wouldreach3000 withreference/nontargetfixed. FirstM8prototype alonecannotclaimthese familyvalues.",
+    "attainable_forecast": "UNKNOWN",
+    "booked_gain_us": 0
+  },
+  "evidence_sha256": {
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/audits/selected-hotpaths-gv9916/report.json": "e6196ca87583ce8e8ba117636ffc157ef154f15971252dfb94ebaee351976e20",
+    "proj_rsi/audits/gv53-keyed-half-official-diagnosis-v1/README.md": "dd68212d80b5eb0e6f4fee7958832461da0bcee6d13de1e52befeacbdc8cdefe",
+    "proj_rsi/audits/gv-unpool16-deltakey-result/report.md": "ef011df0a11a48098f29573c31b3c5f69ada43213bc19f378271a88acf8c20ed",
+    "proj_rsi/candidates/gv_codec_frontier_v1/preload-analysis/actual-report.json": "f318d8f725912074c028da48a7bf5f65581df09614c7d5b5e969b18e49aa700b"
+  },
+  "loop": "profile->measure->hypothesis->optimize/reimplement->test->validate->stack->submit measuredgains->learn->reprioritize->repeat;idle<=10s;proj_rsi/ITERATION.md"
+}

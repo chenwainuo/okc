@@ -1,0 +1,82 @@
+{
+  "state": "CPU_SOURCE_PINNED_FIXED_UNPOOLER_HARNESS_REVIEW_PENDING",
+  "files": {
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/candidates/rq_compact256_half_v1/submission.py": "bf5ab6527674f74e2683aef5563ad3bb2ead2e5a513ed8097ea7aaaa38a6e1cc",
+    "proj_rsi/candidates/rq_compact256_half_v1/manifest.json": "15367c821a12b0c880aca874f096edac9114274e1661dedabe8c4b83f7d474b5",
+    "proj_rsi/candidates/rq_compact256_half_v1/source-proof.json": "3576ca90974bc5f0743a03abe0d1ec315c6f2fa837bc102da85fe0019677f4de",
+    "proj_rsi/candidates/rq_compact256_half_v1/role-lifetime-proof.json": "5f5073e840faf2d1659b9de32c0509416c6baaf8b6c74aceb407b5f7d5c544cc",
+    "proj_rsi/candidates/rq_compact256_half_v1/compile-proof.json": "07964c1d3e7278e5a8fd195a6830b6ea573f6fb6597832aaddf88c6baf61afc3",
+    "proj_rsi/candidates/rq_compact256_half_v1/source-review.json": "afef961ca2ab0014479bc29b6cf2a7df2ec211d76e29aa2a5976bfc9b29cd249",
+    "proj_rsi/scheduling/reviews/rq-compact256-half-v1-source.md": "46750a3f50f9ee6fac34b78ce40051db20dded2592a50945a7660cf8b099e86f",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/build.py": "4b1fb53953d255ccf5a1d35ecb0a0879d6856c4f903ac03b6a07f5af10e290d8",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/driver.py": "400ae2022f63eafd8b3634f043f04a3006b4b470073734508fee2a732afc1d6c",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/binding.cu": "0053d7a37752841cb73fde7c26bf63bde2a55d2b1b1d33f58aba428c218c278f",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/trial.cu": "bccec574fd3be71faa26240f402753f71e0976461be59a6b14b2d5707a47acab",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/codec.py": "289d1855a673cafd1d7edfde028d40db00a93da825e6561b6b0d9d9fad9d8fd7"
+  },
+  "arms": {
+    "control": {
+      "type": [
+        32,
+        6,
+        1,
+        0,
+        0,
+        0,
+        35
+      ],
+      "threads": 384,
+      "shared": 99488,
+      "grid": [
+        64,
+        2,
+        1
+      ]
+    },
+    "oldhalf": {
+      "type": [
+        32,
+        6,
+        1,
+        0,
+        0,
+        0,
+        51
+      ],
+      "threads": 384,
+      "shared": 62624,
+      "grid": [
+        128,
+        2,
+        1
+      ]
+    },
+    "compact": {
+      "type": [
+        32,
+        6,
+        1,
+        0,
+        0,
+        0,
+        262195
+      ],
+      "threads": 256,
+      "shared": 62624,
+      "grid": [
+        128,
+        2,
+        1
+      ]
+    }
+  },
+  "capacity": "querycudaOccupancyMaxActiveBlocksPerMultiprocessor exactblock/shared; skipoldHALF ifgrid>SMs*occ; saveallattrsandeligibility beforeabort ifincumbent/newcapacity fails",
+  "bounds": {
+    "inner": 120,
+    "outer": 180
+  },
+  "no_new_offline_compile": true
+}

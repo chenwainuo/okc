@@ -1,0 +1,117 @@
+{
+  "id": "research.gv.unpool16.deltakey.robust.01",
+  "resource": "gpu",
+  "kind": "optimization",
+  "state": "BACKLOG",
+  "author": "hotloop_counters",
+  "created_at": 1793138823.265558,
+  "depends_on": [
+    {
+      "id": "research.gv.unpool16.deltakey.01",
+      "accepted_dispositions": [
+        "VALID_REGRESSION",
+        "VALID_GAIN",
+        "VALID_NO_GAIN"
+      ]
+    }
+  ],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 0.9
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "Discriminate weight/X/schedule dependence of mixed prior oneweight paired\u2212.08/F1+.096 with EXACT binary/control/math, noJIT/newselector."
+    },
+    "basis": "Three fresh weights plusmatchedXbank andbothblockedbrackets/ABBA isnewrobustnessquestion; no gainforecast orofficialdata.",
+    "confidence": "unknown",
+    "evidence": [
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/proof.json",
+      "proj_rsi/candidates/gv_unpool16_deltakey_v1/README.md",
+      "proj_rsi/audits/selected-hotpaths-gv9916/report.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 120,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 10
+  },
+  "files": {
+    "proj_rsi/candidates/gv_unpool16_deltakey_robust_v1/driver.py": "fa2512109c267af3e1c1c555fc10ab4ff17ef2929fbed5e534818d5107b12d70",
+    "proj_rsi/candidates/gv_unpool16_deltakey_robust_v1/driver-delta.json": "431b9ae0098708e148c67ead66efab986a369e12f75c88171873699134dc066e",
+    "proj_rsi/candidates/gv_unpool16_deltakey_robust_v1/README.md": "13b02a3fac00f6d18dd93dc17915c20c46b30d615444999518e88a8b7cb83c08",
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/driver.py": "2b1598520ee759c336b129398f6584b57695f500bed8977b0432a8196223cd27",
+    "proj_rsi/candidates/gv_unpool16_deltakey_v1/submission.py": "713c46b37e50f71410ef4c7116f7fcb94bea71bd7b64c7f33d2a9e0d93e24f6c",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/candidates/gv_unpool16_deltakey_robust_v1/cpu-proof.json": "a6326e5a01b0669725e92da95203a3728ea6e2f17002b3fdc031686eb2d24898",
+    "proj_rsi/candidates/gv_unpool16_deltakey_robust_v1/manifest.json": "6dd924b14c437c79b81f18c4f3d5246c12cddc6e289aca692f10a47615952f0d",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/scheduling/reviews/gv-unpool16-deltakey-robust-01.md": "021eca0ffa4723a2be80145160245b2e86c320fba6ddbde8d20b3c4533ef0c3d"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-gv-unpool16-robust-01",
+    "inner_seconds": 60,
+    "outer_seconds": 120,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/gv_unpool16_deltakey_robust_v1/driver.py",
+      "--prior",
+      "/okc/logs/scheduler/gv-unpool16-deltakey-01/run",
+      "--output",
+      "/okc/logs/scheduler/gv-unpool16-robust-01/run",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/gv-unpool16-deltakey-robust-01.md"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv-unpool16-robust-01"
+    ]
+  },
+  "annotations": {
+    "state": "HOLD_FOCUSED_REVIEW_PENDING",
+    "scope": {
+      "fresh_weights": 3,
+      "matched_X_fixtures_per_weight": 8,
+      "normal": 4,
+      "outliers": 4,
+      "clean_timings": 240,
+      "warmups": 30,
+      "own_timed_terminal_oracles": 30,
+      "native_JIT": 0,
+      "profiler": 0
+    },
+    "bounds": {
+      "inner_seconds": 60,
+      "outer_seconds": 120,
+      "profile": false
+    },
+    "reuse": "ExactcollectedSO/canonicalcodec/nativeproof/resourceprotocol/currentinput/strictcleanup; freshweights/sharedXbank/counterbalancedschedule only",
+    "limitations": "Fixedgeometryonly; all perweight/condition/style signsretained, no policy/officialclaim",
+    "problem": "muse_bf16_proj",
+    "review_binding": "Independent focused exactSO/weightloop/schedule/ownterminal GO pinned; frozen native and proposal untouched; root owns admission."
+  },
+  "problem": "muse_bf16_proj",
+  "review": {
+    "actor": "gv_codec_frontier",
+    "path": "proj_rsi/scheduling/reviews/gv-unpool16-deltakey-robust-01.md",
+    "sha256": "021eca0ffa4723a2be80145160245b2e86c320fba6ddbde8d20b3c4533ef0c3d",
+    "decision": "GO"
+  }
+}

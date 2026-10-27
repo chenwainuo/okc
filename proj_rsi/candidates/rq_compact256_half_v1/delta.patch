@@ -1,0 +1,67 @@
+--- inc501d
++++ compact256HALFv1
+@@ -4472,6 +4472,7 @@
+     ("h128s8z", 128, 8, 1, 0, 0, 0, 18),
+     ("s4s5zEH", 128, 5, 1, 0, 0, 0, 65538),
+     ("s4s5hzEH", 128, 5, 1, 0, 0, 0, 65539),
++    ("t32s6hze_half_compact256", 32, 6, 1, 0, 0, 0, 262195),
+ ]
+ RQI = {v[0]: i for i, v in enumerate(RQV)}
+ RQTOL = {1: 4e-3, 2: 5e-3, 3: 6e-3, 4: 6e-3, 5: 7e-3, 6: 7e-3, 7: 8e-3, 8: 8e-3, 9: 8e-3}  # judge 1e-2 (rows 5x)
+@@ -4579,7 +4580,7 @@
+ // so phases never mix. Consumers run GS k64 stages per round: GS full waits, one wgmma.fence, 4*GS wgmma, one commit,
+ // one wait_group 1 (P4: k128 rounds amortise the per-round bookkeeping).
+ template <int NT, int ST, int GS, int PRB, int WM, int INS, int FL>
+-__global__ void __launch_bounds__(384, 1) rq(const RqP p, const __grid_constant__ RqTmap tx, const __grid_constant__ RqTmap to) {
++__global__ void __launch_bounds__((FL & 262144) ? 256 : 384, (FL & 262144) ? 2 : 1) rq(const RqP p, const __grid_constant__ RqTmap tx, const __grid_constant__ RqTmap to) {
+ #if defined(__CUDA_ARCH_FEAT_SM90_ALL)
+   using C = RqC<NT, ST, GS, PRB, WM, INS, FL>;
+   constexpr int XB = C::XB, WB = C::WB, ND = C::ND;
+@@ -4590,6 +4591,8 @@
+   constexpr bool SELF = PRB == 5 || PRB == 6;                          // producers self-paced (no consumer)
+   // rs32 HALF (FL bit 4): one math warpgroup, 64 W rows per CTA (= half h of the 128-row pack block: tiles 4h..4h+3, a
+   // contiguous 6,144 B within each 12,288 B chunk); grid x = 2 NB; math WG1 exits at once; NW = math warps
++  constexpr bool COMPACT = (FL & 262144) != 0;
++  static_assert(!COMPACT || (NT == 32 && ST == 6 && GS == 1 && PRB == 0 && WM == 0 && INS == 0 && FL == 262195), "compact HALF approved unpooler32 type only");
+   constexpr bool HALF = (FL & 16) != 0;
+   static_assert(!(FL & 65536) || (NT == 128 && ST == 5 && GS == 1 && PRB == 0 && WM == 0 && INS == 0 && (FL == 65538 || FL == 65539)), "EH backport approved M128/ST5/selfzero full-output variants only");
+   constexpr int NW = HALF ? 4 : 8, CW = HALF ? 64 : 128;
+@@ -4600,7 +4603,8 @@
+   const uint32_t sraw = (uint32_t)__cvta_generic_to_shared(smem), sbase = (sraw + 1023u) & ~1023u;
+   const uint32_t xring = sbase, wring = sbase + ST * XB, bars = wring + ST * WB;
+   const uint32_t full = bars, wempty = bars + 8 * ST, xempty = bars + 16 * ST, zflag = bars + 24 * ST;
+-  const int tid = threadIdx.x, warp = tid >> 5, lane = tid & 31;
++  // Map physical producer WG1 to the original logical WG2; logical WG1 is absent.
++  const int tid = threadIdx.x + ((COMPACT && threadIdx.x >= 128) ? 128 : 0), warp = tid >> 5, lane = tid & 31;
+   const int nb = HALF ? (int)(blockIdx.x >> 1) : (int)blockIdx.x, hh = HALF ? (int)(blockIdx.x & 1) : 0, ks = blockIdx.y, KS = gridDim.y;
+   const int cb = nb * 128 + 64 * hh;  // first out column of this CTA
+   const int s0 = (int)((long long)ks * p.KC / KS), KCS = (int)((long long)(ks + 1) * p.KC / KS) - s0;
+@@ -4708,7 +4712,8 @@
+     return;
+   }
+   // ---------------- math warpgroups: warp w of WG g decodes W rows 64g + 16w .. +15 of the block (= tile 4g + w = warp)
+-  asm volatile("setmaxnreg.inc.sync.aligned.u32 232;\n");
++  if constexpr (COMPACT) asm volatile("setmaxnreg.inc.sync.aligned.u32 216;\n");
++  else asm volatile("setmaxnreg.inc.sync.aligned.u32 232;\n");
+   if (SELF || (HALF && warp >= 4)) return;
+   const int g = warp >> 2, w = warp & 3;
+   int ei = 0;
+@@ -5066,6 +5071,9 @@
+     return info == 1 ? a.numRegs : info == 2 ? (int)a.localSizeBytes : C::SMEM;
+   }
+   if (p.m < 1 || p.m > NT || KS < 1 || p.KC / KS < GS || KS > 64) return -4;
++  if constexpr (FL & 262144) {
++    if (p.m != 32 || p.N != 8192 || p.K != 4096 || p.KC != 64 || KS != 2 || p.walias != 0) return -47;
++  }
+   if constexpr (NT == 32 && (ST == 4 || ST == 5) && FL == 52) {
+     if (p.m != 32 || p.N != 8192 || p.K != 1024 || p.KC != 16 || KS != 1 || p.walias != 0) return -45;
+   }
+@@ -5080,7 +5088,7 @@
+     if (cudaFuncSetAttribute(k, cudaFuncAttributeMaxDynamicSharedMemorySize, C::SMEM) != cudaSuccess) { cudaGetLastError(); return -6; }
+     once = true;
+   }
+-  k<<<dim3(p.NB * ((FL & 16) ? 2 : 1), KS), dim3(384), C::SMEM, at::cuda::getCurrentCUDAStream()>>>(p, tx, to);
++  k<<<dim3(p.NB * ((FL & 16) ? 2 : 1), KS), dim3((FL & 262144) ? 256 : 384), C::SMEM, at::cuda::getCurrentCUDAStream()>>>(p, tx, to);
+   const cudaError_t e = cudaGetLastError();
+   return e == cudaSuccess ? 0 : (int)e;
+ }

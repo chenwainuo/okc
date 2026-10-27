@@ -1,0 +1,103 @@
+{
+  "id": "research.rq.compact256.half.fixed.01",
+  "resource": "gpu",
+  "kind": "optimization",
+  "state": "BACKLOG",
+  "author": "moe_decode_lut",
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 0
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "Does physical256threadHALF fit actual2CTA and improve actualincumbentfullST6? Old384HALF measuredonlyifsafe, else firstclass unavailable receipt."
+    },
+    "basis": "Oneofflinecompile128regs/0spills/62624shared, logicalroleproof and sourceGO. ExtraX/producerwork and historicalHALF losses arecounterevidence. Speedgainunknown; zeroestimateisnotmeasurednogain.",
+    "confidence": "unknown",
+    "evidence": [
+      "proj_rsi/candidates/rq_compact256_half_v1/compile-proof.json",
+      "proj_rsi/candidates/rq_compact256_half_v1/source-review.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 180,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 15
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-rq-compact256-half-fixed-01",
+    "inner_seconds": 120,
+    "outer_seconds": 180,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/rq_compact256_half_trial_v1/driver.py",
+      "--output",
+      "/okc/logs/scheduler/rq-compact256-half-fixed-01/run",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/rq-compact256-half-fixed-01.md",
+      "--review-sha256",
+      "20da29099eb74037083651123d278ae7e9ab47e2b7f2c0aa6b0915d1ab161869"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/rq-compact256-half-fixed-01"
+    ]
+  },
+  "annotations": {
+    "state": "BACKLOG_FOCUSED_GO_RUNTIME_UNRUN",
+    "scope": "ONLYmuse_bf16_proj unpoolerM32N8192K4096KS2 actualincumbentfull35/oldHALF51/compact262195; noselector/full30",
+    "capacity": "ActualcudaOccupancy query usesexact384/99488,384/62624,256/62624. Everyarmfullgrid<=SMs*occ beforelaunch. UnsafeoldHALF skippedwithnullperformance/provenprecondition; undercapacityincumbent/new abortsbeforemath withsavedreceipt. No unsafechildtrap.",
+    "measurement": "Eligible3arms orcontrolcompact2arms; fixedsameF1seed91100 acrossallblocks7sampleeach,12matchedtriples/pairs allpairorders6/6; coldL2 actualsinglegraphnativecalls.",
+    "terminals": "OwnF1block beforelaterreplay; allownpairedterminalbeforemutation; alltimedcurrentX/FP64oracle/counterreset/guards/sink; graphdrainreset.",
+    "counterlayout": "Allarmsprivate4NBcounterbackings sufficientHALF; extraunusedcontrolcountersremainzero, physicalguardschecked.",
+    "reference": "OriginalcodecAST9nodes andchangedringboundary32onehotrows reused; nofullbasis proof campaign.",
+    "review_binding": "Independent focused driverGO bound; actualcapacityguard/unsafeoldskip preserved; rootownsadmission.",
+    "historical": "HALFKS1unpool19.90vsfull19.60 andHALFKS2serialization retained; noautomatic2xspeed from2CTA",
+    "loop": "proj_rsi/ITERATION.md; profile->measure->hypothesis->optimize/test->validate->stack/submit->learn->reprioritize->repeat;idle<=10s"
+  },
+  "created_at": 1793139842.2510893,
+  "files": {
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/candidates/rq_compact256_half_v1/submission.py": "bf5ab6527674f74e2683aef5563ad3bb2ead2e5a513ed8097ea7aaaa38a6e1cc",
+    "proj_rsi/candidates/rq_compact256_half_v1/manifest.json": "15367c821a12b0c880aca874f096edac9114274e1661dedabe8c4b83f7d474b5",
+    "proj_rsi/candidates/rq_compact256_half_v1/source-proof.json": "3576ca90974bc5f0743a03abe0d1ec315c6f2fa837bc102da85fe0019677f4de",
+    "proj_rsi/candidates/rq_compact256_half_v1/role-lifetime-proof.json": "5f5073e840faf2d1659b9de32c0509416c6baaf8b6c74aceb407b5f7d5c544cc",
+    "proj_rsi/candidates/rq_compact256_half_v1/compile-proof.json": "07964c1d3e7278e5a8fd195a6830b6ea573f6fb6597832aaddf88c6baf61afc3",
+    "proj_rsi/candidates/rq_compact256_half_v1/source-review.json": "afef961ca2ab0014479bc29b6cf2a7df2ec211d76e29aa2a5976bfc9b29cd249",
+    "proj_rsi/scheduling/reviews/rq-compact256-half-v1-source.md": "46750a3f50f9ee6fac34b78ce40051db20dded2592a50945a7660cf8b099e86f",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/build.py": "4b1fb53953d255ccf5a1d35ecb0a0879d6856c4f903ac03b6a07f5af10e290d8",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/driver.py": "400ae2022f63eafd8b3634f043f04a3006b4b470073734508fee2a732afc1d6c",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/binding.cu": "0053d7a37752841cb73fde7c26bf63bde2a55d2b1b1d33f58aba428c218c278f",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/trial.cu": "bccec574fd3be71faa26240f402753f71e0976461be59a6b14b2d5707a47acab",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/codec.py": "289d1855a673cafd1d7edfde028d40db00a93da825e6561b6b0d9d9fad9d8fd7",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/manifest.json": "7acf229c5e5ae5710dacad6b2e3b93f31d2ff4db0fd4b1a51d444be47f5b4e15",
+    "proj_rsi/candidates/rq_compact256_half_trial_v1/cpu-proof.json": "c2e4a17ef0ea2676e7cc7ca938bcf3208da193342329290a570fc9b64aa9096c",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/scheduling/reviews/rq-compact256-half-fixed-01.md": "20da29099eb74037083651123d278ae7e9ab47e2b7f2c0aa6b0915d1ab161869"
+  },
+  "problem": "muse_bf16_proj",
+  "review": {
+    "actor": "measurement_contract_audit",
+    "path": "proj_rsi/scheduling/reviews/rq-compact256-half-fixed-01.md",
+    "sha256": "20da29099eb74037083651123d278ae7e9ab47e2b7f2c0aa6b0915d1ab161869",
+    "decision": "GO"
+  }
+}
