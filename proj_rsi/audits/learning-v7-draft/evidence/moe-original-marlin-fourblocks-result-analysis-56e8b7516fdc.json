@@ -1,0 +1,533 @@
+{
+  "job_id": "research.moe.original.marlin.fourblocks.01",
+  "source_state": "VALID_M8_ORIGINAL_MARLIN_FOUR_BLOCK_SCREEN_ROOT_REVIEW_REQUIRED",
+  "phase": "complete",
+  "evidence": [
+    {
+      "path": "results/proj-rsi/scheduler/artifacts/research.moe.original.marlin.fourblocks.01/collection-1793134616987788926/inventory.json",
+      "sha256": "6a40e6080ebe3071d1855538fcd3581210ff5673e014420e92224bdc1cdca932"
+    },
+    {
+      "path": "results/proj-rsi/scheduler/artifacts/research.moe.original.marlin.fourblocks.01/collection-1793134616987788926/logs/scheduler/research.moe.original.marlin.fourblocks.01.host.log",
+      "sha256": "f51e9783a8d1a00eee49252035031d4d3a862b4f747e542a7a9feac3646c6e7e"
+    },
+    {
+      "path": "results/proj-rsi/scheduler/artifacts/research.moe.original.marlin.fourblocks.01/collection-1793134616987788926/logs/scheduler/moe-original-marlin-fourblocks-01/result.json",
+      "sha256": "3dcb69c57dec5488b23094345f98b06529d2056ade39a5e63f5df60004f398ef"
+    }
+  ],
+  "inventory_file_hashes_validated": 6,
+  "terminal_exit": 0,
+  "cleanup": {
+    "cleanup_failed": false,
+    "compute_pids": [],
+    "container_exists": false,
+    "containers": [],
+    "gpu_memory_mib": 0,
+    "guard_pids": [],
+    "host_log_exists": true,
+    "terminal_exit": 0
+  },
+  "new_GPU_API_queue_calls": 0,
+  "state": "VALID_COLLECTED_M8_RESULT_CPU_RECOMPUTED",
+  "disposition": "VALID_GAIN",
+  "disposition_reason": "Primary same-window paired M8 point versus original is positive; negative F1 brackets are retained explicitly. No all-positive/significance gate or full14/model/official inference.",
+  "F1_paired_conflict": true,
+  "four_block_feasibility": {
+    "queries": {
+      "legal": 1,
+      "registers_per_thread": 128,
+      "static_shared_B": 0,
+      "local_B": 0,
+      "max_threads_per_block": 512,
+      "device_registers_per_SM": 65536,
+      "device_shared_B_per_SM": 233472,
+      "device_optin_shared_B_per_block": 232448,
+      "device_threads_per_SM": 2048,
+      "device_blocks_per_SM": 32,
+      "dynamic_shared_3_B": 76458,
+      "dynamic_shared_4_B": 57088,
+      "kernel_min_cache_B": 28736,
+      "actual_occupancy_3": 3,
+      "actual_occupancy_4": 4,
+      "four_blocks_register_count": 65536,
+      "four_blocks_total_shared_B": 228352,
+      "launch_reserve_B": 1024
+    },
+    "before_any_forced_launch": true,
+    "before_GPU_timing": true,
+    "query_has_no_CUDA_kernel_launch": true,
+    "mechanism": "3to4blocks+smaller_dynamic_shared_and_Acache; not pure occupancy"
+  },
+  "runtime_source_pins_validated": 35,
+  "runtime": {
+    "torch": "2.14.1+cu130",
+    "CUDA": "13.0",
+    "device": "NVIDIA H100 80GB HBM3",
+    "SMs": 132
+  },
+  "compile_wall_seconds": 16.457730663998518,
+  "prepare_seconds": 0.10779340199951548,
+  "default_receipt": {
+    "encoded": 3128128064,
+    "decoded": {
+      "blocks_per_sm": 3,
+      "threads": 128,
+      "thread_n": 128,
+      "thread_k": 64
+    },
+    "contrast_mode": 3,
+    "before_any_forced_launch": true,
+    "source_identical_default_chooser_with_actual_variant_attrs": true,
+    "original_anchor_config_profile_pending": true,
+    "default_output_bitwise_equal_original": true
+  },
+  "capture_receipts": {
+    "default_shim": {
+      "default": {
+        "blocks_per_sm": 3,
+        "threads": 128,
+        "thread_n": 128,
+        "thread_k": 64
+      },
+      "selected": {
+        "blocks_per_sm": 3,
+        "threads": 128,
+        "thread_n": 128,
+        "thread_k": 64
+      },
+      "host_target_calls": 4
+    },
+    "contrast": {
+      "default": {
+        "blocks_per_sm": 3,
+        "threads": 128,
+        "thread_n": 128,
+        "thread_k": 64
+      },
+      "selected": {
+        "blocks_per_sm": 4,
+        "threads": 128,
+        "thread_n": 128,
+        "thread_k": 64
+      },
+      "host_target_calls": 4
+    }
+  },
+  "paired": {
+    "anchor_minus_default_shim": {
+      "median_us": 0.1760050654411316,
+      "median_ratio": 1.0015347725744792,
+      "b_wins": 8,
+      "win_tie_loss": [
+        8,
+        0,
+        4
+      ]
+    },
+    "anchor_minus_contrast": {
+      "median_us": 0.5919970571994781,
+      "median_ratio": 1.0044153762097967,
+      "b_wins": 10,
+      "win_tie_loss": [
+        10,
+        0,
+        2
+      ]
+    },
+    "default_shim_minus_contrast": {
+      "median_us": 0.4639960825443268,
+      "median_ratio": 1.0035149518748039,
+      "b_wins": 8,
+      "win_tie_loss": [
+        8,
+        0,
+        4
+      ]
+    }
+  },
+  "F1_medians_us": {
+    "anchor0": 134.49600338935852,
+    "default_shim1": 134.75200533866882,
+    "contrast2": 136.03200018405914,
+    "default_shim3": 133.44000279903412,
+    "anchor4": 133.4719955921173
+  },
+  "F1_control_minus_contrast": {
+    "anchor_minus_contrast": {
+      "before_us": -1.5359967947006226,
+      "after_us": -2.5600045919418335
+    },
+    "default_shim_minus_contrast": {
+      "before_us": -1.2799948453903198,
+      "after_us": -2.5919973850250244
+    }
+  },
+  "correctness_checks": 22,
+  "raw_clean_calls": 61,
+  "own_timed_terminal_checks": 8,
+  "profiling": {
+    "anchor": {
+      "status": "COMPLETE",
+      "exclusive_kernel_sum_us": 116.25300000000001,
+      "Marlin_calls": [
+        {
+          "tile": {
+            "threads": 128,
+            "thread_m_blocks": 1,
+            "thread_n": 128,
+            "thread_k": 64,
+            "blockM8": true,
+            "stages": 4,
+            "group_blocks": 1,
+            "EP": true,
+            "bias": false
+          },
+          "duration_us": 65.311,
+          "resources": {
+            "queued": 0,
+            "device": 0,
+            "context": 1,
+            "stream": 7,
+            "correlation": 3,
+            "registers per thread": 128,
+            "shared memory": 76458,
+            "blocks per SM": 3,
+            "warps per SM": 12,
+            "grid": [
+              396,
+              1,
+              1
+            ],
+            "block": [
+              128,
+              1,
+              1
+            ],
+            "est. achieved occupancy %": 0,
+            "occupancy": {
+              "activeBlocksPerMultiprocessor": 0,
+              "limitingFactors": "SMEM",
+              "blockLimitRegs": 4,
+              "blockLimitSharedMem": 0,
+              "blockLimitWarps": 16,
+              "blockLimitBlocks": 32,
+              "blockLimitBarriers": 2147483647,
+              "allocatedRegistersPerBlock": 16384,
+              "allocatedSharedMemPerBlock": 77568
+            },
+            "graph id": 2,
+            "graph node id": 8589934596,
+            "channel": 0,
+            "channel_type": 1
+          }
+        },
+        {
+          "tile": {
+            "threads": 128,
+            "thread_m_blocks": 1,
+            "thread_n": 128,
+            "thread_k": 64,
+            "blockM8": true,
+            "stages": 4,
+            "group_blocks": 1,
+            "EP": true,
+            "bias": false
+          },
+          "duration_us": 37.759,
+          "resources": {
+            "queued": 0,
+            "device": 0,
+            "context": 1,
+            "stream": 7,
+            "correlation": 3,
+            "registers per thread": 128,
+            "shared memory": 76458,
+            "blocks per SM": 3,
+            "warps per SM": 12,
+            "grid": [
+              396,
+              1,
+              1
+            ],
+            "block": [
+              128,
+              1,
+              1
+            ],
+            "est. achieved occupancy %": 0,
+            "occupancy": {
+              "activeBlocksPerMultiprocessor": 0,
+              "limitingFactors": "SMEM",
+              "blockLimitRegs": 4,
+              "blockLimitSharedMem": 0,
+              "blockLimitWarps": 16,
+              "blockLimitBlocks": 32,
+              "blockLimitBarriers": 2147483647,
+              "allocatedRegistersPerBlock": 16384,
+              "allocatedSharedMemPerBlock": 77568
+            },
+            "graph id": 2,
+            "graph node id": 8589934598,
+            "channel": 0,
+            "channel_type": 1
+          }
+        }
+      ],
+      "not_clean_latency": true
+    },
+    "default_shim": {
+      "status": "COMPLETE",
+      "exclusive_kernel_sum_us": 115.851,
+      "Marlin_calls": [
+        {
+          "tile": {
+            "threads": 128,
+            "thread_m_blocks": 1,
+            "thread_n": 128,
+            "thread_k": 64,
+            "blockM8": true,
+            "stages": 4,
+            "group_blocks": 1,
+            "EP": true,
+            "bias": false
+          },
+          "duration_us": 64.485,
+          "resources": {
+            "queued": 0,
+            "device": 0,
+            "context": 1,
+            "stream": 7,
+            "correlation": 5679,
+            "registers per thread": 128,
+            "shared memory": 76458,
+            "blocks per SM": 3,
+            "warps per SM": 12,
+            "grid": [
+              396,
+              1,
+              1
+            ],
+            "block": [
+              128,
+              1,
+              1
+            ],
+            "est. achieved occupancy %": 0,
+            "occupancy": {
+              "activeBlocksPerMultiprocessor": 0,
+              "limitingFactors": "SMEM",
+              "blockLimitRegs": 4,
+              "blockLimitSharedMem": 0,
+              "blockLimitWarps": 16,
+              "blockLimitBlocks": 32,
+              "blockLimitBarriers": 2147483647,
+              "allocatedRegistersPerBlock": 16384,
+              "allocatedSharedMemPerBlock": 77568
+            },
+            "graph id": 5,
+            "graph node id": 21474836484,
+            "channel": 0,
+            "channel_type": 1
+          }
+        },
+        {
+          "tile": {
+            "threads": 128,
+            "thread_m_blocks": 1,
+            "thread_n": 128,
+            "thread_k": 64,
+            "blockM8": true,
+            "stages": 4,
+            "group_blocks": 1,
+            "EP": true,
+            "bias": false
+          },
+          "duration_us": 37.764,
+          "resources": {
+            "queued": 0,
+            "device": 0,
+            "context": 1,
+            "stream": 7,
+            "correlation": 5679,
+            "registers per thread": 128,
+            "shared memory": 76458,
+            "blocks per SM": 3,
+            "warps per SM": 12,
+            "grid": [
+              396,
+              1,
+              1
+            ],
+            "block": [
+              128,
+              1,
+              1
+            ],
+            "est. achieved occupancy %": 0,
+            "occupancy": {
+              "activeBlocksPerMultiprocessor": 0,
+              "limitingFactors": "SMEM",
+              "blockLimitRegs": 4,
+              "blockLimitSharedMem": 0,
+              "blockLimitWarps": 16,
+              "blockLimitBlocks": 32,
+              "blockLimitBarriers": 2147483647,
+              "allocatedRegistersPerBlock": 16384,
+              "allocatedSharedMemPerBlock": 77568
+            },
+            "graph id": 5,
+            "graph node id": 21474836486,
+            "channel": 0,
+            "channel_type": 1
+          }
+        }
+      ],
+      "not_clean_latency": true
+    },
+    "contrast": {
+      "status": "COMPLETE",
+      "exclusive_kernel_sum_us": 113.76999999999998,
+      "Marlin_calls": [
+        {
+          "tile": {
+            "threads": 128,
+            "thread_m_blocks": 1,
+            "thread_n": 128,
+            "thread_k": 64,
+            "blockM8": true,
+            "stages": 4,
+            "group_blocks": 1,
+            "EP": true,
+            "bias": false
+          },
+          "duration_us": 63.237,
+          "resources": {
+            "queued": 0,
+            "device": 0,
+            "context": 1,
+            "stream": 7,
+            "correlation": 11353,
+            "registers per thread": 128,
+            "shared memory": 57088,
+            "blocks per SM": 4,
+            "warps per SM": 16,
+            "grid": [
+              528,
+              1,
+              1
+            ],
+            "block": [
+              128,
+              1,
+              1
+            ],
+            "est. achieved occupancy %": 0,
+            "occupancy": {
+              "activeBlocksPerMultiprocessor": 0,
+              "limitingFactors": "SMEM",
+              "blockLimitRegs": 4,
+              "blockLimitSharedMem": 0,
+              "blockLimitWarps": 16,
+              "blockLimitBlocks": 32,
+              "blockLimitBarriers": 2147483647,
+              "allocatedRegistersPerBlock": 16384,
+              "allocatedSharedMemPerBlock": 58112
+            },
+            "graph id": 8,
+            "graph node id": 34359738372,
+            "channel": 0,
+            "channel_type": 1
+          }
+        },
+        {
+          "tile": {
+            "threads": 128,
+            "thread_m_blocks": 1,
+            "thread_n": 128,
+            "thread_k": 64,
+            "blockM8": true,
+            "stages": 4,
+            "group_blocks": 1,
+            "EP": true,
+            "bias": false
+          },
+          "duration_us": 37.123,
+          "resources": {
+            "queued": 0,
+            "device": 0,
+            "context": 1,
+            "stream": 7,
+            "correlation": 11353,
+            "registers per thread": 128,
+            "shared memory": 76458,
+            "blocks per SM": 3,
+            "warps per SM": 12,
+            "grid": [
+              396,
+              1,
+              1
+            ],
+            "block": [
+              128,
+              1,
+              1
+            ],
+            "est. achieved occupancy %": 0,
+            "occupancy": {
+              "activeBlocksPerMultiprocessor": 0,
+              "limitingFactors": "SMEM",
+              "blockLimitRegs": 4,
+              "blockLimitSharedMem": 0,
+              "blockLimitWarps": 16,
+              "blockLimitBlocks": 32,
+              "blockLimitBarriers": 2147483647,
+              "allocatedRegistersPerBlock": 16384,
+              "allocatedSharedMemPerBlock": 77568
+            },
+            "graph id": 8,
+            "graph node id": 34359738374,
+            "channel": 0,
+            "channel_type": 1
+          }
+        }
+      ],
+      "not_clean_latency": true
+    }
+  },
+  "original_profile_gateup_matches_default_receipt": true,
+  "limits": [
+    "M8 normal EP8 only; no full14/model/official/3x result.",
+    "Profile sums are exclusive captured kernel durations, not clean event latency.",
+    "Actual original/default module differences are an explicit control; preserve all signed pair/F1 estimates."
+  ],
+  "source_Acache_capacity_model_not_dynamic_load_counts": {
+    "3": {
+      "dynamic_shared_B": 76458,
+      "sh_a_max_row": 444,
+      "max_num_stage_groups": 13
+    },
+    "4": {
+      "dynamic_shared_B": 57088,
+      "sh_a_max_row": 293,
+      "max_num_stage_groups": 9
+    }
+  },
+  "optional_profile_actual_route_checks": {
+    "anchor": {
+      "sameK64N128128t_up": true,
+      "expected_up_grid": true,
+      "down_unchanged_current_geometry": true
+    },
+    "default_shim": {
+      "sameK64N128128t_up": true,
+      "expected_up_grid": true,
+      "down_unchanged_current_geometry": true
+    },
+    "contrast": {
+      "sameK64N128128t_up": true,
+      "expected_up_grid": true,
+      "down_unchanged_current_geometry": true
+    }
+  }
+}

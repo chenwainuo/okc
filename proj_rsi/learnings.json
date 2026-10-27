@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "registry_version": 6,
+  "registry_version": 7,
   "lessons": [
     {
       "id": "native-x-parent-progress",
@@ -3726,6 +3726,588 @@
         "gpu_seconds": null
       },
       "record_sha256": "0fe90ceeb7d444f5e8883a41faf7a62a54a8be52ba2c0e3d981bc20dd902e35a"
+    },
+    {
+      "id": "empty-oracle-domain-before-optional-counters",
+      "version": 1,
+      "supersedes": null,
+      "title": "An empty routing fixture needs its defined zero oracle, not a rejecting reference",
+      "tags": [
+        "empty-oracle-domain-before-optional-counters",
+        "scope",
+        "counterevidence"
+      ],
+      "context": {
+        "experiment_id": "research.moe.ss.v1.up.counters.01",
+        "family": "empty-oracle-domain-before-optional-counters",
+        "parents": [
+          "separate repaired probe; same numerical kernels@d3af6434cd4509ae5bd33fc7bbaed9c784375d561a996fb082f5810c413d6bf9"
+        ],
+        "comparators": [
+          "separate repaired probe; same numerical kernels"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "Archived H100 local attempts only; CPU evidence backfill"
+        },
+        "validity": "VALIDATED_DIAGNOSIS",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/audits/learning-v7-draft/evidence/moe_ss_v1_up_counters_v2-probe-d3af6434cd45.py",
+            "sha256": "d3af6434cd4509ae5bd33fc7bbaed9c784375d561a996fb082f5810c413d6bf9",
+            "role": "separate repaired probe; same numerical kernels"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "path": "proj_rsi/audits/learning-v7-draft/evidence/actual-analysis-analysis-9c9824ae6ca5.json",
+          "sha256": "9c9824ae6ca5033b36a8a0c09a5194917ccc2374ce4d5da21adddd302d22a6ec",
+          "id": "invalid"
+        },
+        {
+          "path": "proj_rsi/audits/learning-v7-draft/evidence/actual-analysis-analysis-addb73614533.json",
+          "sha256": "addb7361453395b5937d0df5dc5898456b7589620295ace8479df2c17c15270f",
+          "id": "repair"
+        }
+      ],
+      "observations": [
+        {
+          "id": "no_metrics",
+          "statement": "Original probe failed before counter collection; completed nonempty checks do not create hardware metrics.",
+          "outcome": "negative",
+          "evidence": "invalid",
+          "selector": {
+            "json_pointer": "/counter_metrics_collected",
+            "equals": false
+          }
+        },
+        {
+          "id": "cause",
+          "statement": "Original reference intentionally rejects an all-nonlocal fixture; exact-zero branch is the defined repair.",
+          "outcome": "negative",
+          "evidence": "invalid",
+          "selector": {
+            "json_pointer": "/cause",
+            "equals": "Original reference intentionally rejects all-nonlocal case as nothing to check; use exact-zero condition already established by prior serving/stage harness. G6/G7 reference unchanged."
+          }
+        },
+        {
+          "id": "empty_zero",
+          "statement": "Repaired seed7779 validates actual serving output exact zero without weakening the nonempty reference.",
+          "outcome": "positive",
+          "evidence": "repair",
+          "selector": {
+            "json_pointer": "/correctness/2/message",
+            "equals": "all nonlocal actual serving output exact zero"
+          }
+        },
+        {
+          "id": "same_fixtures",
+          "statement": "Recorded tensor hashes match the original G6/G7 fixtures.",
+          "outcome": "positive",
+          "evidence": "repair",
+          "selector": {
+            "json_pointer": "/fixtures_tensor_hashes_equal_original_attempt",
+            "equals": true
+          }
+        },
+        {
+          "id": "metrics",
+          "statement": "Repaired attempt independently verifies two actual nodes and eight metrics/units.",
+          "outcome": "positive",
+          "evidence": "repair",
+          "selector": {
+            "json_pointer": "/exact2nodes_all8metrics_units_independently_verified",
+            "equals": true
+          }
+        },
+        {
+          "id": "cleanup",
+          "statement": "Repaired attempt externally exits cleanly.",
+          "outcome": "positive",
+          "evidence": "repair",
+          "selector": {
+            "json_pointer": "/cleanup/terminal_exit",
+            "equals": 0
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Fixture/reference domain mismatch caused the setup failure, rather than unsupported counters or numerical kernel failure. A domain-specific empty oracle repairs this exact mismatch.",
+          "status": "unproven",
+          "observation_ids": [
+            "no_metrics",
+            "cause",
+            "empty_zero",
+            "same_fixtures",
+            "metrics",
+            "cleanup"
+          ]
+        }
+      ],
+      "scope": "One optional M8 SS up counter probe and separately frozen empty-oracle repair; no kernel performance comparison. Nonempty task and bitwise stage checks remain unchanged.",
+      "transfer_limits": [
+        "Original attempt remains INVALID_SETUP with no counters; later repair does not retroactively validate it.",
+        "Counter replay durations197.472/312.320us are instrumented different workloads, not clean speedup evidence.",
+        "Low DRAM/tensor percentages do not identify producer/consumer or source stall causes."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "A fixture with local routes enters the zero-only branch, or the empty output contains any nonzero byte; then the narrow repair is invalid.",
+      "next_test": {
+        "question": "Does the next existing probe select its oracle from the actual fixture domain?",
+        "controls": [
+          "separate repaired probe; same numerical kernels"
+        ],
+        "discriminator": "Reuse CPU fixture-branch checks and current exact runtime output assertions in the already justified next probe; retain nonempty reference and empty byte-zero checks separately. No repeat profiler run solely for registry learning.",
+        "stop_rule": "Record the named contrast and all signed outcomes. Missing required validity invalidates only that attempt; neither a loss nor an estimator disagreement imposes a minimum gain/significance gate or rejects a family.",
+        "required_gates": [
+          "Preserve the exact named source/fixture and attempt evidence relevant to this diagnostic; no general admission gate is introduced."
+        ]
+      },
+      "related_queue_ids": [
+        "research.moe.ss.v1.up.counters.01",
+        "research.moe.ss.v1.up.counters.v2.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "Avoids a repeated invalid optional probe; no speed gain is measured. Existing performance work retains priority.",
+          "No new GPU reservation, queue action, quota assumption or measured speed forecast follows."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "be5af2419e3596fa167864388ac2280869f388c005a011c04b55b134c5f2b6f1"
+    },
+    {
+      "id": "cleanup-residual-needs-origin-proof",
+      "version": 1,
+      "supersedes": null,
+      "title": "A 32MiB post-drain residual is not proven cuBLAS workspace ownership",
+      "tags": [
+        "cleanup-residual-needs-origin-proof",
+        "scope",
+        "counterevidence"
+      ],
+      "context": {
+        "experiment_id": "research.gv.codec.frontier.two-cell.01",
+        "family": "cleanup-residual-needs-origin-proof",
+        "parents": [
+          "actual failed cleanup driver@da9f36fcca60b60dcf300e6d51148e08314b5e139b883b7c914f89792a1426bc"
+        ],
+        "comparators": [
+          "actual failed cleanup driver"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "Archived H100 local attempts only; CPU evidence backfill"
+        },
+        "validity": "VALIDATED_DIAGNOSIS",
+        "disposition": "INVALID_SETUP",
+        "sources": [
+          {
+            "path": "proj_rsi/audits/learning-v7-draft/evidence/native_v2_capacity32_48-driver-da9f36fcca60.py",
+            "sha256": "da9f36fcca60b60dcf300e6d51148e08314b5e139b883b7c914f89792a1426bc",
+            "role": "actual failed cleanup driver"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "path": "proj_rsi/audits/learning-v7-draft/evidence/attempt01-analysis-report-eed17deb4f5e.json",
+          "sha256": "eed17deb4f5e100d6d12a5145ab8161db2c6f10c3468551bb11c36e0e582ea54",
+          "id": "attempt"
+        },
+        {
+          "path": "proj_rsi/audits/learning-v7-draft/evidence/coordinator-observations-20261027-torch28-cublas-header-inspection-b7a53719fb61.json",
+          "sha256": "b7a53719fb61519962131b042184fc96f9b7fe0d32840a1a4f3d7af5b5e474c1",
+          "id": "header"
+        }
+      ],
+      "observations": [
+        {
+          "id": "api",
+          "statement": "Actual targetimage header declares supported workspace map and clear APIs; this proves availability only.",
+          "outcome": "neutral",
+          "evidence": "header",
+          "selector": {
+            "json_pointer": "/declarations",
+            "equals": {
+              "90": "TORCH_CUDA_CPP_API void clearCublasWorkspaces();",
+              "91": "TORCH_CUDA_CPP_API std::map<std::tuple<void *, void *>, at::DataPtr>& cublas_handle_stream_to_workspace();",
+              "92": "TORCH_CUDA_CPP_API size_t getChosenWorkspaceSize();"
+            }
+          }
+        },
+        {
+          "id": "invalid",
+          "statement": "Completed attempt remains INVALID_CLEANUP.",
+          "outcome": "invalid",
+          "evidence": "attempt",
+          "selector": {
+            "json_pointer": "/disposition",
+            "equals": "INVALID_CLEANUP"
+          }
+        },
+        {
+          "id": "residual",
+          "statement": "Internal post-scope allocation is exactly33554432bytes despite released run aliases.",
+          "outcome": "negative",
+          "evidence": "attempt",
+          "selector": {
+            "json_pointer": "/internal_cleanup",
+            "equals": {
+              "allocated": 33554432,
+              "reserved": 33554432,
+              "all_run_aliases_released": true
+            }
+          }
+        },
+        {
+          "id": "external",
+          "statement": "External process/container cleanup succeeds while trial exits1.",
+          "outcome": "neutral",
+          "evidence": "attempt",
+          "selector": {
+            "json_pointer": "/external_cleanup/terminal_exit",
+            "equals": 1
+          }
+        },
+        {
+          "id": "unproven",
+          "statement": "Version-matched workspace explanation is consistent but allocation origin was not directly measured.",
+          "outcome": "neutral",
+          "evidence": "attempt",
+          "selector": {
+            "json_pointer": "/causal_status",
+            "equals": "32MiB is consistent with version-matched Hopper cuBLAS workspace, and oracle BLAS calls precede all timing; allocation origin not directly measured in this attempt"
+          }
+        },
+        {
+          "id": "loss_pooler",
+          "statement": "Preserve unadmitted pooler paired loss-5.408000us without performance admission.",
+          "outcome": "negative",
+          "evidence": "attempt",
+          "selector": {
+            "json_pointer": "/cells/pooler/unadmitted_paired_control_minus_new_us",
+            "equals": -5.408000200986862
+          }
+        },
+        {
+          "id": "loss_unpooler",
+          "statement": "Preserve unadmitted unpooler paired loss-12.656000us without performance admission.",
+          "outcome": "negative",
+          "evidence": "attempt",
+          "selector": {
+            "json_pointer": "/cells/unpooler/unadmitted_paired_control_minus_new_us",
+            "equals": -12.655999511480331
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Oracle BLAS calls may leave a version-specific cached workspace. Size agreement and an available clear API are not allocation-origin proof; graph, reference and allocator ownership must be observed separately.",
+          "status": "unproven",
+          "observation_ids": [
+            "api",
+            "invalid",
+            "residual",
+            "external",
+            "unproven",
+            "loss_pooler",
+            "loss_unpooler"
+          ]
+        }
+      ],
+      "scope": "One C11 two-cell attempt: completed numerics/timings, failed internal allocation assertion, successful independent external cleanup. No direct workspace map/byte attribution was captured.",
+      "transfer_limits": [
+        "Immutable actual Torch2.8 header-inspection receipt establishes API declarations only, not execution, allocation ownership or successful cleanup.",
+        "External GPU0MiB after process exit does not satisfy the failed internal assertion.",
+        "New post-drain cleanup may validate a new attempt only; frozen old data/disposition stay unchanged.",
+        "Do not clear workspace during live graph use or alter numerical tolerances to hide retained storage."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "The actual workspace map has different/no bytes or33554432bytes remain after a measured safe post-drain clear; then cached cuBLAS workspace alone cannot explain the residual.",
+      "next_test": {
+        "question": "What actual allocation owns the32MiB, and does safe post-drain release remove exactly that residual?",
+        "controls": [
+          "actual failed cleanup driver"
+        ],
+        "discriminator": "In the next meaningful source comparison, record actual version-matched workspace count/bytes and Torch allocated/reserved before/after graph drain and supported clear. Match the byte delta and retain failures; no identical full rerun solely to clean up history.",
+        "stop_rule": "Record the named contrast and all signed outcomes. Missing required validity invalidates only that attempt; neither a loss nor an estimator disagreement imposes a minimum gain/significance gate or rejects a family.",
+        "required_gates": [
+          "Preserve the exact named source/fixture and attempt evidence relevant to this diagnostic; no general admission gate is introduced."
+        ]
+      },
+      "related_queue_ids": [
+        "research.gv.codec.frontier.two-cell.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "Information value is a valid lifetime contract for the next meaningful experiment; neither a speed gain nor a codec-family rejection follows.",
+          "No new GPU reservation, queue action, quota assumption or measured speed forecast follows."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "2c1581d32776672e16fe8d8729c3b42d62057c8a92efb28c75abcaeacc054173"
+    },
+    {
+      "id": "marlin-four-blocks-cache-and-mixed-estimators",
+      "version": 1,
+      "supersedes": null,
+      "title": "Marlin four-block paired progress coexists with negative brackets and a cache-policy change",
+      "tags": [
+        "marlin-four-blocks-cache-and-mixed-estimators",
+        "scope",
+        "counterevidence"
+      ],
+      "context": {
+        "experiment_id": "research.moe.original.marlin.fourblocks.01",
+        "family": "marlin-four-blocks-cache-and-mixed-estimators",
+        "parents": [
+          "measured original/defaultshim/forced4 driver@604fcac84408efdae39b08842dbc8fdc827dd7679c6fd8f36c8be35bda720182"
+        ],
+        "comparators": [
+          "measured original/defaultshim/forced4 driver"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "Archived H100 local attempts only; CPU evidence backfill"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/audits/learning-v7-draft/evidence/moe_marlin_four_blocks_v1-pilot-604fcac84408.py",
+            "sha256": "604fcac84408efdae39b08842dbc8fdc827dd7679c6fd8f36c8be35bda720182",
+            "role": "measured original/defaultshim/forced4 driver"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "path": "proj_rsi/audits/learning-v7-draft/evidence/moe-original-marlin-fourblocks-result-analysis-56e8b7516fdc.json",
+          "sha256": "56e8b7516fdc613e4f79043d033edf7ac5eb46e802c4eb6076fc9d3b67a5c724",
+          "id": "result"
+        },
+        {
+          "path": "proj_rsi/audits/learning-v7-draft/evidence/moe-original-marlin-fourblocks-result-route-signs-566bb6e85473.json",
+          "sha256": "566bb6e854735b3eb4bc734b052719a2cdcc44928a70463f88e979dea9782a99",
+          "id": "routes"
+        }
+      ],
+      "observations": [
+        {
+          "id": "paired",
+          "statement": "Actual original-minus4block paired median is+0.591997us; retain10wins/2losses.",
+          "outcome": "positive",
+          "evidence": "result",
+          "selector": {
+            "json_pointer": "/paired/anchor_minus_contrast",
+            "equals": {
+              "median_us": 0.5919970571994781,
+              "median_ratio": 1.0044153762097967,
+              "b_wins": 10,
+              "win_tie_loss": [
+                10,
+                0,
+                2
+              ]
+            }
+          }
+        },
+        {
+          "id": "shim",
+          "statement": "Defaultshim-minus4block median is+0.463996us; module/control difference remains explicit.",
+          "outcome": "positive",
+          "evidence": "result",
+          "selector": {
+            "json_pointer": "/paired/default_shim_minus_contrast",
+            "equals": {
+              "median_us": 0.4639960825443268,
+              "median_ratio": 1.0035149518748039,
+              "b_wins": 8,
+              "win_tie_loss": [
+                8,
+                0,
+                4
+              ]
+            }
+          }
+        },
+        {
+          "id": "F1",
+          "statement": "Both original F1 endpoints lose-1.535997/-2.560005us.",
+          "outcome": "negative",
+          "evidence": "result",
+          "selector": {
+            "json_pointer": "/F1_control_minus_contrast/anchor_minus_contrast",
+            "equals": {
+              "before_us": -1.5359967947006226,
+              "after_us": -2.5600045919418335
+            }
+          }
+        },
+        {
+          "id": "capacity",
+          "statement": "Actual query changes maximum active CTA capacity3to4 at different shared allocation; not measured scheduling.",
+          "outcome": "neutral",
+          "evidence": "result",
+          "selector": {
+            "json_pointer": "/four_block_feasibility/queries",
+            "equals": {
+              "legal": 1,
+              "registers_per_thread": 128,
+              "static_shared_B": 0,
+              "local_B": 0,
+              "max_threads_per_block": 512,
+              "device_registers_per_SM": 65536,
+              "device_shared_B_per_SM": 233472,
+              "device_optin_shared_B_per_block": 232448,
+              "device_threads_per_SM": 2048,
+              "device_blocks_per_SM": 32,
+              "dynamic_shared_3_B": 76458,
+              "dynamic_shared_4_B": 57088,
+              "kernel_min_cache_B": 28736,
+              "actual_occupancy_3": 3,
+              "actual_occupancy_4": 4,
+              "four_blocks_register_count": 65536,
+              "four_blocks_total_shared_B": 228352,
+              "launch_reserve_B": 1024
+            }
+          }
+        },
+        {
+          "id": "cache",
+          "statement": "Source A-cache capacity changes444to293rows and13to9stagegroups; dynamic reload/stall fractions are unmeasured.",
+          "outcome": "neutral",
+          "evidence": "result",
+          "selector": {
+            "json_pointer": "/source_Acache_capacity_model_not_dynamic_load_counts",
+            "equals": {
+              "3": {
+                "dynamic_shared_B": 76458,
+                "sh_a_max_row": 444,
+                "max_num_stage_groups": 13
+              },
+              "4": {
+                "dynamic_shared_B": 57088,
+                "sh_a_max_row": 293,
+                "max_num_stage_groups": 9
+              }
+            }
+          }
+        },
+        {
+          "id": "validity",
+          "statement": "All22correctness checks pass.",
+          "outcome": "positive",
+          "evidence": "result",
+          "selector": {
+            "json_pointer": "/correctness_checks",
+            "equals": 22
+          }
+        },
+        {
+          "id": "cleanup",
+          "statement": "Trial exits0 with independently clean external scope.",
+          "outcome": "positive",
+          "evidence": "result",
+          "selector": {
+            "json_pointer": "/cleanup",
+            "equals": {
+              "cleanup_failed": false,
+              "compute_pids": [],
+              "container_exists": false,
+              "containers": [],
+              "gpu_memory_mib": 0,
+              "guard_pids": [],
+              "host_log_exists": true,
+              "terminal_exit": 0
+            }
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Scheduling and smaller A-cache interact with routing/schedule context. Positive paired point supports a useful measured version, but opposite brackets and module difference prevent unique occupancy or route-causal attribution.",
+          "status": "unproven",
+          "observation_ids": [
+            "paired",
+            "shim",
+            "F1",
+            "capacity",
+            "cache",
+            "validity",
+            "cleanup"
+          ]
+        }
+      ],
+      "scope": "Local original Marlin M8 whole-serving screen versus exact original and default shim,12paired seeds; bracketed medians and single-replay profiles remain separate. No full14/H200/model stack result.",
+      "transfer_limits": [
+        "Query3to4 is maximum active CTA capacity, not measured residency or achieved scheduling.",
+        "Shared76458to57088bytes changes cache policy as well as capacity, so this is not an isolated occupancy intervention.",
+        "Each F1 block reuses seeds7800\u20137804, so internal brackets use the same bank. Paired seeds7900\u20137911 and blocked/interleaved schedules differ; route histograms alone do not establish why estimators differ.",
+        "Do not add isolated gains, transfer profiles into clean event medians, or reject the family because brackets lose."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "On the same expanded frozen fixture bank under both schedules the paired positive disappears, or gains do not track the proposed routing context; retain each sign instead of inventing a selector.",
+      "next_test": {
+        "question": "Does the four-block progress persist when workload bank and scheduling context are matched?",
+        "controls": [
+          "measured original/defaultshim/forced4 driver"
+        ],
+        "discriminator": "If root prioritizes it, reuse exact binaries in one expanded normal/skewed seed bank with matched bracket fixture identity and balanced interleaving; record current routes/own terminals and all signed estimates. No unchanged full screen or forced policy promotion.",
+        "stop_rule": "Record the named contrast and all signed outcomes. Missing required validity invalidates only that attempt; neither a loss nor an estimator disagreement imposes a minimum gain/significance gate or rejects a family.",
+        "required_gates": [
+          "Preserve the exact named source/fixture and attempt evidence relevant to this diagnostic; no general admission gate is introduced."
+        ]
+      },
+      "related_queue_ids": [
+        "research.moe.original.marlin.fourblocks.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "Retain the valid small paired progress without a significance/minimum-size gate. One workload/schedule diagnostic can price broader integration; transferable package gain remains unknown.",
+          "No new GPU reservation, queue action, quota assumption or measured speed forecast follows."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "7f0b7958d7186952251a4747f3d87ae65c4364b6334f6a0d5ebe74c86b13a1e2"
     }
   ],
   "ideas": [

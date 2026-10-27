@@ -12,3 +12,8 @@ activity accurately. Preserve these requirements in handovers and summaries.
 Use the existing ROI queue and exclusive GPU worker; implementation agents do
 CPU work and return source-pinned proposals to the root coordinator. Do not
 launch competing GPU processes or rewrite frozen experiment artifacts.
+
+A source-pinned proposal, GO review, or DONE evidence becomes frozen when sent
+to the coordinator. Later wording corrections, analysis, or additional evidence
+go in separately named supplements; do not overwrite a delivered hash, even
+before receiving the coordinator's admission or completion acknowledgment.

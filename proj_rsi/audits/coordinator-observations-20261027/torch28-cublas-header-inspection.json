@@ -1,0 +1,13 @@
+{
+  "scope": "CPU-only actual targetimage header inspection; no CUDA context or GPU benchmark",
+  "image": "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel",
+  "runtime": "runc, no --gpus",
+  "header": "/opt/conda/lib/python3.11/site-packages/torch/include/ATen/cuda/CUDAContextLight.h",
+  "declarations": {
+    "90": "TORCH_CUDA_CPP_API void clearCublasWorkspaces();",
+    "91": "TORCH_CUDA_CPP_API std::map<std::tuple<void *, void *>, at::DataPtr>& cublas_handle_stream_to_workspace();",
+    "92": "TORCH_CUDA_CPP_API size_t getChosenWorkspaceSize();"
+  },
+  "absent": "ATen/cuda/CublasHandlePool.h",
+  "conclusion": "Direct map.size() matches actual Torch2.8 API; does not establish that previous residual33554432B was workspace."
+}
