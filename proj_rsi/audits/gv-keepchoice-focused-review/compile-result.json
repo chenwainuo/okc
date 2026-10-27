@@ -1,0 +1,50 @@
+{
+  "source_sha256": "244e5b7d6bb8a68b503eebf09dd5c2d6cfba5a579680c24381018c918a802b4a",
+  "targets": {
+    "51": [
+      1,
+      1,
+      2,
+      2,
+      8,
+      16,
+      1,
+      1,
+      0,
+      1
+    ],
+    "0": [
+      1,
+      1,
+      2,
+      1,
+      8,
+      16,
+      1,
+      1,
+      0,
+      1
+    ]
+  },
+  "compiler_argv": [
+    "/usr/local/cuda-12.8/bin/nvcc",
+    "-std=c++20",
+    "-O3",
+    "-lineinfo",
+    "-gencode=arch=compute_90a,code=sm_90a",
+    "-Xptxas=-v",
+    "-I",
+    "/home/ubuntu/.local/lib/python3.10/site-packages/torch/include",
+    "-I",
+    "/home/ubuntu/.local/lib/python3.10/site-packages/torch/include/torch/csrc/api/include",
+    "-c",
+    "/home/ubuntu/okc/proj_rsi/audits/gv-keepchoice-focused-review/focused-wrapper.cu",
+    "-o",
+    "/home/ubuntu/okc/proj_rsi/audits/gv-keepchoice-focused-review/focused-wrapper.o"
+  ],
+  "returncode": 0,
+  "elapsed_seconds_observed": 6.90325465798378,
+  "local_torch": "2.13.0+cpu",
+  "CPU_only": true,
+  "limits": "Compile real local at::Tensor exports with CUDA12.8 and declaration-only at::cuda current stream seam; does not link/load extension, attest remote Torch ABI, initialize CUDA or validate runtime."
+}

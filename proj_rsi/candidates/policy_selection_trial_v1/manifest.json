@@ -1,0 +1,91 @@
+{
+  "version": "allowlisted-policy-selection-direct-v1",
+  "state": "CPU_FROZEN_GPU_UNRUN_FOCUSED_REVIEW_REQUIRED",
+  "files": {
+    "proj_rsi/candidates/policy_selection_trial_v1/driver.py": "8f2cda90b8b19eebc3489020efd11c5650b34dc343c4914ce14928e510794df8",
+    "proj_rsi/candidates/policy_selection_trial_v1/cpu-proof.json": "9bbc932eea8bbf15b4b9461145d1eb89b727f3025e21fc36e876a3b9d41e9b13",
+    "proj_rsi/candidates/combined_policy_trial_v1/driver.py": "f10ca7bb54e59247ed095c3cdb6d604c96fed0e76772907fb2ce5b21ef63674f",
+    "proj_rsi/candidates/policy_integration_trial_v1/support.py": "dc4286bc47af139767e860fd602b3d385a847eada81d1a90d05a385644e15e24",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/candidates/pw45/submission.py": "835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/candidates/rq32_gv_predxor_pw45_v1/submission.py": "137e0dbce0f0126ef9c72d4b6e9b48e0448b02d0c397d9cc0ba927bac2d2a4a6",
+    "proj_rsi/candidates/gv_predxor_keepchoice_v1/submission.py": "244e5b7d6bb8a68b503eebf09dd5c2d6cfba5a579680c24381018c918a802b4a",
+    "proj_rsi/candidates/combined_positive_selection_v1/submission.py": "44d1693ec289630ef25c97a78deb99c8aef9d3ecb06b201aed3eeca215210797"
+  },
+  "derivation": {
+    "base_path": "proj_rsi/candidates/combined_policy_trial_v1/driver.py",
+    "base_sha256": "f10ca7bb54e59247ed095c3cdb6d604c96fed0e76772907fb2ce5b21ef63674f",
+    "edits": [
+      {
+        "name": "new-immutable-trial",
+        "before": "TRIAL=ROOT/'proj_rsi/candidates/combined_policy_trial_v1'",
+        "after": "TRIAL=ROOT/'proj_rsi/candidates/policy_selection_trial_v1'"
+      },
+      {
+        "name": "frozen-source-allowlists",
+        "before": "ALLOWED={'pw45':'835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3','gv_predxor_pw45_v2':'501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9','rq32_gv_predxor_pw45_v1':'137e0dbce0f0126ef9c72d4b6e9b48e0448b02d0c397d9cc0ba927bac2d2a4a6'}",
+        "after": "ALLOWED={'pw45': '835acb90b47bacff3899c1c599ee60a24ca510801868da7971a85b490f9025f3', 'gv_predxor_pw45_v2': '501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9', 'rq32_gv_predxor_pw45_v1': '137e0dbce0f0126ef9c72d4b6e9b48e0448b02d0c397d9cc0ba927bac2d2a4a6', 'gv_predxor_keepchoice_v1': '244e5b7d6bb8a68b503eebf09dd5c2d6cfba5a579680c24381018c918a802b4a', 'combined_positive_selection_v1': '44d1693ec289630ef25c97a78deb99c8aef9d3ecb06b201aed3eeca215210797'}\nCANDIDATES={'keepchoice':'gv_predxor_keepchoice_v1','positive_selection':'combined_positive_selection_v1'}"
+      },
+      {
+        "name": "default-current-GV-vs-keepchoice",
+        "before": "PINS={key:ALLOWED[key]for key in ('pw45','rq32_gv_predxor_pw45_v1')}",
+        "after": "PINS={key:ALLOWED[key]for key in ('gv_predxor_pw45_v2','gv_predxor_keepchoice_v1')}"
+      },
+      {
+        "name": "preserve-original-pick-body",
+        "before": "def pick(mod,state,layer,m,n):",
+        "after": "def _pick_original(mod,state,layer,m,n):"
+      },
+      {
+        "name": "receipt-only-picked-marker-and-implementation",
+        "before": "def router_cases(mod):",
+        "after": "def pick(mod,state,layer,m,n):\n    info,p=_pick_original(mod,state,layer,m,n)\n    if info['family']!='GV':return info,p\n    marker=p[7] if len(p)==8 and isinstance(p[7],str) else None\n    source=Path(mod.__file__).parent.name\n    if source=='gv_predxor_keepchoice_v1':\n        newer=marker=='gvpredxor';native='gvpredrun' if newer else 'gvrun'\n    else:\n        targets=((1,1,1,2,16,8,1,1,0,3),(1,1,2,2,8,16,1,1,0,0),(1,1,2,2,8,16,1,1,0,1),(1,2,2,2,8,16,1,1,0,0),(1,2,2,2,8,16,1,1,0,1),(1,2,2,1,4,16,1,1,2,1),(1,1,2,1,8,16,1,1,0,1))\n        t=tuple(info['variant'])\n        scope=(layer=='pooler'and((t[1]==1 and m in(1,8))or(t[1]==2 and m==16)))or(layer=='unpooler'and t[1]==2 and m==16)\n        newer=source!='pw45' and t in targets and scope;native='gvrun'\n    info=dict(info,plan_length=len(p),plan_trailing_marker=marker,gv_implementation_receipt={'implementation':'predxor' if newer else 'original','native_API':native,'basis':'frozen_source_and_plan_marker_not_profiler'})\n    return info,p\n\ndef gvpred_choice_rows(state):\n    # JSON copy keeps diagnostics separate from live selector state and normalizes tuple-valued metadata.\n    return json.loads(json.dumps([dict(layer=key[0],m=key[1],**record)for key,record in state.get('gvpred_choices',{}).items()],allow_nan=False))\n\ndef router_cases(mod):"
+      },
+      {
+        "name": "snapshot-original-confirmation-receipt-without-state-write",
+        "before": "            result['prepare'][label]={'wall_seconds':time.time()-start,'import_clock_elapsed':time.time()-mod._T0,'budget_clock_reset':False,'serving_CPU_fallback':bool(state.get('cpu')),'build_threads_joined':len(build_threads)}",
+        "after": "            result['prepare'][label]={'wall_seconds':time.time()-start,'import_clock_elapsed':time.time()-mod._T0,'budget_clock_reset':False,'serving_CPU_fallback':bool(state.get('cpu')),'build_threads_joined':len(build_threads)}\n            result['prepare'][label]['gvpred_choices']=gvpred_choice_rows(state)"
+      },
+      {
+        "name": "allowlisted-runtime-parameters",
+        "before": "p.add_argument('--control',choices=('pw45','gv_predxor_pw45_v2'),default='pw45');args=p.parse_args()",
+        "after": "p.add_argument('--control',choices=('pw45','gv_predxor_pw45_v2','rq32_gv_predxor_pw45_v1'),default='gv_predxor_pw45_v2');p.add_argument('--candidate',choices=tuple(CANDIDATES),default='keepchoice');args=p.parse_args()"
+      },
+      {
+        "name": "choose-frozen-runtime-pair",
+        "before": "PINS={key:ALLOWED[key]for key in (args.control,'rq32_gv_predxor_pw45_v1')};LABELS=tuple(PINS)",
+        "after": "PINS={key:ALLOWED[key]for key in (args.control,CANDIDATES[args.candidate])};LABELS=tuple(PINS)"
+      }
+    ]
+  },
+  "runtime_pairs": {
+    "keepchoice_default": [
+      "gv_predxor_pw45_v2",
+      "gv_predxor_keepchoice_v1"
+    ],
+    "margin_marginal": [
+      "rq32_gv_predxor_pw45_v1",
+      "combined_positive_selection_v1"
+    ]
+  },
+  "scope": {
+    "policies": 2,
+    "shapes": 30,
+    "task_checks": 148,
+    "raw_timing_calls": 2910,
+    "terminal_oracles": 120,
+    "mutations": 240,
+    "SASS_gates": 0,
+    "profiler_calls": 0
+  },
+  "bounds": {
+    "inner_seconds": 900,
+    "outer_seconds": 1020,
+    "profile": false
+  },
+  "limits": "Receipt-only augmentation; execution/prepare/timing/numerics/counters/cleanup inherited. Marker interpretation is source-bound, not a profiler observation. No gain/official claim."
+}

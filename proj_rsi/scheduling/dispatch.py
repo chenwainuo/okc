@@ -18,7 +18,7 @@ import shlex
 import subprocess
 import tempfile
 import time
-from .model import ncu_target
+from .model import ncu_target, launch_tools
 
 HOST = 'root@107.170.6.60'
 REMOTE_REPO = '/root/okc'
@@ -86,7 +86,7 @@ for proc in pathlib.Path('/proc').iterdir():
  if not proc.name.isdigit(): continue
  try: args=(proc/'cmdline').read_bytes().split(b'\0')
  except (FileNotFoundError,PermissionError,ProcessLookupError): continue
- if any(a.endswith(b'/h100_trial.sh') for a in args) and name.encode() in args: guards.append(int(proc.name))
+ if any(a.endswith((b'/h100_trial.sh',b'/h100_sglang_trial.sh')) for a in args) and name.encode() in args: guards.append(int(proc.name))
 log=pathlib.Path(h['host_log'])
 text=log.read_text(errors='replace')[-2000000:] if log.is_file() else ''
 matches=re.findall(r'^TRIAL_EXIT '+re.escape(name)+r' (\d+)\s*$',text,re.M)
@@ -137,9 +137,10 @@ class SSHTransport:
     def probe(self, host, handles):
         return self._python(host, _PROBE, json.dumps(handles))
 
-    def runner(self, host):
-        script="import hashlib,json,os,stat; p='/root/okc_run.sh'; print(json.dumps({'sha256':hashlib.sha256(open(p,'rb').read()).hexdigest(),'mode':stat.S_IMODE(os.stat(p).st_mode),'symlink':os.path.islink(p)}))"
-        return self._python(host,script)
+    def runner(self, host, path='/root/okc_run.sh'):
+        if path not in ('/root/okc_run.sh','/root/okc_run_sglang.sh'): raise ValueError('unapproved installed GPU runner path')
+        script="import hashlib,json,os,stat,sys; p=sys.argv[1]; print(json.dumps({'sha256':hashlib.sha256(open(p,'rb').read()).hexdigest(),'mode':stat.S_IMODE(os.stat(p).st_mode),'symlink':os.path.islink(p)}))"
+        return self._python(host,script,path)
 
     def launch(self, host, command):
         return self._ssh(host, command)
@@ -211,8 +212,8 @@ class GPUDispatcher:
         review = job.get('review', {})
         if review.get('decision') != 'GO' or not review.get('actor') or review.get('actor') == job.get('author'):
             raise ValueError('independent GO review required')
-        guard_path='proj_rsi/tools/h100_trial.sh'
-        if guard_path not in pins or 'proj_rsi/tools/h100_container.sh' not in pins:raise ValueError('hardware guard and container runner must be source-pinned')
+        guard_path,runner_pin,installed_runner=launch_tools(launch)
+        if guard_path not in pins or runner_pin not in pins:raise ValueError('hardware guard and container runner must be source-pinned')
         review_path, review_hash = review.get('path'), review.get('sha256')
         if review_path in pins and pins[review_path] != review_hash:
             raise ValueError('conflicting review hash')
@@ -245,7 +246,8 @@ class GPUDispatcher:
     @staticmethod
     def _command(launch, handles):
         argv = ['env'] + [key + '=' + value for key, value in sorted((k,v) for k,v in launch.get('env', {}).items() if k!='PROJ_GPU_PROFILE')] + launch['argv']
-        guard = ['bash', REMOTE_REPO + '/proj_rsi/tools/h100_trial.sh', launch['container'],
+        guard_path,_,_=launch_tools(launch)
+        guard = ['bash', REMOTE_REPO + '/' + guard_path, launch['container'],
                  str(launch['outer_seconds']), str(launch['inner_seconds']), *argv]
         guard = ['env', 'PROJ_GPU_PROFILE=' + ('1' if launch.get('profile') is True else '0'), *guard]
         # The background job is exactly nohup, never a validation AND-list.
@@ -272,9 +274,10 @@ class GPUDispatcher:
             self.transport.upload(HOST, self.repo_root, REMOTE_REPO, paths)
             actual = self.transport.hashes(HOST, REMOTE_REPO, paths)
             if actual != pins: raise ValueError('remote source/review hashes differ')
-            runner=self.transport.runner(HOST)
-            if runner.get('sha256')!=pins['proj_rsi/tools/h100_container.sh'] or runner.get('mode')!=0o755 or runner.get('symlink',False):
-                raise ValueError('installed /root/okc_run.sh differs from pinned runner or mode755; root manual installation required')
+            _,runner_pin,installed_runner=launch_tools(launch)
+            runner=self.transport.runner(HOST) if installed_runner=='/root/okc_run.sh' else self.transport.runner(HOST,installed_runner)
+            if runner.get('sha256')!=pins[runner_pin] or runner.get('mode')!=0o755 or runner.get('symlink',False):
+                raise ValueError('installed '+installed_runner+' differs from pinned runner or mode755; root manual installation required')
             self.store.attach(job_id,{'dispatch':handles,'installed_runner':runner})
             # Check again after transfer; a local edit during upload invalidates dispatch.
             self._validate(self.store.get(job_id))

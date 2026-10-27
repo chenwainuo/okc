@@ -11,6 +11,19 @@ STATES = {'BACKLOG', 'READY', 'RUNNING', 'VALIDATING', 'DONE', 'HELD', 'CANCELLE
 _ID = re.compile(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,127}\Z')
 _HASH = re.compile(r'[0-9a-f]{64}\Z')
 
+DEFAULT_GPU_IMAGE = 'pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel'
+SGLANG_GPU_IMAGE = 'lmsysorg/sglang@sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a'
+GPU_IMAGE_TOOLS = {
+    DEFAULT_GPU_IMAGE: ('proj_rsi/tools/h100_trial.sh', 'proj_rsi/tools/h100_container.sh', '/root/okc_run.sh'),
+    SGLANG_GPU_IMAGE: ('proj_rsi/tools/h100_sglang_trial.sh', 'proj_rsi/tools/h100_sglang_container.sh', '/root/okc_run_sglang.sh'),
+}
+
+def launch_tools(launch):
+    image = launch.get('image', DEFAULT_GPU_IMAGE)
+    if not isinstance(image, str) or image not in GPU_IMAGE_TOOLS:
+        raise ValueError('launch image must be one of the two explicitly allowed GPU images')
+    return GPU_IMAGE_TOOLS[image]
+
 def load_policy(path=None):
     policy = json.loads(Path(path or Path(__file__).with_name('policy.json')).read_text())
     return _validate_policy(policy)
@@ -177,8 +190,10 @@ def _validate_job(job, *, for_admission=False, policy):
     if launch is not None:
         if not isinstance(launch, dict): errors.append('launch must be an object')
         else:
-            allowed = {'host','remote_repo','container','inner_seconds','outer_seconds','profile','env','argv','artifacts'}
+            allowed = {'host','remote_repo','container','inner_seconds','outer_seconds','profile','env','argv','artifacts','image'}
             if set(launch)-allowed: errors.append('unknown launch keys')
+            try: launch_tools(launch)
+            except ValueError as error: errors.append(str(error))
             if launch.get('host') != 'root@107.170.6.60': errors.append('launch host must be approved H100 host')
             if launch.get('remote_repo') != '/root/okc': errors.append('remote_repo must be /root/okc')
             if not isinstance(launch.get('container'), str) or not re.fullmatch(r'okc-proj-[a-z0-9-]{1,101}', launch['container']): errors.append('container must be safe unique okc-proj name')
@@ -209,7 +224,9 @@ def _validate_job(job, *, for_admission=False, policy):
     if for_admission and resource == 'gpu':
         if not files: errors.append('GPU admission requires pinned files')
         if isinstance(files,dict):
-            for required in ('proj_rsi/tools/h100_trial.sh','proj_rsi/tools/h100_container.sh'):
+            try: selected_tools = launch_tools(launch)[:2] if isinstance(launch,dict) else ()
+            except ValueError: selected_tools = ()
+            for required in selected_tools:
                 if required not in files: errors.append(f'GPU admission requires pinned tool: {required}')
         if not isinstance(review,dict) or review.get('decision') != 'GO': errors.append('GPU admission requires independent GO review')
         if launch is None: errors.append('GPU admission requires launch descriptor')
