@@ -38,6 +38,14 @@ historical LOOP.md log is evidence, not the current work queue.
 - Preserve every source/result and signed effect. Diagnose failed attempts,
   repair and iterate; a losing version does not reject its family. Record facts,
   causal hypothesis, scope, counterevidence, next falsifier and ROI implications.
+- For every failed or non-reproducing projection attempt, record whether the
+  failure concerns setup/correctness, implementation, actual path selection,
+  measurement comparability, or performance transfer. Mark each proposed cause
+  PROVEN, LIKELY or UNKNOWN; passing numerics alone does not rule out an
+  implementation or dispatch mistake. Name the smallest discriminating test and
+  retain a reopening condition for parked versions. An unexplained loss is not
+  proof against the idea. This CPU diagnosis runs alongside the next experiment,
+  rather than becoming an additional GPU admission gate.
 - Stack compatible changes explicitly and measure the actual combined package
   against its parent and incumbent. Source inclusion, selected execution,
   local gains and official gains are separate facts. Never add isolated gains
