@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "registry_version": 4,
+  "registry_version": 6,
   "lessons": [
     {
       "id": "native-x-parent-progress",
@@ -2519,6 +2519,1213 @@
         "gpu_seconds": null
       },
       "record_sha256": "0b1412086eb2fda600b31e1b097055023a0400907a82d9d03db458567d44c702"
+    },
+    {
+      "id": "pw45-small-fixed-gain-unselected-mixed-package",
+      "version": 1,
+      "supersedes": null,
+      "title": "A tiny fixed mechanism win can coexist with an unselected path and conflicting package estimators",
+      "tags": [
+        "o32-HALF-fullK",
+        "actual-policy",
+        "paired",
+        "F1",
+        "small-gains"
+      ],
+      "context": {
+        "experiment_id": "research.pw45.gpu.01",
+        "family": "o32-HALF-fullK",
+        "parents": [
+          "scored PW38 source29e557ea53f3"
+        ],
+        "comparators": [
+          "actual independently prepared PW38",
+          "fixed mechanism arms separately where declared"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local132SM"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/audits/pw45-runtime-independent.json",
+            "sha256": "236a0141f6276edf61d0b1e3882f01d472fd5f3a26bcbe5097897eaf24b906f3",
+            "role": "independently validated immutable actual collection summary"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "runtime",
+          "path": "proj_rsi/audits/pw45-runtime-independent.json",
+          "sha256": "236a0141f6276edf61d0b1e3882f01d472fd5f3a26bcbe5097897eaf24b906f3"
+        }
+      ],
+      "observations": [
+        {
+          "id": "paired",
+          "statement": "Actual PW38-minus-PW45 paired aggregate point is positive; no effect-size filter.",
+          "outcome": "positive",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/pw38_minus_pw45_local_score_estimate_us/paired",
+            "equals": 7.453381362991422
+          }
+        },
+        {
+          "id": "f1",
+          "statement": "Actual F1 aggregate point is negative and must remain explicit.",
+          "outcome": "negative",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/pw38_minus_pw45_local_score_estimate_us/F1",
+            "equals": -9.135128164251
+          }
+        },
+        {
+          "id": "st5",
+          "statement": "Fixed ST5 HALF fullK tiny paired win over old early ST5 remains preserved.",
+          "outcome": "positive",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/fixed_o32_mechanism/contrasts/old_st5_early_zi_minus_half_st5_fullk/paired_median_gain_us",
+            "equals": 0.06399955600500107
+          }
+        },
+        {
+          "id": "st4",
+          "statement": "Fixed ST4 HALF fullK loses the same old control.",
+          "outcome": "negative",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/fixed_o32_mechanism/contrasts/old_st5_early_zi_minus_half_st4_fullk/paired_median_gain_us",
+            "equals": -0.4960000514984131
+          }
+        },
+        {
+          "id": "selected",
+          "statement": "Actual PW45 o32 uses GV, so the fixed HALF mechanism is not its serving path.",
+          "outcome": "neutral",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/actual_o32_basis/pw45/pick/family",
+            "equals": "GV"
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Independent prepare selections and timing context may explain conflicting package estimators; neither the fixed win nor the package paired point isolates a causal source gain.",
+          "status": "unproven",
+          "observation_ids": [
+            "paired",
+            "f1",
+            "st5",
+            "st4",
+            "selected"
+          ]
+        }
+      ],
+      "scope": "One independently prepared policy per source on local H100; no official result or transfer forecast.",
+      "transfer_limits": [
+        "No official H200 score, independent feature causality, repeat-prepare frequency or saved-time forecast follows.",
+        "Retain every signed point and conflicting estimator; source-family retirement is not implied."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Evaluate the measured positive package point under root official controls while preserving opposite F1 and exact source/picks. Any mechanism refinement gets a new immutable version and compares actual prepared paths; do not force the fixed winner.",
+      "next_test": {
+        "question": "A tiny fixed mechanism win can coexist with an unselected path and conflicting package estimators",
+        "controls": [
+          "Actual independently prepared PW38 full policy",
+          "Fixed mechanism contrasts remain separate from selected path"
+        ],
+        "discriminator": "Evaluate the measured positive package point under root official controls while preserving opposite F1 and exact source/picks. Any mechanism refinement gets a new immutable version and compares actual prepared paths; do not force the fixed winner.",
+        "stop_rule": "Missing validity gates invalidate evidence; estimator disagreement is preserved without imposing a new effect-size/significance cutoff.",
+        "required_gates": [
+          "Frozen source/JIT/inventory/actualSO identity and strict terminal/current-X/fullphysical counter/immutability/cleanup",
+          "All raw signed paired/F1 observations and actual selected plans retained"
+        ]
+      },
+      "related_queue_ids": [
+        "research.pw45.gpu.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Future benefit and H200 transfer remain unknown."
+        ]
+      },
+      "cost": {
+        "basis": "This evidence backfill authorizes no future reservation or job.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "794f67c8a9893cae1066cfc42b56382025c7df13fee3777eaaa180a249b74fe3"
+    },
+    {
+      "id": "pw46-proxy-preserved-final-policy-regresses",
+      "version": 1,
+      "supersedes": null,
+      "title": "Preserving a proxy repairs fallback behavior without establishing actual incumbent parity",
+      "tags": [
+        "prepare-selection",
+        "actual-policy",
+        "paired",
+        "F1",
+        "small-gains"
+      ],
+      "context": {
+        "experiment_id": "pw46.stack.fullscope.01",
+        "family": "prepare-selection",
+        "parents": [
+          "scored PW38 source29e557ea53f3"
+        ],
+        "comparators": [
+          "actual independently prepared PW38",
+          "fixed mechanism arms separately where declared"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local132SM"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_REGRESSION",
+        "sources": [
+          {
+            "path": "proj_rsi/audits/pw46-runtime-independent.json",
+            "sha256": "5e0b427859f226468b15ca5446e8be1ef5ac49a5bb317c4e3a3978ce98d1ee1d",
+            "role": "independently validated immutable actual collection summary"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "runtime",
+          "path": "proj_rsi/audits/pw46-runtime-independent.json",
+          "sha256": "5e0b427859f226468b15ca5446e8be1ef5ac49a5bb317c4e3a3978ce98d1ee1d"
+        }
+      ],
+      "observations": [
+        {
+          "id": "paired",
+          "statement": "Actual PW38-minus-PW46 paired aggregate is negative.",
+          "outcome": "negative",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/pw38_minus_pw46_local_score_estimate_us/paired",
+            "equals": -7.058786059357772
+          }
+        },
+        {
+          "id": "f1",
+          "statement": "Actual F1 aggregate also regresses.",
+          "outcome": "negative",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/pw38_minus_pw46_local_score_estimate_us/F1",
+            "equals": -10.297969355971873
+          }
+        },
+        {
+          "id": "qkv",
+          "statement": "Completed QKV confirmation preserves its proxy on conflicting/loss observations.",
+          "outcome": "neutral",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/Lt_actual_confirmation/0/reason",
+            "equals": "equivocal_or_loss_preserve_incumbent"
+          }
+        },
+        {
+          "id": "pooler",
+          "statement": "Pooler confirmation is not admitted; preserved proxy remains distinct from actual PW38.",
+          "outcome": "neutral",
+          "evidence": "runtime",
+          "selector": {
+            "json_pointer": "/Lt_actual_confirmation/2/status",
+            "equals": "not_admitted"
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Logging/discovery context, prepare variance and downstream RQ selection may change final paths; this single run cannot isolate their effects.",
+          "status": "unproven",
+          "observation_ids": [
+            "paired",
+            "f1",
+            "qkv",
+            "pooler"
+          ]
+        }
+      ],
+      "scope": "One independently prepared policy per source on local H100; no official result or transfer forecast.",
+      "transfer_limits": [
+        "No official H200 score, independent feature causality, repeat-prepare frequency or saved-time forecast follows.",
+        "Retain every signed point and conflicting estimator; source-family retirement is not implied."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "Compare proxy configurations and post-RQ final serving policy against separately prepared actual PW38 across repeated full prepares; charge original whole budgets, retain all signs and do not hardcode recorded winners.",
+      "next_test": {
+        "question": "Preserving a proxy repairs fallback behavior without establishing actual incumbent parity",
+        "controls": [
+          "Actual independently prepared PW38 full policy",
+          "Fixed mechanism contrasts remain separate from selected path"
+        ],
+        "discriminator": "Compare proxy configurations and post-RQ final serving policy against separately prepared actual PW38 across repeated full prepares; charge original whole budgets, retain all signs and do not hardcode recorded winners.",
+        "stop_rule": "Missing validity gates invalidate evidence; estimator disagreement is preserved without imposing a new effect-size/significance cutoff.",
+        "required_gates": [
+          "Frozen source/JIT/inventory/actualSO identity and strict terminal/current-X/fullphysical counter/immutability/cleanup",
+          "All raw signed paired/F1 observations and actual selected plans retained"
+        ]
+      },
+      "related_queue_ids": [
+        "pw46.stack.fullscope.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Future benefit and H200 transfer remain unknown."
+        ]
+      },
+      "cost": {
+        "basis": "This evidence backfill authorizes no future reservation or job.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "1d2370f374817b2294d8eb1f2f2373a69b488e4a269420af42e0b7f5612302ff"
+    },
+    {
+      "id": "occupancy-versus-producer-ilp-packed-stores",
+      "version": 1,
+      "supersedes": null,
+      "title": "Higher queried CTA capacity can lose when producer ILP and packed stores change",
+      "tags": [
+        "moe-SS-producer-schedule",
+        "actual-resources",
+        "matched-controls",
+        "signed-outcomes"
+      ],
+      "context": {
+        "experiment_id": "research.moe.ss.decode.lut.rolled.down.01",
+        "family": "moe-SS-producer-schedule",
+        "parents": [
+          "exact v1 LUT control@29e8ccca7da01aeab28e2964b6e98d1e7d89cad8cb884f34f956bf25091b5974",
+          "measured rolled v2@e91f5d5d609d5b1d8ab9bfb93d8db9e8cda1f691e1b6c6921f4b3606314566bd",
+          "two-value scatter derivative@1cbb9d6863acb6cc03ddc2be925a6573463d6d40b5fa26c6a1418c17d7e26423"
+        ],
+        "comparators": [
+          "exact measured v1 LUT down",
+          "failed rolled v2 down",
+          "measured two-value scatter down"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local132SM, fixed M8 MoE stage scope"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/learning_archive/evidence-v6/occupancy-versus-producer-ilp-packed-stores-source0-29e8ccca7da0.cu",
+            "sha256": "29e8ccca7da01aeab28e2964b6e98d1e7d89cad8cb884f34f956bf25091b5974",
+            "role": "exact v1 LUT control"
+          },
+          {
+            "path": "proj_rsi/learning_archive/evidence-v6/occupancy-versus-producer-ilp-packed-stores-source1-e91f5d5d609d.cu",
+            "sha256": "e91f5d5d609d5b1d8ab9bfb93d8db9e8cda1f691e1b6c6921f4b3606314566bd",
+            "role": "measured rolled v2"
+          },
+          {
+            "path": "proj_rsi/learning_archive/evidence-v6/occupancy-versus-producer-ilp-packed-stores-source2-1cbb9d6863ac.cu",
+            "sha256": "1cbb9d6863acb6cc03ddc2be925a6573463d6d40b5fa26c6a1418c17d7e26423",
+            "role": "two-value scatter derivative"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "v1",
+          "path": "proj_rsi/learning_archive/evidence-v6/occupancy-versus-producer-ilp-packed-stores-v1-c3b43e606e4a.json",
+          "sha256": "c3b43e606e4a96fe1244e759f4b260c5d81a121ff5882b6354b9d1ce6fce806e"
+        },
+        {
+          "id": "v2",
+          "path": "proj_rsi/learning_archive/evidence-v6/occupancy-versus-producer-ilp-packed-stores-v2-f726b5baa437.json",
+          "sha256": "f726b5baa43720bca590012a0d0783f3017f55d348b2429584a9ee451dd17823"
+        },
+        {
+          "id": "scatter",
+          "path": "proj_rsi/learning_archive/evidence-v6/occupancy-versus-producer-ilp-packed-stores-scatter-e5953db04462.json",
+          "sha256": "e5953db044628683d72133a588f38798dc182b483b9463dde1fd48f54f2a21c2"
+        }
+      ],
+      "observations": [
+        {
+          "id": "v1_capacity",
+          "statement": "The actual v1 down function query returns a maximum active capacity of four CTAs/SM.",
+          "outcome": "neutral",
+          "evidence": "v2",
+          "selector": {
+            "json_pointer": "/v1_resources/occupancy",
+            "equals": 4
+          }
+        },
+        {
+          "id": "v2_capacity",
+          "statement": "Rolled v2 raises the queried maximum active down capacity to five CTAs/SM.",
+          "outcome": "positive",
+          "evidence": "v2",
+          "selector": {
+            "json_pointer": "/actual_v2_resources/0/occupancy",
+            "equals": 5
+          }
+        },
+        {
+          "id": "v2_loss",
+          "statement": "Despite 59-to-48 register reduction and higher queried CTA capacity, v2 loses all eight paired down seeds.",
+          "outcome": "negative",
+          "evidence": "v2",
+          "selector": {
+            "json_pointer": "/paired/median_v1_minus_v2_us",
+            "equals": -101.93600505590439
+          }
+        },
+        {
+          "id": "schedule",
+          "statement": "Actual code changes from eight independent LDS.U16 lookups then four packed word stores to alternating dependent lookup/half-store instructions.",
+          "outcome": "neutral",
+          "evidence": "v2",
+          "selector": {
+            "json_pointer": "/producer_schedule_observation/observed",
+            "equals": "v1firststep issues8LDS_U16 before4packedSTS32; v2alternates8LDS_U16/dependentSTS_U16 beforebackedge0x2440_to_0x1f80. Same BF16payload but8halfstoreinstructions versus4wordstores."
+          }
+        },
+        {
+          "id": "scatter_rescue",
+          "statement": "Restoring two-value packed scatter improves all eight seeds over failed v2.",
+          "outcome": "positive",
+          "evidence": "scatter",
+          "selector": {
+            "json_pointer": "/comparisons/v2_rolled_down_versus_two_value_scatter/median_control_minus_variant_us",
+            "equals": 24.46400374174118
+          }
+        },
+        {
+          "id": "scatter_still_loses",
+          "statement": "The packed scatter variant still loses all eight seeds to actual v1 LUT.",
+          "outcome": "negative",
+          "evidence": "scatter",
+          "selector": {
+            "json_pointer": "/comparisons/v1_full_lut_versus_two_value_scatter/median_control_minus_variant_us",
+            "equals": -82.43200182914734
+          }
+        },
+        {
+          "id": "counterexample",
+          "statement": "Earlier exact v1 LUT improved down over original while reducing queried maximum active CTA capacity from five to four CTAs/SM.",
+          "outcome": "positive",
+          "evidence": "v1",
+          "selector": {
+            "json_pointer": "/stage/down/median_paired_saving_us",
+            "equals": 112.43200302124023
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Register/liveness reduction traded away independent lookup issue and packed stores. Scatter rescue supports a material schedule/store cost, but cannot assign unique cycles or show occupancy alone caused either result.",
+          "status": "unproven",
+          "observation_ids": [
+            "v1_capacity",
+            "v2_capacity",
+            "v2_loss",
+            "schedule",
+            "scatter_rescue",
+            "scatter_still_loses",
+            "counterexample"
+          ]
+        }
+      ],
+      "scope": "One actual M8 down-stage v1/v2/scatter sequence with bitwise current-input and mixed full numerical checks. Full-serving speed and official incumbent comparisons were not timed in these stage screens.",
+      "transfer_limits": [
+        "Actual SASS and resource query returns are facts; queried maximum active CTA capacity is not measured residency/scheduling, and causal ILP/latency attribution remains unproven.",
+        "A shared producer version loss does not reject rolling, lookup tables, occupancy changes or the SS family.",
+        "Do not transfer H100 stage deltas to whole serving, Marlin or H200."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "An equal-resource producer schedule retaining v1 lookup independence and packed stores does not change the measured contrast, or an independently attributed consumer bottleneck dominates.",
+      "next_test": {
+        "question": "Does producer dependency/store formation explain the remaining v1-versus-scatter gap?",
+        "controls": [
+          "exact measured v1 LUT down",
+          "failed rolled v2 down",
+          "measured two-value scatter down"
+        ],
+        "discriminator": "At one fixed M8 workload, distinguish the retained producer schedule from consumer/startup costs using only an already justified scoped contrast. Query actual resources and inspect realized stores; do not launch a broad occupancy sweep or infer elapsed-time savings from opcode counts.",
+        "stop_rule": "Record the named contrast and all signed outcomes. Missing required validity invalidates only that attempt; neither a loss nor an estimator disagreement imposes a minimum gain/significance gate or rejects a family.",
+        "required_gates": [
+          "Use the exact source, workload and comparator named for this discriminator.",
+          "Check the actual observed state or selected native path; preserve current-input/terminal/cleanup evidence relevant to the measured scope."
+        ]
+      },
+      "related_queue_ids": [
+        "research.moe.ss.decode.lut.rolled.down.01",
+        "research.moe.ss.two.value.scatter.down.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "Retain the measured scatter rescue and v1 counterwin. Information value is choosing producer versus consumer work before another rewrite; attainable gain remains unknown.",
+          "No benefit forecast, new GPU reservation, quota assumption or promotion follows from this registry update."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "3b3f08ae7745a0e5275eb4ec3459854104c8ffa55e70141d4ef4b67d7cd8e2c7"
+    },
+    {
+      "id": "grouped-stages-sync-versus-shared-residency",
+      "version": 1,
+      "supersedes": null,
+      "title": "Halving sync rounds can lose with a larger ring; retain both B7 gains",
+      "tags": [
+        "moe-SS-grouped-stages",
+        "actual-resources",
+        "matched-controls",
+        "signed-outcomes"
+      ],
+      "context": {
+        "experiment_id": "research.moe.ss.lut.pair2.stage.01",
+        "family": "moe-SS-grouped-stages",
+        "parents": [
+          "exact v1 LUT control@29e8ccca7da01aeab28e2964b6e98d1e7d89cad8cb884f34f956bf25091b5974",
+          "measured pair2 source@dc31999a4ad82ef9ed5ff140a83df10ba580060ead1b3cde87f3cd53ad0843e5"
+        ],
+        "comparators": [
+          "exact v1 LUT up/down",
+          "measured pair2 up/down",
+          "both observed B7 contexts plus B6/B9/B11 countercontexts"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local132SM, fixed M8 MoE stage scope"
+        },
+        "validity": "VALID_LOCAL",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/learning_archive/evidence-v6/grouped-stages-sync-versus-shared-residency-source0-29e8ccca7da0.cu",
+            "sha256": "29e8ccca7da01aeab28e2964b6e98d1e7d89cad8cb884f34f956bf25091b5974",
+            "role": "exact v1 LUT control"
+          },
+          {
+            "path": "proj_rsi/learning_archive/evidence-v6/grouped-stages-sync-versus-shared-residency-source1-dc31999a4ad8.cu",
+            "sha256": "dc31999a4ad82ef9ed5ff140a83df10ba580060ead1b3cde87f3cd53ad0843e5",
+            "role": "measured pair2 source"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "pair",
+          "path": "proj_rsi/learning_archive/evidence-v6/grouped-stages-sync-versus-shared-residency-pair-7b1c5ac8beb0.json",
+          "sha256": "7b1c5ac8beb024c1012c58db220f2a4448f5bf0352c012a2da9dab95b31da2b0"
+        },
+        {
+          "id": "v1",
+          "path": "proj_rsi/learning_archive/evidence-v6/grouped-stages-sync-versus-shared-residency-v1-c3b43e606e4a.json",
+          "sha256": "c3b43e606e4a96fe1244e759f4b260c5d81a121ff5882b6354b9d1ce6fce806e"
+        }
+      ],
+      "observations": [
+        {
+          "id": "realized",
+          "statement": "Actual eight MMAs/group and 32 logical rounds were verified; reduced sync rounds did not produce aggregate stage gain.",
+          "outcome": "neutral",
+          "evidence": "pair",
+          "selector": {
+            "json_pointer": "/causal_interpretation/0",
+            "equals": "Actual8MMA/groups and32logicalrounds passed; reducing sync rounds did not yield overall stage gain in this package."
+          }
+        },
+        {
+          "id": "up_loss",
+          "statement": "Pair2 up paired median saving is negative.",
+          "outcome": "negative",
+          "evidence": "pair",
+          "selector": {
+            "json_pointer": "/stage/up/paired_median_saving_us",
+            "equals": -43.66399347782135
+          }
+        },
+        {
+          "id": "down_loss",
+          "statement": "Pair2 down paired median saving is negative despite unchanged queried maximum capacity of four CTAs/SM.",
+          "outcome": "negative",
+          "evidence": "pair",
+          "selector": {
+            "json_pointer": "/stage/down/paired_median_saving_us",
+            "equals": -46.720005571842194
+          }
+        },
+        {
+          "id": "up_capacity",
+          "statement": "Pair2 up queries a maximum active capacity of four CTAs/SM versus v1 six.",
+          "outcome": "negative",
+          "evidence": "pair",
+          "selector": {
+            "json_pointer": "/stage/up/actual_candidate_resources/occupancy",
+            "equals": 4
+          }
+        },
+        {
+          "id": "B7a",
+          "statement": "The first B7 up context retains a positive 51.232010us paired saving.",
+          "outcome": "positive",
+          "evidence": "pair",
+          "selector": {
+            "json_pointer": "/stage/up/pairs/3/saving_us",
+            "equals": 51.23201012611389
+          }
+        },
+        {
+          "id": "B7b",
+          "statement": "The second B7 up context retains a positive 51.551998us paired saving under opposite arm order.",
+          "outcome": "positive",
+          "evidence": "pair",
+          "selector": {
+            "json_pointer": "/stage/up/pairs/6/saving_us",
+            "equals": 51.551997661590576
+          }
+        },
+        {
+          "id": "shared",
+          "statement": "Measured pair2 dynamic shared allocation is 46112 bytes.",
+          "outcome": "neutral",
+          "evidence": "pair",
+          "selector": {
+            "json_pointer": "/stage/up/actual_candidate_resources/dynamic_shared",
+            "equals": 46112
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "A larger shared ring reduces queried maximum active up CTA capacity, while actual scheduling, batching/startup and producer ILP remain confounded; down losses at equal queried capacity show this capacity alone is insufficient. B7 gains may reflect schedule/wave context rather than a general group-size win.",
+          "status": "unproven",
+          "observation_ids": [
+            "realized",
+            "up_loss",
+            "down_loss",
+            "up_capacity",
+            "B7a",
+            "B7b",
+            "shared"
+          ]
+        }
+      ],
+      "scope": "Fixed M8 EP8 normal up/down stages versus exact v1 LUT, eight routing seeds with frozen-record F1. Mixed full serving was checked numerically, not timed. B7 identifies these two observed routing contexts, not a validated dispatch policy.",
+      "transfer_limits": [
+        "Idealized wave counts are a source/resource model, not measured CTA scheduling.",
+        "Do not average away B7 positives or declare B7-selectable whole-serving coverage.",
+        "Fewer barriers/sync rounds is not a speed forecast; one pair2 loss is not a grouped-stage family rejection."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "An equal-queried-capacity grouping contrast does not preserve B7 gains or improve the named stage; actual scheduling attribution contradicts the wave hypothesis.",
+      "next_test": {
+        "question": "Can grouped-stage work preserve useful B7 progress without losing queried CTA capacity or equal-capacity down performance?",
+        "controls": [
+          "exact v1 LUT up/down",
+          "measured pair2 up/down",
+          "both observed B7 contexts plus B6/B9/B11 countercontexts"
+        ],
+        "discriminator": "Preserve both signed B7 outcomes and compare only a resource-accounted grouping refinement or existing producer/consumer diagnostic. Keep the same frozen workload per F1 bracket; do not hardcode a B7 winner or repeat a broad group sweep.",
+        "stop_rule": "Record the named contrast and all signed outcomes. Missing required validity invalidates only that attempt; neither a loss nor an estimator disagreement imposes a minimum gain/significance gate or rejects a family.",
+        "required_gates": [
+          "Use the exact source, workload and comparator named for this discriminator.",
+          "Check the actual observed state or selected native path; preserve current-input/terminal/cleanup evidence relevant to the measured scope."
+        ]
+      },
+      "related_queue_ids": [
+        "research.moe.ss.lut.pair2.stage.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "B7 progress remains evidence for a specific future causal question. Full-package gain and useful runtime coverage are unknown, so next work needs its own bounded ROI price.",
+          "No benefit forecast, new GPU reservation, quota assumption or promotion follows from this registry update."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "b3a7369aaba69502cabed4bebb1012b01cc54eab82cf97790cc88d6ea58d19ca"
+    },
+    {
+      "id": "f1-exact-workload-not-distinct-seeds",
+      "version": 1,
+      "supersedes": null,
+      "title": "An F1 bracket needs the same workload; distinct routing seeds are confounded",
+      "tags": [
+        "measurement-workload-identity",
+        "actual-resources",
+        "matched-controls",
+        "signed-outcomes"
+      ],
+      "context": {
+        "experiment_id": "research.moe.ss.lut.whole.01",
+        "family": "measurement-workload-identity",
+        "parents": [
+          "whole-serving measurement driver@b9efd01454a980f17e8a83a12333f5940d4d5a9b4331d4869cf1cfb4926a1377",
+          "frozen-record stage driver@d19e7c6b0c13145aba1ab41987b2ad9b4288b4bd4b5df93b3f15d9e9b715febc"
+        ],
+        "comparators": [
+          "same immutable record copied into private arm graph buffers",
+          "balanced per-seed paired comparisons",
+          "original unmatched groups retained as descriptive context"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local132SM, fixed M8 MoE stage scope"
+        },
+        "validity": "VALIDATED_DIAGNOSIS",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/learning_archive/evidence-v6/f1-exact-workload-not-distinct-seeds-source0-b9efd01454a9.py",
+            "sha256": "b9efd01454a980f17e8a83a12333f5940d4d5a9b4331d4869cf1cfb4926a1377",
+            "role": "whole-serving measurement driver"
+          },
+          {
+            "path": "proj_rsi/learning_archive/evidence-v6/f1-exact-workload-not-distinct-seeds-source1-d19e7c6b0c13.py",
+            "sha256": "d19e7c6b0c13145aba1ab41987b2ad9b4288b4bd4b5df93b3f15d9e9b715febc",
+            "role": "frozen-record stage driver"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "whole",
+          "path": "proj_rsi/learning_archive/evidence-v6/f1-exact-workload-not-distinct-seeds-whole-be274fd26b05.json",
+          "sha256": "be274fd26b052b76be512617b30dc5a62e7cbd33bbaad89531a7ecdd66d0f000"
+        },
+        {
+          "id": "fixed",
+          "path": "proj_rsi/learning_archive/evidence-v6/f1-exact-workload-not-distinct-seeds-fixed-f726b5baa437.json",
+          "sha256": "f726b5baa43720bca590012a0d0783f3017f55d348b2429584a9ee451dd17823"
+        }
+      ],
+      "observations": [
+        {
+          "id": "unmatched",
+          "statement": "The whole-serving descriptive F1 groups used distinct input/routing fixtures.",
+          "outcome": "negative",
+          "evidence": "whole",
+          "selector": {
+            "json_pointer": "/F1_design/matched_fixtures",
+            "equals": false
+          }
+        },
+        {
+          "id": "identity_code",
+          "statement": "Its block-specific seed formula changed the workload between F1 arms.",
+          "outcome": "negative",
+          "evidence": "whole",
+          "selector": {
+            "json_pointer": "/F1_design/code",
+            "equals": "seed=7800+10*block+i"
+          }
+        },
+        {
+          "id": "paired_valid",
+          "statement": "Balanced paired whole-serving comparisons retained identical routing across all arms.",
+          "outcome": "positive",
+          "evidence": "whole",
+          "selector": {
+            "json_pointer": "/paired_fixture_routing_equal_all_arms",
+            "equals": true
+          }
+        },
+        {
+          "id": "repair",
+          "statement": "The later stage F1 bracket reuses one frozen seed7904 record and private graph buffers.",
+          "outcome": "positive",
+          "evidence": "fixed",
+          "selector": {
+            "json_pointer": "/fixed_workload_F1/routing_record_identical",
+            "equals": true
+          }
+        },
+        {
+          "id": "frozen_hashes",
+          "statement": "The corrected bracket retains byte hashes for activation, sorted routes, experts and post metadata.",
+          "outcome": "neutral",
+          "evidence": "fixed",
+          "selector": {
+            "json_pointer": "/F1_frozen_workload/tensor_byte_sha256",
+            "equals": {
+              "x": "4ed0c47c0b1df1c2ecac11db2b53220d2c8d903de7b0cde637cd7feeaaa8fa59",
+              "sorted_ids": "9d0c9dc666185991b9c26aa7f03207fec4df1d95f5a0d3f5d6cfca5ce66624fc",
+              "experts": "cb045ee8d79fcccf3d744ec18516c1edf3b9088c1305ff9c5f0cc05fffbda412",
+              "post": "50c8ba3a6170f0a2fb6736ece8a603576ef6309a35e810911599bc6211b554a9"
+            }
+          }
+        },
+        {
+          "id": "real_loss",
+          "statement": "Both corrected fixed-workload F1 endpoints lose to v1; preserving workload identity does not imply candidate success.",
+          "outcome": "negative",
+          "evidence": "fixed",
+          "selector": {
+            "json_pointer": "/fixed_workload_F1/after_minus_v2_us",
+            "equals": -14.27200436592102
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Different active-block and input/routing workloads confound arm effects with workload effects; identical fixtures and byte hashes remove this particular confound while leaving clock/context and finite-sample uncertainty.",
+          "status": "unproven",
+          "observation_ids": [
+            "unmatched",
+            "identity_code",
+            "paired_valid",
+            "repair",
+            "frozen_hashes",
+            "real_loss"
+          ]
+        }
+      ],
+      "scope": "MoE whole-serving descriptive groups and subsequent fixed M8 down-stage F1 repair. Routing changes active local expert blocks and therefore actual kernel work. Paired evidence remains valid; unmatched F1 groups are not a controlled stack-effect estimator.",
+      "transfer_limits": [
+        "Do not call unmatched-block signs estimator disagreement with matched paired effects.",
+        "A common seed label alone is weaker than exact workload/metadata identity; keep hashes or immutable identity receipts.",
+        "The later corrected stage bracket neither repairs old measurements retroactively nor establishes a whole-serving result."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "After fixing exact workload identity, the former arm contrast persists in matched pairs and both endpoints; then workload changes alone cannot explain it.",
+      "next_test": {
+        "question": "Does a proposed F1 comparison preserve exact activation and routing work across all arms/endpoints?",
+        "controls": [
+          "same immutable record copied into private arm graph buffers",
+          "balanced per-seed paired comparisons",
+          "original unmatched groups retained as descriptive context"
+        ],
+        "discriminator": "For the next named comparison, freeze one actual record before the bracket and retain its tensor/route metadata hashes for every arm. Compare current outputs before mutation. Do not rerun a completed experiment solely to relabel old unmatched medians.",
+        "stop_rule": "Record the named contrast and all signed outcomes. Missing required validity invalidates only that attempt; neither a loss nor an estimator disagreement imposes a minimum gain/significance gate or rejects a family.",
+        "required_gates": [
+          "Use the exact source, workload and comparator named for this discriminator.",
+          "Check the actual observed state or selected native path; preserve current-input/terminal/cleanup evidence relevant to the measured scope."
+        ]
+      },
+      "related_queue_ids": [
+        "research.moe.ss.lut.whole.01",
+        "research.moe.ss.decode.lut.rolled.down.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "This is measurement-design learning, not a speed gain. It protects interpretation of the already authorized next comparison without creating a new broad proof or GPU gate.",
+          "No benefit forecast, new GPU reservation, quota assumption or promotion follows from this registry update."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "4b747da091ff1884410eb45b3a0fe439968ec3abd199175dfa727378e33ef883"
+    },
+    {
+      "id": "normal-chooser-needs-actual-route-evidence",
+      "version": 1,
+      "supersedes": null,
+      "title": "Source inclusion and fixed wins do not establish selected execution or incumbent gain",
+      "tags": [
+        "prepare-selection-actual-route",
+        "actual-resources",
+        "matched-controls",
+        "signed-outcomes"
+      ],
+      "context": {
+        "experiment_id": "research.complete.splitcta.m1.incremental.01",
+        "family": "prepare-selection-actual-route",
+        "parents": [
+          "current GV incumbent@501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+          "M1-only optional standalone@eb56c92fbcdaf54733f9224e6b2cd5167eb1ab7dbd21c61a1cbe277fb7ffd007",
+          "exact composed M1 source@55f7fb523307a577bda46ddb10ceaee8f8f13e148adf525aade9e415c1f0e456"
+        ],
+        "comparators": [
+          "actual selected old H100 tuple0 WR1/WK8/KU16",
+          "new tuple8195",
+          "actual incumbent and exact parent package separately"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "H100 local and H200 official archives; separate scoped observations"
+        },
+        "validity": "VALID_OFFICIAL_CHECK",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/learning_archive/evidence-v6/normal-chooser-needs-actual-route-evidence-source0-501d901db8ee.py",
+            "sha256": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+            "role": "current GV incumbent"
+          },
+          {
+            "path": "proj_rsi/learning_archive/evidence-v6/normal-chooser-needs-actual-route-evidence-source1-eb56c92fbcda.py",
+            "sha256": "eb56c92fbcdaf54733f9224e6b2cd5167eb1ab7dbd21c61a1cbe277fb7ffd007",
+            "role": "M1-only optional standalone"
+          },
+          {
+            "path": "proj_rsi/learning_archive/evidence-v6/normal-chooser-needs-actual-route-evidence-source2-55f7fb523307.py",
+            "sha256": "55f7fb523307a577bda46ddb10ceaee8f8f13e148adf525aade9e415c1f0e456",
+            "role": "exact composed M1 source"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "official",
+          "path": "proj_rsi/learning_archive/evidence-v6/normal-chooser-needs-actual-route-evidence-official-534799f3f159.json",
+          "sha256": "534799f3f15924ef6439a872636c032c589c23c2221325192108486e451f767a"
+        },
+        {
+          "id": "local",
+          "path": "proj_rsi/learning_archive/evidence-v6/normal-chooser-needs-actual-route-evidence-local-8a6140c1d27f.json",
+          "sha256": "8a6140c1d27fe05bc98b3cd3a76f1a2b42b9dbb61f0c5d50c059d02f028a8255"
+        },
+        {
+          "id": "fixed",
+          "path": "proj_rsi/learning_archive/evidence-v6/normal-chooser-needs-actual-route-evidence-fixed-e16574704725.json",
+          "sha256": "e16574704725c89edffc5d7623f10bfa2a0cd87cce98111be7e4b0742d5a1066"
+        }
+      ],
+      "observations": [
+        {
+          "id": "fixed_win",
+          "statement": "Matched fixed M1 split-CTA paired improvement remains positive.",
+          "outcome": "positive",
+          "evidence": "fixed",
+          "selector": {
+            "json_pointer": "/cells/1/signed_gain_positive_favors_splitcta/paired_median_us",
+            "equals": 0.14400016516447067
+          }
+        },
+        {
+          "id": "local_unselected",
+          "statement": "The new tuple is unselected in the valid local composed full30 run.",
+          "outcome": "negative",
+          "evidence": "local",
+          "selector": {
+            "json_pointer": "/new_tuple_selected_shapes",
+            "equals": []
+          }
+        },
+        {
+          "id": "official_unselected",
+          "statement": "Composed scored ae061d contains the source but selects no new split tuple.",
+          "outcome": "negative",
+          "evidence": "official",
+          "selector": {
+            "json_pointer": "/new_tuple_selected_routes/ae061d458eaa420a",
+            "equals": []
+          }
+        },
+        {
+          "id": "standalone_selected",
+          "statement": "Standalone M1 CHECK selects the new tuple only for decode1/pooler.",
+          "outcome": "positive",
+          "evidence": "official",
+          "selector": {
+            "json_pointer": "/new_tuple_selected_routes/53e707b4e7ed470e",
+            "equals": [
+              {
+                "load": "decode 1",
+                "layer": "pooler",
+                "M": 1
+              }
+            ]
+          }
+        },
+        {
+          "id": "parent_progress",
+          "statement": "Composed official parent-relative score point improves by 0.397884us; retain it.",
+          "outcome": "positive",
+          "evidence": "official",
+          "selector": {
+            "json_pointer": "/comparisons/composed_vs_exact_d1ca/cross_job_score_gain_us_positive_favors_new",
+            "equals": 0.3978839138526382
+          }
+        },
+        {
+          "id": "incumbent_loss",
+          "statement": "The same composed scored source remains worse than actual best GV.",
+          "outcome": "negative",
+          "evidence": "official",
+          "selector": {
+            "json_pointer": "/comparisons/composed_vs_best_GV/cross_job_score_gain_us_positive_favors_new",
+            "equals": -29.706112109949117
+          }
+        },
+        {
+          "id": "mixed_F1",
+          "statement": "Local incremental conservative F1 opposes its paired and endpoint-average gains.",
+          "outcome": "negative",
+          "evidence": "local",
+          "selector": {
+            "json_pointer": "/actual_policy_geometric_load_speedup/F1_conservative",
+            "equals": 0.9951258564065592
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Normal short-screen/finalist selection and preparation context can alter old and new routes. Nonselection can explain why a fixed mechanism is absent, but not attribute whole-package deltas; matched contexts are needed to isolate any cause.",
+          "status": "unproven",
+          "observation_ids": [
+            "fixed_win",
+            "local_unselected",
+            "official_unselected",
+            "standalone_selected",
+            "parent_progress",
+            "incumbent_loss",
+            "mixed_F1"
+          ]
+        }
+      ],
+      "scope": "Exact GV53 split-CTA lineage: H100 fixed M1, local actual full30 incremental versus d1ca, H200 composed scored ae061d and standalone M1 CHECK53e707. These contexts remain separate; labels identify actual selected profiles, not inferred source execution.",
+      "transfer_limits": [
+        "No cross-job, H100-to-H200, source-commutation-to-additivity or parent-to-incumbent gain transfer.",
+        "Official raw events, calibrated objective medians and separate profile durations are distinct; preserve all values.",
+        "Normal chooser nonselection is not a legality bug or a reason to force a measured winner; no minimum-size/significance cutoff applies."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "The exact new tuple is selected in a same-context actual-policy test yet the proposed mechanism contrast is absent, or a matched old/new finalist contrast refutes the rank explanation.",
+      "next_test": {
+        "question": "Does the new option beat the actual old H100 winner, rather than only the earlier GV53 comparator?",
+        "controls": [
+          "actual selected old H100 tuple0 WR1/WK8/KU16",
+          "new tuple8195",
+          "actual incumbent and exact parent package separately"
+        ],
+        "discriminator": "If still useful after root reprioritization, use the already proposed single-M1 matched old-winner versus new contrast and shadow screen/retest ranks without changing serving choices. Do not make another unchanged full30 selector copy or force promotion.",
+        "stop_rule": "Record the named contrast and all signed outcomes. Missing required validity invalidates only that attempt; neither a loss nor an estimator disagreement imposes a minimum gain/significance gate or rejects a family.",
+        "required_gates": [
+          "Use the exact source, workload and comparator named for this discriminator.",
+          "Check the actual observed state or selected native path; preserve current-input/terminal/cleanup evidence relevant to the measured scope."
+        ]
+      },
+      "related_queue_ids": [
+        "research.complete.splitcta.m1.incremental.01",
+        "research.gv53.splitcta.m1.fullpolicy.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "Keep the tiny official parent-relative positive and all losses. One-cell diagnosis may choose whether selector work has value; neither speed benefit nor remaining quota is inferred.",
+          "No benefit forecast, new GPU reservation, quota assumption or promotion follows from this registry update."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "27299b8d0bae32b0dc1e691df6d29bdb61b38d04ff169c28fa6b5ac1e5f019cb"
+    },
+    {
+      "id": "register-go-needs-actual-state-verification",
+      "version": 1,
+      "supersedes": null,
+      "title": "A successful GO registration can remain HELD; verify state before claiming readiness",
+      "tags": [
+        "scheduler-admission-postcondition",
+        "actual-resources",
+        "matched-controls",
+        "signed-outcomes"
+      ],
+      "context": {
+        "experiment_id": "research.moe.ss.decode.lut.rolled.down.01",
+        "family": "scheduler-admission-postcondition",
+        "parents": [
+          "registration/rebalance source snapshot, not a runtime binary attestation@f10578b8d03fb15605c340d0636d4f9d9c2046e86a4481aea5e0294437a27662"
+        ],
+        "comparators": [
+          "exact registered descriptor and GO binding",
+          "actual post-action state/reasons",
+          "dependency disposition and exclusive worker state"
+        ],
+        "hardware": {
+          "kind": "CPU",
+          "model": "CPU archived root registration receipt and source inspection"
+        },
+        "validity": "VALIDATED_DIAGNOSIS",
+        "disposition": "VALID_MIXED",
+        "sources": [
+          {
+            "path": "proj_rsi/learning_archive/evidence-v6/register-go-needs-actual-state-verification-source0-f10578b8d03f.py",
+            "sha256": "f10578b8d03fb15605c340d0636d4f9d9c2046e86a4481aea5e0294437a27662",
+            "role": "registration/rebalance source snapshot, not a runtime binary attestation"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "held",
+          "path": "proj_rsi/learning_archive/evidence-v6/register-go-needs-actual-state-verification-held-47ad94e2b405.json",
+          "sha256": "47ad94e2b405c6ce28cc7d803579a8cd7fe73ba094cb906050914ee38d652fea"
+        }
+      ],
+      "observations": [
+        {
+          "id": "go",
+          "statement": "The actual archived register response contains independent GO.",
+          "outcome": "positive",
+          "evidence": "held",
+          "selector": {
+            "json_pointer": "/review/decision",
+            "equals": "GO"
+          }
+        },
+        {
+          "id": "held",
+          "statement": "The same returned descriptor is HELD, so registration plus GO did not make it READY.",
+          "outcome": "negative",
+          "evidence": "held",
+          "selector": {
+            "json_pointer": "/state",
+            "equals": "HELD"
+          }
+        },
+        {
+          "id": "id",
+          "statement": "The observation concerns the actual rolled-down GPU job, not a synthetic queue example.",
+          "outcome": "neutral",
+          "evidence": "held",
+          "selector": {
+            "json_pointer": "/id",
+            "equals": "research.moe.ss.decode.lut.rolled.down.01"
+          }
+        },
+        {
+          "id": "dependency",
+          "statement": "The response also retains an explicit valid-result dependency, which must be checked separately.",
+          "outcome": "neutral",
+          "evidence": "held",
+          "selector": {
+            "json_pointer": "/depends_on",
+            "equals": [
+              {
+                "accepted_dispositions": [
+                  "VALID_GAIN"
+                ],
+                "id": "research.moe.ss.decode.lut.stage.01"
+              }
+            ]
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Registration preserves descriptor intent and eligibility/state transitions are separate from independent source GO. Explicit HELD state and dependency/eligibility can block readiness; the receipt alone does not identify every later transition.",
+          "status": "unproven",
+          "observation_ids": [
+            "go",
+            "held",
+            "id",
+            "dependency"
+          ]
+        }
+      ],
+      "scope": "Byte-exact root register stdout archived for one actual GPU descriptor. CPU diagnosis uses that returned state and current register/rebalance source semantics; no live WAL or mutable checkpoint is pinned and no queue action is performed.",
+      "transfer_limits": [
+        "GO is source/launch review evidence, not READY/RUNNING or physical GPU utilization.",
+        "Do not generalize one HELD receipt into an automatic release policy; root authority and actual eligibility reasons still apply.",
+        "The archived response proves the returned state at registration, not current live state or successful subsequent launch."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "low",
+        "transfer": "low"
+      },
+      "falsification": "A pinned post-action readback shows READY with satisfied dependencies and eligible source/launch bindings; then this particular HELD blocker has been resolved.",
+      "next_test": {
+        "question": "Did the authorized registration/transition actually produce the expected eligible state?",
+        "controls": [
+          "exact registered descriptor and GO binding",
+          "actual post-action state/reasons",
+          "dependency disposition and exclusive worker state"
+        ],
+        "discriminator": "After an already authorized root mutation, inspect its completion and actual returned/readback state and reason. If HELD remains, diagnose that reason and apply only the authorized explicit release or repair; verify again before claiming queued/active work. This registry neither registers nor transitions jobs.",
+        "stop_rule": "Record the named contrast and all signed outcomes. Missing required validity invalidates only that attempt; neither a loss nor an estimator disagreement imposes a minimum gain/significance gate or rejects a family.",
+        "required_gates": [
+          "Use the exact source, workload and comparator named for this discriminator.",
+          "Check the actual observed state or selected native path; preserve current-input/terminal/cleanup evidence relevant to the measured scope."
+        ]
+      },
+      "related_queue_ids": [
+        "research.moe.ss.decode.lut.rolled.down.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "This avoids idle eligible-queue mistakes; no measured GPU speedup, automatic admission rule or new broad checklist is claimed.",
+          "No benefit forecast, new GPU reservation, quota assumption or promotion follows from this registry update."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "record_sha256": "0fe90ceeb7d444f5e8883a41faf7a62a54a8be52ba2c0e3d981bc20dd902e35a"
     }
   ],
   "ideas": [
@@ -3110,6 +4317,268 @@
       },
       "transfer_status": "unproven",
       "record_sha256": "03eb057d03096d361a98805961ee9ab11316c4573bd71b828c89e78443c4c131"
+    },
+    {
+      "id": "idea.pw45-small-fixed-gain-unselected-mixed-package",
+      "version": 1,
+      "supersedes": null,
+      "title": "A tiny fixed mechanism win can coexist with an unselected path and conflicting package estimators",
+      "tags": [
+        "o32-HALF-fullK",
+        "actual-policy",
+        "paired",
+        "F1",
+        "small-gains"
+      ],
+      "lesson_refs": [
+        "pw45-small-fixed-gain-unselected-mixed-package@1"
+      ],
+      "existing_roi_ids": [
+        "research.pw45.gpu.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Independent prepare selections and timing context may explain conflicting package estimators; neither the fixed win nor the package paired point isolates a causal source gain.",
+      "discriminator": "Evaluate the measured positive package point under root official controls while preserving opposite F1 and exact source/picks. Any mechanism refinement gets a new immutable version and compares actual prepared paths; do not force the fixed winner.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Future benefit and H200 transfer remain unknown."
+        ]
+      },
+      "cost": {
+        "basis": "This evidence backfill authorizes no future reservation or job.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "8744fa54851417a2e0a3da864ab9595be04961e956552867e09cd771d625fc29"
+    },
+    {
+      "id": "idea.pw46-proxy-preserved-final-policy-regresses",
+      "version": 1,
+      "supersedes": null,
+      "title": "Preserving a proxy repairs fallback behavior without establishing actual incumbent parity",
+      "tags": [
+        "prepare-selection",
+        "actual-policy",
+        "paired",
+        "F1",
+        "small-gains"
+      ],
+      "lesson_refs": [
+        "pw46-proxy-preserved-final-policy-regresses@1"
+      ],
+      "existing_roi_ids": [
+        "pw46.stack.fullscope.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Logging/discovery context, prepare variance and downstream RQ selection may change final paths; this single run cannot isolate their effects.",
+      "discriminator": "Compare proxy configurations and post-RQ final serving policy against separately prepared actual PW38 across repeated full prepares; charge original whole budgets, retain all signs and do not hardcode recorded winners.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "us",
+        "conditions": [
+          "Future benefit and H200 transfer remain unknown."
+        ]
+      },
+      "cost": {
+        "basis": "This evidence backfill authorizes no future reservation or job.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "d2bf08d9594cee124638faaffc6bafb40c053c90a7a20c7bfb159c482a762ceb"
+    },
+    {
+      "id": "idea.occupancy-versus-producer-ilp-packed-stores",
+      "version": 1,
+      "supersedes": null,
+      "title": "Does producer dependency/store formation explain the remaining v1-versus-scatter gap?",
+      "tags": [
+        "moe-SS-producer-schedule",
+        "actual-resources",
+        "matched-controls",
+        "signed-outcomes"
+      ],
+      "lesson_refs": [
+        "occupancy-versus-producer-ilp-packed-stores@1"
+      ],
+      "existing_roi_ids": [
+        "research.moe.ss.decode.lut.rolled.down.01",
+        "research.moe.ss.two.value.scatter.down.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Register/liveness reduction traded away independent lookup issue and packed stores. Scatter rescue supports a material schedule/store cost, but cannot assign unique cycles or show occupancy alone caused either result.",
+      "discriminator": "At one fixed M8 workload, distinguish the retained producer schedule from consumer/startup costs using only an already justified scoped contrast. Query actual resources and inspect realized stores; do not launch a broad occupancy sweep or infer elapsed-time savings from opcode counts.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "Retain the measured scatter rescue and v1 counterwin. Information value is choosing producer versus consumer work before another rewrite; attainable gain remains unknown.",
+          "No benefit forecast, new GPU reservation, quota assumption or promotion follows from this registry update."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "526fddc11fddd688d5f4813affd88a77c7f9703f981fba5251ffe6cb0e99661e"
+    },
+    {
+      "id": "idea.grouped-stages-sync-versus-shared-residency",
+      "version": 1,
+      "supersedes": null,
+      "title": "Can grouped-stage work preserve useful B7 progress without losing queried CTA capacity or equal-capacity down performance?",
+      "tags": [
+        "moe-SS-grouped-stages",
+        "actual-resources",
+        "matched-controls",
+        "signed-outcomes"
+      ],
+      "lesson_refs": [
+        "grouped-stages-sync-versus-shared-residency@1"
+      ],
+      "existing_roi_ids": [
+        "research.moe.ss.lut.pair2.stage.01"
+      ],
+      "status": "proposed",
+      "mechanism": "A larger shared ring reduces queried maximum active up CTA capacity, while actual scheduling, batching/startup and producer ILP remain confounded; down losses at equal queried capacity show this capacity alone is insufficient. B7 gains may reflect schedule/wave context rather than a general group-size win.",
+      "discriminator": "Preserve both signed B7 outcomes and compare only a resource-accounted grouping refinement or existing producer/consumer diagnostic. Keep the same frozen workload per F1 bracket; do not hardcode a B7 winner or repeat a broad group sweep.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "B7 progress remains evidence for a specific future causal question. Full-package gain and useful runtime coverage are unknown, so next work needs its own bounded ROI price.",
+          "No benefit forecast, new GPU reservation, quota assumption or promotion follows from this registry update."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "3ccc836d5d26d48f4ce777c6789285a10e75e222ac87b198f295f40e6edaefce"
+    },
+    {
+      "id": "idea.f1-exact-workload-not-distinct-seeds",
+      "version": 1,
+      "supersedes": null,
+      "title": "Does a proposed F1 comparison preserve exact activation and routing work across all arms/endpoints?",
+      "tags": [
+        "measurement-workload-identity",
+        "actual-resources",
+        "matched-controls",
+        "signed-outcomes"
+      ],
+      "lesson_refs": [
+        "f1-exact-workload-not-distinct-seeds@1"
+      ],
+      "existing_roi_ids": [
+        "research.moe.ss.lut.whole.01",
+        "research.moe.ss.decode.lut.rolled.down.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Different active-block and input/routing workloads confound arm effects with workload effects; identical fixtures and byte hashes remove this particular confound while leaving clock/context and finite-sample uncertainty.",
+      "discriminator": "For the next named comparison, freeze one actual record before the bracket and retain its tensor/route metadata hashes for every arm. Compare current outputs before mutation. Do not rerun a completed experiment solely to relabel old unmatched medians.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "This is measurement-design learning, not a speed gain. It protects interpretation of the already authorized next comparison without creating a new broad proof or GPU gate.",
+          "No benefit forecast, new GPU reservation, quota assumption or promotion follows from this registry update."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "303f4aa622166c089f113f5d079fc3a14437cddf1de7455214a1d1933faac354"
+    },
+    {
+      "id": "idea.normal-chooser-needs-actual-route-evidence",
+      "version": 1,
+      "supersedes": null,
+      "title": "Does the new option beat the actual old H100 winner, rather than only the earlier GV53 comparator?",
+      "tags": [
+        "prepare-selection-actual-route",
+        "actual-resources",
+        "matched-controls",
+        "signed-outcomes"
+      ],
+      "lesson_refs": [
+        "normal-chooser-needs-actual-route-evidence@1"
+      ],
+      "existing_roi_ids": [
+        "research.complete.splitcta.m1.incremental.01",
+        "research.gv53.splitcta.m1.fullpolicy.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Normal short-screen/finalist selection and preparation context can alter old and new routes. Nonselection can explain why a fixed mechanism is absent, but not attribute whole-package deltas; matched contexts are needed to isolate any cause.",
+      "discriminator": "If still useful after root reprioritization, use the already proposed single-M1 matched old-winner versus new contrast and shadow screen/retest ranks without changing serving choices. Do not make another unchanged full30 selector copy or force promotion.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "Keep the tiny official parent-relative positive and all losses. One-cell diagnosis may choose whether selector work has value; neither speed benefit nor remaining quota is inferred.",
+          "No benefit forecast, new GPU reservation, quota assumption or promotion follows from this registry update."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "610b269f1248119362b5e982a5a276580a7662fd2f142e4db7c8ef214893772c"
+    },
+    {
+      "id": "idea.register-go-needs-actual-state-verification",
+      "version": 1,
+      "supersedes": null,
+      "title": "Did the authorized registration/transition actually produce the expected eligible state?",
+      "tags": [
+        "scheduler-admission-postcondition",
+        "actual-resources",
+        "matched-controls",
+        "signed-outcomes"
+      ],
+      "lesson_refs": [
+        "register-go-needs-actual-state-verification@1"
+      ],
+      "existing_roi_ids": [
+        "research.moe.ss.decode.lut.rolled.down.01"
+      ],
+      "status": "proposed",
+      "mechanism": "Registration preserves descriptor intent and eligibility/state transitions are separate from independent source GO. Explicit HELD state and dependency/eligibility can block readiness; the receipt alone does not identify every later transition.",
+      "discriminator": "After an already authorized root mutation, inspect its completion and actual returned/readback state and reason. If HELD remains, diagnose that reason and apply only the authorized explicit release or repair; verify again before claiming queued/active work. This registry neither registers nor transitions jobs.",
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "This avoids idle eligible-queue mistakes; no measured GPU speedup, automatic admission rule or new broad checklist is claimed.",
+          "No benefit forecast, new GPU reservation, quota assumption or promotion follows from this registry update."
+        ]
+      },
+      "cost": {
+        "basis": "Evidence backfill and scoped next question only; future cost must be priced separately by root.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      },
+      "transfer_status": "unproven",
+      "record_sha256": "38fedfe4ff5fbd1b1d1995b94f9005a71f2b4a25ebcea8e45c19f589ebb9a1e7"
     }
   ]
 }

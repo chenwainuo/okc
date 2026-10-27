@@ -106,3 +106,74 @@ router rows that completed collection. Hardware-only metrics versus broad
 sections are a proposed recipe discriminator; no cause, gain, transfer, new ROI
 or future job ID is fabricated. The archive binds actual raw collections and
 the independent source-bound diagnosis by SHA256.
+
+## Registry revision5: actual PW45/PW46 runtime
+
+Revision5 preserves every v4 record and appends two lessons/two proposed
+discriminators. Archive `learning_archive/registry-v5-79674136.json` reproduces
+from `PYTHONPATH=. python3 proj_rsi/audits/build-learning-v5.py`; all consumer
+snapshots and v1-v4 archives remain unchanged.
+
+Actual PW45 validates all125 source pins and78 collected files, fullpolicy
+222/4350/180/360 gates, all actual SO/JIT artifacts, o32 basis and separate
+210-call fixed mechanism. Paired actual-PW38 aggregate point is+7.453381us;
+F1 is−9.135128us. Fixed ST5 tiny+.063999556paired/+.080000143F1 is preserved,
+but actual PW45 o32 selects GV, so package observations cannot be assigned to
+that fixed path. The positive paired point and opposite F1 remain available to
+root without any new effect-size/significance gate or H200 forecast.
+
+Actual PW46 validates locally but regresses actual PW38 under both aggregate
+estimators (−7.058786paired/−10.297969F1). Completed confirmations preserve proxies;
+later cells are not admitted, and downstream RQ selection can supersede Lt.
+This repairs fallback handling without proving proxy/actual parity. All30 signs
+and raw observations remain in each immutable runtime audit; no family is closed.
+
+## Registry revision6: producer schedules, workload identity and actual state
+
+Revision6 preserves every v5 lesson and idea, then appends five lessons and five
+proposed discriminators. Independent semantic review is pinned in
+`audits/learning-v6-review.json`; the immutable registry is
+`learning_archive/registry-v6-18f19bb1.json`. Evidence and source snapshots live
+under `learning_archive/evidence-v6`, so later analysis updates cannot change
+these observations. Reproduce after that review with:
+
+```bash
+PYTHONPATH=. python3 proj_rsi/audits/build-learning-v6.py --seal-review proj_rsi/audits/learning-v6-review.json
+python3 -m proj_rsi.learning validate
+python3 -m unittest proj_rsi.tests.test_learning
+```
+
+- **CTA capacity versus producer work:** rolled LUT down reduced registers
+  59→48 and raised queried maximum active CTA capacity 4→5, yet lost all eight
+  paired seeds. Actual code traded eight independent lookups and four packed
+  stores for dependent lookup/half-store pairs. Two-value scatter recovered
+  +24.464us versus failed v2, but still lost −82.432us versus v1. These are
+  measured contrasts and static scheduling facts; unique cycle attribution is
+  unproven. Queried CTA capacity is not measured resident scheduling.
+- **Grouped stages:** pair2 realized eight MMAs/group and 32 logical rounds,
+  but aggregate up/down paired savings were −43.664/−46.720us. Larger shared
+  allocation reduced queried up CTA capacity 6→4; down lost at unchanged
+  capacity. Both B7 up gains, +51.232010/+51.551998us, remain explicit without
+  inventing a B7 dispatch rule or declaring grouping ineffective everywhere.
+- **F1 workload identity:** whole-serving groups used different routing/input
+  seeds and therefore different active work. Their medians are descriptive,
+  not controlled F1 stack effects; matched paired observations remain valid.
+  Later brackets freeze one seed7904 record with tensor/metadata byte hashes.
+  The corrected bracket still loses, which is preserved rather than hidden.
+- **Selection versus inclusion:** fixed M1 progress, source inclusion, actual
+  selected profiles and whole-package results are separate facts. The composed
+  H200 source selects no new split tuple, while standalone M1 CHECK does.
+  Preserve the +0.397884us official parent-relative score point and the
+  −29.706112us loss versus best GV; neither establishes cross-job causality.
+- **Registration postconditions:** archived root registration stdout contains
+  independent GO and returned state HELD for the same actual job. Review,
+  registration, eligible READY state and physical execution are distinct.
+  Verify completion and actual state/reasons after an already authorized action;
+  repair or explicitly release only within root authority, then verify again.
+
+These lessons create no GPU-admission dependency, broad proof checklist,
+minimum-effect/significance threshold, automatic transition or promotion.
+Future benefit and cost remain unknown until a named discriminator is priced
+and measured. Continue the [iteration contract](ITERATION.md): profile → measure
+→ hypothesis → optimize → test → validate → stack → submit measured gains →
+learn → reprioritize → repeat, with deliberate idle waits at most10s.

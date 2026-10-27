@@ -1,0 +1,110 @@
+{
+  "annotations": {
+    "checks": "mixed v1up/v2down current/fresh/nonlocal/reference and finalownoutput; allstageoutputs bitexact/currentinput beforetiming andeverytimedcall; ownF1terminals andpairedterminals",
+    "optional_profile": "disabled bydefault; onlyaftersaveddirecttimings andterminals; numeric/runtime failures propagate outsideoptionalhandler",
+    "performance_claim": "none until actualgate+timings; no genericoccupancy/compiler/familyclaim",
+    "reuse": "No new immutabletree/archive; prior original/v1LUTbinsstay preserved. Originalprepareonce;sharedreadonlybanks;privateoutputgraphs",
+    "review_binding": "Exact independent focused rolled-down review attached; root owns admission.",
+    "scope": "v1fullLUTup retained; compileonlyT8DIV1 rolleddown; exactbothSOreuse; downnormalzeroing andoriginalgrid",
+    "state": "HELD_FOCUSED_REVIEW_PENDING_GPU_UNRUN",
+    "timing": "9fixedB9F1calls,16balancedpairedstagecalls; actual perseedhist saved; signedfailures/lossesretained"
+  },
+  "author": "moe_decode_lut",
+  "cost": {
+    "cpu_minutes": 10,
+    "followup_gpu_seconds": 0,
+    "gpu_seconds": 180
+  },
+  "created_at": 1793132973.4340143,
+  "depends_on": [
+    {
+      "accepted_dispositions": [
+        "VALID_GAIN"
+      ],
+      "id": "research.moe.ss.decode.lut.stage.01"
+    }
+  ],
+  "estimate": {
+    "basis": "Measuredv1LUT winsbothstages8/8 but down59regs/4CTAsSM causes B9capacity2waves; offline rolleddown48regs mayrestore5CTAsSM. Dynamicloop overhead/ILP tradeoff unknown.",
+    "confidence": "unknown",
+    "direct": {
+      "p_gain": 0,
+      "p_valid": 0,
+      "scenario_score_us": 0
+    },
+    "evidence": [
+      "tools/moe_ss_decode_lut_v1/actual-analysis/analysis.json",
+      "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/codegen.json"
+    ],
+    "information": {
+      "decision": "Does rolled producerstep restore down occupancy and improve actual down stage while v1fullLUTup stays unchanged? One fixedB9F1 bracket plus8realroutingpairs; no full-servinggainclaim.",
+      "p_followup_gain": 0,
+      "p_resolve": 0,
+      "scenario_score_us": 0,
+      "unblocks": []
+    }
+  },
+  "files": {
+    "benchmarks/rsi_bundle.py": "ee5e3cc5039958e60291941bcd8e3d7c1adbc3ffbf36dab569d9992329719c25",
+    "benchmarks/rsi_worker.py": "2acb9f85cd9980bca531085a9de4ae49b580c9c830300ad21c6e6a795c3fa9b5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/tools/h100_sglang_container.sh": "1eac699c8aef569f69f5f8e9d9b83dfbd3d4fb2ba3b1998c53464b8e54b25d4c",
+    "proj_rsi/tools/h100_sglang_trial.sh": "551ba60dd1d10175991c8e7279ff6ea548023dfca3a0dacbaec7134d35b4ac13",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/adapter.py": "c8aa1303123db57d84e5d244c6ca3baeeaa1d5ae895534223399951ef1bba838",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v1/full_table/extension_source.cu": "29e8ccca7da01aeab28e2964b6e98d1e7d89cad8cb884f34f956bf25091b5974",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/codegen.json": "be0b2652d6362ddb70702df77ade847f1f625e462f8f540dd741d6484c03b5cb",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/down_only/adapter.py": "ca7fc37eaff3013a9093eb01fb1fff39a69576ebbe94271e2689fb73024f0590",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/down_only/extension_source.cu": "e91f5d5d609d5b1d8ab9bfb93d8db9e8cda1f691e1b6c6921f4b3606314566bd",
+    "serving/experiments/moe_rsi_20261027/ss_decode_lut_v2/down_only/kernel.cuh": "e0c181e8103d2ed69eec44047fe1184869a10424847d1551fa3d316007cc6734",
+    "serving/experiments/moe_rsi_20261027/ss_pipeline_v2/cpu_proof.py": "45fd4b203053c634201d214a74316e820b56278efc44e528f5c3593e30a5d1f7",
+    "tools/moe_ss_decode_lut_v2/manifest.json": "2881c648f8d86f6610d53c591b2bcc08b60eef8cbe8f8571543dfebdccd505bf",
+    "tools/moe_ss_decode_lut_v2/pilot.py": "d19e7c6b0c13145aba1ab41987b2ad9b4288b4bd4b5df93b3f15d9e9b715febc",
+    "tools/moe_ss_serving_pilot_v1/pilot.py": "d313e60ed27e053211bab0595c5c24e2f6b2d39dbe323588dbed7264262fe925"
+  },
+  "id": "research.moe.ss.decode.lut.rolled.down.01",
+  "kind": "diagnostic",
+  "launch": {
+    "argv": [
+      "python3",
+      "/okc/tools/moe_ss_decode_lut_v2/pilot.py",
+      "--prior",
+      "/okc/logs/scheduler/moe-ss-true-serving-pilot-01",
+      "--lut-prior",
+      "/okc/logs/scheduler/moe-ss-decode-lut-stage-01",
+      "--output",
+      "/okc/logs/scheduler/moe-ss-decode-lut-rolled-down-01",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/moe-ss-decode-lut-rolled-down-01.md",
+      "--review-sha256",
+      "834b4611d632d4e0f45753950a56e6a49c950288232c7c9d3e4c9d9885951741"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/moe-ss-decode-lut-rolled-down-01"
+    ],
+    "container": "okc-proj-moe-ss-decode-lut-rolled-down-01",
+    "env": {
+      "MAX_JOBS": "1",
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "host": "root@107.170.6.60",
+    "image": "lmsysorg/sglang@sha256:8cfc5a72cb296771f5f8a4a4688cb6d05685610a830cbb616fa4ab0eb7bb2b0a",
+    "inner_seconds": 130,
+    "outer_seconds": 180,
+    "profile": false,
+    "remote_repo": "/root/okc"
+  },
+  "observations": [],
+  "resource": "gpu",
+  "review": {
+    "actor": "rq_lab_review",
+    "decision": "GO",
+    "path": "proj_rsi/scheduling/reviews/moe-ss-decode-lut-rolled-down-01.md",
+    "sha256": "834b4611d632d4e0f45753950a56e6a49c950288232c7c9d3e4c9d9885951741"
+  },
+  "state": "HELD",
+  "write_paths": []
+}

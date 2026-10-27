@@ -1,0 +1,60 @@
+{
+  "decision": "GO",
+  "reviewer": "rq_lab_review",
+  "scope": "Read-only independent semantic review of five unsealed v6 lessons and five proposed ideas before author computes digests; no registry/docs/GPU/queue mutations.",
+  "draft_path": "proj_rsi/audits/learning-v6-draft.json",
+  "draft_sha256": "a2bdde4d24c66c6b939ba172ced3041fd17bdd5b03178322faf8952ab543b267",
+  "registry_instruction": "proj_rsi/LEARNING.md: recompute new record digest only after independent review; registry learning runs in parallel and is not GPU-admission dependency.",
+  "preserved_prefix": {
+    "lessons": 15,
+    "ideas": 17,
+    "exact_array_equality": true
+  },
+  "new_records": [
+    "occupancy-versus-producer-ilp-packed-stores",
+    "grouped-stages-sync-versus-shared-residency",
+    "f1-exact-workload-not-distinct-seeds",
+    "normal-chooser-needs-actual-route-evidence",
+    "register-go-needs-actual-state-verification"
+  ],
+  "new_ideas": [
+    "idea.occupancy-versus-producer-ilp-packed-stores",
+    "idea.grouped-stages-sync-versus-shared-residency",
+    "idea.f1-exact-workload-not-distinct-seeds",
+    "idea.normal-chooser-needs-actual-route-evidence",
+    "idea.register-go-needs-actual-state-verification"
+  ],
+  "checks": {
+    "all_evidence_and_source_paths_sha256_match": true,
+    "all31_observation_JSON_pointer_values_match": true,
+    "new_records_and_ideas_unsealed": true,
+    "future_ideas_proposed_not_queued_and_transfer_unproven": true,
+    "null_future_cost_benefit_not_measured_forecasts": true
+  },
+  "resolved_finding": "Author qualified actual occupancy language as queried maximum active CTA capacity, explicitly distinct from measured residency/scheduling. Corrected draft reviewed with evidence and prior prefixes unchanged.",
+  "semantic_findings": [
+    {
+      "record": "occupancy-versus-producer-ilp-packed-stores",
+      "result": "Actual v2 five-CTA queried capacity coexists with all8paired losses; scatter rescue all8 versus v2 and all8losses versus v1 are retained. SASS lookup/store realization is fact; unique ILP/occupancy cycle attribution remains unproven. v1 lower-capacity counterwin and stage-to-whole/hardware limits remain."
+    },
+    {
+      "record": "grouped-stages-sync-versus-shared-residency",
+      "result": "Both B7 up gains51.232/51.552us retained under opposite orders alongside aggregate up/down losses and fixedF1. Equal queried down capacity refutes capacity-only explanation; modeled waves are not measured scheduling or dispatch coverage."
+    },
+    {
+      "record": "f1-exact-workload-not-distinct-seeds",
+      "result": "Whole-serving F1 distinct block seeds are descriptive confounded workloads; same-round paired evidence remains valid. Later immutable recorded/hash F1 repair is explicit and preserves negative endpoints; it does not repair old measurements retroactively."
+    },
+    {
+      "record": "normal-chooser-needs-actual-route-evidence",
+      "result": "Source inclusion/fixed-template win, actual local nonselection, composed official nonselection and standalone selected route remain separate. Tiny+0.397884us parent-relative cross-job point is retained with incumbentloss and conservativeF1opposition; no additive/causal/H100toH200 promotion."
+    },
+    {
+      "record": "register-go-needs-actual-state-verification",
+      "result": "Exact root register stdout proves independentGO plus returnedHELD for this job only. No live/current queue state, worker activity or failed dependency is inferred. Proposed explicit-state readback is operational diagnosis, not automatic release authorization."
+    }
+  ],
+  "remaining_blockers": [],
+  "owner_next_action": "scheduler_fastpath may now seal only these new records with learning.digest and run its existing registry validation/tests; any semantic change after this receipt needs review of that delta.",
+  "iteration_loop": "proj_rsi/ITERATION.md"
+}
