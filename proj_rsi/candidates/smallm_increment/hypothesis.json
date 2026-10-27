@@ -1,0 +1,17 @@
+{
+  "family": "rq32_loader_cursor",
+  "version": "smallm_increment_v1",
+  "state": "CPU_IMPLEMENTED_CODEGEN_PASS_REVIEW_PENDING",
+  "source_sha256": "0d0ef30a495de725139fd8a401ed0c7a239d0ef10e7c41a8b4f9a6c2d37c1737",
+  "predecessor": "rs32/a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad",
+  "observed_cost": "Actual selected ST5/6 FL35 sequential consumer loader re-derives ring modulo/parity with reciprocal multiply/shift/remainder arithmetic",
+  "causal_hypothesis": "A scalar slot/parity recurrence can shorten consumer next-LDS address readiness if this arithmetic is exposed rather than hidden by producer/HGMMA dependencies",
+  "change": "Only WM0 GS1 NT16/32 FL35 PRB0 INS0 ldr uses increment-wrap slot/parity, reusing slot for Wempty arrival",
+  "predicted_support": "Correct actual outputs and same-run complete-pipeline improvement against prepared incumbent and predecessor",
+  "predicted_refutation": "Correct but flat/slower complete timings; address work hidden or cursor/scheduling costs offset it",
+  "comparison": ["actual prepared pw36 kernel_fn per shape", "frozen rs32 predecessor", "smallm_increment_v1 complete kernel_fn"],
+  "validity": ["all basis columns", "FP64/task normal/outlier", "actual final timed graph outputs before replay/mutation", "fresh/zero/outlier/NaN poison retained graph", "weight/pack immutability", "counter reset", "actual JIT SASS/resources/lifetime", "root-only bounded GPU and cleanup"],
+  "forecast": {"attainable_gain_us": null, "ln_gain_target": null, "note": "No measured speed or critical-path budget; static instruction deltas are codegen evidence only", "conditional_scenario": {"decode16_cut_us": 1, "decode32_cut_us": 3, "score_us": 3158.126341193491}},
+  "next": "Root and independent critic inspect exact source and SASS before bounded GPU admission",
+  "next_after_failure": "Preserve result and diagnose exposed issue path; no family kill"
+}

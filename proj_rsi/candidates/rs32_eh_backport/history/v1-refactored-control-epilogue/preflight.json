@@ -1,0 +1,154 @@
+{
+  "state": "CPU_EH_BACKPORT_PASS_GPU_UNRUN_REVIEW_REQUIRED",
+  "registers": [
+    168,
+    168,
+    168,
+    168
+  ],
+  "bitmap": {
+    "status": "PASS_16384_OUTPUT_BF16_ONCE",
+    "half_slabs": [
+      {
+        "WG": 0,
+        "half": 0,
+        "bytes": 8192,
+        "source_range": [
+          0,
+          8192
+        ],
+        "global_token_range": [
+          0,
+          64
+        ],
+        "global_channel_range": [
+          0,
+          64
+        ]
+      },
+      {
+        "WG": 0,
+        "half": 1,
+        "bytes": 8192,
+        "source_range": [
+          8192,
+          16384
+        ],
+        "global_token_range": [
+          64,
+          128
+        ],
+        "global_channel_range": [
+          0,
+          64
+        ]
+      },
+      {
+        "WG": 1,
+        "half": 0,
+        "bytes": 8192,
+        "source_range": [
+          16384,
+          24576
+        ],
+        "global_token_range": [
+          0,
+          64
+        ],
+        "global_channel_range": [
+          64,
+          128
+        ]
+      },
+      {
+        "WG": 1,
+        "half": 1,
+        "bytes": 8192,
+        "source_range": [
+          24576,
+          32768
+        ],
+        "global_token_range": [
+          64,
+          128
+        ],
+        "global_channel_range": [
+          64,
+          128
+        ]
+      }
+    ],
+    "first_TMA_vs_second_STSM": "DISJOINT_8KiB_RANGES_PER_WG",
+    "descriptor_box": [
+      64,
+      64
+    ],
+    "no_alias_until_both_TMA_reads_complete": true
+  },
+  "physical": [
+    {
+      "flag": 65539,
+      "EH": true,
+      "static_STSM": 8,
+      "static_reduce_issues": 2,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": true
+    },
+    {
+      "flag": 65538,
+      "EH": true,
+      "static_STSM": 8,
+      "static_reduce_issues": 2,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": true
+    },
+    {
+      "flag": 3,
+      "EH": false,
+      "static_STSM": 8,
+      "static_reduce_issues": 1,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": false
+    },
+    {
+      "flag": 2,
+      "EH": false,
+      "static_STSM": 8,
+      "static_reduce_issues": 1,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": false
+    }
+  ],
+  "existing_no_EH_actual_SASS_comparison": {
+    "2": {
+      "equal": false,
+      "original_instructions": 1792,
+      "candidate_instructions": 1792
+    },
+    "3": {
+      "equal": false,
+      "original_instructions": 1832,
+      "candidate_instructions": 1832
+    }
+  },
+  "candidate_sha256": "007f28015abd112e548fa56d36b3ad2a4ce1a5956d415a7319116ff89f5315f1",
+  "RQCU_sha256": "d6243183b7d12197342790b897be6b65630c60794119a99312f6708b07844f8f",
+  "current_rs32_PW36_RQCU_identical": true,
+  "producer_math_fullK_and_generic_D_retirement": "EXACT_UNCHANGED_PREFIX",
+  "flags": {
+    "EH": 65536,
+    "EP": 131072,
+    "EP_ported": false,
+    "HALF": 16,
+    "EARLY": 32
+  },
+  "source_domains": [
+    "M128/ST5/GS1/PRB0/WM0/INS0/FL65538",
+    "M128/ST5/GS1/PRB0/WM0/INS0/FL65539"
+  ],
+  "runtime": "UNRUN_NO_CONTEXT_NO_EXTENSION_NO_PREPARE; both EH variants must selfvalidate and win actual preparation bake; no gain admission"
+}

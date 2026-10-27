@@ -1,0 +1,154 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.8.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+device NVIDIA H100 80GB HBM3  torch 2.8.0+cu128  cuda 12.8
+lt qkv_gate m128 heur 20.06 best 2:66.15.1.0.0.1.35.0.2 19.04 (103 tried, 3.6s)
+lt qkv_gate m256 heur 23.04 best 0:66.124.1.0.0.0.35.0.3 21.25 (102 tried, 7.1s)
+lt o m128 heur 10.88 best 2:66.15.1.0.0.0.35.0.2 10.69 (47 tried, 10.1s)
+lt o m256 heur 12.29 best 3:66.20.1.0.0.4.35.0.2 11.55 (47 tried, 11.8s)
+lt pooler m128 heur 28.77 best 2:66.15.1.0.0.0.35.0.2 27.52 (48 tried, 14.3s)
+lt pooler m256 heur 34.08 best 2:66.17.1.0.0.0.35.0.2 29.92 (47 tried, 15.9s)
+lt unpooler m128 heur 28.03 best 3:66.18.1.0.0.2.35.0.5 26.88 (47 tried, 18.4s)
+lt unpooler m256 heur 30.18 best 3:66.20.1.0.0.4.35.0.2 28.03 (47 tried, 20.1s)
+lt router m128 heur 11.55 best torch 11.55 (48 tried, 21.8s)
+lt router m256 heur 12.51 best torch 12.51 (48 tried, 23.5s)
+gv qkv_gate m1 v12 16.35 best 1.1.2.1.8.16.1.1.0.1 11.14
+  v12:16.48 1.1.2.1.8.16.1.1.0.1:11.23 1.1.2.1.4.16.2.1.0.0:12.29 1.1.2.1.4.16.2.1.0.1:12.32 1.1.2.1.4.8.4.1.0.1:14.91
+gv qkv_gate m8 v12 16.70 best 1.1.2.1.8.16.1.1.0.1 11.14
+  v12:16.96 1.1.2.1.8.16.1.1.0.1:11.42 1.1.2.1.4.16.2.1.0.0:12.61 1.1.2.1.4.16.2.1.0.1:12.48 1.1.2.1.4.8.4.1.0.1:14.82
+gv qkv_gate m16 v12 16.58 best 1.2.1.1.4.8.4.1.2.1 12.26
+  v12:16.77 1.2.2.1.4.16.2.1.0.1:12.54 1.2.2.1.4.8.4.1.2.1:16.99 1.2.2.1.4.8.4.1.2.3:13.60 1.2.2.1.4.16.2.1.2.0:13.31 1.2.2.1.4.16.2.1.2.1:12.99 1.2.1.1.4.16.2.1.2.1:12.99 1.2.1.1.4.8.4.1.2.1:12.35
+gv qkv_gate m32 v12 15.20 best 1.4.2.1.8.16.1.1.2.1 14.56
+  v12:15.26 1.4.2.1.8.16.1.1.2.0:14.37 1.4.2.1.8.16.1.1.2.1:14.50 1.4.2.1.4.16.2.1.2.0:15.42 1.4.2.1.4.16.2.1.2.1:15.97 1.4.2.2.4.16.2.1.2.1:16.06 1.4.1.1.4.8.4.1.2.0:19.23 1.4.1.1.4.8.4.1.2.1:20.22 1.4.2.1.4.8.4.1.2.1:20.19 1.4.1.1.4.16.2.1.2.1:15.14
+gv o m1 v12 6.85 best 1.1.2.1.8.2.1.1.0.0 5.22
+  v12:6.98 1.1.2.1.8.2.1.1.0.0:5.34 1.1.2.1.8.2.1.1.0.1:5.44 1.1.2.2.4.4.1.1.0.1:5.86 1.1.2.1.4.4.1.1.0.1:5.60
+gv o m8 v12 6.85 best 1.1.2.1.8.2.1.1.0.0 5.31
+  v12:6.85 1.1.2.1.8.2.1.1.0.0:5.44 1.1.2.1.8.2.1.1.0.1:5.31 1.1.2.2.4.4.1.1.0.1:5.63 1.1.2.1.4.4.1.1.0.1:5.57
+gv o m16 v12 7.01 best 1.2.2.1.8.2.1.1.0.0 5.44
+  v12:7.10 1.2.2.1.8.2.1.1.0.0:5.41 1.2.2.1.8.2.1.1.0.1:5.44 1.2.2.2.4.4.1.1.0.1:5.92 1.2.2.2.4.4.1.1.2.1:5.89 1.2.2.1.8.2.1.1.2.1:6.91 1.2.1.1.4.4.1.1.2.1:5.70
+gv o m32 v12 7.04 best 1.4.2.1.8.2.1.1.0.1 6.24
+  v12:7.17 1.4.2.1.4.4.1.1.2.0:6.72 1.4.2.1.4.4.1.1.2.1:6.78 1.4.2.2.4.4.1.1.2.0:6.78 1.4.2.2.4.4.1.1.2.1:6.91 1.4.2.1.8.2.1.1.0.1:6.27 1.4.1.1.4.4.1.1.2.0:6.30 1.4.1.1.4.4.1.1.2.1:6.27 1.4.2.1.8.2.1.1.2.1:7.49 1.4.1.1.8.2.1.1.2.1:7.49
+gv pooler m1 v12 26.24 best 1.1.2.2.8.16.1.1.0.0 17.82
+  v12:29.89 1.1.2.2.8.16.1.1.0.0:17.95 1.1.2.2.8.16.1.1.0.1:17.76 1.1.1.2.16.8.1.1.0.3:17.98 1.1.2.1.8.16.1.1.0.1:17.86
+gv pooler m8 v12 25.63 best 1.1.2.2.8.16.1.1.0.1 17.82
+  v12:25.92 1.1.2.2.8.16.1.1.0.0:17.82 1.1.2.2.8.16.1.1.0.1:17.89 1.1.1.2.16.8.1.1.0.3:17.98 1.1.2.1.8.16.1.1.0.1:17.92
+gv pooler m16 v12 25.89 best 1.2.2.2.8.16.1.1.0.1 17.92
+  v12:26.02 1.2.2.2.8.16.1.1.0.0:17.95 1.2.2.2.8.16.1.1.0.1:17.79 1.2.2.1.8.16.1.1.2.1:18.34 1.2.2.1.8.16.1.1.0.1:19.84
+gv pooler m32 v12 26.24 best 1.4.2.1.8.16.1.1.2.0 20.10
+  v12:26.53 1.4.2.1.8.16.1.1.2.0:20.03 1.4.2.1.8.16.1.1.2.1:20.10 1.4.2.1.4.16.2.1.2.1:22.24 1.4.2.2.4.16.2.1.2.1:21.70
+gv unpooler m1 v12 5.73 best 1.1.2.1.16.4.1.1.0.1 3.84
+  v12:6.56 1.1.2.1.16.4.1.1.0.0:4.10 1.1.2.1.16.4.1.1.0.1:3.84 1.1.2.1.8.2.4.1.0.1:4.93 1.1.2.1.8.4.2.1.0.1:4.96
+gv unpooler m8 v12 7.04 best 1.1.2.1.16.4.1.1.0.1 4.03
+  v12:7.04 1.1.2.1.16.4.1.1.0.0:4.13 1.1.2.1.16.4.1.1.0.1:3.81 1.1.2.1.8.2.4.1.0.1:4.86 1.1.2.1.8.4.2.1.0.1:4.86
+gv unpooler m16 v12 23.62 best 1.2.2.1.4.16.1.1.2.1 18.37
+  v12:23.71 1.2.2.1.4.16.1.1.2.0:18.37 1.2.2.1.4.16.1.1.2.1:18.30 1.2.2.1.4.16.1.1.0.1:20.42 1.2.2.1.8.8.1.1.0.1:21.70
+gv unpooler m32 v12 23.49 best 1.4.2.1.4.16.1.1.2.0 20.06
+  v12:23.55 1.4.2.1.4.16.1.1.2.0:20.26 1.4.2.1.4.16.1.1.2.1:20.13 1.4.2.2.4.16.1.1.2.1:20.06 1.4.2.1.8.8.1.1.2.1:21.76
+gv router m1 v12 5.44 best rr0 3.87
+  v12:5.44 2.1.2.1.8.1.16.1.0.0:7.20 2.1.2.1.4.2.16.1.0.0:5.54 2.1.2.1.8.2.8.1.0.0:5.31 rr0:3.78 rr1:3.78
+gv router m8 v12 5.54 best 2.1.2.1.8.2.8.1.0.0 5.31
+  v12:5.63 2.1.2.1.8.1.16.1.0.0:7.17 2.1.2.1.4.2.16.1.0.0:5.60 2.1.2.1.8.2.8.1.0.0:5.28
+gv router m16 v12 5.76 best 2.2.2.1.8.2.8.1.0.0 5.41
+  v12:5.89 2.2.2.1.8.1.16.1.0.0:5.66 2.2.2.1.4.2.16.1.0.0:5.63 2.2.2.1.8.2.8.1.0.0:5.31
+gv router m32 v12 6.43 best 2.4.2.1.4.2.16.1.0.0 6.02
+  v12:6.43 2.4.2.1.8.1.16.1.0.0:8.03 2.4.2.1.4.2.16.1.0.0:6.08 2.4.2.1.8.2.8.1.0.0:8.96
+PREP r6 done in 33s
+GX router c12 escapes hi 285 lo 1139
+BAKE router m=128 r6 16.22
+BAKE router m=128 rs64k32 15.14
+BAKE router m=128 rp64k32s4 13.44
+BAKE router m=128 rp64k32s2 13.63
+BAKE router m=128 rp64k64x2 15.74
+BAKE router m=128 rp64k32sc 15.90
+PROBE rszero router m=128 3.52
+PICK router m=128 rp64k32s4 13.44
+BAKE router m=256 r6 14.75
+BAKE router m=256 rs64k32 22.37
+BAKE router m=256 rv64k32 18.05
+BAKE router m=256 rv64k64x2 22.50
+BAKE router m=256 rv64k32sc 23.10
+PICK router m=256 r6 14.75
+PREP rq extension ready at 37s
+BAKE pooler m=128 r6 31.74
+BAKE pooler m=128 rq:s4s5hz 23.65 (ok 3.2e-03)
+BAKE pooler m=128 rq:s4s5hzE 24.13 (ok 3.2e-03)
+BAKE pooler m=128 rq:s4hz 24.70 (ok 3.1e-03)
+BAKE pooler m=128 rq:s4s5z 25.15 (ok 3.1e-03)
+PICK pooler m=128 rq:s4s5hz 23.65
+BAKE pooler m=256 r6 29.95
+BAKE pooler m=256 rq:n256s5hz 29.92 (ok 3.1e-03)
+BAKE pooler m=256 rq:n256s5hzEP 29.70 (ok 3.2e-03)
+BAKE pooler m=256 rq:n256s4hz 29.41 (ok 3.1e-03)
+BAKE pooler m=256 rq:n256s5z 30.37 (ok 3.1e-03)
+PICK pooler m=256 rq:n256s4hz 29.41
+BAKE qkv_gate m=128 r6 19.14
+BAKE qkv_gate m=128 rq:s4s5hz 17.25 (ok 3.8e-03)
+BAKE qkv_gate m=128 rq:s4s5hzE 16.96 (ok 3.8e-03)
+BAKE qkv_gate m=128 rq:s4hz 17.76 (ok 3.8e-03)
+BAKE qkv_gate m=128 rq:s4s5z 17.34 (ok 3.8e-03)
+PICK qkv_gate m=128 rq:s4s5hzE 16.96
+BAKE qkv_gate m=256 r6 21.12
+BAKE qkv_gate m=256 rq:n256s5hz 21.15 (ok 3.8e-03)
+BAKE qkv_gate m=256 rq:n256s5hzEP 21.22 (ok 3.8e-03)
+BAKE qkv_gate m=256 rq:n256s4hz 20.80 (ok 3.7e-03)
+BAKE qkv_gate m=256 rq:n256s5z 21.54 (ok 3.8e-03)
+PICK qkv_gate m=256 rq:n256s4hz 20.80
+BAKE unpooler m=128 r6 30.43
+BAKE unpooler m=128 rq:s4s5hz 23.71 (ok 2.4e-03)
+BAKE unpooler m=128 rq:s4s5hzE 23.74 (ok 2.4e-03)
+BAKE unpooler m=128 rq:s4hz 24.42 (ok 2.4e-03)
+BAKE unpooler m=128 rq:s4s5z 24.74 (ok 2.4e-03)
+PICK unpooler m=128 rq:s4s5hz 23.71
+BAKE unpooler m=256 r6 27.49
+BAKE unpooler m=256 rq:n256s5hz 29.79 (ok 2.4e-03)
+BAKE unpooler m=256 rq:n256s5hzEP 29.79 (ok 2.4e-03)
+BAKE unpooler m=256 rq:n256s4hz 29.34 (ok 2.4e-03)
+BAKE unpooler m=256 rq:n256s5z 30.11 (ok 2.4e-03)
+PICK unpooler m=256 r6 27.49
+BAKE o m=128 r6 10.56
+BAKE o m=128 rq:s4s5hz 11.71 (ok 2.4e-03)
+BAKE o m=128 rq:s4s5hzE 11.81 (ok 2.4e-03)
+BAKE o m=128 rq:s4hz 11.94 (ok 2.4e-03)
+BAKE o m=128 rq:s4s5z 11.49 (ok 2.4e-03)
+PICK o m=128 r6 10.56
+BAKE o m=256 r6 11.33
+BAKE o m=256 rq:n256s5hz 14.88 (ok 2.4e-03)
+BAKE o m=256 rq:n256s5hzEP 15.46 (ok 2.4e-03)
+BAKE o m=256 rq:n256s4hz 14.59 (ok 2.4e-03)
+BAKE o m=256 rq:n256s5z 15.01 (ok 2.4e-03)
+PICK o m=256 r6 11.33
+PREP done in 39s
+PREPARE 38.8s
+/okc/proj_rsi/tools/h100_bench.py:63: UserWarning: An output with one or more elements was resized since it had shape [1], which does not match the required output shape []. This behavior is deprecated, and in a future PyTorch release outputs will not be resized unless they have zero elements. You can explicitly reuse an out tensor t by resizing it, inplace, to zero elements with t.resize_(0). (Triggered internally at /pytorch/aten/src/ATen/native/Resize.cpp:31.)
+  torch.sum(fview, 0, out=sink)  # READ flush, as the judge does (a write flush leaves L2 dirty and changes rankings)
+REPLAY_OVERHEAD 13.46 us  (empty graph replay)   READ6MB 50.48 us (torch.sum of 6 MB)
+CHECK pooler    m=128  ok  relative L2 error 3.421e-03 (worst row 3.692e-03); 21 probe rows exact to 0.0e+00
+CHECK pooler    m=256  ok  relative L2 error 3.399e-03 (worst row 3.744e-03); 27 probe rows exact to 0.0e+00
+CHECK qkv_gate  m=128  ok  relative L2 error 4.047e-03 (worst row 4.492e-03); 21 probe rows exact to 0.0e+00
+CHECK qkv_gate  m=256  ok  relative L2 error 4.017e-03 (worst row 4.415e-03); 27 probe rows exact to 0.0e+00
+CHECK unpooler  m=128  ok  relative L2 error 2.696e-03 (worst row 2.973e-03); 21 probe rows exact to 0.0e+00
+CHECK unpooler  m=256  ok  relative L2 error 1.402e-04 (worst row 3.086e-04); 42 probe rows exact to 0.0e+00
+CHECK o         m=128  ok  relative L2 error 5.126e-05 (worst row 1.894e-04); 21 probe rows exact to 0.0e+00
+CHECK o         m=256  ok  relative L2 error 5.226e-05 (worst row 1.989e-04); 42 probe rows exact to 0.0e+00
+load      layer        m  yours_us  torch_us    sol_us   x_sol
+verify16  pooler     128     26.27     31.55     20.97    1.25
+verify16  qkv_gate   128     19.87     22.59     12.07    1.65
+verify16  unpooler   128     24.61     29.76     20.97    1.17
+verify16  o          128     13.70     14.05      5.71    2.40
+verify32  pooler     256     32.18     39.31     21.91    1.47
+verify32  qkv_gate   256     23.55     27.50     12.87    1.83
+verify32  unpooler   256     30.37     31.09     21.91    1.39
+verify32  o          256     14.22     14.72      6.42    2.22
+BENCH_DONE

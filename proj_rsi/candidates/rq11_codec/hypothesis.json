@@ -1,0 +1,28 @@
+{
+  "family": "lossless-fixed-window-weight-codec",
+  "version": "rq11-wordplanes-v1",
+  "predecessor": ["rs32 stock RQ12", "codec-study R 11-bit escape analysis"],
+  "observed_failure": "No GPU attempt. Offline prototype increases decode/load instructions; synthetic escape entries consume most of the 1-bit raw saving.",
+  "causal_hypothesis": "Three aligned shared wordplanes avoid unaligned 44-byte per-lane vector loads, but preserving the stock serial escape walker likely costs more than the saved W traffic.",
+  "change_or_diagnostic": "CPU exact format proof plus offline sm90a source/SASS comparison; root may isolate producer byte reduction from decode and escape changes if GPU ROI warrants it.",
+  "predicted_observations": {
+    "supports": "Producer-only read time falls with 5632-byte HALF stages; full decode/escape path erases that gain.",
+    "refutes": "Actual weight fixture has a much smaller escape rate, or full fused decode is demonstrably hidden and same-run selected path improves."
+  },
+  "comparison": ["official rs32 3200.6150084373335 us", "native-X same-run selected incumbent", "rq11-wordplanes-v1"],
+  "validity": {
+    "numerics": "CPU all BF16 bit patterns proved. CUDA decoder never executed. Full matmul numerics, one-hot probes, and FP32 accumulation order remain unvalidated.",
+    "real_timed_graph": "Not run; no performance claim.",
+    "mutation": "No runtime launcher or activation; no parent source edited.",
+    "immutability": "Source hashes retained locally in SHA256SUMS.",
+    "resources": "Offline nvcc zero spills, no GPU context, no extension load.",
+    "cleanup": "All own sources, logs, cubin and results retained in candidate directory."
+  },
+  "forecast": {
+    "attainable_gain": "Unknown. Raw weight-byte upper bound 8.333%; synthetic total packed bytes only 1.6-5.0% lower after CSR. Whole-serving gain strictly less absent other effects.",
+    "conditional_score_value": "No exact board projection; no same-job per-load evidence.",
+    "information_value": "Resolves layout legality, exactness, finite/capacity gating, and confirms this straightforward decoder has substantial extra instructions."
+  },
+  "cost": "CPU proof and one offline compile only; no GPU queue position consumed.",
+  "next_after_failure": "Retain v1. Park this integration pending actual escape histogram and a root-run producer/decode isolation; this does not retire other lossless codec layouts."
+}

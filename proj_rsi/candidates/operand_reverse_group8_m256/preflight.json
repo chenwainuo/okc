@@ -1,0 +1,990 @@
+{
+  "state": "CPU_PASS_GPU_UNRUN_ROOT_CRITIC_GO_REQUIRED",
+  "source": {
+    "exact_restored_parent_source": "e92744c61531ae99e9345d2f541d5f5dda685ecd9ab5a7753621edd7c9d7289e",
+    "NT": 128,
+    "M": 256,
+    "N": 8192,
+    "K": 4096,
+    "grid": [
+      128,
+      2
+    ],
+    "pack_grid": [
+      256,
+      2
+    ],
+    "descriptor_outer": 256,
+    "descriptor_box_outer": 128,
+    "unchanged_codec_producers_math_and_smem": true
+  },
+  "maps": {
+    "status": "PASS_EXHAUSTIVE_2TILE_U32_AND_OUTPUT_BIJECTIONS",
+    "XP_bytes": 2097152,
+    "BF16_bits_preserved": 1048576,
+    "all65536_patterns": true,
+    "output_cells": 2097152,
+    "input_XP_max_byte": 2097151,
+    "output_max_byte": 4194303,
+    "per_tile_W_sequences_identical": true,
+    "u32_offset_max_below_2pow32": true,
+    "consumer_vectors": 131072,
+    "counters": "unchanged no source access except inherited fields; no y-shared atomics",
+    "alias": "each y owns disjoint XP1MiB and output rows128; W immutable shared"
+  },
+  "schedule_per_independent_tile": {
+    "status": "PASS_SYMBOLIC_GROUP8_SCHEDULE_NOT_RUNTIME",
+    "A_words_per_bank": 32,
+    "physical_banks_required": 2,
+    "source_old_K64_stages": 64,
+    "math_pairs": 32,
+    "same_order_MMA_quads": 256,
+    "fences_commits_wait1_per_WG": 32,
+    "stage_Bempty_releases": 64,
+    "wait_for_DAG_nodes": 160,
+    "B8_phases": {
+      "0": [
+        [
+          0,
+          0
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          16,
+          0
+        ],
+        [
+          24,
+          1
+        ],
+        [
+          32,
+          0
+        ],
+        [
+          40,
+          1
+        ],
+        [
+          48,
+          0
+        ],
+        [
+          56,
+          1
+        ]
+      ],
+      "1": [
+        [
+          1,
+          0
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          17,
+          0
+        ],
+        [
+          25,
+          1
+        ],
+        [
+          33,
+          0
+        ],
+        [
+          41,
+          1
+        ],
+        [
+          49,
+          0
+        ],
+        [
+          57,
+          1
+        ]
+      ],
+      "2": [
+        [
+          2,
+          0
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          18,
+          0
+        ],
+        [
+          26,
+          1
+        ],
+        [
+          34,
+          0
+        ],
+        [
+          42,
+          1
+        ],
+        [
+          50,
+          0
+        ],
+        [
+          58,
+          1
+        ]
+      ],
+      "3": [
+        [
+          3,
+          0
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          19,
+          0
+        ],
+        [
+          27,
+          1
+        ],
+        [
+          35,
+          0
+        ],
+        [
+          43,
+          1
+        ],
+        [
+          51,
+          0
+        ],
+        [
+          59,
+          1
+        ]
+      ],
+      "4": [
+        [
+          4,
+          0
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          20,
+          0
+        ],
+        [
+          28,
+          1
+        ],
+        [
+          36,
+          0
+        ],
+        [
+          44,
+          1
+        ],
+        [
+          52,
+          0
+        ],
+        [
+          60,
+          1
+        ]
+      ],
+      "5": [
+        [
+          5,
+          0
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          21,
+          0
+        ],
+        [
+          29,
+          1
+        ],
+        [
+          37,
+          0
+        ],
+        [
+          45,
+          1
+        ],
+        [
+          53,
+          0
+        ],
+        [
+          61,
+          1
+        ]
+      ],
+      "6": [
+        [
+          6,
+          0
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          22,
+          0
+        ],
+        [
+          30,
+          1
+        ],
+        [
+          38,
+          0
+        ],
+        [
+          46,
+          1
+        ],
+        [
+          54,
+          0
+        ],
+        [
+          62,
+          1
+        ]
+      ],
+      "7": [
+        [
+          7,
+          0
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          23,
+          0
+        ],
+        [
+          31,
+          1
+        ],
+        [
+          39,
+          0
+        ],
+        [
+          47,
+          1
+        ],
+        [
+          55,
+          0
+        ],
+        [
+          63,
+          1
+        ]
+      ]
+    },
+    "negative_current_bank_refill_rejected": true,
+    "events": [
+      [
+        "load_pair",
+        0,
+        []
+      ],
+      [
+        "load_pair",
+        1,
+        []
+      ],
+      [
+        "commit_wait1",
+        0,
+        [
+          0
+        ]
+      ],
+      [
+        "load_pair",
+        2,
+        [
+          1
+        ]
+      ],
+      [
+        "commit_wait1",
+        1,
+        [
+          1
+        ]
+      ],
+      [
+        "load_pair",
+        3,
+        [
+          2
+        ]
+      ],
+      [
+        "commit_wait1",
+        2,
+        [
+          2
+        ]
+      ],
+      [
+        "load_pair",
+        4,
+        [
+          3
+        ]
+      ],
+      [
+        "commit_wait1",
+        3,
+        [
+          3
+        ]
+      ],
+      [
+        "load_pair",
+        5,
+        [
+          4
+        ]
+      ],
+      [
+        "commit_wait1",
+        4,
+        [
+          4
+        ]
+      ],
+      [
+        "load_pair",
+        6,
+        [
+          5
+        ]
+      ],
+      [
+        "commit_wait1",
+        5,
+        [
+          5
+        ]
+      ],
+      [
+        "load_pair",
+        7,
+        [
+          6
+        ]
+      ],
+      [
+        "commit_wait1",
+        6,
+        [
+          6
+        ]
+      ],
+      [
+        "load_pair",
+        8,
+        [
+          7
+        ]
+      ],
+      [
+        "commit_wait1",
+        7,
+        [
+          7
+        ]
+      ],
+      [
+        "load_pair",
+        9,
+        [
+          8
+        ]
+      ],
+      [
+        "commit_wait1",
+        8,
+        [
+          8
+        ]
+      ],
+      [
+        "load_pair",
+        10,
+        [
+          9
+        ]
+      ],
+      [
+        "commit_wait1",
+        9,
+        [
+          9
+        ]
+      ],
+      [
+        "load_pair",
+        11,
+        [
+          10
+        ]
+      ],
+      [
+        "commit_wait1",
+        10,
+        [
+          10
+        ]
+      ],
+      [
+        "load_pair",
+        12,
+        [
+          11
+        ]
+      ],
+      [
+        "commit_wait1",
+        11,
+        [
+          11
+        ]
+      ],
+      [
+        "load_pair",
+        13,
+        [
+          12
+        ]
+      ],
+      [
+        "commit_wait1",
+        12,
+        [
+          12
+        ]
+      ],
+      [
+        "load_pair",
+        14,
+        [
+          13
+        ]
+      ],
+      [
+        "commit_wait1",
+        13,
+        [
+          13
+        ]
+      ],
+      [
+        "load_pair",
+        15,
+        [
+          14
+        ]
+      ],
+      [
+        "commit_wait1",
+        14,
+        [
+          14
+        ]
+      ],
+      [
+        "load_pair",
+        16,
+        [
+          15
+        ]
+      ],
+      [
+        "commit_wait1",
+        15,
+        [
+          15
+        ]
+      ],
+      [
+        "load_pair",
+        17,
+        [
+          16
+        ]
+      ],
+      [
+        "commit_wait1",
+        16,
+        [
+          16
+        ]
+      ],
+      [
+        "load_pair",
+        18,
+        [
+          17
+        ]
+      ],
+      [
+        "commit_wait1",
+        17,
+        [
+          17
+        ]
+      ],
+      [
+        "load_pair",
+        19,
+        [
+          18
+        ]
+      ],
+      [
+        "commit_wait1",
+        18,
+        [
+          18
+        ]
+      ],
+      [
+        "load_pair",
+        20,
+        [
+          19
+        ]
+      ],
+      [
+        "commit_wait1",
+        19,
+        [
+          19
+        ]
+      ],
+      [
+        "load_pair",
+        21,
+        [
+          20
+        ]
+      ],
+      [
+        "commit_wait1",
+        20,
+        [
+          20
+        ]
+      ],
+      [
+        "load_pair",
+        22,
+        [
+          21
+        ]
+      ],
+      [
+        "commit_wait1",
+        21,
+        [
+          21
+        ]
+      ],
+      [
+        "load_pair",
+        23,
+        [
+          22
+        ]
+      ],
+      [
+        "commit_wait1",
+        22,
+        [
+          22
+        ]
+      ],
+      [
+        "load_pair",
+        24,
+        [
+          23
+        ]
+      ],
+      [
+        "commit_wait1",
+        23,
+        [
+          23
+        ]
+      ],
+      [
+        "load_pair",
+        25,
+        [
+          24
+        ]
+      ],
+      [
+        "commit_wait1",
+        24,
+        [
+          24
+        ]
+      ],
+      [
+        "load_pair",
+        26,
+        [
+          25
+        ]
+      ],
+      [
+        "commit_wait1",
+        25,
+        [
+          25
+        ]
+      ],
+      [
+        "load_pair",
+        27,
+        [
+          26
+        ]
+      ],
+      [
+        "commit_wait1",
+        26,
+        [
+          26
+        ]
+      ],
+      [
+        "load_pair",
+        28,
+        [
+          27
+        ]
+      ],
+      [
+        "commit_wait1",
+        27,
+        [
+          27
+        ]
+      ],
+      [
+        "load_pair",
+        29,
+        [
+          28
+        ]
+      ],
+      [
+        "commit_wait1",
+        28,
+        [
+          28
+        ]
+      ],
+      [
+        "load_pair",
+        30,
+        [
+          29
+        ]
+      ],
+      [
+        "commit_wait1",
+        29,
+        [
+          29
+        ]
+      ],
+      [
+        "load_pair",
+        31,
+        [
+          30
+        ]
+      ],
+      [
+        "commit_wait1",
+        30,
+        [
+          30
+        ]
+      ],
+      [
+        "commit_wait1",
+        31,
+        [
+          31
+        ]
+      ]
+    ],
+    "limits": "Sequential symbolic stage/bank/DAG model. Does not simulate arbitrary GPU interleavings, register allocation, fences' hardware latency or runtime launchability."
+  },
+  "W_bit_map": {
+    "exact_BF16_values": 524288,
+    "escapes": 491209,
+    "cap": 61504,
+    "escape_lists_span32entry_windows": true,
+    "escape_control_flow": "Bit proof reconstructs CSR entries; unchanged inherited rq_fix supplies reload semantics, GPU runtime pending",
+    "shared_B_SW128_bijection": true
+  },
+  "shared_epilogue_bijection": {
+    "all8192_D_scalars_observed": true,
+    "single128x64_slab_bijection": true
+  },
+  "physical": {
+    "status": "PASS_ALL_ACTUAL_GROUP8_BINARIES",
+    "binaries": [
+      {
+        "status": "PASS_PHYSICAL_ASYNC_A_AND_FENCE_COVERAGE",
+        "groups_per_static_loop": 2,
+        "MMA_per_group": [
+          8,
+          8
+        ],
+        "A_register_sets": [
+          [
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119
+          ],
+          [
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87
+          ]
+        ],
+        "D_registers": [
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55
+        ],
+        "loop_PC_range": [
+          3024,
+          6432
+        ],
+        "iterations": 2,
+        "groups_checked": 4,
+        "fences_checked": 4,
+        "initial_vector_loads": 16,
+        "all_MMA_fence_wait_operations_unpredicated": true,
+        "payload_writes_checked": 32,
+        "outlined_instruction_count": 16,
+        "outlined_entry_PCs": [
+          12896,
+          12960,
+          13264,
+          13328
+        ],
+        "retirement_events": [
+          {
+            "iteration": 0,
+            "PC": 4256,
+            "retired_groups": 0
+          },
+          {
+            "iteration": 0,
+            "PC": 6048,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 4256,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 6048,
+            "retired_groups": 1
+          }
+        ],
+        "tail": "Final wait0 precedes first generic A/D epilogue access",
+        "limits": "Fixed main-loop CFG, all predicate writes conservatively executed. Source proofs retain exact XP indices/B descriptors. No wait-mask/latency or general ISA verifier claim."
+      }
+    ]
+  },
+  "negative_controls": {
+    "status": "PASS_NEGATIVE_CONTROLS",
+    "rejections": {
+      "old_real_premature_A_overwrite": "{'error': 'GENERIC_ASYNC_OPERAND_ACCESS_BEFORE_RETIRE', 'iteration': 0, 'PC': '0xe30', 'instruction': '@!P0 LDG.E.NA.128.CONSTANT R56, desc[UR12][R10.64]', 'clobbered_or_read': [56, 57, 58, 59]}",
+      "removed_initial_fence": "{'error': 'UNFENCED_GENERIC_A_D_ACCESS', 'iteration': 0, 'PC': '0xe30', 'instruction': 'HGMMA.64x64x16.F32.BF16 R24, R116, gdesc[UR4], R24'}",
+      "predicated_aligned_fence": "Predicated aligned WGMMA/fence/wait forbidden",
+      "new_A_bank_overwrite_before_retire": "{'error': 'GENERIC_ASYNC_OPERAND_ACCESS_BEFORE_RETIRE', 'iteration': 0, 'PC': '0x11f0', 'instruction': 'LDG.E.NA.128.CONSTANT R88, desc[UR12][R14.64]', 'clobbered_or_read': [88, 89, 90, 91]}",
+      "generic_pending_D_write": "{'error': 'GENERIC_ASYNC_OPERAND_ACCESS_BEFORE_RETIRE', 'iteration': 1, 'PC': '0xdc0', 'instruction': 'IMAD.MOV.U32 R24, RZ, RZ, RZ', 'clobbered_or_read': [24]}"
+    }
+  },
+  "store_form": {
+    "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_OWNER_BARRIERS",
+    "binaries": [
+      {
+        "STSM": 0,
+        "scalar_STS": 32,
+        "fullwarp_unpredicated_STSM": false,
+        "last_producer_store_PC": 12144,
+        "proxy_fence_PC": 12176,
+        "producer_barriers_PC": {
+          "3": 12288,
+          "4": 12224
+        },
+        "owner_barrier_predicates": {
+          "same_predicate": "P0",
+          "complementary_bar3_bar4": true,
+          "instructions": [
+            "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80",
+            "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+          ],
+          "intervening_no_predicate_writer_instructions": [
+            "@!P0 WARPSYNC.ALL",
+            "@!P0 NOP",
+            "BSSY B0, 0x3220"
+          ]
+        },
+        "shared_payload_bytes_per_stage": 8192,
+        "HGMMA": 16,
+        "X_LDG128": 32
+      }
+    ]
+  },
+  "registers": [
+    122,
+    17
+  ],
+  "SMEM_bytes": 103600,
+  "threads": 512,
+  "rounded_register_pool": 65536,
+  "source_sha256": "b9dedf18be83f32dcfa82f19674bb31dea0e32e749af74c586852f0ffca503a0",
+  "device_source_sha256": "1c96074ee6e418a0f959df9123555cb7a988272c1899872f47a348a292750ee6",
+  "gpu_calls": 0
+}

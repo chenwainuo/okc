@@ -1,0 +1,22 @@
+{
+  "state": "PREREGISTERED_PROPOSAL_GPU_UNRUN_REQUIRES_REVIEWED_DRIVER",
+  "source": "proj_rsi/candidates/pw38/submission.py",
+  "source_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+  "question": "Does EH itself improve current identical RQ geometry before any prepare selection-threshold change?",
+  "fixed_variants": [
+    {"control": "s4s5z", "new": "s4s5zEH", "control_FL": 2, "new_FL": 65538},
+    {"control": "s4s5hz", "new": "s4s5hzEH", "control_FL": 3, "new_FL": 65539}
+  ],
+  "fixed_geometry": {"NT": 128, "ST": 5, "GS": 1, "PRB": 0, "WM": 0, "INS": 0},
+  "shapes": [
+    {"layer": "qkv_gate", "m": 128, "n": 2304, "k": 8192, "KS": 7},
+    {"layer": "pooler", "m": 128, "n": 4096, "k": 8192, "KS": 4},
+    {"layer": "unpooler", "m": 128, "n": 8192, "k": 4096, "KS": 2},
+    {"layer": "o", "m": 128, "n": 8192, "k": 1024, "KS": 2}
+  ],
+  "comparison_protocol": "32 balanced paired fresh-fixture trials plus bracketed F1, same graph scope and cold read-only L2 flush. Retain every raw call, pairwise deltas, distributions and uncertainty. Also compare against actual same-run RS32/PW36 serving policy; an EH gain against a losing RQ control is not an incumbent gain.",
+  "gates": ["save and verify actual JIT before first math", "all-K basis and FP64 normal/outlier numerical checks", "half-slab output bitmap and current descriptor behavior", "actual terminal outputs before any replay or mutation", "current-X mutation and output NaN poison checks", "zero/reset counters and persistent-state semantics", "fresh workspaces and final graph drain/reset"],
+  "next_full_candidate_gate": "If composition is valid, full 30-shape prepared-policy comparison RS32/PW36/PW38, retaining actual chosen variants. Official scoring is a separate root decision after correctness and rules review.",
+  "interpretation": "No automatic minimum-gain rejection; no PC fractions as time; no historical kernel gain assumed to transfer. No threshold or variant mutation during a run.",
+  "execution": "Root-only exclusive scheduler, normal optimization capability, bounded declared full-job budget. This JSON is a concrete test specification, not an implemented or executed GPU lab."
+}

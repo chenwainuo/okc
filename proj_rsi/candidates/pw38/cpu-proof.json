@@ -1,0 +1,203 @@
+{
+  "state": "CPU_PW38_CUMULATIVE_OPTIONAL_EH_PASS_GPU_UNRUN",
+  "candidate_sha256": "29e557ea53f3ce73cacfe5d22df4a5e405a822d195abd6311be3f4809dedad0e",
+  "base_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "EH_manifest_sha256": "a4ccf23b7ff6b9a383ad0d6299d7de2d0d0d18b60d85e287150a0e465aac9869",
+  "EH_source_sha256": "9067795eb0d01abe576744a874e3504d6371a92ebc05543708c500b8d83a4819",
+  "exact_text_replacements": 6,
+  "reverse_restoration": "ENTIRE_PW36_BYTES_EXACT",
+  "changed_named_AST_nodes": [
+    "RQBAKE",
+    "RQCU",
+    "RQPROD",
+    "RQV"
+  ],
+  "unchanged_named_AST_nodes": [
+    "prepare",
+    "kernel_fn",
+    "_r6",
+    "_v12",
+    "_rqbake",
+    "_rqsbake",
+    "RQSBAKE",
+    "RQPROD2",
+    "RQFLAGS",
+    "_rqsrc",
+    "_rqwg",
+    "_rqss",
+    "RWCU",
+    "_rwsrc",
+    "_rwext",
+    "RSPALL",
+    "RSP",
+    "_rsbake"
+  ],
+  "PW35_PW36_router": "ALL_SIX_NAMED_NODES_EXACT",
+  "cursor": "EXCLUDED_NO_LDS_CURSOR",
+  "EH_flags": [
+    65538,
+    65539
+  ],
+  "EH_flag_bit": 65536,
+  "HALF_bit": 16,
+  "EARLY_bit": 32,
+  "EP_ported": false,
+  "existing_controls": "ALL_VARIANTS_RETAINED_NON_EH_FL2_FL3_OFFLINE_SASS_EXACT",
+  "control_instruction_counts": {
+    "2": 1792,
+    "3": 1832
+  },
+  "bitmap": {
+    "status": "PASS_16384_OUTPUT_BF16_ONCE",
+    "half_slabs": [
+      {
+        "WG": 0,
+        "half": 0,
+        "bytes": 8192,
+        "source_range": [
+          0,
+          8192
+        ],
+        "global_token_range": [
+          0,
+          64
+        ],
+        "global_channel_range": [
+          0,
+          64
+        ]
+      },
+      {
+        "WG": 0,
+        "half": 1,
+        "bytes": 8192,
+        "source_range": [
+          8192,
+          16384
+        ],
+        "global_token_range": [
+          64,
+          128
+        ],
+        "global_channel_range": [
+          0,
+          64
+        ]
+      },
+      {
+        "WG": 1,
+        "half": 0,
+        "bytes": 8192,
+        "source_range": [
+          16384,
+          24576
+        ],
+        "global_token_range": [
+          0,
+          64
+        ],
+        "global_channel_range": [
+          64,
+          128
+        ]
+      },
+      {
+        "WG": 1,
+        "half": 1,
+        "bytes": 8192,
+        "source_range": [
+          24576,
+          32768
+        ],
+        "global_token_range": [
+          64,
+          128
+        ],
+        "global_channel_range": [
+          64,
+          128
+        ]
+      }
+    ],
+    "first_TMA_vs_second_STSM": "DISJOINT_8KiB_RANGES_PER_WG",
+    "descriptor_box": [
+      64,
+      64
+    ],
+    "no_alias_until_both_TMA_reads_complete": true
+  },
+  "offline_physical": [
+    {
+      "flag": 65539,
+      "EH": true,
+      "static_STSM": 8,
+      "static_reduce_issues": 2,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": true
+    },
+    {
+      "flag": 65538,
+      "EH": true,
+      "static_STSM": 8,
+      "static_reduce_issues": 2,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": true
+    },
+    {
+      "flag": 3,
+      "EH": false,
+      "static_STSM": 8,
+      "static_reduce_issues": 1,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": false
+    },
+    {
+      "flag": 2,
+      "EH": false,
+      "static_STSM": 8,
+      "static_reduce_issues": 1,
+      "WGMMA_drain_before_STSM": "PASS",
+      "both_TMA_reads_drain_before_exit": "PASS",
+      "half0_issue_before_half1_STSM": false
+    }
+  ],
+  "offline_reuse": {
+    "translation_unit_sha256": "f5fa9e9012776c869a491d5e3522b4cd9f3a7cfce5342af5a75eb110981ff224",
+    "cubin_sha256": "dfb218e34dc9d5be7eb260078bb665352a13311c1ca41b7621046815837cc894",
+    "SASS_sha256": "19cafb1adb1489d9f22dcca2e23e9da7e71bf3bc50c81521a8db5148c091db59",
+    "covered_instances": [
+      "NT128/ST5/GS1/PRB0/WM0/INS0/FL2",
+      "NT128/ST5/GS1/PRB0/WM0/INS0/FL3",
+      "NT128/ST5/GS1/PRB0/WM0/INS0/FL65538",
+      "NT128/ST5/GS1/PRB0/WM0/INS0/FL65539"
+    ],
+    "limits": "CPU offline exact-source reuse only; actual JIT/all production resources/GPU correctness/performance remain unrun."
+  },
+  "selection": {
+    "mechanism": "existing validated RQ bake with MARGIN0.99, unchanged R6 F1 incumbent gate",
+    "EH_is_optional": true,
+    "EH_ACTUALLY_SELECTED": "UNRUN",
+    "small_historical_gain_can_be_suppressed": true,
+    "next_diagnostic": "same-geometry controls FL2vs65538 and FL3vs65539 on current cumulative source before changing selection thresholds"
+  },
+  "production_imports_executed": 0,
+  "cuda_API_calls": 0,
+  "prepare_calls": 0,
+  "extension_builds": 0,
+  "new_compilations": 0,
+  "lint": {
+    "path": "/home/ubuntu/okc/proj_rsi/candidates/pw38/submission.py",
+    "ok": true,
+    "findings": [
+      {
+        "severity": "warning",
+        "rule": "sm_90a",
+        "detail": "several load_inline builds: confirm the one holding wgmma/setmaxnreg/multicast gets the sm_90a flags"
+      }
+    ]
+  },
+  "performance": "UNMEASURED_NOT_SHIPPED_NOT_PROMOTED"
+}

@@ -1,0 +1,225 @@
+{
+  "status": "PASS_ACTUAL_JIT_MAIN_AND_PHYSICAL_GATES",
+  "canonical_sass_sha256": "691797ac2f14b3d0ab62535dc4316250cd1a71bc0bcb6064af80bd094d5a3c59",
+  "instructions": 1064,
+  "native_physical": {
+    "A4": {
+      "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+      "binaries": [
+        {
+          "status": "PASS_PHYSICAL_A4_RETIREMENT",
+          "iterations": 2,
+          "groups": 8,
+          "A_register_sets": [
+            [
+              56,
+              57,
+              58,
+              59,
+              60,
+              61,
+              62,
+              63,
+              64,
+              65,
+              66,
+              67,
+              68,
+              69,
+              70,
+              71
+            ],
+            [
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87
+            ],
+            [
+              88,
+              89,
+              90,
+              91,
+              92,
+              93,
+              94,
+              95,
+              96,
+              97,
+              98,
+              99,
+              100,
+              101,
+              102,
+              103
+            ],
+            [
+              104,
+              105,
+              106,
+              107,
+              108,
+              109,
+              110,
+              111,
+              112,
+              113,
+              114,
+              115,
+              116,
+              117,
+              118,
+              119
+            ]
+          ],
+          "payload_or_conservative_A_writes_checked": 32,
+          "outlined_wait_paths_no_A_writes": [
+            15904,
+            15952,
+            16000,
+            16048,
+            16096,
+            16144,
+            16192,
+            16240
+          ],
+          "retirement_events": [
+            {
+              "iteration": 0,
+              "PC": 5792,
+              "retired_groups": 0
+            },
+            {
+              "iteration": 0,
+              "PC": 7120,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 0,
+              "PC": 8368,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 0,
+              "PC": 9568,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 5792,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 7120,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 8368,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 9568,
+              "retired_groups": 1
+            }
+          ],
+          "final": "wait0 retires lastgroup before epilogue",
+          "loop_PC_range": [
+            5312,
+            10320
+          ],
+          "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+        }
+      ]
+    },
+    "X_physical_blocks": [
+      {
+        "bar_PC": "0xd00",
+        "last_LDSM": "0xcd0",
+        "proxy_fence_PC": "0xcf0"
+      },
+      {
+        "bar_PC": "0xed0",
+        "last_LDSM": "0xea0",
+        "proxy_fence_PC": "0xec0"
+      },
+      {
+        "bar_PC": "0x1090",
+        "last_LDSM": "0x1060",
+        "proxy_fence_PC": "0x1080"
+      },
+      {
+        "bar_PC": "0x1360",
+        "last_LDSM": "0x12c0",
+        "proxy_fence_PC": "0x1310"
+      },
+      {
+        "bar_PC": "0x18d0",
+        "last_LDSM": "0x1890",
+        "proxy_fence_PC": "0x18c0"
+      },
+      {
+        "bar_PC": "0x1d70",
+        "last_LDSM": "0x1d30",
+        "proxy_fence_PC": "0x1d60"
+      },
+      {
+        "bar_PC": "0x2250",
+        "last_LDSM": "0x2210",
+        "proxy_fence_PC": "0x2240"
+      },
+      {
+        "bar_PC": "0x2710",
+        "last_LDSM": "0x26d0",
+        "proxy_fence_PC": "0x2700"
+      }
+    ],
+    "math_global_X_LDG": 0,
+    "static_LDSM": 32,
+    "static_X_TMA_steady_and_startup": 8,
+    "limits": "LocalCUDA12.8cubin only; driverJIT must rerun gates before anyGPUmath"
+  },
+  "producer_store": {
+    "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_OWNER_BARRIERS",
+    "binaries": [
+      {
+        "STSM": 4,
+        "scalar_STS": 16,
+        "fullwarp_unpredicated_STSM": true,
+        "last_producer_store_PC": 15024,
+        "proxy_fence_PC": 15056,
+        "producer_barriers_PC": {
+          "3": 15088,
+          "4": 15072
+        },
+        "owner_barrier_predicates": {
+          "same_predicate": "P0",
+          "complementary_bar3_bar4": true,
+          "instructions": [
+            "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80",
+            "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+          ],
+          "intervening_no_predicate_writer_instructions": []
+        },
+        "shared_payload_bytes_per_stage": 8192,
+        "HGMMA": 16,
+        "X_LDG128": 0
+      }
+    ]
+  },
+  "limit": "Does not replace GPU resource/occupancy/numerical/graph/mutation gates"
+}

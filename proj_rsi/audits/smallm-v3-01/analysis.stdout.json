@@ -1,0 +1,545 @@
+{
+  "verdict": "VALID_LOCAL_ALL5_ACTUAL_POLICY_COMPARISON; MIXED_FLAT_AND_REGRESSIONS; NO_OFFICIAL_PROMOTION",
+  "validation": {
+    "inventory_files": 12,
+    "pinned_job_files": 28,
+    "raw_calls": 770,
+    "shapes": 5,
+    "basis_FP64_checks": 15,
+    "graph_mutation_checks": 75,
+    "strict_terminal_output_oracles": 30,
+    "balanced_pairs_per_shape": 30,
+    "all_state_invariant_evaluations_from_frozen_control_flow": 125,
+    "counter_baseline_views": 73,
+    "cursor_actually_selected_shapes": 3,
+    "cleanup_verified": true
+  },
+  "per_shape": {
+    "qkv32": {
+      "picks": {
+        "pw36": {
+          "path": "RQ",
+          "name": "t32s6hze",
+          "KS": 6,
+          "resources": [
+            168,
+            0,
+            99488
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123420567862784,
+            288
+          ],
+          "cursor_affected": true
+        },
+        "rs32": {
+          "path": "RQ",
+          "name": "t32s6hze",
+          "KS": 6,
+          "resources": [
+            168,
+            0,
+            99488
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123425275022336,
+            288
+          ],
+          "cursor_affected": true
+        },
+        "increment": {
+          "path": "RQ",
+          "name": "t32s5hze",
+          "KS": 6,
+          "resources": [
+            168,
+            0,
+            83080
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123416812453888,
+            288
+          ],
+          "cursor_affected": true
+        }
+      },
+      "comparison": {
+        "pw36": {
+          "paired_control_over_increment_median_ratio": 0.9979771076971928,
+          "paired_increment_gain_percent": -0.20228923028071666,
+          "paired_signed_control_minus_increment_us": -0.03200024366378784,
+          "paired_delta_distribution": {
+            "n": 30,
+            "median_us": -0.03200024366378784,
+            "min_us": -1.183999702334404,
+            "max_us": 1.0559996590018272,
+            "q25_us": -0.16000005416572094,
+            "q75_us": 0.1679996494203806,
+            "MAD_us": 0.14400016516447067
+          },
+          "paired_increment_win_tie_loss": [
+            11,
+            3,
+            16
+          ],
+          "F1_before_us": 15.072000212967396,
+          "F1_after_us": 15.00799972563982,
+          "F1_increment_us": 14.944000169634819,
+          "F1_signed_conservative_control_minus_increment_us": 0.06399955600500107,
+          "F1_signed_before_minus_increment_us": 0.12800004333257675,
+          "F1_signed_after_minus_increment_us": 0.06399955600500107
+        },
+        "rs32": {
+          "paired_control_over_increment_median_ratio": 1.0,
+          "paired_increment_gain_percent": 0.0,
+          "paired_signed_control_minus_increment_us": 0.0,
+          "paired_delta_distribution": {
+            "n": 30,
+            "median_us": 0.0,
+            "min_us": -0.8319998160004616,
+            "max_us": 0.9920010343194008,
+            "q25_us": -0.15200022608041763,
+            "q75_us": 0.12800004333257675,
+            "MAD_us": 0.14399969950318336
+          },
+          "paired_increment_win_tie_loss": [
+            14,
+            4,
+            12
+          ],
+          "F1_before_us": 15.072000212967396,
+          "F1_after_us": 15.104000456631184,
+          "F1_increment_us": 14.944000169634819,
+          "F1_signed_conservative_control_minus_increment_us": 0.12800004333257675,
+          "F1_signed_before_minus_increment_us": 0.12800004333257675,
+          "F1_signed_after_minus_increment_us": 0.1600002869963646
+        }
+      }
+    },
+    "qkv16": {
+      "picks": {
+        "pw36": {
+          "path": "GV_no_counter",
+          "GV_instance": 15,
+          "GV_template": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "cursor_affected": false
+        },
+        "rs32": {
+          "path": "GV_no_counter",
+          "GV_instance": 15,
+          "GV_template": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "cursor_affected": false
+        },
+        "increment": {
+          "path": "GV_no_counter",
+          "GV_instance": 15,
+          "GV_template": [
+            1,
+            2,
+            2,
+            2,
+            8,
+            16,
+            1,
+            1,
+            0,
+            1
+          ],
+          "cursor_affected": false
+        }
+      },
+      "comparison": {
+        "pw36": {
+          "paired_control_over_increment_median_ratio": 1.0021810442887422,
+          "paired_increment_gain_percent": 0.21810442887422177,
+          "paired_signed_control_minus_increment_us": 0.03200024366378784,
+          "paired_delta_distribution": {
+            "n": 30,
+            "median_us": 0.03200024366378784,
+            "min_us": -1.1839987710118294,
+            "max_us": 0.9599989280104637,
+            "q25_us": -0.16000005416572094,
+            "q75_us": 0.17600040882825851,
+            "MAD_us": 0.19199959933757782
+          },
+          "paired_increment_win_tie_loss": [
+            16,
+            0,
+            14
+          ],
+          "F1_before_us": 14.879999682307243,
+          "F1_after_us": 14.976000413298607,
+          "F1_increment_us": 14.84800036996603,
+          "F1_signed_conservative_control_minus_increment_us": 0.031999312341213226,
+          "F1_signed_before_minus_increment_us": 0.031999312341213226,
+          "F1_signed_after_minus_increment_us": 0.12800004333257675
+        },
+        "rs32": {
+          "paired_control_over_increment_median_ratio": 1.0021692139673894,
+          "paired_increment_gain_percent": 0.21692139673894495,
+          "paired_signed_control_minus_increment_us": 0.03200024366378784,
+          "paired_delta_distribution": {
+            "n": 30,
+            "median_us": 0.03200024366378784,
+            "min_us": -1.2480011209845543,
+            "max_us": 1.1200010776519775,
+            "q25_us": -0.15199952758848667,
+            "q75_us": 0.18400046974420547,
+            "MAD_us": 0.1759999431669712
+          },
+          "paired_increment_win_tie_loss": [
+            15,
+            2,
+            13
+          ],
+          "F1_before_us": 15.072000212967396,
+          "F1_after_us": 14.879999682307243,
+          "F1_increment_us": 14.84800036996603,
+          "F1_signed_conservative_control_minus_increment_us": 0.031999312341213226,
+          "F1_signed_before_minus_increment_us": 0.22399984300136566,
+          "F1_signed_after_minus_increment_us": 0.031999312341213226
+        }
+      }
+    },
+    "pooler32": {
+      "picks": {
+        "pw36": {
+          "path": "RQ",
+          "name": "t32s5hz",
+          "KS": 4,
+          "resources": [
+            168,
+            0,
+            83080
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123420567862272,
+            512
+          ],
+          "cursor_affected": false
+        },
+        "rs32": {
+          "path": "RQ",
+          "name": "t32s5hze",
+          "KS": 4,
+          "resources": [
+            168,
+            0,
+            83080
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123420567861760,
+            512
+          ],
+          "cursor_affected": true
+        },
+        "increment": {
+          "path": "RQ",
+          "name": "t32s5hze",
+          "KS": 4,
+          "resources": [
+            168,
+            0,
+            83080
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123425275170816,
+            512
+          ],
+          "cursor_affected": true
+        }
+      },
+      "comparison": {
+        "pw36": {
+          "paired_control_over_increment_median_ratio": 1.0043700546801633,
+          "paired_increment_gain_percent": 0.4370054680163271,
+          "paired_signed_control_minus_increment_us": 0.09599979966878891,
+          "paired_delta_distribution": {
+            "n": 30,
+            "median_us": 0.09599979966878891,
+            "min_us": -0.3200005739927292,
+            "max_us": 1.5679989010095596,
+            "q25_us": -0.11999951675534248,
+            "q75_us": 0.3359992988407612,
+            "MAD_us": 0.23999903351068497
+          },
+          "paired_increment_win_tie_loss": [
+            17,
+            1,
+            12
+          ],
+          "F1_before_us": 22.016000002622604,
+          "F1_after_us": 21.91999927163124,
+          "F1_increment_us": 21.856000646948814,
+          "F1_signed_conservative_control_minus_increment_us": 0.06399862468242645,
+          "F1_signed_before_minus_increment_us": 0.15999935567378998,
+          "F1_signed_after_minus_increment_us": 0.06399862468242645
+        },
+        "rs32": {
+          "paired_control_over_increment_median_ratio": 0.9934918740883727,
+          "paired_increment_gain_percent": -0.6508125911627305,
+          "paired_signed_control_minus_increment_us": -0.14400016516447067,
+          "paired_delta_distribution": {
+            "n": 30,
+            "median_us": -0.14400016516447067,
+            "min_us": -0.7680002599954605,
+            "max_us": 0.4160013049840927,
+            "q25_us": -0.30400045216083527,
+            "q75_us": -0.03200024366378784,
+            "MAD_us": 0.14400016516447067
+          },
+          "paired_increment_win_tie_loss": [
+            7,
+            0,
+            23
+          ],
+          "F1_before_us": 21.824000403285027,
+          "F1_after_us": 21.75999991595745,
+          "F1_increment_us": 21.856000646948814,
+          "F1_signed_conservative_control_minus_increment_us": -0.09600073099136353,
+          "F1_signed_before_minus_increment_us": -0.03200024366378784,
+          "F1_signed_after_minus_increment_us": -0.09600073099136353
+        }
+      }
+    },
+    "unpooler32": {
+      "picks": {
+        "pw36": {
+          "path": "RQ",
+          "name": "t32s5hze",
+          "KS": 2,
+          "resources": [
+            168,
+            0,
+            83080
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123425276295168,
+            1024
+          ],
+          "cursor_affected": true
+        },
+        "rs32": {
+          "path": "RQ",
+          "name": "t32s5hze",
+          "KS": 2,
+          "resources": [
+            168,
+            0,
+            83080
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123420578860032,
+            1024
+          ],
+          "cursor_affected": true
+        },
+        "increment": {
+          "path": "RQ",
+          "name": "t32s6hze",
+          "KS": 2,
+          "resources": [
+            168,
+            0,
+            99488
+          ],
+          "counter_storage": [
+            "cuda:0",
+            123425275171328,
+            1024
+          ],
+          "cursor_affected": true
+        }
+      },
+      "comparison": {
+        "pw36": {
+          "paired_control_over_increment_median_ratio": 0.9834852162580332,
+          "paired_increment_gain_percent": -1.6514783741966799,
+          "paired_signed_control_minus_increment_us": -0.38400012999773026,
+          "paired_delta_distribution": {
+            "n": 30,
+            "median_us": -0.38400012999773026,
+            "min_us": -1.7920006066560745,
+            "max_us": 0.9599998593330383,
+            "q25_us": -0.7600001990795135,
+            "q75_us": -0.12799911201000214,
+            "MAD_us": 0.28800126165151596
+          },
+          "paired_increment_win_tie_loss": [
+            4,
+            0,
+            26
+          ],
+          "F1_before_us": 21.568000316619873,
+          "F1_after_us": 21.79200015962124,
+          "F1_increment_us": 21.95199951529503,
+          "F1_signed_conservative_control_minus_increment_us": -0.38399919867515564,
+          "F1_signed_before_minus_increment_us": -0.38399919867515564,
+          "F1_signed_after_minus_increment_us": -0.15999935567378998
+        },
+        "rs32": {
+          "paired_control_over_increment_median_ratio": 0.9842397624267838,
+          "paired_increment_gain_percent": -1.5760237573216207,
+          "paired_signed_control_minus_increment_us": -0.3519989550113678,
+          "paired_delta_distribution": {
+            "n": 30,
+            "median_us": -0.3519989550113678,
+            "min_us": -1.3759993016719818,
+            "max_us": 1.3120006769895554,
+            "q25_us": -0.527998898178339,
+            "q75_us": -0.10399939492344856,
+            "MAD_us": 0.22399984300136566
+          },
+          "paired_increment_win_tie_loss": [
+            3,
+            2,
+            25
+          ],
+          "F1_before_us": 21.695999428629875,
+          "F1_after_us": 21.79200015962124,
+          "F1_increment_us": 21.95199951529503,
+          "F1_signed_conservative_control_minus_increment_us": -0.2560000866651535,
+          "F1_signed_before_minus_increment_us": -0.2560000866651535,
+          "F1_signed_after_minus_increment_us": -0.15999935567378998
+        }
+      }
+    },
+    "o32": {
+      "picks": {
+        "pw36": {
+          "path": "GV_no_counter",
+          "GV_instance": 47,
+          "GV_template": [
+            1,
+            4,
+            1,
+            1,
+            4,
+            4,
+            1,
+            1,
+            2,
+            1
+          ],
+          "cursor_affected": false
+        },
+        "rs32": {
+          "path": "GV_no_counter",
+          "GV_instance": 47,
+          "GV_template": [
+            1,
+            4,
+            1,
+            1,
+            4,
+            4,
+            1,
+            1,
+            2,
+            1
+          ],
+          "cursor_affected": false
+        },
+        "increment": {
+          "path": "GV_no_counter",
+          "GV_instance": 46,
+          "GV_template": [
+            1,
+            4,
+            1,
+            1,
+            4,
+            4,
+            1,
+            1,
+            2,
+            0
+          ],
+          "cursor_affected": false
+        }
+      },
+      "comparison": {
+        "pw36": {
+          "paired_control_over_increment_median_ratio": 1.0,
+          "paired_increment_gain_percent": 0.0,
+          "paired_signed_control_minus_increment_us": 0.0,
+          "paired_delta_distribution": {
+            "n": 30,
+            "median_us": 0.0,
+            "min_us": -0.7999995723366737,
+            "max_us": 0.8319998160004616,
+            "q25_us": -0.14399969950318336,
+            "q75_us": 0.1600002869963646,
+            "MAD_us": 0.1600002869963646
+          },
+          "paired_increment_win_tie_loss": [
+            12,
+            4,
+            14
+          ],
+          "F1_before_us": 9.696000255644321,
+          "F1_after_us": 9.696000255644321,
+          "F1_increment_us": 9.759999811649323,
+          "F1_signed_conservative_control_minus_increment_us": -0.06399955600500107,
+          "F1_signed_before_minus_increment_us": -0.06399955600500107,
+          "F1_signed_after_minus_increment_us": -0.06399955600500107
+        },
+        "rs32": {
+          "paired_control_over_increment_median_ratio": 0.9885460274929251,
+          "paired_increment_gain_percent": -1.1453972507074917,
+          "paired_signed_control_minus_increment_us": -0.11199992150068283,
+          "paired_delta_distribution": {
+            "n": 30,
+            "median_us": -0.11199992150068283,
+            "min_us": -0.9599998593330383,
+            "max_us": 1.1519994586706161,
+            "q25_us": -0.22399984300136566,
+            "q75_us": 0.05599972791969776,
+            "MAD_us": 0.14400016516447067
+          },
+          "paired_increment_win_tie_loss": [
+            10,
+            0,
+            20
+          ],
+          "F1_before_us": 9.600000455975533,
+          "F1_after_us": 9.631999768316746,
+          "F1_increment_us": 9.759999811649323,
+          "F1_signed_conservative_control_minus_increment_us": -0.15999935567378998,
+          "F1_signed_before_minus_increment_us": -0.15999935567378998,
+          "F1_signed_after_minus_increment_us": -0.12800004333257675
+        }
+      }
+    }
+  }
+}

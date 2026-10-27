@@ -1,0 +1,591 @@
+{
+  "ds": {
+    "physical": {
+      "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+      "binaries": [
+        {
+          "status": "PASS_PHYSICAL_A4_RETIREMENT",
+          "iterations": 2,
+          "groups": 8,
+          "A_register_sets": [
+            [
+              104,
+              105,
+              106,
+              107,
+              108,
+              109,
+              110,
+              111,
+              112,
+              113,
+              114,
+              115,
+              116,
+              117,
+              118,
+              119
+            ],
+            [
+              88,
+              89,
+              90,
+              91,
+              92,
+              93,
+              94,
+              95,
+              96,
+              97,
+              98,
+              99,
+              100,
+              101,
+              102,
+              103
+            ],
+            [
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87
+            ],
+            [
+              56,
+              57,
+              58,
+              59,
+              60,
+              61,
+              62,
+              63,
+              64,
+              65,
+              66,
+              67,
+              68,
+              69,
+              70,
+              71
+            ]
+          ],
+          "payload_or_conservative_A_writes_checked": 32,
+          "outlined_wait_paths_no_A_writes": [
+            11904,
+            11968,
+            12032,
+            12096
+          ],
+          "retirement_events": [
+            {
+              "iteration": 0,
+              "PC": 3712,
+              "retired_groups": 0
+            },
+            {
+              "iteration": 0,
+              "PC": 4592,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 0,
+              "PC": 5312,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 0,
+              "PC": 6064,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 3712,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 4592,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 5312,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 6064,
+              "retired_groups": 1
+            }
+          ],
+          "final": "wait0 retires lastgroup before epilogue",
+          "loop_PC_range": [
+            2992,
+            6288
+          ],
+          "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+        }
+      ]
+    },
+    "store": {
+      "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_OWNER_BARRIERS",
+      "binaries": [
+        {
+          "STSM": 4,
+          "scalar_STS": 16,
+          "fullwarp_unpredicated_STSM": true,
+          "last_producer_store_PC": 11232,
+          "proxy_fence_PC": 11264,
+          "producer_barriers_PC": {
+            "3": 11296,
+            "4": 11280
+          },
+          "owner_barrier_predicates": {
+            "same_predicate": "P0",
+            "complementary_bar3_bar4": true,
+            "instructions": [
+              "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80",
+              "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+            ],
+            "intervening_no_predicate_writer_instructions": []
+          },
+          "shared_payload_bytes_per_stage": 8192,
+          "HGMMA": 16,
+          "X_LDG128": 32
+        }
+      ]
+    }
+  },
+  "g8": {
+    "physical": {
+      "status": "PASS_ALL_ACTUAL_GROUP8_BINARIES",
+      "binaries": [
+        {
+          "status": "PASS_PHYSICAL_ASYNC_A_AND_FENCE_COVERAGE",
+          "groups_per_static_loop": 2,
+          "MMA_per_group": [
+            8,
+            8
+          ],
+          "A_register_sets": [
+            [
+              88,
+              89,
+              90,
+              91,
+              92,
+              93,
+              94,
+              95,
+              96,
+              97,
+              98,
+              99,
+              100,
+              101,
+              102,
+              103,
+              104,
+              105,
+              106,
+              107,
+              108,
+              109,
+              110,
+              111,
+              112,
+              113,
+              114,
+              115,
+              116,
+              117,
+              118,
+              119
+            ],
+            [
+              56,
+              57,
+              58,
+              59,
+              60,
+              61,
+              62,
+              63,
+              64,
+              65,
+              66,
+              67,
+              68,
+              69,
+              70,
+              71,
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87
+            ]
+          ],
+          "D_registers": [
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55
+          ],
+          "loop_PC_range": [
+            2960,
+            6368
+          ],
+          "iterations": 2,
+          "groups_checked": 4,
+          "fences_checked": 4,
+          "initial_vector_loads": 16,
+          "all_MMA_fence_wait_operations_unpredicated": true,
+          "payload_writes_checked": 32,
+          "outlined_instruction_count": 16,
+          "outlined_entry_PCs": [
+            12816,
+            12880,
+            13184,
+            13248
+          ],
+          "retirement_events": [
+            {
+              "iteration": 0,
+              "PC": 4192,
+              "retired_groups": 0
+            },
+            {
+              "iteration": 0,
+              "PC": 5984,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 4192,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 5984,
+              "retired_groups": 1
+            }
+          ],
+          "tail": "Final wait0 precedes first generic A/D epilogue access",
+          "limits": "Fixed main-loop CFG, all predicate writes conservatively executed. Source proofs retain exact XP indices/B descriptors. No wait-mask/latency or general ISA verifier claim."
+        }
+      ]
+    },
+    "store": {
+      "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_OWNER_BARRIERS",
+      "binaries": [
+        {
+          "STSM": 0,
+          "scalar_STS": 32,
+          "fullwarp_unpredicated_STSM": false,
+          "last_producer_store_PC": 12064,
+          "proxy_fence_PC": 12096,
+          "producer_barriers_PC": {
+            "3": 12208,
+            "4": 12144
+          },
+          "owner_barrier_predicates": {
+            "same_predicate": "P0",
+            "complementary_bar3_bar4": true,
+            "instructions": [
+              "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80",
+              "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+            ],
+            "intervening_no_predicate_writer_instructions": [
+              "@!P0 WARPSYNC.ALL",
+              "@!P0 NOP",
+              "BSSY B0, 0x31d0"
+            ]
+          },
+          "shared_payload_bytes_per_stage": 8192,
+          "HGMMA": 16,
+          "X_LDG128": 32
+        }
+      ]
+    }
+  },
+  "new": {
+    "physical": {
+      "status": "PASS_ALL_ACTUAL_GROUP8_BINARIES",
+      "binaries": [
+        {
+          "status": "PASS_PHYSICAL_ASYNC_A_AND_FENCE_COVERAGE",
+          "groups_per_static_loop": 2,
+          "MMA_per_group": [
+            8,
+            8
+          ],
+          "A_register_sets": [
+            [
+              88,
+              89,
+              90,
+              91,
+              92,
+              93,
+              94,
+              95,
+              96,
+              97,
+              98,
+              99,
+              100,
+              101,
+              102,
+              103,
+              104,
+              105,
+              106,
+              107,
+              108,
+              109,
+              110,
+              111,
+              112,
+              113,
+              114,
+              115,
+              116,
+              117,
+              118,
+              119
+            ],
+            [
+              56,
+              57,
+              58,
+              59,
+              60,
+              61,
+              62,
+              63,
+              64,
+              65,
+              66,
+              67,
+              68,
+              69,
+              70,
+              71,
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87
+            ]
+          ],
+          "D_registers": [
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55
+          ],
+          "loop_PC_range": [
+            2960,
+            6368
+          ],
+          "iterations": 2,
+          "groups_checked": 4,
+          "fences_checked": 4,
+          "initial_vector_loads": 16,
+          "all_MMA_fence_wait_operations_unpredicated": true,
+          "payload_writes_checked": 32,
+          "outlined_instruction_count": 16,
+          "outlined_entry_PCs": [
+            12160,
+            12224,
+            12528,
+            12592
+          ],
+          "retirement_events": [
+            {
+              "iteration": 0,
+              "PC": 4192,
+              "retired_groups": 0
+            },
+            {
+              "iteration": 0,
+              "PC": 5984,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 4192,
+              "retired_groups": 1
+            },
+            {
+              "iteration": 1,
+              "PC": 5984,
+              "retired_groups": 1
+            }
+          ],
+          "tail": "Final wait0 precedes first generic A/D epilogue access",
+          "limits": "Fixed main-loop CFG, all predicate writes conservatively executed. Source proofs retain exact XP indices/B descriptors. No wait-mask/latency or general ISA verifier claim."
+        }
+      ]
+    },
+    "store": {
+      "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_OWNER_BARRIERS",
+      "binaries": [
+        {
+          "STSM": 4,
+          "scalar_STS": 16,
+          "fullwarp_unpredicated_STSM": true,
+          "last_producer_store_PC": 11488,
+          "proxy_fence_PC": 11520,
+          "producer_barriers_PC": {
+            "3": 11552,
+            "4": 11536
+          },
+          "owner_barrier_predicates": {
+            "same_predicate": "P0",
+            "complementary_bar3_bar4": true,
+            "instructions": [
+              "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80",
+              "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+            ],
+            "intervening_no_predicate_writer_instructions": []
+          },
+          "shared_payload_bytes_per_stage": 8192,
+          "HGMMA": 16,
+          "X_LDG128": 32
+        }
+      ]
+    }
+  },
+  "status": "VALID_REGRESSION_NO_INCUMBENT_GAIN",
+  "F1": {
+    "incumbent_before": 24.000000208616257,
+    "ds_before": 33.663999289274216,
+    "g8_before": 34.71999987959862,
+    "new": 35.00799834728241,
+    "g8_after": 34.432001411914825,
+    "ds_after": 33.952001482248306,
+    "incumbent_after": 23.96799996495247
+  },
+  "F1_gains": {
+    "incumbent": -11.03999838232994,
+    "ds": -1.343999058008194,
+    "g8": -0.5759969353675842
+  },
+  "paired_gains": {
+    "incumbent": -11.295999400317669,
+    "ds": -1.359999179840088,
+    "g8": -0.7039997726678848
+  },
+  "wins": {
+    "incumbent": 0,
+    "ds": 5,
+    "g8": 8
+  },
+  "calls": 295,
+  "strict_terminal_oracles": 8,
+  "strict_XP_checks": 6,
+  "paired_orders": {
+    "incumbent,ds,g8,new": 4,
+    "ds,g8,new,incumbent": 4,
+    "g8,new,incumbent,ds": 4,
+    "new,incumbent,ds,g8": 4,
+    "new,g8,ds,incumbent": 4,
+    "g8,ds,incumbent,new": 4,
+    "ds,incumbent,new,g8": 4,
+    "incumbent,new,g8,ds": 4
+  },
+  "G8_paired_gain_vs_DS": -0.39999932050704956,
+  "G8_wins_vs_DS": 9
+}

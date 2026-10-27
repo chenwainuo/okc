@@ -1,0 +1,1257 @@
+{
+  "status": "G8_DIAGNOSIS_REQUIRED",
+  "parent_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "candidate_source_sha256": {
+    "dp": "97dd5613f9dfe859c87bb62f21e6d9543c10cdc7fc7310c2e87e40246fb1cf3b",
+    "ds": "672dab448f74dbeecccd60b4070e8a6686c0533ae69f5827afd5a4283bb0cbd1",
+    "g8": "e92744c61531ae99e9345d2f541d5f5dda685ecd9ab5a7753621edd7c9d7289e"
+  },
+  "policy": "Frozen scalarDP producers/W6B8/CSR/SMEM512threads; two oldK64 stages per8HGMMA group, onefence/commit/wait, A2x32,192K->128Klookahead; controlsactualinc/DP/DS",
+  "actual_JIT_SASS": {
+    "dp": {
+      "artifact": "/okc/logs/operand-reverse-group8-01.dp.jit.sass",
+      "sha256": "bebe472634172ceb69c0a8d3df2c3555c70f89f421693b4d12dee847b2e7e746",
+      "module": "/root/.cache/torch_extensions/operand_reverse_dual_producer_97dd5613f9df/operand_reverse_dual_producer_97dd5613f9df.so",
+      "retirement_and_fence_gate": {
+        "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+        "binaries": [
+          {
+            "status": "PASS_PHYSICAL_A4_RETIREMENT",
+            "iterations": 2,
+            "groups": 8,
+            "A_register_sets": [
+              [
+                104,
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112,
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119
+              ],
+              [
+                88,
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96,
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103
+              ],
+              [
+                72,
+                73,
+                74,
+                75,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87
+              ],
+              [
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70,
+                71
+              ]
+            ],
+            "payload_or_conservative_A_writes_checked": 32,
+            "outlined_wait_paths_no_A_writes": [
+              12560,
+              12624,
+              12688,
+              12752
+            ],
+            "retirement_events": [
+              {
+                "iteration": 0,
+                "PC": 3712,
+                "retired_groups": 0
+              },
+              {
+                "iteration": 0,
+                "PC": 4592,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 5312,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 6064,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 3712,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 4592,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 5312,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 6064,
+                "retired_groups": 1
+              }
+            ],
+            "final": "wait0 retires lastgroup before epilogue",
+            "loop_PC_range": [
+              2992,
+              6288
+            ],
+            "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+          }
+        ]
+      },
+      "store_form_gate": {
+        "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_OWNER_BARRIERS",
+        "binaries": [
+          {
+            "STSM": 0,
+            "scalar_STS": 32,
+            "fullwarp_unpredicated_STSM": false,
+            "last_producer_store_PC": 11808,
+            "proxy_fence_PC": 11840,
+            "producer_barriers_PC": {
+              "3": 11952,
+              "4": 11888
+            },
+            "owner_barrier_predicates": {
+              "same_predicate": "P0",
+              "complementary_bar3_bar4": true,
+              "instructions": [
+                "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80",
+                "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+              ],
+              "intervening_no_predicate_writer_instructions": [
+                "@!P0 WARPSYNC.ALL",
+                "@!P0 NOP",
+                "BSSY B0, 0x30d0"
+              ]
+            },
+            "shared_payload_bytes_per_stage": 8192,
+            "HGMMA": 16,
+            "X_LDG128": 32
+          }
+        ]
+      }
+    },
+    "ds": {
+      "artifact": "/okc/logs/operand-reverse-group8-01.ds.jit.sass",
+      "sha256": "145c56d97b81451c43cb025f8908687c447a64cef54af0b7dfd6ee9ef51b35fb",
+      "module": "/root/.cache/torch_extensions/operand_reverse_dual_stmatrix_672dab448f74/operand_reverse_dual_stmatrix_672dab448f74.so",
+      "retirement_and_fence_gate": {
+        "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+        "binaries": [
+          {
+            "status": "PASS_PHYSICAL_A4_RETIREMENT",
+            "iterations": 2,
+            "groups": 8,
+            "A_register_sets": [
+              [
+                104,
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112,
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119
+              ],
+              [
+                88,
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96,
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103
+              ],
+              [
+                72,
+                73,
+                74,
+                75,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87
+              ],
+              [
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70,
+                71
+              ]
+            ],
+            "payload_or_conservative_A_writes_checked": 32,
+            "outlined_wait_paths_no_A_writes": [
+              11904,
+              11968,
+              12032,
+              12096
+            ],
+            "retirement_events": [
+              {
+                "iteration": 0,
+                "PC": 3712,
+                "retired_groups": 0
+              },
+              {
+                "iteration": 0,
+                "PC": 4592,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 5312,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 6064,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 3712,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 4592,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 5312,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 6064,
+                "retired_groups": 1
+              }
+            ],
+            "final": "wait0 retires lastgroup before epilogue",
+            "loop_PC_range": [
+              2992,
+              6288
+            ],
+            "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+          }
+        ]
+      },
+      "store_form_gate": {
+        "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_OWNER_BARRIERS",
+        "binaries": [
+          {
+            "STSM": 4,
+            "scalar_STS": 16,
+            "fullwarp_unpredicated_STSM": true,
+            "last_producer_store_PC": 11232,
+            "proxy_fence_PC": 11264,
+            "producer_barriers_PC": {
+              "3": 11296,
+              "4": 11280
+            },
+            "owner_barrier_predicates": {
+              "same_predicate": "P0",
+              "complementary_bar3_bar4": true,
+              "instructions": [
+                "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80",
+                "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+              ],
+              "intervening_no_predicate_writer_instructions": []
+            },
+            "shared_payload_bytes_per_stage": 8192,
+            "HGMMA": 16,
+            "X_LDG128": 32
+          }
+        ]
+      }
+    },
+    "g8": {
+      "artifact": "/okc/logs/operand-reverse-group8-01.g8.jit.sass",
+      "sha256": "cc56203a79237d0c04768579783219ea72cd27ae72acbc3b0d7c6a216fecf107",
+      "module": "/root/.cache/torch_extensions/operand_reverse_group8_e92744c61531/operand_reverse_group8_e92744c61531.so",
+      "retirement_and_fence_gate": {
+        "status": "PASS_ALL_ACTUAL_GROUP8_BINARIES",
+        "binaries": [
+          {
+            "status": "PASS_PHYSICAL_ASYNC_A_AND_FENCE_COVERAGE",
+            "groups_per_static_loop": 2,
+            "MMA_per_group": [
+              8,
+              8
+            ],
+            "A_register_sets": [
+              [
+                88,
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96,
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103,
+                104,
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112,
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119
+              ],
+              [
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70,
+                71,
+                72,
+                73,
+                74,
+                75,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87
+              ]
+            ],
+            "D_registers": [
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48,
+              49,
+              50,
+              51,
+              52,
+              53,
+              54,
+              55
+            ],
+            "loop_PC_range": [
+              2960,
+              6368
+            ],
+            "iterations": 2,
+            "groups_checked": 4,
+            "fences_checked": 4,
+            "initial_vector_loads": 16,
+            "all_MMA_fence_wait_operations_unpredicated": true,
+            "payload_writes_checked": 32,
+            "outlined_instruction_count": 16,
+            "outlined_entry_PCs": [
+              12816,
+              12880,
+              13184,
+              13248
+            ],
+            "retirement_events": [
+              {
+                "iteration": 0,
+                "PC": 4192,
+                "retired_groups": 0
+              },
+              {
+                "iteration": 0,
+                "PC": 5984,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 4192,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 5984,
+                "retired_groups": 1
+              }
+            ],
+            "tail": "Final wait0 precedes first generic A/D epilogue access",
+            "limits": "Fixed main-loop CFG, all predicate writes conservatively executed. Source proofs retain exact XP indices/B descriptors. No wait-mask/latency or general ISA verifier claim."
+          }
+        ]
+      },
+      "store_form_gate": {
+        "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_OWNER_BARRIERS",
+        "binaries": [
+          {
+            "STSM": 0,
+            "scalar_STS": 32,
+            "fullwarp_unpredicated_STSM": false,
+            "last_producer_store_PC": 12064,
+            "proxy_fence_PC": 12096,
+            "producer_barriers_PC": {
+              "3": 12208,
+              "4": 12144
+            },
+            "owner_barrier_predicates": {
+              "same_predicate": "P0",
+              "complementary_bar3_bar4": true,
+              "instructions": [
+                "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80",
+                "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+              ],
+              "intervening_no_predicate_writer_instructions": [
+                "@!P0 WARPSYNC.ALL",
+                "@!P0 NOP",
+                "BSSY B0, 0x31d0"
+              ]
+            },
+            "shared_payload_bytes_per_stage": 8192,
+            "HGMMA": 16,
+            "X_LDG128": 32
+          }
+        ]
+      }
+    }
+  },
+  "attrs": {
+    "dp": {
+      "regs": 122,
+      "local": 0,
+      "smem": 103600,
+      "max_dynamic_before": 49152,
+      "occupancy_after_optin": 1,
+      "max_dynamic_after": 103600,
+      "threads": 512,
+      "rounded_register_pool": 65536,
+      "max_threads": 512,
+      "register_mode": "uniform static"
+    },
+    "ds": {
+      "regs": 122,
+      "local": 0,
+      "smem": 103600,
+      "max_dynamic_before": 49152,
+      "occupancy_after_optin": 1,
+      "max_dynamic_after": 103600,
+      "threads": 512,
+      "rounded_register_pool": 65536,
+      "max_threads": 512,
+      "register_mode": "uniform static"
+    },
+    "g8": {
+      "regs": 122,
+      "local": 0,
+      "smem": 103600,
+      "max_dynamic_before": 49152,
+      "occupancy_after_optin": 1,
+      "max_dynamic_after": 103600,
+      "threads": 512,
+      "rounded_register_pool": 65536,
+      "max_threads": 512,
+      "register_mode": "uniform static"
+    }
+  },
+  "packer_attrs": {
+    "dp": {
+      "regs": 22,
+      "local": 0,
+      "max_threads": 1024
+    },
+    "ds": {
+      "regs": 22,
+      "local": 0,
+      "max_threads": 1024
+    },
+    "g8": {
+      "regs": 22,
+      "local": 0,
+      "max_threads": 1024
+    }
+  },
+  "GPU_pack_all65536_BF16_storage_bits": {
+    "dp": "PASS_1MiB_EXACT_INPUT_IMMUTABLE_STORAGE_ONLY",
+    "ds": "PASS_1MiB_EXACT_INPUT_IMMUTABLE_STORAGE_ONLY",
+    "g8": "PASS_1MiB_EXACT_INPUT_IMMUTABLE_STORAGE_ONLY"
+  },
+  "validation": {
+    "dp": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 1.7e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "fixed_pointer_replay": "original",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "zero",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "fresh_outliers",
+        "status": "PASS"
+      }
+    ],
+    "ds": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 1.7e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "fixed_pointer_replay": "original",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "zero",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "fresh_outliers",
+        "status": "PASS"
+      }
+    ],
+    "g8": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 1.7e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 1.369e-04 (worst row 3.234e-04); 18 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 1.494e-04 (worst row 3.328e-04); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "fixed_pointer_replay": "original",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "zero",
+        "status": "PASS"
+      },
+      {
+        "fixed_pointer_replay": "fresh_outliers",
+        "status": "PASS"
+      }
+    ],
+    "incumbent": [
+      {
+        "all4096_onehot_columns": "EXACT",
+        "random_FP64": "PASS",
+        "detail": "ok 2.4e-03"
+      },
+      {
+        "official_input_dist": "normal",
+        "result": "relative L2 error 2.558e-03 (worst row 2.975e-03); 17 probe rows exact to 0.0e+00"
+      },
+      {
+        "official_input_dist": "outliers",
+        "result": "relative L2 error 2.836e-03 (worst row 3.009e-03); 16 probe rows exact to 0.0e+00"
+      }
+    ]
+  },
+  "fresh_workspace_and_output": {
+    "dp": {
+      "status": "PASS",
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00",
+      "workspace_bytes": 1048576
+    },
+    "ds": {
+      "status": "PASS",
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00",
+      "workspace_bytes": 1048576
+    },
+    "g8": {
+      "status": "PASS",
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00",
+      "workspace_bytes": 1048576
+    }
+  },
+  "incumbent_pick": {
+    "kind": "rq",
+    "variant": "s4s5hz",
+    "KS": 2
+  },
+  "timing": {
+    "F1_medians_us": {
+      "incumbent_before": 24.288000538945198,
+      "dp_before": 33.63199904561043,
+      "ds_before": 33.695999532938,
+      "g8": 35.0399985909462,
+      "ds_after": 33.40800106525421,
+      "dp_after": 33.59999880194664,
+      "incumbent_after": 24.383999407291412
+    },
+    "F1_samples_us": {
+      "incumbent_before": [
+        24.224000051617622,
+        23.840000852942467,
+        25.439999997615814,
+        23.903999477624893,
+        24.4159996509552,
+        25.34399926662445,
+        23.80800060927868,
+        24.447999894618988,
+        25.855999439954758,
+        24.288000538945198,
+        25.02400055527687,
+        24.927999824285507,
+        24.25600029528141,
+        24.032000452280045,
+        25.280000641942024,
+        23.711999878287315,
+        24.159999564290047,
+        25.119999423623085,
+        24.320000782608986,
+        24.224000051617622,
+        24.032000452280045
+      ],
+      "dp_before": [
+        33.63199904561043,
+        32.80000016093254,
+        32.76799991726875,
+        34.591998904943466,
+        33.055998384952545,
+        33.40800106525421,
+        34.143999218940735,
+        35.10399907827377,
+        33.055998384952545,
+        33.504001796245575,
+        34.432001411914825,
+        33.344000577926636,
+        34.11199897527695,
+        33.76000002026558,
+        33.15199911594391,
+        34.623999148607254,
+        32.76799991726875,
+        33.824000507593155,
+        33.663999289274216,
+        34.752000123262405,
+        33.344000577926636
+      ],
+      "ds_before": [
+        33.47200155258179,
+        32.83200040459633,
+        34.272000193595886,
+        34.17599946260452,
+        33.11999887228012,
+        33.24799984693527,
+        35.679999738931656,
+        34.752000123262405,
+        33.695999532938,
+        33.535998314619064,
+        35.711999982595444,
+        34.591998904943466,
+        33.88800099492073,
+        32.99200162291527,
+        33.11999887228012,
+        35.26400029659271,
+        35.16799956560135,
+        33.85600075125694,
+        33.215999603271484,
+        33.440001308918,
+        33.1839993596077
+      ],
+      "g8": [
+        36.159999668598175,
+        33.535998314619064,
+        35.96799820661545,
+        35.071998834609985,
+        34.40000116825104,
+        35.392001271247864,
+        34.84800085425377,
+        35.392001271247864,
+        35.0399985909462,
+        34.07999873161316,
+        34.94400158524513,
+        37.02399879693985,
+        35.45600175857544,
+        34.752000123262405,
+        34.17599946260452,
+        34.68799963593483,
+        35.840000957250595,
+        34.36800092458725,
+        34.94400158524513,
+        35.16799956560135,
+        35.19999980926514
+      ],
+      "ds_after": [
+        33.535998314619064,
+        33.08799862861633,
+        34.2399999499321,
+        33.215999603271484,
+        34.2399999499321,
+        33.79200026392937,
+        33.40800106525421,
+        32.44800120592117,
+        34.11199897527695,
+        33.376000821590424,
+        33.24799984693527,
+        33.344000577926636,
+        34.11199897527695,
+        32.35200047492981,
+        33.76000002026558,
+        33.15199911594391,
+        33.88800099492073,
+        34.04799848794937,
+        34.11199897527695,
+        33.40800106525421,
+        33.376000821590424
+      ],
+      "dp_after": [
+        33.85600075125694,
+        33.376000821590424,
+        33.88800099492073,
+        34.46400165557861,
+        33.055998384952545,
+        34.81600061058998,
+        32.96000137925148,
+        33.59999880194664,
+        33.28000009059906,
+        34.33600068092346,
+        33.47200155258179,
+        33.88800099492073,
+        33.79200026392937,
+        33.76000002026558,
+        34.81600061058998,
+        33.24799984693527,
+        32.83200040459633,
+        33.535998314619064,
+        34.36800092458725,
+        32.896000891923904,
+        33.440001308918
+      ],
+      "incumbent_after": [
+        23.711999878287315,
+        24.73600022494793,
+        24.12799932062626,
+        24.512000381946564,
+        24.064000695943832,
+        24.383999407291412,
+        24.4159996509552,
+        24.032000452280045,
+        24.288000538945198,
+        24.288000538945198,
+        23.903999477624893,
+        24.480000138282776,
+        24.57600086927414,
+        24.191999807953835,
+        23.96799996495247,
+        24.768000468611717,
+        24.032000452280045,
+        24.480000138282776,
+        24.671999737620354,
+        24.70399998128414,
+        24.70399998128414
+      ]
+    },
+    "F1_g8_gain_us": {
+      "incumbent": -10.751998052001,
+      "dp": -1.4399997889995575,
+      "ds": -1.631997525691986
+    },
+    "paired_graph_us": [
+      {
+        "incumbent": 24.992000311613083,
+        "dp": 34.55999866127968,
+        "ds": 35.071998834609985,
+        "g8": 34.20799970626831
+      },
+      {
+        "dp": 32.6399989426136,
+        "ds": 33.63199904561043,
+        "g8": 35.0399985909462,
+        "incumbent": 24.09599907696247
+      },
+      {
+        "ds": 34.01599824428558,
+        "g8": 35.679999738931656,
+        "incumbent": 25.119999423623085,
+        "dp": 33.79200026392937
+      },
+      {
+        "g8": 35.77600046992302,
+        "incumbent": 24.480000138282776,
+        "dp": 35.74400022625923,
+        "ds": 33.08799862861633
+      },
+      {
+        "g8": 34.912001341581345,
+        "ds": 32.70399942994118,
+        "dp": 34.304000437259674,
+        "incumbent": 23.744000121951103
+      },
+      {
+        "ds": 33.72799977660179,
+        "dp": 33.92000123858452,
+        "incumbent": 24.960000067949295,
+        "g8": 34.04799848794937
+      },
+      {
+        "dp": 33.28000009059906,
+        "incumbent": 23.840000852942467,
+        "g8": 34.94400158524513,
+        "ds": 33.376000821590424
+      },
+      {
+        "incumbent": 23.80800060927868,
+        "g8": 36.99199855327606,
+        "ds": 34.68799963593483,
+        "dp": 34.11199897527695
+      },
+      {
+        "incumbent": 23.871999233961105,
+        "dp": 34.143999218940735,
+        "ds": 33.08799862861633,
+        "g8": 35.96799820661545
+      },
+      {
+        "dp": 33.79200026392937,
+        "ds": 33.440001308918,
+        "g8": 35.13599932193756,
+        "incumbent": 24.351999163627625
+      },
+      {
+        "ds": 33.72799977660179,
+        "g8": 34.84800085425377,
+        "incumbent": 24.512000381946564,
+        "dp": 33.15199911594391
+      },
+      {
+        "g8": 34.11199897527695,
+        "incumbent": 24.191999807953835,
+        "dp": 33.24799984693527,
+        "ds": 32.92800113558769
+      },
+      {
+        "g8": 35.232000052928925,
+        "ds": 33.85600075125694,
+        "dp": 34.65599939227104,
+        "incumbent": 23.840000852942467
+      },
+      {
+        "ds": 34.04799848794937,
+        "dp": 34.591998904943466,
+        "incumbent": 23.840000852942467,
+        "g8": 35.19999980926514
+      },
+      {
+        "dp": 33.28000009059906,
+        "incumbent": 25.05600079894066,
+        "g8": 34.143999218940735,
+        "ds": 34.143999218940735
+      },
+      {
+        "incumbent": 23.360000923275948,
+        "g8": 35.2960005402565,
+        "ds": 33.72799977660179,
+        "dp": 33.535998314619064
+      },
+      {
+        "incumbent": 24.159999564290047,
+        "dp": 33.85600075125694,
+        "ds": 33.376000821590424,
+        "g8": 33.984001725912094
+      },
+      {
+        "dp": 33.72799977660179,
+        "ds": 34.4959981739521,
+        "g8": 35.61599925160408,
+        "incumbent": 23.871999233961105
+      },
+      {
+        "ds": 34.52799841761589,
+        "g8": 33.92000123858452,
+        "incumbent": 23.840000852942467,
+        "dp": 33.79200026392937
+      },
+      {
+        "g8": 35.360001027584076,
+        "incumbent": 23.871999233961105,
+        "dp": 34.46400165557861,
+        "ds": 32.99200162291527
+      },
+      {
+        "g8": 36.51199862360954,
+        "ds": 34.55999866127968,
+        "dp": 33.79200026392937,
+        "incumbent": 24.288000538945198
+      }
+    ],
+    "paired_g8_median_gain_us": {
+      "incumbent": -11.104000732302666,
+      "dp": -0.8959993720054626,
+      "ds": -1.4079995453357697
+    },
+    "paired_g8_wins": {
+      "incumbent": 0,
+      "dp": 1,
+      "ds": 2
+    }
+  },
+  "actual_timed_graph_checks": [
+    {
+      "graph": "incumbent",
+      "input": "original",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.686e-03 (worst row 2.986e-03); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "dp",
+      "input": "original",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "ds",
+      "input": "original",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "g8",
+      "input": "original",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.421e-04 (worst row 2.633e-04); 12 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "incumbent",
+      "input": "zero",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "dp",
+      "input": "zero",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "ds",
+      "input": "zero",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "g8",
+      "input": "zero",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "exact zero complete output"
+    },
+    {
+      "graph": "incumbent",
+      "input": "fresh_normal",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.671e-03 (worst row 2.983e-03); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "dp",
+      "input": "fresh_normal",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "ds",
+      "input": "fresh_normal",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "g8",
+      "input": "fresh_normal",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.346e-04 (worst row 2.464e-04); 14 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "incumbent",
+      "input": "fresh_outliers",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 2.833e-03 (worst row 2.971e-03); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "dp",
+      "input": "fresh_outliers",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "ds",
+      "input": "fresh_outliers",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "g8",
+      "input": "fresh_outliers",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 1.495e-04 (worst row 3.026e-04); 20 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "incumbent",
+      "input": "all_probes",
+      "packed_poison_overwritten_byte_exact": false,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "dp",
+      "input": "all_probes",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "ds",
+      "input": "all_probes",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    },
+    {
+      "graph": "g8",
+      "input": "all_probes",
+      "packed_poison_overwritten_byte_exact": true,
+      "NaN_poison_overwritten": true,
+      "input_immutable": true,
+      "oracle": "relative L2 error 0.000e+00 (worst row 0.000e+00); 128 probe rows exact to 0.0e+00"
+    }
+  ],
+  "profile": {
+    "incumbent": [
+      {
+        "name": "void rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 21505
+      }
+    ],
+    "dp": [
+      {
+        "name": "rx_pack(unsigned int const*, unsigned int*)",
+        "duration_ns": 1728
+      },
+      {
+        "name": "void rq_px_dp<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 28321
+      }
+    ],
+    "ds": [
+      {
+        "name": "rx_pack(unsigned int const*, unsigned int*)",
+        "duration_ns": 2143
+      },
+      {
+        "name": "void rq_px_dp_stmx<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 29601
+      }
+    ],
+    "g8": [
+      {
+        "name": "rx_pack(unsigned int const*, unsigned int*)",
+        "duration_ns": 2112
+      },
+      {
+        "name": "void rq_px_g8<128, 8, 1, 0, 0, 0, 20>(RqP, RqTmap, RqTmap)",
+        "duration_ns": 29441
+      }
+    ]
+  },
+  "full_pipeline_in_timed_graph": "FRESH_PACK_PLUS_MAIN_2_NODES_EVERY_CALL_FOR_ALL_THREE_PACKED_VARIANTS",
+  "weights_inputs_counters": "UNCHANGED_OR_RESET",
+  "versions_improved_both_methods": [],
+  "next_measurement_question": "Group8 halves math fences/commits/wait1, preserves256MMA/Korder andproducerstages; Alookahead192K->128K/Bretirementcoarser explicitconfounds. Ifvalid butbehind, preserveversion anddiagnosefreshphase, nofamilyclosure.",
+  "graph_cleanup": "RESET_ALL_FOUR"
+}

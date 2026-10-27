@@ -1,0 +1,18 @@
+[
+  [
+    "  auto ldr = [&](int G) {  // full waits, LDS of this warp's 48 B per lane per stage, W slots released",
+    "  // smallm_increment v1: ldr is called once for each consecutive stage in WM0/GS1.\n  constexpr bool LDS_CURSOR = (NT == 16 || NT == 32) && GS == 1 && PRB == 0 && WM == 0 && INS == 0 && FL == 35;\n  int ldslot = 0, ldphase = 0;\n  auto ldr = [&](int G) {  // full waits, LDS of this warp's 48 B per lane per stage, W slots released"
+  ],
+  [
+    "        const int slot = RES ? 0 : s % ST;\n        if (!RES) rq_wait(full + 8 * slot, (s / ST) & 1);",
+    "        const int slot = LDS_CURSOR ? ldslot : (RES ? 0 : s % ST);\n        if (!RES) rq_wait(full + 8 * slot, LDS_CURSOR ? ldphase : ((s / ST) & 1));"
+  ],
+  [
+    "for (int j = 0; j < GS; j++) if (GS * G + j < KCS) rq_arrive(wempty + 8 * ((GS * G + j) % ST));",
+    "for (int j = 0; j < GS; j++) if (GS * G + j < KCS) rq_arrive(wempty + 8 * (LDS_CURSOR ? ldslot : ((GS * G + j) % ST)));"
+  ],
+  [
+    "    RQ_T1(2);\n  };\n  auto xrel",
+    "    RQ_T1(2);\n    if (LDS_CURSOR && ++ldslot == ST) { ldslot = 0; ldphase ^= 1; }\n  };\n  auto xrel"
+  ]
+]

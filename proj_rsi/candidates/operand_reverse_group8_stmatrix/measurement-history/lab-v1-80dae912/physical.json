@@ -1,0 +1,198 @@
+{
+  "physical": {
+    "status": "PASS_ALL_ACTUAL_GROUP8_BINARIES",
+    "binaries": [
+      {
+        "status": "PASS_PHYSICAL_ASYNC_A_AND_FENCE_COVERAGE",
+        "groups_per_static_loop": 2,
+        "MMA_per_group": [
+          8,
+          8
+        ],
+        "A_register_sets": [
+          [
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119
+          ],
+          [
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87
+          ]
+        ],
+        "D_registers": [
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55
+        ],
+        "loop_PC_range": [
+          2960,
+          6368
+        ],
+        "iterations": 2,
+        "groups_checked": 4,
+        "fences_checked": 4,
+        "initial_vector_loads": 16,
+        "all_MMA_fence_wait_operations_unpredicated": true,
+        "payload_writes_checked": 32,
+        "outlined_instruction_count": 16,
+        "outlined_entry_PCs": [
+          12160,
+          12224,
+          12528,
+          12592
+        ],
+        "retirement_events": [
+          {
+            "iteration": 0,
+            "PC": 4192,
+            "retired_groups": 0
+          },
+          {
+            "iteration": 0,
+            "PC": 5984,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 4192,
+            "retired_groups": 1
+          },
+          {
+            "iteration": 1,
+            "PC": 5984,
+            "retired_groups": 1
+          }
+        ],
+        "tail": "Final wait0 precedes first generic A/D epilogue access",
+        "limits": "Fixed main-loop CFG, all predicate writes conservatively executed. Source proofs retain exact XP indices/B descriptors. No wait-mask/latency or general ISA verifier claim."
+      }
+    ]
+  },
+  "negative_controls": {
+    "status": "PASS_NEGATIVE_CONTROLS",
+    "rejections": {
+      "old_real_premature_A_overwrite": "{'error': 'GENERIC_ASYNC_OPERAND_ACCESS_BEFORE_RETIRE', 'iteration': 0, 'PC': '0xe30', 'instruction': '@!P0 LDG.E.NA.128.CONSTANT R56, desc[UR12][R10.64]', 'clobbered_or_read': [56, 57, 58, 59]}",
+      "removed_initial_fence": "{'error': 'UNFENCED_GENERIC_A_D_ACCESS', 'iteration': 0, 'PC': '0xdf0', 'instruction': 'HGMMA.64x64x16.F32.BF16 R24, R116, gdesc[UR4], R24'}",
+      "predicated_aligned_fence": "Predicated aligned WGMMA/fence/wait forbidden",
+      "new_A_bank_overwrite_before_retire": "{'error': 'GENERIC_ASYNC_OPERAND_ACCESS_BEFORE_RETIRE', 'iteration': 0, 'PC': '0x11b0', 'instruction': 'LDG.E.NA.128.CONSTANT R88, desc[UR12][R14.64]', 'clobbered_or_read': [88, 89, 90, 91]}",
+      "generic_pending_D_write": "{'error': 'GENERIC_ASYNC_OPERAND_ACCESS_BEFORE_RETIRE', 'iteration': 1, 'PC': '0xd80', 'instruction': 'IMAD.MOV.U32 R24, RZ, RZ, RZ', 'clobbered_or_read': [24]}"
+    }
+  },
+  "store_form": {
+    "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_OWNER_BARRIERS",
+    "binaries": [
+      {
+        "STSM": 4,
+        "scalar_STS": 16,
+        "fullwarp_unpredicated_STSM": true,
+        "last_producer_store_PC": 11488,
+        "proxy_fence_PC": 11520,
+        "producer_barriers_PC": {
+          "3": 11552,
+          "4": 11536
+        },
+        "owner_barrier_predicates": {
+          "same_predicate": "P0",
+          "complementary_bar3_bar4": true,
+          "instructions": [
+            "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80",
+            "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+          ],
+          "intervening_no_predicate_writer_instructions": []
+        },
+        "shared_payload_bytes_per_stage": 8192,
+        "HGMMA": 16,
+        "X_LDG128": 32
+      }
+    ]
+  }
+}

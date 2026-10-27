@@ -1,0 +1,5434 @@
+{
+  "status": "CPU_LAB_GATES_PASS_GPU_UNRUN",
+  "identities": {
+    "reverse_tma_x": {
+      "manifest_sha256": "025f4a2de43f7c14a4ee4779dcb6a929974311b0380b433710ed4022beef50fc",
+      "files": 13
+    },
+    "reverse_tma_x_async_refill": {
+      "manifest_sha256": "92fbe73d6ed0bbe5d9b6165cfd0e9956494e1e97b48f6f38221739df584d60d2",
+      "files": 27
+    },
+    "operand_reverse_dual_stmatrix": {
+      "manifest_sha256": "6785da2ec9881ce13148951daff2f8802d8e7bbe6c83abf588607092b3f97072",
+      "files": 17
+    }
+  },
+  "canonical_binary_gates": {
+    "new": {
+      "canonical_main_semantic_equality": "PASS_ALL_PC_PREDICATE_INSTRUCTIONS_EXACT",
+      "canonical_main_instructions": 976,
+      "retirement_and_fence_gate": {
+        "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+        "binaries": [
+          {
+            "status": "PASS_PHYSICAL_A4_RETIREMENT",
+            "iterations": 2,
+            "groups": 8,
+            "A_register_sets": [
+              [
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70,
+                71
+              ],
+              [
+                72,
+                73,
+                74,
+                75,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87
+              ],
+              [
+                88,
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96,
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103
+              ],
+              [
+                104,
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112,
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119
+              ]
+            ],
+            "payload_or_conservative_A_writes_checked": 32,
+            "outlined_wait_paths_no_A_writes": [
+              14480,
+              14528,
+              14576,
+              14624,
+              14672,
+              14720,
+              14768,
+              14816
+            ],
+            "retirement_events": [
+              {
+                "iteration": 0,
+                "PC": 4720,
+                "retired_groups": 0
+              },
+              {
+                "iteration": 0,
+                "PC": 5648,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 6496,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 7216,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 4720,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 5648,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 6496,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 7216,
+                "retired_groups": 1
+              }
+            ],
+            "final": "wait0 retires lastgroup before epilogue",
+            "loop_PC_range": [
+              4192,
+              7648
+            ],
+            "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+          }
+        ]
+      },
+      "canonical_sass_sha256": "434327ccbea9e72c218989619c60acc2bdf00ce3041d9062edc85d370c042491",
+      "X_layout_protocol_physical": {
+        "layout": {
+          "status": "PASS",
+          "shared_bf16": 8192,
+          "register_words_per_stage": 4096,
+          "stages": 64,
+          "global_bf16": 524288,
+          "all_coordinates_once": true,
+          "primary_ldmatrix": "PTX8.7 section9.7.14.5.15 Figure103",
+          "primary_wgmma": "PTX8.7 section9.7.15.5.1.1.1 Figure147"
+        },
+        "source": {
+          "status": "EXACT_RESTORE_PARENT",
+          "parent_body_sha256": "60a5aee42138bf84130121041f6aa37da60d6478fa2e5bbc328f546982de2d78"
+        },
+        "DAG": {
+          "status": "PASS_FULL_DAG",
+          "nodes": 578,
+          "edges": 1495,
+          "topological_order": [
+            "W0",
+            "W1",
+            "W2",
+            "W3",
+            "W4",
+            "W5",
+            "X0",
+            "X1",
+            "C0/WG0",
+            "C0/WG1",
+            "C1/WG0",
+            "C1/WG1",
+            "EMPTY0",
+            "EMPTY1",
+            "ISSUE0",
+            "ISSUE1",
+            "B0",
+            "X2",
+            "B1",
+            "X3",
+            "W6",
+            "C2/WG0",
+            "C2/WG1",
+            "W7",
+            "C3/WG0",
+            "C3/WG1",
+            "EMPTY2",
+            "M0/WG0",
+            "EMPTY3",
+            "M0/WG1",
+            "ISSUE2",
+            "M1/WG0",
+            "ISSUE3",
+            "M1/WG1",
+            "B2",
+            "X4",
+            "B3",
+            "X5",
+            "W8",
+            "C4/WG0",
+            "C4/WG1",
+            "W9",
+            "M2/WG0",
+            "EMPTY4",
+            "M2/WG1",
+            "C5/WG0",
+            "ISSUE4",
+            "C5/WG1",
+            "M3/WG0",
+            "B4",
+            "X6",
+            "EMPTY5",
+            "M3/WG1",
+            "W10",
+            "C6/WG0",
+            "ISSUE5",
+            "C6/WG1",
+            "M4/WG0",
+            "B5",
+            "X7",
+            "EMPTY6",
+            "M4/WG1",
+            "W11",
+            "C7/WG0",
+            "ISSUE6",
+            "C7/WG1",
+            "M5/WG0",
+            "B6",
+            "X8",
+            "EMPTY7",
+            "M5/WG1",
+            "W12",
+            "C8/WG0",
+            "ISSUE7",
+            "C8/WG1",
+            "M6/WG0",
+            "B7",
+            "X9",
+            "EMPTY8",
+            "M6/WG1",
+            "W13",
+            "C9/WG0",
+            "ISSUE8",
+            "C9/WG1",
+            "M7/WG0",
+            "B8",
+            "X10",
+            "EMPTY9",
+            "M7/WG1",
+            "W14",
+            "C10/WG0",
+            "ISSUE9",
+            "C10/WG1",
+            "M8/WG0",
+            "B9",
+            "X11",
+            "EMPTY10",
+            "M8/WG1",
+            "W15",
+            "C11/WG0",
+            "ISSUE10",
+            "C11/WG1",
+            "M9/WG0",
+            "B10",
+            "X12",
+            "EMPTY11",
+            "M9/WG1",
+            "W16",
+            "C12/WG0",
+            "ISSUE11",
+            "C12/WG1",
+            "M10/WG0",
+            "B11",
+            "X13",
+            "EMPTY12",
+            "M10/WG1",
+            "W17",
+            "C13/WG0",
+            "ISSUE12",
+            "C13/WG1",
+            "M11/WG0",
+            "B12",
+            "X14",
+            "EMPTY13",
+            "M11/WG1",
+            "W18",
+            "C14/WG0",
+            "ISSUE13",
+            "C14/WG1",
+            "M12/WG0",
+            "B13",
+            "X15",
+            "EMPTY14",
+            "M12/WG1",
+            "W19",
+            "C15/WG0",
+            "ISSUE14",
+            "C15/WG1",
+            "M13/WG0",
+            "B14",
+            "X16",
+            "EMPTY15",
+            "M13/WG1",
+            "W20",
+            "C16/WG0",
+            "ISSUE15",
+            "C16/WG1",
+            "M14/WG0",
+            "B15",
+            "X17",
+            "EMPTY16",
+            "M14/WG1",
+            "W21",
+            "C17/WG0",
+            "ISSUE16",
+            "C17/WG1",
+            "M15/WG0",
+            "B16",
+            "X18",
+            "EMPTY17",
+            "M15/WG1",
+            "W22",
+            "C18/WG0",
+            "ISSUE17",
+            "C18/WG1",
+            "M16/WG0",
+            "B17",
+            "X19",
+            "EMPTY18",
+            "M16/WG1",
+            "W23",
+            "C19/WG0",
+            "ISSUE18",
+            "C19/WG1",
+            "M17/WG0",
+            "B18",
+            "X20",
+            "EMPTY19",
+            "M17/WG1",
+            "W24",
+            "C20/WG0",
+            "ISSUE19",
+            "C20/WG1",
+            "M18/WG0",
+            "B19",
+            "X21",
+            "EMPTY20",
+            "M18/WG1",
+            "W25",
+            "C21/WG0",
+            "ISSUE20",
+            "C21/WG1",
+            "M19/WG0",
+            "B20",
+            "X22",
+            "EMPTY21",
+            "M19/WG1",
+            "W26",
+            "C22/WG0",
+            "ISSUE21",
+            "C22/WG1",
+            "M20/WG0",
+            "B21",
+            "X23",
+            "EMPTY22",
+            "M20/WG1",
+            "W27",
+            "C23/WG0",
+            "ISSUE22",
+            "C23/WG1",
+            "M21/WG0",
+            "B22",
+            "X24",
+            "EMPTY23",
+            "M21/WG1",
+            "W28",
+            "C24/WG0",
+            "ISSUE23",
+            "C24/WG1",
+            "M22/WG0",
+            "B23",
+            "X25",
+            "EMPTY24",
+            "M22/WG1",
+            "W29",
+            "C25/WG0",
+            "ISSUE24",
+            "C25/WG1",
+            "M23/WG0",
+            "B24",
+            "X26",
+            "EMPTY25",
+            "M23/WG1",
+            "W30",
+            "C26/WG0",
+            "ISSUE25",
+            "C26/WG1",
+            "M24/WG0",
+            "B25",
+            "X27",
+            "EMPTY26",
+            "M24/WG1",
+            "W31",
+            "C27/WG0",
+            "ISSUE26",
+            "C27/WG1",
+            "M25/WG0",
+            "B26",
+            "X28",
+            "EMPTY27",
+            "M25/WG1",
+            "W32",
+            "C28/WG0",
+            "ISSUE27",
+            "C28/WG1",
+            "M26/WG0",
+            "B27",
+            "X29",
+            "EMPTY28",
+            "M26/WG1",
+            "W33",
+            "C29/WG0",
+            "ISSUE28",
+            "C29/WG1",
+            "M27/WG0",
+            "B28",
+            "X30",
+            "EMPTY29",
+            "M27/WG1",
+            "W34",
+            "C30/WG0",
+            "ISSUE29",
+            "C30/WG1",
+            "M28/WG0",
+            "B29",
+            "X31",
+            "EMPTY30",
+            "M28/WG1",
+            "W35",
+            "C31/WG0",
+            "ISSUE30",
+            "C31/WG1",
+            "M29/WG0",
+            "B30",
+            "X32",
+            "EMPTY31",
+            "M29/WG1",
+            "W36",
+            "C32/WG0",
+            "ISSUE31",
+            "C32/WG1",
+            "M30/WG0",
+            "B31",
+            "X33",
+            "EMPTY32",
+            "M30/WG1",
+            "W37",
+            "C33/WG0",
+            "ISSUE32",
+            "C33/WG1",
+            "M31/WG0",
+            "B32",
+            "X34",
+            "EMPTY33",
+            "M31/WG1",
+            "W38",
+            "C34/WG0",
+            "ISSUE33",
+            "C34/WG1",
+            "M32/WG0",
+            "B33",
+            "X35",
+            "EMPTY34",
+            "M32/WG1",
+            "W39",
+            "C35/WG0",
+            "ISSUE34",
+            "C35/WG1",
+            "M33/WG0",
+            "B34",
+            "X36",
+            "EMPTY35",
+            "M33/WG1",
+            "W40",
+            "C36/WG0",
+            "ISSUE35",
+            "C36/WG1",
+            "M34/WG0",
+            "B35",
+            "X37",
+            "EMPTY36",
+            "M34/WG1",
+            "W41",
+            "C37/WG0",
+            "ISSUE36",
+            "C37/WG1",
+            "M35/WG0",
+            "B36",
+            "X38",
+            "EMPTY37",
+            "M35/WG1",
+            "W42",
+            "C38/WG0",
+            "ISSUE37",
+            "C38/WG1",
+            "M36/WG0",
+            "B37",
+            "X39",
+            "EMPTY38",
+            "M36/WG1",
+            "W43",
+            "C39/WG0",
+            "ISSUE38",
+            "C39/WG1",
+            "M37/WG0",
+            "B38",
+            "X40",
+            "EMPTY39",
+            "M37/WG1",
+            "W44",
+            "C40/WG0",
+            "ISSUE39",
+            "C40/WG1",
+            "M38/WG0",
+            "B39",
+            "X41",
+            "EMPTY40",
+            "M38/WG1",
+            "W45",
+            "C41/WG0",
+            "ISSUE40",
+            "C41/WG1",
+            "M39/WG0",
+            "B40",
+            "X42",
+            "EMPTY41",
+            "M39/WG1",
+            "W46",
+            "C42/WG0",
+            "ISSUE41",
+            "C42/WG1",
+            "M40/WG0",
+            "B41",
+            "X43",
+            "EMPTY42",
+            "M40/WG1",
+            "W47",
+            "C43/WG0",
+            "ISSUE42",
+            "C43/WG1",
+            "M41/WG0",
+            "B42",
+            "X44",
+            "EMPTY43",
+            "M41/WG1",
+            "W48",
+            "C44/WG0",
+            "ISSUE43",
+            "C44/WG1",
+            "M42/WG0",
+            "B43",
+            "X45",
+            "EMPTY44",
+            "M42/WG1",
+            "W49",
+            "C45/WG0",
+            "ISSUE44",
+            "C45/WG1",
+            "M43/WG0",
+            "B44",
+            "X46",
+            "EMPTY45",
+            "M43/WG1",
+            "W50",
+            "C46/WG0",
+            "ISSUE45",
+            "C46/WG1",
+            "M44/WG0",
+            "B45",
+            "X47",
+            "EMPTY46",
+            "M44/WG1",
+            "W51",
+            "C47/WG0",
+            "ISSUE46",
+            "C47/WG1",
+            "M45/WG0",
+            "B46",
+            "X48",
+            "EMPTY47",
+            "M45/WG1",
+            "W52",
+            "C48/WG0",
+            "ISSUE47",
+            "C48/WG1",
+            "M46/WG0",
+            "B47",
+            "X49",
+            "EMPTY48",
+            "M46/WG1",
+            "W53",
+            "C49/WG0",
+            "ISSUE48",
+            "C49/WG1",
+            "M47/WG0",
+            "B48",
+            "X50",
+            "EMPTY49",
+            "M47/WG1",
+            "W54",
+            "C50/WG0",
+            "ISSUE49",
+            "C50/WG1",
+            "M48/WG0",
+            "B49",
+            "X51",
+            "EMPTY50",
+            "M48/WG1",
+            "W55",
+            "C51/WG0",
+            "ISSUE50",
+            "C51/WG1",
+            "M49/WG0",
+            "B50",
+            "X52",
+            "EMPTY51",
+            "M49/WG1",
+            "W56",
+            "C52/WG0",
+            "ISSUE51",
+            "C52/WG1",
+            "M50/WG0",
+            "B51",
+            "X53",
+            "EMPTY52",
+            "M50/WG1",
+            "W57",
+            "C53/WG0",
+            "ISSUE52",
+            "C53/WG1",
+            "M51/WG0",
+            "B52",
+            "X54",
+            "EMPTY53",
+            "M51/WG1",
+            "W58",
+            "C54/WG0",
+            "ISSUE53",
+            "C54/WG1",
+            "M52/WG0",
+            "B53",
+            "X55",
+            "EMPTY54",
+            "M52/WG1",
+            "W59",
+            "C55/WG0",
+            "ISSUE54",
+            "C55/WG1",
+            "M53/WG0",
+            "B54",
+            "X56",
+            "EMPTY55",
+            "M53/WG1",
+            "W60",
+            "C56/WG0",
+            "ISSUE55",
+            "C56/WG1",
+            "M54/WG0",
+            "B55",
+            "X57",
+            "EMPTY56",
+            "M54/WG1",
+            "W61",
+            "C57/WG0",
+            "ISSUE56",
+            "C57/WG1",
+            "M55/WG0",
+            "B56",
+            "X58",
+            "EMPTY57",
+            "M55/WG1",
+            "W62",
+            "C58/WG0",
+            "ISSUE57",
+            "C58/WG1",
+            "M56/WG0",
+            "B57",
+            "X59",
+            "EMPTY58",
+            "M56/WG1",
+            "W63",
+            "C59/WG0",
+            "ISSUE58",
+            "C59/WG1",
+            "M57/WG0",
+            "B58",
+            "X60",
+            "EMPTY59",
+            "M57/WG1",
+            "C60/WG0",
+            "ISSUE59",
+            "C60/WG1",
+            "M58/WG0",
+            "B59",
+            "X61",
+            "EMPTY60",
+            "M58/WG1",
+            "C61/WG0",
+            "ISSUE60",
+            "C61/WG1",
+            "M59/WG0",
+            "B60",
+            "X62",
+            "EMPTY61",
+            "M59/WG1",
+            "ISSUE62",
+            "C62/WG0",
+            "ISSUE61",
+            "C62/WG1",
+            "B62",
+            "M60/WG0",
+            "B61",
+            "X63",
+            "EMPTY62",
+            "M60/WG1",
+            "ISSUE63",
+            "C63/WG0",
+            "C63/WG1",
+            "B63",
+            "M61/WG0",
+            "EMPTY63",
+            "M61/WG1",
+            "M62/WG0",
+            "M62/WG1",
+            "M63/WG0",
+            "M63/WG1",
+            "DRAIN",
+            "OUTPUT"
+          ],
+          "dependencies": {
+            "X0": [],
+            "C0/WG0": [
+              "X0"
+            ],
+            "M0/WG0": [
+              "B0",
+              "C0/WG0",
+              "C3/WG0"
+            ],
+            "C0/WG1": [
+              "X0"
+            ],
+            "M0/WG1": [
+              "B0",
+              "C0/WG1",
+              "C3/WG1"
+            ],
+            "EMPTY0": [
+              "C0/WG0",
+              "C0/WG1"
+            ],
+            "ISSUE0": [
+              "EMPTY0"
+            ],
+            "B0": [
+              "ISSUE0",
+              "W0"
+            ],
+            "W0": [],
+            "X1": [],
+            "C1/WG0": [
+              "C0/WG0",
+              "X1"
+            ],
+            "M1/WG0": [
+              "B1",
+              "C1/WG0",
+              "C3/WG0",
+              "M0/WG0"
+            ],
+            "C1/WG1": [
+              "C0/WG1",
+              "X1"
+            ],
+            "M1/WG1": [
+              "B1",
+              "C1/WG1",
+              "C3/WG1",
+              "M0/WG1"
+            ],
+            "EMPTY1": [
+              "C1/WG0",
+              "C1/WG1"
+            ],
+            "ISSUE1": [
+              "EMPTY1"
+            ],
+            "B1": [
+              "ISSUE1",
+              "W1"
+            ],
+            "W1": [],
+            "X2": [
+              "ISSUE0"
+            ],
+            "C2/WG0": [
+              "C1/WG0",
+              "X2"
+            ],
+            "M2/WG0": [
+              "B2",
+              "C2/WG0",
+              "C4/WG0",
+              "M1/WG0"
+            ],
+            "C2/WG1": [
+              "C1/WG1",
+              "X2"
+            ],
+            "M2/WG1": [
+              "B2",
+              "C2/WG1",
+              "C4/WG1",
+              "M1/WG1"
+            ],
+            "EMPTY2": [
+              "C2/WG0",
+              "C2/WG1"
+            ],
+            "ISSUE2": [
+              "B0",
+              "EMPTY2"
+            ],
+            "B2": [
+              "ISSUE2",
+              "W2"
+            ],
+            "W2": [],
+            "X3": [
+              "ISSUE1"
+            ],
+            "C3/WG0": [
+              "C2/WG0",
+              "X3"
+            ],
+            "M3/WG0": [
+              "B3",
+              "C3/WG0",
+              "C5/WG0",
+              "M2/WG0"
+            ],
+            "C3/WG1": [
+              "C2/WG1",
+              "X3"
+            ],
+            "M3/WG1": [
+              "B3",
+              "C3/WG1",
+              "C5/WG1",
+              "M2/WG1"
+            ],
+            "EMPTY3": [
+              "C3/WG0",
+              "C3/WG1"
+            ],
+            "ISSUE3": [
+              "B1",
+              "EMPTY3"
+            ],
+            "B3": [
+              "ISSUE3",
+              "W3"
+            ],
+            "W3": [],
+            "X4": [
+              "ISSUE2"
+            ],
+            "C4/WG0": [
+              "C3/WG0",
+              "M1/WG0",
+              "X4"
+            ],
+            "M4/WG0": [
+              "B4",
+              "C4/WG0",
+              "C6/WG0",
+              "M3/WG0"
+            ],
+            "C4/WG1": [
+              "C3/WG1",
+              "M1/WG1",
+              "X4"
+            ],
+            "M4/WG1": [
+              "B4",
+              "C4/WG1",
+              "C6/WG1",
+              "M3/WG1"
+            ],
+            "EMPTY4": [
+              "C4/WG0",
+              "C4/WG1"
+            ],
+            "ISSUE4": [
+              "B2",
+              "EMPTY4"
+            ],
+            "B4": [
+              "ISSUE4",
+              "W4"
+            ],
+            "W4": [],
+            "X5": [
+              "ISSUE3"
+            ],
+            "C5/WG0": [
+              "C4/WG0",
+              "M2/WG0",
+              "X5"
+            ],
+            "M5/WG0": [
+              "B5",
+              "C5/WG0",
+              "C7/WG0",
+              "M4/WG0"
+            ],
+            "C5/WG1": [
+              "C4/WG1",
+              "M2/WG1",
+              "X5"
+            ],
+            "M5/WG1": [
+              "B5",
+              "C5/WG1",
+              "C7/WG1",
+              "M4/WG1"
+            ],
+            "EMPTY5": [
+              "C5/WG0",
+              "C5/WG1"
+            ],
+            "ISSUE5": [
+              "B3",
+              "EMPTY5"
+            ],
+            "B5": [
+              "ISSUE5",
+              "W5"
+            ],
+            "W5": [],
+            "X6": [
+              "ISSUE4"
+            ],
+            "C6/WG0": [
+              "C5/WG0",
+              "M3/WG0",
+              "X6"
+            ],
+            "M6/WG0": [
+              "B6",
+              "C6/WG0",
+              "C8/WG0",
+              "M5/WG0"
+            ],
+            "C6/WG1": [
+              "C5/WG1",
+              "M3/WG1",
+              "X6"
+            ],
+            "M6/WG1": [
+              "B6",
+              "C6/WG1",
+              "C8/WG1",
+              "M5/WG1"
+            ],
+            "EMPTY6": [
+              "C6/WG0",
+              "C6/WG1"
+            ],
+            "ISSUE6": [
+              "B4",
+              "EMPTY6"
+            ],
+            "B6": [
+              "ISSUE6",
+              "W6"
+            ],
+            "W6": [
+              "B0"
+            ],
+            "X7": [
+              "ISSUE5"
+            ],
+            "C7/WG0": [
+              "C6/WG0",
+              "M4/WG0",
+              "X7"
+            ],
+            "M7/WG0": [
+              "B7",
+              "C7/WG0",
+              "C9/WG0",
+              "M6/WG0"
+            ],
+            "C7/WG1": [
+              "C6/WG1",
+              "M4/WG1",
+              "X7"
+            ],
+            "M7/WG1": [
+              "B7",
+              "C7/WG1",
+              "C9/WG1",
+              "M6/WG1"
+            ],
+            "EMPTY7": [
+              "C7/WG0",
+              "C7/WG1"
+            ],
+            "ISSUE7": [
+              "B5",
+              "EMPTY7"
+            ],
+            "B7": [
+              "ISSUE7",
+              "W7"
+            ],
+            "W7": [
+              "B1"
+            ],
+            "X8": [
+              "ISSUE6"
+            ],
+            "C8/WG0": [
+              "C7/WG0",
+              "M5/WG0",
+              "X8"
+            ],
+            "M8/WG0": [
+              "B8",
+              "C10/WG0",
+              "C8/WG0",
+              "M7/WG0"
+            ],
+            "C8/WG1": [
+              "C7/WG1",
+              "M5/WG1",
+              "X8"
+            ],
+            "M8/WG1": [
+              "B8",
+              "C10/WG1",
+              "C8/WG1",
+              "M7/WG1"
+            ],
+            "EMPTY8": [
+              "C8/WG0",
+              "C8/WG1"
+            ],
+            "ISSUE8": [
+              "B6",
+              "EMPTY8"
+            ],
+            "B8": [
+              "ISSUE8",
+              "M1/WG0",
+              "M1/WG1",
+              "W8"
+            ],
+            "W8": [
+              "B2"
+            ],
+            "X9": [
+              "ISSUE7"
+            ],
+            "C9/WG0": [
+              "C8/WG0",
+              "M6/WG0",
+              "X9"
+            ],
+            "M9/WG0": [
+              "B9",
+              "C11/WG0",
+              "C9/WG0",
+              "M8/WG0"
+            ],
+            "C9/WG1": [
+              "C8/WG1",
+              "M6/WG1",
+              "X9"
+            ],
+            "M9/WG1": [
+              "B9",
+              "C11/WG1",
+              "C9/WG1",
+              "M8/WG1"
+            ],
+            "EMPTY9": [
+              "C9/WG0",
+              "C9/WG1"
+            ],
+            "ISSUE9": [
+              "B7",
+              "EMPTY9"
+            ],
+            "B9": [
+              "ISSUE9",
+              "M2/WG0",
+              "M2/WG1",
+              "W9"
+            ],
+            "W9": [
+              "B3"
+            ],
+            "X10": [
+              "ISSUE8"
+            ],
+            "C10/WG0": [
+              "C9/WG0",
+              "M7/WG0",
+              "X10"
+            ],
+            "M10/WG0": [
+              "B10",
+              "C10/WG0",
+              "C12/WG0",
+              "M9/WG0"
+            ],
+            "C10/WG1": [
+              "C9/WG1",
+              "M7/WG1",
+              "X10"
+            ],
+            "M10/WG1": [
+              "B10",
+              "C10/WG1",
+              "C12/WG1",
+              "M9/WG1"
+            ],
+            "EMPTY10": [
+              "C10/WG0",
+              "C10/WG1"
+            ],
+            "ISSUE10": [
+              "B8",
+              "EMPTY10"
+            ],
+            "B10": [
+              "ISSUE10",
+              "M3/WG0",
+              "M3/WG1",
+              "W10"
+            ],
+            "W10": [
+              "B4"
+            ],
+            "X11": [
+              "ISSUE9"
+            ],
+            "C11/WG0": [
+              "C10/WG0",
+              "M8/WG0",
+              "X11"
+            ],
+            "M11/WG0": [
+              "B11",
+              "C11/WG0",
+              "C13/WG0",
+              "M10/WG0"
+            ],
+            "C11/WG1": [
+              "C10/WG1",
+              "M8/WG1",
+              "X11"
+            ],
+            "M11/WG1": [
+              "B11",
+              "C11/WG1",
+              "C13/WG1",
+              "M10/WG1"
+            ],
+            "EMPTY11": [
+              "C11/WG0",
+              "C11/WG1"
+            ],
+            "ISSUE11": [
+              "B9",
+              "EMPTY11"
+            ],
+            "B11": [
+              "ISSUE11",
+              "M4/WG0",
+              "M4/WG1",
+              "W11"
+            ],
+            "W11": [
+              "B5"
+            ],
+            "X12": [
+              "ISSUE10"
+            ],
+            "C12/WG0": [
+              "C11/WG0",
+              "M9/WG0",
+              "X12"
+            ],
+            "M12/WG0": [
+              "B12",
+              "C12/WG0",
+              "C14/WG0",
+              "M11/WG0"
+            ],
+            "C12/WG1": [
+              "C11/WG1",
+              "M9/WG1",
+              "X12"
+            ],
+            "M12/WG1": [
+              "B12",
+              "C12/WG1",
+              "C14/WG1",
+              "M11/WG1"
+            ],
+            "EMPTY12": [
+              "C12/WG0",
+              "C12/WG1"
+            ],
+            "ISSUE12": [
+              "B10",
+              "EMPTY12"
+            ],
+            "B12": [
+              "ISSUE12",
+              "M5/WG0",
+              "M5/WG1",
+              "W12"
+            ],
+            "W12": [
+              "B6"
+            ],
+            "X13": [
+              "ISSUE11"
+            ],
+            "C13/WG0": [
+              "C12/WG0",
+              "M10/WG0",
+              "X13"
+            ],
+            "M13/WG0": [
+              "B13",
+              "C13/WG0",
+              "C15/WG0",
+              "M12/WG0"
+            ],
+            "C13/WG1": [
+              "C12/WG1",
+              "M10/WG1",
+              "X13"
+            ],
+            "M13/WG1": [
+              "B13",
+              "C13/WG1",
+              "C15/WG1",
+              "M12/WG1"
+            ],
+            "EMPTY13": [
+              "C13/WG0",
+              "C13/WG1"
+            ],
+            "ISSUE13": [
+              "B11",
+              "EMPTY13"
+            ],
+            "B13": [
+              "ISSUE13",
+              "M6/WG0",
+              "M6/WG1",
+              "W13"
+            ],
+            "W13": [
+              "B7"
+            ],
+            "X14": [
+              "ISSUE12"
+            ],
+            "C14/WG0": [
+              "C13/WG0",
+              "M11/WG0",
+              "X14"
+            ],
+            "M14/WG0": [
+              "B14",
+              "C14/WG0",
+              "C16/WG0",
+              "M13/WG0"
+            ],
+            "C14/WG1": [
+              "C13/WG1",
+              "M11/WG1",
+              "X14"
+            ],
+            "M14/WG1": [
+              "B14",
+              "C14/WG1",
+              "C16/WG1",
+              "M13/WG1"
+            ],
+            "EMPTY14": [
+              "C14/WG0",
+              "C14/WG1"
+            ],
+            "ISSUE14": [
+              "B12",
+              "EMPTY14"
+            ],
+            "B14": [
+              "ISSUE14",
+              "M7/WG0",
+              "M7/WG1",
+              "W14"
+            ],
+            "W14": [
+              "B8"
+            ],
+            "X15": [
+              "ISSUE13"
+            ],
+            "C15/WG0": [
+              "C14/WG0",
+              "M12/WG0",
+              "X15"
+            ],
+            "M15/WG0": [
+              "B15",
+              "C15/WG0",
+              "C17/WG0",
+              "M14/WG0"
+            ],
+            "C15/WG1": [
+              "C14/WG1",
+              "M12/WG1",
+              "X15"
+            ],
+            "M15/WG1": [
+              "B15",
+              "C15/WG1",
+              "C17/WG1",
+              "M14/WG1"
+            ],
+            "EMPTY15": [
+              "C15/WG0",
+              "C15/WG1"
+            ],
+            "ISSUE15": [
+              "B13",
+              "EMPTY15"
+            ],
+            "B15": [
+              "ISSUE15",
+              "M8/WG0",
+              "M8/WG1",
+              "W15"
+            ],
+            "W15": [
+              "B9"
+            ],
+            "X16": [
+              "ISSUE14"
+            ],
+            "C16/WG0": [
+              "C15/WG0",
+              "M13/WG0",
+              "X16"
+            ],
+            "M16/WG0": [
+              "B16",
+              "C16/WG0",
+              "C18/WG0",
+              "M15/WG0"
+            ],
+            "C16/WG1": [
+              "C15/WG1",
+              "M13/WG1",
+              "X16"
+            ],
+            "M16/WG1": [
+              "B16",
+              "C16/WG1",
+              "C18/WG1",
+              "M15/WG1"
+            ],
+            "EMPTY16": [
+              "C16/WG0",
+              "C16/WG1"
+            ],
+            "ISSUE16": [
+              "B14",
+              "EMPTY16"
+            ],
+            "B16": [
+              "ISSUE16",
+              "M9/WG0",
+              "M9/WG1",
+              "W16"
+            ],
+            "W16": [
+              "B10"
+            ],
+            "X17": [
+              "ISSUE15"
+            ],
+            "C17/WG0": [
+              "C16/WG0",
+              "M14/WG0",
+              "X17"
+            ],
+            "M17/WG0": [
+              "B17",
+              "C17/WG0",
+              "C19/WG0",
+              "M16/WG0"
+            ],
+            "C17/WG1": [
+              "C16/WG1",
+              "M14/WG1",
+              "X17"
+            ],
+            "M17/WG1": [
+              "B17",
+              "C17/WG1",
+              "C19/WG1",
+              "M16/WG1"
+            ],
+            "EMPTY17": [
+              "C17/WG0",
+              "C17/WG1"
+            ],
+            "ISSUE17": [
+              "B15",
+              "EMPTY17"
+            ],
+            "B17": [
+              "ISSUE17",
+              "M10/WG0",
+              "M10/WG1",
+              "W17"
+            ],
+            "W17": [
+              "B11"
+            ],
+            "X18": [
+              "ISSUE16"
+            ],
+            "C18/WG0": [
+              "C17/WG0",
+              "M15/WG0",
+              "X18"
+            ],
+            "M18/WG0": [
+              "B18",
+              "C18/WG0",
+              "C20/WG0",
+              "M17/WG0"
+            ],
+            "C18/WG1": [
+              "C17/WG1",
+              "M15/WG1",
+              "X18"
+            ],
+            "M18/WG1": [
+              "B18",
+              "C18/WG1",
+              "C20/WG1",
+              "M17/WG1"
+            ],
+            "EMPTY18": [
+              "C18/WG0",
+              "C18/WG1"
+            ],
+            "ISSUE18": [
+              "B16",
+              "EMPTY18"
+            ],
+            "B18": [
+              "ISSUE18",
+              "M11/WG0",
+              "M11/WG1",
+              "W18"
+            ],
+            "W18": [
+              "B12"
+            ],
+            "X19": [
+              "ISSUE17"
+            ],
+            "C19/WG0": [
+              "C18/WG0",
+              "M16/WG0",
+              "X19"
+            ],
+            "M19/WG0": [
+              "B19",
+              "C19/WG0",
+              "C21/WG0",
+              "M18/WG0"
+            ],
+            "C19/WG1": [
+              "C18/WG1",
+              "M16/WG1",
+              "X19"
+            ],
+            "M19/WG1": [
+              "B19",
+              "C19/WG1",
+              "C21/WG1",
+              "M18/WG1"
+            ],
+            "EMPTY19": [
+              "C19/WG0",
+              "C19/WG1"
+            ],
+            "ISSUE19": [
+              "B17",
+              "EMPTY19"
+            ],
+            "B19": [
+              "ISSUE19",
+              "M12/WG0",
+              "M12/WG1",
+              "W19"
+            ],
+            "W19": [
+              "B13"
+            ],
+            "X20": [
+              "ISSUE18"
+            ],
+            "C20/WG0": [
+              "C19/WG0",
+              "M17/WG0",
+              "X20"
+            ],
+            "M20/WG0": [
+              "B20",
+              "C20/WG0",
+              "C22/WG0",
+              "M19/WG0"
+            ],
+            "C20/WG1": [
+              "C19/WG1",
+              "M17/WG1",
+              "X20"
+            ],
+            "M20/WG1": [
+              "B20",
+              "C20/WG1",
+              "C22/WG1",
+              "M19/WG1"
+            ],
+            "EMPTY20": [
+              "C20/WG0",
+              "C20/WG1"
+            ],
+            "ISSUE20": [
+              "B18",
+              "EMPTY20"
+            ],
+            "B20": [
+              "ISSUE20",
+              "M13/WG0",
+              "M13/WG1",
+              "W20"
+            ],
+            "W20": [
+              "B14"
+            ],
+            "X21": [
+              "ISSUE19"
+            ],
+            "C21/WG0": [
+              "C20/WG0",
+              "M18/WG0",
+              "X21"
+            ],
+            "M21/WG0": [
+              "B21",
+              "C21/WG0",
+              "C23/WG0",
+              "M20/WG0"
+            ],
+            "C21/WG1": [
+              "C20/WG1",
+              "M18/WG1",
+              "X21"
+            ],
+            "M21/WG1": [
+              "B21",
+              "C21/WG1",
+              "C23/WG1",
+              "M20/WG1"
+            ],
+            "EMPTY21": [
+              "C21/WG0",
+              "C21/WG1"
+            ],
+            "ISSUE21": [
+              "B19",
+              "EMPTY21"
+            ],
+            "B21": [
+              "ISSUE21",
+              "M14/WG0",
+              "M14/WG1",
+              "W21"
+            ],
+            "W21": [
+              "B15"
+            ],
+            "X22": [
+              "ISSUE20"
+            ],
+            "C22/WG0": [
+              "C21/WG0",
+              "M19/WG0",
+              "X22"
+            ],
+            "M22/WG0": [
+              "B22",
+              "C22/WG0",
+              "C24/WG0",
+              "M21/WG0"
+            ],
+            "C22/WG1": [
+              "C21/WG1",
+              "M19/WG1",
+              "X22"
+            ],
+            "M22/WG1": [
+              "B22",
+              "C22/WG1",
+              "C24/WG1",
+              "M21/WG1"
+            ],
+            "EMPTY22": [
+              "C22/WG0",
+              "C22/WG1"
+            ],
+            "ISSUE22": [
+              "B20",
+              "EMPTY22"
+            ],
+            "B22": [
+              "ISSUE22",
+              "M15/WG0",
+              "M15/WG1",
+              "W22"
+            ],
+            "W22": [
+              "B16"
+            ],
+            "X23": [
+              "ISSUE21"
+            ],
+            "C23/WG0": [
+              "C22/WG0",
+              "M20/WG0",
+              "X23"
+            ],
+            "M23/WG0": [
+              "B23",
+              "C23/WG0",
+              "C25/WG0",
+              "M22/WG0"
+            ],
+            "C23/WG1": [
+              "C22/WG1",
+              "M20/WG1",
+              "X23"
+            ],
+            "M23/WG1": [
+              "B23",
+              "C23/WG1",
+              "C25/WG1",
+              "M22/WG1"
+            ],
+            "EMPTY23": [
+              "C23/WG0",
+              "C23/WG1"
+            ],
+            "ISSUE23": [
+              "B21",
+              "EMPTY23"
+            ],
+            "B23": [
+              "ISSUE23",
+              "M16/WG0",
+              "M16/WG1",
+              "W23"
+            ],
+            "W23": [
+              "B17"
+            ],
+            "X24": [
+              "ISSUE22"
+            ],
+            "C24/WG0": [
+              "C23/WG0",
+              "M21/WG0",
+              "X24"
+            ],
+            "M24/WG0": [
+              "B24",
+              "C24/WG0",
+              "C26/WG0",
+              "M23/WG0"
+            ],
+            "C24/WG1": [
+              "C23/WG1",
+              "M21/WG1",
+              "X24"
+            ],
+            "M24/WG1": [
+              "B24",
+              "C24/WG1",
+              "C26/WG1",
+              "M23/WG1"
+            ],
+            "EMPTY24": [
+              "C24/WG0",
+              "C24/WG1"
+            ],
+            "ISSUE24": [
+              "B22",
+              "EMPTY24"
+            ],
+            "B24": [
+              "ISSUE24",
+              "M17/WG0",
+              "M17/WG1",
+              "W24"
+            ],
+            "W24": [
+              "B18"
+            ],
+            "X25": [
+              "ISSUE23"
+            ],
+            "C25/WG0": [
+              "C24/WG0",
+              "M22/WG0",
+              "X25"
+            ],
+            "M25/WG0": [
+              "B25",
+              "C25/WG0",
+              "C27/WG0",
+              "M24/WG0"
+            ],
+            "C25/WG1": [
+              "C24/WG1",
+              "M22/WG1",
+              "X25"
+            ],
+            "M25/WG1": [
+              "B25",
+              "C25/WG1",
+              "C27/WG1",
+              "M24/WG1"
+            ],
+            "EMPTY25": [
+              "C25/WG0",
+              "C25/WG1"
+            ],
+            "ISSUE25": [
+              "B23",
+              "EMPTY25"
+            ],
+            "B25": [
+              "ISSUE25",
+              "M18/WG0",
+              "M18/WG1",
+              "W25"
+            ],
+            "W25": [
+              "B19"
+            ],
+            "X26": [
+              "ISSUE24"
+            ],
+            "C26/WG0": [
+              "C25/WG0",
+              "M23/WG0",
+              "X26"
+            ],
+            "M26/WG0": [
+              "B26",
+              "C26/WG0",
+              "C28/WG0",
+              "M25/WG0"
+            ],
+            "C26/WG1": [
+              "C25/WG1",
+              "M23/WG1",
+              "X26"
+            ],
+            "M26/WG1": [
+              "B26",
+              "C26/WG1",
+              "C28/WG1",
+              "M25/WG1"
+            ],
+            "EMPTY26": [
+              "C26/WG0",
+              "C26/WG1"
+            ],
+            "ISSUE26": [
+              "B24",
+              "EMPTY26"
+            ],
+            "B26": [
+              "ISSUE26",
+              "M19/WG0",
+              "M19/WG1",
+              "W26"
+            ],
+            "W26": [
+              "B20"
+            ],
+            "X27": [
+              "ISSUE25"
+            ],
+            "C27/WG0": [
+              "C26/WG0",
+              "M24/WG0",
+              "X27"
+            ],
+            "M27/WG0": [
+              "B27",
+              "C27/WG0",
+              "C29/WG0",
+              "M26/WG0"
+            ],
+            "C27/WG1": [
+              "C26/WG1",
+              "M24/WG1",
+              "X27"
+            ],
+            "M27/WG1": [
+              "B27",
+              "C27/WG1",
+              "C29/WG1",
+              "M26/WG1"
+            ],
+            "EMPTY27": [
+              "C27/WG0",
+              "C27/WG1"
+            ],
+            "ISSUE27": [
+              "B25",
+              "EMPTY27"
+            ],
+            "B27": [
+              "ISSUE27",
+              "M20/WG0",
+              "M20/WG1",
+              "W27"
+            ],
+            "W27": [
+              "B21"
+            ],
+            "X28": [
+              "ISSUE26"
+            ],
+            "C28/WG0": [
+              "C27/WG0",
+              "M25/WG0",
+              "X28"
+            ],
+            "M28/WG0": [
+              "B28",
+              "C28/WG0",
+              "C30/WG0",
+              "M27/WG0"
+            ],
+            "C28/WG1": [
+              "C27/WG1",
+              "M25/WG1",
+              "X28"
+            ],
+            "M28/WG1": [
+              "B28",
+              "C28/WG1",
+              "C30/WG1",
+              "M27/WG1"
+            ],
+            "EMPTY28": [
+              "C28/WG0",
+              "C28/WG1"
+            ],
+            "ISSUE28": [
+              "B26",
+              "EMPTY28"
+            ],
+            "B28": [
+              "ISSUE28",
+              "M21/WG0",
+              "M21/WG1",
+              "W28"
+            ],
+            "W28": [
+              "B22"
+            ],
+            "X29": [
+              "ISSUE27"
+            ],
+            "C29/WG0": [
+              "C28/WG0",
+              "M26/WG0",
+              "X29"
+            ],
+            "M29/WG0": [
+              "B29",
+              "C29/WG0",
+              "C31/WG0",
+              "M28/WG0"
+            ],
+            "C29/WG1": [
+              "C28/WG1",
+              "M26/WG1",
+              "X29"
+            ],
+            "M29/WG1": [
+              "B29",
+              "C29/WG1",
+              "C31/WG1",
+              "M28/WG1"
+            ],
+            "EMPTY29": [
+              "C29/WG0",
+              "C29/WG1"
+            ],
+            "ISSUE29": [
+              "B27",
+              "EMPTY29"
+            ],
+            "B29": [
+              "ISSUE29",
+              "M22/WG0",
+              "M22/WG1",
+              "W29"
+            ],
+            "W29": [
+              "B23"
+            ],
+            "X30": [
+              "ISSUE28"
+            ],
+            "C30/WG0": [
+              "C29/WG0",
+              "M27/WG0",
+              "X30"
+            ],
+            "M30/WG0": [
+              "B30",
+              "C30/WG0",
+              "C32/WG0",
+              "M29/WG0"
+            ],
+            "C30/WG1": [
+              "C29/WG1",
+              "M27/WG1",
+              "X30"
+            ],
+            "M30/WG1": [
+              "B30",
+              "C30/WG1",
+              "C32/WG1",
+              "M29/WG1"
+            ],
+            "EMPTY30": [
+              "C30/WG0",
+              "C30/WG1"
+            ],
+            "ISSUE30": [
+              "B28",
+              "EMPTY30"
+            ],
+            "B30": [
+              "ISSUE30",
+              "M23/WG0",
+              "M23/WG1",
+              "W30"
+            ],
+            "W30": [
+              "B24"
+            ],
+            "X31": [
+              "ISSUE29"
+            ],
+            "C31/WG0": [
+              "C30/WG0",
+              "M28/WG0",
+              "X31"
+            ],
+            "M31/WG0": [
+              "B31",
+              "C31/WG0",
+              "C33/WG0",
+              "M30/WG0"
+            ],
+            "C31/WG1": [
+              "C30/WG1",
+              "M28/WG1",
+              "X31"
+            ],
+            "M31/WG1": [
+              "B31",
+              "C31/WG1",
+              "C33/WG1",
+              "M30/WG1"
+            ],
+            "EMPTY31": [
+              "C31/WG0",
+              "C31/WG1"
+            ],
+            "ISSUE31": [
+              "B29",
+              "EMPTY31"
+            ],
+            "B31": [
+              "ISSUE31",
+              "M24/WG0",
+              "M24/WG1",
+              "W31"
+            ],
+            "W31": [
+              "B25"
+            ],
+            "X32": [
+              "ISSUE30"
+            ],
+            "C32/WG0": [
+              "C31/WG0",
+              "M29/WG0",
+              "X32"
+            ],
+            "M32/WG0": [
+              "B32",
+              "C32/WG0",
+              "C34/WG0",
+              "M31/WG0"
+            ],
+            "C32/WG1": [
+              "C31/WG1",
+              "M29/WG1",
+              "X32"
+            ],
+            "M32/WG1": [
+              "B32",
+              "C32/WG1",
+              "C34/WG1",
+              "M31/WG1"
+            ],
+            "EMPTY32": [
+              "C32/WG0",
+              "C32/WG1"
+            ],
+            "ISSUE32": [
+              "B30",
+              "EMPTY32"
+            ],
+            "B32": [
+              "ISSUE32",
+              "M25/WG0",
+              "M25/WG1",
+              "W32"
+            ],
+            "W32": [
+              "B26"
+            ],
+            "X33": [
+              "ISSUE31"
+            ],
+            "C33/WG0": [
+              "C32/WG0",
+              "M30/WG0",
+              "X33"
+            ],
+            "M33/WG0": [
+              "B33",
+              "C33/WG0",
+              "C35/WG0",
+              "M32/WG0"
+            ],
+            "C33/WG1": [
+              "C32/WG1",
+              "M30/WG1",
+              "X33"
+            ],
+            "M33/WG1": [
+              "B33",
+              "C33/WG1",
+              "C35/WG1",
+              "M32/WG1"
+            ],
+            "EMPTY33": [
+              "C33/WG0",
+              "C33/WG1"
+            ],
+            "ISSUE33": [
+              "B31",
+              "EMPTY33"
+            ],
+            "B33": [
+              "ISSUE33",
+              "M26/WG0",
+              "M26/WG1",
+              "W33"
+            ],
+            "W33": [
+              "B27"
+            ],
+            "X34": [
+              "ISSUE32"
+            ],
+            "C34/WG0": [
+              "C33/WG0",
+              "M31/WG0",
+              "X34"
+            ],
+            "M34/WG0": [
+              "B34",
+              "C34/WG0",
+              "C36/WG0",
+              "M33/WG0"
+            ],
+            "C34/WG1": [
+              "C33/WG1",
+              "M31/WG1",
+              "X34"
+            ],
+            "M34/WG1": [
+              "B34",
+              "C34/WG1",
+              "C36/WG1",
+              "M33/WG1"
+            ],
+            "EMPTY34": [
+              "C34/WG0",
+              "C34/WG1"
+            ],
+            "ISSUE34": [
+              "B32",
+              "EMPTY34"
+            ],
+            "B34": [
+              "ISSUE34",
+              "M27/WG0",
+              "M27/WG1",
+              "W34"
+            ],
+            "W34": [
+              "B28"
+            ],
+            "X35": [
+              "ISSUE33"
+            ],
+            "C35/WG0": [
+              "C34/WG0",
+              "M32/WG0",
+              "X35"
+            ],
+            "M35/WG0": [
+              "B35",
+              "C35/WG0",
+              "C37/WG0",
+              "M34/WG0"
+            ],
+            "C35/WG1": [
+              "C34/WG1",
+              "M32/WG1",
+              "X35"
+            ],
+            "M35/WG1": [
+              "B35",
+              "C35/WG1",
+              "C37/WG1",
+              "M34/WG1"
+            ],
+            "EMPTY35": [
+              "C35/WG0",
+              "C35/WG1"
+            ],
+            "ISSUE35": [
+              "B33",
+              "EMPTY35"
+            ],
+            "B35": [
+              "ISSUE35",
+              "M28/WG0",
+              "M28/WG1",
+              "W35"
+            ],
+            "W35": [
+              "B29"
+            ],
+            "X36": [
+              "ISSUE34"
+            ],
+            "C36/WG0": [
+              "C35/WG0",
+              "M33/WG0",
+              "X36"
+            ],
+            "M36/WG0": [
+              "B36",
+              "C36/WG0",
+              "C38/WG0",
+              "M35/WG0"
+            ],
+            "C36/WG1": [
+              "C35/WG1",
+              "M33/WG1",
+              "X36"
+            ],
+            "M36/WG1": [
+              "B36",
+              "C36/WG1",
+              "C38/WG1",
+              "M35/WG1"
+            ],
+            "EMPTY36": [
+              "C36/WG0",
+              "C36/WG1"
+            ],
+            "ISSUE36": [
+              "B34",
+              "EMPTY36"
+            ],
+            "B36": [
+              "ISSUE36",
+              "M29/WG0",
+              "M29/WG1",
+              "W36"
+            ],
+            "W36": [
+              "B30"
+            ],
+            "X37": [
+              "ISSUE35"
+            ],
+            "C37/WG0": [
+              "C36/WG0",
+              "M34/WG0",
+              "X37"
+            ],
+            "M37/WG0": [
+              "B37",
+              "C37/WG0",
+              "C39/WG0",
+              "M36/WG0"
+            ],
+            "C37/WG1": [
+              "C36/WG1",
+              "M34/WG1",
+              "X37"
+            ],
+            "M37/WG1": [
+              "B37",
+              "C37/WG1",
+              "C39/WG1",
+              "M36/WG1"
+            ],
+            "EMPTY37": [
+              "C37/WG0",
+              "C37/WG1"
+            ],
+            "ISSUE37": [
+              "B35",
+              "EMPTY37"
+            ],
+            "B37": [
+              "ISSUE37",
+              "M30/WG0",
+              "M30/WG1",
+              "W37"
+            ],
+            "W37": [
+              "B31"
+            ],
+            "X38": [
+              "ISSUE36"
+            ],
+            "C38/WG0": [
+              "C37/WG0",
+              "M35/WG0",
+              "X38"
+            ],
+            "M38/WG0": [
+              "B38",
+              "C38/WG0",
+              "C40/WG0",
+              "M37/WG0"
+            ],
+            "C38/WG1": [
+              "C37/WG1",
+              "M35/WG1",
+              "X38"
+            ],
+            "M38/WG1": [
+              "B38",
+              "C38/WG1",
+              "C40/WG1",
+              "M37/WG1"
+            ],
+            "EMPTY38": [
+              "C38/WG0",
+              "C38/WG1"
+            ],
+            "ISSUE38": [
+              "B36",
+              "EMPTY38"
+            ],
+            "B38": [
+              "ISSUE38",
+              "M31/WG0",
+              "M31/WG1",
+              "W38"
+            ],
+            "W38": [
+              "B32"
+            ],
+            "X39": [
+              "ISSUE37"
+            ],
+            "C39/WG0": [
+              "C38/WG0",
+              "M36/WG0",
+              "X39"
+            ],
+            "M39/WG0": [
+              "B39",
+              "C39/WG0",
+              "C41/WG0",
+              "M38/WG0"
+            ],
+            "C39/WG1": [
+              "C38/WG1",
+              "M36/WG1",
+              "X39"
+            ],
+            "M39/WG1": [
+              "B39",
+              "C39/WG1",
+              "C41/WG1",
+              "M38/WG1"
+            ],
+            "EMPTY39": [
+              "C39/WG0",
+              "C39/WG1"
+            ],
+            "ISSUE39": [
+              "B37",
+              "EMPTY39"
+            ],
+            "B39": [
+              "ISSUE39",
+              "M32/WG0",
+              "M32/WG1",
+              "W39"
+            ],
+            "W39": [
+              "B33"
+            ],
+            "X40": [
+              "ISSUE38"
+            ],
+            "C40/WG0": [
+              "C39/WG0",
+              "M37/WG0",
+              "X40"
+            ],
+            "M40/WG0": [
+              "B40",
+              "C40/WG0",
+              "C42/WG0",
+              "M39/WG0"
+            ],
+            "C40/WG1": [
+              "C39/WG1",
+              "M37/WG1",
+              "X40"
+            ],
+            "M40/WG1": [
+              "B40",
+              "C40/WG1",
+              "C42/WG1",
+              "M39/WG1"
+            ],
+            "EMPTY40": [
+              "C40/WG0",
+              "C40/WG1"
+            ],
+            "ISSUE40": [
+              "B38",
+              "EMPTY40"
+            ],
+            "B40": [
+              "ISSUE40",
+              "M33/WG0",
+              "M33/WG1",
+              "W40"
+            ],
+            "W40": [
+              "B34"
+            ],
+            "X41": [
+              "ISSUE39"
+            ],
+            "C41/WG0": [
+              "C40/WG0",
+              "M38/WG0",
+              "X41"
+            ],
+            "M41/WG0": [
+              "B41",
+              "C41/WG0",
+              "C43/WG0",
+              "M40/WG0"
+            ],
+            "C41/WG1": [
+              "C40/WG1",
+              "M38/WG1",
+              "X41"
+            ],
+            "M41/WG1": [
+              "B41",
+              "C41/WG1",
+              "C43/WG1",
+              "M40/WG1"
+            ],
+            "EMPTY41": [
+              "C41/WG0",
+              "C41/WG1"
+            ],
+            "ISSUE41": [
+              "B39",
+              "EMPTY41"
+            ],
+            "B41": [
+              "ISSUE41",
+              "M34/WG0",
+              "M34/WG1",
+              "W41"
+            ],
+            "W41": [
+              "B35"
+            ],
+            "X42": [
+              "ISSUE40"
+            ],
+            "C42/WG0": [
+              "C41/WG0",
+              "M39/WG0",
+              "X42"
+            ],
+            "M42/WG0": [
+              "B42",
+              "C42/WG0",
+              "C44/WG0",
+              "M41/WG0"
+            ],
+            "C42/WG1": [
+              "C41/WG1",
+              "M39/WG1",
+              "X42"
+            ],
+            "M42/WG1": [
+              "B42",
+              "C42/WG1",
+              "C44/WG1",
+              "M41/WG1"
+            ],
+            "EMPTY42": [
+              "C42/WG0",
+              "C42/WG1"
+            ],
+            "ISSUE42": [
+              "B40",
+              "EMPTY42"
+            ],
+            "B42": [
+              "ISSUE42",
+              "M35/WG0",
+              "M35/WG1",
+              "W42"
+            ],
+            "W42": [
+              "B36"
+            ],
+            "X43": [
+              "ISSUE41"
+            ],
+            "C43/WG0": [
+              "C42/WG0",
+              "M40/WG0",
+              "X43"
+            ],
+            "M43/WG0": [
+              "B43",
+              "C43/WG0",
+              "C45/WG0",
+              "M42/WG0"
+            ],
+            "C43/WG1": [
+              "C42/WG1",
+              "M40/WG1",
+              "X43"
+            ],
+            "M43/WG1": [
+              "B43",
+              "C43/WG1",
+              "C45/WG1",
+              "M42/WG1"
+            ],
+            "EMPTY43": [
+              "C43/WG0",
+              "C43/WG1"
+            ],
+            "ISSUE43": [
+              "B41",
+              "EMPTY43"
+            ],
+            "B43": [
+              "ISSUE43",
+              "M36/WG0",
+              "M36/WG1",
+              "W43"
+            ],
+            "W43": [
+              "B37"
+            ],
+            "X44": [
+              "ISSUE42"
+            ],
+            "C44/WG0": [
+              "C43/WG0",
+              "M41/WG0",
+              "X44"
+            ],
+            "M44/WG0": [
+              "B44",
+              "C44/WG0",
+              "C46/WG0",
+              "M43/WG0"
+            ],
+            "C44/WG1": [
+              "C43/WG1",
+              "M41/WG1",
+              "X44"
+            ],
+            "M44/WG1": [
+              "B44",
+              "C44/WG1",
+              "C46/WG1",
+              "M43/WG1"
+            ],
+            "EMPTY44": [
+              "C44/WG0",
+              "C44/WG1"
+            ],
+            "ISSUE44": [
+              "B42",
+              "EMPTY44"
+            ],
+            "B44": [
+              "ISSUE44",
+              "M37/WG0",
+              "M37/WG1",
+              "W44"
+            ],
+            "W44": [
+              "B38"
+            ],
+            "X45": [
+              "ISSUE43"
+            ],
+            "C45/WG0": [
+              "C44/WG0",
+              "M42/WG0",
+              "X45"
+            ],
+            "M45/WG0": [
+              "B45",
+              "C45/WG0",
+              "C47/WG0",
+              "M44/WG0"
+            ],
+            "C45/WG1": [
+              "C44/WG1",
+              "M42/WG1",
+              "X45"
+            ],
+            "M45/WG1": [
+              "B45",
+              "C45/WG1",
+              "C47/WG1",
+              "M44/WG1"
+            ],
+            "EMPTY45": [
+              "C45/WG0",
+              "C45/WG1"
+            ],
+            "ISSUE45": [
+              "B43",
+              "EMPTY45"
+            ],
+            "B45": [
+              "ISSUE45",
+              "M38/WG0",
+              "M38/WG1",
+              "W45"
+            ],
+            "W45": [
+              "B39"
+            ],
+            "X46": [
+              "ISSUE44"
+            ],
+            "C46/WG0": [
+              "C45/WG0",
+              "M43/WG0",
+              "X46"
+            ],
+            "M46/WG0": [
+              "B46",
+              "C46/WG0",
+              "C48/WG0",
+              "M45/WG0"
+            ],
+            "C46/WG1": [
+              "C45/WG1",
+              "M43/WG1",
+              "X46"
+            ],
+            "M46/WG1": [
+              "B46",
+              "C46/WG1",
+              "C48/WG1",
+              "M45/WG1"
+            ],
+            "EMPTY46": [
+              "C46/WG0",
+              "C46/WG1"
+            ],
+            "ISSUE46": [
+              "B44",
+              "EMPTY46"
+            ],
+            "B46": [
+              "ISSUE46",
+              "M39/WG0",
+              "M39/WG1",
+              "W46"
+            ],
+            "W46": [
+              "B40"
+            ],
+            "X47": [
+              "ISSUE45"
+            ],
+            "C47/WG0": [
+              "C46/WG0",
+              "M44/WG0",
+              "X47"
+            ],
+            "M47/WG0": [
+              "B47",
+              "C47/WG0",
+              "C49/WG0",
+              "M46/WG0"
+            ],
+            "C47/WG1": [
+              "C46/WG1",
+              "M44/WG1",
+              "X47"
+            ],
+            "M47/WG1": [
+              "B47",
+              "C47/WG1",
+              "C49/WG1",
+              "M46/WG1"
+            ],
+            "EMPTY47": [
+              "C47/WG0",
+              "C47/WG1"
+            ],
+            "ISSUE47": [
+              "B45",
+              "EMPTY47"
+            ],
+            "B47": [
+              "ISSUE47",
+              "M40/WG0",
+              "M40/WG1",
+              "W47"
+            ],
+            "W47": [
+              "B41"
+            ],
+            "X48": [
+              "ISSUE46"
+            ],
+            "C48/WG0": [
+              "C47/WG0",
+              "M45/WG0",
+              "X48"
+            ],
+            "M48/WG0": [
+              "B48",
+              "C48/WG0",
+              "C50/WG0",
+              "M47/WG0"
+            ],
+            "C48/WG1": [
+              "C47/WG1",
+              "M45/WG1",
+              "X48"
+            ],
+            "M48/WG1": [
+              "B48",
+              "C48/WG1",
+              "C50/WG1",
+              "M47/WG1"
+            ],
+            "EMPTY48": [
+              "C48/WG0",
+              "C48/WG1"
+            ],
+            "ISSUE48": [
+              "B46",
+              "EMPTY48"
+            ],
+            "B48": [
+              "ISSUE48",
+              "M41/WG0",
+              "M41/WG1",
+              "W48"
+            ],
+            "W48": [
+              "B42"
+            ],
+            "X49": [
+              "ISSUE47"
+            ],
+            "C49/WG0": [
+              "C48/WG0",
+              "M46/WG0",
+              "X49"
+            ],
+            "M49/WG0": [
+              "B49",
+              "C49/WG0",
+              "C51/WG0",
+              "M48/WG0"
+            ],
+            "C49/WG1": [
+              "C48/WG1",
+              "M46/WG1",
+              "X49"
+            ],
+            "M49/WG1": [
+              "B49",
+              "C49/WG1",
+              "C51/WG1",
+              "M48/WG1"
+            ],
+            "EMPTY49": [
+              "C49/WG0",
+              "C49/WG1"
+            ],
+            "ISSUE49": [
+              "B47",
+              "EMPTY49"
+            ],
+            "B49": [
+              "ISSUE49",
+              "M42/WG0",
+              "M42/WG1",
+              "W49"
+            ],
+            "W49": [
+              "B43"
+            ],
+            "X50": [
+              "ISSUE48"
+            ],
+            "C50/WG0": [
+              "C49/WG0",
+              "M47/WG0",
+              "X50"
+            ],
+            "M50/WG0": [
+              "B50",
+              "C50/WG0",
+              "C52/WG0",
+              "M49/WG0"
+            ],
+            "C50/WG1": [
+              "C49/WG1",
+              "M47/WG1",
+              "X50"
+            ],
+            "M50/WG1": [
+              "B50",
+              "C50/WG1",
+              "C52/WG1",
+              "M49/WG1"
+            ],
+            "EMPTY50": [
+              "C50/WG0",
+              "C50/WG1"
+            ],
+            "ISSUE50": [
+              "B48",
+              "EMPTY50"
+            ],
+            "B50": [
+              "ISSUE50",
+              "M43/WG0",
+              "M43/WG1",
+              "W50"
+            ],
+            "W50": [
+              "B44"
+            ],
+            "X51": [
+              "ISSUE49"
+            ],
+            "C51/WG0": [
+              "C50/WG0",
+              "M48/WG0",
+              "X51"
+            ],
+            "M51/WG0": [
+              "B51",
+              "C51/WG0",
+              "C53/WG0",
+              "M50/WG0"
+            ],
+            "C51/WG1": [
+              "C50/WG1",
+              "M48/WG1",
+              "X51"
+            ],
+            "M51/WG1": [
+              "B51",
+              "C51/WG1",
+              "C53/WG1",
+              "M50/WG1"
+            ],
+            "EMPTY51": [
+              "C51/WG0",
+              "C51/WG1"
+            ],
+            "ISSUE51": [
+              "B49",
+              "EMPTY51"
+            ],
+            "B51": [
+              "ISSUE51",
+              "M44/WG0",
+              "M44/WG1",
+              "W51"
+            ],
+            "W51": [
+              "B45"
+            ],
+            "X52": [
+              "ISSUE50"
+            ],
+            "C52/WG0": [
+              "C51/WG0",
+              "M49/WG0",
+              "X52"
+            ],
+            "M52/WG0": [
+              "B52",
+              "C52/WG0",
+              "C54/WG0",
+              "M51/WG0"
+            ],
+            "C52/WG1": [
+              "C51/WG1",
+              "M49/WG1",
+              "X52"
+            ],
+            "M52/WG1": [
+              "B52",
+              "C52/WG1",
+              "C54/WG1",
+              "M51/WG1"
+            ],
+            "EMPTY52": [
+              "C52/WG0",
+              "C52/WG1"
+            ],
+            "ISSUE52": [
+              "B50",
+              "EMPTY52"
+            ],
+            "B52": [
+              "ISSUE52",
+              "M45/WG0",
+              "M45/WG1",
+              "W52"
+            ],
+            "W52": [
+              "B46"
+            ],
+            "X53": [
+              "ISSUE51"
+            ],
+            "C53/WG0": [
+              "C52/WG0",
+              "M50/WG0",
+              "X53"
+            ],
+            "M53/WG0": [
+              "B53",
+              "C53/WG0",
+              "C55/WG0",
+              "M52/WG0"
+            ],
+            "C53/WG1": [
+              "C52/WG1",
+              "M50/WG1",
+              "X53"
+            ],
+            "M53/WG1": [
+              "B53",
+              "C53/WG1",
+              "C55/WG1",
+              "M52/WG1"
+            ],
+            "EMPTY53": [
+              "C53/WG0",
+              "C53/WG1"
+            ],
+            "ISSUE53": [
+              "B51",
+              "EMPTY53"
+            ],
+            "B53": [
+              "ISSUE53",
+              "M46/WG0",
+              "M46/WG1",
+              "W53"
+            ],
+            "W53": [
+              "B47"
+            ],
+            "X54": [
+              "ISSUE52"
+            ],
+            "C54/WG0": [
+              "C53/WG0",
+              "M51/WG0",
+              "X54"
+            ],
+            "M54/WG0": [
+              "B54",
+              "C54/WG0",
+              "C56/WG0",
+              "M53/WG0"
+            ],
+            "C54/WG1": [
+              "C53/WG1",
+              "M51/WG1",
+              "X54"
+            ],
+            "M54/WG1": [
+              "B54",
+              "C54/WG1",
+              "C56/WG1",
+              "M53/WG1"
+            ],
+            "EMPTY54": [
+              "C54/WG0",
+              "C54/WG1"
+            ],
+            "ISSUE54": [
+              "B52",
+              "EMPTY54"
+            ],
+            "B54": [
+              "ISSUE54",
+              "M47/WG0",
+              "M47/WG1",
+              "W54"
+            ],
+            "W54": [
+              "B48"
+            ],
+            "X55": [
+              "ISSUE53"
+            ],
+            "C55/WG0": [
+              "C54/WG0",
+              "M52/WG0",
+              "X55"
+            ],
+            "M55/WG0": [
+              "B55",
+              "C55/WG0",
+              "C57/WG0",
+              "M54/WG0"
+            ],
+            "C55/WG1": [
+              "C54/WG1",
+              "M52/WG1",
+              "X55"
+            ],
+            "M55/WG1": [
+              "B55",
+              "C55/WG1",
+              "C57/WG1",
+              "M54/WG1"
+            ],
+            "EMPTY55": [
+              "C55/WG0",
+              "C55/WG1"
+            ],
+            "ISSUE55": [
+              "B53",
+              "EMPTY55"
+            ],
+            "B55": [
+              "ISSUE55",
+              "M48/WG0",
+              "M48/WG1",
+              "W55"
+            ],
+            "W55": [
+              "B49"
+            ],
+            "X56": [
+              "ISSUE54"
+            ],
+            "C56/WG0": [
+              "C55/WG0",
+              "M53/WG0",
+              "X56"
+            ],
+            "M56/WG0": [
+              "B56",
+              "C56/WG0",
+              "C58/WG0",
+              "M55/WG0"
+            ],
+            "C56/WG1": [
+              "C55/WG1",
+              "M53/WG1",
+              "X56"
+            ],
+            "M56/WG1": [
+              "B56",
+              "C56/WG1",
+              "C58/WG1",
+              "M55/WG1"
+            ],
+            "EMPTY56": [
+              "C56/WG0",
+              "C56/WG1"
+            ],
+            "ISSUE56": [
+              "B54",
+              "EMPTY56"
+            ],
+            "B56": [
+              "ISSUE56",
+              "M49/WG0",
+              "M49/WG1",
+              "W56"
+            ],
+            "W56": [
+              "B50"
+            ],
+            "X57": [
+              "ISSUE55"
+            ],
+            "C57/WG0": [
+              "C56/WG0",
+              "M54/WG0",
+              "X57"
+            ],
+            "M57/WG0": [
+              "B57",
+              "C57/WG0",
+              "C59/WG0",
+              "M56/WG0"
+            ],
+            "C57/WG1": [
+              "C56/WG1",
+              "M54/WG1",
+              "X57"
+            ],
+            "M57/WG1": [
+              "B57",
+              "C57/WG1",
+              "C59/WG1",
+              "M56/WG1"
+            ],
+            "EMPTY57": [
+              "C57/WG0",
+              "C57/WG1"
+            ],
+            "ISSUE57": [
+              "B55",
+              "EMPTY57"
+            ],
+            "B57": [
+              "ISSUE57",
+              "M50/WG0",
+              "M50/WG1",
+              "W57"
+            ],
+            "W57": [
+              "B51"
+            ],
+            "X58": [
+              "ISSUE56"
+            ],
+            "C58/WG0": [
+              "C57/WG0",
+              "M55/WG0",
+              "X58"
+            ],
+            "M58/WG0": [
+              "B58",
+              "C58/WG0",
+              "C60/WG0",
+              "M57/WG0"
+            ],
+            "C58/WG1": [
+              "C57/WG1",
+              "M55/WG1",
+              "X58"
+            ],
+            "M58/WG1": [
+              "B58",
+              "C58/WG1",
+              "C60/WG1",
+              "M57/WG1"
+            ],
+            "EMPTY58": [
+              "C58/WG0",
+              "C58/WG1"
+            ],
+            "ISSUE58": [
+              "B56",
+              "EMPTY58"
+            ],
+            "B58": [
+              "ISSUE58",
+              "M51/WG0",
+              "M51/WG1",
+              "W58"
+            ],
+            "W58": [
+              "B52"
+            ],
+            "X59": [
+              "ISSUE57"
+            ],
+            "C59/WG0": [
+              "C58/WG0",
+              "M56/WG0",
+              "X59"
+            ],
+            "M59/WG0": [
+              "B59",
+              "C59/WG0",
+              "C61/WG0",
+              "M58/WG0"
+            ],
+            "C59/WG1": [
+              "C58/WG1",
+              "M56/WG1",
+              "X59"
+            ],
+            "M59/WG1": [
+              "B59",
+              "C59/WG1",
+              "C61/WG1",
+              "M58/WG1"
+            ],
+            "EMPTY59": [
+              "C59/WG0",
+              "C59/WG1"
+            ],
+            "ISSUE59": [
+              "B57",
+              "EMPTY59"
+            ],
+            "B59": [
+              "ISSUE59",
+              "M52/WG0",
+              "M52/WG1",
+              "W59"
+            ],
+            "W59": [
+              "B53"
+            ],
+            "X60": [
+              "ISSUE58"
+            ],
+            "C60/WG0": [
+              "C59/WG0",
+              "M57/WG0",
+              "X60"
+            ],
+            "M60/WG0": [
+              "B60",
+              "C60/WG0",
+              "C62/WG0",
+              "M59/WG0"
+            ],
+            "C60/WG1": [
+              "C59/WG1",
+              "M57/WG1",
+              "X60"
+            ],
+            "M60/WG1": [
+              "B60",
+              "C60/WG1",
+              "C62/WG1",
+              "M59/WG1"
+            ],
+            "EMPTY60": [
+              "C60/WG0",
+              "C60/WG1"
+            ],
+            "ISSUE60": [
+              "B58",
+              "EMPTY60"
+            ],
+            "B60": [
+              "ISSUE60",
+              "M53/WG0",
+              "M53/WG1",
+              "W60"
+            ],
+            "W60": [
+              "B54"
+            ],
+            "X61": [
+              "ISSUE59"
+            ],
+            "C61/WG0": [
+              "C60/WG0",
+              "M58/WG0",
+              "X61"
+            ],
+            "M61/WG0": [
+              "B61",
+              "C61/WG0",
+              "C63/WG0",
+              "M60/WG0"
+            ],
+            "C61/WG1": [
+              "C60/WG1",
+              "M58/WG1",
+              "X61"
+            ],
+            "M61/WG1": [
+              "B61",
+              "C61/WG1",
+              "C63/WG1",
+              "M60/WG1"
+            ],
+            "EMPTY61": [
+              "C61/WG0",
+              "C61/WG1"
+            ],
+            "ISSUE61": [
+              "B59",
+              "EMPTY61"
+            ],
+            "B61": [
+              "ISSUE61",
+              "M54/WG0",
+              "M54/WG1",
+              "W61"
+            ],
+            "W61": [
+              "B55"
+            ],
+            "X62": [
+              "ISSUE60"
+            ],
+            "C62/WG0": [
+              "C61/WG0",
+              "M59/WG0",
+              "X62"
+            ],
+            "M62/WG0": [
+              "B62",
+              "C62/WG0",
+              "M61/WG0"
+            ],
+            "C62/WG1": [
+              "C61/WG1",
+              "M59/WG1",
+              "X62"
+            ],
+            "M62/WG1": [
+              "B62",
+              "C62/WG1",
+              "M61/WG1"
+            ],
+            "EMPTY62": [
+              "C62/WG0",
+              "C62/WG1"
+            ],
+            "ISSUE62": [
+              "B60"
+            ],
+            "B62": [
+              "ISSUE62",
+              "M55/WG0",
+              "M55/WG1",
+              "W62"
+            ],
+            "W62": [
+              "B56"
+            ],
+            "X63": [
+              "ISSUE61"
+            ],
+            "C63/WG0": [
+              "C62/WG0",
+              "M60/WG0",
+              "X63"
+            ],
+            "M63/WG0": [
+              "B63",
+              "C63/WG0",
+              "M62/WG0"
+            ],
+            "C63/WG1": [
+              "C62/WG1",
+              "M60/WG1",
+              "X63"
+            ],
+            "M63/WG1": [
+              "B63",
+              "C63/WG1",
+              "M62/WG1"
+            ],
+            "EMPTY63": [
+              "C63/WG0",
+              "C63/WG1"
+            ],
+            "ISSUE63": [
+              "B61"
+            ],
+            "B63": [
+              "ISSUE63",
+              "M56/WG0",
+              "M56/WG1",
+              "W63"
+            ],
+            "W63": [
+              "B57"
+            ],
+            "DRAIN": [
+              "M63/WG0",
+              "M63/WG1"
+            ],
+            "OUTPUT": [
+              "DRAIN"
+            ]
+          },
+          "X_empty_arrivals": 512,
+          "X_full_issues": 64,
+          "X_refills": 62,
+          "Xempty_phase": "s//2 mod2; all8warp arrivals before ownerwait success; next phase cannot complete before nextTMA andread",
+          "W6_B8": "Bslot reuse waits M(s-7), notM(s-8); Wrefill waitsBpub(s-6)",
+          "tail": "Xempty62/63 completes withoutproducerwait; noX64/65; lastwait0 beforeoutput",
+          "startup": "C0/1\u2192ISSUE0/1\u2192X2/3\u2192C2/3\u2192M0/1; noMMA dependency for first4Aloads"
+        },
+        "physical": {
+          "A4": {
+            "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+            "binaries": [
+              {
+                "status": "PASS_PHYSICAL_A4_RETIREMENT",
+                "iterations": 2,
+                "groups": 8,
+                "A_register_sets": [
+                  [
+                    56,
+                    57,
+                    58,
+                    59,
+                    60,
+                    61,
+                    62,
+                    63,
+                    64,
+                    65,
+                    66,
+                    67,
+                    68,
+                    69,
+                    70,
+                    71
+                  ],
+                  [
+                    72,
+                    73,
+                    74,
+                    75,
+                    76,
+                    77,
+                    78,
+                    79,
+                    80,
+                    81,
+                    82,
+                    83,
+                    84,
+                    85,
+                    86,
+                    87
+                  ],
+                  [
+                    88,
+                    89,
+                    90,
+                    91,
+                    92,
+                    93,
+                    94,
+                    95,
+                    96,
+                    97,
+                    98,
+                    99,
+                    100,
+                    101,
+                    102,
+                    103
+                  ],
+                  [
+                    104,
+                    105,
+                    106,
+                    107,
+                    108,
+                    109,
+                    110,
+                    111,
+                    112,
+                    113,
+                    114,
+                    115,
+                    116,
+                    117,
+                    118,
+                    119
+                  ]
+                ],
+                "payload_or_conservative_A_writes_checked": 32,
+                "outlined_wait_paths_no_A_writes": [
+                  14480,
+                  14528,
+                  14576,
+                  14624,
+                  14672,
+                  14720,
+                  14768,
+                  14816
+                ],
+                "retirement_events": [
+                  {
+                    "iteration": 0,
+                    "PC": 4720,
+                    "retired_groups": 0
+                  },
+                  {
+                    "iteration": 0,
+                    "PC": 5648,
+                    "retired_groups": 1
+                  },
+                  {
+                    "iteration": 0,
+                    "PC": 6496,
+                    "retired_groups": 1
+                  },
+                  {
+                    "iteration": 0,
+                    "PC": 7216,
+                    "retired_groups": 1
+                  },
+                  {
+                    "iteration": 1,
+                    "PC": 4720,
+                    "retired_groups": 1
+                  },
+                  {
+                    "iteration": 1,
+                    "PC": 5648,
+                    "retired_groups": 1
+                  },
+                  {
+                    "iteration": 1,
+                    "PC": 6496,
+                    "retired_groups": 1
+                  },
+                  {
+                    "iteration": 1,
+                    "PC": 7216,
+                    "retired_groups": 1
+                  }
+                ],
+                "final": "wait0 retires lastgroup before epilogue",
+                "loop_PC_range": [
+                  4192,
+                  7648
+                ],
+                "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+              }
+            ]
+          },
+          "math_X_handoff": [
+            {
+              "last_LDSM": "0xd10",
+              "MEMBAR": "0xd20",
+              "FENCE": "0xd30",
+              "Xempty_arrive": "0xd50"
+            },
+            {
+              "last_LDSM": "0xdb0",
+              "MEMBAR": "0xdc0",
+              "FENCE": "0xdd0",
+              "Xempty_arrive": "0xdf0"
+            },
+            {
+              "last_LDSM": "0xe70",
+              "MEMBAR": "0xe80",
+              "FENCE": "0xe90",
+              "Xempty_arrive": "0xeb0"
+            },
+            {
+              "last_LDSM": "0xfa0",
+              "MEMBAR": "0xfe0",
+              "FENCE": "0xff0",
+              "Xempty_arrive": "0x1050"
+            },
+            {
+              "last_LDSM": "0x1410",
+              "MEMBAR": "0x1420",
+              "FENCE": "0x1430",
+              "Xempty_arrive": "0x1450"
+            },
+            {
+              "last_LDSM": "0x1740",
+              "MEMBAR": "0x1750",
+              "FENCE": "0x1760",
+              "Xempty_arrive": "0x1780"
+            },
+            {
+              "last_LDSM": "0x1a90",
+              "MEMBAR": "0x1aa0",
+              "FENCE": "0x1ab0",
+              "Xempty_arrive": "0x1ad0"
+            },
+            {
+              "last_LDSM": "0x1d70",
+              "MEMBAR": "0x1d80",
+              "FENCE": "0x1d90",
+              "Xempty_arrive": "0x1db0"
+            }
+          ],
+          "math_TMA": 0,
+          "math_LDG": 0,
+          "math_bar5": 0,
+          "producer_X_TMA_sites": 1,
+          "warp_sync": "source __syncwarp compiler-elided on converged path; actualMEMBAR.ALL.CTA beforeFENCE andlane0arrive; no physicalWARPSYNCclaim",
+          "limits": "FixedlocalCUDA12.8binary; compilersemantic preservation plus source fullwarp synchronization; actualJIT mustregate"
+        },
+        "dynamic_shared": 137248,
+        "shared_Xempty": [
+          136208,
+          136224
+        ],
+        "raw_GPU_bits": "UNPROBED"
+      },
+      "producer_output_owner_proxy": "EXACT_CANONICAL_MAIN_AND_FROZEN_SOURCE_PROOF"
+    },
+    "native": {
+      "canonical_main_semantic_equality": "PASS_ALL_PC_PREDICATE_INSTRUCTIONS_EXACT",
+      "canonical_main_instructions": 1104,
+      "retirement_and_fence_gate": {
+        "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+        "binaries": [
+          {
+            "status": "PASS_PHYSICAL_A4_RETIREMENT",
+            "iterations": 2,
+            "groups": 8,
+            "A_register_sets": [
+              [
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70,
+                71
+              ],
+              [
+                72,
+                73,
+                74,
+                75,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87
+              ],
+              [
+                88,
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96,
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103
+              ],
+              [
+                104,
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112,
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119
+              ]
+            ],
+            "payload_or_conservative_A_writes_checked": 32,
+            "outlined_wait_paths_no_A_writes": [
+              16560,
+              16608,
+              16656,
+              16704,
+              16752,
+              16800,
+              16848,
+              16896
+            ],
+            "retirement_events": [
+              {
+                "iteration": 0,
+                "PC": 5824,
+                "retired_groups": 0
+              },
+              {
+                "iteration": 0,
+                "PC": 7152,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 8400,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 9600,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 5824,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 7152,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 8400,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 9600,
+                "retired_groups": 1
+              }
+            ],
+            "final": "wait0 retires lastgroup before epilogue",
+            "loop_PC_range": [
+              5344,
+              10352
+            ],
+            "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+          }
+        ]
+      },
+      "canonical_sass_sha256": "be4e8a5fc177a2aa0eb11b26ddb1841df49f9015a51de8d256f46e3fd06802f8",
+      "X_layout_protocol_physical": {
+        "layout": {
+          "status": "PASS",
+          "shared_bf16": 8192,
+          "register_words_per_stage": 4096,
+          "stages": 64,
+          "global_bf16": 524288,
+          "all_coordinates_once": true,
+          "primary_ldmatrix": "PTX8.7 section9.7.14.5.15 Figure103",
+          "primary_wgmma": "PTX8.7 section9.7.15.5.1.1.1 Figure147"
+        },
+        "protocol": {
+          "status": "PASS_SOURCE_SCHEDULE",
+          "X_TMA_issues": 64,
+          "X_phase_reuses": 62,
+          "math_bar5_participants": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            176,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211,
+            212,
+            213,
+            214,
+            215,
+            216,
+            217,
+            218,
+            219,
+            220,
+            221,
+            222,
+            223,
+            224,
+            225,
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234,
+            235,
+            236,
+            237,
+            238,
+            239,
+            240,
+            241,
+            242,
+            243,
+            244,
+            245,
+            246,
+            247,
+            248,
+            249,
+            250,
+            251,
+            252,
+            253,
+            254,
+            255
+          ],
+          "producer_bar3": [
+            256,
+            257,
+            258,
+            259,
+            260,
+            261,
+            262,
+            263,
+            264,
+            265,
+            266,
+            267,
+            268,
+            269,
+            270,
+            271,
+            272,
+            273,
+            274,
+            275,
+            276,
+            277,
+            278,
+            279,
+            280,
+            281,
+            282,
+            283,
+            284,
+            285,
+            286,
+            287,
+            288,
+            289,
+            290,
+            291,
+            292,
+            293,
+            294,
+            295,
+            296,
+            297,
+            298,
+            299,
+            300,
+            301,
+            302,
+            303,
+            304,
+            305,
+            306,
+            307,
+            308,
+            309,
+            310,
+            311,
+            312,
+            313,
+            314,
+            315,
+            316,
+            317,
+            318,
+            319,
+            320,
+            321,
+            322,
+            323,
+            324,
+            325,
+            326,
+            327,
+            328,
+            329,
+            330,
+            331,
+            332,
+            333,
+            334,
+            335,
+            336,
+            337,
+            338,
+            339,
+            340,
+            341,
+            342,
+            343,
+            344,
+            345,
+            346,
+            347,
+            348,
+            349,
+            350,
+            351,
+            352,
+            353,
+            354,
+            355,
+            356,
+            357,
+            358,
+            359,
+            360,
+            361,
+            362,
+            363,
+            364,
+            365,
+            366,
+            367,
+            368,
+            369,
+            370,
+            371,
+            372,
+            373,
+            374,
+            375,
+            376,
+            377,
+            378,
+            379,
+            380,
+            381,
+            382,
+            383
+          ],
+          "producer_bar4": [
+            384,
+            385,
+            386,
+            387,
+            388,
+            389,
+            390,
+            391,
+            392,
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            403,
+            404,
+            405,
+            406,
+            407,
+            408,
+            409,
+            410,
+            411,
+            412,
+            413,
+            414,
+            415,
+            416,
+            417,
+            418,
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            429,
+            430,
+            431,
+            432,
+            433,
+            434,
+            435,
+            436,
+            437,
+            438,
+            439,
+            440,
+            441,
+            442,
+            443,
+            444,
+            445,
+            446,
+            447,
+            448,
+            449,
+            450,
+            451,
+            452,
+            453,
+            454,
+            455,
+            456,
+            457,
+            458,
+            459,
+            460,
+            461,
+            462,
+            463,
+            464,
+            465,
+            466,
+            467,
+            468,
+            469,
+            470,
+            471,
+            472,
+            473,
+            474,
+            475,
+            476,
+            477,
+            478,
+            479,
+            480,
+            481,
+            482,
+            483,
+            484,
+            485,
+            486,
+            487,
+            488,
+            489,
+            490,
+            491,
+            492,
+            493,
+            494,
+            495,
+            496,
+            497,
+            498,
+            499,
+            500,
+            501,
+            502,
+            503,
+            504,
+            505,
+            506,
+            507,
+            508,
+            509,
+            510,
+            511
+          ],
+          "trace": [
+            {
+              "event": "read_complete_all8warps",
+              "s": 0,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 2,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 1,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 3,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 2,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 4,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 3,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 5,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 4,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 6,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 5,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 7,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 6,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 8,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 7,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 9,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 8,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 10,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 9,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 11,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 10,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 12,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 11,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 13,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 12,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 14,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 13,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 15,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 14,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 16,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 15,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 17,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 16,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 18,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 17,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 19,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 18,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 20,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 19,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 21,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 20,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 22,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 21,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 23,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 22,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 24,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 23,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 25,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 24,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 26,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 25,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 27,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 26,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 28,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 27,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 29,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 28,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 30,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 29,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 31,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 30,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 32,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 31,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 33,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 32,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 34,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 33,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 35,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 34,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 36,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 35,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 37,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 36,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 38,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 37,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 39,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 38,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 40,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 39,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 41,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 40,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 42,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 41,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 43,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 42,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 44,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 43,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 45,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 44,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 46,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 45,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 47,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 46,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 48,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 47,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 49,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 48,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 50,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 49,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 51,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 50,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 52,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 51,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 53,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 52,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 54,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 53,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 55,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 54,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 56,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 55,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 57,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 56,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 58,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 57,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 59,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 58,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 60,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 59,
+              "slot": 1,
+              "phase": 1
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 61,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 60,
+              "slot": 0,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 62,
+              "slot": 0
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 61,
+              "slot": 1,
+              "phase": 0
+            },
+            {
+              "event": "tid0_expect16384_and_TMA",
+              "s": 63,
+              "slot": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 62,
+              "slot": 0,
+              "phase": 1
+            },
+            {
+              "event": "read_complete_all8warps",
+              "s": 63,
+              "slot": 1,
+              "phase": 1
+            }
+          ],
+          "regions": [
+            [
+              "W",
+              0,
+              36864
+            ],
+            [
+              "B",
+              36864,
+              102400
+            ],
+            [
+              "Wfull",
+              102400,
+              102448
+            ],
+            [
+              "Bfull",
+              102448,
+              102512
+            ],
+            [
+              "Bempty",
+              102512,
+              102576
+            ],
+            [
+              "X",
+              103424,
+              136192
+            ],
+            [
+              "Xfull",
+              136192,
+              136208
+            ]
+          ],
+          "dynamic_shared_bytes": 137232,
+          "output": "B scratch [36864,53248) only after finalwait0; disjointX; W/Bsourceunchanged",
+          "deadlock": "X reads/issue elected bymath withoutW producer dependency; allringreuseedges strictlyearlierstage"
+        },
+        "physical": {
+          "A4": {
+            "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+            "binaries": [
+              {
+                "status": "PASS_PHYSICAL_A4_RETIREMENT",
+                "iterations": 2,
+                "groups": 8,
+                "A_register_sets": [
+                  [
+                    56,
+                    57,
+                    58,
+                    59,
+                    60,
+                    61,
+                    62,
+                    63,
+                    64,
+                    65,
+                    66,
+                    67,
+                    68,
+                    69,
+                    70,
+                    71
+                  ],
+                  [
+                    72,
+                    73,
+                    74,
+                    75,
+                    76,
+                    77,
+                    78,
+                    79,
+                    80,
+                    81,
+                    82,
+                    83,
+                    84,
+                    85,
+                    86,
+                    87
+                  ],
+                  [
+                    88,
+                    89,
+                    90,
+                    91,
+                    92,
+                    93,
+                    94,
+                    95,
+                    96,
+                    97,
+                    98,
+                    99,
+                    100,
+                    101,
+                    102,
+                    103
+                  ],
+                  [
+                    104,
+                    105,
+                    106,
+                    107,
+                    108,
+                    109,
+                    110,
+                    111,
+                    112,
+                    113,
+                    114,
+                    115,
+                    116,
+                    117,
+                    118,
+                    119
+                  ]
+                ],
+                "payload_or_conservative_A_writes_checked": 32,
+                "outlined_wait_paths_no_A_writes": [
+                  16560,
+                  16608,
+                  16656,
+                  16704,
+                  16752,
+                  16800,
+                  16848,
+                  16896
+                ],
+                "retirement_events": [
+                  {
+                    "iteration": 0,
+                    "PC": 5824,
+                    "retired_groups": 0
+                  },
+                  {
+                    "iteration": 0,
+                    "PC": 7152,
+                    "retired_groups": 1
+                  },
+                  {
+                    "iteration": 0,
+                    "PC": 8400,
+                    "retired_groups": 1
+                  },
+                  {
+                    "iteration": 0,
+                    "PC": 9600,
+                    "retired_groups": 1
+                  },
+                  {
+                    "iteration": 1,
+                    "PC": 5824,
+                    "retired_groups": 1
+                  },
+                  {
+                    "iteration": 1,
+                    "PC": 7152,
+                    "retired_groups": 1
+                  },
+                  {
+                    "iteration": 1,
+                    "PC": 8400,
+                    "retired_groups": 1
+                  },
+                  {
+                    "iteration": 1,
+                    "PC": 9600,
+                    "retired_groups": 1
+                  }
+                ],
+                "final": "wait0 retires lastgroup before epilogue",
+                "loop_PC_range": [
+                  5344,
+                  10352
+                ],
+                "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+              }
+            ]
+          },
+          "X_physical_blocks": [
+            {
+              "bar_PC": "0xd20",
+              "last_LDSM": "0xcf0",
+              "proxy_fence_PC": "0xd10"
+            },
+            {
+              "bar_PC": "0xef0",
+              "last_LDSM": "0xec0",
+              "proxy_fence_PC": "0xee0"
+            },
+            {
+              "bar_PC": "0x10b0",
+              "last_LDSM": "0x1080",
+              "proxy_fence_PC": "0x10a0"
+            },
+            {
+              "bar_PC": "0x1380",
+              "last_LDSM": "0x12e0",
+              "proxy_fence_PC": "0x1330"
+            },
+            {
+              "bar_PC": "0x18f0",
+              "last_LDSM": "0x18b0",
+              "proxy_fence_PC": "0x18e0"
+            },
+            {
+              "bar_PC": "0x1d90",
+              "last_LDSM": "0x1d50",
+              "proxy_fence_PC": "0x1d80"
+            },
+            {
+              "bar_PC": "0x2270",
+              "last_LDSM": "0x2230",
+              "proxy_fence_PC": "0x2260"
+            },
+            {
+              "bar_PC": "0x2730",
+              "last_LDSM": "0x26f0",
+              "proxy_fence_PC": "0x2720"
+            }
+          ],
+          "math_global_X_LDG": 0,
+          "static_LDSM": 32,
+          "static_X_TMA_steady_and_startup": 8,
+          "limits": "LocalCUDA12.8cubin only; driverJIT must rerun gates before anyGPUmath"
+        }
+      },
+      "producer_output_owner_proxy": "EXACT_CANONICAL_MAIN_AND_FROZEN_SOURCE_PROOF"
+    },
+    "ds": {
+      "canonical_main_semantic_equality": "PASS_ALL_PC_PREDICATE_INSTRUCTIONS_EXACT",
+      "canonical_main_instructions": 808,
+      "retirement_and_fence_gate": {
+        "status": "PASS_ALL_ACTUAL_MAIN_BINARIES",
+        "binaries": [
+          {
+            "status": "PASS_PHYSICAL_A4_RETIREMENT",
+            "iterations": 2,
+            "groups": 8,
+            "A_register_sets": [
+              [
+                104,
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112,
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119
+              ],
+              [
+                88,
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96,
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103
+              ],
+              [
+                72,
+                73,
+                74,
+                75,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87
+              ],
+              [
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70,
+                71
+              ]
+            ],
+            "payload_or_conservative_A_writes_checked": 32,
+            "outlined_wait_paths_no_A_writes": [
+              11904,
+              11968,
+              12032,
+              12096
+            ],
+            "retirement_events": [
+              {
+                "iteration": 0,
+                "PC": 3712,
+                "retired_groups": 0
+              },
+              {
+                "iteration": 0,
+                "PC": 4592,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 5312,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 0,
+                "PC": 6064,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 3712,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 4592,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 5312,
+                "retired_groups": 1
+              },
+              {
+                "iteration": 1,
+                "PC": 6064,
+                "retired_groups": 1
+              }
+            ],
+            "final": "wait0 retires lastgroup before epilogue",
+            "loop_PC_range": [
+              2992,
+              6288
+            ],
+            "limits": "Fixed unrolledmain CFG; predicatewrites conservatively all executed; slowwaitpaths checked for noAwrite. Not a general SASS control/dataflow verifier."
+          }
+        ]
+      },
+      "canonical_sass_sha256": "5e2e65397434ddf14ee844cd9b020b422c290043c8d92e76049d79a739582324",
+      "store_form_gate": {
+        "status": "PASS_INTENDED_STORE_FORM_AND_RETAINED_PROXY_OWNER_BARRIERS",
+        "binaries": [
+          {
+            "STSM": 4,
+            "scalar_STS": 16,
+            "fullwarp_unpredicated_STSM": true,
+            "last_producer_store_PC": 11232,
+            "proxy_fence_PC": 11264,
+            "producer_barriers_PC": {
+              "3": 11296,
+              "4": 11280
+            },
+            "owner_barrier_predicates": {
+              "same_predicate": "P0",
+              "complementary_bar3_bar4": true,
+              "instructions": [
+                "@!P0 BAR.SYNC.DEFER_BLOCKING 0x3, 0x80",
+                "@P0 BAR.SYNC.DEFER_BLOCKING 0x4, 0x80"
+              ],
+              "intervening_no_predicate_writer_instructions": []
+            },
+            "shared_payload_bytes_per_stage": 8192,
+            "HGMMA": 16,
+            "X_LDG128": 32
+          }
+        ]
+      }
+    }
+  },
+  "timed_output_adversarial_gate": {
+    "status": "CPU_SYNTHETIC_ADVERSARIAL_GATE_PASS",
+    "lab_sha256": "48feda58e6b6fdf70d8481d0d2e5fb2dbb23253e74bc67ce4f98ad250af93689",
+    "distinct_last_fixtures_all4_policies": "PASS",
+    "no_gate_replay_or_mutation": true,
+    "phase_order": "F1 gate then paired timing then paired gate then mutation/profile",
+    "negative_controls": {
+      "output": "('ds', 'immediate actual timed output', 1, 'synthetic CPU recorded fixture oracle')",
+      "XP": "('ds', 'actual timed XP', 1)",
+      "currentX": "timed X changed",
+      "weight": "W/packed/escape modified during timing",
+      "packed": "W/packed/escape modified during timing",
+      "escape": "W/packed/escape modified during timing",
+      "counter": "candidate counter not reset",
+      "incumbent_counter": "incumbent counter not reset",
+      "wrong_per_policy_seed": "('ds', 'immediate actual timed output', 3, 'synthetic CPU recorded fixture oracle')"
+    },
+    "gpu_calls": 0,
+    "limits": "CPU synthetic gate semantics and source ordering; real CUDA numerics/runtime remain unrun"
+  },
+  "GPU": "UNRUN_NO_CONTEXT_NO_EXTENSION_NO_PREPARE",
+  "raw_native_X_bit_mover": "UNPROBED_NOT_AN_XP_PACK_GATE",
+  "limits": "CPU proofs bind frozen sources and local cubin; actual JIT and all CUDA runtime gates remain required"
+}

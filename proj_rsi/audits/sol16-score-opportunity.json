@@ -1,0 +1,1018 @@
+{
+  "authority": {
+    "job": "fb548b5dc6f04696",
+    "score_us": 3200.6150084373335,
+    "speedup": 1.509334920715312,
+    "tests_passed": 9,
+    "tests": 9,
+    "raw_path": "candidates/rs32/profiles/submission.fb548b5dc6f04696.json",
+    "raw_sha256": "f3a8e1c1339cbaf764d0f9024b7d4c9273dc73c15788f425c8c16e6b7a037fd7",
+    "source_path": "candidates/rs32/submission.py",
+    "source_sha256": "a7b6e01080197bd6568f0ad88dd62630486ac28661ac7d5c2c502d020f5a35ad",
+    "log_sha256": "dc74ae050555498984c5dde1f7474dbb5f70789822a72c1e679b2cdaab00a9ef",
+    "source_contracts": {
+      "ITERATION.md": "58308fb0274db62992939ad51c0825cba3e8edc929882ee87370421ad7054728",
+      "protocol.json": "12f8ced91ecdf397e37e041b51408b26a2e1ad0115ce46070b9ac2ac5a38fda9",
+      "score.py": "779755bb01549faac38418e635f3f1507e39c593bbec9c9b15937a5671fbe6d4",
+      "audits/group16-feasibility.md": "74b3c4a01e350cf4034120662a6dda21d692a7ea35ae15242ec2d8e92233e9f4"
+    },
+    "exact_formula": "4830.8 / exp(sum(log(same_job_sglang_load_sum / proposed_candidate_load_sum))/6)",
+    "equivalent_delta_formula": "S0*exp(sum(log1p(-delta_load_us/official_load_sum_us))/6)",
+    "units": "component sums are single-call microseconds; multiply sums by 62 for weighted load times; ratio cancels 62",
+    "warning": "PICK bake_us and GPU profile times are not scored median_ns. No local minima substitution."
+  },
+  "recomputed_score_us": 3200.6150084373335,
+  "targets": {
+    "latest_user_3ms": {
+      "target_score_us": 3000,
+      "score_reduction_us": 200.61500843733347,
+      "relative_speedup_vs_incumbent": 1.0668716694791112,
+      "relative_speedup_vs_published": 1.6102666666666667,
+      "sum_log_load_gain_needed": 0.38838415684847727,
+      "all_load_equal_fractional_reduction": 0.06268014363129593,
+      "single_load_residual_fraction_required": 0.6781517765687923,
+      "single_load_required_reduction_us": {
+        "decode 1": 11.35843329794315,
+        "decode 16": 15.542755500449356,
+        "decode 32": 16.780992478064363,
+        "verify 1": 12.064587679405875,
+        "verify 16": 21.72843004632059,
+        "verify 32": 27.867179736325042
+      }
+    },
+    "3x_current_official_incumbent": {
+      "target_score_us": 1066.8716694791112,
+      "score_reduction_us": 2133.743338958222,
+      "relative_speedup_vs_incumbent": 3.0,
+      "relative_speedup_vs_published": 4.528004762145936,
+      "sum_log_load_gain_needed": 6.591673732008658,
+      "all_load_equal_fractional_reduction": 0.6666666666666666,
+      "single_load_residual_fraction_required": 0.0013717421124828542,
+      "single_load_required_reduction_us": {
+        "decode 1": 35.24286179283812,
+        "decode 16": 48.22594539349055,
+        "decode 32": 52.06793781658024,
+        "verify 1": 37.43391232044957,
+        "verify 16": 67.41881006040667,
+        "verify 32": 86.4660766358799
+      }
+    },
+    "3x_published_sglang_reference": {
+      "target_score_us": 1610.2666666666667,
+      "score_reduction_us": 1590.3483417706668,
+      "relative_speedup_vs_incumbent": 1.9876304184217937,
+      "relative_speedup_vs_published": 3.0,
+      "sum_log_load_gain_needed": 4.121659108351295,
+      "all_load_equal_fractional_reduction": 0.49688835976156276,
+      "single_load_residual_fraction_required": 0.016217585377671383,
+      "single_load_required_reduction_us": {
+        "decode 1": 34.71893309538671,
+        "decode 16": 47.509007112431064,
+        "decode 32": 51.29388356980606,
+        "verify 1": 36.87741094897046,
+        "verify 16": 66.41654612547698,
+        "verify 32": 85.18065154265503
+      }
+    }
+  },
+  "loads": [
+    {
+      "load": "decode 1",
+      "m": 1,
+      "ours_component_sum_us": 35.29127231727883,
+      "sglang_component_sum_us": 59.343998786062,
+      "ours_weighted_load_us": 2188.0588836712877,
+      "sglang_weighted_load_us": 3679.327924735844,
+      "score_derivative_per_genuine_us": 15.115233872664376
+    },
+    {
+      "load": "decode 16",
+      "m": 16,
+      "ours_component_sum_us": 48.29218982397611,
+      "sglang_component_sum_us": 75.63200080767274,
+      "ours_weighted_load_us": 2994.115769086519,
+      "sglang_weighted_load_us": 4689.18405007571,
+      "score_derivative_per_genuine_us": 11.046006335266979
+    },
+    {
+      "load": "decode 32",
+      "m": 32,
+      "ours_component_sum_us": 52.13945970918543,
+      "sglang_component_sum_us": 76.75200048834085,
+      "ours_weighted_load_us": 3232.6465019694965,
+      "sglang_weighted_load_us": 4758.624030277133,
+      "score_derivative_per_genuine_us": 10.230942892674047
+    },
+    {
+      "load": "verify 1",
+      "m": 8,
+      "ours_component_sum_us": 37.48533252968096,
+      "sglang_component_sum_us": 75.82400180399418,
+      "ours_weighted_load_us": 2324.0906168402194,
+      "sglang_weighted_load_us": 4701.088111847639,
+      "score_derivative_per_genuine_us": 14.23052161314509
+    },
+    {
+      "load": "verify 16",
+      "m": 128,
+      "ours_component_sum_us": 67.51141831598414,
+      "sglang_component_sum_us": 86.68800024315715,
+      "ours_weighted_load_us": 4185.707935591017,
+      "sglang_weighted_load_us": 5374.656015075743,
+      "score_derivative_per_genuine_us": 7.901416501766164
+    },
+    {
+      "load": "verify 32",
+      "m": 256,
+      "ours_component_sum_us": 86.58484871917094,
+      "sglang_component_sum_us": 101.66399646550417,
+      "ours_weighted_load_us": 5368.260620588598,
+      "sglang_weighted_load_us": 6303.1677808612585,
+      "score_derivative_per_genuine_us": 6.160845028091462
+    }
+  ],
+  "shapes": [
+    {
+      "layer": "qkv_gate",
+      "m": 1,
+      "load": "decode 1",
+      "official_us": 9.199054542664959,
+      "same_job_sglang_us": 13.95200053229928,
+      "load_fraction": 0.2606608925845114,
+      "local_score_derivative_per_us": 15.115233872664376,
+      "zero_shape_conditional_score_us": 3043.505217184993,
+      "zero_shape_conditional_score_reduction_us": 157.10979125234053,
+      "actual_prepare_pick": {
+        "policy": "not printed; see actual timed profile"
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 1, 16, 8, 1, 1, 2, 8193>(G)                       9.3 \u00b5s 100.0%      1\ntotal                                                              9.3 \u00b5s"
+    },
+    {
+      "layer": "o",
+      "m": 1,
+      "load": "decode 1",
+      "official_us": 4.96756054642412,
+      "same_job_sglang_us": 6.719999480992556,
+      "load_fraction": 0.14075889647061465,
+      "local_score_derivative_per_us": 15.115233872664376,
+      "zero_shape_conditional_score_us": 3120.704243115894,
+      "zero_shape_conditional_score_reduction_us": 79.91076532143961,
+      "actual_prepare_pick": {
+        "policy": "not printed; see actual timed profile"
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.0 \u00b5s 100.0%      1\ntotal                                                              4.0 \u00b5s"
+    },
+    {
+      "layer": "pooler",
+      "m": 1,
+      "load": "decode 1",
+      "official_us": 13.462035894367908,
+      "same_job_sglang_us": 21.279999520629644,
+      "load_fraction": 0.38145510236469454,
+      "local_score_derivative_per_us": 15.115233872664376,
+      "zero_shape_conditional_score_us": 2954.3502103596243,
+      "zero_shape_conditional_score_reduction_us": 246.2647980777092,
+      "actual_prepare_pick": {
+        "policy": "not printed; see actual timed profile"
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         14.0 \u00b5s 100.0%      1\ntotal                                                             14.0 \u00b5s"
+    },
+    {
+      "layer": "unpooler",
+      "m": 1,
+      "load": "decode 1",
+      "official_us": 3.996916644413409,
+      "same_job_sglang_us": 6.943999323993921,
+      "load_fraction": 0.11325510195495256,
+      "local_score_derivative_per_us": 15.115233872664376,
+      "zero_shape_conditional_score_us": 3137.1350898232427,
+      "zero_shape_conditional_score_reduction_us": 63.47991861409082,
+      "actual_prepare_pick": {
+        "policy": "uk-s4x",
+        "bake_us": 8.45
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.1 \u00b5s 100.0%      1\ntotal                                                              3.1 \u00b5s"
+    },
+    {
+      "layer": "router",
+      "m": 1,
+      "load": "decode 1",
+      "official_us": 3.665704689408439,
+      "same_job_sglang_us": 10.4479999281466,
+      "load_fraction": 0.1038700066252269,
+      "local_score_derivative_per_us": 15.115233872664376,
+      "zero_shape_conditional_score_us": 3142.6446239665243,
+      "zero_shape_conditional_score_reduction_us": 57.97038447080922,
+      "actual_prepare_pick": {
+        "policy": "not printed; see actual timed profile"
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid rr<1, 1, 1024>(float4 const*, __nv_bfloat16 const*, ...       2.5 \u00b5s 100.0%      1\ntotal                                                              2.5 \u00b5s"
+    },
+    {
+      "layer": "qkv_gate",
+      "m": 16,
+      "load": "decode 16",
+      "official_us": 9.663935825712803,
+      "same_job_sglang_us": 13.968001119792461,
+      "load_fraction": 0.20011384575720464,
+      "local_score_derivative_per_us": 11.046006335266979,
+      "zero_shape_conditional_score_us": 3083.6953600581096,
+      "zero_shape_conditional_score_reduction_us": 116.91964837922387,
+      "actual_prepare_pick": {
+        "policy": "rq:t16s5hze-k7",
+        "bake_us": 14.05
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid rq<16, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                9.9 \u00b5s 100.0%      1\ntotal                                                              9.9 \u00b5s"
+    },
+    {
+      "layer": "o",
+      "m": 16,
+      "load": "decode 16",
+      "official_us": 5.344963442993029,
+      "same_job_sglang_us": 6.6720000468194485,
+      "load_fraction": 0.11067966605936269,
+      "local_score_derivative_per_us": 11.046006335266979,
+      "zero_shape_conditional_score_us": 3138.6518225807877,
+      "zero_shape_conditional_score_reduction_us": 61.963185856545806,
+      "actual_prepare_pick": {
+        "policy": "r6",
+        "bake_us": 9.66
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           5.0 \u00b5s 100.0%      1\ntotal                                                              5.0 \u00b5s"
+    },
+    {
+      "layer": "pooler",
+      "m": 16,
+      "load": "decode 16",
+      "official_us": 14.166533488498406,
+      "same_job_sglang_us": 21.616000682115555,
+      "load_fraction": 0.29335040593800127,
+      "local_score_derivative_per_us": 11.046006335266979,
+      "zero_shape_conditional_score_us": 3020.6526627746107,
+      "zero_shape_conditional_score_reduction_us": 179.96234566272278,
+      "actual_prepare_pick": {
+        "policy": "r6",
+        "bake_us": 18.24
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 2, 8, 16, 1, 1, 0, 1>(G)                         14.2 \u00b5s 100.0%      1\ntotal                                                             14.2 \u00b5s"
+    },
+    {
+      "layer": "unpooler",
+      "m": 16,
+      "load": "decode 16",
+      "official_us": 14.420908690994064,
+      "same_job_sglang_us": 18.52799905464053,
+      "load_fraction": 0.2986178250263228,
+      "local_score_derivative_per_us": 11.046006335266979,
+      "zero_shape_conditional_score_us": 3016.888258775465,
+      "zero_shape_conditional_score_reduction_us": 183.72674966186833,
+      "actual_prepare_pick": {
+        "policy": "r6",
+        "bake_us": 18.82
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 2, 2, 1, 4, 16, 1, 1, 2, 1>(G)                         14.6 \u00b5s 100.0%      1\ntotal                                                             14.6 \u00b5s"
+    },
+    {
+      "layer": "router",
+      "m": 16,
+      "load": "decode 16",
+      "official_us": 4.695848375777806,
+      "same_job_sglang_us": 14.847999904304743,
+      "load_fraction": 0.09723825721910856,
+      "local_score_derivative_per_us": 11.046006335266979,
+      "zero_shape_conditional_score_us": 3146.508880393726,
+      "zero_shape_conditional_score_reduction_us": 54.10612804360744,
+      "actual_prepare_pick": {
+        "policy": "rk-s16w8x",
+        "bake_us": 8.9
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 2, 1, 1, 8, 1, 16, 1, 0, 536870912>(G)                  3.9 \u00b5s 100.0%      1\ntotal                                                              3.9 \u00b5s"
+    },
+    {
+      "layer": "qkv_gate",
+      "m": 32,
+      "load": "decode 32",
+      "official_us": 10.10794512446512,
+      "same_job_sglang_us": 14.39999882131815,
+      "load_fraction": 0.19386363381675778,
+      "local_score_derivative_per_us": 10.230942892674047,
+      "zero_shape_conditional_score_us": 3087.6982831257255,
+      "zero_shape_conditional_score_reduction_us": 112.91672531160793,
+      "actual_prepare_pick": {
+        "policy": "rq:t32s5hze-k7",
+        "bake_us": 14.05
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               10.3 \u00b5s 100.0%      1\ntotal                                                             10.3 \u00b5s"
+    },
+    {
+      "layer": "o",
+      "m": 32,
+      "load": "decode 32",
+      "official_us": 6.36577079922631,
+      "same_job_sglang_us": 6.719999946653843,
+      "load_fraction": 0.12209123060983407,
+      "local_score_derivative_per_us": 10.230942892674047,
+      "zero_shape_conditional_score_us": 3131.9032341995035,
+      "zero_shape_conditional_score_reduction_us": 68.71177423783001,
+      "actual_prepare_pick": {
+        "policy": "rq:t32s6hze-k2",
+        "bake_us": 10.5
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 6, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)                5.6 \u00b5s 100.0%      1\ntotal                                                              5.6 \u00b5s"
+    },
+    {
+      "layer": "pooler",
+      "m": 32,
+      "load": "decode 32",
+      "official_us": 15.538102163324636,
+      "same_job_sglang_us": 22.000000812113285,
+      "load_fraction": 0.29801041763743635,
+      "local_score_derivative_per_us": 10.230942892674047,
+      "zero_shape_conditional_score_us": 3017.323546745329,
+      "zero_shape_conditional_score_reduction_us": 183.2914616920043,
+      "actual_prepare_pick": {
+        "policy": "rq:t32s5hze-k4",
+        "bake_us": 19.39
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.7 \u00b5s 100.0%      1\ntotal                                                             15.7 \u00b5s"
+    },
+    {
+      "layer": "unpooler",
+      "m": 32,
+      "load": "decode 32",
+      "official_us": 15.149120268335562,
+      "same_job_sglang_us": 18.720000982284546,
+      "load_fraction": 0.29055000479160575,
+      "local_score_derivative_per_us": 10.230942892674047,
+      "zero_shape_conditional_score_us": 3022.6444809849836,
+      "zero_shape_conditional_score_reduction_us": 177.97052745234987,
+      "actual_prepare_pick": {
+        "policy": "rq:t32s5hze-k2",
+        "bake_us": 19.17
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid rq<32, 5, 1, 0, 0, 0, 35>(RqP, RqTmap, RqTmap)               15.8 \u00b5s 100.0%      1\ntotal                                                             15.8 \u00b5s"
+    },
+    {
+      "layer": "router",
+      "m": 32,
+      "load": "decode 32",
+      "official_us": 4.978521353833797,
+      "same_job_sglang_us": 14.911999925971031,
+      "load_fraction": 0.09548471314436595,
+      "local_score_derivative_per_us": 10.230942892674047,
+      "zero_shape_conditional_score_us": 3147.5266981734826,
+      "zero_shape_conditional_score_reduction_us": 53.08831026385087,
+      "actual_prepare_pick": {
+        "policy": "rk-s16w8z",
+        "bake_us": 9.25
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 4, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.2 \u00b5s 100.0%      1\ntotal                                                              4.2 \u00b5s"
+    },
+    {
+      "layer": "qkv_gate",
+      "m": 8,
+      "load": "verify 1",
+      "official_us": 9.316761505608152,
+      "same_job_sglang_us": 14.080000575631857,
+      "load_fraction": 0.24854418720258442,
+      "local_score_derivative_per_us": 14.23052161314509,
+      "zero_shape_conditional_score_us": 3051.762125267664,
+      "zero_shape_conditional_score_reduction_us": 148.85288316966944,
+      "actual_prepare_pick": {
+        "policy": "not printed; see actual timed profile"
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 2, 1>(G)                          9.1 \u00b5s 100.0%      1\ntotal                                                              9.1 \u00b5s"
+    },
+    {
+      "layer": "o",
+      "m": 8,
+      "load": "verify 1",
+      "official_us": 5.274411330498385,
+      "same_job_sglang_us": 6.671999581158161,
+      "load_fraction": 0.14070600351009546,
+      "local_score_derivative_per_us": 14.23052161314509,
+      "zero_shape_conditional_score_us": 3120.73625955693,
+      "zero_shape_conditional_score_reduction_us": 79.87874888040369,
+      "actual_prepare_pick": {
+        "policy": "not printed; see actual timed profile"
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 1, 1, 0, 1>(G)                           4.1 \u00b5s 100.0%      1\ntotal                                                              4.1 \u00b5s"
+    },
+    {
+      "layer": "pooler",
+      "m": 8,
+      "load": "verify 1",
+      "official_us": 13.718590892337465,
+      "same_job_sglang_us": 21.536000072956085,
+      "load_fraction": 0.36597223411250407,
+      "local_score_derivative_per_us": 14.23052161314509,
+      "zero_shape_conditional_score_us": 2966.548709256577,
+      "zero_shape_conditional_score_reduction_us": 234.0662991807567,
+      "actual_prepare_pick": {
+        "policy": "not printed; see actual timed profile"
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 1, 2, 16, 8, 1, 1, 0, 3>(G)                         15.2 \u00b5s 100.0%      1\ntotal                                                             15.2 \u00b5s"
+    },
+    {
+      "layer": "unpooler",
+      "m": 8,
+      "load": "verify 1",
+      "official_us": 4.222228995963594,
+      "same_job_sglang_us": 7.008000742644072,
+      "load_fraction": 0.11263682915498814,
+      "local_score_derivative_per_us": 14.23052161314509,
+      "zero_shape_conditional_score_us": 3137.4995392557576,
+      "zero_shape_conditional_score_reduction_us": 63.11546918157592,
+      "actual_prepare_pick": {
+        "policy": "uk-s4x",
+        "bake_us": 8.51
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<1, 1, 2, 1, 8, 2, 4, 1, 0, 536870913>(G)                   3.5 \u00b5s 100.0%      1\ntotal                                                              3.5 \u00b5s"
+    },
+    {
+      "layer": "router",
+      "m": 8,
+      "load": "verify 1",
+      "official_us": 4.95333980527336,
+      "same_job_sglang_us": 26.528000831604004,
+      "load_fraction": 0.13214074601982778,
+      "local_score_derivative_per_us": 14.23052161314509,
+      "zero_shape_conditional_score_us": 3125.8993285824195,
+      "zero_shape_conditional_score_reduction_us": 74.71567985491401,
+      "actual_prepare_pick": {
+        "policy": "rk-s16w8z",
+        "bake_us": 8.8
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid gv<2, 1, 1, 1, 8, 1, 16, 1, 0, 134217728>(G)                  4.1 \u00b5s 100.0%      1\ntotal                                                              4.1 \u00b5s"
+    },
+    {
+      "layer": "qkv_gate",
+      "m": 128,
+      "load": "verify 16",
+      "official_us": 13.207008322424473,
+      "same_job_sglang_us": 17.167999409139156,
+      "load_fraction": 0.1956262903648338,
+      "local_score_derivative_per_us": 7.901416501766164,
+      "zero_shape_conditional_score_us": 3086.572022738573,
+      "zero_shape_conditional_score_reduction_us": 114.04298569876028,
+      "actual_prepare_pick": {
+        "policy": "rq:s4s5hz",
+        "bake_us": 16.86
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 3>(RqP, RqTmap, RqTmap)               13.1 \u00b5s 100.0%      1\ntotal                                                             13.1 \u00b5s"
+    },
+    {
+      "layer": "o",
+      "m": 128,
+      "load": "verify 16",
+      "official_us": 7.550517974464806,
+      "same_job_sglang_us": 7.535999640822411,
+      "load_fraction": 0.11184060656413627,
+      "local_score_derivative_per_us": 7.901416501766164,
+      "zero_shape_conditional_score_us": 3137.9685720449916,
+      "zero_shape_conditional_score_reduction_us": 62.64643639234191,
+      "actual_prepare_pick": {
+        "policy": "r6",
+        "bake_us": 11.17
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x2_h_bz_TNT                            5.5 \u00b5s 100.0%      1\ntotal                                                              5.5 \u00b5s"
+    },
+    {
+      "layer": "pooler",
+      "m": 128,
+      "load": "verify 16",
+      "official_us": 18.399035181928525,
+      "same_job_sglang_us": 25.568000972270966,
+      "load_fraction": 0.2725321973804886,
+      "local_score_derivative_per_us": 7.901416501766164,
+      "zero_shape_conditional_score_us": 3035.3054392068534,
+      "zero_shape_conditional_score_reduction_us": 165.30956923048007,
+      "actual_prepare_pick": {
+        "policy": "rq:s4s5z",
+        "bake_us": 22.94
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid rq<128, 5, 1, 0, 0, 0, 2>(RqP, RqTmap, RqTmap)               18.9 \u00b5s 100.0%      1\ntotal                                                             18.9 \u00b5s"
+    },
+    {
+      "layer": "unpooler",
+      "m": 128,
+      "load": "verify 16",
+      "official_us": 18.95137490319335,
+      "same_job_sglang_us": 19.903999753296375,
+      "load_fraction": 0.28071362409381323,
+      "local_score_derivative_per_us": 7.901416501766164,
+      "zero_shape_conditional_score_us": 3029.589194531315,
+      "zero_shape_conditional_score_reduction_us": 171.02581390601836,
+      "actual_prepare_pick": {
+        "policy": "r6",
+        "bake_us": 22.82
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x64_64x8_1x1_v_bz_NNN                           18.8 \u00b5s 100.0%      1\ntotal                                                             18.8 \u00b5s"
+    },
+    {
+      "layer": "router",
+      "m": 128,
+      "load": "verify 16",
+      "official_us": 9.403481933972989,
+      "same_job_sglang_us": 16.51200046762824,
+      "load_fraction": 0.13928728159672807,
+      "local_score_derivative_per_us": 7.901416501766164,
+      "zero_shape_conditional_score_us": 3121.594408654589,
+      "zero_shape_conditional_score_reduction_us": 79.02059978274428,
+      "actual_prepare_pick": {
+        "policy": "rw64k32s8z",
+        "bake_us": 13.22
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nvoid rwk<256, 8, 8, 128, 128, 1, 4, 1>(__nv_bfloat16 cons...       9.0 \u00b5s 100.0%      1\ntotal                                                              9.0 \u00b5s"
+    },
+    {
+      "layer": "qkv_gate",
+      "m": 256,
+      "load": "verify 32",
+      "official_us": 17.276527350138725,
+      "same_job_sglang_us": 19.56799952313304,
+      "load_fraction": 0.19953291604369913,
+      "local_score_derivative_per_us": 6.160845028091462,
+      "zero_shape_conditional_score_us": 3084.068510744045,
+      "zero_shape_conditional_score_reduction_us": 116.54649769328853,
+      "actual_prepare_pick": {
+        "policy": "r6",
+        "bake_us": 21.6
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_72x64_64x12_1x1_v_bz_TNN                           17.6 \u00b5s 100.0%      1\ntotal                                                             17.6 \u00b5s"
+    },
+    {
+      "layer": "o",
+      "m": 256,
+      "load": "verify 32",
+      "official_us": 8.799156651465292,
+      "same_job_sglang_us": 8.991999085992575,
+      "load_fraction": 0.10162466969255156,
+      "local_score_derivative_per_us": 6.160845028091462,
+      "zero_shape_conditional_score_us": 3143.9556206225893,
+      "zero_shape_conditional_score_reduction_us": 56.65938781474415,
+      "actual_prepare_pick": {
+        "policy": "r6",
+        "bake_us": 12.8
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_256x64_64x5_2x1_v_bz_coopB_NNN                      8.1 \u00b5s 100.0%      1\ntotal                                                              8.1 \u00b5s"
+    },
+    {
+      "layer": "pooler",
+      "m": 256,
+      "load": "verify 32",
+      "official_us": 24.838240169206934,
+      "same_job_sglang_us": 30.863999389111996,
+      "load_fraction": 0.2868658955537038,
+      "local_score_derivative_per_us": 6.160845028091462,
+      "zero_shape_conditional_score_us": 3025.2548914322756,
+      "zero_shape_conditional_score_reduction_us": 175.36011700505787,
+      "actual_prepare_pick": {
+        "policy": "r6",
+        "bake_us": 28.29
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_64x128_64x8_1x2_v_bz_NNT                           25.2 \u00b5s 100.0%      1\ntotal                                                             25.2 \u00b5s"
+    },
+    {
+      "layer": "unpooler",
+      "m": 256,
+      "load": "verify 32",
+      "official_us": 24.693354263625714,
+      "same_job_sglang_us": 24.57599900662899,
+      "load_fraction": 0.2851925553824789,
+      "local_score_derivative_per_us": 6.160845028091462,
+      "zero_shape_conditional_score_us": 3026.43684263513,
+      "zero_shape_conditional_score_reduction_us": 174.1781658022037,
+      "actual_prepare_pick": {
+        "policy": "r6",
+        "bake_us": 28.16
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tst_128x128_64x6_2x1_v_bz_TNT                          25.6 \u00b5s 100.0%      1\ntotal                                                             25.6 \u00b5s"
+    },
+    {
+      "layer": "router",
+      "m": 256,
+      "load": "verify 32",
+      "official_us": 10.977570284734263,
+      "same_job_sglang_us": 17.66399946063757,
+      "load_fraction": 0.12678396332756653,
+      "local_score_derivative_per_us": 6.160845028091462,
+      "zero_shape_conditional_score_us": 3129.106811107644,
+      "zero_shape_conditional_score_reduction_us": 71.50819732968966,
+      "actual_prepare_pick": {
+        "policy": "r6",
+        "bake_us": 15.33
+      },
+      "actual_timed_profile": "kernel                                                           GPU time  share  calls\nnvjet_sm90_tss_64x64_64x13_1x1_v_bz_splitK_NNN                     6.1 \u00b5s  63.1%      1\nvoid cublasLt::splitKreduce_kernel<32, 16, int, float, fl...       1.9 \u00b5s  19.9%      1\nvoid at::native::elementwise_kernel<128, 2, at::native::g...       1.6 \u00b5s  16.9%      1\ntotal                                                              9.6 \u00b5s"
+    }
+  ],
+  "conditional_scenarios": {
+    "smallm_actual_rq_five_each_delta_-1us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": -1,
+        "decode 32": -4,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 0
+      },
+      "score_us": 3251.376456462614,
+      "score_reduction_us": -50.761448025280515
+    },
+    "smallm_actual_rq_five_each_delta_0us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 0
+      },
+      "score_us": 3200.6150084373335,
+      "score_reduction_us": 0.0
+    },
+    "smallm_actual_rq_five_each_delta_0.5us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0.5,
+        "decode 32": 2.0,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 0
+      },
+      "score_us": 3174.3072656069735,
+      "score_reduction_us": 26.307742830359985
+    },
+    "smallm_actual_rq_five_each_delta_1us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 1,
+        "decode 32": 4,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 0
+      },
+      "score_us": 3147.3229296272693,
+      "score_reduction_us": 53.29207881006414
+    },
+    "smallm_actual_rq_five_each_delta_2us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 2,
+        "decode 32": 8,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 0
+      },
+      "score_us": 3091.1161405917546,
+      "score_reduction_us": 109.49886784557884
+    },
+    "smallm_actual_rq_five_each_delta_3us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 3,
+        "decode 32": 12,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 0
+      },
+      "score_us": 3031.507683849838,
+      "score_reduction_us": 169.10732458749544
+    },
+    "large_six_each_delta_-1us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": -3,
+        "verify 32": -3
+      },
+      "score_us": 3242.2456595140256,
+      "score_reduction_us": -41.630651076692175
+    },
+    "large_six_each_delta_0us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 0
+      },
+      "score_us": 3200.6150084373335,
+      "score_reduction_us": 0.0
+    },
+    "large_six_each_delta_0.5us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 1.5,
+        "verify 32": 1.5
+      },
+      "score_us": 3179.3777517217063,
+      "score_reduction_us": 21.237256715627154
+    },
+    "large_six_each_delta_1us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 3,
+        "verify 32": 3
+      },
+      "score_us": 3157.8459519786757,
+      "score_reduction_us": 42.769056458657815
+    },
+    "large_six_each_delta_2us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 6,
+        "verify 32": 6
+      },
+      "score_us": 3113.8553753477995,
+      "score_reduction_us": 86.75963308953396
+    },
+    "large_six_each_delta_3us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 9,
+        "verify 32": 9
+      },
+      "score_us": 3068.5497737747155,
+      "score_reduction_us": 132.06523466261797
+    },
+    "native_x_only_each_delta_-1us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": -1,
+        "verify 32": 0
+      },
+      "score_us": 3208.468095860458,
+      "score_reduction_us": -7.853087423124634
+    },
+    "native_x_only_each_delta_0us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 0
+      },
+      "score_us": 3200.6150084373335,
+      "score_reduction_us": 0.0
+    },
+    "native_x_only_each_delta_0.5us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 0.5,
+        "verify 32": 0
+      },
+      "score_us": 3196.652053235216,
+      "score_reduction_us": 3.9629552021174277
+    },
+    "native_x_only_each_delta_1us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 1,
+        "verify 32": 0
+      },
+      "score_us": 3192.6643798966293,
+      "score_reduction_us": 7.950628540704201
+    },
+    "native_x_only_each_delta_2us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 2,
+        "verify 32": 0
+      },
+      "score_us": 3184.6135044787825,
+      "score_reduction_us": 16.001503958550984
+    },
+    "native_x_only_each_delta_3us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 3,
+        "verify 32": 0
+      },
+      "score_us": 3176.4595586424,
+      "score_reduction_us": 24.155449794933247
+    },
+    "future_m256_three_each_delta_-1us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": -3
+      },
+      "score_us": 3218.836231271826,
+      "score_reduction_us": -18.221222834492437
+    },
+    "future_m256_three_each_delta_0us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 0
+      },
+      "score_us": 3200.6150084373335,
+      "score_reduction_us": 0.0
+    },
+    "future_m256_three_each_delta_0.5us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 1.5
+      },
+      "score_us": 3191.3063191626243,
+      "score_reduction_us": 9.308689274709195
+    },
+    "future_m256_three_each_delta_1us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 3
+      },
+      "score_us": 3181.8598542320874,
+      "score_reduction_us": 18.755154205246072
+    },
+    "future_m256_three_each_delta_2us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 6
+      },
+      "score_us": 3162.535089195461,
+      "score_reduction_us": 38.07991924187263
+    },
+    "future_m256_three_each_delta_3us": {
+      "delta_load_us": {
+        "decode 1": 0,
+        "decode 16": 0,
+        "decode 32": 0,
+        "verify 1": 0,
+        "verify 16": 0,
+        "verify 32": 9
+      },
+      "score_us": 3142.6012092030633,
+      "score_reduction_us": 58.01379923427021
+    },
+    "smallm_actual_rq_five_equal_cut_to_3000": {
+      "required_per_shape_us": 3.503737380681501,
+      "null_means": "No feasible equal nonnegative-component-time cut in this restricted group, not a family bound"
+    },
+    "smallm_actual_rq_five_equal_cut_to_3x_incumbent": {
+      "required_per_shape_us": null,
+      "null_means": "No feasible equal nonnegative-component-time cut in this restricted group, not a family bound"
+    },
+    "smallm_actual_rq_five_equal_cut_to_3x_published": {
+      "required_per_shape_us": null,
+      "null_means": "No feasible equal nonnegative-component-time cut in this restricted group, not a family bound"
+    },
+    "large_six_equal_cut_to_3000": {
+      "required_per_shape_us": 4.456254802973199,
+      "null_means": "No feasible equal nonnegative-component-time cut in this restricted group, not a family bound"
+    },
+    "large_six_equal_cut_to_3x_incumbent": {
+      "required_per_shape_us": null,
+      "null_means": "No feasible equal nonnegative-component-time cut in this restricted group, not a family bound"
+    },
+    "large_six_equal_cut_to_3x_published": {
+      "required_per_shape_us": null,
+      "null_means": "No feasible equal nonnegative-component-time cut in this restricted group, not a family bound"
+    }
+  },
+  "zero_entire_layer_across_six_loads_conditional": {
+    "qkv_gate": {
+      "delta_load_us": {
+        "decode 1": 9.199054542664959,
+        "decode 16": 9.663935825712803,
+        "decode 32": 10.10794512446512,
+        "verify 1": 9.316761505608152,
+        "verify 16": 13.207008322424473,
+        "verify 32": 17.276527350138725
+      },
+      "score_us": 2506.4803157994284,
+      "score_reduction_us": 694.1346926379051
+    },
+    "o": {
+      "delta_load_us": {
+        "decode 1": 4.96756054642412,
+        "decode 16": 5.344963442993029,
+        "decode 32": 6.36577079922631,
+        "verify 1": 5.274411330498385,
+        "verify 16": 7.550517974464806,
+        "verify 32": 8.799156651465292
+      },
+      "score_us": 2812.023621187726,
+      "score_reduction_us": 388.5913872496076
+    },
+    "pooler": {
+      "delta_load_us": {
+        "decode 1": 13.462035894367908,
+        "decode 16": 14.166533488498406,
+        "decode 32": 15.538102163324636,
+        "verify 1": 13.718590892337465,
+        "verify 16": 18.399035181928525,
+        "verify 32": 24.838240169206934
+      },
+      "score_us": 2183.9028533362125,
+      "score_reduction_us": 1016.712155101121
+    },
+    "unpooler": {
+      "delta_load_us": {
+        "decode 1": 3.996916644413409,
+        "decode 16": 14.420908690994064,
+        "decode 32": 15.149120268335562,
+        "verify 1": 4.222228995963594,
+        "verify 16": 18.95137490319335,
+        "verify 32": 24.693354263625714
+      },
+      "score_us": 2450.2554081293088,
+      "score_reduction_us": 750.3596003080247
+    },
+    "router": {
+      "delta_load_us": {
+        "decode 1": 3.665704689408439,
+        "decode 16": 4.695848375777806,
+        "decode 32": 4.978521353833797,
+        "verify 1": 4.95333980527336,
+        "verify 16": 9.403481933972989,
+        "verify 32": 10.977570284734263
+      },
+      "score_us": 2829.425866723439,
+      "score_reduction_us": 371.1891417138945
+    }
+  },
+  "status": "CPU arithmetic only. Attainable improvements UNKNOWN. No objective achieved claim.",
+  "evidence_snapshot": {
+    "audits/sol04-smallm-increment.md": "7e504694b5c0d15d4bac220a666b233d4db2390c2e579a3e11c67801f2ca685a",
+    "audits/sol05-qkv-coverage.md": "91e8d05f9d59a69d536fffd34d0861f45fcdd6a76122d596297a719842ec1611",
+    "audits/sol08-tma-async-refill.md": "9cd56dfb2c9b6bd44d87215d4788de9d3b81801fbcb37e8d1defa3eb72d81583",
+    "audits/sol08-tma-x4.md": "ecbed183524a61d8aae2e8cd0afb96fb29e9b4a1087a33d605c47e718401116d",
+    "audits/sol10-smallm-integration.md": "7bde2914319630781a1161d1d1ed5248696d933bddb98eee7eb7f4be9c2341ed",
+    "audits/native-x-01/report.md": "59204bc6f5c9c57b92f9c60556fc3e7b87354ce3028ac1db7e1f746de61bea7d"
+  },
+  "potential_roi_rank": [
+    "smallm actual rq five-shape coverage; initial runtime scope qkv32 only",
+    "future qkv/pooler/unpooler128+256 broad coverage, conditional on useful seed",
+    "native-X U128 refinement, narrow ceiling and current incumbent deficit"
+  ],
+  "information_value_rank": [
+    "repaired selected qkv32 cursor actual-policy lab",
+    "bounded native-X bottleneck profile then isolated async-refill/X4/store controls",
+    "QKV128 split4 full-pipeline coverage; then explicit M256 port"
+  ],
+  "local_native_x_evidence": {
+    "hardware": "local H100, not official H200",
+    "paired_median_us": {
+      "actual_pw36": 23.968,
+      "native_x": 31.856,
+      "DP": 34.096,
+      "DS": 35.312
+    },
+    "paired_median_actual_minus_native_us": -7.952,
+    "official_gain_admitted": false,
+    "source": "audits/native-x-01/report.md",
+    "new_cpu_branch_gain": "UNKNOWN; GPU_UNRUN in reviewed branch snapshots",
+    "warning": "Do not substitute local times into official score or confuse gain versus failed parents with gain versus actual incumbent"
+  }
+}

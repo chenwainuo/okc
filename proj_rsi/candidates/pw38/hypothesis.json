@@ -1,0 +1,22 @@
+{
+  "id": "pw38",
+  "version": "pw38-v1-cumulative-selectable-EH",
+  "family": "cumulative-production-stack",
+  "state": "CPU_COMPOSITION_PASS_GPU_UNRUN_REVIEW_REQUIRED",
+  "parent": "PW36: combined RS32 small-M RQ and PW35 RTK router",
+  "parent_sha256": "2a067059cc432daa00b367e70aa150672c33e9d25dfe196d8bbe6943c813bccf",
+  "EH_backport_manifest_sha256": "a4ccf23b7ff6b9a383ad0d6299d7de2d0d0d18b60d85e287150a0e465aac9869",
+  "EH_backport_source_sha256": "9067795eb0d01abe576744a874e3504d6371a92ebc05543708c500b8d83a4819",
+  "change": "Exact six-anchor EH v2 patch atop PW36. Append optional M128/ST5 FL65538/65539 RQ variants while preserving every existing control, original non-EH epilogue and full routing/bake/prepare behavior.",
+  "hypothesis": "Half-token EH epilogue overlaps the first 8KiB TMA read with the second half's STMatrix work, potentially retaining a small historical kernel gain on current RQ. Actual modern same-geometry and complete-policy evidence must determine whether it helps.",
+  "included": ["PW35 RTK router", "RS32 NT16/32 RQ", "all inherited stable baseline paths and controls", "optional EH half-token epilogue, bit65536"],
+  "excluded": ["smallm_increment cursor: valid v3 regression versus RS32; no isolated improvement", "EP early-poll backport", "native-X and operand-reverse lineages"],
+  "comparison": ["actual RS32 incumbent", "PW36 cumulative parent", "PW38 optional EH cumulative source"],
+  "selection": "Unchanged _rqbake: fastest validated RQ candidate must beat lower R6 F1 baseline by 1%. No separate 1% EH-over-RQ requirement. EH is compiled/selectable, not claimed selected until observed PICK records and actual graph prove it.",
+  "small_gain_policy": "Retain all outcomes and uncertainty. No fixed tiny-gain rejection threshold. Establish same-geometry EH effect before changing any selection threshold.",
+  "required_gates": ["independent source/rules review", "actual JIT resources and control codegen", "current same-geometry EH correctness and paired measurements", "full 30-shape prepared-policy comparison", "strict actual timed-output/current-X/counter/workspace tests", "official correctness and scoring before leaderboard promotion"],
+  "version_freeze": "Frozen PW38 v1; future source changes receive a new version. PW36, PW37 and EH backport stay immutable.",
+  "GPU": "UNRUN",
+  "official_submission": "UNRUN",
+  "speedup_claim": "NONE"
+}

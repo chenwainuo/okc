@@ -1,0 +1,44 @@
+Launch Settings
+--------------------- ------------------------------------------------------------------------------------------------------------------------
+Launch Attribute      Value                                                                                                                   
+--------------------- ------------------------------------------------------------------------------------------------------------------------
+Profiler Command Line /opt/nvidia/nsight-compute/2025.1.1/target/linux-desktop-glibc_2_11_3-x64/ncu --target-processes application-only --kill
+                       no --replay-mode kernel --graph-profiling node --cache-control all --clock-control none --nvtx --nvtx-include profile/ 
+                      --launch-count 4 --section LaunchStats --section SourceCounters --section MemoryWorkloadAnalysis_Tables --section Schedu
+                      lerStats --section WarpStateStats --section SpeedOfLight --export /okc/logs/group8-compare-ncu01 -f python3 /okc/proj_rs
+                      i/tools/group8_compare_ncu.py --json /okc/logs/group8-compare-ncu01-driver.json                                         
+
+Session Info
+--------------------- -------------------------------------------------------------------
+Session Attribute     Value                                                              
+--------------------- -------------------------------------------------------------------
+Created               2026-Oct-27 02:45:44                                               
+Host Name             450ca58f7404                                                       
+Host OS               Linux - #31-Ubuntu SMP PREEMPT_DYNAMIC Sat Aug  1 04:26:38 UTC 2026
+Host Architecture     x86_64                                                             
+Host Processor        Intel(R) Xeon(R) Platinum 8468                                     
+Target Name           450ca58f7404                                                       
+Target IP Addresses   172.17.0.2                                                         
+Target OS             Linux - #31-Ubuntu SMP PREEMPT_DYNAMIC Sat Aug  1 04:26:38 UTC 2026
+Target Architecture   x86_64                                                             
+Target Processor      Intel(R) Xeon(R) Platinum 8468                                     
+CUDA Version          13.0                                                               
+PerfWorks             0.1.0                                                              
+Nsight Compute Target 2025.1.1.0 (build 35528883) (public-release)                       
+
+Processes
+---------- -------------------------
+Process Id Process Name             
+---------- -------------------------
+34         /opt/conda/bin/python3.11
+
+Device Attributes
+--------------------------- ---------------------
+Device Attribute            Device 0             
+--------------------------- ---------------------
+confidential_computing_mode No-CC                
+multiprocessor_count        132                  
+display_name                NVIDIA H100 80GB HBM3
+compute_capability_major    9                    
+compute_capability_minor    0                    
+total_memory                85017493504          

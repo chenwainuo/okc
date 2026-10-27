@@ -1,0 +1,28 @@
+# Evidence-bound stacking contract
+
+Implemented `proj_rsi/composition.py`, `proj_rsi/changes.json` and CPU tests. No kernel, trial, queue, protocol, package initializer or production selector changed; no GPU import/context/prepare. The registry snapshots 42 actual artifact roots: all 38 candidate-directory manifests currently present, source-only rs32/pw36 baselines, and two bound measurement results. Existing immutable artifacts retain their original identities. Newly created roots need an explicit future registry entry rather than being silently trusted.
+
+The ten classified delta/alternative IDs cover native-X, X2/X4 depth, async refill, STMX stores, packed-X delivery, group4/group8 and NT16/NT32 cursor recurrence. Remaining roots have typed discoverable artifact IDs marked UNCLASSIFIED_ARTIFACT. Selecting one adds a pending semantic-classification gate; a frozen file alone does not prove a composable optimization. Trial/proof roots are artifacts, not measured speedups.
+
+Each immutable version ID matches `change:<name>:v<number>` and binds kind, base SHA, exact shape scope, semantic axes, dependency IDs, explicit conflicts, named source write regions and artifact identity digests in its canonical core SHA. Artifact digests bind actual manifest/source/proof/binary/file hashes. Changing a source byte, source pin or core metadata fails validation. Dependency cycles, missing/unknown dependencies, duplicate IDs, conflicting overlapping-shape semantic axes and explicit conflicts are hard errors. Immutable IDs are never reused for changed cores; add a new version ID and retain old evidence instead.
+
+`compatible` means no hard contradiction or identity failure; it does not mean a concrete implementation is available. Overlapping write regions require an explicit merge recipe. Different independent bases require a rebase. Missing adaptations remain in `pending_rebases`. Recipe metadata and concrete merged-source artifact identities are hash-bound too. CPU source verification is stated separately from runtime admission.
+
+X4 plus STMX uses two concrete source recipes: native-X+STMX and X4+STMX, bound to the existing native and new X4 store-composite frozen directories. The store/depth source regions commute, as proven by worker12's exact inverse/commutation artifact. This removes pending source rebases for that stack, while every runtime/production control remains required. Async refill plus X4 shares refill regions and has an explicit **UNVERIFIED** adaptation recipe: pending implementation, not a universal incompatibility. Packed-X versus native-TMA delivery and group4 versus group8 remain individually selectable alternative versions; selecting contradictory variants over the same shape is rejected. Native-X/group8 adaptation is explicitly unverified.
+
+The NT16 and NT32 cursor scopes are disjoint from M128 native-TMA scopes. They can coexist in a future production selector without an axis conflict; full selector/shape coverage, preparation budget, runtime numerical/terminal-output/mutation/immutability/counter/cleanup controls and independent official validation still precede production eligibility. No automatic source integration or host-protocol change occurs here.
+
+Admission states distinguish CPU_ONLY, MEASURED_PARENT_WIN, MEASURED_INCUMBENT_WIN, VALID_NO_GAIN, VALID_REGRESSION, UNCERTAIN and INVALID. Native-X is bound to its actual valid same-run parent improvement and incumbent loss. The cursor result's invalid attempt is separately retained as evidence while the independently CPU-proved source remains CPU_ONLY. No CPU SASS instruction reduction is recorded as a GPU win. All artifact-only entries remain conservative pending classification, even if their historical directory contains richer evidence; classification requires a new evidence review, not inference from names or old closure language.
+
+There is no 0.5us minimum retention rule. Repeatable tiny deltas stay selectable; uncertainty requests measurement or a stack test. A valid individual regression is a retained version observation and does not ban its family or prove the stack regresses. `gain_estimate_us` is always unknown and `additive_gain_assumed` false. Two individually measured wins do not validate their composition.
+
+`production_eligible` remains false unless the exact selected ID set has a FULL_STACK_VALIDATED record, all mandatory controls, a real incumbent win, and file-bound evidence including the exact combined source SHA/path. Runtime controls include actual JIT/lifetime resources, all basis/FP64/task numerics, immediate actual terminal timed outputs, fresh/zero/outlier mutation, immutable data/counter reset/cleanup, balanced incumbent-parent-stack comparison, full scope, prepare budget, independent full-stack review and official H200 validation. No such record is currently present, so every real stack remains non-production.
+
+Commands:
+
+```sh
+python3 -m proj_rsi.composition validate-stack change:native-x:v1 change:x-depth4:v1 change:stmatrix-stores:v1
+python3 -m unittest proj_rsi.tests.test_composition -v
+```
+
+The CLI emits machine JSON with compatible/pending_rebases/required_runtime_controls/production_eligible, admissions, selected dependency order and errors. Exit2 reports a hard validation error; exit0 may still contain pending work and production=false. Ten meaningful CPU tests pass: selectable incompatible alternatives; cycle/missing dependency; source drift; core/unique-ID drift; tiny retained gain; nonadditive individual wins; disjoint scopes; explicit/unverified merges; invalid-version repair; and the real X4/STMX/async registry stacks. No GPU result is created by these tests.

@@ -1,0 +1,13 @@
+# Native-X4 strict four-arm trial v1
+
+CPU lab gates PASS; GPU UNRUN. This is a new driver frozen separately from kernelX4 d47e/e844 and old async48fe/c261/nativee96/a73; no oldsource edited. Root-only execution after07independentGO, exclusiveGPU240s/outer300s.
+
+Driver `proj_rsi/tools/native_x4_lab.py` compares actualLOCALpw36 selectedrq incumbent, DS freshpack+main, nativeX2 parent, newX4. Labels incumbent/ds/native/new. FreshcurrentoriginalX goesdirectlyto native/new main with noXP/pack node; DS owns onefresh1MiBXP and actual2-node pipeline. Frozen source maps and exactactualJIT PC/predicate/instruction equivalence bind everyarm. Correctperlabel LDSM/Xring/A4/proxy/bar5/all64stage/source-restoration gates run beforefirstcandidate math; actual CUDA attrs require122regs native/new,0local,rounded512pool<=65536,maxThreads512,occupancy1 aftersharedoptin,SMEM170016new/137232native/103600DS. Allpackbits65536 gate appliesonlyDS; nativeGPUrawbitmapping remainsUNPROBED.
+
+All4096K basis/randomFP64 andofficialnormal/outlier taskcases perarm precedetiming. Freshfixedpointeroriginal/zero/outlier tests, DSfreshworkspace poison/fullXP, nativenewfreshoutput, allinputW/packedW/escapeimmutability andzero counters retained. Incumbentguard pins actualselectedrqpolicy and rejectsfallback. Noextra timedbaselinecopy.
+
+Timing:21F1 samples in7bracketblocks (147),32balanced4-arm rotations/reversals (128),20warmups; every295rawcall islogged with inputseed/policy/mode. F1phase strict4recordedterminaloutputoracles beforepairedreplay; pairedphase strict4morebeforemutations/profile/repair. Outputs mayrefer todifferentfixtures and useeacharm's actualrecordedseed. All20poison/fresh/zero/probe graphmutations runafterstrictterminalreadgate; 1/2/1nodecounts capturedaftervalidation. Graphsdrained/reset infinally, inputsweightsescapecounters checked throughout.
+
+CPU proof extracts terminalgate withAST without importingGPUlab;9adversarialcorruptions rejected, distinctlastfixtures PASS, noreplay/mutationinsidegate andcontrolfloworder checked. Additional3wronglabel and3canonicalinstructiontamper testsreject; everycanonicalbinary/source/map passes. `cpu_proof.py` creates noCUDAcontext/extension/prepare and noGPUlabimport. RawGPUreadiness/correctness/timing remainunrun.
+
+Rootcommand afterindependentGO: `python3 proj_rsi/tools/native_x4_lab.py --json <new-attempt-output.json>` insideexclusiveboundedGPUenvironment. Preservefailedattempt/source; realactualincumbentwin/independentreview/officialH200score requiredforpromotion. HypothesisX4lookahead vslargersharedfootprint; noclaimedgain fromCPUproofs.

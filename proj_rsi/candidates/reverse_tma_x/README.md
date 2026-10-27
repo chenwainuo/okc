@@ -1,0 +1,14 @@
+# Native-X TMA to register-A prototype v1
+
+CPU feasibility passes; GPU unrun; independent review and root admission required.
+One fixed M128/N8192/K4096 kernel. Run `python3 preflight.py` for CPU-only CUDA12.8 cubin/proofs (this regenerates artifacts; a future source/version change must preserve this frozen version first). `prototype.extension()` exists only as a future root driver entry point; it was never called. No lab, prepare, GPU context, timing, replay, mutation, counter or score claim.
+
+W6/B8 scalar-store dual-producer parent stays exact. Replace fresh-X pack node plus native global A loads with original-X TMA into two16384B SW128 shared slots, then four `ldmatrix.x4` per stage into the same A4 register pipeline. Input tensor-map encodes current `x.data_ptr()` each call, shape box(64,128), stride8192B. Retained `xp` positional argument is ignored and may be an empty tensor; no XP allocation is required. Public integration must keep graph output/mutation gates and verify actual one-node capture.
+
+Resources: 512threads;122registers rounded128×512=65536;0stack/spills;137232dynamic shared;6barriers. Shared base aligned1024; W[0,36864), B[36864,102400), metadata through102576; X[103424,136192), Xfull[136192,136208),1024B allocation slack. Xslot and output scratch disjoint. Output reuses old B only after final WGMMA drain.
+
+`proofs.json` enumerates8192BF16/stage once, exact parent A word map,64stages, Xslot/parity startup/steady/tail and W/B dependencies. Local cubin gate checks 32staticLDSM,8namedbar5,8mathX TMA sites,0mathLDG; every LDSM quartet precedes MEMBAR/proxyFENCE/bar5. Adapted parent physical A4 gate proves R56..119 four disjoint16word slots, no writes while pending WGMMA, two full loop iterations and outlined wait paths. Source/dataflow indexing proof and local binary gates are bounded; actual driverJIT gates must run before first math and a general SASS address interpreter is not claimed.
+
+Expected opportunity: remove one pack node and per-thread global X requests/address work. Costs:256MiB nominal extra shared X fill/read over128CTAs×64stages,64math-only barriers/proxyfences, elected TMA issue and only two shared X slots. Same128MiB logical X read, same precision/FP32chain; no numerical or latency result inferred. No speed forecast.
+
+Next: independent source/proxy/lifetime/resource review; root can create one bounded strict actual-incumbent/DP/new full-pipeline driver only after review. All4096K basis probes, FP64/task cases, fresh/zero/outlier original-X mutations, captured graph output oracles including **actual final timed outputs**, input/packedW/escape immutability, zero counters, graph teardown/drain, actual JIT physical gate, root-exclusive GPU and cleanup are mandatory. A valid DP win alone cannot promote; actual incumbent comparison and official H200 validation remain required.
