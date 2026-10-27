@@ -8,6 +8,8 @@ Retain their historical evidence; active ROI work and GPU admissions are project
 Before continuing optimization, read [proj_rsi/ITERATION.md](proj_rsi/ITERATION.md),
 especially its Continuous coordinator loop section. This records the user's
 explicit persistent instructions and applies to takeovers and compacted sessions.
+Recovery state is in [proj_rsi/HANDOVER_CURRENT.json](proj_rsi/HANDOVER_CURRENT.json);
+verify live queue/process/receipt state before repeating any recorded action.
 
 Every user-facing answer/update must restate the optimization loop briefly and
 link that contract. During active authorized work, status questions do not pause

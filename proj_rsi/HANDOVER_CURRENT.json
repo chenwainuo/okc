@@ -1,0 +1,101 @@
+{
+  "updated_at": "2026-10-27T21:55:59.799034+00:00",
+  "objective": "ONLY muse_bf16_proj; official score <3000us. Serving/MoE optimization stopped by explicit user correction.",
+  "contract": "proj_rsi/ITERATION.md; every user update includes compactloop+link; do not endcoordination forstatusquestions; idlewait<=10s; frozenhashdelivery immutable, supplements newpaths.",
+  "incumbent": {
+    "job": "9916d34357b745cf",
+    "source": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "score_us": 3157.0384036526784,
+    "rank_observed": 63,
+    "ranked_observed": 1174
+  },
+  "last_quota": {
+    "scored_left": 1,
+    "checks_left": 9,
+    "used_scored": 9,
+    "used_checks": 11
+  },
+  "worker": {
+    "pid": 4068896,
+    "command": "python3 -u -m proj_rsi.scheduling work --latest-snapshot --owner root --max-jobs1000 --max-wall-seconds86400 --poll-seconds10 --idle-wait-seconds7200",
+    "host": "root@107.170.6.60",
+    "GPU": "H10080GB",
+    "exclusive": true,
+    "do_not_duplicate": true
+  },
+  "queue_latest": {
+    "sequence": 1715,
+    "GPU_ready": 0,
+    "GPU_running": 0,
+    "GPU_validating": 0
+  },
+  "new_checks": [
+    {
+      "job": "dc78c2473d204a92",
+      "experiment": "gv_o32_positive_selection_isolated_v1",
+      "source": "e0f1f712868f8a092a5e96c010420fcc92562291b051d391c9bc77abf0f5bba2",
+      "score_us": 3191.721918275971,
+      "passed": "9/9",
+      "decision": "refine",
+      "release": "results/proj-rsi/releases/gv-o32-positive-selection-v1-e0f1f712868f",
+      "diagnosis": "Target improves crossjob but 12routeschange/all30inputseedsdiffer; comparisonnotcausal; wholeloss."
+    },
+    {
+      "job": "ac49231d41d441f6",
+      "experiment": "gv53_keyed_half_v1",
+      "source": "239b530cf7eead0a2dbf0af5c29aea4ba02e449500eb80e45b255b361cf2f900",
+      "score_us": 3225.893245547708,
+      "passed": "9/9",
+      "decision": "refine",
+      "release": "results/proj-rsi/releases/gv53-keyed-half-v1-239b530cf7ee",
+      "diagnosis": "Actualgv_keyed servesM1/M8; no missingexposure. LocalM8gain didnottransfer; rq_lab_review investigating production/labcodegen."
+    }
+  ],
+  "local_results": [
+    {
+      "job": "research.gv53.keyed.half.fixed.01",
+      "state": "DONE VALID_GAIN",
+      "evidence": "proj_rsi/audits/gv53-keyed-half-result/done-evidence.json",
+      "effects": "M1paired+.064/F1−.864us; M8paired+.224/F1+.176us. ExactSO available forreuse."
+    },
+    {
+      "job": "research.rq.descriptor.offset.fixed.01",
+      "state": "DONE VALID_GAIN scopedunpooler",
+      "evidence": "proj_rsi/candidates/rq_descriptor_offset_trial_v1/actual-analysis/done-evidence.json",
+      "effects": "poolerpaired−.224/F1+.080us; unpoolerpaired+.048/F1+.080us. Broadc262sourcefrozen; authorbuildingunpooler-onlyversion."
+    },
+    {
+      "job": "research.gv.unpool16.deltakey.01",
+      "state": "DONE VALID_REGRESSION withpositiveF1",
+      "evidence": "proj_rsi/audits/gv-unpool16-deltakey-result/analysis.json",
+      "effects": "paired−.080us/F1+.096us. Source713c frozen; authorbuilding3freshweightbankreuseSOdiagnostic, noJIT."
+    }
+  ],
+  "active_assignments": {
+    "rq_lab_review": "GV53 officialtransfer/sourcecodegen diagnosis; noGPU/API",
+    "moe_decode_lut": "ProjectionRQunpooler32-onlysourceguard + focusedproof/test proposal; NO MOE work despite name",
+    "hotloop_counters": "ProjectionGV16 exactSO3weightbank robustness diagnostic (newquestion, noJIT)",
+    "gv_codec_frontier": "Focusedindependentreview of projectioncandidate/harness whenready",
+    "measurement_contract_audit": "FocusedRQreview ifneeded",
+    "scheduler_fastpath": "CPU3branchcomposer complete; composeonlyvalidatedrootchosen subsets. audits/projection-three-branch-stack-v1",
+    "moe_result_repair": "Projectionfailureaudit completed150records,18narrow causes proven; unknown transfercauses; versionedO32supplement",
+    "stack_evidence_sync": "ROI/history updates CPUonly",
+    "queue_continuity": "10sreadonlyobserver, current15minbounduntil22:00:33; renewboundedwhileactive"
+  },
+  "important_docs": [
+    "proj_rsi/ROI_QUEUE.md",
+    "proj_rsi/roi_queue.json",
+    "audits/projection-failure-diagnosis-20261027/LATEST.json",
+    "proj_rsi/audits/projection-three-branch-stack-v1/README.md"
+  ],
+  "procedural_notes": [
+    "runner.wait ONLY retrieves; root must archive(job,candidate) and record(job,experiment,kind), thenLedger.decide. BothnewCHECKsarchived/recorded/refinealready.",
+    "No currentofficialwaitrequired:53592and43255finished. Lastscoredslotstillunused.",
+    "Do not infer total1066positivebake rows are shippinggains oractualdispatchcounts.",
+    "All existingunsubmittedmixedpositiveandfailedversionsretained; everyfailuregetsPROVEN/LIKELY/UNKNOWNcause,nextfalsifier,version/familydistinction.",
+    "NewGPUdescriptorsrequireproblem=muse_bf16_proj; optionalmachinepolicyfilterproposalnotactivated; rootmanualscope+observeractive.",
+    "Schedulerstore latestsnapshotreads usesauthoritativeWALsnapshot, notcheckpointwrites. Alwayspollregister/transitioncompletion.",
+    "Use actualexclusiveworker; no agentGPU/SSH/queue/git. Implementers/reviewersCPUonly.",
+    "Gitlatestlocal d2e358f; earlier5b3e00b pushed. Preserve unrelated inheriteddirtyfiles, no broadgitadd."
+  ]
+}
