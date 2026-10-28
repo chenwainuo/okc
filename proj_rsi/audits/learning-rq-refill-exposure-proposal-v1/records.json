@@ -1,0 +1,201 @@
+{
+  "status": "PRIVATE_UNSEALED_SINGLE_LESSON_EXTENSION",
+  "base_registry_sha256": "1c91b7a478eec3ac8cfa10b4d64e85b2525e41b15a624a85e4c4073430a0e35d",
+  "base_registry_version": 10,
+  "append_lessons": [
+    {
+      "id": "normal-chooser-needs-actual-route-evidence",
+      "version": 3,
+      "supersedes": "04baaf315b9510f15fb9266bceeae9558a8a55cd4c9f7742b669478265830ac6",
+      "record_sha256": null,
+      "title": "A selected kernel need not expose the internal dependency being optimized",
+      "tags": [
+        "projection",
+        "RQ",
+        "mechanism-exposure",
+        "experiment-cost"
+      ],
+      "context": {
+        "experiment_id": "research.rq.pooler32.escape.exposure.01",
+        "family": "muse_bf16_proj",
+        "parents": [
+          "normal-chooser-needs-actual-route-evidence@2: completed selection/execution differs from transferred gain",
+          "501d pooler M32 KS4; lookahead source c7f9f68d"
+        ],
+        "comparators": [
+          "Exact packed list lengths versus subsequent32-record refill condition",
+          "Whole-kernel aggregate scoreboard versus targeted refill sites"
+        ],
+        "hardware": {
+          "kind": "GPU",
+          "model": "Actual CUDA weights/packing statistics; no native RQ timing"
+        },
+        "validity": "VALIDATED_DIAGNOSIS",
+        "disposition": "CPU_ACCOUNTING",
+        "sources": [
+          {
+            "path": "proj_rsi/candidates/rq_pooler32_escape_exposure_v1/stats.py",
+            "sha256": "888254971c4f91fd37f16d4c035857f6f9f39ff68a9392639342107292cefe0e",
+            "role": "exact packing/list exposure diagnostic"
+          },
+          {
+            "path": "proj_rsi/candidates/rq_pooler32_escape_lookahead_v1/submission.py",
+            "sha256": "c7f9f68d0c8a7fb4814df7685538ca5c58c40ba68cd51b968e8a6b71416ae79c",
+            "role": "frozen subsequent-bank lookahead version"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "id": "exposure",
+          "path": "proj_rsi/candidates/rq_pooler32_escape_exposure_v1/actual-analysis/analysis.json",
+          "sha256": "48e49cae70d00c3c4dc09205a047e7af06b066cb32803a27e7b171c581eb03f7"
+        },
+        {
+          "id": "profile",
+          "path": "proj_rsi/candidates/rq_pooler32_exactso_counters_v1/actual-analysis/analysis.json",
+          "sha256": "919d83d52d6d39b7443782aefbd7947eaca6ddb39bec749e409a1399c4163607"
+        }
+      ],
+      "observations": [
+        {
+          "id": "cap",
+          "statement": "Original escape bank capacity32 records.",
+          "outcome": "neutral",
+          "evidence": "exposure",
+          "selector": {
+            "json_pointer": "/exposure/cap",
+            "equals": 32
+          }
+        },
+        {
+          "id": "lists",
+          "statement": "All1024 exact intended lists counted.",
+          "outcome": "neutral",
+          "evidence": "exposure",
+          "selector": {
+            "json_pointer": "/exposure/slots",
+            "equals": 1024
+          }
+        },
+        {
+          "id": "maximum",
+          "statement": "Maximum11 records/list stays within initial bank.",
+          "outcome": "neutral",
+          "evidence": "exposure",
+          "selector": {
+            "json_pointer": "/exposure/maximum_records_per_slot",
+            "equals": 11
+          }
+        },
+        {
+          "id": "refills",
+          "statement": "Zero subsequent-bank loads: targeted refill sites cannot execute on this fixture.",
+          "outcome": "negative",
+          "evidence": "exposure",
+          "selector": {
+            "json_pointer": "/exposure/required_subsequent_bank_loads",
+            "equals": 0
+          }
+        },
+        {
+          "id": "initial",
+          "statement": "1024 initial loads remain; candidate does not optimize their dependency.",
+          "outcome": "neutral",
+          "evidence": "exposure",
+          "selector": {
+            "json_pointer": "/exposure/original_total_window_loads",
+            "equals": 1024
+          }
+        },
+        {
+          "id": "scoreboard",
+          "statement": "54.07% aggregate long-scoreboard warp-activity samples cannot implicate the dormant subsequent-refill sites; not wall-time or repair-PC attribution.",
+          "outcome": "neutral",
+          "evidence": "profile",
+          "selector": {
+            "json_pointer": "/metrics/smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct",
+            "equals": {
+              "value": 54.07,
+              "unit": "%"
+            }
+          }
+        },
+        {
+          "id": "cost",
+          "statement": "Exact statistics completed in3.101620902s without native JIT/timing; establish cheap applicability before spending on another full candidate build. Avoided-build saving is not measured.",
+          "outcome": "neutral",
+          "evidence": "exposure",
+          "selector": {
+            "json_pointer": "/elapsed_seconds",
+            "equals": 3.1016209020017413
+          }
+        }
+      ],
+      "hypotheses": [
+        {
+          "statement": "Subsequent-bank lookahead can explain/improve this intended fixture through the targeted refill dependency.",
+          "status": "refuted",
+          "observation_ids": [
+            "cap",
+            "maximum",
+            "refills",
+            "initial"
+          ]
+        },
+        {
+          "statement": "The aggregate scoreboard percentage identifies the proposed refill sites as a bottleneck.",
+          "status": "refuted",
+          "observation_ids": [
+            "refills",
+            "scoreboard"
+          ]
+        }
+      ],
+      "scope": "Extends existing selected-execution lesson to internal dynamic exposure. Exact seed5151 pooler[4096,8192],KS4,KC128: cap32/max11 across1024 lists. Prior chooser evidence remains immutable in v1/v2. This version/fixture is unexposed; no performance measurement or prefetch-family rejection.",
+      "transfer_limits": [
+        "Zero subsequent refills does not imply zero initial escape loads, shuffle work or all memory stalls.",
+        "CPU correctness/native overlap proof remains valid but does not establish dynamic benefit.",
+        "Other real intended lists/geometries may expose refills; no synthetic-tail benchmark to manufacture applicability.",
+        "3.102s diagnostic is measured; no controlled43s build saving or kernel/official gain is claimed."
+      ],
+      "confidence": {
+        "observation": "high",
+        "causality": "high",
+        "transfer": "low"
+      },
+      "falsification": "Reopen this version only if a real intended packed workload has a required subsequent bank (list crosses32), or develop a separate mechanism targeting an evidenced active initial/payload dependency. No required rerun.",
+      "next_test": {
+        "question": "Does a proposed dependency optimization target an operation actually reached by the intended packed workload?",
+        "controls": [
+          "Reuse exact pack/list identity and existing unchanged proofs; use available frozen data first."
+        ],
+        "discriminator": "Reopen this version only if a real intended packed workload has a required subsequent bank (list crosses32), or develop a separate mechanism targeting an evidenced active initial/payload dependency. No required rerun.",
+        "stop_rule": "Park this source/fixture when exposure is zero; retain family/proofs and pursue an active dependency. No broad proof gate or automatic GPU rerun.",
+        "required_gates": [
+          "No new admission requirement; reuse scope-appropriate existing validity checks only when a changed experiment is otherwise authorized."
+        ]
+      },
+      "related_queue_ids": [
+        "research.rq.pooler32.escape.exposure.01",
+        "research.rq.pooler32.escape.lookahead.fixed.01"
+      ],
+      "conditional_benefit": {
+        "kind": "conditional_scenario_not_measured",
+        "value": null,
+        "unit": "decision",
+        "conditions": [
+          "Economic lesson: prefer cheap exact exposure accounting when it can falsify applicability before compile; no saved-time or performance estimate."
+        ]
+      },
+      "cost": {
+        "basis": "Measured exposure diagnostic3.101620902s; native timing/build for parked candidate not performed; no new execution requested.",
+        "cpu_minutes": null,
+        "gpu_seconds": null
+      }
+    }
+  ],
+  "append_ideas": [],
+  "live_registry_mutated": false,
+  "dedup": "Extend normal-chooser-needs-actual-route-evidence@2 to@3: actual internal-path exposure is the next execution distinction, not a duplicate profiling/cost lesson. Chooser fidelity audit758f27f remains separate."
+}

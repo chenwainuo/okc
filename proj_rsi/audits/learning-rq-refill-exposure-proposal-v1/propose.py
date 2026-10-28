@@ -1,0 +1,33 @@
+import copy,hashlib,json
+from pathlib import Path
+D=Path(__file__).parent;B=Path('proj_rsi/learnings.json');sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();base=sha(B);assert base=='1c91b7a478eec3ac8cfa10b4d64e85b2525e41b15a624a85e4c4073430a0e35d'
+r=json.loads(B.read_text());old=[x for x in r['lessons'] if x['id']=='normal-chooser-needs-actual-route-evidence'][-1];x=copy.deepcopy(old)
+x.update(version=old['version']+1,supersedes=old['record_sha256'],record_sha256=None,title='A selected kernel need not expose the internal dependency being optimized',tags=['projection','RQ','mechanism-exposure','experiment-cost'],evidence=[],observations=[],hypotheses=[])
+paths={'exposure':'proj_rsi/candidates/rq_pooler32_escape_exposure_v1/actual-analysis/analysis.json','profile':'proj_rsi/candidates/rq_pooler32_exactso_counters_v1/actual-analysis/analysis.json'}
+docs={k:json.loads(Path(p).read_text()) for k,p in paths.items()}
+x['context']={'experiment_id':'research.rq.pooler32.escape.exposure.01','family':'muse_bf16_proj','parents':['normal-chooser-needs-actual-route-evidence@2: completed selection/execution differs from transferred gain','501d pooler M32 KS4; lookahead source c7f9f68d'], 'comparators':['Exact packed list lengths versus subsequent32-record refill condition','Whole-kernel aggregate scoreboard versus targeted refill sites'],'hardware':{'kind':'GPU','model':'Actual CUDA weights/packing statistics; no native RQ timing'},'validity':'VALIDATED_DIAGNOSIS','disposition':'CPU_ACCOUNTING','sources':[]}
+for p,role in [('proj_rsi/candidates/rq_pooler32_escape_exposure_v1/stats.py','exact packing/list exposure diagnostic'),('proj_rsi/candidates/rq_pooler32_escape_lookahead_v1/submission.py','frozen subsequent-bank lookahead version')]:x['context']['sources'].append({'path':p,'sha256':sha(p),'role':role})
+for k,p in paths.items():x['evidence'].append({'id':k,'path':p,'sha256':sha(p)})
+def ptr(d,p):
+ for k in p.strip('/').split('/'):d=d[int(k)] if isinstance(d,list) else d[k]
+ return d
+def ob(id,e,p,text,outcome='neutral'):x['observations'].append({'id':id,'statement':text,'outcome':outcome,'evidence':e,'selector':{'json_pointer':p,'equals':ptr(docs[e],p)}})
+for id,p,msg in [('cap','cap','Original escape bank capacity32 records.'),('lists','slots','All1024 exact intended lists counted.'),('maximum','maximum_records_per_slot','Maximum11 records/list stays within initial bank.'),('refills','required_subsequent_bank_loads','Zero subsequent-bank loads: targeted refill sites cannot execute on this fixture.'),('initial','original_total_window_loads','1024 initial loads remain; candidate does not optimize their dependency.')]:ob(id,'exposure','/exposure/'+p,msg,'negative' if id=='refills' else 'neutral')
+ob('scoreboard','profile','/metrics/smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct','54.07% aggregate long-scoreboard warp-activity samples cannot implicate the dormant subsequent-refill sites; not wall-time or repair-PC attribution.')
+ob('cost','exposure','/elapsed_seconds','Exact statistics completed in3.101620902s without native JIT/timing; establish cheap applicability before spending on another full candidate build. Avoided-build saving is not measured.')
+x['hypotheses']=[{'statement':'Subsequent-bank lookahead can explain/improve this intended fixture through the targeted refill dependency.','status':'refuted','observation_ids':['cap','maximum','refills','initial']},{'statement':'The aggregate scoreboard percentage identifies the proposed refill sites as a bottleneck.','status':'refuted','observation_ids':['refills','scoreboard']}]
+x['scope']='Extends existing selected-execution lesson to internal dynamic exposure. Exact seed5151 pooler[4096,8192],KS4,KC128: cap32/max11 across1024 lists. Prior chooser evidence remains immutable in v1/v2. This version/fixture is unexposed; no performance measurement or prefetch-family rejection.'
+x['transfer_limits']=['Zero subsequent refills does not imply zero initial escape loads, shuffle work or all memory stalls.','CPU correctness/native overlap proof remains valid but does not establish dynamic benefit.','Other real intended lists/geometries may expose refills; no synthetic-tail benchmark to manufacture applicability.','3.102s diagnostic is measured; no controlled43s build saving or kernel/official gain is claimed.']
+x['confidence']={'observation':'high','causality':'high','transfer':'low'}
+x['falsification']='Reopen this version only if a real intended packed workload has a required subsequent bank (list crosses32), or develop a separate mechanism targeting an evidenced active initial/payload dependency. No required rerun.'
+x['next_test']={'question':'Does a proposed dependency optimization target an operation actually reached by the intended packed workload?','controls':['Reuse exact pack/list identity and existing unchanged proofs; use available frozen data first.'],'discriminator':x['falsification'],'stop_rule':'Park this source/fixture when exposure is zero; retain family/proofs and pursue an active dependency. No broad proof gate or automatic GPU rerun.','required_gates':['No new admission requirement; reuse scope-appropriate existing validity checks only when a changed experiment is otherwise authorized.']}
+x['related_queue_ids']=['research.rq.pooler32.escape.exposure.01','research.rq.pooler32.escape.lookahead.fixed.01']
+x['conditional_benefit']={'kind':'conditional_scenario_not_measured','value':None,'unit':'decision','conditions':['Economic lesson: prefer cheap exact exposure accounting when it can falsify applicability before compile; no saved-time or performance estimate.']}
+x['cost']={'basis':'Measured exposure diagnostic3.101620902s; native timing/build for parked candidate not performed; no new execution requested.','cpu_minutes':None,'gpu_seconds':None}
+out={'status':'PRIVATE_UNSEALED_SINGLE_LESSON_EXTENSION','base_registry_sha256':base,'base_registry_version':10,'append_lessons':[x],'append_ideas':[],'live_registry_mutated':False,'dedup':'Extend normal-chooser-needs-actual-route-evidence@2 to@3: actual internal-path exposure is the next execution distinction, not a duplicate profiling/cost lesson. Chooser fidelity audit758f27f remains separate.'}
+(D/'records.json').write_text(json.dumps(out,indent=2,ensure_ascii=False)+'\n')
+for q in x['evidence']+x['context']['sources']:assert sha(q['path'])==q['sha256']
+for o in x['observations']:assert ptr(docs[o['evidence']],o['selector']['json_pointer'])==o['selector']['equals']
+assert sha(B)==base
+(D/'checks.json').write_text(json.dumps({'state':'SEVEN_SELECTORS_AND_FILE_HASHES_PASS_UNSEALED','base_unchanged':base,'GPU_API_SSH_queue_git_actions':0},indent=2)+'\n')
+print(sha(D/'records.json'))
