@@ -1,0 +1,13 @@
+# QKV small half-X prefetch: one evidence-based CPU revision
+
+ScopeonlyactualQKVM1/M8tuple(1,1,1,2,16,8,1,1,2,1),N2304/K8192; parent501d, actual9916and40dselectedroute. NoGV53/poolerM16/unpoolerM16 modifications. Full-Xpredecessor isfrozen atgv_qkv_xprefetch_v1 manifest5a3dbfde...; noGPUmeasurement. ItrealizedearliernextXissue butspilledsecond/highXvectorsofunit2/4/5 (actualLDG→STLpairs inproof.json),32Bstack/48Bstores+48Bloads. A singlepartial-Xrevision wasauthorized becauseeliminatingthosefourfuturehighwords couldshortenliveness.
+
+Thisversionprefetchesonlynextunit'sfirstuint4; second/highuint4 loadsatitsoriginalcurrentstepuse. Prologuefirstlowunit0; eachstepcopycurrentlow, loadcurrenthigh, refillnextlow, laststepnorefill. Sixteen totalXvectorreads/warp, sameaddresses/cachepolicy,exactW/decode/escape/HMMA/FP32/outputorder. Sourceandkernelinversesto501dpass; symbolic256×8traces prove identicalcurrentraw8words acrossboundary. No codec/mathchange, no newharness.
+
+OnefocusedCUDA12.8compile1.975s: currentcontrol64regs/0stack/spill; new64regs/**32Bstack/56Bspillstores/100Bspillloads**. NextlowXunit1 now0x400beforefirstPRMT0x4b0, so motionrealized, butresourceconstraintfails. ControlfullPC/predicate/128bitencodingexactactualarchived501d. Thelowerprefetchwidth doesnotguaranteelowerwholefunctionallocationpressure: actualallocator spillsXbasepointerto[R1+0x18] at0x3d0 beforeR20becomesfutureXlow, reloadsbase0xb10(andlater); escapenxchunkmaskfrom0x540/0xae0 spillsat0x600/b00 toslot0x10; prefetchedlowunit6(+0x300) spills0x2cb0/cc0. Thoseareconcretespillorigins, notconjecturedhardwarestallfractions. Nativecodecontainsadditionalcursor/addressstacktraffic comparedoriginal.
+
+Disposition: **PARKthisversion, noGPUproposal**. Failureisimplementation/livenessbudget, notcorrectnessfailure or measuredperformanceregression. Originalfull-X/half-Xsources,allcompile/SASS/proofreceipts preserved. Familyisnotrejected. No furthercompile/registerlimit/geometry/cachehint sweep inthisaudit. Reopenwitha differentconcreteplacementthatshortensoverlapwithliveW/accumulators/address/cursor, or actualQKVPC/counterevidence identifyingwhichwaittomove; do notassumeGV53H100gaintransfers.
+
+HighesteligiblesensitivityQKVM1+M8=8.28094457%, notgainforecast. O M1/M8alreadyhasallST2/KU2W+Xloadedprologue; QKVWalreadyprefetchedtwochunksahead innativecode. Thisauditdoesnotrepeat thosealready-prefetchedWcases orclaimalllate-loadopportunitiesexhausted. RootownsnextROI/queue; authorCPUonly/noGPU/API/SSH/git.
+
+Loop: profile→measure→hypothesize→optimize→test→validate→stack→learn→reprioritize. [Contract](../../ITERATION.md).

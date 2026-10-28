@@ -1,0 +1,455 @@
+{
+  "state": "VALID_FIXED_THREE_ARM_W_ONLY_RESULT",
+  "job_id": "research.gv53.earlyload.wonly.fixed.01",
+  "recommended_disposition": "VALID_GAIN",
+  "primary_comparator": "Actual same-run parent501d native vs W-only; all pair/F1/order signs retained.",
+  "hardware": {
+    "name": "NVIDIA H100 80GB HBM3",
+    "SM_count": 132,
+    "cc": [
+      9,
+      0
+    ],
+    "UUID": "54a7daab-fe3e-c7fc-7f7c-6fbc40145a22"
+  },
+  "native": {
+    "parent": {
+      "instructions": 360,
+      "full_PC_predicate_encoding_control_exact_pilot": true
+    },
+    "W_X": {
+      "instructions": 384,
+      "full_PC_predicate_encoding_control_exact_pilot": true
+    },
+    "W_only": {
+      "instructions": 392,
+      "full_PC_predicate_encoding_control_exact_pilot": true
+    }
+  },
+  "attributes": {
+    "parent": {
+      "registers": 64,
+      "local": 0,
+      "user_static": 0,
+      "max_dynamic": 17408,
+      "max_threads": 1024,
+      "occupancy": 1,
+      "device_reserved": 1024,
+      "arm_echo": 0
+    },
+    "W_X": {
+      "registers": 64,
+      "local": 0,
+      "user_static": 0,
+      "max_dynamic": 17408,
+      "max_threads": 1024,
+      "occupancy": 1,
+      "device_reserved": 1024,
+      "arm_echo": 1
+    },
+    "W_only": {
+      "registers": 64,
+      "local": 0,
+      "user_static": 0,
+      "max_dynamic": 17408,
+      "max_threads": 1024,
+      "occupancy": 1,
+      "device_reserved": 1024,
+      "arm_echo": 2
+    }
+  },
+  "scope": "M8fixed body only; compilerpartlyhoistsX andW-only392>WX384>parent360slots, notpure fixed-X isolation or guaranteedcheaperstaging.",
+  "counts": {
+    "raw": 203,
+    "warmup": 15,
+    "clean": 188,
+    "F1": 44,
+    "paired": 144,
+    "paired_groups": 48,
+    "unique_paired_X_fixtures": 8,
+    "normal_zero_outlier_task_checks": 9,
+    "basis_sets": 3,
+    "basis_columns": 24,
+    "own_terminals": 7,
+    "mutations": 15
+  },
+  "W_seed": 5344,
+  "contrasts": {
+    "parent_minus_W_X": {
+      "paired_median_us": 0.14400016516447067,
+      "paired_mean_us": 0.17599986555675665,
+      "wins_ties_losses": [
+        32,
+        4,
+        12
+      ],
+      "left_first_median_us": 0.14400016516447067,
+      "right_first_median_us": 0.14399923384189606,
+      "six_order_medians_us": {
+        "0": 0.14400016516447067,
+        "1": 0.06399955600500107,
+        "2": 0.11199992150068283,
+        "3": 0.14399923384189606,
+        "4": 0.20800065249204636,
+        "5": 0.22399891167879105
+      },
+      "eight_seed_medians_us": {
+        "95200": 0.06399955600500107,
+        "95201": 0.09599979966878891,
+        "95202": 0.09599979966878891,
+        "95203": 0.11200085282325745,
+        "95204": 0.07999967783689499,
+        "95205": 0.1600002869963646,
+        "95206": 0.23999903351068497,
+        "95207": 0.07999967783689499
+      },
+      "median_of_eight_seed_medians_us": 0.09599979966878891,
+      "all_48_signed_us": [
+        1.183999702334404,
+        -0.03200024366378784,
+        -0.9280014783143997,
+        0.12799911201000214,
+        0.0,
+        0.4479996860027313,
+        0.03200024366378784,
+        0.15999935567378998,
+        0.0,
+        1.1199992150068283,
+        0.5440004169940948,
+        -0.09600073099136353,
+        -0.12799911201000214,
+        0.35200081765651703,
+        0.12799911201000214,
+        -0.09600073099136353,
+        0.06400048732757568,
+        1.183999702334404,
+        1.2479983270168304,
+        -0.09600073099136353,
+        0.09600073099136353,
+        0.06400048732757568,
+        0.12800097465515137,
+        0.19199959933757782,
+        0.15999935567378998,
+        -0.15999935567378998,
+        0.1600012183189392,
+        -0.5440004169940948,
+        0.28800033032894135,
+        0.0,
+        0.12800097465515137,
+        0.15999935567378998,
+        0.28800033032894135,
+        0.1600012183189392,
+        -0.28800033032894135,
+        0.2560000866651535,
+        0.15999935567378998,
+        0.5440004169940948,
+        -0.22399984300136566,
+        0.22399984300136566,
+        0.831998884677887,
+        0.2559982240200043,
+        0.0,
+        -0.0959988683462143,
+        0.3519989550113678,
+        0.15999935567378998,
+        0.3200005739927292,
+        -0.38400106132030487
+      ],
+      "interpretation": "Positive favors right arm.48triples share8unique input fixtures; no independence/significance inference."
+    },
+    "parent_minus_W_only": {
+      "paired_median_us": 0.09600073099136353,
+      "paired_mean_us": 0.11933354350427787,
+      "wins_ties_losses": [
+        29,
+        0,
+        19
+      ],
+      "left_first_median_us": 0.0,
+      "right_first_median_us": 0.15999935567378998,
+      "six_order_medians_us": {
+        "0": -0.031999312341213226,
+        "1": 0.07999967783689499,
+        "2": -0.03200024366378784,
+        "3": 0.14400016516447067,
+        "4": 0.2400008961558342,
+        "5": -0.031999312341213226
+      },
+      "eight_seed_medians_us": {
+        "95200": 0.15999935567378998,
+        "95201": 0.0,
+        "95202": 0.0,
+        "95203": 0.11199992150068283,
+        "95204": -0.04799943417310715,
+        "95205": 0.0800006091594696,
+        "95206": 0.23999996483325958,
+        "95207": 0.06400048732757568
+      },
+      "median_of_eight_seed_medians_us": 0.07200054824352264,
+      "all_48_signed_us": [
+        0.8959993720054626,
+        -0.31999871134757996,
+        0.47999992966651917,
+        0.15999935567378998,
+        0.15999935567378998,
+        -0.15999935567378998,
+        -0.2560000866651535,
+        0.03200024366378784,
+        -0.03200024366378784,
+        0.09600073099136353,
+        0.7680002599954605,
+        -0.35200081765651703,
+        -0.3519989550113678,
+        0.12800097465515137,
+        -0.12800097465515137,
+        0.28800033032894135,
+        -0.15999935567378998,
+        1.536000519990921,
+        0.9279996156692505,
+        0.12799911201000214,
+        -0.12799911201000214,
+        0.09600073099136353,
+        0.1600012183189392,
+        -1.1199992150068283,
+        0.06400048732757568,
+        -0.06400048732757568,
+        -0.0959988683462143,
+        -0.09600073099136353,
+        0.3200005739927292,
+        -0.03199838101863861,
+        -0.12799911201000214,
+        -0.09600073099136353,
+        0.28800033032894135,
+        0.12800097465515137,
+        0.03200024366378784,
+        0.4159994423389435,
+        0.28800033032894135,
+        0.22399984300136566,
+        0.09600073099136353,
+        0.2560000866651535,
+        0.7999986410140991,
+        0.22399984300136566,
+        -0.47999992966651917,
+        0.1600012183189392,
+        -0.03200024366378784,
+        0.22399984300136566,
+        0.4160013049840927,
+        -0.03200024366378784
+      ],
+      "interpretation": "Positive favors right arm.48triples share8unique input fixtures; no independence/significance inference."
+    },
+    "W_X_minus_W_only": {
+      "paired_median_us": -0.031999312341213226,
+      "paired_mean_us": -0.05666632205247879,
+      "wins_ties_losses": [
+        21,
+        1,
+        26
+      ],
+      "left_first_median_us": -0.06399955600500107,
+      "right_first_median_us": 9.313225746154785e-07,
+      "six_order_medians_us": {
+        "0": -0.2720002084970474,
+        "1": -0.1759994775056839,
+        "2": -0.12800004333257675,
+        "3": 0.03200024366378784,
+        "4": 0.06400048732757568,
+        "5": -0.03199838101863861
+      },
+      "eight_seed_medians_us": {
+        "95200": -0.12799911201000214,
+        "95201": -0.19199959933757782,
+        "95202": -0.22399984300136566,
+        "95203": -0.09599979966878891,
+        "95204": 9.313225746154785e-07,
+        "95205": -0.01600012183189392,
+        "95206": 9.313225746154785e-07,
+        "95207": 0.0800006091594696
+      },
+      "median_of_eight_seed_medians_us": -0.055999960750341415,
+      "all_48_signed_us": [
+        -0.28800033032894135,
+        -0.2879984676837921,
+        1.4080014079809189,
+        0.03200024366378784,
+        0.15999935567378998,
+        -0.6079990416765213,
+        -0.28800033032894135,
+        -0.12799911201000214,
+        -0.03200024366378784,
+        -1.0239984840154648,
+        0.22399984300136566,
+        -0.2560000866651535,
+        -0.22399984300136566,
+        -0.22399984300136566,
+        -0.2560000866651535,
+        0.38400106132030487,
+        -0.22399984300136566,
+        0.35200081765651703,
+        -0.31999871134757996,
+        0.22399984300136566,
+        -0.22399984300136566,
+        0.03200024366378784,
+        0.03200024366378784,
+        -1.3119988143444061,
+        -0.0959988683462143,
+        0.0959988683462143,
+        -0.2560000866651535,
+        0.4479996860027313,
+        0.03200024366378784,
+        -0.03199838101863861,
+        -0.2560000866651535,
+        -0.2560000866651535,
+        0.0,
+        -0.03200024366378784,
+        0.3200005739927292,
+        0.15999935567378998,
+        0.12800097465515137,
+        -0.3200005739927292,
+        0.3200005739927292,
+        0.03200024366378784,
+        -0.03200024366378784,
+        -0.03199838101863861,
+        -0.47999992966651917,
+        0.2560000866651535,
+        -0.38399919867515564,
+        0.06400048732757568,
+        0.09600073099136353,
+        0.35200081765651703
+      ],
+      "interpretation": "Positive favors right arm.48triples share8unique input fixtures; no independence/significance inference."
+    }
+  },
+  "F1": {
+    "arm_medians_us": {
+      "parent_before": 22.23999984562397,
+      "W_X": 22.175999358296394,
+      "W_only": 21.056000143289566,
+      "parent_after": 21.568000316619873
+    },
+    "parent_drift_us": -0.671999529004097,
+    "brackets": {
+      "W_X": {
+        "parent_before_minus_arm_us": 0.06400048732757568,
+        "parent_after_minus_arm_us": -0.6079990416765213,
+        "endpoint_average_minus_arm_us": -0.2719992771744728,
+        "conservative_min_endpoint_minus_arm_us": -0.6079990416765213,
+        "same_fixture_before_median_us": 0.03200024366378784,
+        "same_fixture_after_median_us": -0.0959988683462143
+      },
+      "W_only": {
+        "parent_before_minus_arm_us": 1.183999702334404,
+        "parent_after_minus_arm_us": 0.512000173330307,
+        "endpoint_average_minus_arm_us": 0.8479999378323555,
+        "conservative_min_endpoint_minus_arm_us": 0.512000173330307,
+        "same_fixture_before_median_us": 1.0239984840154648,
+        "same_fixture_after_median_us": 0.35200081765651703
+      }
+    },
+    "W_X_minus_W_only_block_median_us": 1.1199992150068283,
+    "last_contrast_scope": "Different adjacent armblocks on same11fixtures, not a bracketed/paired isolated effect."
+  },
+  "cost": {
+    "native_compile_and_link_seconds": 1.6911914360098308,
+    "task_weight_pack_seconds": 0.26451085100416094,
+    "run_elapsed_seconds": 5.388250972988317
+  },
+  "build": {
+    "CUDA_sha256": "051c4e8bcdc62b618ca67d0180e8eea2babfcaa22219da12ad4b00a1f5d3eaf9",
+    "SO_sha256": "00d656cb39b350ad3aa95a3b55d0e6e36eb10dfc16ddc65aa15b9838e5666870",
+    "stages": [
+      {
+        "stage": "native_compile",
+        "argv": [
+          "/usr/local/cuda/bin/nvcc",
+          "-c",
+          "-std=c++17",
+          "-arch=sm_90a",
+          "-O3",
+          "-lineinfo",
+          "-Xptxas=-v",
+          "-Xcompiler",
+          "-fPIC",
+          "/okc/logs/scheduler/gv53-earlyload-wonly-01/run/actual.cu",
+          "-o",
+          "/okc/logs/scheduler/gv53-earlyload-wonly-01/run/actual.o"
+        ],
+        "seconds": 1.6442362629895797,
+        "returncode": 0
+      },
+      {
+        "stage": "host_link",
+        "argv": [
+          "/usr/local/cuda/bin/nvcc",
+          "-shared",
+          "-cudart",
+          "shared",
+          "-Xcompiler",
+          "-fPIC",
+          "/okc/logs/scheduler/gv53-earlyload-wonly-01/run/actual.o",
+          "-o",
+          "/okc/logs/scheduler/gv53-earlyload-wonly-01/run/actual.so"
+        ],
+        "seconds": 0.046698749996721745,
+        "returncode": 0
+      }
+    ],
+    "CXX_Torch_compile_calls": 0,
+    "native_compile_calls": 1,
+    "actual_fullPC_predicate_encoding_equals_pilot": {
+      "_Z10gv_predxorILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G": true,
+      "_Z12gv_earlyloadILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G": true,
+      "_Z18gv_earlyload_wonlyILi1ELi1ELi1ELi2ELi16ELi8ELi1ELi1ELi0ELi3EEv1G": true
+    },
+    "ABI": "validatedthinCABIwithcurrentstreamandstrongowners"
+  },
+  "cleanup": {
+    "internal": {
+      "allocated": 0,
+      "reserved": 0,
+      "before_blas_clear": {
+        "allocated": 33554432,
+        "reserved": 1170210816
+      },
+      "blas_map_entries_workspace_bytes_after": [
+        1,
+        33554432,
+        0
+      ],
+      "clear_error": null,
+      "after_run_scope_and_drain": true
+    },
+    "external": {
+      "cleanup_failed": false,
+      "compute_pids": [],
+      "container_exists": false,
+      "containers": [],
+      "gpu_memory_mib": 0,
+      "guard_pids": [],
+      "host_log_exists": true,
+      "host_log_tail": "2026-10-27T23:46:28Z\ntorch_import_and_device\nload_cleanup_bridge_and_compile_thin\n/okc/proj_rsi/candidates/gv53_earlyload_wonly_v1/adapter.py:37: SyntaxWarning: invalid decimal literal\n  if len(x.shape)!=2 or x.shape[0]!=8or x.shape[1]!=8192 or tuple(out.shape)!=(x.shape[0],4096):raise ThinError('fixed GV53 shape mismatch')\nactual_task_weight_and_pack\nfixed_pooler_M8\ncomplete\nTRIAL_EXIT okc-proj-gv53-earlyload-wonly-01 0\n2026-10-27T23:46:39Z\n",
+      "terminal_exit": 0
+    }
+  },
+  "validated_artifact_hash_count": 11,
+  "validated_dispatch_source_pins": 21,
+  "max_saved_FP64_L2": 0.0016510854847072115,
+  "max_saved_worst_row": 0.0017333289994678621,
+  "claims_limits": [
+    "One actualWseed reused from earlier W_Xstudy; not independent weight replication or selection/official gain.",
+    "Observed relative motion/codegen is real; unique W/X latency or overlap attribution remains unproven because instructions/control schedules differ.",
+    "No output bytes saved for independent CPU GPU-numeric recomputation; source-bound successful own-output/currentX/runtime assertions reviewed.",
+    "No minimum-size/significance cutoff; keep positive/mixed/losing observations and select a scoped next discriminator."
+  ],
+  "files": {
+    "inventory": {
+      "path": "results/proj-rsi/scheduler/artifacts/research.gv53.earlyload.wonly.fixed.01/collection-1793144820626481457/inventory.json",
+      "sha256": "afb0a3841ff77fc850b9d7828f85b72aa8c7adad6f9ffe0a1f00f5c8f57cbbd2"
+    },
+    "result": {
+      "path": "results/proj-rsi/scheduler/artifacts/research.gv53.earlyload.wonly.fixed.01/collection-1793144820626481457/logs/scheduler/gv53-earlyload-wonly-01/run/result.json",
+      "sha256": "e50fc52129860aa65677fa3376766cbc86de284d329c416dafb57f1d350b8850"
+    }
+  },
+  "GPU_API_SSH_queue_git_actions": 0,
+  "contract": "proj_rsi/ITERATION.md"
+}

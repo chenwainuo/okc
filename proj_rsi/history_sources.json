@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "revision": 23,
+  "revision": 24,
   "active_jobs_snapshot": "complete-stack-scored-complete-161bdb8de7354344",
   "jobs_snapshots": [
     {
@@ -535,6 +535,28 @@
         }
       ],
       "association": "Own accepted SCORED receipt and completed official result9/9 at3175.899650724306us. Actual M1keyed/M8parent; earlyload source inclusion is not selected execution. Root REFINE; no new API/board capture."
+    },
+    "38821b954fb14978": {
+      "candidate": "gv_unpool16_xprefetch_choice_v1",
+      "source": {
+        "path": "results/proj-rsi/releases/gv-unpool16-xprefetch-choice-v1-48af8c797b40/submission.py",
+        "sha256": "48af8c797b404f97eff2aefaf93b7a8354baf00869c0518fcc0e81298bc6ec66"
+      },
+      "attestation": {
+        "path": "results/proj-rsi/jobs/38821b954fb14978.submitted.json",
+        "sha256": "24220d6b5eb8d0030897d3b6c571db16bd356da2eac3c65e3590e1d89e883a52"
+      },
+      "additional_attestations": [
+        {
+          "path": "results/proj-rsi/releases/gv-unpool16-xprefetch-choice-v1-48af8c797b40/release.json",
+          "sha256": "49d7352514782b0e3de5e6eb4ac42bdc3f75c3f6eaa16acec753859446c8c76f"
+        },
+        {
+          "path": "results/proj-rsi/releases/gv-unpool16-xprefetch-choice-v1-48af8c797b40/profiles/submission.38821b954fb14978.json",
+          "sha256": "06e1bbc21785dfb0458adf356aab3636b9a5c779abc0f23af7405a88c7159511"
+        }
+      ],
+      "association": "Own accepted CHECK/completed9/9 result3225.130858482905us; actualXprefetchselected/tuning+.095999800us, wholeloss/REFINE. No new API/board capture."
     }
   },
   "preservation": "Never overwrite earlier API snapshots. Append a new snapshot ID/path/SHA and advance active pointer/revision after collecting a fresh read-only API response. Checks never enter submissions unless mode=run.",
@@ -680,6 +702,17 @@
       "result": {
         "path": "results/proj-rsi/jobs/40d856e085274f51.json",
         "sha256": "e15b9f5c98140c844c5da8b5461eb520cdcc9b19558d8fcf5727564bf7263d4b"
+      }
+    },
+    {
+      "job_id": "38821b954fb14978",
+      "receipt": {
+        "path": "results/proj-rsi/jobs/38821b954fb14978.submitted.json",
+        "sha256": "24220d6b5eb8d0030897d3b6c571db16bd356da2eac3c65e3590e1d89e883a52"
+      },
+      "result": {
+        "path": "results/proj-rsi/jobs/38821b954fb14978.json",
+        "sha256": "06e1bbc21785dfb0458adf356aab3636b9a5c779abc0f23af7405a88c7159511"
       }
     }
   ],
@@ -891,10 +924,15 @@
     "gv53_selected_earlyload_v1",
     "gv53_selected_earlyload_trial_v1",
     "rq_pooler32_exactso_counters_v1",
-    "gv_unpool16_xprefetch_v1"
+    "gv_unpool16_xprefetch_v1",
+    "gv53_earlyload_wonly_v1",
+    "rq_pooler32_escape_exposure_v1",
+    "gv_unpool16_xprefetch_choice_v1",
+    "gv_qkv_xprefetch_v1",
+    "gv_qkv_half_xprefetch_v1"
   ],
   "candidate_inventory_policy": "Explicit preserved inventory cut. New in-progress candidate directories are retained on disk/ROI; append reviewed/measured versions deliberately rather than invalidating frozen history outputs during parallel CPU work. Discovery: python3 -m proj_rsi.history_catalog --discover-candidates (read-only). Refresh: append reviewed roots, advance revision/cut timestamp, regenerate/check. No source files are hidden or removed.",
-  "candidate_inventory_cut_utc": "2026-10-27T23:40:45Z",
+  "candidate_inventory_cut_utc": "2026-10-28T00:06:21Z",
   "candidate_inventory_refresh_notes": [
     {
       "cut_utc": "2026-10-27T23:18:16Z",
@@ -925,6 +963,17 @@
         "gv_unpool16_xprefetch_v1"
       ],
       "basis": "Completed body/RQcounter/Xprefetch/official40d cut; new optionalstack/W-only/RQlookahead remain liveROI preparation and read-only discoverable."
+    },
+    {
+      "cut_utc": "2026-10-28T00:06:21Z",
+      "added": [
+        "gv53_earlyload_wonly_v1",
+        "rq_pooler32_escape_exposure_v1",
+        "gv_unpool16_xprefetch_choice_v1",
+        "gv_qkv_xprefetch_v1",
+        "gv_qkv_half_xprefetch_v1"
+      ],
+      "basis": "Root bounded completed W-only/exposure/CHECK388 cut + frozen CPU QKVfull/half counterevidence; runningQKVtradeoff/accepted3ef separately ROItracked/discoverable, no outcome inferred."
     }
   ]
 }

@@ -1,0 +1,97 @@
+{
+  "id": "research.rq.pooler32.escape.exposure.01",
+  "resource": "gpu",
+  "kind": "diagnostic",
+  "state": "BACKLOG",
+  "author": "moe_decode_lut",
+  "created_at": 1793144803.5510325,
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 0
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [
+        "research.rq.pooler32.escape.lookahead.fixed.01"
+      ],
+      "decision": "Count exact actualtask >=32 escape windows before spending~43sJIT on the frozen lookaheadtrial. Zero exposure parks currentfixture/version; active exposure letsrootdecide bounded test."
+    },
+    "basis": "UNPRICED diagnostic: zeros are unknown placeholders, not opportunityzero. Concrete followup is frozen lookaheadtrial<=150s; exposure test<=60s may avoid unnecessarycompile. No speedforecast.",
+    "confidence": "unknown",
+    "evidence": [
+      "proj_rsi/candidates/rq_pooler32_escape_lookahead_v1/proposal.json",
+      "proj_rsi/candidates/rq_pooler32_escape_lookahead_trial_v1/job-proposed.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 60,
+    "followup_gpu_seconds": 150,
+    "cpu_minutes": 5
+  },
+  "files": {
+    "proj_rsi/candidates/rq_pooler32_escape_exposure_v1/stats.py": "888254971c4f91fd37f16d4c035857f6f9f39ff68a9392639342107292cefe0e",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/candidates/rq_descriptor_offset_trial_v1/codec.py": "289d1855a673cafd1d7edfde028d40db00a93da825e6561b6b0d9d9fad9d8fd7",
+    "proj_rsi/candidates/gv_top8_exponent_stats_v1/manifest.json": "67e2e9378b4570cf0ebfdc593db4e24fc7adf9126cb64d232f2bfc011c398213",
+    "proj_rsi/candidates/rq_pooler32_escape_exposure_v1/manifest.json": "94b4a8fe2031486bff1ef2a659930e5df663691b03f96a8af528eb2c3c1ad81a",
+    "proj_rsi/candidates/rq_pooler32_escape_exposure_v1/cpu-proof.json": "e05cdf6e52bde29b71a7d7204674f62149ed87d219b36254141d7dd13ed94f12",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_trial_v1/job-proposed.json": "f51008c969611eb64093addd6d9b99797b19542e3359c9d136684099c153027f",
+    "proj_rsi/scheduling/reviews/rq-pooler32-escape-exposure-01.md": "38be0da06f3ad2d5de2fd2d2266a753788fa57fadddb7bcd37b6a0211ef39d6e",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-rq-pooler32-escape-exposure-01",
+    "inner_seconds": 30,
+    "outer_seconds": 60,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/rq_pooler32_escape_exposure_v1/stats.py",
+      "--output",
+      "/okc/logs/scheduler/rq-pooler32-escape-exposure-01/stats.json",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/rq-pooler32-escape-exposure-01.md",
+      "--review-sha256",
+      "38be0da06f3ad2d5de2fd2d2266a753788fa57fadddb7bcd37b6a0211ef39d6e"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/rq-pooler32-escape-exposure-01"
+    ]
+  },
+  "annotations": {
+    "problem": "muse_bf16_proj",
+    "state": "GO_BOUND_ROOT_READY_BACKLOG",
+    "scope": "One originalseed5151 poolerM32N4096K8192KS4 exactpack; noactivation/output/JIT/nativeRQ/timing/profiler",
+    "reuse": "Existingweight-only stats runtime/cleanup pattern, exactoriginal9codecASTnodes with _c12 own unpack equality; noBLAS/helperSO needed",
+    "meaning": "Subsequentwindowload count floor(length/32) per1024mathwarplists. Initialload isseparate; zeroactualexposure means plannedlookahead cannot show intendedrefill overlap benefit. A futuretimingloss atzeroexposure isnot a mechanismtest.",
+    "cleanup": "AllGPUtensors localto work(); returnsCPUints/hashstrings only, gc/sync/emptycache allocated0. Externalrootcleanup required.",
+    "pricing": "Unpricedexplicitplaceholders; concretefollowup frozenRQlookaheadtwoarmtrial150s bound, rootownsROI/admission.",
+    "review_binding": "Independent GO explicitfilespin; addedrequiredreferenceimport checks.py; source/proposal unchanged.",
+    "loop": "proj_rsi/ITERATION.md; profile->measure->hypothesis->optimize/test->validate->stack/submit->learn->reprioritize->repeat;idle<=10s"
+  },
+  "problem": "muse_bf16_proj",
+  "review": {
+    "actor": "rq_lab_review",
+    "path": "proj_rsi/scheduling/reviews/rq-pooler32-escape-exposure-01.md",
+    "sha256": "38be0da06f3ad2d5de2fd2d2266a753788fa57fadddb7bcd37b6a0211ef39d6e",
+    "decision": "GO"
+  }
+}

@@ -42,69 +42,41 @@
   },
   "loop_contract": "proj_rsi/ITERATION.md",
   "loop": "profile -> measure -> hypothesis -> optimize/reimplement -> test -> validate -> stack -> submit measured gains -> learn -> reprioritize -> repeat; deliberate idle<=10s",
-  "view_updated_at_utc": "2026-10-27T23:40:45.660248+00:00",
-  "ranking_method": "Active CPU preparation only; root priority ordering, attainable gains/expected score ROI remain UNKNOWN. Completed local and official results are historical evidence, not active slots.",
+  "view_updated_at_utc": "2026-10-28T00:06:21Z",
+  "ranking_method": "Active root-admitted bounded QKV spill tradeoff; completed W-only/Xprefetch and dormant-refill diagnostic are historical. Explicit descriptor priors are low-confidence planning assumptions, not forecast.",
   "active_opportunities": [
     {
       "problem": "muse_bf16_proj",
       "priority_rank": 1,
-      "id": "projection.unpool16.xprefetch.optional",
-      "title": "Optional unpoolerM16 Xprefetch production integration",
-      "owner": "moe_result_repair",
-      "work_kind": "CPU_source_and_focused_review",
-      "planning_readiness": "PREPARING_OR_REVIEWING_AT_CUT",
-      "GPU_admitted": false,
+      "id": "projection.qkv.spill.tradeoff",
+      "scheduler_job_id": "research.gv.qkv.spill.tradeoff.01",
+      "title": "Measure earlier X overlap against actual spill cost, QKV M1/M8",
+      "owner": "hotloop_counters",
+      "planning_readiness": "INDEPENDENT_GO_ROOT_ADMITTED",
+      "GPU_admitted": true,
       "actual_runtime_READY": false,
-      "artifact_directory": "proj_rsi/candidates/gv_unpool16_xprefetch_choice_v1",
+      "last_reported_runtime_state": "RUNNING",
+      "runtime_sequence": 1935,
+      "source_descriptor": "proj_rsi/candidates/gv_qkv_spill_tradeoff_trial_v1/job-root-priced-v1.json",
       "attainable_gain_us": null,
       "expected_score_gain_us": null,
-      "approved_new_cost_or_priors": null,
-      "scope_limit": "Fixed local+.576us/21W3L; F1 endpoints\u2212.128/+.544us. New policy selection and official transfer unmeasured.",
-      "next_falsifier": "Freeze source/review and obtain root admission for the changed behavior; inspect own current-parent result and actual selected execution."
-    },
-    {
-      "problem": "muse_bf16_proj",
-      "priority_rank": 2,
-      "id": "projection.gv53.M8.Wonly",
-      "title": "GV53 M8 W-only earlier issue falsifier",
-      "owner": "scheduler_fastpath",
-      "work_kind": "CPU_source_and_focused_review",
-      "planning_readiness": "PREPARING_OR_REVIEWING_AT_CUT",
-      "GPU_admitted": false,
-      "actual_runtime_READY": false,
-      "artifact_directory": null,
-      "attainable_gain_us": null,
-      "expected_score_gain_us": null,
-      "approved_new_cost_or_priors": null,
-      "scope_limit": "Remove X snapshot/leave X late; prior earlyload fixed gain did not select on official40d M8. New version unmeasured.",
-      "next_falsifier": "Freeze source/review and obtain root admission for the changed behavior; inspect own current-parent result and actual selected execution."
-    },
-    {
-      "problem": "muse_bf16_proj",
-      "priority_rank": 3,
-      "id": "projection.rq.pooler32.lookahead",
-      "title": "RQ poolerM32 escape-lookahead trial",
-      "owner": "moe_decode_lut",
-      "work_kind": "CPU_source_and_focused_review",
-      "planning_readiness": "PREPARING_OR_REVIEWING_AT_CUT",
-      "GPU_admitted": false,
-      "actual_runtime_READY": false,
-      "artifact_directory": null,
-      "attainable_gain_us": null,
-      "expected_score_gain_us": null,
-      "approved_new_cost_or_priors": null,
-      "scope_limit": "Exact current counters motivate dependency separation;168regs/0spill static with+112instructions/+5SHFL does not prove speed.",
-      "next_falsifier": "Freeze source/review and obtain root admission for the changed behavior; inspect own current-parent result and actual selected execution."
+      "root_adopted_planning_prior": {
+        "scenario_score_us": 13.126129394630416,
+        "p_gain": 0.08,
+        "p_valid": 0.85
+      },
+      "bound_seconds": 120,
+      "scope_limit": "5%hypotheticalcut tobothactualQKV1/8cases is a sensitivity scenario, not forecast. CPU spills are resource facts; net runtime UNKNOWN, no zero-spill admission gate.",
+      "next_falsifier": "Consume own current-parent/fullX/halfX fixed native/current-output result; preserve every sign, scope and actual spill cost."
     }
   ],
   "runtime_observation": {
-    "source": "Root frozen handover at2026-10-27T23:40:45.660248+00:00",
-    "sequence": 1897,
-    "state": "QUEUE_EMPTY_AT_COMPLETED_CUT",
-    "eligible_GPU_jobs": 0,
+    "source": "Root assigned bounded completed cut; source snapshot generated00:06:21UTC, not a new runtime poll",
+    "sequence": 1935,
+    "state": "QKV_SPILL_TRADEOFF_RUNNING_AT_ROOT_CUT",
+    "eligible_GPU_jobs": null,
     "physical_GPU_utilization": null,
-    "active_CPU_preparation": "Optional unpoolerM16 Xprefetch integration; GV53 M8 W-only falsifier; RQ poolerM32 escape lookahead",
-    "note": "Timestamped observation, not a live poll; no READY/admission inferred."
+    "note": "Own QKV outcome is outside this cut. Accepted scored3ef pending separately; no pending score or completed-count credit."
   },
   "conditional_scenario_method": {
     "official_source": {
@@ -125,8 +97,8 @@
     "note": "All prior signed measurements/sources and completed losses remain historical evidence; they are counterevidence, not active queue entries.",
     "newly_completed_reference_index": "proj_rsi/audits/projection-completed-live-references-quarter-lane-abi-v1-20261027.json",
     "canonical_batch_for_new_results_pending": false,
-    "latest_completed_cut": "proj_rsi/audits/projection-production-DONE1897-cut-v1-20261027.json",
-    "scope_note": "Canonical cut includes production bodies/RQcounter/Xprefetch and own scored40d; all signs/selection contexts retained.",
+    "latest_completed_cut": "proj_rsi/audits/projection-wonly-exposure-ROOT1935-cut-v1-20261028.json",
+    "scope_note": "Completed W-only/exposure/CHECK388 and frozen CPUfull/half codegen facts; pending3ef and runningQKVoutcome excluded.",
     "latest_completed_earlyload": "proj_rsi/audits/projection-earlyload-DONE1853-cut-v1-20261027.json"
   },
   "root_adopted_planning_priors": null,
@@ -382,5 +354,37 @@
     ],
     "RQ_exactSO": "VALID_NO_GAIN counter diagnostic; no speed claim",
     "combined_or_official_Xprefetch_gain": null
+  },
+  "accepted_pending_official": {
+    "job_id": "3ef736760fda465b",
+    "source_sha256": "2dda1b25dd858629559c13e41a0076c5372d5b0e9004a2964726e3ed682bb5c4",
+    "receipt": "results/proj-rsi/jobs/3ef736760fda465b.submitted.json",
+    "kind": "scored",
+    "status_at_cut": "ACCEPTED_PENDING_RESULT",
+    "score_us": null,
+    "completed_official_count": 74,
+    "completed_scored_count": 20,
+    "completed_CHECK_count": 54,
+    "distinct_accepted_total_including_pending": 75,
+    "release": "results/proj-rsi/releases/gv-m8-threeway-choice-v1-2dda1b25dd85"
+  },
+  "completed_wonly_exposure_cut": {
+    "CHECK_job": "38821b954fb14978",
+    "CHECK_score_us": 3225.130858482905,
+    "decision": "REFINE",
+    "actual_target_selection": "unpoolerM16 Xprefetch selected, tuning+.09599979966878891us",
+    "actual_other_selection": "M1parent/M8earlyload",
+    "Wonly_vs_parent_paired_us": 0.09600073099136353,
+    "Wonly_vs_WX_paired_us": -0.031999312341213226,
+    "escape_exposure": "0subsequentrefills,max11/cap32; currentlookahead parkedUNRUN, speedUNKNOWN",
+    "CPU_fullX_spills_bytes": [
+      48,
+      48
+    ],
+    "CPU_halfX_spills_bytes": [
+      56,
+      100
+    ],
+    "QKV_net_runtime_outcome": "OUTSIDE_CUT_RUNNING"
   }
 }

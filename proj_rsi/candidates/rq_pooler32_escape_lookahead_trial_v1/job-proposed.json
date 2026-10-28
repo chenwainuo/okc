@@ -1,0 +1,102 @@
+{
+  "id": "research.rq.pooler32.escape.lookahead.fixed.01",
+  "resource": "gpu",
+  "kind": "optimization",
+  "state": "HELD",
+  "author": "moe_decode_lut",
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 1.0100860202109474,
+      "p_gain": 0,
+      "p_valid": 0
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 0,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "Resolve whether actual pooler escape-window lookahead gains despite+112staticinstructions; existing same-source comparator, no profiler gate."
+    },
+    "basis": "Unpriced mechanism test: p_gain/p_valid0 are UNKNOWN placeholders, not evidence of no opportunity. Conditional0.1uscasegain gives1.010086scoreus if all else incumbentfixed; not forecast. Currentsource dependency removed natively atsame168regs/shared; no PCattribution or measuredgain yet. Rootownspricing/admission.",
+    "confidence": "unknown",
+    "evidence": [
+      "proj_rsi/candidates/rq_pooler32_escape_lookahead_v1/native-overlap-proof.json",
+      "proj_rsi/candidates/rq_pooler32_escape_lookahead_v1/window-proof.json",
+      "proj_rsi/candidates/rq_pooler32_exactso_counters_v1/actual-analysis/done-evidence.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 150,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 10
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-rq-pooler32-escape-lookahead-fixed-01",
+    "inner_seconds": 90,
+    "outer_seconds": 150,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/rq_pooler32_escape_lookahead_trial_v1/driver.py",
+      "--output",
+      "/okc/logs/scheduler/rq-pooler32-escape-lookahead-fixed-01/run",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/rq-pooler32-escape-lookahead-fixed-01.md",
+      "--review-sha256",
+      "ROOT_BIND_APPROVED_REVIEW_SHA256"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/rq-pooler32-escape-lookahead-fixed-01"
+    ]
+  },
+  "annotations": {
+    "problem": "muse_bf16_proj",
+    "state": "HELD_FOCUSED_REVIEW_PENDING",
+    "scope": "One poolerM32N4096K8192KS4 cell, actualincumbent ST6FL35 versus guarded lookaheadFL524323; nofreshprepare/selector/full30/profiler.",
+    "minimum": "Original validated two-armPyBind seam, compileonly2privatefunctions; expectedcompile~43s historical,90sinner/150souter bound. No newframework.",
+    "resources": "Record actual loadedregister/local/shared and graphgrid[32,4,1]/block[384,1,1]/smem99488; require queriedcapacity>=128 before timing. Source CPUcontrol exactparent andboth168regs/no spills.",
+    "measurements": "6warmcalls+21fixedF1calls(control7,new7,control7) seed91100 +16samefixturefreshpairs8/8order; raw graphcalls currentX/FP64outputs checked.",
+    "own_outputs": "EachF1blockbeforelaterreplay, bothownpairedterminals beforemutations; retainedgraphzero/normal/boundary mutationoracles; fullphysicalcounterbackingreset0/guards/sink/immutableW/pack/escape.",
+    "changed_boundary": "32onehotrows atsplit/ring/k16boundaries, originalcodec/matrixproof reused.",
+    "exposure": "Recordactualecap/listlengthhistogram,totalrefills/slots outside timedregion; noextra numericalvaliditygate.",
+    "risks": "Added112staticinstructions and5SHFLsites; conditionalbranch/registerdependencies could eraseprefetchbenefit; actualrefillfrequency unknownuntilrun.",
+    "review_binding": "rq_lab_reviewfocusedGO; rootready stateBACKLOG afterGO. RootownsGPU/queue/official.",
+    "pricing": "Direct scenario conditionalonly; probabilities unpriced placeholders, not opportunityzero; root mayrepricewithoutsourcechange. No new informationclaim or unidentifiedfollowupcost.",
+    "loop": "proj_rsi/ITERATION.md; profile->measure->hypothesis->optimize/test->validate->stack/submit->learn->reprioritize->repeat;idle<=10s"
+  },
+  "created_at": 1793144554.3609836,
+  "files": {
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_v1/submission.py": "c7f9f68d0c8a7fb4814df7685538ca5c58c40ba68cd51b968e8a6b71416ae79c",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_v1/manifest.json": "6486d5a12ed3978ba9b61a1f69495dc741a1a398ccc4183c60cedb2c2e41be46",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_v1/source-proof.json": "1bf47fb1974e08add7e19e905b4b6eb64920097f5fc5b420b43860972f173aaf",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_v1/window-proof.json": "13ba08f6fd53f48cfb8f6878c6694ec14c97e92521258543d0dc8b5c43bfef5c",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_v1/compile-proof.json": "f1f20dcdb20c98275cf19e555000e134b46f75d057c8604a0f2810b878bf572d",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_v1/native-overlap-proof.json": "8bebc603e33243da7ad99a1a7a998f8d429ad668b688d3b3104e0775b76782a3",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_v1/proposal.json": "a7fe330990abcab8ffe34074b5898237803340e0ff13ca33e587b1fed22637ed",
+    "proj_rsi/audits/hotpath-fresh-counter-v2/selected_graph_metadata.py": "8dff6660175d94a48699315422389278b7ba7f42412befd3f7553c735848310a",
+    "proj_rsi/candidates/rq_pooler32_exactso_counters_v1/actual-analysis/done-evidence.json": "c6b41a475785fe2bd1fe8740d619abfc76fa91a996ec67508c2bb79c61bf052f",
+    "proj_rsi/audits/selected-hotpaths-gv9916/routes.csv": "023f8a722f4f1499e3ae0a66e643d858e3e27307114c178be038d0ea3feb23a3",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_trial_v1/build.py": "9cd58d23f982b44dd4e242be7754b951c8a3de8075a7bcaa7e66f28ebfaeb0e5",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_trial_v1/driver.py": "b95f34c98c2d5c87ef4d5e3f1c722b786d8e49ae7d1ee73c808bec1a8744cf4a",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_trial_v1/trial.cu": "d0416a7a76d654323ed659db35d6936a90b55b4f48b356c96f9e566e69267a54",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_trial_v1/binding.cu": "57d4c7526636a02eed1e22c0e5d81cf89532167ee69d9d680379ea4f08579b20",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_trial_v1/codec.py": "289d1855a673cafd1d7edfde028d40db00a93da825e6561b6b0d9d9fad9d8fd7",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_trial_v1/manifest.json": "1c13fce54b41a2ceda6bf35d5124d2dd7e3e0a7380df1d92565efb7c7bbc91ab",
+    "proj_rsi/candidates/rq_pooler32_escape_lookahead_trial_v1/cpu-proof.json": "4f69c63f5fb12935c7b922338f29e87dc7aa2b7972819b7077a8433e07c775fb",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67"
+  }
+}

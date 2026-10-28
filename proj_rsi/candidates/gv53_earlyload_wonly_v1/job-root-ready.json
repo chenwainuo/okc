@@ -1,0 +1,116 @@
+{
+  "id": "research.gv53.earlyload.wonly.fixed.01",
+  "problem": "muse_bf16_proj",
+  "resource": "gpu",
+  "kind": "diagnostic",
+  "state": "BACKLOG",
+  "author": "scheduler_fastpath",
+  "created_at": 1793144652.808679,
+  "depends_on": [],
+  "write_paths": [],
+  "estimate": {
+    "direct": {
+      "scenario_score_us": 0,
+      "p_gain": 0,
+      "p_valid": 1
+    },
+    "information": {
+      "scenario_score_us": 0,
+      "p_resolve": 1,
+      "p_followup_gain": 0,
+      "unblocks": [],
+      "decision": "Three-arm W-sufficiency falsifier; measured W_Xpositive retained, no unpriced wholepolicy forecast or gainfloor."
+    },
+    "basis": "W-only nextWbeforedecode and noXsnapshot realized at64regs0spill;392instructions exceedsWX384/parent360. Test schedule sufficiency without presumedgain; zero scorecredit for diagnostic.",
+    "confidence": "CPU_CODEGEN_PROVEN_GPU_UNRUN",
+    "evidence": [
+      "proj_rsi/candidates/gv53_earlyload_wonly_v1/proof.json",
+      "proj_rsi/candidates/gv53_earlyload_wonly_v1/adapter-test-results.txt",
+      "proj_rsi/audits/gv53-earlyload-result-v1/analysis.json"
+    ]
+  },
+  "cost": {
+    "gpu_seconds": 120,
+    "followup_gpu_seconds": 0,
+    "cpu_minutes": 10
+  },
+  "files": {
+    "proj_rsi/candidates/gv53_earlyload_wonly_v1/submission.py": "e3931df000c696fd1dbb3c04fdb5bbe07c4b47293f2412fb0357d74056a84a19",
+    "proj_rsi/candidates/gv53_earlyload_wonly_v1/pilot.cu": "ad271a12489efc42b4127d1616faecfa000b3ebe95fef625f9521867efa840e3",
+    "proj_rsi/candidates/gv53_earlyload_wonly_v1/pilot.sass": "40ca415ebed65b025b545dc56a566e4914c3099044d7a6d19155bd7a23645c10",
+    "proj_rsi/candidates/gv53_earlyload_wonly_v1/driver.py": "6988e41efcd3102380834a38f6f0f93ed3ed3c388033f03162d8604cb9186d39",
+    "proj_rsi/candidates/gv53_earlyload_wonly_v1/bridge.cuh": "2ec0b1cc92da8ec46fb3f8e14b4a1a45297aabd52fbb2db6f60ae77306c41012",
+    "proj_rsi/candidates/gv53_earlyload_wonly_v1/adapter.py": "3097a226089cf903bce03bd59c9c07737e91cce3de188660f043fcd67a61ef56",
+    "proj_rsi/candidates/gv53_earlyload_wonly_v1/proof.json": "f33a9ea79d87e4fe58c8845fa4020895e98a131871f6ccf77a5070ea472e36a7",
+    "proj_rsi/candidates/gv_predxor_pw45_v2/submission.py": "501d901db8eeb0a7547191fbd1e2df2e7c3132b31ac974355dd5bf811d232ab9",
+    "proj_rsi/candidates/gv53_earlyload_v1/submission.py": "81fdc825bc21a568db8082873892982fb16eff5fbbc894baed2211a58aef1791",
+    "muse_bf16_proj/reference.py": "e62491abc9ddcad33f5faba8b0ee74cf6370b7be5dd2dc05031742f3ebf7147d",
+    "muse_bf16_proj/checks.py": "9a046c3c38db28b325dcd1557baecdf6bc9ef941d2175f9a900ba4c230bb8055",
+    "results/proj-rsi/scheduler/artifacts/research.gv53.keyed.half.fixed.01/collection-1793137198211949643/logs/scheduler/gv53-keyed-half-01/run/actual.so": "2638c75aa2020edda1a66905bda0a658335fbaf4dd4d6fc09b2e2f2e4933acad",
+    "results/proj-rsi/scheduler/artifacts/research.gv53.keyed.half.fixed.01/collection-1793137198211949643/logs/scheduler/gv53-keyed-half-01/run/result.json": "c15d1773abcc1387a0a327ada45146c4c0920e0c25a5c998b6070ba278f531a2",
+    "proj_rsi/tools/h100_trial.sh": "674036ba22edcc3c64dda2677271c58f27fe822339cf132c4f36ce58837ee9e5",
+    "proj_rsi/tools/h100_container.sh": "8b3529b5fa873e61e4e236e0cbcdaa0a94ad426a9a21b6aa6469af4bf6e29d67",
+    "proj_rsi/candidates/gv53_earlyload_wonly_v1/manifest.json": "4dbc3d0c9f1cc14686a3b62820c11744448f618e9dfc7780506bcf8d5849572a",
+    "proj_rsi/scheduling/reviews/gv53-earlyload-wonly-01.md": "b4922032e8af7c023aff6015461a68c9bc315746995a7fb91abcf935bbed885b",
+    "proj_rsi/candidates/gv53_earlyload_wonly_v1/cpu-proof.json": "ee6c0875db5e84cf528047c2cf429e5471bba281a448683cc7afae3d4349255d",
+    "proj_rsi/candidates/gv53_earlyload_wonly_v1/test_adapter.py": "ad07206374a2388e6e39be418e42baeecd4995634f1aaddff6766844f3927bb6",
+    "proj_rsi/candidates/gv53_earlyload_wonly_v1/adapter-test-results.txt": "396378849fd54b851b98b9b890ccb7546ca4a5344a17dfd70adaa3ae7eaba3b6",
+    "proj_rsi/candidates/gv53_earlyload_wonly_v1/delta.json": "ebdd134e14bcec2daf719adbb3fb6342ab7b1d977642c09be405da31642d4cb1"
+  },
+  "review": {
+    "actor": "measurement_contract_audit",
+    "path": "proj_rsi/scheduling/reviews/gv53-earlyload-wonly-01.md",
+    "sha256": "b4922032e8af7c023aff6015461a68c9bc315746995a7fb91abcf935bbed885b",
+    "decision": "GO"
+  },
+  "launch": {
+    "host": "root@107.170.6.60",
+    "remote_repo": "/root/okc",
+    "container": "okc-proj-gv53-earlyload-wonly-01",
+    "inner_seconds": 60,
+    "outer_seconds": 120,
+    "profile": false,
+    "env": {
+      "MAX_JOBS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "argv": [
+      "python3",
+      "/okc/proj_rsi/candidates/gv53_earlyload_wonly_v1/driver.py",
+      "--output",
+      "/okc/logs/scheduler/gv53-earlyload-wonly-01/run",
+      "--review",
+      "/okc/proj_rsi/scheduling/reviews/gv53-earlyload-wonly-01.md"
+    ],
+    "artifacts": [
+      "/root/okc/logs/scheduler/gv53-earlyload-wonly-01"
+    ]
+  },
+  "annotations": {
+    "state": "FOCUSED_GO_ROOT_ADMISSION_PENDING",
+    "source_sha256": "e3931df000c696fd1dbb3c04fdb5bbe07c4b47293f2412fb0357d74056a84a19",
+    "roles": [
+      "parent",
+      "W_X",
+      "W_only"
+    ],
+    "fixed_M": 8,
+    "warmups": 15,
+    "clean_calls": 188,
+    "F1_calls": 44,
+    "paired_calls": 144,
+    "paired_groups": 48,
+    "unique_paired_X_fixtures": 8,
+    "six_orders_each_seed": true,
+    "own_terminals": 7,
+    "mutations": 15,
+    "basis_columns_per_arm": 8,
+    "hypothesis": "RetainWoverlapwithlessXstaging; no cheaper-static-code assertion.",
+    "counterevidence": "W-only392/WX384/parent360instructions; all64regs0spill; compilerpartiallyhoistsX so notpurecausalisolation.",
+    "actual_policy_or_official_claim": false,
+    "contract": "proj_rsi/ITERATION.md",
+    "review_scope": "Three realized M8 schedules; eight unique paired fixtures,48 triples; not pure X isolation or policy/official gain."
+  }
+}
