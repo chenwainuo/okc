@@ -1,129 +1,108 @@
-# Open Kernel Challenge serving experiments
+# Open Kernel Challenge: `muse_bf16_proj`
 
-Optimize SGLang serving for Muse Spark Open. Develop and profile individual expert
-components on one H200, then validate the complete serving patch on eight H200s.
-The patch stack is experimental: benchmark results determine which changes survive.
+A single-file CUDA/PyTorch kernel for the dense projections of Muse Spark Open
+(`qkv_gate`, `o`, `pooler`, `unpooler` in BF16, the `router` in FP32) as one H200
+runs them while serving: `out = x @ W.T` for 1 to 256 tokens per step.
 
-See the [architecture review and optimization candidates](docs/architecture-review.md)
-for the serving path, bottleneck hypotheses, experiments and validation gates.
-The [structured review](docs/architecture-review.json) is the current agent handoff record.
+Latest judged result: **3133.1 µs per decode step, 1.542× SGLang's kernels**
+(score = a fixed reference time divided by the paired speedup over SGLang).
 
-## Setup
+The kernel is `muse_bf16_proj/submission.py` (one file, ~6.6k lines: the CUDA
+sources are embedded strings compiled with `torch.utils.cpp_extension.load_inline`
+during the untimed `prepare()` call). `reference.py`, `checks.py` and `baseline.py`
+are the challenge's reference, correctness spec and SGLang baseline.
 
-Use a Linux GPU host with Docker, NVIDIA drivers, and NVIDIA Container Toolkit.
-The launcher uses the exact challenge container digest and preserves compilation caches.
+## Results (judge, H200, µs per layer; speedup is paired against SGLang)
 
-```bash
-git clone git@github.com:chenwainuo/okc.git
-cd okc
-curl -fsSL https://openkernelchallenge.dev/install.sh | sh
-python3 bootstrap.py
-```
+| load | qkv_gate | o | pooler | unpooler | router | load sum | speedup |
+|---|---|---|---|---|---|---|---|
+| decode, m=1 | 9.06 | 5.38 | 13.83 | 4.13 | 3.58 | 35.97 | 1.66× |
+| decode, m=16 | 9.79 | 5.81 | 14.27 | 14.57 | 4.62 | 49.05 | 1.56× |
+| decode, m=32 | 10.14 | 6.36 | 15.30 | 15.30 | 5.18 | 52.28 | 1.48× |
+| verify, m=8 | 9.17 | 5.18 | 13.66 | 4.03 | 4.31 | 36.35 | 2.08× |
+| verify, m=128 | 12.31 | 7.35 | 17.11 | 17.38 | 7.13 | 61.27 | 1.42× |
+| verify, m=256 | 17.53 | 8.57 | 24.51 | 23.82 | 9.08 | 83.52 | 1.19× |
 
-Bootstrap downloads the official problem fixtures, verifies their hashes, fetches
-SGLang at the required commit, and applies `serving/patch.diff`. Upstream sources
-and challenge fixtures retain their original licenses and are fetched separately.
-Bootstrap refuses to overwrite an unrelated SGLang worktree.
+Weights: qkv_gate 2304×8192, o 8192×1024, pooler 4096×8192, unpooler 8192×4096
+(rows 0-1023 only when m ≤ 8), router 256×8192 FP32. Every shape is timed as a
+replayed CUDA graph with a cold L2, so the small shapes are dominated by the
+HBM stream of the weights plus fixed per-kernel latency.
 
-## Measure
+## How it works
 
-```bash
-# Short correctness + timing smoke test; two pairs are not statistical evidence.
-bash benchmarks/run_h200.sh --pairs 2 --batches 8 32
+### 1. Lossless 12-bit weight packing (prepare time)
 
-# Actual stock serving method versus patched serving method, with profiler traces.
-bash benchmarks/run_h200.sh --profile
+Every BF16 weight is stored in 12 bits instead of 16: sign + 7 mantissa bits +
+a 4-bit exponent offset inside a per-group exponent window. Values whose
+exponent falls outside the window are rare (about one per CTA per K-stage) and
+are recorded as *escapes*: a sorted list of (stage, word, XOR patch) entries that
+the kernel applies after decoding. The pack is bit-exact (verified by an
+independent unpacker before any kernel runs) and cuts the HBM traffic by 25%,
+which is the whole game for the memory-bound shapes. The router is stored as a
+BF16 hi + lo pair, both 12-bit packed, with FP32 accumulation.
 
-# Each isolated change, intermediate/full stacks, and actual serving method.
-bash benchmarks/run_h200.sh --matrix --profile
+### 2. One kernel family per regime
 
-# Representative prefill regression diagnostics; increase pairs for conclusions.
-bash benchmarks/run_h200.sh --matrix --prefill --pairs 20
+- **m ≤ 32, BF16 layers (`gv` / `gv_predxor`)**: register-direct GEMV. Each
+  thread streams packed words straight from global memory, decodes them with a
+  predicated-XOR trick (~1.1 integer ops per weight), and accumulates in FP32;
+  `x` is read once per 128 rows. Launch geometry (rows per CTA, K split 1/2/4,
+  x in L1 or a shared-memory slab) is chosen per shape at prepare time.
+- **m = 16/32 and m = 128 (`rq`, "RS128")**: swap-AB split-K GEMM on the
+  tensor cores. Each CTA owns 128 weight rows; two math warpgroups decode the
+  12-bit pack (12 KB per 128-row k64 stage, delivered by `cp.async.bulk` into a
+  5-slot ring) directly into the **A registers of `wgmma`**, while `x` arrives as
+  the shared-memory B operand through a 2D TMA. K is split over a one-wave grid;
+  partials are summed with `cp.reduce.async.bulk.tensor` BF16 adds into the
+  output, which the kernel zeroes itself (no memset node, no cluster). Tile
+  widths NT = 16 / 32 / 128 cover the three token counts.
+- **router, m = 128/256 (`rtk`)**: a one-node `wgmma` kernel over the hi + lo
+  pair with FP32 accumulation and a split-K reduction; m = 1 uses a 1024-thread
+  single-block GEMV (`rr`).
+- **cuBLASLt** remains the fallback and is the pick where it still wins
+  (`o` at m = 128/256, pooler/unpooler at m = 256).
 
-# Marlin thread configuration / occupancy sweep with an unchanged JIT control.
-bash benchmarks/run_h200.sh --execution --minutes 45
+### 3. The escape path
 
-# Tile/padding candidates, with independent code artifacts and source hashes.
-bash benchmarks/run_h200.sh --tiles
-```
+The 12-bit pack needs a few patches per stage, and in a tensor-core mainloop the
+cost is not the patches but the instructions that sit between the decode and
+`wgmma.fence`. The shipped design keeps a **per-thread staged cursor**: each
+thread holds only its own escape entries sorted by stage, a warp vote skips the
+whole apply block when nobody in the warp has an entry for this stage, and the
+apply block itself is kept short so the taken branch over it is cheap. This
+removed about 1 µs per shape at m = 128 compared with a warp-wide list walk, and
+proportionally less at m = 32 and m = 16 where the kernels are closer to the
+HBM bound.
 
-Results and profiles go into `results/`. Diagnostics include named eager stage ranges
-(alignment, workspace, gate/up GEMM, SwiGLU, down GEMM, finalizer), graph kernel
-traces, structured event tables, per-expert route counts and GPU memory snapshots. Clean timing uses CUDA graph replay,
-cold L2, alternating execution order, fresh inputs and correctness checks against
-the official FP32 reference. Profiler runs are separate from timing. Bootstrap
-confidence intervals describe within-run variation only; repeat independent runs
-before retaining a change. Local kernel speedups are **not** serving scores.
+### 4. Per-shape selection in `prepare()`
 
-## Optimization loop
+`prepare()` builds every candidate path for each (layer, m) shape, validates each
+one against the reference (one-hot probe rows must be bit-exact; random inputs
+within tolerance), and then times the candidates as captured CUDA-graph replays
+against a reference pick, in the same paired-ratio style the judge uses. A
+candidate replaces the reference only if it beats a margin; a handful of picks
+whose gain is below what a single timing run can resolve are fixed from
+offline measurements. The whole prepare runs in about 200 s on the judge
+(limit 300 s); the timed `kernel_fn` is one graph-captured launch with no host
+synchronisation.
 
-Run the resumable experiment queue with `bash benchmarks/run_h200.sh --loop --minutes 45`.
-State, candidate sources, logs, and measurements persist under `results/optimization-loop/`.
-The [ranked experiment queue](docs/optimization-queue.json) tracks potential ROI,
-evidence, stage, and next action. Executable queued items run in rank order;
-profiling and implementation tasks remain agent work.
-See [the agent loop protocol](docs/optimization-loop.json) for gates, stop/resume,
-budget boundaries, and promotion requirements. The finite queue stops when exhausted;
-new hypotheses and active-patch promotion require agent review.
-
-Baseline → profile → explicit bottleneck hypothesis → isolated implementation →
-correctness → paired measurements → retain/revert → re-profile the stack →
-full serving validation. Do not infer a speedup from fewer operations alone.
-
-The active changes in `serving/patches/` enable small-batch fused finalization and
-cap Hopper EP8 expert tiles at 16 through 256 tokens and 32 through 512 tokens.
-Larger prefills retain stock tile selection. The combined artifact is `serving/patch.diff`.
-Earlier routing candidates are parked in `serving/experiments/initial-stack/`;
-their standalone measurements did not establish a useful gain.
-
-## Agent-driven RSI
-
-The [RSI protocol](rsi/protocol.json) assigns planner, implementer, critic, executor,
-and validator roles. The [kernel rewrite plan](docs/kernel-rewrite-plan.json) ranks
-counter-backed opportunities and labels speedup ranges as engineering priors.
-The [independent audit](docs/rsi-measurement-audit.json) records measurement gaps.
-
-```bash
-# Read the current ledger; all GPU work remains supervisor-controlled.
-python3 -m rsi status
-# First-time initialization only, with an explicit run-accounting budget:
-python3 -m rsi init --budget-usd 5
-```
-
-See [CLI usage](rsi/usage.json) and proposal/review schemas under `rsi/`.
-Source bundles, exact shape coverage, fresh holdouts, raw samples and independent
-review gate local promotion. Ledger promotion neither applies a patch nor proves
-full serving speedup. Legacy reports are observational only. The local ledger
-coordinates trusted agents; actor labels are not authentication and deadline
-records do not themselves stop a process. Root must enforce execution deadlines.
-The isolated execution path is `benchmarks/run_rsi_h200.py`; it requires a
-reviewed frozen plan and supervisor-issued live lease, mounts verified source
-trees read-only, and starts serialized persistent workers. See
-[the runner review](docs/rsi-runner-review.json).
-Optimizer-method promotion requires the separate frozen portfolio evaluator
-specified in the protocol; that evaluator is not implemented yet.
-
-## Serving requirements
-
-The [official rules](https://openkernelchallenge.dev/rules) and
-[serving API](https://openkernelchallenge.dev/api/v1/serving) are authoritative.
-`serving/benchmark-contract.json` records the observed configuration.
-
-- Hidden multi-turn agentic coding conversations, concurrency 1, 4, 16, 32.
-- Score compares throughput at stock interactivity across loads.
-- Outputs must agree nearly as well as stock agrees with itself.
-- Exactly 220 output tokens per request; TTFT at most twice stock at a load for
-  that load to improve the score.
-- Preserve precision, all eight routed experts, norms, attention window and DFlash.
-
-The single-GPU adapter excludes loading, communication, scheduling, attention and
-the pre-expert norm. Full-node correctness and performance remain mandatory.
-
-## CPU checks
+## Running it
 
 ```bash
-python3 -m unittest discover -s benchmarks -p 'test_*.py' -v
+curl -fsSL https://openkernelchallenge.dev/install.sh | sh   # the okc CLI
+python3 bootstrap.py                                         # challenge container
+okc check muse_bf16_proj/submission.py                       # correctness + timing on the judge
 ```
 
-CPU tests cover dispatch and measurement logic, not GPU numerical correctness.
-GPU checks include invalid routes, empty local routing, and NaNs in ignored slots.
+`muse_bf16_proj/TASK.md` describes the problem, the loads and the judge's timing
+protocol.
+
+## Layout
+
+- `muse_bf16_proj/` — the kernel (`submission.py`), reference, checks, baseline, task description.
+- `muse_moe_w4a16/`, `serving/` — the other challenge problems (not the focus of this file).
+- `docs/`, `audits/`, `reports/` — design notes and measurement records.
+
+## License
+
+See `LICENSE`.
